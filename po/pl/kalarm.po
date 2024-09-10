@@ -1,6 +1,6 @@
 # translation of kalarm.po to
 # translation of alarmdaemonctrl.po to
-# Version: $Revision: 1687127 $
+# Version: $Revision: 1689985 $
 #
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2004, 2005, 2006.
@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 02:29+0000\n"
+"POT-Creation-Date: 2024-09-10 02:28+0000\n"
 "PO-Revision-Date: 2024-07-14 13:41+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -300,13 +300,13 @@ msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr ""
 "<para>Błąd otwierania pliku dźwiękowego: <filename>%1</filename></para>"
 
-#: audioplayer.cpp:94
+#: audioplayer.cpp:99 audioplayer.cpp:108
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr "Nie można uruchomić odtwarzacza dźwiękowego"
 
-#: audioplayer.cpp:171 audioplayer.cpp:245
+#: audioplayer.cpp:201 audioplayer.cpp:281
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"

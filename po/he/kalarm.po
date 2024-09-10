@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 02:29+0000\n"
+"POT-Creation-Date: 2024-09-10 02:28+0000\n"
 "PO-Revision-Date: 2024-09-02 08:17+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -292,7 +292,7 @@ msgstr ""
 "אין אפשרות לפתוח את לוח השנה :\n"
 "%1"
 
-#: audioplayer.cpp:94
+#: audioplayer.cpp:99 audioplayer.cpp:108
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Cannot initialize audio player: %1"
@@ -300,7 +300,7 @@ msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr "לא ניתן להפעיל את נגן השמע: %1"
 
-#: audioplayer.cpp:171 audioplayer.cpp:245
+#: audioplayer.cpp:201 audioplayer.cpp:281
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
