@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 00:40+0000\n"
+"POT-Creation-Date: 2024-09-10 00:39+0000\n"
 "PO-Revision-Date: 2002-11-07 11:37+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -306,13 +306,13 @@ msgstr ""
 "Kan nie open kalender:\n"
 "%1"
 
-#: audioplayer_vlc.cpp:55
+#: audioplayer_vlc.cpp:60 audioplayer_vlc.cpp:69
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr ""
 
-#: audioplayer_vlc.cpp:112 audioplayer_vlc.cpp:174
+#: audioplayer_vlc.cpp:141 audioplayer_vlc.cpp:209
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
