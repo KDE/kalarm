@@ -2631,9 +2631,13 @@ This displays the Configuration dialog.</para>
 
 <itemizedlist>
 <listitem>
-<para><guilabel>Start at login</guilabel>: &kalarm; will be started
-automatically at session login, ensuring that &kalarm; runs at
-all times unless you manually quit.</para>
+<para><guilabel>Start at login</guilabel>: &kalarm; must be running
+for alarms to trigger, so &kalarm; is normally
+started automatically at session login to ensure that &kalarm; runs
+at all times unless you manually quit it. Deselect this option if you do
+not want to restart &kalarm; automatically from now on; this will
+disable all alarms once &kalarm; quits, unless you run it manually
+again.</para>
 
 <warning><para>This option should always be checked unless you intend
 to discontinue use of &kalarm;.</para></warning>
@@ -2645,12 +2649,13 @@ this option again each time you run &kalarm;.</para></note>
 </listitem>
 
 <listitem>
-<para><guilabel>Warn before quitting</guilabel>: When alarms are
-disabled while &kalarm; is not running, selecting this option prompts
-you for confirmation if you attempt to terminate &kalarm; using the
-system tray icon's <menuchoice><guimenu>Quit</guimenu></menuchoice>
-option. This prevents accidental disabling of alarms. For safety, this
-option is automatically re-enabled by default whenever you change run
+<para><guilabel>Warn before quitting</guilabel>: &kalarm; must be
+running for alarms to trigger. Select this option so that if you
+attempt to terminate &kalarm; using its
+<menuchoice><guimenu>Quit</guimenu></menuchoice> option, you will be warned
+that alarms will be disabled and prompted for confirmation. This prevents
+accidental disabling of alarms. For safety, this option is
+automatically re-enabled by default whenever you change run
 mode.</para>
 </listitem>
 
