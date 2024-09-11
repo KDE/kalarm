@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2024-9-2</date>
+<date>2024-9-11</date>
 <releaseinfo>3.10.0 (KDE Gear 24.12)</releaseinfo>
 
 <abstract>
@@ -2639,9 +2639,9 @@ all times unless you manually quit.</para>
 to discontinue use of &kalarm;.</para></warning>
 
 <note><para>This option is automatically reselected whenever &kalarm;
-is run. So if you have unchecked this option and want to continue to
-prevent &kalarm; from running at login, you need to uncheck this
-option again each time you run &kalarm;.</para></note>
+is run. So if you have previously unchecked this option and want to
+continue to prevent &kalarm; from running at login, you need to uncheck
+this option again each time you run &kalarm;.</para></note>
 </listitem>
 
 <listitem>
