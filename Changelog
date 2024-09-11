@@ -3,9 +3,12 @@ KAlarm Change Log
 === Version 3.10.0 (KDE Gear 24.12) --- 31 July 2024 ===
 * Provide build option to use VLC or MPV to play sounds.
 
-=== Version 3.9.1 (KDE Gear 24.08.1) --- 10 September 2024 ===
-* Fix repeating audio alarms only playing once.
+=== Version 3.9.2 (KDE Gear 24.08.2) --- 11 September 2024 ===
 * Fix crash if kernel alarm timers are supported.
+* Fix Wake from Suspend not working when using RTC wake [KDE Bug 486187]
+
+=== Version 3.9.1 (KDE Gear 24.08.1) --- 9 September 2024 ===
+* Fix repeating audio alarms only playing once.
 
 === Version 3.9.0 (KDE Gear 24.08) --- 9 July 2024 ===
 * Use VLC instead of libcanberra to play sounds [KDE Bug 489597, 489213, 484851]
