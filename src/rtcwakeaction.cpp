@@ -1,7 +1,7 @@
 /*
  *  rtcwakeaction.cpp  -  KAuth helper application to execute rtcwake commands
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2011-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2011-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -75,7 +75,7 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
         proc.setProgram(exe);
         proc.setArguments({ QStringLiteral("-m"), QStringLiteral("no"), QStringLiteral("-s"), QString::number(t ? t - now : 2) });
         proc.start();
-        proc.waitForStarted(5000); // allow a timeout of 5 seconds
+        proc.waitForFinished(5000); // allow a timeout of 5 seconds
         result = proc.exitCode();
     }
     QString errmsg;
