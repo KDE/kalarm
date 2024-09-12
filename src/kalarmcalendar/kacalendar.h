@@ -28,10 +28,10 @@ class Alarm;
 namespace KAlarmCal
 {
 
-extern const QLatin1String KALARMCAL_EXPORT MIME_BASE;      //!< The base mime type for KAlarm alarms
-extern const QLatin1String KALARMCAL_EXPORT MIME_ACTIVE;    //!< The mime type for KAlarm active alarms
-extern const QLatin1String KALARMCAL_EXPORT MIME_ARCHIVED;  //!< The mime type for KAlarm archived alarms
-extern const QLatin1String KALARMCAL_EXPORT MIME_TEMPLATE;  //!< The mime type for KAlarm alarm templates
+extern const QLatin1StringView KALARMCAL_EXPORT MIME_BASE;      //!< The base mime type for KAlarm alarms
+extern const QLatin1StringView KALARMCAL_EXPORT MIME_ACTIVE;    //!< The mime type for KAlarm active alarms
+extern const QLatin1StringView KALARMCAL_EXPORT MIME_ARCHIVED;  //!< The mime type for KAlarm archived alarms
+extern const QLatin1StringView KALARMCAL_EXPORT MIME_TEMPLATE;  //!< The mime type for KAlarm alarm templates
 
 /** Declaration type for a calendar resource ID. */
 using ResourceId = qint64;

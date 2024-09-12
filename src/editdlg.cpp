@@ -64,7 +64,7 @@ namespace
 const char EDIT_DIALOG_NAME[] = "EditDialog";
 const char TEMPLATE_DIALOG_NAME[] = "EditTemplateDialog";
 const char EDIT_MORE_KEY[]   = "EditMore";
-const QLatin1String EDIT_MORE_GROUP("ShowOpts");
+const QLatin1StringView EDIT_MORE_GROUP("ShowOpts");
 const int  maxDelayTime = 99*60 + 59;    // < 100 hours
 }
 

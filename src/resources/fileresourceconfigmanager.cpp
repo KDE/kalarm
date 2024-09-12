@@ -21,7 +21,7 @@
 namespace
 {
 // Config file keys
-const QLatin1String GENERAL_GROUP("General");
+const QLatin1StringView GENERAL_GROUP("General");
 const char* KEY_LASTID    = "LastId";
 }
 

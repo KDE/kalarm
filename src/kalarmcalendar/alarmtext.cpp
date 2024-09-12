@@ -121,7 +121,7 @@ void AlarmText::setText(const QString& text)
 {
     d->clear();
     d->mBody = text;
-    if (text.startsWith(QLatin1String("#!")))
+    if (text.startsWith(QLatin1StringView("#!")))
         d->mType = Private::Script;
 }
 
@@ -186,7 +186,7 @@ QString AlarmText::Private::displayText() const
             text += mSubjectPrefix + QLatin1Char('\t') + mSubject;
             if (!mBody.isEmpty())
             {
-                text += QLatin1String("\n\n");
+                text += QLatin1StringView("\n\n");
                 text += mBody;
             }
             break;
@@ -369,7 +369,7 @@ QString AlarmText::summary(const KAEvent& event, int maxLines, bool* truncated)
         return text.left(newline);    // text ends in newline
     if (truncated)
         *truncated = true;
-    return text.left(newline + (maxLines <= 1 ? 0 : 1)) + QLatin1String("...");
+    return text.left(newline + (maxLines <= 1 ? 0 : 1)) + QLatin1StringView("...");
 }
 
 /******************************************************************************

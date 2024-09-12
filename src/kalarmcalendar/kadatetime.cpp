@@ -1727,9 +1727,9 @@ QString KADateTime::toString(const QString& format) const
                 {   // am/pm
                     bool am = (d->time().hour() < 12);
                     QString text = (am ? locale.amText() : locale.pmText()).toLower();
-                    if (text == QLatin1String("a.m."))
+                    if (text == QLatin1StringView("a.m."))
                         text = QStringLiteral("am");
-                    else if (text == QLatin1String("p.m."))
+                    else if (text == QLatin1StringView("p.m."))
                         text = QStringLiteral("pm");
                     result += text;
                     break;
@@ -1738,9 +1738,9 @@ QString KADateTime::toString(const QString& format) const
                 {   // AM/PM
                     bool am = (d->time().hour() < 12);
                     QString text = (am ? locale.amText() : locale.pmText()).toUpper();
-                    if (text == QLatin1String("A.M."))
+                    if (text == QLatin1StringView("A.M."))
                         text = QStringLiteral("AM");
-                    else if (text == QLatin1String("P.M."))
+                    else if (text == QLatin1StringView("P.M."))
                         text = QStringLiteral("PM");
                     result += text;
                     break;
@@ -1778,10 +1778,10 @@ QString KADateTime::toString(const QString& format) const
                     num = d->date().month();
                     break;
                 case 'P':     // am/pm
-                    result += (d->time().hour() < 12) ? QLatin1String("am") : QLatin1String("pm");
+                    result += (d->time().hour() < 12) ? QLatin1StringView("am") : QLatin1StringView("pm");
                     break;
                 case 'p':     // AM/PM
-                    result += (d->time().hour() < 12) ? QLatin1String("AM") : QLatin1String("PM");
+                    result += (d->time().hour() < 12) ? QLatin1StringView("AM") : QLatin1StringView("PM");
                     break;
                 case 'S':
                 {   // seconds with ':' prefix, only if non-zero
@@ -1807,7 +1807,7 @@ QString KADateTime::toString(const QString& format) const
                     zone = TZName;
                     break;
                 default:
-                    result += QLatin1String("%:");
+                    result += QLatin1StringView("%:");
                     result += format[i];
                     break;
             }
@@ -1860,7 +1860,7 @@ QString KADateTime::toString(const QString& format) const
                     int offset = (d->specType == TimeZone || d->specType == LocalZone) ? d->timeZoneOffset(local)
                                : (d->specType == OffsetFromUTC) ? d->spec().utcOffset() : 0;
                     if (offset == InvalidOffset)
-                        return result + QLatin1String("+ERROR");
+                        return result + QLatin1StringView("+ERROR");
                     offset /= 60;
                     switch (zone)
                     {
@@ -1914,13 +1914,13 @@ QString KADateTime::toString(TimeFormat format) const
     {
         case RFCDateDay:
             result += shortDay(d->date().dayOfWeek());
-            result += QLatin1String(", ");
+            result += QLatin1StringView(", ");
             [[fallthrough]]; // fall through to RFCDate
         case RFCDate:
         {
             QString seconds;
             if (d->time().second())
-                seconds = QLatin1String(":") + numString(d->time().second(), 2);
+                seconds = QLatin1StringView(":") + numString(d->time().second(), 2);
             result += QStringLiteral("%1 %2 ").arg(numString(d->date().day(), 2),
                                                    shortMonth(d->date().month()));
             int year = d->date().year();
@@ -2029,7 +2029,7 @@ QString KADateTime::toString(TimeFormat format) const
         offset = d->timeZoneOffset(local);   // calculate offset and cache UTC value
     }
     if (d->specType == Invalid || offset == InvalidOffset)
-        return result + QLatin1String("+ERROR");
+        return result + QLatin1StringView("+ERROR");
     if (offset < 0)
     {
         offset = -offset;
@@ -2068,8 +2068,8 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
             {
                 // Check that if date has '-' separators, both separators are '-'.
                 parts_ = match1.capturedTexts();
-                bool h1 = (parts_.at(3) == QLatin1String("-"));
-                bool h2 = (parts_.at(5) == QLatin1String("-"));
+                bool h1 = (parts_.at(3) == QLatin1StringView("-"));
+                bool h2 = (parts_.at(5) == QLatin1StringView("-"));
                 if (h1 != h2)
                     break;
             }
@@ -2145,7 +2145,7 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
                     if (!ok[0] || !ok[1] || offsetMin > 59)
                         break;
                     offset += offsetMin * 60;
-                    negOffset = (partsu[1] == QLatin1String("-"));
+                    negOffset = (partsu[1] == QLatin1StringView("-"));
                     if (negOffset)
                         offset = -offset;
                 }
@@ -2227,7 +2227,7 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
                 second = 59;    // apparently a leap second - validate below, once time zone is known
             if (!parts[7].isEmpty())
             {
-                QString ms = parts[7] + QLatin1String("00");
+                QString ms = parts[7] + QLatin1StringView("00");
                 ms.truncate(3);
                 msecs = ms.toInt(&ok);
                 if (!ok)
@@ -2246,7 +2246,7 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
                 offset += parts[11].toInt(&ok1) * 60;
                 if (!ok || !ok1)
                     break;
-                if (parts[9] == QLatin1String("-"))
+                if (parts[9] == QLatin1StringView("-"))
                 {
                     if (!offset && leapSecond)
                         break;    // leap second only valid if known time zone
@@ -2332,7 +2332,7 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
             int year = parts[2].toInt(&ok);
             if (!ok)
                 break;
-            if (parts[1] == QLatin1String("-"))
+            if (parts[1] == QLatin1StringView("-"))
                 year = -year;
             if (!dateOnly)
             {
@@ -2358,7 +2358,7 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
                 }
                 if (!parts[7].isEmpty())
                 {
-                    QString ms = parts[7] + QLatin1String("00");
+                    QString ms = parts[7] + QLatin1StringView("00");
                     ms.truncate(3);
                     msecs = ms.toInt(&ok);
                     if (!ok)
@@ -2418,7 +2418,7 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
                     if (!ok)
                         break;
                 }
-                if (parts[9] == QLatin1String("-"))
+                if (parts[9] == QLatin1StringView("-"))
                 {
                     offset = -offset;
                     if (!offset && negZero)
@@ -2485,7 +2485,7 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
                 if (!ok)
                     break;
             }
-            if (parts2[1] == QLatin1String("-"))
+            if (parts2[1] == QLatin1StringView("-"))
             {
                 offset = -offset;
                 if (!offset && negZero)
@@ -3026,7 +3026,7 @@ QDateTime fromStr(const QString& string, const QString& format, int& utcOffset,
                     if (!i)
                         return {};
                     val.truncate(i);
-                    val += QLatin1String("00");
+                    val += QLatin1StringView("00");
                     val.truncate(3);
                     int ms = val.toInt();
                     if (millisec != NO_NUMBER && millisec != ms)
@@ -3324,9 +3324,9 @@ int getAmPm(const QString& string, int& offset, bool localised)
     }
     if (!ap)
     {
-        if (part.startsWith(QLatin1String("am"), Qt::CaseInsensitive))
+        if (part.startsWith(QLatin1StringView("am"), Qt::CaseInsensitive))
             ap = 1;
-        else if (part.startsWith(QLatin1String("pm"), Qt::CaseInsensitive))
+        else if (part.startsWith(QLatin1StringView("pm"), Qt::CaseInsensitive))
             ap = 2;
     }
     if (ap)

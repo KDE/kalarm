@@ -33,8 +33,8 @@ QString currentIdentityName()
 Type currentIdentity()
 {
     const QString desktop = currentIdentityName();
-    if (desktop == QLatin1String("KDE"))    return Type::Kde;
-    if (desktop == QLatin1String("Unity"))  return Type::Unity;
+    if (desktop == QLatin1StringView("KDE"))    return Type::Kde;
+    if (desktop == QLatin1StringView("Unity"))  return Type::Unity;
     return Type::Other;
 }
 

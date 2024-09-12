@@ -301,7 +301,7 @@ void TrayWindow::updateToolTip()
     else if (mHaveDisabledAlarms)
     {
         if (!subTitle.isEmpty())
-            subTitle += QLatin1String("<br/>");
+            subTitle += QLatin1StringView("<br/>");
         subTitle += i18nc("@info:tooltip Brief: some alarms are disabled", "(Some alarms disabled)");
     }
     setToolTipSubTitle(subTitle);
@@ -362,9 +362,9 @@ QString TrayWindow::tooltipAlarmText() const
                 minutes[0] = static_cast<char>((mins%60) / 10 + '0');
                 minutes[1] = static_cast<char>((mins%60) % 10 + '0');
                 if (Preferences::showTooltipAlarmTime())
-                    item.text += i18nc("@info prefix + hours:minutes", "(%1%2:%3)", prefix, mins/60, QLatin1String(minutes));
+                    item.text += i18nc("@info prefix + hours:minutes", "(%1%2:%3)", prefix, mins/60, QLatin1StringView(minutes));
                 else
-                    item.text += i18nc("@info prefix + hours:minutes", "%1%2:%3", prefix, mins/60, QLatin1String(minutes));
+                    item.text += i18nc("@info prefix + hours:minutes", "%1%2:%3", prefix, mins/60, QLatin1StringView(minutes));
                 item.text += QLatin1Char(' ');
             }
             item.text += AlarmText::summary(*event);
@@ -386,7 +386,7 @@ QString TrayWindow::tooltipAlarmText() const
     {
         qCDebug(KALARM_LOG) << "TrayWindow::tooltipAlarmText: --" << (count+1) << ")" << items.at(i).text;
         if (i > 0)
-            text += QLatin1String("<br />");
+            text += QLatin1StringView("<br />");
         text += items.at(i).text;
         if (++count == maxCount)
             break;

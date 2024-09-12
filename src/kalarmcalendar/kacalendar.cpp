@@ -28,10 +28,10 @@ using namespace KCalendarCore;
 namespace KAlarmCal
 {
 
-const QLatin1String MIME_BASE("application/x-vnd.kde.alarm");
-const QLatin1String MIME_ACTIVE("application/x-vnd.kde.alarm.active");
-const QLatin1String MIME_ARCHIVED("application/x-vnd.kde.alarm.archived");
-const QLatin1String MIME_TEMPLATE("application/x-vnd.kde.alarm.template");
+const QLatin1StringView MIME_BASE("application/x-vnd.kde.alarm");
+const QLatin1StringView MIME_ACTIVE("application/x-vnd.kde.alarm.active");
+const QLatin1StringView MIME_ARCHIVED("application/x-vnd.kde.alarm.archived");
+const QLatin1StringView MIME_TEMPLATE("application/x-vnd.kde.alarm.template");
 
 static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION VCALENDAR property
 
@@ -132,7 +132,7 @@ int Private::readKAlarmVersion(const FileStorage::Ptr& fileStorage, QString& sub
         {
             // Older versions used KAlarm's translated name in the product ID, which
             // could have created problems using a calendar in different locales.
-            progname = QLatin1String(" ") + i18n("KAlarm") + QLatin1Char(' ');
+            progname = QLatin1StringView(" ") + i18n("KAlarm") + QLatin1Char(' ');
             i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
             if (i < 0)
                 return KACalendar::IncompatibleFormat;    // calendar wasn't created by KAlarm
@@ -148,7 +148,7 @@ int Private::readKAlarmVersion(const FileStorage::Ptr& fileStorage, QString& sub
             return KACalendar::IncompatibleFormat;    // missing version string
         versionString.truncate(i);   // 'versionString' now contains the KAlarm version string
     }
-    if (versionString == QLatin1String(KAEvent::currentCalendarVersionString()))
+    if (versionString == QLatin1StringView(KAEvent::currentCalendarVersionString()))
         return KACalendar::CurrentFormat;    // the calendar is in the current KAlarm format
     const int ver = KAlarmCal::getVersionNumber(versionString, &subVersion);
     if (ver == KAEvent::currentCalendarVersion())

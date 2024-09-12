@@ -189,7 +189,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
     <entry name="TooltipTimeToPrefix" type="String">
       <label context="@label">Time-to-alarm prefix in system tray tooltip</label>
       <whatsthis context="@info:whatsthis">Enter the text to be displayed in front of the time until the alarm, in the system tray tooltip.</whatsthis>
-      <default code="true">QLatin1String("+")</default>
+      <default code="true">QLatin1StringView("+")</default>
       <emit signal="tooltipPreferencesChanged"/>
     </entry>
     <entry name="Base_EmailClient" key="EmailClient" type="Enum">
@@ -209,12 +209,12 @@ SPDX-License-Identifier: GPL-2.0-or-later
     <entry name="Base_EmailFrom" key="EmailFrom" type="String">
       <label context="@label">'From' email address</label>
       <whatsthis context="@info:whatsthis">Your email address, used to identify you as the sender when sending email alarms. Enter "@SystemSettings" to use the default email address set in KMail, "@KMail" to allow choice of KMail identities, or enter the actual email address otherwise.</whatsthis>
-      <default code="true">KAlarmCal::Identities::identitiesExist() ? QLatin1String("@KMail") : QLatin1String("@SystemSettings")</default>
+      <default code="true">KAlarmCal::Identities::identitiesExist() ? QLatin1StringView("@KMail") : QLatin1StringView("@SystemSettings")</default>
     </entry>
     <entry name="Base_EmailBccAddress" key="EmailBccAddress" type="String">
       <label context="@label">'Bcc' email address</label>
       <whatsthis context="@info:whatsthis">Your email address, used for blind copying email alarms to yourself. If you want blind copies to be sent to your account on the computer which KAlarm runs on, you can simply enter your user login name. Enter "@SystemSettings" to use the default email address set in KMail, or enter the actual email address otherwise.</whatsthis>
-      <default code="true">QLatin1String("@SystemSettings")</default>
+      <default code="true">QLatin1StringView("@SystemSettings")</default>
     </entry>
     <entry name="Base_CmdXTermCommand" key="CmdXTerm" type="String">
       <label context="@label">Terminal for command alarms</label>

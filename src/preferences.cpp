@@ -42,7 +42,7 @@ namespace
 {
 
 // Config file entry names
-const QLatin1String GENERAL_GROUP("General");
+const QLatin1StringView GENERAL_GROUP("General");
 
 // Config file entry name for temporary use
 const char* TEMP = "Temp";
@@ -76,10 +76,10 @@ void splitXTermCommands();
 } // namespace
 
 // Config file entry names for notification messages
-const QLatin1String Preferences::QUIT_WARN("QuitWarn");
-const QLatin1String Preferences::ASK_AUTO_START("AskAutoStart");
-const QLatin1String Preferences::CONFIRM_ALARM_DELETION("ConfirmAlarmDeletion");
-const QLatin1String Preferences::EMAIL_QUEUED_NOTIFY("EmailQueuedNotify");
+const QLatin1StringView Preferences::QUIT_WARN("QuitWarn");
+const QLatin1StringView Preferences::ASK_AUTO_START("AskAutoStart");
+const QLatin1StringView Preferences::CONFIRM_ALARM_DELETION("ConfirmAlarmDeletion");
+const QLatin1StringView Preferences::EMAIL_QUEUED_NOTIFY("EmailQueuedNotify");
 const bool  default_quitWarn             = true;
 const bool  default_emailQueuedNotify    = false;
 const bool  default_confirmAlarmDeletion = true;
@@ -199,7 +199,7 @@ void Preferences::setNoAutoStart(bool yes)
     const QStringList autostartDirs = QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation);
     for (const QString& dir : autostartDirs)
     {
-        const QString file = dir + QLatin1String("/autostart/") + AUTOSTART_FILE;
+        const QString file = dir + QLatin1StringView("/autostart/") + AUTOSTART_FILE;
         if (QFile::exists(file))
         {
             QFileInfo info(file);
@@ -219,7 +219,7 @@ void Preferences::setNoAutoStart(bool yes)
     if (existingRO)
     {
         configDirRW = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-        autostartFileRW = configDirRW + QLatin1String("/autostart/") + AUTOSTART_FILE;
+        autostartFileRW = configDirRW + QLatin1StringView("/autostart/") + AUTOSTART_FILE;
         if (configDirRW.isEmpty())
         {
             qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: No writable autostart file path";
@@ -257,8 +257,8 @@ void Preferences::setNoAutoStart(bool yes)
                 lines.removeAt(i);
                 --i;
             }
-            else if (line.startsWith(QLatin1String("Hidden="))
-                 ||  line.startsWith(QLatin1String("OnlyShowIn=")))
+            else if (line.startsWith(QLatin1StringView("Hidden="))
+                 ||  line.startsWith(QLatin1StringView("OnlyShowIn=")))
             {
                 lines.removeAt(i);
                 update = true;
@@ -277,7 +277,7 @@ void Preferences::setNoAutoStart(bool yes)
     if (update)
     {
         // Write the updated file
-        QFileInfo info(configDirRW + QLatin1String("/autostart"));
+        QFileInfo info(configDirRW + QLatin1StringView("/autostart"));
         if (!info.exists())
         {
             // First, create the directory for it.

@@ -115,18 +115,18 @@ struct UpdateStatusData
     }
 };
 
-const QLatin1String KORG_DBUS_SERVICE("org.kde.korganizer");
-const QLatin1String KORG_DBUS_IFACE("org.kde.korganizer.Korganizer");
+const QLatin1StringView KORG_DBUS_SERVICE("org.kde.korganizer");
+const QLatin1StringView KORG_DBUS_IFACE("org.kde.korganizer.Korganizer");
 // D-Bus object path of KOrganizer's notification interface
 #define       KORG_DBUS_PATH            "/Korganizer"
 #define       KORG_DBUS_LOAD_PATH       "/korganizer_PimApplication"
-const QLatin1String KORG_MIME_TYPE("application/x-vnd.akonadi.calendar.event");
-const QLatin1String KORGANIZER_UID("korg-");
+const QLatin1StringView KORG_MIME_TYPE("application/x-vnd.akonadi.calendar.event");
+const QLatin1StringView KORGANIZER_UID("korg-");
 
-const QLatin1String ALARM_OPTS_FILE("alarmopts");
-const QLatin1String DONT_SHOW_ERRORS_GROUP("DontShowErrors");
+const QLatin1StringView ALARM_OPTS_FILE("alarmopts");
+const QLatin1StringView DONT_SHOW_ERRORS_GROUP("DontShowErrors");
 
-const QLatin1String GENERAL_GROUP("General");
+const QLatin1StringView GENERAL_GROUP("General");
 
 KAlarm::UpdateResult updateEvent(KAEvent&, KAlarm::UpdateError, QWidget* msgParent, bool saveIfReadOnly);
 void editNewTemplate(EditAlarmDlg::Type, const KAEvent& preset, QWidget* parent);
@@ -1907,7 +1907,7 @@ KADateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime
     const QString zone = tzstring.trimmed();
     if (!zone.isEmpty())
     {
-        if (zone == QLatin1String("UTC"))
+        if (zone == QLatin1StringView("UTC"))
             spec = KADateTime::UTC;
         else
         {

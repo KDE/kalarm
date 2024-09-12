@@ -314,7 +314,7 @@ bool readDirectoryResource(const QString& dirPath, CalEvent::Types alarmTypes,
         const QString file = it.fileName();
         if (!file.isEmpty()
         &&  !file.startsWith(QLatin1Char('.')) && !file.endsWith(QLatin1Char('~'))
-        &&  file != QLatin1String("WARNING_README.txt"))
+        &&  file != QLatin1StringView("WARNING_README.txt"))
         {
             const QString path = dirPath + QLatin1Char('/') + file;
             if (QFileInfo::exists(path)  // a temporary file may no longer exist

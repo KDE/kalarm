@@ -218,7 +218,7 @@ void MessageDisplayHelper::initTexts()
             static const QRegularExpression re(QStringLiteral("^(<[^>]+>)*"));  // search for HTML tag "<...>"
             const QRegularExpressionMatch match = re.match(s);
             // Prefix the time, plus a newline, to "Reminder", inside any HTML tags.
-            s.insert(match.capturedEnd(0), mTexts.time + QLatin1String("<br/>"));
+            s.insert(match.capturedEnd(0), mTexts.time + QLatin1StringView("<br/>"));
             mTexts.timeFull = s;
         }
     }
@@ -252,7 +252,7 @@ void MessageDisplayHelper::initTexts()
 
                         QMimeDatabase db;
                         QMimeType mime = db.mimeTypeForUrl(url);
-                        if (mime.name() == QLatin1String("application/octet-stream"))
+                        if (mime.name() == QLatin1StringView("application/octet-stream"))
                             mime = db.mimeTypeForData(mTempFile);
                         mTexts.fileType = File::fileType(mime);
                         switch (mTexts.fileType)
@@ -271,7 +271,7 @@ void MessageDisplayHelper::initTexts()
                         switch (mTexts.fileType)
                         {
                             case File::Type::Image:
-                                mTexts.message = QLatin1String(R"(<div align="center"><img src=")") + mTempFile->fileName() + QLatin1String(R"("></div>)");
+                                mTexts.message = QLatin1StringView(R"(<div align="center"><img src=")") + mTempFile->fileName() + QLatin1StringView(R"("></div>)");
                                 mTempFile->close();   // keep the file available to be displayed
                                 break;
                             case File::Type::TextFormatted:

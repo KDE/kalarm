@@ -295,7 +295,7 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
     for (int i = 0;  i < args.size();  ++i)
     {
         const QString arg = args[i];
-        if (arg == QLatin1String("--nofork"))
+        if (arg == QLatin1StringView("--nofork"))
             continue;     // Ignore debugging option
         mNonExecArguments << arg;
         if (arg == d->optionName(EXEC)  ||  arg == d->optionName(EXEC, true)
@@ -373,14 +373,14 @@ void CommandOptions::process()
         mEditAction    = KAEvent::SubAction::Command;
         mEditActionSet = true;
         mFlags        |= KAEvent::DISPLAY_COMMAND;
-        mText          = mParser->value(*mOptions.at(d->mCommandOpt)) + QLatin1String(" ") + mExecArguments.join(QLatin1Char(' '));
+        mText          = mParser->value(*mOptions.at(d->mCommandOpt)) + QLatin1StringView(" ") + mExecArguments.join(QLatin1Char(' '));
     }
     if (d->checkCommand(EXEC, NEW))
     {
         mEditType      = EditAlarmDlg::COMMAND;
         mEditAction    = KAEvent::SubAction::Command;
         mEditActionSet = true;
-        mText          = mParser->value(*mOptions.at(d->mCommandOpt)) + QLatin1String(" ") + mExecArguments.join(QLatin1Char(' '));
+        mText          = mParser->value(*mOptions.at(d->mCommandOpt)) + QLatin1StringView(" ") + mExecArguments.join(QLatin1Char(' '));
     }
     if (d->checkCommand(MAIL, NEW))
     {

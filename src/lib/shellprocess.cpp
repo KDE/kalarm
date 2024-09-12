@@ -44,7 +44,7 @@ bool ShellProcess::start(OpenMode openMode)
     connect(this, &QProcess::readyReadStandardOutput, this, &ShellProcess::stdoutReady);
     connect(this, &QProcess::readyReadStandardError, this, &ShellProcess::stderrReady);
     const QStringList args{ QStringLiteral("-c"), mCommand };
-    QProcess::start(QLatin1String(shellPath()), args, openMode);
+    QProcess::start(QLatin1StringView(shellPath()), args, openMode);
     if (!waitForStarted())
     {
         mStatus = Status::StartFail;

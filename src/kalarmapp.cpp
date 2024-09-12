@@ -63,7 +63,7 @@ const int RESOURCES_TIMEOUT = 30;   // timeout (seconds) for resources to be pop
 const char FDO_NOTIFICATIONS_SERVICE[] = "org.freedesktop.Notifications";
 const char FDO_NOTIFICATIONS_PATH[]    = "/org/freedesktop/Notifications";
 
-const QLatin1String GENERAL_GROUP("General");
+const QLatin1StringView GENERAL_GROUP("General");
 
 /******************************************************************************
 * Find the maximum number of seconds late which a late-cancel alarm is allowed
@@ -289,7 +289,7 @@ bool KAlarmApp::restoreSession()
     for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
     {
         const QString type = KMainWindow::classNameOfToplevel(i);
-        if (type == QLatin1String("MainWindow"))
+        if (type == QLatin1StringView("MainWindow"))
         {
             MainWindow* win = MainWindow::create(true);
             win->restore(i, false);
@@ -298,7 +298,7 @@ bool KAlarmApp::restoreSession()
             else
                 win->show();
         }
-        else if (type == QLatin1String("MessageWindow"))
+        else if (type == QLatin1StringView("MessageWindow"))
         {
             auto win = new MessageWindow;
             win->restore(i, false);
@@ -1644,7 +1644,7 @@ QStringList KAlarmApp::scheduledAlarmList()
     {
         const KADateTime dateTime = event.nextTrigger(KAEvent::Trigger::Display).effectiveKDateTime().toLocalZone();
         const Resource resource = Resources::resource(event.resourceId());
-        QString text(resource.configName() + QLatin1String(":"));
+        QString text(resource.configName() + QLatin1StringView(":"));
         text += event.id() + QLatin1Char(' ')
              +  dateTime.toString(QStringLiteral("%Y%m%dT%H%M "))
              +  AlarmText::summary(event, 1);
@@ -2583,43 +2583,43 @@ QString KAlarmApp::composeXTermCommand(const QString& command, const KAEvent& ev
     QString cmd = Preferences::cmdXTermCommand();
     if (cmd.isEmpty())
         return {};   // no terminal application is configured
-    cmd.replace(QLatin1String("%t"), KAboutData::applicationData().displayName());  // set the terminal window title
-    if (cmd.indexOf(QLatin1String("%C")) >= 0)
+    cmd.replace(QLatin1StringView("%t"), KAboutData::applicationData().displayName());  // set the terminal window title
+    if (cmd.indexOf(QLatin1StringView("%C")) >= 0)
     {
         // Execute the command from a temporary script file
         if (flags & ProcData::TEMP_FILE)
-            cmd.replace(QLatin1String("%C"), command);    // the command is already calling a temporary file
+            cmd.replace(QLatin1StringView("%C"), command);    // the command is already calling a temporary file
         else
         {
             tempScriptFile = createTempScriptFile(command, true, event, *alarm);
             if (tempScriptFile.isEmpty())
                 return {};
-            cmd.replace(QLatin1String("%C"), tempScriptFile);    // %C indicates where to insert the command
+            cmd.replace(QLatin1StringView("%C"), tempScriptFile);    // %C indicates where to insert the command
         }
     }
-    else if (cmd.indexOf(QLatin1String("%W")) >= 0)
+    else if (cmd.indexOf(QLatin1StringView("%W")) >= 0)
     {
         // Execute the command from a temporary script file,
         // with a sleep after the command is executed
-        tempScriptFile = createTempScriptFile(command + QLatin1String("\nsleep 86400\n"), true, event, *alarm);
+        tempScriptFile = createTempScriptFile(command + QLatin1StringView("\nsleep 86400\n"), true, event, *alarm);
         if (tempScriptFile.isEmpty())
             return {};
-        cmd.replace(QLatin1String("%W"), tempScriptFile);    // %w indicates where to insert the command
+        cmd.replace(QLatin1StringView("%W"), tempScriptFile);    // %w indicates where to insert the command
     }
-    else if (cmd.indexOf(QLatin1String("%w")) >= 0)
+    else if (cmd.indexOf(QLatin1StringView("%w")) >= 0)
     {
         // Append a sleep to the command.
         // Quote the command in case it contains characters such as [>|;].
-        const QString exec = KShell::quoteArg(command + QLatin1String("; sleep 86400"));
-        cmd.replace(QLatin1String("%w"), exec);    // %w indicates where to insert the command string
+        const QString exec = KShell::quoteArg(command + QLatin1StringView("; sleep 86400"));
+        cmd.replace(QLatin1StringView("%w"), exec);    // %w indicates where to insert the command string
     }
     else
     {
         // Set the command to execute.
         // Put it in quotes in case it contains characters such as [>|;].
         const QString exec = KShell::quoteArg(command);
-        if (cmd.indexOf(QLatin1String("%c")) >= 0)
-            cmd.replace(QLatin1String("%c"), exec);    // %c indicates where to insert the command string
+        if (cmd.indexOf(QLatin1StringView("%c")) >= 0)
+            cmd.replace(QLatin1StringView("%c"), exec);    // %c indicates where to insert the command string
         else
             cmd.append(exec);           // otherwise, simply append the command string
     }

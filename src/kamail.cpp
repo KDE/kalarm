@@ -580,7 +580,7 @@ void initHeaders(KMime::Message& message, JobData& data)
     message.setHeader(subject);
 
     auto agent = new KMime::Headers::UserAgent;
-    agent->fromUnicodeString(KAboutData::applicationData().displayName() + QLatin1String("/" KALARM_VERSION));
+    agent->fromUnicodeString(KAboutData::applicationData().displayName() + QLatin1StringView("/" KALARM_VERSION));
     agent->setRFC2047Charset("us-ascii");
     message.setHeader(agent);
 
@@ -760,7 +760,7 @@ bool parseUserName(const char* & scursor, const char* const send, QString& resul
 #ifndef WIN32
                     if (getpwnam(atom.toByteArray().constData()))
                     {
-                        result = QLatin1String(atom);
+                        result = QLatin1StringView(atom);
                         return true;
                     }
 #endif

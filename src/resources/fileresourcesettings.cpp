@@ -30,15 +30,15 @@ const char* KEY_UPDATEFORMAT = "UpdateFormat";
 const char* KEY_HASH         = "Hash";
 const char* KEY_CMDERRORS    = "CommandErrors";
 // Config file values
-const QLatin1String STORAGE_FILE("File");
-const QLatin1String STORAGE_DIR("Dir");
-const QLatin1String ALARM_ACTIVE("Active");
-const QLatin1String ALARM_ARCHIVED("Archived");
-const QLatin1String ALARM_TEMPLATE("Template");
-const QLatin1String CMD_ERROR_VALUE("Main");
-const QLatin1String CMD_ERROR_PRE_VALUE("Pre");
-const QLatin1String CMD_ERROR_POST_VALUE("Post");
-const QLatin1String CMD_ERROR_PRE_POST_VALUE("PrePost");
+const QLatin1StringView STORAGE_FILE("File");
+const QLatin1StringView STORAGE_DIR("Dir");
+const QLatin1StringView ALARM_ACTIVE("Active");
+const QLatin1StringView ALARM_ARCHIVED("Archived");
+const QLatin1StringView ALARM_TEMPLATE("Template");
+const QLatin1StringView CMD_ERROR_VALUE("Main");
+const QLatin1StringView CMD_ERROR_PRE_VALUE("Pre");
+const QLatin1StringView CMD_ERROR_POST_VALUE("Post");
+const QLatin1StringView CMD_ERROR_PRE_POST_VALUE("PrePost");
 const QLatin1Char   CMD_ERROR_SEPARATOR(':');
 }
 

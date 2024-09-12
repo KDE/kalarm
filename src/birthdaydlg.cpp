@@ -39,7 +39,7 @@
 
 namespace
 {
-const QLatin1String GENERAL_GROUP("General");
+const QLatin1StringView GENERAL_GROUP("General");
 }
 
 BirthdayDlg::BirthdayDlg(QWidget* parent)

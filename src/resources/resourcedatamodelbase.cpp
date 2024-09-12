@@ -62,13 +62,13 @@ QString ResourceDataModelBase::typeListForDisplay(CalEvent::Types alarmTypes)
 {
     QString list;
     if (alarmTypes & CalEvent::ACTIVE)
-        list += QLatin1String("<item>") + i18nc("@item:intext", "Active Alarms") + QLatin1String("</item>");
+        list += QLatin1StringView("<item>") + i18nc("@item:intext", "Active Alarms") + QLatin1StringView("</item>");
     if (alarmTypes & CalEvent::ARCHIVED)
-        list += QLatin1String("<item>") + i18nc("@item:intext", "Archived Alarms") + QLatin1String("</item>");
+        list += QLatin1StringView("<item>") + i18nc("@item:intext", "Archived Alarms") + QLatin1StringView("</item>");
     if (alarmTypes & CalEvent::TEMPLATE)
-        list += QLatin1String("<item>") + i18nc("@item:intext", "Alarm Templates") + QLatin1String("</item>");
+        list += QLatin1StringView("<item>") + i18nc("@item:intext", "Alarm Templates") + QLatin1StringView("</item>");
     if (!list.isEmpty())
-        list = QLatin1String("<list>") + list + QLatin1String("</list>");
+        list = QLatin1StringView("<list>") + list + QLatin1StringView("</list>");
     return list;
 }
 
@@ -355,7 +355,7 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                         break;
                     case Qt::DisplayRole:
                         if (event.commandError() != KAEvent::CmdErr::None)
-                            return QLatin1String("!");
+                            return QLatin1StringView("!");
                         break;
                     case Qt::TextAlignmentRole:
                         return Qt::AlignCenter;

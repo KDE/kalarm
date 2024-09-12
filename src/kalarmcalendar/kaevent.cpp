@@ -5737,7 +5737,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
                 preFlags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, Qt::SkipEmptyParts);
                 preFlags << KAEventPrivate::ARCHIVE_FLAG;
                 flagsValid = true;
-                if (prop != QLatin1String("0"))
+                if (prop != QLatin1StringView("0"))
                 { // "0" was a dummy parameter if no others were present
                     // It's the archive property containing a reminder time and/or repeat-at-login flag.
                     // This was present when no reminder/at-login alarm was pending.
@@ -6147,7 +6147,7 @@ QString EmailAddressList::address(int index) const
             }
         }
         result += (*this)[index].name();
-        result += (quote ? QLatin1String("\" <") : QLatin1String(" <"));
+        result += (quote ? QLatin1StringView("\" <") : QLatin1StringView(" <"));
         quote = true;    // need angle brackets round email address
     }
 

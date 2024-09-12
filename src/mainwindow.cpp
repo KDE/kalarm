@@ -80,8 +80,8 @@ using namespace KAlarmCal;
 namespace
 {
 const QString UI_FILE(QStringLiteral("kalarmui.rc"));
-const QLatin1String WINDOW_NAME("MainWindow");
-const QLatin1String VIEW_GROUP("View");
+const QLatin1StringView WINDOW_NAME("MainWindow");
+const QLatin1StringView VIEW_GROUP("View");
 
 const char*   SHOW_COLUMNS        = "ShowColumns";
 const char*   SHOW_ARCHIVED_KEY   = "ShowArchivedAlarms";
@@ -1411,7 +1411,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     AlarmText          alarmText;
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
 #ifndef NDEBUG
-    const QString fmts = data->formats().join(QLatin1String(", "));
+    const QString fmts = data->formats().join(QLatin1StringView(", "));
     qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent:" << fmts;
 #endif
 
@@ -1514,7 +1514,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
             // Try to find the mime type of the file, without downloading a remote file
             QMimeDatabase mimeDb;
             const QString mimeTypeName = mimeDb.mimeTypeForUrl(url).name();
-            action = mimeTypeName.startsWith(QLatin1String("audio/")) ? KAEvent::SubAction::Audio : KAEvent::SubAction::File;
+            action = mimeTypeName.startsWith(QLatin1StringView("audio/")) ? KAEvent::SubAction::Audio : KAEvent::SubAction::File;
             alarmText.setText(url.toDisplayString());
         }
     }

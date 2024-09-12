@@ -36,7 +36,7 @@ Type fileType(const QMimeType& mimetype)
         return Type::TextApplication;
     if (mimetype.inherits(QStringLiteral("text/plain")))
         return Type::TextPlain;
-    if (mimetype.name().startsWith(QLatin1String("image/")))
+    if (mimetype.name().startsWith(QLatin1StringView("image/")))
         return Type::Image;
     return Type::Unknown;
 }

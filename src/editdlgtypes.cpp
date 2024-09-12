@@ -1502,10 +1502,10 @@ void EditEmailAlarmDlg::slotTrySuccess()
     to.replace(QLatin1Char('<'), QStringLiteral("&lt;"));
     to.replace(QLatin1Char('>'), QStringLiteral("&gt;"));
     if (mEmailBcc->isChecked())
-        msg = QLatin1String("<qt>") + xi18nc("@info", "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>",
-                    to, Preferences::emailBccAddress()) + QLatin1String("</qt>");
+        msg = QLatin1StringView("<qt>") + xi18nc("@info", "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>",
+                    to, Preferences::emailBccAddress()) + QLatin1StringView("</qt>");
     else
-        msg = QLatin1String("<qt>") + xi18nc("@info", "Email sent to:<nl/>%1", to) + QLatin1String("</qt>");
+        msg = QLatin1StringView("<qt>") + xi18nc("@info", "Email sent to:<nl/>%1", to) + QLatin1StringView("</qt>");
     KAMessageBox::information(this, msg);
 }
 
@@ -1522,7 +1522,7 @@ void EditEmailAlarmDlg::openAddressBook()
             return;
         QString addrs = mEmailToEdit->text().trimmed();
         if (!addrs.isEmpty())
-            addrs += QLatin1String(", ");
+            addrs += QLatin1StringView(", ");
         addrs += person.fullName();
         mEmailToEdit->setText(addrs);
     }

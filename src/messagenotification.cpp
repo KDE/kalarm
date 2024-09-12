@@ -93,7 +93,7 @@ private Q_SLOTS:
         for (MessageNotification* notif : std::as_const(MessageNotification::mNotificationList))
         {
             const QByteArray group = "Notification_" + QByteArray::number(++n);
-            KConfigGroup cg(config, QLatin1String(group.constData()));
+            KConfigGroup cg(config, QLatin1StringView(group.constData()));
             notif->saveProperties(cg);
         }
         KConfigGroup cg(config, QStringLiteral("Number"));

@@ -64,8 +64,8 @@ enum FullScreenType { NoFullScreen = 0, FullScreen = 1, FullScreenActive = 2 };
 FullScreenType haveFullScreenWindow(int screen);
 FullScreenType findFullScreenWindows(const QList<QRect>& screenRects, QList<FullScreenType>& screenTypes);
 
-const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
-const QLatin1String KMAIL_DBUS_PATH("/KMail");
+const QLatin1StringView KMAIL_DBUS_SERVICE("org.kde.kmail");
+const QLatin1StringView KMAIL_DBUS_PATH("/KMail");
 
 // The delay for enabling message window buttons if a zero delay is
 // configured, i.e. the windows are placed far from the cursor.
