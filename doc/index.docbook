@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2024-9-11</date>
+<date>2024-9-12</date>
 <releaseinfo>3.10.0 (KDE Gear 24.12)</releaseinfo>
 
 <abstract>
@@ -2631,21 +2631,37 @@ This displays the Configuration dialog.</para>
 
 <itemizedlist>
 <listitem>
-<para><guilabel>Start at login</guilabel>: &kalarm; must be running
-for alarms to trigger, so &kalarm; is normally
-started automatically at session login to ensure that &kalarm; runs
-at all times unless you manually quit it. Deselect this option if you do
-not want to restart &kalarm; automatically from now on; this will
-disable all alarms once &kalarm; quits, unless you run it manually
-again.</para>
+<para><guilabel>Run Mode</guilabel>: This allows you to select whether
+&kalarm; should run automatically, manually or not at all.</para>
 
-<warning><para>This option should always be checked unless you intend
-to discontinue use of &kalarm;.</para></warning>
+<itemizedlist>
+<listitem>
+<para><guilabel>Run automatically</guilabel>: Select this to run
+&kalarm; automatically at login to ensure that it always runs. This
+option must be selected for &kalarm; to function normally and to
+always trigger alarms.</para>
+</listitem>
 
-<note><para>This option is automatically reselected whenever &kalarm;
-is run. So if you have previously unchecked this option and want to
-continue to prevent &kalarm; from running at login, you need to uncheck
-this option again each time you run &kalarm;.</para></note>
+<listitem>
+<para><guilabel>Run manually only</guilabel>: Select this if you
+only want to use &kalarm; occasionally. It will not run automatically,
+and you will need to run it manually when you require it. Once it
+quits (or after you log out), it will no longer function or trigger
+alarms until you run it manually again.</para>
+</listitem>
+
+<listitem>
+<para><guilabel>Do not run</guilabel>: Select this if you want to
+stop using &kalarm;. It will no longer be started at login and after
+it quits or you log out, it will no longer trigger alarms.</para>
+
+<para>Note that if you later run &kalarm; again after selecting this
+option, &kalarm; will then resume normal functioning and will be run
+automatically at login. If you still do not want to use &kalarm; after
+that, you will need to select this <guilabel>Do not run</guilabel>
+option once more.</para>
+</listitem>
+</itemizedlist>
 </listitem>
 
 <listitem>
