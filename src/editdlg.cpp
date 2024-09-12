@@ -31,6 +31,7 @@
 #include "templatepickdlg.h"
 #include "lib/timeedit.h"
 #include "lib/timespinbox.h"
+#include "lib/tooltip.h"
 #include "config-kalarm.h"
 #include "kalarm_debug.h"
 
@@ -196,7 +197,7 @@ void EditAlarmDlg::init(const KAEvent& event)
         {
             mLoadTemplateButton = mButtonBox->addButton(i18nc("@action:button", "Load Template..."),
                                                         QDialogButtonBox::HelpRole);
-            mLoadTemplateButton->setToolTip(i18nc("@info:tooltip", "Select an alarm template to preset the alarm"));
+            KAlarm::setToolTip(mLoadTemplateButton, i18nc("@info:tooltip", "Select an alarm template to preset the alarm"));
         }
     }
     mButtonBox->addButton(QDialogButtonBox::Cancel);
@@ -287,14 +288,14 @@ void EditAlarmDlg::init(const KAEvent& event)
         topLayout->addWidget(templateTimeBox);
         auto grid = new QGridLayout(templateTimeBox);
         mTemplateTimeGroup = new ButtonGroup(templateTimeBox);
-        connect(mTemplateTimeGroup, &ButtonGroup::buttonSet, this, &EditAlarmDlg::slotTemplateTimeType);
-        connect(mTemplateTimeGroup, &ButtonGroup::buttonSet, this, &EditAlarmDlg::contentsChanged);
+        connect(mTemplateTimeGroup, &ButtonGroup::selectionChanged, this, &EditAlarmDlg::slotTemplateTimeType);
+        connect(mTemplateTimeGroup, &ButtonGroup::selectionChanged, this, &EditAlarmDlg::contentsChanged);
 
         mTemplateDefaultTime = new RadioButton(i18nc("@option:radio", "Default time"), templateTimeBox);
         mTemplateDefaultTime->setReadOnly(mReadOnly);
         mTemplateDefaultTime->setWhatsThis(i18nc("@info:whatsthis", "Do not specify a start time for alarms based on this template. "
                                                 "The normal default start time will be used."));
-        mTemplateTimeGroup->addButton(mTemplateDefaultTime);
+        mTemplateTimeGroup->insertButton(mTemplateDefaultTime);
         grid->addWidget(mTemplateDefaultTime, 0, 0, Qt::AlignLeft);
 
         QWidget* box = new QWidget(templateTimeBox);
@@ -304,7 +305,7 @@ void EditAlarmDlg::init(const KAEvent& event)
         mTemplateUseTime->setReadOnly(mReadOnly);
         mTemplateUseTime->setWhatsThis(i18nc("@info:whatsthis", "Specify a start time for alarms based on this template."));
         layout->addWidget(mTemplateUseTime);
-        mTemplateTimeGroup->addButton(mTemplateUseTime);
+        mTemplateTimeGroup->insertButton(mTemplateUseTime);
         mTemplateTime = new TimeEdit();
         mTemplateTime->setReadOnly(mReadOnly);
         mTemplateTime->setWhatsThis(xi18nc("@info:whatsthis",
@@ -318,7 +319,7 @@ void EditAlarmDlg::init(const KAEvent& event)
         mTemplateAnyTime = new RadioButton(i18nc("@option:radio", "Date only"), templateTimeBox);
         mTemplateAnyTime->setReadOnly(mReadOnly);
         mTemplateAnyTime->setWhatsThis(xi18nc("@info:whatsthis", "Set the <interface>Any time</interface> option for alarms based on this template."));
-        mTemplateTimeGroup->addButton(mTemplateAnyTime);
+        mTemplateTimeGroup->insertButton(mTemplateAnyTime);
         grid->addWidget(mTemplateAnyTime, 1, 0, Qt::AlignLeft);
 
         box = new QWidget(templateTimeBox);
@@ -330,7 +331,7 @@ void EditAlarmDlg::init(const KAEvent& event)
                                                   "Set alarms based on this template to start after the specified time "
                                                  "interval from when the alarm is created."));
         layout->addWidget(mTemplateUseTimeAfter);
-        mTemplateTimeGroup->addButton(mTemplateUseTimeAfter);
+        mTemplateTimeGroup->insertButton(mTemplateUseTimeAfter);
         mTemplateTimeAfter = new TimeSpinBox(1, maxDelayTime);
         mTemplateTimeAfter->setValue(1439);
         mTemplateTimeAfter->setReadOnly(mReadOnly);
@@ -1453,7 +1454,7 @@ void EditAlarmDlg::slotSetSubRepetition()
 * Called when one of the template time radio buttons is clicked,
 * to enable or disable the template time entry spin boxes.
 */
-void EditAlarmDlg::slotTemplateTimeType(QAbstractButton*)
+void EditAlarmDlg::slotTemplateTimeType(QAbstractButton*, QAbstractButton*)
 {
     mTemplateTime->setEnabled(mTemplateUseTime->isChecked());
     mTemplateTimeAfter->setEnabled(mTemplateUseTimeAfter->isChecked());

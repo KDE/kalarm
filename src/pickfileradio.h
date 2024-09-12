@@ -1,7 +1,7 @@
 /*
  *  pickfileradio.h  -  radio button with an associated file picker
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -104,7 +104,7 @@ Q_SIGNALS:
     void          fileChanged();   // emitted whenever the selected file changes
 
 private Q_SLOTS:
-    void          slotSelectionChanged(QAbstractButton*);
+    void          slotSelectionChanged(QAbstractButton* oldButton, QAbstractButton* newButton);
     void          slotPickFile();
     void          setLastButton();
 

@@ -131,7 +131,7 @@ private Q_SLOTS:
     void            slotShowMainPage();
     void            slotShowRecurrenceEdit();
     void            slotAnyTimeToggled(bool anyTime);
-    void            slotTemplateTimeType(QAbstractButton*);
+    void            slotTemplateTimeType(QAbstractButton*, QAbstractButton*);
     void            slotSetSubRepetition();
     void            slotResize();
     void            focusFixTimer();

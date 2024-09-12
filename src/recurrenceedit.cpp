@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2024 David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  SPDX-FileCopyrightText: 2000, 2001 Cornelius Schumacher <schumacher@kde.org>
@@ -90,13 +90,13 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     vlayout->setContentsMargins(0, 0, 0, 0);
     hlayout->addLayout(vlayout);
     mRuleButtonGroup = new ButtonGroup(recurGroup);
-    connect(mRuleButtonGroup, &ButtonGroup::buttonSet, this, &RecurrenceEdit::periodClicked);
-    connect(mRuleButtonGroup, &ButtonGroup::buttonSet, this, &RecurrenceEdit::contentsChanged);
+    connect(mRuleButtonGroup, &ButtonGroup::selectionChanged, this, &RecurrenceEdit::periodClicked);
+    connect(mRuleButtonGroup, &ButtonGroup::selectionChanged, this, &RecurrenceEdit::contentsChanged);
 
     mNoneButton = new RadioButton(i18n_combo_NoRecur(), recurGroup);
     mNoneButton->setReadOnly(mReadOnly);
     mNoneButton->setWhatsThis(i18nc("@info:whatsthis", "Do not repeat the alarm"));
-    mRuleButtonGroup->addButton(mNoneButton);
+    mRuleButtonGroup->insertButton(mNoneButton);
     vlayout->addWidget(mNoneButton);
 
     mAtLoginButton = new RadioButton(i18n_combo_AtLogin(), recurGroup);
@@ -104,37 +104,37 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     mAtLoginButton->setWhatsThis(xi18nc("@info:whatsthis",
                                       "<para>Trigger the alarm at the specified date/time and at every login until then.</para>"
                                       "<para>Note that it will also be triggered any time <application>KAlarm</application> is restarted.</para>"));
-    mRuleButtonGroup->addButton(mAtLoginButton);
+    mRuleButtonGroup->insertButton(mAtLoginButton);
     vlayout->addWidget(mAtLoginButton);
 
     mSubDailyButton = new RadioButton(i18n_combo_HourlyMinutely(), recurGroup);
     mSubDailyButton->setReadOnly(mReadOnly);
     mSubDailyButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm at hourly/minutely intervals"));
-    mRuleButtonGroup->addButton(mSubDailyButton);
+    mRuleButtonGroup->insertButton(mSubDailyButton);
     vlayout->addWidget(mSubDailyButton);
 
     mDailyButton = new RadioButton(i18n_combo_Daily(), recurGroup);
     mDailyButton->setReadOnly(mReadOnly);
     mDailyButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm at daily intervals"));
-    mRuleButtonGroup->addButton(mDailyButton);
+    mRuleButtonGroup->insertButton(mDailyButton);
     vlayout->addWidget(mDailyButton);
 
     mWeeklyButton = new RadioButton(i18n_combo_Weekly(), recurGroup);
     mWeeklyButton->setReadOnly(mReadOnly);
     mWeeklyButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm at weekly intervals"));
-    mRuleButtonGroup->addButton(mWeeklyButton);
+    mRuleButtonGroup->insertButton(mWeeklyButton);
     vlayout->addWidget(mWeeklyButton);
 
     mMonthlyButton = new RadioButton(i18n_combo_Monthly(), recurGroup);
     mMonthlyButton->setReadOnly(mReadOnly);
     mMonthlyButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm at monthly intervals"));
-    mRuleButtonGroup->addButton(mMonthlyButton);
+    mRuleButtonGroup->insertButton(mMonthlyButton);
     vlayout->addWidget(mMonthlyButton);
 
     mYearlyButton = new RadioButton(i18n_combo_Yearly(), recurGroup);
     mYearlyButton->setReadOnly(mReadOnly);
     mYearlyButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm at annual intervals"));
-    mRuleButtonGroup->addButton(mYearlyButton);
+    mRuleButtonGroup->insertButton(mYearlyButton);
     vlayout->addWidget(mYearlyButton);
     vlayout->addStretch();    // top-adjust the interval radio buttons
 
@@ -193,14 +193,14 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     mRangeButtonBox = new QGroupBox(i18nc("@title:group", "Recurrence End"), this);
     topLayout->addWidget(mRangeButtonBox);
     mRangeButtonGroup = new ButtonGroup(mRangeButtonBox);
-    connect(mRangeButtonGroup, &ButtonGroup::buttonSet, this, &RecurrenceEdit::rangeTypeClicked);
-    connect(mRangeButtonGroup, &ButtonGroup::buttonSet, this, &RecurrenceEdit::contentsChanged);
+    connect(mRangeButtonGroup, &ButtonGroup::selectionChanged, this, &RecurrenceEdit::rangeTypeClicked);
+    connect(mRangeButtonGroup, &ButtonGroup::selectionChanged, this, &RecurrenceEdit::contentsChanged);
 
     vlayout = new QVBoxLayout(mRangeButtonBox);
     mNoEndDateButton = new RadioButton(i18nc("@option:radio", "No end"), mRangeButtonBox);
     mNoEndDateButton->setReadOnly(mReadOnly);
     mNoEndDateButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm indefinitely"));
-    mRangeButtonGroup->addButton(mNoEndDateButton);
+    mRangeButtonGroup->insertButton(mNoEndDateButton);
     vlayout->addWidget(mNoEndDateButton, 1, Qt::AlignLeft);
     QSize size = mNoEndDateButton->size();
 
@@ -210,7 +210,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     mRepeatCountButton = new RadioButton(i18nc("@option:radio", "End after:"), mRangeButtonBox);
     mRepeatCountButton->setReadOnly(mReadOnly);
     mRepeatCountButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm for the number of times specified"));
-    mRangeButtonGroup->addButton(mRepeatCountButton);
+    mRangeButtonGroup->insertButton(mRepeatCountButton);
     mRepeatCountEntry = new SpinBox(1, 9999, mRangeButtonBox);
     mRepeatCountEntry->setSingleShiftStep(10);
     mRepeatCountEntry->setSelectOnStep(false);
@@ -235,7 +235,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     mEndDateButton->setWhatsThis(
           xi18nc("@info:whatsthis", "<para>Repeat the alarm until the date/time specified.</para>"
                 "<para><note>This applies to the main recurrence only. It does not limit any sub-repetition which will occur regardless after the last main recurrence.</note></para>"));
-    mRangeButtonGroup->addButton(mEndDateButton);
+    mRangeButtonGroup->insertButton(mEndDateButton);
     mEndDateEdit = new KDateComboBox(mRangeButtonBox);
     mEndDateEdit->setOptions(mReadOnly ? KDateComboBox::Options{} : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
     static const QString tzText = i18nc("@info", "This uses the same time zone as the start time.");
@@ -1301,7 +1301,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
     mDayButton = new RadioButton(i18nc("@option:radio On day number in the month", "On day"), this);
     mDayButton->setFixedSize(mDayButton->sizeHint());
     mDayButton->setReadOnly(readOnly);
-    mButtonGroup->addButton(mDayButton);
+    mButtonGroup->insertButton(mDayButton);
     mDayButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm on the selected day of the month"));
     boxLayout->addWidget(mDayButton, 0, 0);
 
@@ -1323,7 +1323,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
     mPosButton = new RadioButton(i18nc("@option:radio On the 1st Tuesday", "On the"), this);
     mPosButton->setFixedSize(mPosButton->sizeHint());
     mPosButton->setReadOnly(readOnly);
-    mButtonGroup->addButton(mPosButton);
+    mButtonGroup->insertButton(mPosButton);
     mPosButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm on one day of the week, in the selected week of the month"));
     boxLayout->addWidget(mPosButton, 1, 0);
 
@@ -1362,8 +1362,8 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
     connect(mDayOfWeekCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &MonthYearRule::changed);
     boxLayout->addWidget(mDayOfWeekCombo, 1, 2, Qt::AlignLeft);
 
-    connect(mButtonGroup, &ButtonGroup::buttonSet, this, &MonthYearRule::clicked);
-    connect(mButtonGroup, &ButtonGroup::buttonSet, this, &MonthYearRule::changed);
+    connect(mButtonGroup, &ButtonGroup::selectionChanged, this, &MonthYearRule::clicked);
+    connect(mButtonGroup, &ButtonGroup::selectionChanged, this, &MonthYearRule::changed);
 }
 
 MonthYearRule::DayPosType MonthYearRule::type() const

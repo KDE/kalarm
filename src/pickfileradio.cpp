@@ -1,7 +1,7 @@
 /*
  *  pickfileradio.cpp  -  radio button with an associated file picker
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -45,7 +45,7 @@ void PickFileRadio::init(QPushButton* button, LineEdit* edit)
         mEdit->setEnabled(false);
         connect(mEdit, &LineEdit::textChanged, this, &PickFileRadio::fileChanged);
     }
-    connect(mGroup, &ButtonGroup::buttonSet, this, &PickFileRadio::slotSelectionChanged);
+    connect(mGroup, &ButtonGroup::selectionChanged, this, &PickFileRadio::slotSelectionChanged);
     PickFileRadio::setReadOnly(RadioButton::isReadOnly());   // avoid calling virtual method from constructor
 }
 
@@ -95,9 +95,10 @@ void PickFileRadio::setEnabled(bool enable)
 /******************************************************************************
 * Called when the selected radio button changes.
 */
-void PickFileRadio::slotSelectionChanged(QAbstractButton* button)
+void PickFileRadio::slotSelectionChanged(QAbstractButton* oldButton, QAbstractButton* newButton)
 {
-    if (button == mLastButton  ||  mRevertButton)
+    Q_UNUSED(oldButton)
+    if (newButton == mLastButton  ||  mRevertButton)
         return;
     if (mLastButton == this)
     {
@@ -105,7 +106,7 @@ void PickFileRadio::slotSelectionChanged(QAbstractButton* button)
         if (mEdit)
             mEdit->setEnabled(false);
     }
-    else if (button == this)
+    else if (newButton == this)
     {
         if (!pickFileIfNone())
             return;    // revert to previously selected type
@@ -113,7 +114,7 @@ void PickFileRadio::slotSelectionChanged(QAbstractButton* button)
         if (mEdit)
             mEdit->setEnabled(true);
     }
-    mLastButton = button;
+    mLastButton = newButton;
 }
 
 /******************************************************************************

@@ -87,6 +87,7 @@ set(libkalarm_SRCS
     lib/spinbox.cpp
     lib/spinbox2.cpp
     lib/stackedwidgets.cpp
+    lib/tooltip.cpp
     lib/lineedit.cpp
     lib/synchtimer.cpp
     lib/buttongroup.h
@@ -114,6 +115,7 @@ set(libkalarm_SRCS
     lib/spinbox.h
     lib/spinbox2.h
     lib/stackedwidgets.h
+    lib/tooltip.h
     lib/lineedit.h
     lib/synchtimer.h
    )

@@ -1,7 +1,7 @@
 /*
  *  buttongroup.cpp  -  QButtonGroup with an extra signal
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -14,74 +14,38 @@
 ButtonGroup::ButtonGroup(QObject* parent)
     : QButtonGroup(parent)
 {
-    connect(this, &QButtonGroup::buttonClicked, this, &ButtonGroup::buttonSet);
 }
 
 /******************************************************************************
- * Inserts a button into the group.
- */
-void ButtonGroup::addButton(QAbstractButton* button)
+* Inserts a button into the group.
+*/
+void ButtonGroup::insertButton(QAbstractButton* button, int id)
 {
-    QButtonGroup::addButton(button);
+    QButtonGroup::addButton(button, id);
     connect(button, &QAbstractButton::toggled, this, &ButtonGroup::slotButtonToggled);
 }
 
 /******************************************************************************
- * Inserts a button into the group.
- */
-void ButtonGroup::addButton(QAbstractButton* button, int id)
-{
-    addButton(button);
-    mIds[id] = button;
-}
-
-/******************************************************************************
- * Returns the ID of the specified button.
- * Reply = -1 if not found.
- */
-int ButtonGroup::id(QAbstractButton* button) const
-{
-    for (QMap<int, QAbstractButton*>::ConstIterator it = mIds.constBegin();  it != mIds.constEnd();  ++it)
-        if (it.value() == button)
-            return it.key();
-    return -1;
-}
-
-/******************************************************************************
- * Returns the button with the specified ID.
- */
-QAbstractButton* ButtonGroup::find(int id) const
-{
-    QMap<int, QAbstractButton*>::ConstIterator it = mIds.find(id);
-    if (it == mIds.constEnd())
-        return nullptr;
-    return it.value();
-}
-
-/******************************************************************************
- * Returns the ID of the currently selected button.
- */
-int ButtonGroup::selectedId() const
-{
-    return id(checkedButton());
-}
-
-/******************************************************************************
- * Returns the ID of the currently selected button.
- */
+* Checks the button with the specified ID.
+*/
 void ButtonGroup::setButton(int id)
 {
-    QAbstractButton* button = find(id);
-    if (button)
-        button->setChecked(true);
+    QAbstractButton* btn = button(id);
+    if (btn)
+        btn->setChecked(true);
 }
 
 /******************************************************************************
- * Called when one of the member buttons is toggled.
- */
+* Called when one of the member buttons is toggled.
+*/
 void ButtonGroup::slotButtonToggled(bool)
 {
-    Q_EMIT buttonSet(checkedButton());
+    if (checkedButton() != mSelectedButton)
+    {
+        QAbstractButton* old = mSelectedButton;
+        mSelectedButton = checkedButton();
+        Q_EMIT selectionChanged(old, mSelectedButton);
+    }
 }
 
 #include "moc_buttongroup.cpp"

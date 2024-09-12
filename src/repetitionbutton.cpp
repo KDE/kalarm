@@ -1,7 +1,7 @@
 /*
  *  repetitionbutton.cpp  -  pushbutton and dialog to specify alarm repetition
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -148,7 +148,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     mButtonBox = new QGroupBox(this);
     topLayout->addWidget(mButtonBox);
     mButtonGroup = new ButtonGroup(mButtonBox);
-    connect(mButtonGroup, &ButtonGroup::buttonSet, this, &RepetitionDlg::typeClicked);
+    connect(mButtonGroup, &ButtonGroup::selectionChanged, this, &RepetitionDlg::typeClicked);
 
     auto vlayout = new QVBoxLayout(mButtonBox);
     auto layout = new QHBoxLayout();
@@ -156,7 +156,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     vlayout->addLayout(layout);
     mCountButton = new RadioButton(i18nc("@option:radio", "Number of repetitions:"), mButtonBox);
     mCountButton->setWhatsThis(i18nc("@info:whatsthis", "Check to specify the number of times the alarm should repeat after each recurrence"));
-    mButtonGroup->addButton(mCountButton);
+    mButtonGroup->insertButton(mCountButton);
     layout->addWidget(mCountButton);
     mCount = new SpinBox(1, MAX_COUNT, mButtonBox);
     mCount->setSingleShiftStep(10);
@@ -172,7 +172,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     vlayout->addLayout(layout);
     mDurationButton = new RadioButton(i18nc("@option:radio", "Duration:"), mButtonBox);
     mDurationButton->setWhatsThis(i18nc("@info:whatsthis", "Check to specify how long the alarm is to be repeated"));
-    mButtonGroup->addButton(mDurationButton);
+    mButtonGroup->insertButton(mDurationButton);
     layout->addWidget(mDurationButton);
     mDuration = new TimePeriod(TimePeriod::ShowMinutes, mButtonBox);
     connect(mDuration, &TimePeriod::valueChanged, this, &RepetitionDlg::durationChanged);

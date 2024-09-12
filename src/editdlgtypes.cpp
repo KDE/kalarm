@@ -862,12 +862,12 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     frameLayout->addWidget(mCmdOutputBox);
     auto vlayout = new QVBoxLayout(mCmdOutputBox);
     mCmdOutputGroup = new ButtonGroup(mCmdOutputBox);
-    connect(mCmdOutputGroup, &ButtonGroup::buttonSet, this, &EditCommandAlarmDlg::contentsChanged);
+    connect(mCmdOutputGroup, &ButtonGroup::selectionChanged, this, &EditCommandAlarmDlg::contentsChanged);
 
     // Execute in terminal window
     mCmdExecInTerm = new RadioButton(i18n_radio_ExecInTermWindow(), mCmdOutputBox);
     mCmdExecInTerm->setWhatsThis(i18nc("@info:whatsthis", "Check to execute the command in a terminal window"));
-    mCmdOutputGroup->addButton(mCmdExecInTerm, Preferences::Log_Terminal);
+    mCmdOutputGroup->insertButton(mCmdExecInTerm, Preferences::Log_Terminal);
     vlayout->addWidget(mCmdExecInTerm, 0, Qt::AlignLeft);
 
     // Log file name edit box
@@ -894,14 +894,14 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mCmdLogToFile = new PickLogFileRadio(browseButton, mCmdLogFileEdit, i18nc("@option:radio", "Log to file"), mCmdOutputGroup, mCmdOutputBox);
     mCmdLogToFile->setWhatsThis(i18nc("@info:whatsthis", "Check to log the command output to a local file. The output will be appended to any existing contents of the file."));
     connect(mCmdLogToFile, &PickLogFileRadio::fileChanged, this, &EditCommandAlarmDlg::contentsChanged);
-    mCmdOutputGroup->addButton(mCmdLogToFile, Preferences::Log_File);
+    mCmdOutputGroup->insertButton(mCmdLogToFile, Preferences::Log_File);
     vlayout->addWidget(mCmdLogToFile, 0, Qt::AlignLeft);
     vlayout->addWidget(box);
 
     // Discard output
     mCmdDiscardOutput = new RadioButton(i18nc("@option:radio", "Discard"), mCmdOutputBox);
     mCmdDiscardOutput->setWhatsThis(i18nc("@info:whatsthis", "Check to discard command output."));
-    mCmdOutputGroup->addButton(mCmdDiscardOutput, Preferences::Log_Discard);
+    mCmdOutputGroup->insertButton(mCmdDiscardOutput, Preferences::Log_Discard);
     vlayout->addWidget(mCmdDiscardOutput, 0, Qt::AlignLeft);
 
     // Top-adjust the controls

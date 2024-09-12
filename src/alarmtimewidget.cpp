@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -83,7 +83,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     }
     mDeferring = mode & DEFER_TIME;
     mButtonGroup = new ButtonGroup(this);
-    connect(mButtonGroup, &ButtonGroup::buttonSet, this, &AlarmTimeWidget::slotButtonSet);
+    connect(mButtonGroup, &ButtonGroup::selectionChanged, this, &AlarmTimeWidget::slotButtonSet);
     auto topLayout = new QVBoxLayout(topWidget);
     if (title.isEmpty())
         topLayout->setContentsMargins(0, 0, 0, 0);
@@ -92,7 +92,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mAtTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer until:") : i18nc("@option:radio", "At date/time:")), topWidget);
     mAtTimeRadio->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "Reschedule the alarm to the specified date and time.")
                                           : i18nc("@info:whatsthis", "Specify the date, or date and time, to schedule the alarm."));
-    mButtonGroup->addButton(mAtTimeRadio);
+    mButtonGroup->insertButton(mAtTimeRadio);
 
     // Date edit box
     mDateEdit = new KDateComboBox(topWidget);
@@ -137,7 +137,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mAfterTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio Defer for time interval", "Defer for:") : i18nc("@option:radio", "Time from now:")), topWidget);
     mAfterTimeRadio->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "Reschedule the alarm for the specified time interval after now.")
                                              : i18nc("@info:whatsthis", "Schedule the alarm after the specified time interval from now."));
-    mButtonGroup->addButton(mAfterTimeRadio);
+    mButtonGroup->insertButton(mAfterTimeRadio);
 
     if (mDeferring)
     {
@@ -240,8 +240,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     }
 
     // Initialise the radio button statuses
-    mAtTimeRadio->setChecked(true);
-    slotButtonSet(mAtTimeRadio);
+    mAtTimeRadio->setChecked(true);   // this will trigger slotButtonSet()
 
     // Timeout every minute to update alarm time fields.
     MinuteTimer::connect(this, SLOT(updateTimes()));
@@ -629,7 +628,7 @@ void AlarmTimeWidget::updateTimes()
 * Called when the radio button states have been changed.
 * Updates the appropriate edit box.
 */
-void AlarmTimeWidget::slotButtonSet(QAbstractButton*)
+void AlarmTimeWidget::slotButtonSet(QAbstractButton*, QAbstractButton*)
 {
     const bool at = mAtTimeRadio->isChecked();
     mDateEdit->setEnabled(at);

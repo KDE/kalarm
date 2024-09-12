@@ -1,28 +1,25 @@
 /*
- *  buttongroup.h  -  QButtonGroup with an extra signal, and button IDs
+ *  buttongroup.h  -  QButtonGroup with an extra signal
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002, 2004, 2005, 2008 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #pragma once
 
 #include <QButtonGroup>
-#include <QMap>
-class QAbstractButton;
+//class QAbstractButton;
 
 
 /**
- *  @short A QButtonGroup with signal on new selection, and button IDs.
+ *  @short A QButtonGroup with signal on new selection.
  *
  *  The ButtonGroup class provides an enhanced version of the QButtonGroup class.
  *
- *  It emits an additional signal, buttonSet(QAbstractButton*), whenever any of its
- *  buttons changes state, for whatever reason, including programmatic control. (The
- *  QButtonGroup class only emits signals when buttons are clicked on by the user.)
- *
- *  It allows buttons to have associated ID numbers, which can be used to access the
- *  buttons.
+ *  It emits an additional signal, selectionChanged(QAbstractButton*,QAbstractButton*),
+ *  whenever the checked button changes. This allows just a single signal to be
+ *  processed instead of two at a time (first the old selection being unchecked,
+ *  and then the new selection being checked).
  *
  *  @author David Jarvie <djarvie@kde.org>
  */
@@ -34,45 +31,32 @@ public:
      *  @param parent The parent object of this widget
      */
     explicit ButtonGroup(QObject* parent = nullptr);
-    /** Adds a button to the group.
-     *  The button is not given an ID.
-     *  This overrides the addButton() method of QButtonGroup.
-     *  @param button The button to insert
-     */
-    void         addButton(QAbstractButton* button);
+
     /** Adds a button with a specified ID to the group.
      *  @param button The button to insert
      *  @param id     Button ID
      */
-    void         addButton(QAbstractButton* button, int id);
-    /** Returns the identifier of the specified button.
-     *  @return ID, or -1 if the button was not found
-     */
-    int          id(QAbstractButton* button) const;
-    /** Returns the button with the specified identifier @p id.
-     *  @return button, or 0 if the button was not found
-     */
-    QAbstractButton* find(int id) const;
-    /** Returns the id of the selected button.
-     *  @return button if exactly one is selected, or -1 otherwise
-     */
-    int          selectedId() const;
+    void insertButton(QAbstractButton* button, int id = -1);
+
+    void addButton(QAbstractButton* button, int id = -1) = delete;  // hide QButtonGroup method
+
     /** Checks the button with the specified ID.
      *  @param id Button ID
      */
-    void         setButton(int id);
+    void setButton(int id);
+
 Q_SIGNALS:
-    /** Signal emitted whenever any button in the group changes state,
-     *  for whatever reason.
-     *  @param button The button which is now selected
+    /** Signal emitted when the selected button in the group changes.
+     *  @param oldButton The button which was previously selected
+     *  @param newButton The button which is now selected
      */
-    void         buttonSet(QAbstractButton* button);
+    void selectionChanged(QAbstractButton* oldButton, QAbstractButton* newButton);
 
 private Q_SLOTS:
-    void         slotButtonToggled(bool);
+    void slotButtonToggled(bool);
 
 private:
-    QMap<int, QAbstractButton*> mIds;
+    QAbstractButton* mSelectedButton {nullptr};
 };
 
 // vim: et sw=4:

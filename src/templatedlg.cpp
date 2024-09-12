@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialog to create, edit and delete alarm templates
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -18,6 +18,7 @@
 #include "lib/config.h"
 #include "lib/messagebox.h"
 #include "lib/shellprocess.h"
+#include "lib/tooltip.h"
 
 #include <KLocalizedString>
 #include <KGuiItem>
@@ -85,7 +86,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 
     mCopyButton = new QPushButton(i18nc("@action:button", "Copy"));
     connect(mCopyButton, &QPushButton::clicked, this, &TemplateDlg::slotCopy);
-    mCopyButton->setToolTip(i18nc("@info:tooltip", "Create a new alarm template based on the selected template"));
+    KAlarm::setToolTip(mCopyButton, i18nc("@info:tooltip", "Create a new alarm template based on the selected template"));
     mCopyButton->setWhatsThis(i18nc("@info:whatsthis", "Create a new alarm template based on a copy of the currently highlighted template"));
     layout->addWidget(mCopyButton);
 

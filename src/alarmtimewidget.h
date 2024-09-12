@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.h  -  alarm date/time entry widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -72,7 +72,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void              updateTimes();
-    void              slotButtonSet(QAbstractButton*);
+    void              slotButtonSet(QAbstractButton*, QAbstractButton*);
     void              dateTimeChanged();
     void              delayTimeChanged(int);
     void              slotPresetSelected(int);

@@ -76,13 +76,16 @@ public:
     bool apply(bool syncToDisc) override;
 
 private Q_SLOTS:
-    void         slotAutostartClicked();
+    void         slotRunModeChanged(QAbstractButton* old, QAbstractButton* now);
     void         slotOtherTerminalToggled(bool);
 
 private:
     void         setTimeZone(const QTimeZone&);
 
-    QCheckBox*    mAutoStart;
+    ButtonGroup*  mRunMode;
+    QRadioButton* mRunAuto;
+    QRadioButton* mRunManual;
+    QRadioButton* mRunNone;
     QCheckBox*    mQuitWarn;
     QCheckBox*    mUseAlarmNames;
     QCheckBox*    mConfirmAlarmDeletion;

@@ -826,32 +826,6 @@ void KAlarmApp::doQuit(QWidget* parent)
         mCancelRtcWake = true;
     }
 #endif
-    if (!Preferences::autoStart())
-    {
-        int option = KMessageBox::ButtonCode::SecondaryAction;
-        if (!Preferences::autoStartChangedByUser())
-        {
-            option = KAMessageBox::questionYesNoCancel(parent,
-                                         xi18nc("@info", "Do you want to start KAlarm at login?<nl/>"
-                                                        "(Note that alarms will be disabled if KAlarm is not started.)"),
-                                         QString(), KGuiItem(i18nc("@action:button", "Yes")), KGuiItem(i18nc("@action:button", "No")),
-                                         KStandardGuiItem::cancel(), Preferences::ASK_AUTO_START);
-        }
-        switch (option)
-        {
-            case KMessageBox::ButtonCode::PrimaryAction:
-                Preferences::setAutoStart(true);
-                Preferences::setNoAutoStart(false);
-                break;
-            case KMessageBox::ButtonCode::SecondaryAction:
-                Preferences::setNoAutoStart(true);
-                break;
-            case KMessageBox::Cancel:
-            default:
-                return;
-        }
-        Preferences::self()->save();
-    }
     quitIf(0, true);
 }
 

@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 3.10.0 (KDE Gear 24.12) --- 31 July 2024 ===
+=== Version 3.10.0 (KDE Gear 24.12) --- 12 September 2024 ===
 * Provide build option to use VLC or MPV to play sounds.
+* Show all Run Mode options in Preferences dialogue. 
 
 === Version 3.9.2 (KDE Gear 24.08.2) --- 11 September 2024 ===
 * Fix crash if kernel alarm timers are supported.
@@ -57,7 +58,7 @@ KAlarm Change Log
 
 === Version 3.5.5 (KDE Gear 23.04) --- 30 December 2022 ===
 * Disallow setting environment variables in command alarm command line.
-* In Preferences dialog, if OK shows warning message, don't close dialog until user responds.
+* In Preferences dialogue, if OK shows warning message, don't close dialog until user responds.
 * Allow setting null command line for invoking terminal to run command alarms in.
 * If only one standard command is available to invoke terminal to run command alarms in, use it as default.
 * Show accuracy warning if short time-from-now specified in Edit Alarm dialogue [KDE Bug 463278]
