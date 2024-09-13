@@ -143,12 +143,11 @@ void KAlarmApp::initialise()
 
     setQuitOnLastWindowClosed(false);
     Preferences::self();    // read KAlarm configuration
-    if (!Preferences::noAutoStart())
+    if (Preferences::runMode() != Preferences::RunMode_Manual)
     {
         // Strip out any "OnlyShowIn=KDE" list from kalarm.autostart.desktop
-        Preferences::setNoAutoStart(false);
-        // Enable kalarm.autostart.desktop to start KAlarm
-        Preferences::setAutoStart(true);
+        // and enable kalarm.autostart.desktop to start KAlarm
+        Preferences::setRunMode(Preferences::RunMode_Auto);
         Preferences::self()->save();
     }
     Preferences::connect(&Preferences::startOfDayChanged, this, &KAlarmApp::changeStartOfDay);
@@ -274,8 +273,7 @@ bool KAlarmApp::restoreSession()
 
     // When KAlarm is session restored, automatically set start-at-login to true.
     Preferences::self()->load();
-    Preferences::setAutoStart(true);
-    Preferences::setNoAutoStart(false);
+    Preferences::setRunMode(Preferences::RunMode_Auto);
     Preferences::self()->save();
 
     if (!initCheck(true))     // open the calendar file (needed for main windows), don't process queue yet

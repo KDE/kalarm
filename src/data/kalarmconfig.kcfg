@@ -128,14 +128,20 @@ SPDX-License-Identifier: GPL-2.0-or-later
       <whatsthis context="@info:whatsthis">Desktops for which the auto-hide in system tray option is not available.</whatsthis>
       <default>Unity</default>
     </entry>
-    <entry name="AutoStart" key="AutoStart" type="Bool">
+    <entry name="Base_AutoStart" key="AutoStart" type="Bool">
       <label context="@label">Start at login</label>
-      <whatsthis context="@info:whatsthis">&lt;p>Automatically start KAlarm whenever you start KDE.&lt;/p>&lt;p>This option should always be checked unless you intend to discontinue use of KAlarm.&lt;/p></whatsthis>
+      <whatsthis context="@info:whatsthis">&lt;p>Automatically start KAlarm whenever you start KDE.&lt;/p>&lt;p>This option should always be set true if RunMode=Auto, else false.&lt;/p></whatsthis>
       <default>false</default>
     </entry>
-    <entry name="Base_NoAutoStart" key="NoAutoStart" type="Bool" hidden="true">
-      <label context="@label">Suppress autostart at login</label>
-      <default>false</default>
+    <entry name="Base_RunMode" key="RunMode" type="Enum">
+      <label context="@label">Run mode</label>
+      <whatsthis context="@info:whatsthis">Whether to run KAlarm automatically on login, manually only, or not at all.</whatsthis>
+      <choices name="RunMode" prefix="RunMode_">
+        <choice name="Auto"><label context="@option">Run automatically</label></choice>
+        <choice name="Manual"><label context="@option">Run manually only</label></choice>
+        <choice name="None"><label context="@option">Do not run</label></choice>
+      </choices>
+      <default>None</default>
     </entry>
     <entry name="DefaultDeferTime" key="DeferTime" type="Int">
       <label context="@label">Default defer time interval</label>

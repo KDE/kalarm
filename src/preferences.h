@@ -53,14 +53,12 @@ public:
 
     static int              autoHideSystemTray();
     static void             setAutoHideSystemTray(int timeout);
-    static bool             autoStartChangedByUser()         { return mAutoStartChangedByUser; }
-    static void             setAutoStartChangedByUser(bool c){ mAutoStartChangedByUser = c; }
 
     // Access to settings
     static QString          previousVersion()                { return mPreviousVersion; }
     static Backend          previousBackend()                { return mPreviousBackend; }
-    static bool             noAutoStart()                    { return self()->base_NoAutoStart(); }
-    static void             setNoAutoStart(bool yes);
+    static RunMode          runMode()                        { return self()->base_RunMode(); }
+    static void             setRunMode(RunMode);
     static bool             modalMessages();
     static void             setModalMessages(bool yes);
     static int              messageButtonDelay();
@@ -167,9 +165,6 @@ private:
 
     // All the following members are accessed by the Preferences dialog classes
     static int              mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
-
-    // Change tracking
-    static bool             mAutoStartChangedByUser; // AutoStart has been changed by the user
 };
 
 // vim: et sw=4:

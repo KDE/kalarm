@@ -9,6 +9,7 @@ if(ENABLE_AKONADI_PLUGIN)
 endif()
 add_subdirectory(icons)
 add_subdirectory(autostart)
+add_subdirectory(kconf_update)
 
 ########### next target ###############
 

@@ -585,9 +585,9 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
 void MiscPrefTab::restore(bool defaults, bool)
 {
     mRunMode->blockSignals(true);
-    if (defaults  ||  Preferences::autoStart())
+    if (defaults  ||  Preferences::runMode() == Preferences::RunMode_Auto)
         mRunAuto->setChecked(true);
-    else if (Preferences::noAutoStart())
+    else if (Preferences::runMode() == Preferences::RunMode_Manual)
         mRunManual->setChecked(true);
     else
         mRunNone->setChecked(true);
@@ -664,15 +664,12 @@ bool MiscPrefTab::apply(bool syncToDisc)
         if (b != Preferences::quitWarn())
             Preferences::setQuitWarn(b);
     }
-    bool b = mRunAuto->isChecked();
-    if (b != Preferences::autoStart())
-    {
-        Preferences::setAutoStart(b);
-        if (b)
-            Preferences::setNoAutoStart(false);
-        Preferences::setAutoStartChangedByUser(true);  // prevent prompting the user on quit, about start-at-login
-    }
-    b = mUseAlarmNames->isChecked();
+    Preferences::RunMode mode = mRunAuto->isChecked() ? Preferences::RunMode_Auto
+                              : mRunManual->isChecked() ? Preferences::RunMode_Manual
+                              : Preferences::RunMode_None;
+    if (mode != Preferences::runMode())
+        Preferences::setRunMode(mode);
+    bool b = mUseAlarmNames->isChecked();
     if (b != Preferences::useAlarmName())
         Preferences::setUseAlarmName(b);
     b = mConfirmAlarmDeletion->isChecked();

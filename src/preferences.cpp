@@ -91,8 +91,6 @@ bool                 Preferences::mUsingDefaults = false;
 Holidays*            Preferences::mHolidays = nullptr;   // always non-null after Preferences initialisation
 QString              Preferences::mPreviousVersion;
 Preferences::Backend Preferences::mPreviousBackend;
-// Change tracking
-bool           Preferences::mAutoStartChangedByUser = false;
 
 
 Preferences* Preferences::self()
@@ -106,6 +104,11 @@ Preferences* Preferences::self()
         KAMessageBox::setDefaultShouldBeShownContinue(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
 
         mInstance = new Preferences;
+
+        // Ensure that AutoStart corresponds to RunMode
+        const bool autostart = (runMode() == RunMode_Auto);
+        if (mInstance->self()->base_AutoStart() != autostart)
+            mInstance->self()->setBase_AutoStart(autostart);
     }
     return mInstance;
 }
@@ -175,16 +178,27 @@ void Preferences::setAutoHideSystemTray(int timeout)
 }
 
 /******************************************************************************
-* Set the NoAutoStart condition.
+* Set the RunMode.
+* The AutoStart entry also needs to be set, because it controls autostart via
+* the kalarm.autostart.desktop file.
 * On KDE desktops, the "X-KDE-autostart-condition" entry in
-* kalarm.autostart.desktop references this to determine whether to autostart KAlarm.
+* kalarm.autostart.desktop references the AutoStart config entry to determine
+* whether to autostart KAlarm.
+* The kalarm.autostart.desktop entry is
+*   X-KDE-autostart-condition=kalarmrc:General:AutoStart:false
+* where the parameters are:
+*   kalarmrc  : the config file to use
+*   General   : the section within the config file
+*   AutoStart : the entry which specifies whether to autostart
+*   false     : the default value to use, i.e. don't autostart KAlarm unless
+*               there is an entry 'AutoStart=true' in kalarmrc [General]
 * On non-KDE desktops, the "X-KDE-autostart-condition" entry in
 * kalarm.autostart.desktop doesn't have any effect, so that KAlarm will be
 * autostarted even if it is set not to autostart. Adding a "Hidden" entry to,
 * and removing the "OnlyShowIn=KDE" entry from, a user-modifiable copy of the
 * file fixes this.
 */
-void Preferences::setNoAutoStart(bool yes)
+void Preferences::setRunMode(RunMode mode)
 {
     // Find the existing kalarm.autostart.desktop file, and whether it's writable.
     bool existingRO = true;   // whether the existing file is read-only
@@ -216,7 +230,7 @@ void Preferences::setNoAutoStart(bool yes)
         autostartFileRW = configDirRW + QLatin1StringView("/autostart/") + AUTOSTART_FILE;
         if (configDirRW.isEmpty())
         {
-            qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: No writable autostart file path";
+            qCWarning(KALARM_LOG) << "Preferences::setRunMode: No writable autostart file path";
             return;
         }
         if (QFile::exists(autostartFileRW))
@@ -224,7 +238,7 @@ void Preferences::setNoAutoStart(bool yes)
             QFileInfo info(autostartFileRW);
             if (!info.isReadable() || !info.isWritable())
             {
-                qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: Autostart file is not read/write:" << autostartFileRW;
+                qCWarning(KALARM_LOG) << "Preferences::setRunMode: Autostart file is not read/write:" << autostartFileRW;
                 return;
             }
         }
@@ -237,7 +251,7 @@ void Preferences::setNoAutoStart(bool yes)
         QFile file(autostartFile);
         if (!file.open(QIODevice::ReadOnly))
         {
-            qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: Error reading autostart file:" << autostartFile;
+            qCWarning(KALARM_LOG) << "Preferences::setRunMode: Error reading autostart file:" << autostartFile;
             return;
         }
         QTextStream stream(&file);
@@ -261,7 +275,7 @@ void Preferences::setNoAutoStart(bool yes)
         }
     }
 
-    if (yes)
+    if (mode == RunMode_Manual)
     {
         // Add a "Hidden" entry to the local kalarm.autostart.desktop file, to
         // prevent autostart from happening.
@@ -277,14 +291,14 @@ void Preferences::setNoAutoStart(bool yes)
             // First, create the directory for it.
             if (!QDir(configDirRW).mkdir(QStringLiteral("autostart")))
             {
-                qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: Error creating autostart file directory:" << info.filePath();
+                qCWarning(KALARM_LOG) << "Preferences::setRunMode: Error creating autostart file directory:" << info.filePath();
                 return;
             }
         }
         QSaveFile file(autostartFileRW);
         if (!file.open(QIODevice::WriteOnly))
         {
-            qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: Error writing autostart file:" << autostartFileRW;
+            qCWarning(KALARM_LOG) << "Preferences::setRunMode: Error writing autostart file:" << autostartFileRW;
             return;
         }
         QTextStream stream(&file);
@@ -293,13 +307,14 @@ void Preferences::setNoAutoStart(bool yes)
         // bug 75077), so check that the data can actually be written by flush().
         if (!file.flush()  ||  !file.commit())   // save the file
         {
-            qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: Error writing autostart file:" << autostartFileRW;
+            qCWarning(KALARM_LOG) << "Preferences::setRunMode: Error writing autostart file:" << autostartFileRW;
             return;
         }
-        qCDebug(KALARM_LOG) << "Preferences::setNoAutoStart: Written" << autostartFileRW;
+        qCDebug(KALARM_LOG) << "Preferences::setRunMode: Written" << autostartFileRW;
     }
 
-    self()->setBase_NoAutoStart(yes);
+    self()->setBase_RunMode(mode);
+    self()->setBase_AutoStart(mode == RunMode_Auto);
 }
 
 /******************************************************************************
