@@ -276,7 +276,6 @@ bool KAlarmApp::restoreSession()
     Preferences::self()->load();
     Preferences::setAutoStart(true);
     Preferences::setNoAutoStart(false);
-    Preferences::setAskAutoStart(true);  // cancel any start-at-login prompt suppression
     Preferences::self()->save();
 
     if (!initCheck(true))     // open the calendar file (needed for main windows), don't process queue yet

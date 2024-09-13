@@ -668,7 +668,6 @@ bool MiscPrefTab::apply(bool syncToDisc)
     if (b != Preferences::autoStart())
     {
         Preferences::setAutoStart(b);
-        Preferences::setAskAutoStart(true);  // cancel any start-at-login prompt suppression
         if (b)
             Preferences::setNoAutoStart(false);
         Preferences::setAutoStartChangedByUser(true);  // prevent prompting the user on quit, about start-at-login

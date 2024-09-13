@@ -59,7 +59,6 @@ public:
     // Access to settings
     static QString          previousVersion()                { return mPreviousVersion; }
     static Backend          previousBackend()                { return mPreviousBackend; }
-    static void             setAskAutoStart(bool yes);
     static bool             noAutoStart()                    { return self()->base_NoAutoStart(); }
     static void             setNoAutoStart(bool yes);
     static bool             modalMessages();
@@ -138,7 +137,6 @@ public:
 
     // Config file entry names for notification messages
     static const QLatin1StringView QUIT_WARN;
-    static const QLatin1StringView ASK_AUTO_START;
     static const QLatin1StringView CONFIRM_ALARM_DELETION;
     static const QLatin1StringView EMAIL_QUEUED_NOTIFY;
 

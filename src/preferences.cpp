@@ -77,7 +77,6 @@ void splitXTermCommands();
 
 // Config file entry names for notification messages
 const QLatin1StringView Preferences::QUIT_WARN("QuitWarn");
-const QLatin1StringView Preferences::ASK_AUTO_START("AskAutoStart");
 const QLatin1StringView Preferences::CONFIRM_ALARM_DELETION("ConfirmAlarmDeletion");
 const QLatin1StringView Preferences::EMAIL_QUEUED_NOTIFY("EmailQueuedNotify");
 const bool  default_quitWarn             = true;
@@ -173,11 +172,6 @@ void Preferences::setAutoHideSystemTray(int timeout)
     if (noAutoHideSystemTrayDesktops().contains(Desktop::currentIdentityName()))
         return;
     self()->setBase_AutoHideSystemTray(timeout);
-}
-
-void Preferences::setAskAutoStart(bool yes)
-{
-    KAMessageBox::saveDontShowAgainYesNo(ASK_AUTO_START, !yes);
 }
 
 /******************************************************************************
