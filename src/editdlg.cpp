@@ -56,6 +56,7 @@
 #include <QDialogButtonBox>
 #include <QLocale>
 #include <QStyle>
+using namespace Qt::Literals::StringLiterals;
 
 using namespace KCal;
 using namespace KAlarmCal;
@@ -1316,7 +1317,7 @@ void EditAlarmDlg::slotEditDeferral()
     // deletion of EditAlarmDlg, and on return from this function).
     AutoQPointer<DeferAlarmDlg> deferDlg = new DeferAlarmDlg((deferred ? mDeferDateTime : DateTime(now.addSecs(60).toTimeSpec(start.timeSpec()))),
                                                              start.isDateOnly(), deferred, this);
-    deferDlg->setObjectName(QLatin1StringView("EditDeferDlg"));    // used by LikeBack
+    deferDlg->setObjectName("EditDeferDlg"_L1);    // used by LikeBack
     if (limit)
     {
         // Don't allow deferral past the next recurrence

@@ -18,6 +18,7 @@ using KAlarmCal::KADateTime;
 #include <QLocale>
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
+using namespace Qt::Literals::StringLiterals;
 
 //clazy:excludeall=non-pod-global-static
 
@@ -2803,7 +2804,7 @@ void KADateTimeTest::dstShifts()
 void KADateTimeTest::strings_iso8601()
 {
     QTimeZone london("Europe/London");
-    bool decpt = QLocale().decimalPoint() == QLatin1Char('.');   // whether this locale uses '.' as decimal symbol
+    bool decpt = QLocale().decimalPoint() == '.'_L1;   // whether this locale uses '.' as decimal symbol
 
     // Ensure that local time is different from UTC and different from 'london'
     QByteArray originalZone = qgetenv("TZ");   // save the original local time zone

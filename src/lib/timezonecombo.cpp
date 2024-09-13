@@ -10,6 +10,7 @@
 
 #include <KLocalizedString>
 #include <QTimeZone>
+using namespace Qt::Literals::StringLiterals;
 
 
 TimeZoneCombo::TimeZoneCombo(QWidget* parent)
@@ -25,7 +26,7 @@ TimeZoneCombo::TimeZoneCombo(QWidget* parent)
         if (zone != utc)
         {
             mZoneNames << zone;
-            addItem(i18n(zone.constData()).replace(QLatin1Char('_'), QLatin1Char(' ')));
+            addItem(i18n(zone.constData()).replace('_'_L1, ' '_L1));
         }
 }
 

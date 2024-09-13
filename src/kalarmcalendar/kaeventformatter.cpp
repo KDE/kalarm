@@ -16,6 +16,7 @@
 #include <KLocalizedString>
 
 #include <QLocale>
+using namespace Qt::Literals::StringLiterals;
 
 static QString trueFalse(bool value);
 static QString minutes(int n);
@@ -333,7 +334,7 @@ QString KAEventFormatter::value(Parameter param) const
             QString value;
             const auto customProperties = mEvent.customProperties();
             for (auto it = customProperties.cbegin(), end = customProperties.cend(); it != end; ++it)
-                value += QString::fromLatin1(it.key()) + QLatin1StringView(":") + it.value() + QLatin1StringView("<nl/>");
+                value += QString::fromLatin1(it.key()) + ":"_L1 + it.value() + "<nl/>"_L1;
             return i18nc("@info", "%1", value);
         }
 

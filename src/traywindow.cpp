@@ -30,6 +30,7 @@
 #include <QTimer>
 #include <QLocale>
 #include <QMenu>
+using namespace Qt::Literals::StringLiterals;
 
 #include <stdlib.h>
 #include <limits.h>
@@ -301,7 +302,7 @@ void TrayWindow::updateToolTip()
     else if (mHaveDisabledAlarms)
     {
         if (!subTitle.isEmpty())
-            subTitle += QLatin1StringView("<br/>");
+            subTitle += "<br/>"_L1;
         subTitle += i18nc("@info:tooltip Brief: some alarms are disabled", "(Some alarms disabled)");
     }
     setToolTipSubTitle(subTitle);
@@ -351,7 +352,7 @@ QString TrayWindow::tooltipAlarmText() const
             if (Preferences::showTooltipAlarmTime())
             {
                 item.text += QLocale().toString(item.dateTime.time(), QLocale::ShortFormat);
-                item.text += QLatin1Char(' ');
+                item.text += ' '_L1;
             }
             if (Preferences::showTooltipTimeToAlarm())
             {
@@ -365,7 +366,7 @@ QString TrayWindow::tooltipAlarmText() const
                     item.text += i18nc("@info prefix + hours:minutes", "(%1%2:%3)", prefix, mins/60, QLatin1StringView(minutes));
                 else
                     item.text += i18nc("@info prefix + hours:minutes", "%1%2:%3", prefix, mins/60, QLatin1StringView(minutes));
-                item.text += QLatin1Char(' ');
+                item.text += ' '_L1;
             }
             item.text += AlarmText::summary(*event);
 
@@ -386,7 +387,7 @@ QString TrayWindow::tooltipAlarmText() const
     {
         qCDebug(KALARM_LOG) << "TrayWindow::tooltipAlarmText: --" << (count+1) << ")" << items.at(i).text;
         if (i > 0)
-            text += QLatin1StringView("<br />");
+            text += "<br />"_L1;
         text += items.at(i).text;
         if (++count == maxCount)
             break;

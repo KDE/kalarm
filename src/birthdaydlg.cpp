@@ -36,6 +36,7 @@
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 #include <QSortFilterProxyModel>
+using namespace Qt::Literals::StringLiterals;
 
 namespace
 {
@@ -45,7 +46,7 @@ const QLatin1StringView GENERAL_GROUP("General");
 BirthdayDlg::BirthdayDlg(QWidget* parent)
     : QDialog(parent)
 {
-    setObjectName(QLatin1StringView("BirthdayDlg"));    // used by LikeBack
+    setObjectName("BirthdayDlg"_L1);    // used by LikeBack
     setWindowTitle(i18nc("@title:window", "Import Birthdays From KAddressBook"));
 
     auto mainLayout = new QVBoxLayout(this);

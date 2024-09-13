@@ -17,6 +17,7 @@
 #include <KLocalizedString>
 
 #include <QCommandLineParser>
+using namespace Qt::Literals::StringLiterals;
 
 #include <iostream>
 
@@ -295,7 +296,7 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
     for (int i = 0;  i < args.size();  ++i)
     {
         const QString arg = args[i];
-        if (arg == QLatin1StringView("--nofork"))
+        if (arg == "--nofork"_L1)
             continue;     // Ignore debugging option
         mNonExecArguments << arg;
         if (arg == d->optionName(EXEC)  ||  arg == d->optionName(EXEC, true)
@@ -373,14 +374,14 @@ void CommandOptions::process()
         mEditAction    = KAEvent::SubAction::Command;
         mEditActionSet = true;
         mFlags        |= KAEvent::DISPLAY_COMMAND;
-        mText          = mParser->value(*mOptions.at(d->mCommandOpt)) + QLatin1StringView(" ") + mExecArguments.join(QLatin1Char(' '));
+        mText          = mParser->value(*mOptions.at(d->mCommandOpt)) + " "_L1 + mExecArguments.join(' '_L1);
     }
     if (d->checkCommand(EXEC, NEW))
     {
         mEditType      = EditAlarmDlg::COMMAND;
         mEditAction    = KAEvent::SubAction::Command;
         mEditActionSet = true;
-        mText          = mParser->value(*mOptions.at(d->mCommandOpt)) + QLatin1StringView(" ") + mExecArguments.join(QLatin1Char(' '));
+        mText          = mParser->value(*mOptions.at(d->mCommandOpt)) + " "_L1 + mExecArguments.join(' '_L1);
     }
     if (d->checkCommand(MAIL, NEW))
     {
@@ -508,8 +509,8 @@ void CommandOptions::process()
             {
                 // Background colour is specified
                 QString colourText = mParser->value(*mOptions.at(COLOUR));
-                if (colourText.at(0) == QLatin1Char('0')
-                &&  colourText.at(1).toLower() == QLatin1Char('x'))
+                if (colourText.at(0) == '0'_L1
+                &&  colourText.at(1).toLower() == 'x'_L1)
                     colourText.replace(0, 2, QStringLiteral("#"));
                 mBgColour = QColor::fromString(colourText);
                 if (!mBgColour.isValid())
@@ -519,8 +520,8 @@ void CommandOptions::process()
             {
                 // Foreground colour is specified
                 QString colourText = mParser->value(*mOptions.at(COLOURFG));
-                if (colourText.at(0) == QLatin1Char('0')
-                &&  colourText.at(1).toLower() == QLatin1Char('x'))
+                if (colourText.at(0) == '0'_L1
+                &&  colourText.at(1).toLower() == 'x'_L1)
                     colourText.replace(0, 2, QStringLiteral("#"));
                 mFgColour = QColor::fromString(colourText);
                 if (!mFgColour.isValid())
@@ -662,7 +663,7 @@ void CommandOptions::process()
                 const Option opt = onceOnly ? REMINDER_ONCE : REMINDER;
                 KARecurrence::Type recurType;
                 QString optval = mParser->value(*mOptions.at(onceOnly ? REMINDER_ONCE : REMINDER));
-                const bool after = (optval.at(0) == QLatin1Char('+'));
+                const bool after = (optval.at(0) == '+'_L1);
                 if (after)
                     optval.remove(0, 1);   // it's a reminder after the main alarm
                 if (!convInterval(optval, recurType, mReminderMinutes))
@@ -781,7 +782,7 @@ void CommandOptions::process()
             if (mParser->isSet(*mOptions.at(VOLUME)))
                 errors << d->optionName(VOLUME);
             if (!errors.isEmpty())
-                mError = errors.join(QLatin1Char(' ')) + i18nc("@info:shell", ": option(s) only valid with an appropriate action option or message");
+                mError = errors.join(' '_L1) + i18nc("@info:shell", ": option(s) only valid with an appropriate action option or message");
             break;
         }
         default:

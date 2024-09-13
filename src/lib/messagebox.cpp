@@ -11,6 +11,7 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
+using namespace Qt::Literals::StringLiterals;
 
 QMap<QString, KMessageBox::ButtonCode> KAMessageBox::mContinueDefaults;
 
@@ -113,7 +114,7 @@ void KAMessageBox::saveDontShowAgain(const QString& dontShowAgainName, bool yesn
     if (dontShowAgainName.isEmpty())
         return;
     KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("Notification Messages"));
-    KConfig::WriteConfigFlags flags = (dontShowAgainName[0] == QLatin1Char(':')) ? KConfig::Global | KConfig::Persistent : KConfig::Persistent;
+    KConfig::WriteConfigFlags flags = (dontShowAgainName[0] == ':'_L1) ? KConfig::Global | KConfig::Persistent : KConfig::Persistent;
     if (yesno)
         config.writeEntry(dontShowAgainName, QString::fromLatin1(dontShow ? yesnoResult : ""), flags);
     else

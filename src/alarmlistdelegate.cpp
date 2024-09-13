@@ -15,6 +15,7 @@
 #include <KColorScheme>
 
 #include <QPainter>
+using namespace Qt::Literals::StringLiterals;
 
 
 void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
@@ -35,7 +36,7 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
             {
                 const QString str = index.data(ResourceDataModelBase::TimeDisplayRole).toString();
                 // Need to pad out spacing to align times without leading zeroes
-                const int i = str.indexOf(QLatin1Char('~'));    // look for indicator of a leading zero to be omitted
+                const int i = str.indexOf('~'_L1);    // look for indicator of a leading zero to be omitted
                 if (i >= 0)
                 {
                     painter->save();
@@ -49,7 +50,7 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
                     if (i > 0)
                     {
                         QString str0 = str;
-                        str0[i] = QLatin1Char('0');
+                        str0[i] = '0'_L1;
                         QRect displayRect = textRect(str0, painter, opt);
                         timeRect = textRect(time, painter, opt);
                         timeRect.moveRight(displayRect.right());

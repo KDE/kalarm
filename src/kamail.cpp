@@ -43,6 +43,7 @@
 #include <QByteArray>
 #include <QStandardPaths>
 #include <QDBusInterface>
+using namespace Qt::Literals::StringLiterals;
 
 #ifdef Q_OS_WIN
 #define popen _popen
@@ -166,7 +167,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
                 command += extractEmailAndNormalize(jobdata.bcc);
             }
 
-            command += QLatin1Char(' ');
+            command += ' '_L1;
             command += jobdata.event.emailPureAddresses(QStringLiteral(" ")); // locally provided, okay
         }
         // Add the body and attachments to the message.
@@ -417,26 +418,26 @@ int KAMail::checkAddress(QString& address)
 {
     address = address.trimmed();
     // Check that there are no list separator characters present
-    if (address.indexOf(QLatin1Char(',')) >= 0  ||  address.indexOf(QLatin1Char(';')) >= 0)
+    if (address.indexOf(','_L1) >= 0  ||  address.indexOf(';'_L1) >= 0)
         return -1;
     const int n = address.length();
     if (!n)
         return 0;
     int start = 0;
     int end   = n - 1;
-    if (address.at(end) == QLatin1Char('>'))
+    if (address.at(end) == '>'_L1)
     {
         // The email address is in <...>
-        if ((start = address.indexOf(QLatin1Char('<'))) < 0)
+        if ((start = address.indexOf('<'_L1)) < 0)
             return -1;
         ++start;
         --end;
     }
-    const int i = address.indexOf(QLatin1Char('@'), start);
+    const int i = address.indexOf('@'_L1, start);
     if (i >= 0)
     {
         if (i == start  ||  i == end)          // check @ isn't the first or last character
-//        ||  address.indexOf(QLatin1Char('@'), i + 1) >= 0)    // check for multiple @ characters
+//        ||  address.indexOf('@'_L1, i + 1) >= 0)    // check for multiple @ characters
             return -1;
     }
 /*    else
@@ -469,10 +470,10 @@ QString KAMail::convertAttachments(const QString& items, QStringList& list)
     for (int next = 0;  next < length;  )
     {
         // Find the first delimiter character (, or ;)
-        int i = items.indexOf(QLatin1Char(','), next);
+        int i = items.indexOf(','_L1, next);
         if (i < 0)
             i = items.length();
-        int sc = items.indexOf(QLatin1Char(';'), next);
+        int sc = items.indexOf(';'_L1, next);
         if (sc < 0)
             sc = items.length();
         if (sc < i)
@@ -585,7 +586,7 @@ void initHeaders(KMime::Message& message, JobData& data)
     message.setHeader(agent);
 
     auto id = new KMime::Headers::MessageID;
-    id->generate(data.from.mid(data.from.indexOf(QLatin1Char('@')) + 1).toLatin1());
+    id->generate(data.from.mid(data.from.indexOf('@'_L1) + 1).toLatin1());
     message.setHeader(id);
 }
 
@@ -701,7 +702,7 @@ KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalid
             {
                 int len = endName - start;
                 QString name = text.mid(start, endName - start);
-                if (name.at(0) == QLatin1Char('"')  &&  name.at(len - 1) == QLatin1Char('"'))
+                if (name.at(0) == '"'_L1  &&  name.at(len - 1) == '"'_L1)
                     name = name.mid(1, len - 2);
                 mbox.setName(name);
             }

@@ -13,6 +13,7 @@
 #include <QApplication>
 #include <QScreen>
 #include <QProcessEnvironment>
+using namespace Qt::Literals::StringLiterals;
 
 namespace Desktop
 {
@@ -33,8 +34,8 @@ QString currentIdentityName()
 Type currentIdentity()
 {
     const QString desktop = currentIdentityName();
-    if (desktop == QLatin1StringView("KDE"))    return Type::Kde;
-    if (desktop == QLatin1StringView("Unity"))  return Type::Unity;
+    if (desktop == "KDE"_L1)    return Type::Kde;
+    if (desktop == "Unity"_L1)  return Type::Unity;
     return Type::Other;
 }
 

@@ -66,6 +66,7 @@ using namespace KCalendarCore;
 #include <QStandardPaths>
 #include <QPushButton>
 #include <QTemporaryFile>
+using namespace Qt::Literals::StringLiterals;
 
 //clazy:excludeall=non-pod-global-static
 
@@ -1682,7 +1683,7 @@ QStringList dontShowErrors(const EventId& eventId)
 {
     if (eventId.isEmpty())
         return {};
-    KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
+    KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/'_L1 + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
     const QString id = QStringLiteral("%1:%2").arg(eventId.resourceId()).arg(eventId.eventId());
     return group.readEntry(id, QStringList());
@@ -1708,7 +1709,7 @@ void setDontShowErrors(const EventId& eventId, const QStringList& tags)
 {
     if (eventId.isEmpty())
         return;
-    KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
+    KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/'_L1 + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
     const QString id = QStringLiteral("%1:%2").arg(eventId.resourceId()).arg(eventId.eventId());
     if (tags.isEmpty())
@@ -1726,7 +1727,7 @@ void setDontShowErrors(const EventId& eventId, const QString& tag)
 {
     if (eventId.isEmpty()  ||  tag.isEmpty())
         return;
-    KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
+    KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/'_L1 + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
     const QString id = QStringLiteral("%1:%2").arg(eventId.resourceId()).arg(eventId.eventId());
     QStringList tags = group.readEntry(id, QStringList());
@@ -1907,7 +1908,7 @@ KADateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime
     const QString zone = tzstring.trimmed();
     if (!zone.isEmpty())
     {
-        if (zone == QLatin1StringView("UTC"))
+        if (zone == "UTC"_L1)
             spec = KADateTime::UTC;
         else
         {

@@ -26,6 +26,7 @@
 #include <QHBoxLayout>
 #include <QStandardPaths>
 #include <QMimeDatabase>
+using namespace Qt::Literals::StringLiterals;
 
 //clazy:excludeall=non-pod-global-static
 
@@ -318,10 +319,10 @@ bool SoundPicker::browseFile(QString& file, QString& defaultDir, const QString& 
         for (const QMimeType& mimeType : allMimeTypes)
             if (mimeType.name().startsWith(QStringLiteral("audio/")))
             {
-                audioFilter += mimeType.globPatterns().join(QLatin1Char(' '));
-                audioFilter += QLatin1Char(' ');
+                audioFilter += mimeType.globPatterns().join(' '_L1);
+                audioFilter += ' '_L1;
             }
-        audioFilter[audioFilter.length() - 1] = QLatin1Char(')');
+        audioFilter[audioFilter.length() - 1] = ')'_L1;
     }
 
     static QString kdeSoundDir;     // directory containing KDE sound files

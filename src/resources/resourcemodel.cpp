@@ -19,6 +19,7 @@
 #include <QMouseEvent>
 #include <QHelpEvent>
 #include <QToolTip>
+using namespace Qt::Literals::StringLiterals;
 
 /*============================================================================*/
 
@@ -683,12 +684,12 @@ bool ResourceView::viewportEvent(QEvent* e)
         if (value.canConvert<QString>())
         {
             QString toolTip = value.toString();
-            int i = toolTip.indexOf(QLatin1Char('@'));
+            int i = toolTip.indexOf('@'_L1);
             if (i > 0)
             {
                 static const QRegularExpression re(QStringLiteral("<(nl|br)"), QRegularExpression::CaseInsensitiveOption);
                 const int j = toolTip.indexOf(re, i + 1);
-                const int k = toolTip.indexOf(QLatin1Char('@'), j);
+                const int k = toolTip.indexOf('@'_L1, j);
                 const QString name = toolTip.mid(i + 1, j - i - 1);
                 value = model()->data(index, Qt::FontRole);
                 const QFontMetrics fm(qvariant_cast<QFont>(value).resolve(listViewOptions().font));

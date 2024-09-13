@@ -53,6 +53,7 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <QStandardItemModel>
+using namespace Qt::Literals::StringLiterals;
 
 using namespace KAlarmCal;
 using namespace KCalendarCore;
@@ -1499,13 +1500,13 @@ void EditEmailAlarmDlg::slotTrySuccess()
     disconnect(theApp(), &KAlarmApp::execAlarmSuccess, this, &EditEmailAlarmDlg::slotTrySuccess);
     QString msg;
     QString to = KAEvent::joinEmailAddresses(mEmailAddresses, QStringLiteral("<nl/>"));
-    to.replace(QLatin1Char('<'), QStringLiteral("&lt;"));
-    to.replace(QLatin1Char('>'), QStringLiteral("&gt;"));
+    to.replace('<'_L1, QStringLiteral("&lt;"));
+    to.replace('>'_L1, QStringLiteral("&gt;"));
     if (mEmailBcc->isChecked())
-        msg = QLatin1StringView("<qt>") + xi18nc("@info", "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>",
-                    to, Preferences::emailBccAddress()) + QLatin1StringView("</qt>");
+        msg = "<qt>"_L1 + xi18nc("@info", "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>",
+                    to, Preferences::emailBccAddress()) + "</qt>"_L1;
     else
-        msg = QLatin1StringView("<qt>") + xi18nc("@info", "Email sent to:<nl/>%1", to) + QLatin1StringView("</qt>");
+        msg = "<qt>"_L1 + xi18nc("@info", "Email sent to:<nl/>%1", to) + "</qt>"_L1;
     KAMessageBox::information(this, msg);
 }
 
@@ -1522,7 +1523,7 @@ void EditEmailAlarmDlg::openAddressBook()
             return;
         QString addrs = mEmailToEdit->text().trimmed();
         if (!addrs.isEmpty())
-            addrs += QLatin1StringView(", ");
+            addrs += ", "_L1;
         addrs += person.fullName();
         mEmailToEdit->setText(addrs);
     }
@@ -1911,7 +1912,7 @@ QString CommandEdit::text(EditAlarmDlg* dlg, bool showErrorMessage) const
         result = mCommandEdit->text().trimmed();
         QString params = result;
         const QString cmd = ShellProcess::splitCommandLine(params);
-        if (cmd.contains(QLatin1Char('=')))
+        if (cmd.contains('='_L1))
         {
             if (showErrorMessage)
                 KAMessageBox::error(dlg, xi18nc("@info", "<para>The command cannot set environment variables:</para><para><icode>%1</icode></para>", cmd));

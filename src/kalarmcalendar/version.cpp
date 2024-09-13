@@ -9,6 +9,7 @@
  */
 
 #include "version.h"
+using namespace Qt::Literals::StringLiterals;
 
 namespace KAlarmCal
 {
@@ -30,21 +31,21 @@ int getVersionNumber(const QString& version, QString* subVersion)
     //      if the representation returned by this method changes.
     if (subVersion)
         subVersion->clear();
-    const int count = version.count(QLatin1Char('.')) + 1;
+    const int count = version.count('.'_L1) + 1;
     if (count < 2)
         return 0;
     bool ok;
-    unsigned vernum = version.section(QLatin1Char('.'), 0, 0).toUInt(&ok) * 10000;  // major version
+    unsigned vernum = version.section('.'_L1, 0, 0).toUInt(&ok) * 10000;  // major version
     if (!ok)
         return 0;
-    unsigned v = version.section(QLatin1Char('.'), 1, 1).toUInt(&ok);               // minor version
+    unsigned v = version.section('.'_L1, 1, 1).toUInt(&ok);               // minor version
     if (!ok)
         return 0;
     vernum += (v < 99 ? v : 99) * 100;
     if (count >= 3)
     {
         // Issue number: allow other characters to follow the last digit
-        const QString issue = version.section(QLatin1Char('.'), 2);
+        const QString issue = version.section('.'_L1, 2);
         const int n = issue.length();
         if (!n  ||  !issue[0].isDigit())
             return 0;

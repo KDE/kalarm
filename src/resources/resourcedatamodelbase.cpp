@@ -20,6 +20,7 @@
 #include <QApplication>
 #include <QIcon>
 #include <QRegularExpression>
+using namespace Qt::Literals::StringLiterals;
 
 
 /*=============================================================================
@@ -62,13 +63,13 @@ QString ResourceDataModelBase::typeListForDisplay(CalEvent::Types alarmTypes)
 {
     QString list;
     if (alarmTypes & CalEvent::ACTIVE)
-        list += QLatin1StringView("<item>") + i18nc("@item:intext", "Active Alarms") + QLatin1StringView("</item>");
+        list += "<item>"_L1 + i18nc("@item:intext", "Active Alarms") + "</item>"_L1;
     if (alarmTypes & CalEvent::ARCHIVED)
-        list += QLatin1StringView("<item>") + i18nc("@item:intext", "Archived Alarms") + QLatin1StringView("</item>");
+        list += "<item>"_L1 + i18nc("@item:intext", "Archived Alarms") + "</item>"_L1;
     if (alarmTypes & CalEvent::TEMPLATE)
-        list += QLatin1StringView("<item>") + i18nc("@item:intext", "Alarm Templates") + QLatin1StringView("</item>");
+        list += "<item>"_L1 + i18nc("@item:intext", "Alarm Templates") + "</item>"_L1;
     if (!list.isEmpty())
-        list = QLatin1StringView("<list>") + list + QLatin1StringView("</list>");
+        list = "<list>"_L1 + list + "</list>"_L1;
     return list;
 }
 
@@ -355,7 +356,7 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                         break;
                     case Qt::DisplayRole:
                         if (event.commandError() != KAEvent::CmdErr::None)
-                            return QLatin1StringView("!");
+                            return "!"_L1;
                         break;
                     case Qt::TextAlignmentRole:
                         return Qt::AlignCenter;
@@ -363,7 +364,7 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                     {
                         const unsigned i = (event.actionTypes() == KAEvent::Action::Display)
                                            ? event.bgColour().rgb() : 0;
-                        return QStringLiteral("%1").arg(i, 6, 10, QLatin1Char('0'));
+                        return QStringLiteral("%1").arg(i, 6, 10, '0'_L1);
                     }
                     default:
                         break;
@@ -391,7 +392,7 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                     case ValueRole:
                         return static_cast<int>(event.actionSubType());
                     case SortRole:
-                        return QStringLiteral("%1").arg(static_cast<int>(event.actionSubType()), 2, 10, QLatin1Char('0'));
+                        return QStringLiteral("%1").arg(static_cast<int>(event.actionSubType()), 2, 10, '0'_L1);
                 }
                 break;
             case NameColumn:
@@ -478,8 +479,8 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
 */
 QString ResourceDataModelBase::tooltip(const Resource& resource, CalEvent::Types types) const
 {
-    const QString name     = QLatin1Char('@') + resource.displayName();   // insert markers for stripping out name
-    const QString type     = QLatin1Char('@') + resource.storageTypeString(false);   // file/directory/URL etc.
+    const QString name     = '@'_L1 + resource.displayName();   // insert markers for stripping out name
+    const QString type     = '@'_L1 + resource.storageTypeString(false);   // file/directory/URL etc.
     const QString locn     = resource.displayLocation();
     const bool    inactive = !(resource.enabledTypes() & types);
     const QString readonly = readOnlyTooltip(resource);
@@ -542,7 +543,7 @@ QString ResourceDataModelBase::repeatOrder(const KAEvent& event)
                 break;
         }
     }
-    return QStringLiteral("%1%2").arg(static_cast<char>('0' + repOrder)).arg(repInterval, 8, 10, QLatin1Char('0'));
+    return QStringLiteral("%1%2").arg(static_cast<char>('0' + repOrder)).arg(repInterval, 8, 10, '0'_L1);
 }
 
 /******************************************************************************
@@ -742,15 +743,15 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
     {
         // Display the time of day if it's a date/time value, or if it's
         // a date-only value but it's in a different time zone
-        dateTimeText += QLatin1Char(' ');
+        dateTimeText += ' '_L1;
         // Don't try to align right-to-left languages...
         const bool useFullFormat = QApplication::isLeftToRight() && leadingZero && !timeFullFormat.isEmpty();
         QString timeText = locale.toString(kdt.time(), (useFullFormat ? timeFullFormat : timeFormat));
-        if (useFullFormat  &&  leadingZero != '0'  &&  timeText.at(hourOffset) == QLatin1Char('0'))
+        if (useFullFormat  &&  leadingZero != '0'  &&  timeText.at(hourOffset) == '0'_L1)
             timeText[hourOffset] = QChar::fromLatin1(leadingZero);
         dateTimeText += timeText;
     }
-    return dateTimeText + QLatin1Char(' ');
+    return dateTimeText + ' '_L1;
 }
 
 /******************************************************************************

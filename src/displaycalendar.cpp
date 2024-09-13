@@ -20,6 +20,7 @@
 
 #include <QStandardPaths>
 #include <QDir>
+using namespace Qt::Literals::StringLiterals;
 
 using namespace KCalendarCore;
 using namespace KAlarmCal;
@@ -51,7 +52,7 @@ void DisplayCalendar::initialise()
 {
     QDir dir;
     dir.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    mDisplayCalPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + displayCalendarName;
+    mDisplayCalPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/'_L1 + displayCalendarName;
     mDisplayICalPath = mDisplayCalPath;
     mDisplayICalPath.replace(QStringLiteral("\\.vcs$"), QStringLiteral(".ics"));
     mCalType = (mDisplayCalPath == mDisplayICalPath) ? LOCAL_ICAL : LOCAL_VCAL;    // is the calendar in ICal or VCal format?

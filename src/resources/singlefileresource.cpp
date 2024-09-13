@@ -32,6 +32,7 @@
 #include <QTimer>
 #include <QTimeZone>
 #include <QEventLoopLocker>
+using namespace Qt::Literals::StringLiterals;
 
 using namespace KCalendarCore;
 using namespace KAlarmCal;
@@ -661,7 +662,7 @@ QString SingleFileResource::cacheFilePath() const
         cacheDir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
         QDir().mkpath(cacheDir);
     }
-    return cacheDir + QLatin1Char('/') + identifier();
+    return cacheDir + '/'_L1 + identifier();
 }
 
 /******************************************************************************

@@ -19,6 +19,7 @@
 #include <QMouseEvent>
 #include <QToolTip>
 #include <QApplication>
+using namespace Qt::Literals::StringLiterals;
 
 
 EventListView::EventListView(QWidget* parent)
@@ -169,7 +170,7 @@ bool EventListView::viewportEvent(QEvent* e)
         if (value.canConvert<QString>())
         {
             QString toolTip = value.toString();
-            int i = toolTip.indexOf(QLatin1Char('\n'));
+            int i = toolTip.indexOf('\n'_L1);
             if (i < 0)
             {
                 auto m = qobject_cast<EventListModel*>(model());

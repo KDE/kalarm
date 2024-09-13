@@ -22,6 +22,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QMap>
+using namespace Qt::Literals::StringLiterals;
 
 using namespace KCalendarCore;
 
@@ -132,7 +133,7 @@ int Private::readKAlarmVersion(const FileStorage::Ptr& fileStorage, QString& sub
         {
             // Older versions used KAlarm's translated name in the product ID, which
             // could have created problems using a calendar in different locales.
-            progname = QLatin1StringView(" ") + i18n("KAlarm") + QLatin1Char(' ');
+            progname = " "_L1 + i18n("KAlarm") + ' '_L1;
             i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
             if (i < 0)
                 return KACalendar::IncompatibleFormat;    // calendar wasn't created by KAlarm
@@ -140,8 +141,8 @@ int Private::readKAlarmVersion(const FileStorage::Ptr& fileStorage, QString& sub
 
         // Extract the KAlarm version string
         versionString = prodid.mid(i + progname.length()).trimmed();
-        i = versionString.indexOf(QLatin1Char('/'));
-        const int j = versionString.indexOf(QLatin1Char(' '));
+        i = versionString.indexOf('/'_L1);
+        const int j = versionString.indexOf(' '_L1);
         if (j >= 0  &&  j < i)
             i = j;
         if (i <= 0)
@@ -280,7 +281,7 @@ Type status(const Event::Ptr& event, QString* param)
         PropertyMap::ConstIterator it = properties.constFind(property);
         if (it != properties.constEnd())
             return it.value();
-        const int i = property.indexOf(QLatin1Char(';'));
+        const int i = property.indexOf(';'_L1);
         if (i < 0)
             return EMPTY;
         it = properties.constFind(property.left(i));
@@ -325,7 +326,7 @@ void setStatus(const Event::Ptr& event, Type status, const QString& param)
             return;
     }
     if (!param.isEmpty())
-        text += QLatin1Char(';') + param;
+        text += ';'_L1 + param;
     event->setCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
 }
 

@@ -12,6 +12,7 @@
 #include <KConfigGroup>
 
 #include <QFileInfo>
+using namespace Qt::Literals::StringLiterals;
 
 namespace
 {
@@ -531,7 +532,7 @@ QString FileResourceSettings::alarmTypesString(CalEvent::Types alarmTypes)
         types += ALARM_ARCHIVED;
     if (alarmTypes & CalEvent::TEMPLATE)
         types += ALARM_TEMPLATE;
-    return types.join(QLatin1Char(','));
+    return types.join(','_L1);
 }
 
 FileResourceSettings::Storage FileResourceSettings::storageType(const QUrl& url)

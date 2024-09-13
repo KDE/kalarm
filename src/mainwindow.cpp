@@ -72,6 +72,7 @@ using namespace KCalUtils;
 #include <QMenuBar>
 #include <QSystemTrayIcon>
 #include <QMimeData>
+using namespace Qt::Literals::StringLiterals;
 
 using namespace KAlarmCal;
 
@@ -126,7 +127,7 @@ MainWindow::MainWindow(bool restored)
     qCDebug(KALARM_LOG) << "MainWindow:";
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowModality(Qt::WindowModal);
-    setObjectName(QLatin1StringView("MainWin"));    // used by LikeBack
+    setObjectName("MainWin"_L1);    // used by LikeBack
     setPlainCaption(KAboutData::applicationData().displayName());
     KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
     mShowResources     = config.readEntry(SHOW_RESOURCES_KEY, false);
@@ -1411,7 +1412,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     AlarmText          alarmText;
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
 #ifndef NDEBUG
-    const QString fmts = data->formats().join(QLatin1StringView(", "));
+    const QString fmts = data->formats().join(", "_L1);
     qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent:" << fmts;
 #endif
 
@@ -1514,7 +1515,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
             // Try to find the mime type of the file, without downloading a remote file
             QMimeDatabase mimeDb;
             const QString mimeTypeName = mimeDb.mimeTypeForUrl(url).name();
-            action = mimeTypeName.startsWith(QLatin1StringView("audio/")) ? KAEvent::SubAction::Audio : KAEvent::SubAction::File;
+            action = mimeTypeName.startsWith("audio/"_L1) ? KAEvent::SubAction::Audio : KAEvent::SubAction::File;
             alarmText.setText(url.toDisplayString());
         }
     }

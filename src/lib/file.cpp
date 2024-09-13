@@ -19,6 +19,7 @@
 #include <QDir>
 #include <QRegularExpression>
 #include <QFileDialog>
+using namespace Qt::Literals::StringLiterals;
 
 namespace File
 {
@@ -36,7 +37,7 @@ Type fileType(const QMimeType& mimetype)
         return Type::TextApplication;
     if (mimetype.inherits(QStringLiteral("text/plain")))
         return Type::TextPlain;
-    if (mimetype.name().startsWith(QLatin1StringView("image/")))
+    if (mimetype.name().startsWith("image/"_L1))
         return Type::Image;
     return Type::Unknown;
 }

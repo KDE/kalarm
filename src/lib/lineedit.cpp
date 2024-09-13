@@ -22,6 +22,7 @@
 #include <QDropEvent>
 #include <QFocusEvent>
 #include <QRegularExpression>
+using namespace Qt::Literals::StringLiterals;
 
 
 /*=============================================================================
@@ -163,19 +164,19 @@ void LineEdit::dropEvent(QDropEvent* e)
         }
         else
         {
-            const int newline = txt.indexOf(QLatin1Char('\n'));
+            const int newline = txt.indexOf('\n'_L1);
             newText = (newline >= 0) ? txt.left(newline) : txt;
         }
     }
 
     if (!newEmails.isEmpty())
     {
-        newText = newEmails.join(QLatin1Char(','));
+        newText = newEmails.join(','_L1);
         const int c = cursorPosition();
         if (c > 0)
-            newText.prepend(QLatin1Char(','));
+            newText.prepend(','_L1);
         if (c < static_cast<int>(text().length()))
-            newText.append(QLatin1Char(','));
+            newText.append(','_L1);
     }
     if (!newText.isEmpty())
         insert(newText);

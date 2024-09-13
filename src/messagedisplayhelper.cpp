@@ -46,6 +46,7 @@
 #include <QTimeZone>
 #include <QTimer>
 #include <QUrl>
+using namespace Qt::Literals::StringLiterals;
 
 using namespace KAlarmCal;
 
@@ -218,7 +219,7 @@ void MessageDisplayHelper::initTexts()
             static const QRegularExpression re(QStringLiteral("^(<[^>]+>)*"));  // search for HTML tag "<...>"
             const QRegularExpressionMatch match = re.match(s);
             // Prefix the time, plus a newline, to "Reminder", inside any HTML tags.
-            s.insert(match.capturedEnd(0), mTexts.time + QLatin1StringView("<br/>"));
+            s.insert(match.capturedEnd(0), mTexts.time + "<br/>"_L1);
             mTexts.timeFull = s;
         }
     }
@@ -252,7 +253,7 @@ void MessageDisplayHelper::initTexts()
 
                         QMimeDatabase db;
                         QMimeType mime = db.mimeTypeForUrl(url);
-                        if (mime.name() == QLatin1StringView("application/octet-stream"))
+                        if (mime.name() == "application/octet-stream"_L1)
                             mime = db.mimeTypeForData(mTempFile);
                         mTexts.fileType = File::fileType(mime);
                         switch (mTexts.fileType)
@@ -455,7 +456,7 @@ QString MessageDisplayHelper::dateTimeToDisplay() const
             const QDateTime dt = mDateTime.qDateTime();
             tm = locale.toString(dt, QLocale::ShortFormat);
             if (showZone)
-                tm += QLatin1Char(' ') + mDateTime.timeZone().displayName(dt, QTimeZone::ShortName, locale);
+                tm += ' '_L1 + mDateTime.timeZone().displayName(dt, QTimeZone::ShortName, locale);
         }
     }
     return tm;

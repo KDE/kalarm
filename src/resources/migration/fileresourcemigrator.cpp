@@ -24,6 +24,7 @@
 #include <QStandardPaths>
 #include <QDirIterator>
 #include <QFileInfo>
+using namespace Qt::Literals::StringLiterals;
 
 using namespace KAlarmCal;
 
@@ -268,7 +269,7 @@ void FileResourceMigrator::createDefaultResources()
 */
 void FileResourceMigrator::createCalendar(CalEvent::Type alarmType, const QString& file, const QString& name)
 {
-    const QUrl url = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + file);
+    const QUrl url = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/'_L1 + file);
     qCDebug(KALARM_LOG) << "FileResourceMigrator: New:" << name << ", type=" << alarmType << ", path=" << url.toString();
     FileResourceSettings::Ptr settings(new FileResourceSettings(
                   FileResourceSettings::File, url, alarmType, name, QColor(), alarmType,
@@ -313,10 +314,10 @@ bool readDirectoryResource(const QString& dirPath, CalEvent::Types alarmTypes,
         it.next();
         const QString file = it.fileName();
         if (!file.isEmpty()
-        &&  !file.startsWith(QLatin1Char('.')) && !file.endsWith(QLatin1Char('~'))
-        &&  file != QLatin1StringView("WARNING_README.txt"))
+        &&  !file.startsWith('.'_L1) && !file.endsWith('~'_L1)
+        &&  file != "WARNING_README.txt"_L1)
         {
-            const QString path = dirPath + QLatin1Char('/') + file;
+            const QString path = dirPath + '/'_L1 + file;
             if (QFileInfo::exists(path)  // a temporary file may no longer exist
             &&  QFileInfo(path).isFile())
             {

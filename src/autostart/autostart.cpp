@@ -18,6 +18,7 @@
 #include <QDBusConnectionInterface>
 #include <QCommandLineParser>
 #include <QStandardPaths>
+using namespace Qt::Literals::StringLiterals;
 
 // Number of seconds to wait before autostarting KAlarm.
 // Allow plenty of time for session restoration to happen first.
@@ -100,7 +101,7 @@ void AutostartApp::setCommandLine(const QString& exe, const QStringList& args)
 void AutostartApp::slotAutostart()
 {
     const QString prog = mArgs[0];
-    if (prog == QLatin1StringView("kalarm"))
+    if (prog == "kalarm"_L1)
     {
         QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(QStringLiteral(KALARM_DBUS_SERVICE));
         if (reply.isValid()  &&  reply.value())

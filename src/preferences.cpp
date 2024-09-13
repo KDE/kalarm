@@ -31,6 +31,7 @@
 #include <QSaveFile>
 #include <QDir>
 #include <QStandardPaths>
+using namespace Qt::Literals::StringLiterals;
 
 #include <time.h>
 
@@ -207,7 +208,7 @@ void Preferences::setRunMode(RunMode mode)
     const QStringList autostartDirs = QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation);
     for (const QString& dir : autostartDirs)
     {
-        const QString file = dir + QLatin1StringView("/autostart/") + AUTOSTART_FILE;
+        const QString file = dir + "/autostart/"_L1 + AUTOSTART_FILE;
         if (QFile::exists(file))
         {
             QFileInfo info(file);
@@ -227,7 +228,7 @@ void Preferences::setRunMode(RunMode mode)
     if (existingRO)
     {
         configDirRW = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-        autostartFileRW = configDirRW + QLatin1StringView("/autostart/") + AUTOSTART_FILE;
+        autostartFileRW = configDirRW + "/autostart/"_L1 + AUTOSTART_FILE;
         if (configDirRW.isEmpty())
         {
             qCWarning(KALARM_LOG) << "Preferences::setRunMode: No writable autostart file path";
@@ -256,7 +257,7 @@ void Preferences::setRunMode(RunMode mode)
         }
         QTextStream stream(&file);
         stream.setAutoDetectUnicode(true);
-        lines = stream.readAll().split(QLatin1Char('\n'));
+        lines = stream.readAll().split('\n'_L1);
         for (int i = 0; i < lines.size(); ++i)
         {
             const QString line = lines.at(i).trimmed();
@@ -265,8 +266,8 @@ void Preferences::setRunMode(RunMode mode)
                 lines.removeAt(i);
                 --i;
             }
-            else if (line.startsWith(QLatin1StringView("Hidden="))
-                 ||  line.startsWith(QLatin1StringView("OnlyShowIn=")))
+            else if (line.startsWith("Hidden="_L1)
+                 ||  line.startsWith("OnlyShowIn="_L1))
             {
                 lines.removeAt(i);
                 update = true;
@@ -285,7 +286,7 @@ void Preferences::setRunMode(RunMode mode)
     if (update)
     {
         // Write the updated file
-        QFileInfo info(configDirRW + QLatin1StringView("/autostart"));
+        QFileInfo info(configDirRW + "/autostart"_L1);
         if (!info.exists())
         {
             // First, create the directory for it.
@@ -302,7 +303,7 @@ void Preferences::setRunMode(RunMode mode)
             return;
         }
         QTextStream stream(&file);
-        stream << lines.join(QLatin1Char('\n')) << "\n";
+        stream << lines.join('\n'_L1) << "\n";
         // QSaveFile doesn't report a write error when the device is full (see Qt
         // bug 75077), so check that the data can actually be written by flush().
         if (!file.flush()  ||  !file.commit())   // save the file

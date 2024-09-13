@@ -34,6 +34,7 @@
 #include <QResizeEvent>
 #include <QDialogButtonBox>
 #include <QStandardPaths>
+using namespace Qt::Literals::StringLiterals;
 
 
 // Collect these widget labels together to ensure consistent wording and
@@ -480,7 +481,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
         return true;
     if (err == File::Error::Nonexistent)
     {
-        if (mUrl.isLocalFile()  &&  !file.startsWith(QLatin1Char('/')))
+        if (mUrl.isLocalFile()  &&  !file.startsWith('/'_L1))
         {
             // It's a relative path.
             // Find the first sound resource that contains files.
@@ -494,7 +495,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
                     dir.setPath(soundDirs[i]);
                     if (dir.isReadable() && dir.count() > 2)
                     {
-                        QString f = soundDirs[i] + QLatin1Char('/') + file;
+                        QString f = soundDirs[i] + '/'_L1 + file;
                         err = File::checkFileExists(f, mUrl, MainWindow::mainMainWindow());
                         if (err == File::Error::None)
                             return true;
@@ -508,7 +509,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
             }
             if (err == File::Error::Nonexistent)
             {
-                QString f = QDir::homePath() + QLatin1Char('/') + file;
+                QString f = QDir::homePath() + '/'_L1 + file;
                 err = File::checkFileExists(f, mUrl, MainWindow::mainMainWindow());
                 if (err == File::Error::None)
                     return true;

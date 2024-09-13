@@ -17,6 +17,7 @@
 #include "kalarmcalendar/karecurrence.h"
 #include "kalarm_debug.h"
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KCalendarCore;
 
 #include <stdlib.h>
@@ -513,7 +514,7 @@ bool DBusHandler::scheduleAudio(const QString& name, const QString& audioUrl, in
 */
 KADateTime DBusHandler::convertDateTime(const QString& dateTime, const KADateTime& defaultDt)
 {
-    int i = dateTime.indexOf(QLatin1Char(' '));
+    int i = dateTime.indexOf(' '_L1);
     QString dtString = dateTime;
     QString zone;
     if (i >= 0)
@@ -537,7 +538,7 @@ KADateTime DBusHandler::convertDateTime(const QString& dateTime, const KADateTim
     {
         // Check whether a time is specified
         QString t;
-        if (dtString[0] == QLatin1Char('T'))
+        if (dtString[0] == 'T'_L1)
             t = dtString.mid(1);     // it's a time: remove the leading 'T'
         else if (!dtString[2].isDigit())
             t = dtString;            // it's a time with no leading 'T'

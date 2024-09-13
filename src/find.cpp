@@ -29,6 +29,7 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QRegularExpression>
+using namespace Qt::Literals::StringLiterals;
 
 using namespace KAlarmCal;
 
@@ -92,7 +93,7 @@ void Find::display()
     {
         mDialog = new KFindDialog(mListView, mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
         mDialog->setModal(false);
-        mDialog->setObjectName(QLatin1StringView("FindDlg"));
+        mDialog->setObjectName("FindDlg"_L1);
         mDialog->setHasSelection(false);
         QWidget* kalarmWidgets = mDialog->findExtension();
 
@@ -320,7 +321,7 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
                 found = (mFind->find() == KFind::Match);
                 if (found)
                     break;
-                mFind->setData(event->emailAttachments().join(QLatin1StringView(", ")));
+                mFind->setData(event->emailAttachments().join(", "_L1));
                 found = (mFind->find() == KFind::Match);
                 if (found)
                     break;

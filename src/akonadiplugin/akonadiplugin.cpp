@@ -28,6 +28,7 @@
 #include <KDescendantsProxyModel>
 
 #include <QUrlQuery>
+using namespace Qt::Literals::StringLiterals;
 
 K_PLUGIN_CLASS_WITH_JSON(AkonadiPlugin, "akonadiplugin.json")
 
@@ -109,7 +110,7 @@ KMime::Message::Ptr AkonadiPlugin::fetchAkonadiEmail(const QUrl& url, qint64& em
 
     // It's an Akonadi item
     qCDebug(AKONADIPLUGIN_LOG) << "AkonadiPlugin::fetchAkonadiEmail: Akonadi item" << item.id();
-    if (QUrlQuery(url).queryItemValue(QStringLiteral("type")) != QLatin1StringView("message/rfc822"))
+    if (QUrlQuery(url).queryItemValue(QStringLiteral("type")) != "message/rfc822"_L1)
         return {};   // it's not an email
 
     // It's an email held in Akonadi
