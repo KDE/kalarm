@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-13 00:40+0000\n"
+"POT-Creation-Date: 2024-09-14 00:41+0000\n"
 "PO-Revision-Date: 2024-09-11 23:00+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -147,7 +147,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Geroratu honenbeste:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:328
+#: alarmtimewidget.cpp:137 editdlg.cpp:329
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
@@ -165,7 +165,7 @@ msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "Programatu alarma, hemendik aurrera, zehaztutako denbora-tarterako."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:339
+#: alarmtimewidget.cpp:149 editdlg.cpp:340
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -239,7 +239,7 @@ msgstr ""
 "Aukeratu alarma honetarako, KAlarm konfiguratzeko elkarrizketa-koadroan "
 "ezarritako ordu-eremu lehenetsiaren ezberdina den ordu-eremu bat."
 
-#: alarmtimewidget.cpp:227 prefdlg.cpp:755
+#: alarmtimewidget.cpp:227 prefdlg.cpp:751
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
@@ -321,55 +321,55 @@ msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
 msgstr "<para>Errorea audio-fitxategia jotzean: <filename>%1</filename></para>"
 
-#: autostart/autostart.cpp:48
+#: autostart/autostart.cpp:49
 #, kde-format
 msgid "KAlarm Autostart"
 msgstr "KAlarm automatikoki abiatu"
 
-#: autostart/autostart.cpp:49
+#: autostart/autostart.cpp:50
 #, kde-format
 msgid "KAlarm autostart at login"
 msgstr "KAlarm automatikoki abiatu saio-hastean"
 
-#: autostart/autostart.cpp:51
+#: autostart/autostart.cpp:52
 #, kde-format
 msgid "Copyright 2001-%1, David Jarvie"
 msgstr "Copyright 2001-%1, David Jarvie"
 
-#: autostart/autostart.cpp:52 main.cpp:60
+#: autostart/autostart.cpp:53 main.cpp:60
 #, kde-format
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
 
-#: autostart/autostart.cpp:52 main.cpp:60
+#: autostart/autostart.cpp:53 main.cpp:60
 #, kde-format
 msgid "Author"
 msgstr "Egilea"
 
-#: autostart/autostart.cpp:58
+#: autostart/autostart.cpp:59
 #, kde-format
 msgid "Application to run"
 msgstr "Exekutatu beharreko aplikazioa"
 
-#: autostart/autostart.cpp:59
+#: autostart/autostart.cpp:60
 #, kde-format
 msgid "Command line arguments to pass to application"
 msgstr "Aplikazioari komando-lerrotik pasatu beharreko argumentuak"
 
-#: birthdaydlg.cpp:49
+#: birthdaydlg.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Inportatu urtebetetzeak KAddressBook-etik"
 
-#: birthdaydlg.cpp:63 editdlg.cpp:244
+#: birthdaydlg.cpp:64 editdlg.cpp:245
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Alarmaren izena:"
 
-#: birthdaydlg.cpp:68 editdlg.cpp:252
+#: birthdaydlg.cpp:69 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -379,25 +379,25 @@ msgstr ""
 "Sartu alarma hau identifikatzen laguntzeko izen bat. Hautazkoa da eta ez du "
 "zertan esklusiboa izan behar."
 
-#: birthdaydlg.cpp:75
+#: birthdaydlg.cpp:76
 #, kde-format
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "Urtebetetzea: "
 
-#: birthdaydlg.cpp:78
+#: birthdaydlg.cpp:79
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Alarmaren testua"
 
-#: birthdaydlg.cpp:81 prefdlg.cpp:1962
+#: birthdaydlg.cpp:82 prefdlg.cpp:1958
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "Aurrizkia:"
 
-#: birthdaydlg.cpp:88
+#: birthdaydlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -407,13 +407,13 @@ msgstr ""
 "Sartu, pertsonaren izenaren aurretik, alarmaren mezuan agertu beharreko "
 "testua, beharrezkoak diren amaierako zuriuneak barne."
 
-#: birthdaydlg.cpp:92
+#: birthdaydlg.cpp:93
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "Atzizkia:"
 
-#: birthdaydlg.cpp:99
+#: birthdaydlg.cpp:100
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -423,13 +423,13 @@ msgstr ""
 "Sartu, pertsonaren izenaren aurretik, alarmaren mezuan agertu beharreko "
 "testua, beharrezkoak diren hasierako zuriuneak barne."
 
-#: birthdaydlg.cpp:103
+#: birthdaydlg.cpp:104
 #, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "Hautatu urtebetetzeak"
 
-#: birthdaydlg.cpp:133
+#: birthdaydlg.cpp:134
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -445,19 +445,19 @@ msgstr ""
 "batera hauta ditzakezu sagua zerrendaren gainetik arrastatuz, edo Ktrl edo "
 "Maius sakatu bitartean saguan klik eginez.</para>"
 
-#: birthdaydlg.cpp:139
+#: birthdaydlg.cpp:140
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "Alarmaren konfigurazioa"
 
-#: birthdaydlg.cpp:159
+#: birthdaydlg.cpp:160
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr "Markatu, urtebetetzearen aurretik edo ondoren oroigarri bat azaltzeko."
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -468,7 +468,7 @@ msgstr ""
 "Sartu, urtebetetze bakoitzaren aurretik, oroigarri bat azaltzeko, egun "
 "kopurua. Hori, urtebetetze-egunean azalduko den alarmaz gain da."
 
-#: birthdaydlg.cpp:162
+#: birthdaydlg.cpp:163
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -476,268 +476,268 @@ msgid ""
 msgstr ""
 "Hautatu oroigarria urtebetetzearen aurretik edo ondoren eragin behar den."
 
-#: birthdaydlg.cpp:195 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
 #, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "Azpi-errepikapena"
 
-#: birthdaydlg.cpp:197
+#: birthdaydlg.cpp:198
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
 msgstr "Ezarri alarma errepikapen osagarri bat"
 
-#: commandoptions.cpp:126
+#: commandoptions.cpp:127
 #, kde-format
 msgid "Prompt for confirmation when alarm is acknowledged"
 msgstr "Eskatu berrespena alarmaz konturatu izana adierazteko"
 
-#: commandoptions.cpp:129
+#: commandoptions.cpp:130
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
 msgstr "Erantsi fitxategia e-postara (behar den bezala errepikatu)"
 
-#: commandoptions.cpp:133
+#: commandoptions.cpp:134
 #, kde-format
 msgid "Auto-close alarm window after --late-cancel period"
 msgstr "Itxi alarmaren leihoa automatikoki «--late-cancel» aldia igarotakoan"
 
-#: commandoptions.cpp:136
+#: commandoptions.cpp:137
 #, kde-format
 msgid "Blind copy email to self"
 msgstr "Bidali ezkutuko e-posta kopia (EKK) zeure buruari"
 
-#: commandoptions.cpp:139
+#: commandoptions.cpp:140
 #, kde-format
 msgid "Beep when message is displayed"
 msgstr "Egin bip mezua azaltzen denean"
 
-#: commandoptions.cpp:142
+#: commandoptions.cpp:143
 #, kde-format
 msgid "Message background color (name or hex 0xRRGGBB)"
 msgstr "Mezuaren atzeko planoaren kolorea (izena edo 0xRRGGBB hamaseitarra)"
 
-#: commandoptions.cpp:146
+#: commandoptions.cpp:147
 #, kde-format
 msgid "Message foreground color (name or hex 0xRRGGBB)"
 msgstr "Mezuaren aurreko planoaren kolorea (izena edo 0xRRGGBB hamaseitarra)"
 
-#: commandoptions.cpp:150
+#: commandoptions.cpp:151
 #, kde-format
 msgid "Cancel alarm with the specified event ID"
 msgstr "Ezeztatu zehaztutako gertaera IDa duen alarma"
 
-#: commandoptions.cpp:154
+#: commandoptions.cpp:155
 #, kde-format
 msgid "Disable the alarm"
 msgstr "Ezgaitu alarma"
 
-#: commandoptions.cpp:157
+#: commandoptions.cpp:158
 #, kde-format
 msgid "Disable monitoring of all alarms"
 msgstr "Ezgaitu alarma guztien gainbegiratzea"
 
-#: commandoptions.cpp:160
+#: commandoptions.cpp:161
 #, kde-format
 msgid "Execute a shell command line"
 msgstr "Exekutatu oskoleko komando-lerro bat"
 
-#: commandoptions.cpp:164
+#: commandoptions.cpp:165
 #, kde-format
 msgid "Command line to generate alarm message text"
 msgstr "Alarma testu-mezu bat sortzeko komando-lerroa"
 
-#: commandoptions.cpp:168
+#: commandoptions.cpp:169
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
 msgstr ""
 "Azaldu, zehaztutako alarma editatzeko, alarma editatzeko elkarrizketa-koadroa"
 
-#: commandoptions.cpp:172
+#: commandoptions.cpp:173
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr ""
 "Azaldu alarma editatzeko elkarrizketa-koadroa, ikus-alarma bat editatzeko"
 
-#: commandoptions.cpp:175
+#: commandoptions.cpp:176
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr ""
 "Azaldu, komando-alarma berri bat editatzeko, alarma editatzeko elkarrizketa-"
 "koadroa"
 
-#: commandoptions.cpp:178
+#: commandoptions.cpp:179
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
 msgstr ""
 "Azaldu, e-posta-alarma berri bat editatzeko, alarma editatzeko elkarrizketa-"
 "koadroa"
 
-#: commandoptions.cpp:181
+#: commandoptions.cpp:182
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
 msgstr ""
 "Azaldu, audio-alarma berri bat editatzeko, alarma editatzeko elkarrizketa-"
 "koadroa"
 
-#: commandoptions.cpp:184
+#: commandoptions.cpp:185
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
 msgstr ""
 "Azaldu alarma editatzeko elkarrizketa-koadroa, txantiloi batekin aurre-"
 "ezarrita"
 
-#: commandoptions.cpp:188
+#: commandoptions.cpp:189
 #, kde-format
 msgid "File to display"
 msgstr "Azaltzeko fitxategia"
 
-#: commandoptions.cpp:192
+#: commandoptions.cpp:193
 #, kde-format
 msgid "KMail identity to use as sender of email"
 msgstr "E-posta bidaltzaile gisa erabili beharreko KMail nortasuna"
 
-#: commandoptions.cpp:196
+#: commandoptions.cpp:197
 #, kde-format
 msgid "Interval between alarm repetitions"
 msgstr "Alarma errepikapenen arteko bitartea"
 
-#: commandoptions.cpp:200
+#: commandoptions.cpp:201
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
 msgstr "Erakutsi alarma KOrganizer-en gertaera balitz bezala"
 
-#: commandoptions.cpp:203
+#: commandoptions.cpp:204
 #, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
 msgstr "Alarma bertan behera utzi «aldia» baino beranduago eragiten bada"
 
-#: commandoptions.cpp:208
+#: commandoptions.cpp:209
 #, kde-format
 msgid "Output list of scheduled alarms to stdout"
 msgstr "Atera programatutako alarmen zerrenda irteera estandarretik («stdout»)"
 
-#: commandoptions.cpp:211
+#: commandoptions.cpp:212
 #, kde-format
 msgid "Repeat alarm at every login"
 msgstr "Errepikatu alarma saio hasiera guztietan"
 
-#: commandoptions.cpp:214
+#: commandoptions.cpp:215
 #, kde-format
 msgid "Send an email to the given address (repeat as needed)"
 msgstr "Bidali e-posta bat emandako helbidera (behar den bezala errepikatu)"
 
-#: commandoptions.cpp:218
+#: commandoptions.cpp:219
 #, kde-format
 msgid "Name of alarm"
 msgstr "Alarmaren izena"
 
-#: commandoptions.cpp:222
+#: commandoptions.cpp:223
 #, kde-format
 msgid "Display alarm message as a notification"
 msgstr "Azaldu alarmaren mezua jakinarazpen gisa"
 
-#: commandoptions.cpp:225
+#: commandoptions.cpp:226
 #, kde-format
 msgid "Audio file to play once"
 msgstr "Behin jo beharreko audio-fitxategia"
 
-#: commandoptions.cpp:229
+#: commandoptions.cpp:230
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Behin eta berriz jotzeko audio-fitxategia"
 
-#: commandoptions.cpp:233
+#: commandoptions.cpp:234
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "Zehaztu alarma errepikatzea iCalendar-ren sintaxia erabiliz"
 
-#: commandoptions.cpp:237
+#: commandoptions.cpp:238
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "Azaldu oroigarria alarmaren aurretik edo ondoren"
 
-#: commandoptions.cpp:241
+#: commandoptions.cpp:242
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr ""
 "Azaldu oroigarria behin, alarmaren aurreneko errepika aurretik edo ondoren"
 
-#: commandoptions.cpp:245
+#: commandoptions.cpp:246
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Alarmaren errepikapen kopurua (hasierakoa barne)"
 
-#: commandoptions.cpp:250
+#: commandoptions.cpp:251
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Ahoskatu mezua azaltzen denean"
 
-#: commandoptions.cpp:254
+#: commandoptions.cpp:255
 #, kde-format
 msgid "Email subject line"
 msgstr "E-postaren gaia"
 
 # [TZ]: Time Zone > Ordu-eremua [OE]
-#: commandoptions.cpp:259
+#: commandoptions.cpp:260
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr "Simulatu sistemaren ordua [[[uuuu-]hh-]ee-]oo:mm [OE] (arazteko modua)"
 
-#: commandoptions.cpp:264
+#: commandoptions.cpp:265
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Eragin alarma [[[uuuu-]hh-]ee-]oo:mm [OE] orduan, edo uuuu-hh-ee [OE] datan"
 
-#: commandoptions.cpp:268
+#: commandoptions.cpp:269
 #, kde-format
 msgid "Display system tray icon"
 msgstr "Azaldu sistema-erretiluko ikonoa"
 
-#: commandoptions.cpp:271
+#: commandoptions.cpp:272
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Eragin zehaztutako gertaera IDko alarma"
 
-#: commandoptions.cpp:275
+#: commandoptions.cpp:276
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Errepikatu [[[uuuu-]hh-]ee-]oo:mm [OE] ordura arte, edo  uuuu-hh-ee [OE] "
 "datara arte"
 
-#: commandoptions.cpp:279
+#: commandoptions.cpp:280
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "Audio-fitxategia jotzeko bolumena"
 
-#: commandoptions.cpp:290
+#: commandoptions.cpp:291
 #, kde-format
 msgid "Message text to display"
 msgstr "Azaldu beharreko testu-mezua"
 
-#: commandoptions.cpp:454
+#: commandoptions.cpp:455
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
 msgstr "<icode>%1</icode>: e-posta helbide baliogabea"
 
-#: commandoptions.cpp:577 commandoptions.cpp:592 commandoptions.cpp:671
+#: commandoptions.cpp:578 commandoptions.cpp:593 commandoptions.cpp:672
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
 msgstr "Data soileko alarmentzako <icode>%1</icode> parametro baliogabea"
 
-#: commandoptions.cpp:581
+#: commandoptions.cpp:582
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "<icode>%1</icode> <icode>%2</icode>(e)ren aurretik"
 
-#: commandoptions.cpp:603
+#: commandoptions.cpp:604
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid ""
@@ -747,13 +747,13 @@ msgstr ""
 "<icode>%1</icode> eta <icode>%2</icode> parametro baliogabeak: errepikapena "
 "<icode>%3</icode> bitartea baino luzeagoa da"
 
-#: commandoptions.cpp:784
+#: commandoptions.cpp:785
 #, kde-format
 msgctxt "@info:shell"
 msgid ": option(s) only valid with an appropriate action option or message"
 msgstr ": aukera(k) balioduna soilik ekintza-aukera edo mezu egoki batekin"
 
-#: commandoptions.cpp:805 commandoptions.cpp:822
+#: commandoptions.cpp:806 commandoptions.cpp:823
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -764,25 +764,25 @@ msgstr ""
 "Erabili «--help» komando-lerroko aukera erabilgarrien zerrenda bat "
 "eskuratzeko.\n"
 
-#: commandoptions.cpp:850
+#: commandoptions.cpp:851
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
 msgstr "<icode>%1</icode>(e)k <icode>%2</icode> behar du"
 
-#: commandoptions.cpp:852
+#: commandoptions.cpp:853
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
 msgstr "<icode>%1</icode>(e)k <icode>%2</icode> edo <icode>%3</icode> behar du"
 
-#: commandoptions.cpp:857
+#: commandoptions.cpp:858
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
 msgstr "<icode>%1</icode> parametro baliogabea"
 
-#: commandoptions.cpp:862
+#: commandoptions.cpp:863
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> incompatible with <icode>%2</icode>"
@@ -891,7 +891,7 @@ msgid "Select the holiday region to use."
 msgstr "Hautatu erabili beharreko jaiegun-eskualdea"
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
-#: data/kalarmconfig.kcfg:93 kalarmcalendar/kaeventformatter.cpp:92
+#: data/kalarmconfig.kcfg:93 kalarmcalendar/kaeventformatter.cpp:93
 #, kde-format
 msgctxt "@label"
 msgid "Foreground color"
@@ -905,7 +905,7 @@ msgid "Default foreground color for alarm message windows."
 msgstr "Alarma-mezu leihoaren aurreko planoaren kolore lehenetsia"
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
-#: data/kalarmconfig.kcfg:98 kalarmcalendar/kaeventformatter.cpp:94
+#: data/kalarmconfig.kcfg:98 kalarmcalendar/kaeventformatter.cpp:95
 #, kde-format
 msgctxt "@label"
 msgid "Background color"
@@ -1011,41 +1011,79 @@ msgstr ""
 "Sistemaren erretiluan automatikoki ezkutatzea aukera erabilgarri ez duten "
 "mahaigainak."
 
-#. i18n: ectx: label, entry (AutoStart), group (General)
+#. i18n: ectx: label, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:132
 #, kde-format
 msgctxt "@label"
 msgid "Start at login"
 msgstr "Abiatu saioa hastean"
 
-#. i18n: ectx: whatsthis, entry (AutoStart), group (General)
+#. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:whatsthis"
+#| msgid ""
+#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
+#| "should always be checked unless you intend to discontinue use of KAlarm.</"
+#| "p>"
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-"should always be checked unless you intend to discontinue use of KAlarm.</p>"
+"should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
 "<p>KAlarm automatikoki abiatu KDE abiatzen duzun guztietan.</p><p>Aukera hau "
 "beti gaituta egon beharko litzateke KAlarm-en erabilera eten nahi duzunean "
 "ezik.</p>"
 
-#. i18n: ectx: label, entry (Base_NoAutoStart), group (General)
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:group"
+#| msgid "Run Mode"
 msgctxt "@label"
-msgid "Suppress autostart at login"
-msgstr "Kendu saio-hastean automatikoki abiatzea"
+msgid "Run mode"
+msgstr "Exekuzio modua"
+
+#. i18n: ectx: whatsthis, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:138
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Whether to run KAlarm automatically on login, manually only, or not at all."
+msgstr ""
+
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:140
+#, kde-format
+msgctxt "@option"
+msgid "Run automatically"
+msgstr ""
+
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:141
+#, kde-format
+msgctxt "@option"
+msgid "Run manually only"
+msgstr ""
+
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:142
+#, fuzzy, kde-format
+#| msgctxt "@option:radio"
+#| msgid "Do not repeat"
+msgctxt "@option"
+msgid "Do not run"
+msgstr "Ez errepikatu"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
-#: data/kalarmconfig.kcfg:141
+#: data/kalarmconfig.kcfg:147
 #, kde-format
 msgctxt "@label"
 msgid "Default defer time interval"
 msgstr "Geroratzeko denbora tarte lehenetsia"
 
 #. i18n: ectx: whatsthis, entry (DefaultDeferTime), group (General)
-#: data/kalarmconfig.kcfg:142
+#: data/kalarmconfig.kcfg:148
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1056,14 +1094,14 @@ msgstr ""
 "alarma» elkarrizketa-koadroak erabilia."
 
 #. i18n: ectx: label, entry (AskResource), group (General)
-#: data/kalarmconfig.kcfg:146
+#: data/kalarmconfig.kcfg:152
 #, kde-format
 msgctxt "@label"
 msgid "Prompt for which calendar to store in"
 msgstr "Eskatu zein egutegitan gorde behar den"
 
 #. i18n: ectx: whatsthis, entry (AskResource), group (General)
-#: data/kalarmconfig.kcfg:147
+#: data/kalarmconfig.kcfg:153
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1077,14 +1115,14 @@ msgstr ""
 "alarmen egutegi lehenetsian.</p>"
 
 #. i18n: ectx: label, entry (Base_ModalMessages), group (General)
-#: data/kalarmconfig.kcfg:151
+#: data/kalarmconfig.kcfg:157
 #, kde-format
 msgctxt "@label"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Mezu-leihoek titulu-barra bat dute eta teklatuaren fokua hartzen dute"
 
 #. i18n: ectx: whatsthis, entry (Base_ModalMessages), group (General)
-#: data/kalarmconfig.kcfg:152
+#: data/kalarmconfig.kcfg:158
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1101,14 +1139,14 @@ msgstr ""
 "mugitu edo neurriz aldatu.</li></ul></p>"
 
 #. i18n: ectx: label, entry (Base_MessageButtonDelay), group (General)
-#: data/kalarmconfig.kcfg:156
+#: data/kalarmconfig.kcfg:162
 #, kde-format
 msgctxt "@label"
 msgid "Delay before message window buttons are enabled"
 msgstr "Mezu-leihoko botoiak gaitu aurreko atzerapena"
 
 #. i18n: ectx: whatsthis, entry (Base_MessageButtonDelay), group (General)
-#: data/kalarmconfig.kcfg:161
+#: data/kalarmconfig.kcfg:167
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1132,7 +1170,7 @@ msgstr ""
 "      "
 
 #. i18n: ectx: label, entry (TooltipAlarmCount), group (General)
-#: data/kalarmconfig.kcfg:167
+#: data/kalarmconfig.kcfg:173
 #, kde-format
 msgctxt "@label"
 msgid "Number of alarms to show in system tray tooltip"
@@ -1140,7 +1178,7 @@ msgstr ""
 "Sistema-erretiluko tresna-argibideetan erakutsi beharreko alarma kopurua"
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
-#: data/kalarmconfig.kcfg:172
+#: data/kalarmconfig.kcfg:178
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1159,14 +1197,14 @@ msgstr ""
 "      "
 
 #. i18n: ectx: label, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:178
+#: data/kalarmconfig.kcfg:184
 #, kde-format
 msgctxt "@label"
 msgid "Show alarm times in system tray tooltip"
 msgstr "Erakutsi alarmen orduak sistema-erretiluko tresna-argibideetan"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:179 prefdlg.cpp:1950
+#: data/kalarmconfig.kcfg:185 prefdlg.cpp:1946
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1177,14 +1215,14 @@ msgstr ""
 "mugaerakutsi behar diren edo ez."
 
 #. i18n: ectx: label, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:184
+#: data/kalarmconfig.kcfg:190
 #, kde-format
 msgctxt "@label"
 msgid "Show time to alarms in system tray tooltip"
 msgstr "Erakutsi alarmen ordua sistema-erretiluko tresna-iradokizunetan"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:185 prefdlg.cpp:1956
+#: data/kalarmconfig.kcfg:191 prefdlg.cpp:1952
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1195,14 +1233,14 @@ msgstr ""
 "mugarako zenbat falta den."
 
 #. i18n: ectx: label, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:190
+#: data/kalarmconfig.kcfg:196
 #, kde-format
 msgctxt "@label"
 msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr "Alarmarako-denbora aurrizkia sistema-erretiluko tresna-argibideetan"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:191 prefdlg.cpp:1967
+#: data/kalarmconfig.kcfg:197 prefdlg.cpp:1963
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1213,14 +1251,14 @@ msgstr ""
 "denboraren aurrean azaldu beharreko testua."
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:196
+#: data/kalarmconfig.kcfg:202
 #, kde-format
 msgctxt "@label"
 msgid "Email client"
 msgstr "E-posta bezeroa"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:197
+#: data/kalarmconfig.kcfg:203
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1236,21 +1274,21 @@ msgstr ""
 "bakarrik ibiliko da.</li></ul></p>"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:199
+#: data/kalarmconfig.kcfg:205
 #, kde-format
 msgctxt "@option"
 msgid "Sendmail"
 msgstr "Sendmail"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:200
+#: data/kalarmconfig.kcfg:206
 #, kde-format
 msgctxt "@option"
 msgid "KMail"
 msgstr "KMail"
 
 #. i18n: ectx: label, entry (Base_EmailCopyToKMail), group (General)
-#: data/kalarmconfig.kcfg:205
+#: data/kalarmconfig.kcfg:211
 #, kde-format
 msgctxt "@label"
 msgid "Whether to copy sent emails into KMail's Sent folder."
@@ -1258,7 +1296,7 @@ msgstr ""
 "Bidalitako e-postak KMail-eko Bidalita karpetan kopiatu behar diren edo ez."
 
 #. i18n: ectx: whatsthis, entry (Base_EmailCopyToKMail), group (General)
-#: data/kalarmconfig.kcfg:206
+#: data/kalarmconfig.kcfg:212
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1270,14 +1308,14 @@ msgstr ""
 "bakarrik aplikatzen da."
 
 #. i18n: ectx: label, entry (Base_EmailFrom), group (General)
-#: data/kalarmconfig.kcfg:210
+#: data/kalarmconfig.kcfg:216
 #, kde-format
 msgctxt "@label"
 msgid "'From' email address"
 msgstr "'Nork' e-posta helbidea"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailFrom), group (General)
-#: data/kalarmconfig.kcfg:211
+#: data/kalarmconfig.kcfg:217
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1292,14 +1330,14 @@ msgstr ""
 "artean hautatzen uzteko, edo bestela sartu e-posta helbidea bera."
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
-#: data/kalarmconfig.kcfg:215
+#: data/kalarmconfig.kcfg:221
 #, kde-format
 msgctxt "@label"
 msgid "'Bcc' email address"
 msgstr "'BCC' e-posta helbidea"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailBccAddress), group (General)
-#: data/kalarmconfig.kcfg:216
+#: data/kalarmconfig.kcfg:222
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1316,14 +1354,14 @@ msgstr ""
 "erabiltzeko, sartu \"@SystemSettings\", edo helbidea bera."
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
-#: data/kalarmconfig.kcfg:220
+#: data/kalarmconfig.kcfg:226
 #, kde-format
 msgctxt "@label"
 msgid "Terminal for command alarms"
 msgstr "Komando-alarmetarako terminala"
 
 #. i18n: ectx: whatsthis, entry (Base_CmdXTermCommand), group (General)
-#: data/kalarmconfig.kcfg:221
+#: data/kalarmconfig.kcfg:227
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1334,56 +1372,56 @@ msgstr ""
 "erako eskuliburuan deskribatutako kode berezi batzuk barne."
 
 #. i18n: ectx: label, entry (Base_StartOfDay), group (General)
-#: data/kalarmconfig.kcfg:224
+#: data/kalarmconfig.kcfg:230
 #, kde-format
 msgctxt "@label"
 msgid "Start of day for date-only alarms"
 msgstr "Egunaren hasiera data-soileko alarmetarako"
 
 #. i18n: ectx: whatsthis, entry (Base_StartOfDay), group (General)
-#: data/kalarmconfig.kcfg:225
+#: data/kalarmconfig.kcfg:231
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The earliest time of day at which a date-only alarm will be triggered."
 msgstr "Data-soileko alarma bat eragingo den eguneko ordurik goiztiarrena."
 
 #. i18n: ectx: label, entry (Base_WorkDayStart), group (General)
-#: data/kalarmconfig.kcfg:230
+#: data/kalarmconfig.kcfg:236
 #, kde-format
 msgctxt "@label"
 msgid "Start time of working day"
 msgstr "Laneguneko hasierako ordua"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayStart), group (General)
-#: data/kalarmconfig.kcfg:231
+#: data/kalarmconfig.kcfg:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The start time of the working day."
 msgstr "Lanegunaren hasierako ordua."
 
 #. i18n: ectx: label, entry (Base_WorkDayEnd), group (General)
-#: data/kalarmconfig.kcfg:236
+#: data/kalarmconfig.kcfg:242
 #, kde-format
 msgctxt "@label"
 msgid "End time of working day"
 msgstr "Lanegunaren bukaerako ordua"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayEnd), group (General)
-#: data/kalarmconfig.kcfg:237
+#: data/kalarmconfig.kcfg:243
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The end time of the working day."
 msgstr "Lanegunaren bukaerako ordua."
 
 #. i18n: ectx: label, entry (Base_WorkDays), group (General)
-#: data/kalarmconfig.kcfg:242
+#: data/kalarmconfig.kcfg:248
 #, kde-format
 msgctxt "@label"
 msgid "Working days"
 msgstr "Lanegunak"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDays), group (General)
-#: data/kalarmconfig.kcfg:243
+#: data/kalarmconfig.kcfg:249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1394,14 +1432,14 @@ msgstr ""
 "astelehena ... 64 = igandea."
 
 #. i18n: ectx: label, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:248
+#: data/kalarmconfig.kcfg:254
 #, kde-format
 msgctxt "@label"
 msgid "Disabled alarm color"
 msgstr "Ezgaitutako alarmen kolorea"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:249 prefdlg.cpp:1989
+#: data/kalarmconfig.kcfg:255 prefdlg.cpp:1985
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for disabled alarms."
@@ -1410,14 +1448,14 @@ msgstr ""
 "kolorea."
 
 #. i18n: ectx: label, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:254
+#: data/kalarmconfig.kcfg:260
 #, kde-format
 msgctxt "@label"
 msgid "Archived alarm color"
 msgstr "Artxibatutako alarmen kolorea"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:255 prefdlg.cpp:2002
+#: data/kalarmconfig.kcfg:261 prefdlg.cpp:1998
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
@@ -1426,14 +1464,14 @@ msgstr ""
 "kolorea."
 
 #. i18n: ectx: label, entry (ArchivedKeepDays), group (General)
-#: data/kalarmconfig.kcfg:260
+#: data/kalarmconfig.kcfg:266
 #, kde-format
 msgctxt "@label"
 msgid "Days to keep expired alarms"
 msgstr "Iraungitako alarmak mantentzeko egun kopurua"
 
 #. i18n: ectx: whatsthis, entry (ArchivedKeepDays), group (General)
-#: data/kalarmconfig.kcfg:265
+#: data/kalarmconfig.kcfg:271
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1452,14 +1490,14 @@ msgstr ""
 "      "
 
 #. i18n: ectx: label, entry (KOrgEventDuration), group (General)
-#: data/kalarmconfig.kcfg:271
+#: data/kalarmconfig.kcfg:277
 #, kde-format
 msgctxt "@label"
 msgid "KOrganizer event duration"
 msgstr "KOrganizer ekitaldiaren iraupena"
 
 #. i18n: ectx: whatsthis, entry (KOrgEventDuration), group (General)
-#: data/kalarmconfig.kcfg:272
+#: data/kalarmconfig.kcfg:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1470,14 +1508,14 @@ msgstr ""
 "alarmetarako."
 
 #. i18n: ectx: label, entry (WakeFromSuspendAdvance), group (General)
-#: data/kalarmconfig.kcfg:276
+#: data/kalarmconfig.kcfg:282
 #, kde-format
 msgctxt "@label"
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Esekitze egoeratik esnatzeko alarmarako minutu kopurua"
 
 #. i18n: ectx: whatsthis, entry (WakeFromSuspendAdvance), group (General)
-#: data/kalarmconfig.kcfg:277
+#: data/kalarmconfig.kcfg:283
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1490,14 +1528,14 @@ msgstr ""
 "ziurtatzeko erabil daiteke."
 
 #. i18n: ectx: label, entry (DefaultDisplayMethod), group (Defaults)
-#: data/kalarmconfig.kcfg:290
+#: data/kalarmconfig.kcfg:296
 #, kde-format
 msgctxt "@label"
 msgid "Alarm message display method"
 msgstr "Alarma-mezua azaltzeko modua"
 
 #. i18n: ectx: whatsthis, entry (DefaultDisplayMethod), group (Defaults)
-#: data/kalarmconfig.kcfg:291
+#: data/kalarmconfig.kcfg:297
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1510,14 +1548,14 @@ msgstr ""
 "\" aukerarako ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
-#: data/kalarmconfig.kcfg:299
+#: data/kalarmconfig.kcfg:305
 #, kde-format
 msgctxt "@label"
 msgid "Cancel if late (minutes)"
 msgstr "Utzi berandu bada (minutu)"
 
 #. i18n: ectx: whatsthis, entry (DefaultLateCancel), group (Defaults)
-#: data/kalarmconfig.kcfg:300
+#: data/kalarmconfig.kcfg:306
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1529,14 +1567,14 @@ msgstr ""
 "ezeztu aurretiko minutu kopurua."
 
 #. i18n: ectx: label, entry (DefaultAutoClose), group (Defaults)
-#: data/kalarmconfig.kcfg:305
+#: data/kalarmconfig.kcfg:311
 #, kde-format
 msgctxt "@label"
 msgid "Auto-close window after late-cancellation time"
 msgstr "Itxi leihoa automatikoki ezeztatze-berantiarreko denbora igaro ondoren"
 
 #. i18n: ectx: whatsthis, entry (DefaultAutoClose), group (Defaults)
-#: data/kalarmconfig.kcfg:306
+#: data/kalarmconfig.kcfg:312
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
@@ -1545,14 +1583,14 @@ msgstr ""
 "aukerarako ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:310 kalarmcalendar/kaeventformatter.cpp:106
+#: data/kalarmconfig.kcfg:316 kalarmcalendar/kaeventformatter.cpp:107
 #, kde-format
 msgctxt "@label"
 msgid "Confirm acknowledgement"
 msgstr "Berretsi jaso izanaren adierazpena"
 
 #. i18n: ectx: whatsthis, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:311
+#: data/kalarmconfig.kcfg:317
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1563,14 +1601,14 @@ msgstr ""
 "\" aukerarako ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultCopyToKOrganizer), group (Defaults)
-#: data/kalarmconfig.kcfg:315
+#: data/kalarmconfig.kcfg:321
 #, kde-format
 msgctxt "@label"
 msgid "Show in KOrganizer"
 msgstr "Erakutsi KOrganizer-en"
 
 #. i18n: ectx: whatsthis, entry (DefaultCopyToKOrganizer), group (Defaults)
-#: data/kalarmconfig.kcfg:316
+#: data/kalarmconfig.kcfg:322
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"show in KOrganizer\"."
@@ -1579,35 +1617,35 @@ msgstr ""
 "aukerarako ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
-#: data/kalarmconfig.kcfg:320
+#: data/kalarmconfig.kcfg:326
 #, kde-format
 msgctxt "@label Label for audio options"
 msgid "Sound"
 msgstr "Soinua"
 
 #. i18n: ectx: whatsthis, entry (Base_DefaultSoundType), group (Defaults)
-#: data/kalarmconfig.kcfg:321
+#: data/kalarmconfig.kcfg:327
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default sound type in the alarm edit dialog."
 msgstr "Alarma editatzeko elkarrizketa-koadroan, soinu mota lehenetsia."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
-#: data/kalarmconfig.kcfg:325
+#: data/kalarmconfig.kcfg:331
 #, kde-format
 msgctxt "@option"
 msgid "Play File"
 msgstr "Fitxategi jo"
 
 #. i18n: ectx: label, entry (DefaultSoundFile), group (Defaults)
-#: data/kalarmconfig.kcfg:331
+#: data/kalarmconfig.kcfg:337
 #, kde-format
 msgctxt "@label"
 msgid "Sound file"
 msgstr "Soinu-fitxategia"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundFile), group (Defaults)
-#: data/kalarmconfig.kcfg:332
+#: data/kalarmconfig.kcfg:338
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default sound file path in the alarm edit dialog."
@@ -1616,14 +1654,14 @@ msgstr ""
 "lehenetsia."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:335 kalarmcalendar/kaeventformatter.cpp:114
+#: data/kalarmconfig.kcfg:341 kalarmcalendar/kaeventformatter.cpp:115
 #, kde-format
 msgctxt "@label"
 msgid "Sound volume"
 msgstr "Soinuaren bolumena"
 
 #. i18n: ectx: whatsthis, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:336
+#: data/kalarmconfig.kcfg:342
 #, no-c-format, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1634,14 +1672,14 @@ msgstr ""
 "bolumena desautatzeko, edo % 0 - 100"
 
 #. i18n: ectx: label, entry (DefaultSoundRepeat), group (Defaults)
-#: data/kalarmconfig.kcfg:342
+#: data/kalarmconfig.kcfg:348
 #, kde-format
 msgctxt "@label"
 msgid "Repeat sound file"
 msgstr "Errepikatu soinu-fitxategia"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundRepeat), group (Defaults)
-#: data/kalarmconfig.kcfg:343
+#: data/kalarmconfig.kcfg:349
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for sound repetition."
@@ -1650,14 +1688,14 @@ msgstr ""
 "lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultCmdScript), group (Defaults)
-#: data/kalarmconfig.kcfg:347
+#: data/kalarmconfig.kcfg:353
 #, kde-format
 msgctxt "@label"
 msgid "Enter script"
 msgstr "Sartu gidoia"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdScript), group (Defaults)
-#: data/kalarmconfig.kcfg:348
+#: data/kalarmconfig.kcfg:354
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for command script entry."
@@ -1666,14 +1704,14 @@ msgstr ""
 "lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:352
+#: data/kalarmconfig.kcfg:358
 #, kde-format
 msgctxt "@label"
 msgid "Command output"
 msgstr "Komandoaren irteerakoa"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:353
+#: data/kalarmconfig.kcfg:359
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1684,35 +1722,35 @@ msgstr ""
 "bidali, ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:355
+#: data/kalarmconfig.kcfg:361
 #, kde-format
 msgctxt "@option"
 msgid "Discard Output"
 msgstr "Baztertu irteerakoa"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:356
+#: data/kalarmconfig.kcfg:362
 #, kde-format
 msgctxt "@option"
 msgid "Log To File"
 msgstr "Erregistratu fitxategian"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:357
+#: data/kalarmconfig.kcfg:363
 #, kde-format
 msgctxt "@option"
 msgid "Execute in terminal window"
 msgstr "Exekutatu terminal-leihoan"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:362 kalarmcalendar/kaeventformatter.cpp:137
+#: data/kalarmconfig.kcfg:368 kalarmcalendar/kaeventformatter.cpp:138
 #, kde-format
 msgctxt "@label"
 msgid "Log file"
 msgstr "Egunkari-fitxategia"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:363
+#: data/kalarmconfig.kcfg:369
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default log file path for command alarms in the alarm edit dialog."
@@ -1721,14 +1759,14 @@ msgstr ""
 "fitxategiaren bide-izen lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultEmailBcc), group (Defaults)
-#: data/kalarmconfig.kcfg:366
+#: data/kalarmconfig.kcfg:372
 #, kde-format
 msgctxt "@label"
 msgid "Copy email to self"
 msgstr "Kopia e-posta bidez bidali norbere buruari"
 
 #. i18n: ectx: whatsthis, entry (DefaultEmailBcc), group (Defaults)
-#: data/kalarmconfig.kcfg:367
+#: data/kalarmconfig.kcfg:373
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1738,14 +1776,14 @@ msgstr ""
 "kopia bidaltzeko ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:371
+#: data/kalarmconfig.kcfg:377
 #, kde-format
 msgctxt "@label"
 msgid "Recurrence period"
 msgstr "Errepikatze aldia"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:372 prefdlg.cpp:1454
+#: data/kalarmconfig.kcfg:378 prefdlg.cpp:1450
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default setting for the recurrence rule in the alarm edit dialog."
@@ -1754,28 +1792,28 @@ msgstr ""
 "lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:374
+#: data/kalarmconfig.kcfg:380
 #, kde-format
 msgctxt "@option"
 msgid "No recurrence"
 msgstr "Errepikatzerik ez"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:375
+#: data/kalarmconfig.kcfg:381
 #, kde-format
 msgctxt "@option"
 msgid "At login"
 msgstr "Saio-hastean"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:376
+#: data/kalarmconfig.kcfg:382
 #, kde-format
 msgctxt "@option"
 msgid "Hourly/minutely"
 msgstr "Orduero/minutuero"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:385 prefdlg.cpp:1461
+#: data/kalarmconfig.kcfg:391 prefdlg.cpp:1457
 #, kde-format
 msgctxt "@label"
 msgid "In non-leap years, repeat yearly February 29th alarms on:"
@@ -1784,7 +1822,7 @@ msgstr ""
 "honetan:"
 
 #. i18n: ectx: whatsthis, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:386
+#: data/kalarmconfig.kcfg:392
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1799,35 +1837,35 @@ msgstr ""
 "agerraldia ez da berriz ebaluatuko."
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:388
+#: data/kalarmconfig.kcfg:394
 #, kde-format
 msgctxt "@option"
 msgid "February 28th"
 msgstr "Otsailak 28"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:389
+#: data/kalarmconfig.kcfg:395
 #, kde-format
 msgctxt "@option"
 msgid "March 1st"
 msgstr "Martxoak 1"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:390
+#: data/kalarmconfig.kcfg:396
 #, kde-format
 msgctxt "@option"
 msgid "Do not repeat"
 msgstr "Ez errepikatu"
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
-#: data/kalarmconfig.kcfg:396
+#: data/kalarmconfig.kcfg:402
 #, kde-format
 msgctxt "@label"
 msgid "Reminder units"
 msgstr "Oroigarrien unitateak"
 
 #. i18n: ectx: whatsthis, entry (DefaultReminderUnits), group (Defaults)
-#: data/kalarmconfig.kcfg:397
+#: data/kalarmconfig.kcfg:403
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default reminder time units in the alarm edit dialog."
@@ -1836,35 +1874,35 @@ msgstr ""
 "lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
-#: data/kalarmconfig.kcfg:400
+#: data/kalarmconfig.kcfg:406
 #, kde-format
 msgctxt "@option"
 msgid "Hours/Minutes"
 msgstr "Ordu/Minutu"
 
 #. i18n: ectx: label, entry (DefaultPreAction), group (Defaults)
-#: data/kalarmconfig.kcfg:405
+#: data/kalarmconfig.kcfg:411
 #, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action"
 msgstr "Alarma-aurreko ekintza"
 
 #. i18n: ectx: whatsthis, entry (DefaultPreAction), group (Defaults)
-#: data/kalarmconfig.kcfg:406
+#: data/kalarmconfig.kcfg:412
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute before displaying alarms."
 msgstr "Sartu alarma bistaratu baino lehen exekutatuko den komando lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultExecPreActionOnDeferral), group (Defaults)
-#: data/kalarmconfig.kcfg:409
+#: data/kalarmconfig.kcfg:415
 #, kde-format
 msgctxt "@label"
 msgid "Execute pre-alarm action for deferred alarms"
 msgstr "Exekutatu alarmaren aurreko ekintza geroratutako alarmetarako"
 
 #. i18n: ectx: whatsthis, entry (DefaultExecPreActionOnDeferral), group (Defaults)
-#: data/kalarmconfig.kcfg:410
+#: data/kalarmconfig.kcfg:416
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1875,14 +1913,14 @@ msgstr ""
 "behar den edo ez, ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultCancelOnPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:414
+#: data/kalarmconfig.kcfg:420
 #, kde-format
 msgctxt "@label"
 msgid "Cancel alarm on pre-alarm action error"
 msgstr "Alarma indargabetu alarma-aurreko ekintzaren errorea dagoenean"
 
 #. i18n: ectx: whatsthis, entry (DefaultCancelOnPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:415
+#: data/kalarmconfig.kcfg:421
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1893,14 +1931,14 @@ msgstr ""
 "behar den edo ez, ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultDontShowPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:419
+#: data/kalarmconfig.kcfg:425
 #, kde-format
 msgctxt "@label"
 msgid "Do not notify pre-alarm action errors"
 msgstr "Ez jakinarazi alarma-aurreko ekintzen erroreak"
 
 #. i18n: ectx: whatsthis, entry (DefaultDontShowPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:420
+#: data/kalarmconfig.kcfg:426
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1911,14 +1949,14 @@ msgstr ""
 "erakusteko ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultPostAction), group (Defaults)
-#: data/kalarmconfig.kcfg:424
+#: data/kalarmconfig.kcfg:430
 #, kde-format
 msgctxt "@label"
 msgid "Post-alarm action"
 msgstr "Alarma-ondoko ekintza"
 
 #. i18n: ectx: whatsthis, entry (DefaultPostAction), group (Defaults)
-#: data/kalarmconfig.kcfg:425
+#: data/kalarmconfig.kcfg:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute after alarm message windows are closed."
@@ -1926,14 +1964,14 @@ msgstr ""
 "Alarma mezu leihoak itxi ondoren exekutatu beharreko komando lehenetsia."
 
 #. i18n: ectx: label, entry (Base_QuitWarn), group (Notification Messages)
-#: data/kalarmconfig.kcfg:431
+#: data/kalarmconfig.kcfg:437
 #, kde-format
 msgctxt "@label"
 msgid "Warn before quitting"
 msgstr "Abisatu irten aurretik"
 
 #. i18n: ectx: whatsthis, entry (Base_QuitWarn), group (Notification Messages)
-#: data/kalarmconfig.kcfg:432
+#: data/kalarmconfig.kcfg:438
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Whether to suppress a warning prompt before quitting KAlarm."
@@ -1941,14 +1979,14 @@ msgstr ""
 "«KAlarm»etik irten aurretik ohartarazpen bat ezkutatu behar den edo ez."
 
 #. i18n: ectx: label, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
-#: data/kalarmconfig.kcfg:436
+#: data/kalarmconfig.kcfg:442
 #, kde-format
 msgctxt "@label"
 msgid "Confirm alarm deletions"
 msgstr "Berretsi alarma-ezabaketak"
 
 #. i18n: ectx: whatsthis, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
-#: data/kalarmconfig.kcfg:437 prefdlg.cpp:503
+#: data/kalarmconfig.kcfg:443 prefdlg.cpp:503
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation each time you delete an alarm."
@@ -1956,14 +1994,14 @@ msgstr ""
 "Hautatu, alarma bat ezabatzen duzun bakoitzean, baieztatzea eska dakizun."
 
 #. i18n: ectx: label, entry (Base_EmailQueuedNotify), group (Notification Messages)
-#: data/kalarmconfig.kcfg:441
+#: data/kalarmconfig.kcfg:447
 #, kde-format
 msgctxt "@label"
 msgid "Notify when remote emails are queued"
 msgstr "Jakinarazi urruneko e-postak ilaran ipintzean"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailQueuedNotify), group (Notification Messages)
-#: data/kalarmconfig.kcfg:442 prefdlg.cpp:1172
+#: data/kalarmconfig.kcfg:448 prefdlg.cpp:1168
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2112,7 +2150,7 @@ msgctxt "@info"
 msgid "Cannot defer reminder past the main alarm time (%1)"
 msgstr "Ezin da oroigarria geroratu alarmaren ordu nagusitik aitzina (%1)"
 
-#: displaycalendar.cpp:127
+#: displaycalendar.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2122,127 +2160,127 @@ msgstr ""
 "<para>Errorea egutegia kargatzean:</para><para><filename>%1</filename></"
 "para><para>Mesedez, fitxategia konpondu edo ezabatu.</para>"
 
-#: displaycalendar.cpp:171
+#: displaycalendar.cpp:172
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save calendar to <filename>%1</filename>"
 msgstr "Egutegia <filename>%1</filename>(e)an gordetzea huts egin du"
 
-#: editdlg.cpp:79
+#: editdlg.cpp:80
 #, kde-format
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
 msgstr "Errepikatzea - [%1]"
 
-#: editdlg.cpp:86
+#: editdlg.cpp:87
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
 msgstr "Erakutsi KOrganizer-ren"
 
-#: editdlg.cpp:182
+#: editdlg.cpp:183
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Template [read-only]"
 msgstr "Alarma-txantiloia [irakurtzeko soilik]"
 
-#: editdlg.cpp:183
+#: editdlg.cpp:184
 #, kde-format
 msgctxt "@title:window"
 msgid "Archived Alarm [read-only]"
 msgstr "Artxibatutako alarma [irakurtzeko soilik]"
 
-#: editdlg.cpp:184
+#: editdlg.cpp:185
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "Alarma [irakurtzeko soilik]"
 
-#: editdlg.cpp:195
+#: editdlg.cpp:196
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "Programatu alarma zehaztutako orduan."
 
-#: editdlg.cpp:198
+#: editdlg.cpp:199
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
 msgstr "Zamatu txantiloia..."
 
-#: editdlg.cpp:200
+#: editdlg.cpp:201
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
 msgstr "Hautatu alarmaren aurrezarpenerako alarma txantiloi bat."
 
-#: editdlg.cpp:204
+#: editdlg.cpp:205
 #, kde-format
 msgctxt "@action:button"
 msgid "Try"
 msgstr "Saiatu"
 
-#: editdlg.cpp:214
+#: editdlg.cpp:215
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "Alarma"
 
-#: editdlg.cpp:244
+#: editdlg.cpp:245
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "Plantilaren izena:"
 
-#: editdlg.cpp:251
+#: editdlg.cpp:252
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Sartu alarma-txantiloiaren izena"
 
-#: editdlg.cpp:257
+#: editdlg.cpp:258
 #, kde-format
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Ekintza"
 
-#: editdlg.cpp:266
+#: editdlg.cpp:267
 #, kde-format
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "Geroratutako alarma"
 
-#: editdlg.cpp:269
+#: editdlg.cpp:270
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "Geroratu honarte:"
 
-#: editdlg.cpp:274
+#: editdlg.cpp:275
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "Aldatu..."
 
-#: editdlg.cpp:276
+#: editdlg.cpp:277
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "Altu alarmaren geroratze ordua, edo ezeztatu geroratzea"
 
-#: editdlg.cpp:287 editdlg.cpp:348
+#: editdlg.cpp:288 editdlg.cpp:349
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Ordua"
 
-#: editdlg.cpp:294
+#: editdlg.cpp:295
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "Ordu lehenetsia"
 
-#: editdlg.cpp:296
+#: editdlg.cpp:297
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2252,19 +2290,19 @@ msgstr ""
 "Ez zehaztu hasierako ordu bat txantiloi honetan oinarritutako alarmetan. "
 "Hasierako ordu lehenetsia erabiliko da."
 
-#: editdlg.cpp:304
+#: editdlg.cpp:305
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Ordua:"
 
-#: editdlg.cpp:306
+#: editdlg.cpp:307
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "Zehaztu hasierako ordu bat txantiloi honetan oinarritutako alarmetan."
 
-#: editdlg.cpp:312
+#: editdlg.cpp:313
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2274,13 +2312,13 @@ msgstr ""
 "<para>Sartu hasierako ordua txantiloi honetan oinarritutako alarmetan.</"
 "para><para>%1</para>"
 
-#: editdlg.cpp:319
+#: editdlg.cpp:320
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Data bakarrik"
 
-#: editdlg.cpp:321
+#: editdlg.cpp:322
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2290,7 +2328,7 @@ msgstr ""
 "Ezarri <interface>Edozein ordutan</interface> aukera txantiloi honetan "
 "oinarritutako alarmetan."
 
-#: editdlg.cpp:331
+#: editdlg.cpp:332
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2300,13 +2338,13 @@ msgstr ""
 "Txantiloi honetan oinarritutako alarmak, alarma sortzen denetik zehaztutako "
 "denbora tartean hasteko ezarri."
 
-#: editdlg.cpp:387
+#: editdlg.cpp:388
 #, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "Esnatu esekitzetik"
 
-#: editdlg.cpp:389
+#: editdlg.cpp:390
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2315,25 +2353,25 @@ msgstr ""
 "Egiaztatu, sistema esekita dagoen bitartean alarma eragiten bada sistema "
 "esnatzeko"
 
-#: editdlg.cpp:406
+#: editdlg.cpp:407
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "Markatu, alarma «KOrganizer»ren egutegian kopiatzeko"
 
-#: editdlg.cpp:1008
+#: editdlg.cpp:1009
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Alarma-txantiloiarentzat izen bat sartu behar duzu"
 
-#: editdlg.cpp:1012
+#: editdlg.cpp:1013
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Txantiloiaren izena dagoeneko erabilita dago"
 
-#: editdlg.cpp:1035
+#: editdlg.cpp:1036
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2345,7 +2383,7 @@ msgstr ""
 "para><para>Alarma, orain hasita, zehaztutako denboran, minutuko mugan "
 "eragingo da.</para>"
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1068
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2355,7 +2393,7 @@ msgstr ""
 "Hasierako data ez dator bat alarmaren errepikatze ereduarekin, beraz, "
 "hurrengo errepikaren datara egokituko da (%1)."
 
-#: editdlg.cpp:1071
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2365,19 +2403,19 @@ msgstr ""
 "Hasierako data/ordua ez dator bat alarmaren errepikatze ereduarekin, beraz, "
 "hurrengo errepikaren data/ordura egokituko da (%1)."
 
-#: editdlg.cpp:1093
+#: editdlg.cpp:1094
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Errepikatzea iraungi da dagoeneko"
 
-#: editdlg.cpp:1098
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarma ez da sekula lanorduetan gertatuko"
 
-#: editdlg.cpp:1127
+#: editdlg.cpp:1128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2387,7 +2425,7 @@ msgstr ""
 "Oroigarriaren aldia errepikatze bitartea baino txikiagoa izan behar da, "
 "<interface>%1</interface> markatuta dagoenean izan ezik."
 
-#: editdlg.cpp:1142
+#: editdlg.cpp:1143
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2397,7 +2435,7 @@ msgstr ""
 "Errepikatze barruko errepikapen baten iraupena, errepikatze bitartea ken "
 "oroigarri aldiak baino txikiagoa izan behar du"
 
-#: editdlg.cpp:1149
+#: editdlg.cpp:1150
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2407,115 +2445,115 @@ msgstr ""
 "Data bakarrik duen alarma batek, errepikatze barruko errepikapen baten "
 "aldiaren unitatea egun edo asteetakoa izan behar du"
 
-#: editdlg.cpp:1180
+#: editdlg.cpp:1181
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Hautatu alarma gordetzeko egutegi bat"
 
-#: editdlg.cpp:1261
+#: editdlg.cpp:1262
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Aukera gutxiago <<"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1263
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Erakutsi aukera gutxiago"
 
-#: editdlg.cpp:1267
+#: editdlg.cpp:1268
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Aukera gehiago >>"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1269
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr "Erakutsi aukera gehiago"
 
-#: editdlgtypes.cpp:74
+#: editdlgtypes.cpp:75
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Hautatu egunkari-fitxategia"
 
-#: editdlgtypes.cpp:87
+#: editdlgtypes.cpp:88
 #, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "Azaltzeko metodoa:"
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:89
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "Leihoa"
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:90
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "Jakinarazpena"
 
-#: editdlgtypes.cpp:90
+#: editdlgtypes.cpp:91
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Berretsi aitorpena"
 
-#: editdlgtypes.cpp:126
+#: editdlgtypes.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Ikus-alarma txantiloi berria"
 
-#: editdlgtypes.cpp:126
+#: editdlgtypes.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Editatu ikus-alarma txantiloia"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Ikus-alarma berria"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Editatu ikus-alarma"
 
-#: editdlgtypes.cpp:140
+#: editdlgtypes.cpp:141
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Agerraldi mota:"
 
-#: editdlgtypes.cpp:144
+#: editdlgtypes.cpp:145
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Testu mezua"
 
-#: editdlgtypes.cpp:145
+#: editdlgtypes.cpp:146
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr "Fitxategiaren edukia"
 
-#: editdlgtypes.cpp:146
+#: editdlgtypes.cpp:147
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "Komandoaren irteera"
 
-#: editdlgtypes.cpp:166
+#: editdlgtypes.cpp:167
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2531,31 +2569,31 @@ msgstr ""
 "baten edukia azalduko du.</item><item><interface>%3</interface>: alarmak "
 "komando baten irteera erakutsiko du.</item></list></para>"
 
-#: editdlgtypes.cpp:181
+#: editdlgtypes.cpp:182
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Sartu alarmaren mezuaren testua. Lerro anitzekoa izan daiteke."
 
-#: editdlgtypes.cpp:194
+#: editdlgtypes.cpp:195
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "Sartu bistaratzeko testu edo irudi fitxategiaren URL-a edo izena."
 
-#: editdlgtypes.cpp:201 editdlgtypes.cpp:890 sounddlg.cpp:183
+#: editdlgtypes.cpp:202 editdlgtypes.cpp:891 sounddlg.cpp:184
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Hautatu fitxategi bat"
 
-#: editdlgtypes.cpp:202
+#: editdlgtypes.cpp:203
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Hautatu bistaratzeko testu edo irudi fitxategi bat."
 
-#: editdlgtypes.cpp:246
+#: editdlgtypes.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2565,7 +2603,7 @@ msgstr ""
 "Hautatu alarma leiho batean edo jakinarazpen-sistemaren bidez azaldu behar "
 "den."
 
-#: editdlgtypes.cpp:273
+#: editdlgtypes.cpp:274
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2575,7 +2613,7 @@ msgstr ""
 "Markatu osagarri gisa, alarma nagusiaren ordu(ar)en aurretik edo ondoren "
 "oroigarri bat bistaratzeko."
 
-#: editdlgtypes.cpp:274
+#: editdlgtypes.cpp:275
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2585,7 +2623,7 @@ msgstr ""
 "<para>Sartu alarma nagusia baino zenbat denbora aurretik edo ondoren azaldu "
 "behar den oroigarria alarma bat.</para><para>%1</para>"
 
-#: editdlgtypes.cpp:275
+#: editdlgtypes.cpp:276
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2594,139 +2632,139 @@ msgid ""
 msgstr ""
 "Hautatu oroigarria alarma nagusia baino lehenago edo ondoren eragin behar den"
 
-#: editdlgtypes.cpp:285
+#: editdlgtypes.cpp:286
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr "Markatu, alarma bat aitortzen duzunean berrespena eska dakizun."
 
-#: editdlgtypes.cpp:294
+#: editdlgtypes.cpp:295
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Azaldu alarma orain"
 
-#: editdlgtypes.cpp:676
+#: editdlgtypes.cpp:677
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Bistaratu alarmaren mezua orain"
 
-#: editdlgtypes.cpp:685
+#: editdlgtypes.cpp:686
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Bistaratu fitxategia orain"
 
-#: editdlgtypes.cpp:695
+#: editdlgtypes.cpp:696
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Bistaratu komandoaren irteera orain"
 
-#: editdlgtypes.cpp:727
+#: editdlgtypes.cpp:728
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Hautatu bistaratzeko textu edo irudi fitxategia"
 
-#: editdlgtypes.cpp:805
+#: editdlgtypes.cpp:806
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "Sartu script bat"
 
-#: editdlgtypes.cpp:806
+#: editdlgtypes.cpp:807
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "Exekutatu terminal-lehioan"
 
-#: editdlgtypes.cpp:807
+#: editdlgtypes.cpp:808
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "Exekutatu terminal-lehioan"
 
-#: editdlgtypes.cpp:837
+#: editdlgtypes.cpp:838
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Alarma komando txantiloi berria"
 
-#: editdlgtypes.cpp:837
+#: editdlgtypes.cpp:838
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Editatu alarma komando txantiloia"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:839
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Alarma komando berria"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:839
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Editatu alarma komandoa"
 
-#: editdlgtypes.cpp:846
+#: editdlgtypes.cpp:847
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Exekutatu zehaztutako komandoa orain"
 
-#: editdlgtypes.cpp:847
+#: editdlgtypes.cpp:848
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Exekutatu zehaztutako komandoa orain"
 
-#: editdlgtypes.cpp:854 specialactions.cpp:182
+#: editdlgtypes.cpp:855 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr "Erroreak ez jakinarazi"
 
-#: editdlgtypes.cpp:855
+#: editdlgtypes.cpp:856
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "Ez erakutsi errore mezuak komandoak huts egiten badu."
 
-#: editdlgtypes.cpp:861
+#: editdlgtypes.cpp:862
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Komandoaren irteera"
 
-#: editdlgtypes.cpp:869
+#: editdlgtypes.cpp:870
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "Hautatu komandoa terminal-lehio batean exekutatzeko"
 
-#: editdlgtypes.cpp:882
+#: editdlgtypes.cpp:883
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Sartu egunkari-fitxategiaren izena edo bide-izena."
 
-#: editdlgtypes.cpp:891
+#: editdlgtypes.cpp:892
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Hautatu egunkari-fitxategia."
 
-#: editdlgtypes.cpp:894
+#: editdlgtypes.cpp:895
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "Egunkaritu fitxategira"
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:896
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2736,19 +2774,19 @@ msgstr ""
 "Hautatu komandoaren irteera fitxategi lokal batera egunkaritzeko. Irteera "
 "fitxategiaren edukinen atzetik idatziko dira."
 
-#: editdlgtypes.cpp:902
+#: editdlgtypes.cpp:903
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Baztertu"
 
-#: editdlgtypes.cpp:903
+#: editdlgtypes.cpp:904
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Hautatu komandoaren irteera baztertzeko."
 
-#: editdlgtypes.cpp:1065
+#: editdlgtypes.cpp:1066
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2757,7 +2795,7 @@ msgstr ""
 "Egunkari-fitxategiak fitxategi lokal baten izena edo bide-izena izan behar "
 "du, idazteko baimenarekin."
 
-#: editdlgtypes.cpp:1075
+#: editdlgtypes.cpp:1076
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2768,61 +2806,61 @@ msgstr ""
 "ezarri ezazu <application>KAlarm</application> konfiguratzeko elkarrizketa- "
 "koadroan.</para>"
 
-#: editdlgtypes.cpp:1095
+#: editdlgtypes.cpp:1096
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
 msgstr "Exekutatutako komandoa: <icode>%1</icode>"
 
-#: editdlgtypes.cpp:1129
+#: editdlgtypes.cpp:1130
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "E-postaren kopia bat nire buruari"
 
-#: editdlgtypes.cpp:1166
+#: editdlgtypes.cpp:1167
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "E-posta alarma txantiloi berria"
 
-#: editdlgtypes.cpp:1166
+#: editdlgtypes.cpp:1167
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Editatu e-posta alarma txantiloia"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1168
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "E-posta alarma berria"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1168
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Editatu e-posta alarma"
 
-#: editdlgtypes.cpp:1175
+#: editdlgtypes.cpp:1176
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Bidali orain e-posta zehaztutako helbideetara"
 
-#: editdlgtypes.cpp:1176
+#: editdlgtypes.cpp:1177
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "Bidali e-posta orain"
 
-#: editdlgtypes.cpp:1187
+#: editdlgtypes.cpp:1188
 #, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "Nork:"
 
-#: editdlgtypes.cpp:1193
+#: editdlgtypes.cpp:1194
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2832,13 +2870,13 @@ msgstr ""
 "Zure e-posta identitatea, e-posta alarmak bidaltzean zu bidaltzaile bezala "
 "identifikatuko zaituena."
 
-#: editdlgtypes.cpp:1199
+#: editdlgtypes.cpp:1200
 #, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "Nori:"
 
-#: editdlgtypes.cpp:1204
+#: editdlgtypes.cpp:1205
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2848,170 +2886,170 @@ msgstr ""
 "Sartu e-postaren hartzaileen helbideak. Banandu helbideak koma edo puntu eta "
 "komaz."
 
-#: editdlgtypes.cpp:1215
+#: editdlgtypes.cpp:1216
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Ireki helbide-liburua"
 
-#: editdlgtypes.cpp:1216
+#: editdlgtypes.cpp:1217
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Hautatu e-posta helbideak zure helbide-liburutik."
 
-#: editdlgtypes.cpp:1223
+#: editdlgtypes.cpp:1224
 #, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Gaia:"
 
-#: editdlgtypes.cpp:1229
+#: editdlgtypes.cpp:1230
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Sartu e-postaren gaia."
 
-#: editdlgtypes.cpp:1235
+#: editdlgtypes.cpp:1236
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Sartu e-postaren mezua."
 
-#: editdlgtypes.cpp:1243
+#: editdlgtypes.cpp:1244
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "Eranskinak:"
 
-#: editdlgtypes.cpp:1252
+#: editdlgtypes.cpp:1253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "E-postarekin eranskin bezala bidaliko diren fitxategiak."
 
-#: editdlgtypes.cpp:1256 resourceselector.cpp:76
+#: editdlgtypes.cpp:1257 resourceselector.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Gehitu..."
 
-#: editdlgtypes.cpp:1258
+#: editdlgtypes.cpp:1259
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Gehitu eranskina e-postari."
 
-#: editdlgtypes.cpp:1261 resourceselector.cpp:78
+#: editdlgtypes.cpp:1262 resourceselector.cpp:78
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Kendu"
 
-#: editdlgtypes.cpp:1263
+#: editdlgtypes.cpp:1264
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Kendu nabarmendutako eranskina e-postatik."
 
-#: editdlgtypes.cpp:1268
+#: editdlgtypes.cpp:1269
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "Markatuta badago, e-postaren ezkutuko kopia bidaliko dizu."
 
-#: editdlgtypes.cpp:1450
+#: editdlgtypes.cpp:1451
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "Baliogabeko e-posta helbidea: <email>%1</email>"
 
-#: editdlgtypes.cpp:1457
+#: editdlgtypes.cpp:1458
 #, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Ez da e-posta helbiderik zehaztu"
 
-#: editdlgtypes.cpp:1474
+#: editdlgtypes.cpp:1475
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "E-posta eranskin baliogabea: <filename>%1</filename>"
 
-#: editdlgtypes.cpp:1478
+#: editdlgtypes.cpp:1479
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr ""
 "Ziur zaude e-posta zehaztutako hartzaileei posta orain bidali nahi diezula?"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1480
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Berretsi e-posta"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1480
 #, kde-format
 msgctxt "@action:button"
 msgid "Send"
 msgstr "Bidali"
 
-#: editdlgtypes.cpp:1505
+#: editdlgtypes.cpp:1506
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
 msgstr "E-posta honi bidali zaio:<nl/>%1<nl/>BCC: <email>%2</email>"
 
-#: editdlgtypes.cpp:1508
+#: editdlgtypes.cpp:1509
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
 msgstr "E-posta honi bidali zaio:<nl/>%1"
 
-#: editdlgtypes.cpp:1537
+#: editdlgtypes.cpp:1538
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Hautatu eransteko fitxategia"
 
-#: editdlgtypes.cpp:1620
+#: editdlgtypes.cpp:1621
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Audio-alarma txantiloi berria"
 
-#: editdlgtypes.cpp:1620
+#: editdlgtypes.cpp:1621
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Editatu audio-alarma txantiloia"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1622
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Audio-alarma berria"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1622
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Editatu audio-alarma"
 
-#: editdlgtypes.cpp:1629
+#: editdlgtypes.cpp:1630
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Jo audio-alarma orain"
 
-#: editdlgtypes.cpp:1630
+#: editdlgtypes.cpp:1631
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Jo audio-fitxategia orain"
 
-#: editdlgtypes.cpp:1632
+#: editdlgtypes.cpp:1633
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3020,25 +3058,25 @@ msgstr ""
 "Markatuta badago, soinu-fitxategia behin eta berriro joko du %1(a)ri klik "
 "egin arte."
 
-#: editdlgtypes.cpp:1844
+#: editdlgtypes.cpp:1845
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "Hautatu hau shell komando baten ordez script baten edukinak sartzeko"
 
-#: editdlgtypes.cpp:1850
+#: editdlgtypes.cpp:1851
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Sartu exekutatuko den shell komando bat."
 
-#: editdlgtypes.cpp:1855
+#: editdlgtypes.cpp:1856
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Sartu exekutatuko den scriptaren edukinak"
 
-#: editdlgtypes.cpp:1917
+#: editdlgtypes.cpp:1918
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3048,44 +3086,44 @@ msgstr ""
 "<para>Komandoak ezin ditu ingurune-aldagaiak ezarri:</para><para><icode>%1</"
 "icode></para>"
 
-#: editdlgtypes.cpp:1922
+#: editdlgtypes.cpp:1923
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
 msgstr "Sartu exekutatuko den komando edo script bat"
 
-#: eventlistview.cpp:33
+#: eventlistview.cpp:34
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of scheduled alarms"
 msgstr "Programatutako alarmen zerrenda"
 
 #. i18n: ectx: property (title), widget (QGroupBox, alarmTypeGroupBox)
-#: find.cpp:102 resources/singlefileresourceconfigdialog.ui:78
+#: find.cpp:103 resources/singlefileresourceconfigdialog.ui:78
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Type"
 msgstr "Alarma mota"
 
-#: find.cpp:108
+#: find.cpp:109
 #, kde-format
 msgctxt "@option:check Alarm type"
 msgid "Active"
 msgstr "Aktiboa"
 
-#: find.cpp:109
+#: find.cpp:110
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include active alarms in the search."
 msgstr "Hautatu bilaketan alarma aktiboak kontuan hartzeko."
 
-#: find.cpp:112
+#: find.cpp:113
 #, kde-format
 msgctxt "@option:check Alarm type"
 msgid "Archived"
 msgstr "Artxibatuta"
 
-#: find.cpp:113
+#: find.cpp:114
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3096,73 +3134,73 @@ msgstr ""
 "une honetan artxibatutako dauden alarmak bistaratzen badira bakarrik dago "
 "eskuragarri."
 
-#: find.cpp:121
+#: find.cpp:122
 #, kde-format
 msgctxt "@option:check Alarm action = text display"
 msgid "Text"
 msgstr "Testua"
 
-#: find.cpp:122
+#: find.cpp:123
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include text message alarms in the search."
 msgstr "Hautatu testu mezuko alarmak bilaketan kontuan hartzeko."
 
-#: find.cpp:125
+#: find.cpp:126
 #, kde-format
 msgctxt "@option:check Alarm action = file display"
 msgid "File"
 msgstr "Fitxategia"
 
-#: find.cpp:126
+#: find.cpp:127
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include file alarms in the search."
 msgstr "Hautatu fitxategi alarmak bilaketan kontuan hartzeko."
 
-#: find.cpp:129
+#: find.cpp:130
 #, kde-format
 msgctxt "@option:check Alarm action"
 msgid "Command"
 msgstr "Komandoa"
 
-#: find.cpp:130
+#: find.cpp:131
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include command alarms in the search."
 msgstr "Hautatu komando alarmak bilaketan kontuan hartzeko."
 
-#: find.cpp:133
+#: find.cpp:134
 #, kde-format
 msgctxt "@option:check Alarm action"
 msgid "Email"
 msgstr "E-posta"
 
-#: find.cpp:134
+#: find.cpp:135
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include email alarms in the search."
 msgstr "Hautatu e-posta alarmak bilaketan kontuan hartzeko."
 
-#: find.cpp:137
+#: find.cpp:138
 #, kde-format
 msgctxt "@option:check Alarm action"
 msgid "Audio"
 msgstr "Audioa"
 
-#: find.cpp:138
+#: find.cpp:139
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include audio alarms in the search."
 msgstr "Markatu, bilaketan audio-alarmak barneratzeko."
 
-#: find.cpp:236
+#: find.cpp:237
 #, kde-format
 msgctxt "@info"
 msgid "No alarm types are selected to search"
 msgstr "Ez da alarma motarik hautatu bilaketarako"
 
-#: find.cpp:385
+#: find.cpp:386
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3172,7 +3210,7 @@ msgstr ""
 "<para>Alarma zerrendaren amaierara iritsi da.</para><para>Hasieratik "
 "jarraitu nahi duzu?</para>"
 
-#: find.cpp:386
+#: find.cpp:387
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3252,135 +3290,135 @@ msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
 msgstr "Hautatu alarmaren letra-tipoa eta kolorea"
 
-#: functions.cpp:146
+#: functions.cpp:147
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
 msgstr "Jotzeari utzi"
 
-#: functions.cpp:196
+#: functions.cpp:197
 #, kde-format
 msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "Gaitu alarmak"
 
-#: functions.cpp:222
+#: functions.cpp:223
 #, kde-format
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Zabaldu leihoak"
 
-#: functions.cpp:878
+#: functions.cpp:879
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "Inportatu egutegi-fitxategiak"
 
-#: functions.cpp:939
+#: functions.cpp:940
 #, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "Egutegi-fitxategiak"
 
-#: functions.cpp:940
+#: functions.cpp:941
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr "Hautatu esportatzeko egutegiak"
 
-#: functions.cpp:965
+#: functions.cpp:966
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
 msgstr ""
 "Hartara eransteko egutegia zamatzeko errorea:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1004
+#: functions.cpp:1005
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
 msgstr ""
 "Egutegi berria ondokoan gordetzea huts egin du:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1017
+#: functions.cpp:1018
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
 msgstr "Ezin du egutegi berria ondokora zama-igo:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1036
+#: functions.cpp:1037
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "Ezin dira alarmak KOrganizer-en erakutsi"
 
-#: functions.cpp:1037
+#: functions.cpp:1038
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "Ezin da alarma KOrganizer-en erakutsi"
 
-#: functions.cpp:1040
+#: functions.cpp:1041
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "Ezin da alarma KOrganizer-en eguneratu"
 
-#: functions.cpp:1043
+#: functions.cpp:1044
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "Ezin dira alarmak KOrganizer-etik ezabatu"
 
-#: functions.cpp:1044
+#: functions.cpp:1045
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "Ezin da alarma KOrganizer-etik ezabatu"
 
-#: functions.cpp:1054
+#: functions.cpp:1055
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
 msgstr "<para>%1</para><para>(Ezin izan du KOrganizer abiarazi)</para>"
 
-#: functions.cpp:1057
+#: functions.cpp:1058
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
 msgstr "<para>%1</para><para>(KOrganizer ez dago guztiz abiarazita)</para>"
 
-#: functions.cpp:1060
+#: functions.cpp:1061
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
 msgstr "<para>%1</para><para>(Errorea KOrganizerrekin komunikatzean)</para>"
 
-#: functions.cpp:1310
+#: functions.cpp:1311
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr "Programatutako Esnatu esekitzetik bertan behera utzi da."
 
-#: functions.cpp:1344
+#: functions.cpp:1345
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr "Baimena lortzeko errorea (%1)"
 
-#: functions.cpp:1393
+#: functions.cpp:1394
 #, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "Txantiloi egutegia gaitu behar duzu txantiloiak gorde ahal izateko"
 
-#: functions.cpp:1616
+#: functions.cpp:1617
 #, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
 msgstr "<para>%1</para><para>Ezarri konfigurazio elkarrizketan.</para>"
 
-#: functions.cpp:1620
+#: functions.cpp:1621
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3390,67 +3428,67 @@ msgstr ""
 "<para>Alarmak ezgaituta daude.</para><para>Alarmak orain gaitu nahi dituzu?</"
 "para>"
 
-#: functions.cpp:1621
+#: functions.cpp:1622
 #, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Gaitu"
 
-#: functions.cpp:1621
+#: functions.cpp:1622
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Mantendu ezgaituta"
 
-#: functions.cpp:1990
+#: functions.cpp:1991
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Errorea alarmak gordetzean"
 
-#: functions.cpp:1991
+#: functions.cpp:1992
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Errorea alarma gordetzean"
 
-#: functions.cpp:1994
+#: functions.cpp:1995
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Errorea alarmak ezabatzean"
 
-#: functions.cpp:1995
+#: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Errorea alarma ezabatzean"
 
-#: functions.cpp:1998
+#: functions.cpp:1999
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Errorea beraktibatutako alarmak gordetzean"
 
-#: functions.cpp:1999
+#: functions.cpp:2000
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Errorea beraktibatutako alarma gordetzean"
 
-#: functions.cpp:2002
+#: functions.cpp:2003
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Errorea alarma txantiloiak gordetzean"
 
-#: functions.cpp:2003
+#: functions.cpp:2004
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Errorea alarma txantiloia gordetzean"
 
-#: kalarmapp.cpp:812
+#: kalarmapp.cpp:810
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3458,31 +3496,31 @@ msgid ""
 msgstr ""
 "Irtetea alarmak ezgaituko ditu (alarma-mezu leiho denak ixten direnean)."
 
-#: kalarmapp.cpp:822
+#: kalarmapp.cpp:820
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Irteteak programatutako Esnatu esekitzetik bertan behera utziko du."
 
-#: kalarmapp.cpp:1039
+#: kalarmapp.cpp:1037
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Ezin da alarmarik sortu: Ez da egutegi lehenetsirik definitu"
 
-#: kalarmapp.cpp:1053
+#: kalarmapp.cpp:1051
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Errorea alarma sortzean"
 
-#: kalarmapp.cpp:1109
+#: kalarmapp.cpp:1107
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: <resource>%2</resource> ekitaldia ez da aurkitu, edo ez da bakarra"
 
-#: kalarmapp.cpp:1421
+#: kalarmapp.cpp:1419
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3495,14 +3533,14 @@ msgstr ""
 "<interface>Ikuspegia | Erakutsi egutegiak</interface>, egutegien egoerak "
 "egiaztatu edo aldatzeko."
 
-#: kalarmapp.cpp:1461
+#: kalarmapp.cpp:1459
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 "%1: <resource>%2</resource> ekitaldia ez da aurkitu, edo ez da editagarria"
 
-#: kalarmapp.cpp:1489
+#: kalarmapp.cpp:1487
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3516,7 +3554,7 @@ msgstr ""
 "konpontzeko, erabili <interface>Ikuspegia | Erakutsi egutegiak</interface> "
 "egutegien egoerak markatu edo aldatzeko."
 
-#: kalarmapp.cpp:1497
+#: kalarmapp.cpp:1495
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3532,7 +3570,7 @@ msgstr ""
 "artxibatutako alarmen egutegi bat, eta markatu <interface>Erabili "
 "lehenetsitako gisa artxibatutako alarmetarako</interface>."
 
-#: kalarmapp.cpp:2474
+#: kalarmapp.cpp:2472
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3542,73 +3580,73 @@ msgstr ""
 "Komandoa exekutatzea huts egin du\n"
 "(ez da komando-alarmetarako terminalik hautatu)"
 
-#: kalarmapp.cpp:2627
+#: kalarmapp.cpp:2625
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Errorea behin-behineko script fitxategia sortzean"
 
-#: kalarmapp.cpp:2723
+#: kalarmapp.cpp:2721
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Alarma-aurreko ekintza:"
 
-#: kalarmapp.cpp:2729
+#: kalarmapp.cpp:2727
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
 msgstr "Alarma-ondoko ekintza:"
 
-#: kalarmcalendar/alarmtext.cpp:506
+#: kalarmcalendar/alarmtext.cpp:507
 #, kde-format
 msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "Nork:"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:336
+#: kalarmcalendar/alarmtext.cpp:508 messagedisplayhelper.cpp:337
 #, kde-format
 msgctxt "@info Email addressee"
 msgid "To:"
 msgstr "Nori:"
 
-#: kalarmcalendar/alarmtext.cpp:508
+#: kalarmcalendar/alarmtext.cpp:509
 #, kde-format
 msgctxt "@info Copy-to in email headers"
 msgid "Cc:"
 msgstr "Kk:"
 
-#: kalarmcalendar/alarmtext.cpp:509
+#: kalarmcalendar/alarmtext.cpp:510
 #, kde-format
 msgctxt "@info"
 msgid "Date:"
 msgstr "Data:"
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:338
+#: kalarmcalendar/alarmtext.cpp:511 messagedisplayhelper.cpp:339
 #, kde-format
 msgctxt "@info Email subject"
 msgid "Subject:"
 msgstr "Gaia:"
 
-#: kalarmcalendar/alarmtext.cpp:512
+#: kalarmcalendar/alarmtext.cpp:513
 #, kde-format
 msgctxt "@info Todo calendar item's title field"
 msgid "To-do:"
 msgstr "Zeregina:"
 
-#: kalarmcalendar/alarmtext.cpp:513
+#: kalarmcalendar/alarmtext.cpp:514
 #, kde-format
 msgctxt "@info Todo calendar item's location field"
 msgid "Location:"
 msgstr "Kokapena:"
 
-#: kalarmcalendar/alarmtext.cpp:514
+#: kalarmcalendar/alarmtext.cpp:515
 #, kde-format
 msgctxt "@info Todo calendar item's due date/time"
 msgid "Due:"
 msgstr "Epe-muga:"
 
-#: kalarmcalendar/kacalendar.cpp:135
+#: kalarmcalendar/kacalendar.cpp:136
 #, kde-format
 msgid "KAlarm"
 msgstr "KAlarm"
@@ -3626,8 +3664,8 @@ msgid "At login"
 msgstr "Saio-hastean"
 
 #: kalarmcalendar/kaevent.cpp:3090 kalarmcalendar/kaevent.cpp:3177
-#: kalarmcalendar/kaeventformatter.cpp:428
-#: kalarmcalendar/kaeventformatter.cpp:442
+#: kalarmcalendar/kaeventformatter.cpp:429
+#: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
 msgctxt "@info"
 msgid "1 Minute"
@@ -3636,7 +3674,7 @@ msgstr[0] "Minutu 1"
 msgstr[1] "%1 minutu"
 
 #: kalarmcalendar/kaevent.cpp:3092 kalarmcalendar/kaevent.cpp:3179
-#: kalarmcalendar/kaeventformatter.cpp:444
+#: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
 msgid "1 Hour"
@@ -3651,7 +3689,7 @@ msgid "%1h %2m"
 msgstr "%1h %2m"
 
 #: kalarmcalendar/kaevent.cpp:3097 kalarmcalendar/kaevent.cpp:3184
-#: kalarmcalendar/kaeventformatter.cpp:446
+#: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
 msgid "1 Day"
@@ -3695,422 +3733,422 @@ msgctxt "@info No repetition"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: kalarmcalendar/kaeventformatter.cpp:37
+#: kalarmcalendar/kaeventformatter.cpp:38
 #, kde-format
 msgctxt "@label Unique identifier"
 msgid "UID"
 msgstr "UID"
 
-#: kalarmcalendar/kaeventformatter.cpp:39
+#: kalarmcalendar/kaeventformatter.cpp:40
 #, kde-format
 msgctxt "@label"
 msgid "Alarm type"
 msgstr "Alarma mota"
 
-#: kalarmcalendar/kaeventformatter.cpp:41
+#: kalarmcalendar/kaeventformatter.cpp:42
 #, kde-format
 msgctxt "@label"
 msgid "Alarm status"
 msgstr "Alarmaren egoera"
 
-#: kalarmcalendar/kaeventformatter.cpp:43
+#: kalarmcalendar/kaeventformatter.cpp:44
 #, kde-format
 msgctxt "@label"
 msgid "Alarm name"
 msgstr "Alarmaren izena"
 
-#: kalarmcalendar/kaeventformatter.cpp:45
+#: kalarmcalendar/kaeventformatter.cpp:46
 #, kde-format
 msgctxt "@label"
 msgid "Template name"
 msgstr "Txantiloiaren izena"
 
-#: kalarmcalendar/kaeventformatter.cpp:47
+#: kalarmcalendar/kaeventformatter.cpp:48
 #, kde-format
 msgctxt "@label"
 msgid "Creation time"
 msgstr "Sorrera-data"
 
-#: kalarmcalendar/kaeventformatter.cpp:49
+#: kalarmcalendar/kaeventformatter.cpp:50
 #, kde-format
 msgctxt "@label"
 msgid "Start time"
 msgstr "Hasteko ordua"
 
-#: kalarmcalendar/kaeventformatter.cpp:51
+#: kalarmcalendar/kaeventformatter.cpp:52
 #, kde-format
 msgctxt "@label Start delay configured in an alarm template"
 msgid "Template after time"
 msgstr "Denboraren ondoren txantiloia"
 
-#: kalarmcalendar/kaeventformatter.cpp:53
+#: kalarmcalendar/kaeventformatter.cpp:54
 #, kde-format
 msgctxt "@label"
 msgid "Recurs"
 msgstr "Errepikatzen da"
 
-#: kalarmcalendar/kaeventformatter.cpp:55
+#: kalarmcalendar/kaeventformatter.cpp:56
 #, kde-format
 msgctxt "@label"
 msgid "Recurrence"
 msgstr "Errepikatzea"
 
-#: kalarmcalendar/kaeventformatter.cpp:57
+#: kalarmcalendar/kaeventformatter.cpp:58
 #, kde-format
 msgctxt "@label"
 msgid "Sub-repetition"
 msgstr "Azpi-errepikapena"
 
-#: kalarmcalendar/kaeventformatter.cpp:59
+#: kalarmcalendar/kaeventformatter.cpp:60
 #, kde-format
 msgctxt "@label"
 msgid "Sub-repetition interval"
 msgstr "Azpi-errepikapen bitartea"
 
-#: kalarmcalendar/kaeventformatter.cpp:61
+#: kalarmcalendar/kaeventformatter.cpp:62
 #, kde-format
 msgctxt "@label"
 msgid "Sub-repetition count"
 msgstr "Azpi-errepikapen kopurua"
 
-#: kalarmcalendar/kaeventformatter.cpp:63
+#: kalarmcalendar/kaeventformatter.cpp:64
 #, kde-format
 msgctxt "@label"
 msgid "Next sub-repetition"
 msgstr "Hurrengo azpi-errepikapena"
 
-#: kalarmcalendar/kaeventformatter.cpp:65
+#: kalarmcalendar/kaeventformatter.cpp:66
 #, kde-format
 msgctxt "@label"
 msgid "Work time only"
 msgstr "Laneko denbora bakarrik"
 
-#: kalarmcalendar/kaeventformatter.cpp:67
+#: kalarmcalendar/kaeventformatter.cpp:68
 #, kde-format
 msgctxt "@label"
 msgid "Holidays excluded"
 msgstr "Jaiegunak salbu"
 
-#: kalarmcalendar/kaeventformatter.cpp:69
+#: kalarmcalendar/kaeventformatter.cpp:70
 #, kde-format
 msgctxt "@label"
 msgid "Next recurrence"
 msgstr "Hurrengo errepika"
 
-#: kalarmcalendar/kaeventformatter.cpp:71
+#: kalarmcalendar/kaeventformatter.cpp:72
 #, kde-format
 msgctxt "@label"
 msgid "Late cancel"
 msgstr "Ezeztatze berantiarra"
 
-#: kalarmcalendar/kaeventformatter.cpp:73
+#: kalarmcalendar/kaeventformatter.cpp:74
 #, kde-format
 msgctxt "@label Automatically close window"
 msgid "Auto close"
 msgstr "Itxi automatikoki"
 
-#: kalarmcalendar/kaeventformatter.cpp:75
+#: kalarmcalendar/kaeventformatter.cpp:76
 #, kde-format
 msgctxt "@label"
 msgid "Copy to KOrganizer"
 msgstr "Kopiatu KOrganizer-rera"
 
-#: kalarmcalendar/kaeventformatter.cpp:77
+#: kalarmcalendar/kaeventformatter.cpp:78
 #, kde-format
 msgctxt "@label"
 msgid "Enabled"
 msgstr "Gaituta"
 
-#: kalarmcalendar/kaeventformatter.cpp:79
+#: kalarmcalendar/kaeventformatter.cpp:80
 #, kde-format
 msgctxt "@label"
 msgid "Read-only"
 msgstr "Irakurtzeko soilik"
 
-#: kalarmcalendar/kaeventformatter.cpp:81
+#: kalarmcalendar/kaeventformatter.cpp:82
 #, kde-format
 msgctxt "@label Whether alarm should be archived"
 msgid "Archive"
 msgstr "Artxiboa"
 
-#: kalarmcalendar/kaeventformatter.cpp:83
+#: kalarmcalendar/kaeventformatter.cpp:84
 #, kde-format
 msgctxt "@label"
 msgid "Revision"
 msgstr "Berrikuspena"
 
-#: kalarmcalendar/kaeventformatter.cpp:85
+#: kalarmcalendar/kaeventformatter.cpp:86
 #, kde-format
 msgctxt "@label"
 msgid "Custom properties"
 msgstr "Neurrira egokitutako propietateak"
 
-#: kalarmcalendar/kaeventformatter.cpp:88
+#: kalarmcalendar/kaeventformatter.cpp:89
 #, kde-format
 msgctxt "@label"
 msgid "Message text"
 msgstr "Mezuaren testua"
 
-#: kalarmcalendar/kaeventformatter.cpp:90
+#: kalarmcalendar/kaeventformatter.cpp:91
 #, kde-format
 msgctxt "@label File to provide text for message"
 msgid "Message file"
 msgstr "Mezu fitxategia"
 
-#: kalarmcalendar/kaeventformatter.cpp:96
+#: kalarmcalendar/kaeventformatter.cpp:97
 #, kde-format
 msgctxt "@label"
 msgid "Font"
 msgstr "Letra-tipoa"
 
-#: kalarmcalendar/kaeventformatter.cpp:98
+#: kalarmcalendar/kaeventformatter.cpp:99
 #, kde-format
 msgctxt "@label Shell command to execute before alarm"
 msgid "Pre-alarm action"
 msgstr "Alarma-aurreko ekintza"
 
-#: kalarmcalendar/kaeventformatter.cpp:100
+#: kalarmcalendar/kaeventformatter.cpp:101
 #, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action cancel"
 msgstr "Alarma-aurreko ekintza uztea"
 
-#: kalarmcalendar/kaeventformatter.cpp:102
+#: kalarmcalendar/kaeventformatter.cpp:103
 #, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action no error"
 msgstr "Alarma-aurreko errorerik gabeko ekintza"
 
-#: kalarmcalendar/kaeventformatter.cpp:104
+#: kalarmcalendar/kaeventformatter.cpp:105
 #, kde-format
 msgctxt "@label Shell command to execute after alarm"
 msgid "Post-alarm action"
 msgstr "Alarma-ondoko ekintza"
 
-#: kalarmcalendar/kaeventformatter.cpp:108
+#: kalarmcalendar/kaeventformatter.cpp:109
 #, kde-format
 msgctxt "@label"
 msgid "Akonadi Item ID"
 msgstr "Akonadi elementuaren ID"
 
-#: kalarmcalendar/kaeventformatter.cpp:110
+#: kalarmcalendar/kaeventformatter.cpp:111
 #, kde-format
 msgctxt "@label Audio method"
 msgid "Sound"
 msgstr "Soinua"
 
-#: kalarmcalendar/kaeventformatter.cpp:112
+#: kalarmcalendar/kaeventformatter.cpp:113
 #, kde-format
 msgctxt "@label Whether audio should repeat"
 msgid "Sound repeat"
 msgstr "Soinua errepikatzea"
 
-#: kalarmcalendar/kaeventformatter.cpp:116
+#: kalarmcalendar/kaeventformatter.cpp:117
 #, kde-format
 msgctxt "@label"
 msgid "Sound fade volume"
 msgstr "Soinuaren moteltze bolumena"
 
-#: kalarmcalendar/kaeventformatter.cpp:118
+#: kalarmcalendar/kaeventformatter.cpp:119
 #, kde-format
 msgctxt "@label"
 msgid "Sound fade time"
 msgstr "Soinuaren moteltze denbora"
 
-#: kalarmcalendar/kaeventformatter.cpp:120
+#: kalarmcalendar/kaeventformatter.cpp:121
 #, kde-format
 msgctxt "@label Whether the alarm has a reminder"
 msgid "Reminder"
 msgstr "Oroigarria"
 
-#: kalarmcalendar/kaeventformatter.cpp:122
+#: kalarmcalendar/kaeventformatter.cpp:123
 #, kde-format
 msgctxt "@label Whether reminder is on first recurrence only"
 msgid "Reminder once only"
 msgstr "Oroigarria behin bakarrik"
 
-#: kalarmcalendar/kaeventformatter.cpp:124
+#: kalarmcalendar/kaeventformatter.cpp:125
 #, kde-format
 msgctxt "@label Whether to use standard notification system"
 msgid "Notify"
 msgstr "Jakinarazi"
 
-#: kalarmcalendar/kaeventformatter.cpp:126
+#: kalarmcalendar/kaeventformatter.cpp:127
 #, kde-format
 msgctxt "@label Deferral type"
 msgid "Deferral"
 msgstr "Geroratzea"
 
-#: kalarmcalendar/kaeventformatter.cpp:128
+#: kalarmcalendar/kaeventformatter.cpp:129
 #, kde-format
 msgctxt "@label"
 msgid "Deferral time"
 msgstr "Geroratze ordua"
 
-#: kalarmcalendar/kaeventformatter.cpp:130
+#: kalarmcalendar/kaeventformatter.cpp:131
 #, kde-format
 msgctxt "@label Default deferral delay"
 msgid "Deferral default"
 msgstr "Geroratze lehenetsia"
 
-#: kalarmcalendar/kaeventformatter.cpp:132
+#: kalarmcalendar/kaeventformatter.cpp:133
 #, kde-format
 msgctxt "@label Whether deferral time is date-only by default"
 msgid "Deferral default date only"
 msgstr "Geroratzea lehenetsitako data bakarrik"
 
-#: kalarmcalendar/kaeventformatter.cpp:135
+#: kalarmcalendar/kaeventformatter.cpp:136
 #, kde-format
 msgctxt "@label A shell command"
 msgid "Command"
 msgstr "Komandoa"
 
-#: kalarmcalendar/kaeventformatter.cpp:139
+#: kalarmcalendar/kaeventformatter.cpp:140
 #, kde-format
 msgctxt "@label Execute in terminal window"
 msgid "Execute in terminal"
 msgstr "Exekutatu terminalean"
 
-#: kalarmcalendar/kaeventformatter.cpp:141
+#: kalarmcalendar/kaeventformatter.cpp:142
 #, kde-format
 msgctxt "@label"
 msgid "Hide command error"
 msgstr "Ezkutatu komandoaren errorea"
 
-#: kalarmcalendar/kaeventformatter.cpp:144
+#: kalarmcalendar/kaeventformatter.cpp:145
 #, kde-format
 msgctxt "@label"
 msgid "Email subject"
 msgstr "E-postaren gaia"
 
-#: kalarmcalendar/kaeventformatter.cpp:146
+#: kalarmcalendar/kaeventformatter.cpp:147
 #, kde-format
 msgctxt "@label Email address"
 msgid "Email sender ID"
 msgstr "E-posta bidaltzailearen ID"
 
-#: kalarmcalendar/kaeventformatter.cpp:148
+#: kalarmcalendar/kaeventformatter.cpp:149
 #, kde-format
 msgctxt "@label Email address"
 msgid "Email to"
 msgstr "E-posta nori"
 
-#: kalarmcalendar/kaeventformatter.cpp:150
+#: kalarmcalendar/kaeventformatter.cpp:151
 #, kde-format
 msgctxt "@label true/false"
 msgid "Email bcc"
 msgstr "E-postako BCC"
 
-#: kalarmcalendar/kaeventformatter.cpp:152
+#: kalarmcalendar/kaeventformatter.cpp:153
 #, kde-format
 msgctxt "@label"
 msgid "Email body"
 msgstr "E-postaren gorputza"
 
-#: kalarmcalendar/kaeventformatter.cpp:154
+#: kalarmcalendar/kaeventformatter.cpp:155
 #, kde-format
 msgctxt "@label"
 msgid "Email attachments"
 msgstr "E-posta eranskinak"
 
-#: kalarmcalendar/kaeventformatter.cpp:256
+#: kalarmcalendar/kaeventformatter.cpp:257
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (text)"
 msgstr "Azaldu (testua)"
 
-#: kalarmcalendar/kaeventformatter.cpp:258
+#: kalarmcalendar/kaeventformatter.cpp:259
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (file)"
 msgstr "Azaldu (fitxategia)"
 
-#: kalarmcalendar/kaeventformatter.cpp:261
+#: kalarmcalendar/kaeventformatter.cpp:262
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (command)"
 msgstr "Azaldu (komandoa)"
 
-#: kalarmcalendar/kaeventformatter.cpp:262
+#: kalarmcalendar/kaeventformatter.cpp:263
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Command"
 msgstr "Komandoa"
 
-#: kalarmcalendar/kaeventformatter.cpp:264
+#: kalarmcalendar/kaeventformatter.cpp:265
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Email"
 msgstr "E-posta"
 
-#: kalarmcalendar/kaeventformatter.cpp:266
+#: kalarmcalendar/kaeventformatter.cpp:267
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Audio"
 msgstr "Audioa"
 
-#: kalarmcalendar/kaeventformatter.cpp:273
+#: kalarmcalendar/kaeventformatter.cpp:274
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Active"
 msgstr "Aktibo"
 
-#: kalarmcalendar/kaeventformatter.cpp:275
+#: kalarmcalendar/kaeventformatter.cpp:276
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Archived"
 msgstr "Artxibatuta"
 
-#: kalarmcalendar/kaeventformatter.cpp:277
+#: kalarmcalendar/kaeventformatter.cpp:278
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Template"
 msgstr "Txantiloia"
 
-#: kalarmcalendar/kaeventformatter.cpp:296
+#: kalarmcalendar/kaeventformatter.cpp:297
 #, kde-format
 msgctxt "@info Repeat at login"
 msgid "At login until %1"
 msgstr "Saio-hastean %1 arte"
 
-#: kalarmcalendar/kaeventformatter.cpp:337
+#: kalarmcalendar/kaeventformatter.cpp:338
 #, kde-format
 msgctxt "@info"
 msgid "%1"
 msgstr "%1"
 
-#: kalarmcalendar/kaeventformatter.cpp:349
+#: kalarmcalendar/kaeventformatter.cpp:350
 #, kde-format
 msgctxt "@info Using default font"
 msgid "Default"
 msgstr "Lehenetsia"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:217
+#: kalarmcalendar/kaeventformatter.cpp:366 messagedisplayhelper.cpp:218
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
 msgstr "Oroigarria"
 
-#: kalarmcalendar/kaeventformatter.cpp:378
+#: kalarmcalendar/kaeventformatter.cpp:379
 #, kde-format
 msgctxt "@info"
 msgid "Speak"
 msgstr "Mintzatu"
 
-#: kalarmcalendar/kaeventformatter.cpp:379
+#: kalarmcalendar/kaeventformatter.cpp:380
 #, kde-format
 msgctxt "@info"
 msgid "Beep"
 msgstr "Bip"
 
-#: kalarmcalendar/kaeventformatter.cpp:384
-#: kalarmcalendar/kaeventformatter.cpp:388
+#: kalarmcalendar/kaeventformatter.cpp:385
+#: kalarmcalendar/kaeventformatter.cpp:389
 #, kde-format
 msgctxt "@info Percentage"
 msgid "%1%%"
 msgstr "%%%1"
 
-#: kalarmcalendar/kaeventformatter.cpp:392
+#: kalarmcalendar/kaeventformatter.cpp:393
 #, kde-format
 msgctxt "@info"
 msgid "1 Second"
@@ -4118,25 +4156,25 @@ msgid_plural "%1 Seconds"
 msgstr[0] "Segundo 1"
 msgstr[1] "%1 segundo"
 
-#: kalarmcalendar/kaeventformatter.cpp:417
+#: kalarmcalendar/kaeventformatter.cpp:418
 #, kde-format
 msgctxt "@info Error indication"
 msgid "error!"
 msgstr "errorea!"
 
-#: kalarmcalendar/kaeventformatter.cpp:422
+#: kalarmcalendar/kaeventformatter.cpp:423
 #, kde-format
 msgctxt "@info General purpose status indication: yes or no"
 msgid "Yes"
 msgstr "Bai"
 
-#: kalarmcalendar/kaeventformatter.cpp:423
+#: kalarmcalendar/kaeventformatter.cpp:424
 #, kde-format
 msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Ez"
 
-#: kamail.cpp:68
+#: kamail.cpp:69
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4145,14 +4183,14 @@ msgstr ""
 "E-postako 'Nork' helbide bat konfiguratuta egon behar da e-posta alarmak "
 "exekutatzeko."
 
-#: kamail.cpp:71
+#: kamail.cpp:72
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "bidalitako-posta"
 
-#: kamail.cpp:101
+#: kamail.cpp:102
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4162,7 +4200,7 @@ msgstr ""
 "E-postako 'Nork' helbide baliogabea.<nl/>Ez da aurkitu <resource>%1</"
 "resource> e-posta nortasuna."
 
-#: kamail.cpp:107
+#: kamail.cpp:108
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4172,7 +4210,7 @@ msgstr ""
 "E-postako 'Nork' helbide baliogabea.<nl/><resource>%1</resource> e-posta "
 "nortasunak ez dauka e-posta helbiderik."
 
-#: kamail.cpp:117
+#: kamail.cpp:118
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4185,7 +4223,7 @@ msgstr ""
 "<application>KMail</application>en edo <application>KAlarm</application> "
 "konfiguratzeko elkarrizketa-koadroan.</para>"
 
-#: kamail.cpp:121
+#: kamail.cpp:122
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4198,7 +4236,7 @@ msgstr ""
 "<application>KAlarm</application> konfiguratzeko elkarrizketa-koadroan.</"
 "para>"
 
-#: kamail.cpp:126
+#: kamail.cpp:127
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4209,37 +4247,37 @@ msgstr ""
 "ezarri ezazu <application>KAlarm</application> konfiguratzeko elkarrizketa-"
 "koadroan.</para>"
 
-#: kamail.cpp:156
+#: kamail.cpp:157
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "<filename>%1</filename> ez da aurkitu"
 
-#: kamail.cpp:283
+#: kamail.cpp:284
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Errorea fitxategia eranstean: <filename>%1</filename>"
 
-#: kamail.cpp:293
+#: kamail.cpp:294
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Eranskina ez da aurkitu: <filename>%1</filename>"
 
-#: kamail.cpp:374
+#: kamail.cpp:375
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "E-posta bat bidaltzeko ilaran jarri da"
 
-#: kamail.cpp:540
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Errorea e-posta bidaltzean"
 
-#: kamail.cpp:541
+#: kamail.cpp:542
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"
@@ -4303,49 +4341,49 @@ msgstr ""
 "Itxi alarmaren leihoa automatikoki ezeztatze-berantiarreko aldia iraungi "
 "ondoren"
 
-#: lib/file.cpp:107
+#: lib/file.cpp:108
 #, kde-format
 msgctxt "@info"
 msgid "Please select a file to display"
 msgstr "Hautatu bistaratzeko fitxategia"
 
-#: lib/file.cpp:109
+#: lib/file.cpp:110
 #, kde-format
 msgctxt "@info"
 msgid "Please select a file to play"
 msgstr "Mesedez, hautatu jo beharreko fitxategi bat"
 
-#: lib/file.cpp:115
+#: lib/file.cpp:116
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> is a folder"
 msgstr "<filename>%1</filename> karpeta da"
 
-#: lib/file.cpp:117
+#: lib/file.cpp:118
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> not found"
 msgstr "<filename>%1</filename> ez da aurkitu"
 
-#: lib/file.cpp:118
+#: lib/file.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> is not readable"
 msgstr "<filename>%1</filename> ezin da irakurri"
 
-#: lib/file.cpp:119
+#: lib/file.cpp:120
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> appears not to be a text or image file"
 msgstr "<filename>%1</filename> ez dirudi testu edo irudi fitxategia"
 
-#: lib/file.cpp:178
+#: lib/file.cpp:179
 #, kde-format
 msgctxt "@item:inlistbox File type"
 msgid "All files"
 msgstr "Fitxategi guztiak"
 
-#: lib/filedialog.cpp:55
+#: lib/filedialog.cpp:56
 #, kde-format
 msgctxt "@option:check"
 msgid "Append to existing file"
@@ -4427,7 +4465,7 @@ msgstr ""
 "Sakatu Shift tekla biratze-botoiak sakatzen dituzun bitartean denbora pausu "
 "handiagoen bidez doitzeko (6 ordu / 5 minutu)."
 
-#: lib/timezonecombo.cpp:18
+#: lib/timezonecombo.cpp:19
 #, kde-format
 msgid "System time zone"
 msgstr "Sistemaren ordu-eremua"
@@ -4442,7 +4480,7 @@ msgstr "Alarma-mezu pertsonala, KDEren agindu eta e-posta programatzailea"
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "Copyright © 2001-%1, David Jarvie"
 
-#: mainwindow.cpp:440
+#: mainwindow.cpp:441
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4452,115 +4490,115 @@ msgstr ""
 "Menuak sortzeko hutsegitea (beharbada <filename>%1</filename> falta da edo "
 "hondatuta dago)"
 
-#: mainwindow.cpp:460
+#: mainwindow.cpp:461
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
 msgstr "Txantiloiak..."
 
-#: mainwindow.cpp:464 templatedlg.cpp:74
+#: mainwindow.cpp:465 templatedlg.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Berria"
 
-#: mainwindow.cpp:470
+#: mainwindow.cpp:471
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "Sortu txantiloia..."
 
-#: mainwindow.cpp:474
+#: mainwindow.cpp:475
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
 msgstr "Kopiatu..."
 
-#: mainwindow.cpp:479 resourceselector.cpp:301
+#: mainwindow.cpp:480 resourceselector.cpp:301
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Editatu..."
 
-#: mainwindow.cpp:484
+#: mainwindow.cpp:485
 #, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Ezabatu"
 
-#: mainwindow.cpp:490
+#: mainwindow.cpp:491
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Ezabatu berrespenik gabe"
 
-#: mainwindow.cpp:495
+#: mainwindow.cpp:496
 #, kde-format
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Berraktibatu"
 
-#: mainwindow.cpp:509
+#: mainwindow.cpp:510
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Esnatu esekitzetik..."
 
-#: mainwindow.cpp:519
+#: mainwindow.cpp:520
 #, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Erakutsi artxibatutako alarmak"
 
-#: mainwindow.cpp:524
+#: mainwindow.cpp:525
 #, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Erakutsi sistemaren erretiluan"
 
-#: mainwindow.cpp:528
+#: mainwindow.cpp:529
 #, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Erakutsi egutegiak"
 
-#: mainwindow.cpp:532
+#: mainwindow.cpp:533
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr "Erakutsi data hautatzailea"
 
-#: mainwindow.cpp:543
+#: mainwindow.cpp:544
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Inportatu alarmak..."
 
-#: mainwindow.cpp:549
+#: mainwindow.cpp:550
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Inportatu urtebetetzeak..."
 
-#: mainwindow.cpp:554
+#: mainwindow.cpp:555
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "Esportatu hautatutako alarmak..."
 
-#: mainwindow.cpp:558 resourceselector.cpp:319
+#: mainwindow.cpp:559 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "Esportatu..."
 
-#: mainwindow.cpp:562
+#: mainwindow.cpp:563
 #, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Freskatu alarmak"
 
-#: mainwindow.cpp:806
+#: mainwindow.cpp:807
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4568,7 +4606,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "Benetan ezabatu nahi duzu hautatutako alarma?"
 msgstr[1] "Benetan ezabatu nahi dituzu hautatutako %1 alarmak?"
 
-#: mainwindow.cpp:808
+#: mainwindow.cpp:809
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4576,43 +4614,43 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Ezabatu alarma"
 msgstr[1] "Ezabatu alarmak"
 
-#: mainwindow.cpp:809 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Ezabatu"
 
-#: mainwindow.cpp:903
+#: mainwindow.cpp:904
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Ezkutatu artxibatutako alarmak"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Erakutsi artxibatutako alarmak"
 
-#: mainwindow.cpp:980
+#: mainwindow.cpp:981
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Inportatu urtebetetzeak"
 
-#: mainwindow.cpp:1232
+#: mainwindow.cpp:1233
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1299
+#: mainwindow.cpp:1300
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4621,48 +4659,48 @@ msgstr ""
 "<qt>Horrek menu-barra erabat ezkutatutako du. %1 tekleatuz berriz erakuts "
 "dezakezu.</qt>"
 
-#: mainwindow.cpp:1301
+#: mainwindow.cpp:1302
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Ezkutatu menu-barra"
 
-#: mainwindow.cpp:1541
+#: mainwindow.cpp:1542
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Ikus-alarma"
 
-#: mainwindow.cpp:1543
+#: mainwindow.cpp:1544
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "E-posta alarma"
 
-#: mainwindow.cpp:1545
+#: mainwindow.cpp:1546
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Komando alarma"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1548
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Alarma mota"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Hautatu sortu beharreko alarma mota:"
 
-#: mainwindow.cpp:1681
+#: mainwindow.cpp:1682
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Gaitu"
 
-#: mainwindow.cpp:1681
+#: mainwindow.cpp:1682
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -4675,49 +4713,49 @@ msgid "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"
 msgstr ""
 "<para>Alarma ezin da geroratu.</para><para>Alarma ez da aurkitu.</para>"
 
-#: messagedisplayhelper.cpp:203
+#: messagedisplayhelper.cpp:204
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "Oroigarria"
 
-#: messagedisplayhelper.cpp:204 messagedisplayhelper.cpp:408
+#: messagedisplayhelper.cpp:205 messagedisplayhelper.cpp:409
 #, kde-format
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Mezua"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Fitxategia karpeta bat da"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Fitxategia irekitzea huts egin du"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File not found"
 msgstr "Fitxategia ez da aurkitu"
 
-#: messagedisplayhelper.cpp:352
+#: messagedisplayhelper.cpp:353
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr "Errorea"
 
-#: messagedisplayhelper.cpp:481
+#: messagedisplayhelper.cpp:482
 #, kde-format
 msgctxt "@info"
 msgid "Today"
 msgstr "Gaur"
 
-#: messagedisplayhelper.cpp:483
+#: messagedisplayhelper.cpp:484
 #, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
@@ -4725,7 +4763,7 @@ msgid_plural "in %1 days' time"
 msgstr[0] "Bihar"
 msgstr[1] "%1 egun barru"
 
-#: messagedisplayhelper.cpp:485
+#: messagedisplayhelper.cpp:486
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -4733,7 +4771,7 @@ msgid_plural "in %1 weeks' time"
 msgstr[0] "aste 1 barru"
 msgstr[1] "%1 aste barru"
 
-#: messagedisplayhelper.cpp:499
+#: messagedisplayhelper.cpp:500
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
@@ -4741,7 +4779,7 @@ msgid_plural "in %1 minutes' time"
 msgstr[0] "minutu 1 barru"
 msgstr[1] "%1 minutu barru"
 
-#: messagedisplayhelper.cpp:501
+#: messagedisplayhelper.cpp:502
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
@@ -4749,7 +4787,7 @@ msgid_plural "in %1 hours' time"
 msgstr[0] "ordu 1 barru"
 msgstr[1] "%1 ordu barru"
 
-#: messagedisplayhelper.cpp:504
+#: messagedisplayhelper.cpp:505
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
@@ -4757,7 +4795,7 @@ msgid_plural "%1 hours"
 msgstr[0] "ordu 1"
 msgstr[1] "%1 ordu"
 
-#: messagedisplayhelper.cpp:505
+#: messagedisplayhelper.cpp:506
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
@@ -4765,13 +4803,13 @@ msgid_plural "in %2 %1 minutes' time"
 msgstr[0] "%2 minutu 1 barru"
 msgstr[1] "%2 %1 minutu barru"
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Ezin du mezua ahotsez esan"
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
@@ -4789,7 +4827,7 @@ msgctxt "@action:button"
 msgid "Defer"
 msgstr "Geroratu"
 
-#: messagewindow.cpp:227
+#: messagewindow.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4799,79 +4837,79 @@ msgstr ""
 "Mezurako programatutako data/ordua (benetako aurkezpen orduarekin "
 "alderatuta)."
 
-#: messagewindow.cpp:244
+#: messagewindow.cpp:245
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr "Behean azaltzen den edukia duen fitxategia"
 
-#: messagewindow.cpp:278
+#: messagewindow.cpp:279
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr "Azaldu beharreko fitxategiaren edukia"
 
-#: messagewindow.cpp:298
+#: messagewindow.cpp:299
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr "Alarmaren mezua"
 
-#: messagewindow.cpp:325
+#: messagewindow.cpp:326
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr "Alarmaren komandoaren irteerakoa"
 
-#: messagewindow.cpp:358
+#: messagewindow.cpp:359
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr "Bidali beharreko e-posta"
 
-#: messagewindow.cpp:408
+#: messagewindow.cpp:409
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr "Ez berriz azaldu alarma honetarako errore mezu hau"
 
-#: messagewindow.cpp:425
+#: messagewindow.cpp:426
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Alarma aitortu"
 
-#: messagewindow.cpp:430 resourceselector.cpp:77 templatedlg.cpp:81
+#: messagewindow.cpp:431 resourceselector.cpp:77 templatedlg.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "Editatu..."
 
-#: messagewindow.cpp:434
+#: messagewindow.cpp:435
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "Editatu alarma"
 
-#: messagewindow.cpp:435
+#: messagewindow.cpp:436
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Editatu alarma."
 
-#: messagewindow.cpp:439
+#: messagewindow.cpp:440
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
 msgstr "Geroratu..."
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:444
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "Geroratu alarma beranduago arte"
 
-#: messagewindow.cpp:444
+#: messagewindow.cpp:445
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4881,61 +4919,61 @@ msgstr ""
 "<para>Geroratu alarma beranduago arte.</para><para>Alarma berriz noiz "
 "azalduko den zehazteko eskatuko zaizu.</para>"
 
-#: messagewindow.cpp:458 sounddlg.cpp:443
+#: messagewindow.cpp:459 sounddlg.cpp:444
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Gelditu soinua"
 
-#: messagewindow.cpp:459 sounddlg.cpp:444
+#: messagewindow.cpp:460 sounddlg.cpp:445
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "Gelditu soinuaren erreprodukzioa"
 
-#: messagewindow.cpp:473
+#: messagewindow.cpp:474
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "Aurkitu <application>KMail</application>en"
 
-#: messagewindow.cpp:474
+#: messagewindow.cpp:475
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "Aurkitu eta nabarmendu e-posta hau <application>KMail</application>en"
 
-#: messagewindow.cpp:482
+#: messagewindow.cpp:483
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Aktibatu <application>KAlarm</application>"
 
-#: messagewindow.cpp:483
+#: messagewindow.cpp:484
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Aktibatu <application>KAlarm</application>"
 
-#: messagewindow.cpp:1075
+#: messagewindow.cpp:1076
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Ziur zaude alarma hau aitortu nahi duzula?"
 
-#: messagewindow.cpp:1076
+#: messagewindow.cpp:1077
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Alarma aitortu"
 
-#: messagewindow.cpp:1076
+#: messagewindow.cpp:1077
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Aitortu"
 
-#: messagewindow.cpp:1131
+#: messagewindow.cpp:1132
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -5306,7 +5344,7 @@ msgid "Command to invoke terminal window not found: <command>%1</command>"
 msgstr ""
 "Terminal-lehioa exekutatzeko komandoa ez da aurkitu: <command>%1</command>"
 
-#: prefdlg.cpp:706
+#: prefdlg.cpp:702
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -5320,7 +5358,7 @@ msgstr ""
 "Ez zenuke aukera hau desmarkatu behar <application>KAlarm</application>en "
 "erabilera bertan behera utzi nahi ez baduzu behintzat"
 
-#: prefdlg.cpp:717
+#: prefdlg.cpp:713
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5328,7 +5366,7 @@ msgid ""
 ">except if you manually start it."
 msgstr ""
 
-#: prefdlg.cpp:762
+#: prefdlg.cpp:758
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5338,37 +5376,37 @@ msgstr ""
 "Hautatu <application>KAlarm</application>ek datak eta orduak azaltzeko eta "
 "sartzeko erabili beharko lukeen ordu-eremu lehenetsia."
 
-#: prefdlg.cpp:776
+#: prefdlg.cpp:772
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Holiday region:"
 msgstr "Jaiegun eskualdea:"
 
-#: prefdlg.cpp:785
+#: prefdlg.cpp:781
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which holiday region to use"
 msgstr "Aukeratu erabili beharreko jaiegun-eskualdea"
 
-#: prefdlg.cpp:793
+#: prefdlg.cpp:789
 #, kde-format
 msgctxt "Holiday region, region language"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: prefdlg.cpp:797
+#: prefdlg.cpp:793
 #, kde-format
 msgctxt "No holiday region"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: prefdlg.cpp:815
+#: prefdlg.cpp:811
 #, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
 msgstr "Esnatu esekitzetik alarma baino lehen:"
 
-#: prefdlg.cpp:823
+#: prefdlg.cpp:819
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5380,19 +5418,19 @@ msgstr ""
 "esekitzetik esnatzeko ezarritako alarmetarako. Hau, alarma eragiten den "
 "ordurako sistema erabat lehengoratuta dagoela ziurtatzeko erabil daiteke."
 
-#: prefdlg.cpp:824
+#: prefdlg.cpp:820
 #, kde-format
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
 msgstr "minutu"
 
-#: prefdlg.cpp:838
+#: prefdlg.cpp:834
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Start of day for date-only alarms:"
 msgstr "Data bakarrik duten alarmetarako, egunaren hasiera:"
 
-#: prefdlg.cpp:845
+#: prefdlg.cpp:841
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5402,55 +5440,55 @@ msgstr ""
 "<para>Data bakarrik duen alarma eragingo den ordu goiztiarrena.</para><para>"
 "%1</para>"
 
-#: prefdlg.cpp:850
+#: prefdlg.cpp:846
 #, kde-format
 msgctxt "@title:group"
 msgid "Working Hours"
 msgstr "Laneko orduak"
 
-#: prefdlg.cpp:865
+#: prefdlg.cpp:861
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check the days in the week which are work days"
 msgstr "Markatu lanegunak diren asteko egunak"
 
-#: prefdlg.cpp:875
+#: prefdlg.cpp:871
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily start time:"
 msgstr "Eguneroko hasteko ordua:"
 
-#: prefdlg.cpp:882
+#: prefdlg.cpp:878
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the start time of the working day.</para><para>%1</para>"
 msgstr "<para>Sartu lanegunaren hasierako ordua.</para><para>%1</para>"
 
-#: prefdlg.cpp:894
+#: prefdlg.cpp:890
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily end time:"
 msgstr "Eguneroko amaitzeko ordua:"
 
-#: prefdlg.cpp:901
+#: prefdlg.cpp:897
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the end time of the working day.</para><para>%1</para>"
 msgstr "<para>Sartu lanegunaren amaierako ordua.</para><para>%1</para>"
 
-#: prefdlg.cpp:906
+#: prefdlg.cpp:902
 #, kde-format
 msgctxt "@title:group"
 msgid "KOrganizer"
 msgstr "KOrganizer"
 
-#: prefdlg.cpp:914
+#: prefdlg.cpp:910
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "KOrganizer event duration:"
 msgstr "KOrganizer ekitaldiaren iraupena:"
 
-#: prefdlg.cpp:921
+#: prefdlg.cpp:917
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5460,19 +5498,19 @@ msgstr ""
 "<para>Sartu, «KOrganizer»rera kopiatzen diren alarmen, ekitaldiaren iraupena "
 "ordu eta minututan.</para><para>%1</para>"
 
-#: prefdlg.cpp:990
+#: prefdlg.cpp:986
 #, kde-format
 msgctxt "@title:group"
 msgid "New Alarms && Templates"
 msgstr "Alarma eta txantiloi berriak"
 
-#: prefdlg.cpp:995
+#: prefdlg.cpp:991
 #, kde-format
 msgctxt "@option:radio"
 msgid "Store in default calendar"
 msgstr "Gorde egutegi lehenetsian"
 
-#: prefdlg.cpp:997
+#: prefdlg.cpp:993
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5482,13 +5520,13 @@ msgstr ""
 "Gehitu alarma eta alarma-txantiloi berri guztiak lehenetsitako egutegietan, "
 "ezer esan gabe."
 
-#: prefdlg.cpp:999
+#: prefdlg.cpp:995
 #, kde-format
 msgctxt "@option:radio"
 msgid "Prompt for which calendar to store in"
 msgstr "Eskatu zein egutegitan gorde behar den"
 
-#: prefdlg.cpp:1002
+#: prefdlg.cpp:998
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5502,19 +5540,19 @@ msgstr ""
 "para><para>Kontuan izan artxibatutako alarmak beti gordetzen direla "
 "artxibatutako alarmen egutegi lehenetsian.</para>"
 
-#: prefdlg.cpp:1007
+#: prefdlg.cpp:1003
 #, kde-format
 msgctxt "@title:group"
 msgid "Archived Alarms"
 msgstr "Artxibatutako alarmak"
 
-#: prefdlg.cpp:1012
+#: prefdlg.cpp:1008
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep alarms after expiry"
 msgstr "Mantendu iraungitako alarmak"
 
-#: prefdlg.cpp:1015
+#: prefdlg.cpp:1011
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5524,19 +5562,19 @@ msgstr ""
 "Markatu, iraungitako edo ezabatutako alarmak artxibatzeko (inoiz exekutatu "
 "gabeko ezabatutako alarmak izan ezik)."
 
-#: prefdlg.cpp:1021
+#: prefdlg.cpp:1017
 #, kde-format
 msgctxt "@option:check"
 msgid "Discard archived alarms after:"
 msgstr "Artxibatutako alarmak bota ... igarotakoan:"
 
-#: prefdlg.cpp:1030
+#: prefdlg.cpp:1026
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "days"
 msgstr "egun"
 
-#: prefdlg.cpp:1034
+#: prefdlg.cpp:1030
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5546,19 +5584,19 @@ msgstr ""
 "Kendu marka, alarmak epe mugarik gabe gordetzeko. Markatu, artxibatutako "
 "alarmak zenbat denbora gorde behar diren zehazteko."
 
-#: prefdlg.cpp:1037
+#: prefdlg.cpp:1033
 #, kde-format
 msgctxt "@action:button"
 msgid "Clear Archived Alarms"
 msgstr "Garbitu artxibatutako alarmak"
 
-#: prefdlg.cpp:1040
+#: prefdlg.cpp:1036
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete all existing archived alarms."
 msgstr "Ezabatu existitzen diren artxibatutako alarma guztiak."
 
-#: prefdlg.cpp:1041
+#: prefdlg.cpp:1037
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5568,7 +5606,7 @@ msgstr ""
 "Ezabatu dauden artxibatutako alarma guztiak (artxibatutako alarma-egutegi "
 "lehenetsitik bakarrik)."
 
-#: prefdlg.cpp:1087
+#: prefdlg.cpp:1083
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5582,13 +5620,13 @@ msgstr ""
 "badituzu, mesedez, aurrena, erabili egutegien ikuspegia artxibatutako "
 "alarmen egutegi lehenetsi bat hautatzeko.</para>"
 
-#: prefdlg.cpp:1104
+#: prefdlg.cpp:1100
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete all archived alarms?"
 msgstr "Ziur zaude artxibatutako alarma guztiak ezabatu nahi dituzula?"
 
-#: prefdlg.cpp:1105
+#: prefdlg.cpp:1101
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -5598,31 +5636,31 @@ msgstr ""
 "Ziur zaude artxibatutako alarma-egutegi lehenetsiko alarma guztiak ezabatu "
 "nahi dituzula?"
 
-#: prefdlg.cpp:1123
+#: prefdlg.cpp:1119
 #, kde-format
 msgctxt "@label"
 msgid "Email client:"
 msgstr "Bidali e-posta bezeroari:"
 
-#: prefdlg.cpp:1126
+#: prefdlg.cpp:1122
 #, kde-format
 msgctxt "@option:radio"
 msgid "KMail"
 msgstr "KMail"
 
-#: prefdlg.cpp:1127
+#: prefdlg.cpp:1123
 #, kde-format
 msgctxt "@option:radio"
 msgid "Sendmail"
 msgstr "Sendmail"
 
-#: prefdlg.cpp:1140
+#: prefdlg.cpp:1136
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
 msgstr "Aukeratu e-posta alarma bat eragiten denean e-posta nola bidali."
 
-#: prefdlg.cpp:1143
+#: prefdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5639,7 +5677,7 @@ msgstr ""
 "bateragarria den posta garraiorako agente bat erabiltzeko konfiguratuta "
 "badago.</item></list></para>"
 
-#: prefdlg.cpp:1151
+#: prefdlg.cpp:1147
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5653,7 +5691,7 @@ msgstr ""
 "<application>sendmail</application> edo harekin bateragarria den posta "
 "garraiorako agente bat erabiltzeko konfiguratuta badago.</item></list></para>"
 
-#: prefdlg.cpp:1161
+#: prefdlg.cpp:1157
 #, kde-kuit-format
 msgctxt "@option:check"
 msgid ""
@@ -5663,7 +5701,7 @@ msgstr ""
 "Kopiatu bidalitako e-postak <application>KMail</application>en <resource>%1</"
 "resource> karpetara"
 
-#: prefdlg.cpp:1162
+#: prefdlg.cpp:1158
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5673,25 +5711,25 @@ msgstr ""
 "E-posta bat bidali ondoren, gorde haren kopia bat <application>KMail</"
 "application>en <resource>%1</resource> karpetan"
 
-#: prefdlg.cpp:1170
+#: prefdlg.cpp:1166
 #, kde-format
 msgctxt "@option:check"
 msgid "Notify when remote emails are queued"
 msgstr "Jakinarazi urrutiko e-postak ilaran ipintzen direnean"
 
-#: prefdlg.cpp:1178
+#: prefdlg.cpp:1174
 #, kde-format
 msgctxt "@title:group"
 msgid "Your Email Address"
 msgstr "Zure e-posta helbidea"
 
-#: prefdlg.cpp:1184
+#: prefdlg.cpp:1180
 #, kde-format
 msgctxt "@label 'From' email address"
 msgid "From:"
 msgstr "Nork:"
 
-#: prefdlg.cpp:1196
+#: prefdlg.cpp:1192
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5701,13 +5739,13 @@ msgstr ""
 "Zure e-posta helbidea, e-posta alarmak bidaltzean zu bezala identifikatzen "
 "zaituena."
 
-#: prefdlg.cpp:1203 prefdlg.cpp:1239
+#: prefdlg.cpp:1199 prefdlg.cpp:1235
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
 msgstr "Erabili <application>KMail</application>en nortasun lehenetsia"
 
-#: prefdlg.cpp:1206
+#: prefdlg.cpp:1202
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5717,13 +5755,13 @@ msgstr ""
 "Markatu, e-posta alarmak bidaltzean zu identifikatzeko, <application>KMail</"
 "application>en ezarritako e-posta lehenetsia erabiltzeko."
 
-#: prefdlg.cpp:1210
+#: prefdlg.cpp:1206
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use <application>KMail</application> identities"
 msgstr "Erabili <application>KMail</application>en nortasunak"
 
-#: prefdlg.cpp:1213
+#: prefdlg.cpp:1209
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5739,13 +5777,13 @@ msgstr ""
 "alarma berrietarako, <application>KMail</application>eko nortasunetatik zein "
 "erabili nahi duzun hautatzeko aukera izango duzu."
 
-#: prefdlg.cpp:1220
+#: prefdlg.cpp:1216
 #, kde-format
 msgctxt "@label 'Bcc' email address"
 msgid "Bcc:"
 msgstr "BCC:"
 
-#: prefdlg.cpp:1231
+#: prefdlg.cpp:1227
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5759,7 +5797,7 @@ msgstr ""
 "dabilen ordenagailuko zure kontura bidali daitezen nahi baduzu, zure saio-"
 "hasteko izena sartu besterik ez duzu egin behar."
 
-#: prefdlg.cpp:1242
+#: prefdlg.cpp:1238
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5770,19 +5808,19 @@ msgstr ""
 "<application>KMail</application>en ezarritako e-posta helbide lehenetsia "
 "erabiltzeko."
 
-#: prefdlg.cpp:1344
+#: prefdlg.cpp:1340
 #, kde-format
 msgctxt "@info"
 msgid "No valid 'Bcc' email address is specified."
 msgstr "Ez da 'BCC' e-posta helbide baliozkorik zehaztu."
 
-#: prefdlg.cpp:1351
+#: prefdlg.cpp:1347
 #, kde-format
 msgctxt "@info"
 msgid "Are you sure you want to save your changes?"
 msgstr "Ziur zaude zure aldaketak gorde nahi dituzula?"
 
-#: prefdlg.cpp:1357
+#: prefdlg.cpp:1353
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5792,7 +5830,7 @@ msgstr ""
 "<para>Une honetan <application>KMail</application>en ez dago ezarrita e-"
 "posta helbide lehenetsirik.</para><para>%1</para><para>%2</para>"
 
-#: prefdlg.cpp:1362
+#: prefdlg.cpp:1358
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5802,7 +5840,7 @@ msgstr ""
 "<para>Une honetan ez dago <application>KMail</application> nortasunik.</"
 "para><para>%1</para><para>%2</para>"
 
-#: prefdlg.cpp:1380
+#: prefdlg.cpp:1376
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5811,25 +5849,25 @@ msgstr ""
 "Alarmak editatzeko elkarrizketa-koadroko <interface>%1</interface>(a)ren "
 "ezarpen lehenetsia."
 
-#: prefdlg.cpp:1389 prefdlg.cpp:1844
+#: prefdlg.cpp:1385 prefdlg.cpp:1840
 #, kde-format
 msgctxt "@title:tab"
 msgid "General"
 msgstr "Orokorra"
 
-#: prefdlg.cpp:1395
+#: prefdlg.cpp:1391
 #, kde-format
 msgctxt "@title:tab Settings specific to alarm type"
 msgid "Type Specific"
 msgstr "Motaren berariazkoa"
 
-#: prefdlg.cpp:1401
+#: prefdlg.cpp:1397
 #, kde-format
 msgctxt "@title:tab"
 msgid "Font && Color"
 msgstr "Letra-tipoa eta kolorea"
 
-#: prefdlg.cpp:1417
+#: prefdlg.cpp:1413
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5839,31 +5877,31 @@ msgstr ""
 "Alarmak editatzeko elkarrizketa-koadroan, alarma-mezuak azaltzeko ezarpen "
 "lehenetsia."
 
-#: prefdlg.cpp:1441
+#: prefdlg.cpp:1437
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Recurrence:"
 msgstr "Errepikatzea:"
 
-#: prefdlg.cpp:1474
+#: prefdlg.cpp:1470
 #, kde-format
 msgctxt "@option:radio"
 msgid "February 28th"
 msgstr "Otsailak 28"
 
-#: prefdlg.cpp:1478
+#: prefdlg.cpp:1474
 #, kde-format
 msgctxt "@option:radio"
 msgid "March 1st"
 msgstr "Martxoak 1"
 
-#: prefdlg.cpp:1482
+#: prefdlg.cpp:1478
 #, kde-format
 msgctxt "@option:radio"
 msgid "Do not repeat"
 msgstr "Ez errepikatu"
 
-#: prefdlg.cpp:1487
+#: prefdlg.cpp:1483
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5876,31 +5914,31 @@ msgstr ""
 "<note>Aurretik dauden alarmetan, programatutako hurrengo errepikatzea ez da "
 "berriz kalkulatzen ezarpen hau aldatzen duzunean.</note>"
 
-#: prefdlg.cpp:1493
+#: prefdlg.cpp:1489
 #, kde-format
 msgctxt "@title:group"
 msgid "Display Alarms"
 msgstr "Azaldu alarmak"
 
-#: prefdlg.cpp:1511
+#: prefdlg.cpp:1507
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Reminder units:"
 msgstr "Oroigarrien unitateak:"
 
-#: prefdlg.cpp:1514
+#: prefdlg.cpp:1510
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Minutes"
 msgstr "Minutu"
 
-#: prefdlg.cpp:1515
+#: prefdlg.cpp:1511
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
 msgstr "Ordu/Minutu"
 
-#: prefdlg.cpp:1518
+#: prefdlg.cpp:1514
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5910,19 +5948,19 @@ msgstr ""
 "Alarmak editatzeko elkarrizketa-koadroan oroigarrientzat erabiliko den "
 "unitate lehenetsia."
 
-#: prefdlg.cpp:1524
+#: prefdlg.cpp:1520
 #, kde-format
 msgctxt "@title:group Audio options group"
 msgid "Sound"
 msgstr "Soinua"
 
-#: prefdlg.cpp:1543
+#: prefdlg.cpp:1539
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat sound file"
 msgstr "Errepikatu soinu fitxategia"
 
-#: prefdlg.cpp:1546
+#: prefdlg.cpp:1542
 #, kde-kuit-format
 msgctxt "@info:whatsthis sound file 'Repeat' checkbox"
 msgid ""
@@ -5932,19 +5970,19 @@ msgstr ""
 "Alarmak editatzeko elkarrizketa-koadroko  <interface>%1</interface> soinu "
 "fitxategiaren ezarpen lehenetsia."
 
-#: prefdlg.cpp:1552
+#: prefdlg.cpp:1548
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Sound file:"
 msgstr "Soinu fitxategia:"
 
-#: prefdlg.cpp:1560
+#: prefdlg.cpp:1556
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a sound file"
 msgstr "Hautatu soinu fitxategi bat"
 
-#: prefdlg.cpp:1562
+#: prefdlg.cpp:1558
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
@@ -5952,7 +5990,7 @@ msgstr ""
 "Sartu alarmak editatzeko elkarrizketa-koadroan erabiliko den soinu fitxategi "
 "lehenetsia."
 
-#: prefdlg.cpp:1571
+#: prefdlg.cpp:1567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5961,32 +5999,32 @@ msgstr ""
 "Hautatu, alarma editatzeko elkarrizketa-koadroan soinu-fitxategien bolumen "
 "lehenetsia ezartzeko."
 
-#: prefdlg.cpp:1575
+#: prefdlg.cpp:1571
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default volume for sound files in the alarm edit dialog."
 msgstr ""
 "Alarma editatzeko elkarrizketa-koadroan soinu-fitxategien bolumen lehenetsia."
 
-#: prefdlg.cpp:1585
+#: prefdlg.cpp:1581
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Alarms"
 msgstr "Komando alarmak"
 
-#: prefdlg.cpp:1604
+#: prefdlg.cpp:1600
 #, kde-format
 msgctxt "@title:group"
 msgid "Email Alarms"
 msgstr "E-posta alarmak"
 
-#: prefdlg.cpp:1617
+#: prefdlg.cpp:1613
 #, kde-format
 msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "Mezuaren letra-tipoa eta kolorea"
 
-#: prefdlg.cpp:1823
+#: prefdlg.cpp:1819
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5996,19 +6034,19 @@ msgstr ""
 " <interface>%1</interface> hautatzen denean soinu lehenetsi bezala soinu-"
 "fitxategi bat sartu behar duzu"
 
-#: prefdlg.cpp:1850
+#: prefdlg.cpp:1846
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "Alarmen lehioak"
 
-#: prefdlg.cpp:1853
+#: prefdlg.cpp:1849
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "Erakutsi sistemaren erretiluan"
 
-#: prefdlg.cpp:1855
+#: prefdlg.cpp:1851
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6020,13 +6058,13 @@ msgstr ""
 "erakusteko. Hura sistema-erretiluan erakusteak sarbide erraza eta egoeraren "
 "adierazle bat ematen ditu.</para>"
 
-#: prefdlg.cpp:1884
+#: prefdlg.cpp:1880
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr "Erakutsi beti"
 
-#: prefdlg.cpp:1888
+#: prefdlg.cpp:1884
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6036,13 +6074,13 @@ msgstr ""
 "Markatu <application>KAlarm</application>en ikonoa, alarmak bete edo ez, "
 "sistema-erretiluan erakusteko."
 
-#: prefdlg.cpp:1892
+#: prefdlg.cpp:1888
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr "Automatikoki ezkutatu alarma aktiborik ez badago"
 
-#: prefdlg.cpp:1896
+#: prefdlg.cpp:1892
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6055,7 +6093,7 @@ msgstr ""
 "ikusarazteko, ezkutuko ikonoak erakusteko sistema-erretiluko aukera erabil "
 "daiteke."
 
-#: prefdlg.cpp:1902
+#: prefdlg.cpp:1898
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6069,25 +6107,25 @@ msgstr ""
 "ezkutatzeko. Ezkutuan dagoenean hura ikusarazteko, ezkutuko ikonoak "
 "erakusteko sistema-erretiluko aukera erabil daiteke."
 
-#: prefdlg.cpp:1905
+#: prefdlg.cpp:1901
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr "Automatikoki ezkutatu, epearen barruan beteko den alarmarik ez badago:"
 
-#: prefdlg.cpp:1917
+#: prefdlg.cpp:1913
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "Sistemaren erretiluko aholkua"
 
-#: prefdlg.cpp:1924
+#: prefdlg.cpp:1920
 #, kde-format
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
 msgstr "Erakutsi hurrengo 24 orduetako alarmak"
 
-#: prefdlg.cpp:1928
+#: prefdlg.cpp:1924
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6097,13 +6135,13 @@ msgstr ""
 "Zehaztu sistema-erretiluko tresna-argibidean hurrengo 24 orduetan beteko "
 "diren alarmen laburpen bat erantsi behar den edo ez."
 
-#: prefdlg.cpp:1934
+#: prefdlg.cpp:1930
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "Gehienez erakutsi beharreko alarma kopurua:"
 
-#: prefdlg.cpp:1943
+#: prefdlg.cpp:1939
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6113,43 +6151,43 @@ msgstr ""
 "Kendu marka, hurrengo 24 orduetako alarma guztiak sistema-erretiluko tresna-"
 "argibidean azaltzeko. Markatu, azaldutako kopuruan gain-muga bat ezartzeko."
 
-#: prefdlg.cpp:1947
+#: prefdlg.cpp:1943
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "Erakutsi alarmaren ordua"
 
-#: prefdlg.cpp:1953
+#: prefdlg.cpp:1949
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "Erakutsi alarma arteko denbora"
 
-#: prefdlg.cpp:1971
+#: prefdlg.cpp:1967
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "Alarmen zerrenda"
 
-#: prefdlg.cpp:1983
+#: prefdlg.cpp:1979
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "Ezgaitutako alarmen kolorea:"
 
-#: prefdlg.cpp:1996
+#: prefdlg.cpp:1992
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "Artxibatutako alarmen kolorea:"
 
-#: prefdlg.cpp:2009
+#: prefdlg.cpp:2005
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Alarma-mezuen leihoak"
 
-#: prefdlg.cpp:2021
+#: prefdlg.cpp:2017
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6165,25 +6203,25 @@ msgstr ""
 "erdian, baina ezgaitu botoiak denbora labur batez, leihoa azaldu ondoren.</"
 "item></list></para>"
 
-#: prefdlg.cpp:2024
+#: prefdlg.cpp:2020
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Kokatu leihoak sagu-kurtsoretik urrun"
 
-#: prefdlg.cpp:2028
+#: prefdlg.cpp:2024
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "Erdiratu leihoak, atzeratu leihoaren botoiak aktibatzea"
 
-#: prefdlg.cpp:2037
+#: prefdlg.cpp:2033
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Botoien aktibazio atzerapena (segundotan):"
 
-#: prefdlg.cpp:2045
+#: prefdlg.cpp:2041
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6195,7 +6233,7 @@ msgstr ""
 "denboraz ezgaituta egon behar duten, ustekabean alarma-mezuak aitortzeko "
 "aukerak murrizteko."
 
-#: prefdlg.cpp:2049
+#: prefdlg.cpp:2045
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6205,13 +6243,13 @@ msgstr ""
 "Sartu, alarma-mezuaren leihoa erakutsi ondoren bere botoiak zenbat denboraz "
 "egon behar duten ezgaituta."
 
-#: prefdlg.cpp:2057
+#: prefdlg.cpp:2053
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Mezu-leihoek titulu-barra bat dute eta teklatuaren fokua hartzen dute"
 
-#: prefdlg.cpp:2060
+#: prefdlg.cpp:2056
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7235,25 +7273,25 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "Ez inportatu"
 
-#: resources/migration/fileresourcemigrator.cpp:255
+#: resources/migration/fileresourcemigrator.cpp:256
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "Alarma aktiboak"
 
-#: resources/migration/fileresourcemigrator.cpp:257
+#: resources/migration/fileresourcemigrator.cpp:258
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "Artxibatutako alarmak"
 
-#: resources/migration/fileresourcemigrator.cpp:259
+#: resources/migration/fileresourcemigrator.cpp:260
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "Alarma-txantiloiak"
 
-#: resources/migration/fileresourcemigrator.cpp:279
+#: resources/migration/fileresourcemigrator.cpp:280
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -7263,175 +7301,175 @@ msgstr ""
 "<para>Lehenetsitako <resource>%1</resource> egutegia sortzea huts egin du</"
 "para><para>Kokalekua: <filename>%2</filename></para>"
 
-#: resources/resourcedatamodelbase.cpp:65
+#: resources/resourcedatamodelbase.cpp:66
 #, kde-format
 msgctxt "@item:intext"
 msgid "Active Alarms"
 msgstr "Alarma aktiboak"
 
-#: resources/resourcedatamodelbase.cpp:67
+#: resources/resourcedatamodelbase.cpp:68
 #, kde-format
 msgctxt "@item:intext"
 msgid "Archived Alarms"
 msgstr "Artxibatutako alarmak"
 
-#: resources/resourcedatamodelbase.cpp:69
+#: resources/resourcedatamodelbase.cpp:70
 #, kde-format
 msgctxt "@item:intext"
 msgid "Alarm Templates"
 msgstr "Alarma-txantiloiak"
 
-#: resources/resourcedatamodelbase.cpp:85
+#: resources/resourcedatamodelbase.cpp:86
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only"
 msgstr "Soilik irakurtzeko"
 
-#: resources/resourcedatamodelbase.cpp:88
+#: resources/resourcedatamodelbase.cpp:89
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (old format)"
 msgstr "Solik irakurtzeko (formatu zaharra)"
 
-#: resources/resourcedatamodelbase.cpp:91
+#: resources/resourcedatamodelbase.cpp:92
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (other format)"
 msgstr "Solik irakurtzeko (beste formatu bat)"
 
-#: resources/resourcedatamodelbase.cpp:113
+#: resources/resourcedatamodelbase.cpp:114
 #, kde-format
 msgctxt "@title:column"
 msgid "Time"
 msgstr "Ordua"
 
-#: resources/resourcedatamodelbase.cpp:115
+#: resources/resourcedatamodelbase.cpp:116
 #, kde-format
 msgctxt "@title:column"
 msgid "Time To"
 msgstr "Gelditzen den denbora"
 
-#: resources/resourcedatamodelbase.cpp:117
+#: resources/resourcedatamodelbase.cpp:118
 #, kde-format
 msgctxt "@title:column"
 msgid "Repeat"
 msgstr "Errepikapena"
 
-#: resources/resourcedatamodelbase.cpp:119
+#: resources/resourcedatamodelbase.cpp:120
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
 msgstr "Kolorea"
 
-#: resources/resourcedatamodelbase.cpp:121
+#: resources/resourcedatamodelbase.cpp:122
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Mota"
 
-#: resources/resourcedatamodelbase.cpp:123
+#: resources/resourcedatamodelbase.cpp:124
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Izena"
 
-#: resources/resourcedatamodelbase.cpp:125
+#: resources/resourcedatamodelbase.cpp:126
 #, kde-format
 msgctxt "@title:column"
 msgid "Message, File or Command"
 msgstr "Mezua, fitxategia edo komandoa"
 
-#: resources/resourcedatamodelbase.cpp:127
+#: resources/resourcedatamodelbase.cpp:128
 #, kde-format
 msgctxt "@title:column Template name"
 msgid "Name"
 msgstr "Izena"
 
-#: resources/resourcedatamodelbase.cpp:139
+#: resources/resourcedatamodelbase.cpp:140
 #, kde-format
 msgctxt "@title:column"
 msgid "Calendars"
 msgstr "Egutegiak"
 
-#: resources/resourcedatamodelbase.cpp:450
+#: resources/resourcedatamodelbase.cpp:451
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
 msgstr "Komandoa exekutatzeak huts egin du"
 
-#: resources/resourcedatamodelbase.cpp:452
+#: resources/resourcedatamodelbase.cpp:453
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
 msgstr "Alarma-aurreko ekintza exekutatzea huts egin du"
 
-#: resources/resourcedatamodelbase.cpp:454
+#: resources/resourcedatamodelbase.cpp:455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
 msgstr "Alarma-ondoko ekintza exekutatzea huts egin du"
 
-#: resources/resourcedatamodelbase.cpp:456
+#: resources/resourcedatamodelbase.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
 msgstr "Alarma-aurreko eta -ondoko ekintzak exekutatzea huts egin du"
 
-#: resources/resourcedatamodelbase.cpp:487
+#: resources/resourcedatamodelbase.cpp:488
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
 msgstr "Ezgaituta"
 
-#: resources/resourcedatamodelbase.cpp:490
+#: resources/resourcedatamodelbase.cpp:491
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 msgstr "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 
-#: resources/resourcedatamodelbase.cpp:495
+#: resources/resourcedatamodelbase.cpp:496
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename>"
 msgstr "%1<nl/>%2: <filename>%3</filename>"
 
-#: resources/resourcedatamodelbase.cpp:556
+#: resources/resourcedatamodelbase.cpp:557
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
 msgstr "Hurrengo programatutako alarmaren data eta ordua"
 
-#: resources/resourcedatamodelbase.cpp:558
+#: resources/resourcedatamodelbase.cpp:559
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
 msgstr "Programatutako hurrengo alarmaren aktibaziorako pasako den denbora"
 
-#: resources/resourcedatamodelbase.cpp:560
+#: resources/resourcedatamodelbase.cpp:561
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
 msgstr "Alarmaren periodikotasuna"
 
-#: resources/resourcedatamodelbase.cpp:562
+#: resources/resourcedatamodelbase.cpp:563
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Background color of alarm message"
 msgstr "Alarma mezuen atzeko planoaren kolorea"
 
-#: resources/resourcedatamodelbase.cpp:564
+#: resources/resourcedatamodelbase.cpp:565
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm type (message, file, command or email)"
 msgstr "Alarma mota (mezua, fitxategia, komandoa edo posta)"
 
-#: resources/resourcedatamodelbase.cpp:566
+#: resources/resourcedatamodelbase.cpp:567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
 msgstr "Alarmaren izena, edo alarmaren testua izena hutsik badago"
 
-#: resources/resourcedatamodelbase.cpp:568
+#: resources/resourcedatamodelbase.cpp:569
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7441,44 +7479,44 @@ msgstr ""
 "Alarma mezuaren testua, bistaratuko den tesu fitxategiaren URL-a, "
 "exekutatuko den komandoa, edo e-postaren gaia"
 
-#: resources/resourcedatamodelbase.cpp:570
+#: resources/resourcedatamodelbase.cpp:571
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
 msgstr "Alarma-txantiloiaren izena"
 
-#: resources/resourcedatamodelbase.cpp:662
-#: resources/resourcedatamodelbase.cpp:762
+#: resources/resourcedatamodelbase.cpp:663
+#: resources/resourcedatamodelbase.cpp:763
 #, kde-format
 msgctxt "@info Alarm never occurs"
 msgid "Never"
 msgstr "Inoiz ez"
 
-#: resources/resourcedatamodelbase.cpp:768
+#: resources/resourcedatamodelbase.cpp:769
 #, no-c-format, kde-format
 msgctxt "@info n days"
 msgid "%1d"
 msgstr "%1e"
 
-#: resources/resourcedatamodelbase.cpp:778
+#: resources/resourcedatamodelbase.cpp:779
 #, kde-format
 msgctxt "@info hours:minutes"
 msgid "%1:%2"
 msgstr "%1:%2"
 
-#: resources/resourcedatamodelbase.cpp:785
+#: resources/resourcedatamodelbase.cpp:786
 #, kde-format
 msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
 msgstr " %1e %2:%3 "
 
-#: resources/resourcemodel.cpp:328
+#: resources/resourcemodel.cpp:329
 #, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
 msgstr "Ezin duzu zure artxibatutako alarmen egutegi lehenetsia ezgaitu."
 
-#: resources/resourcemodel.cpp:334
+#: resources/resourcemodel.cpp:335
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -7488,7 +7526,7 @@ msgstr ""
 "Ezin duzu zure artxibatutako alarmen egutegi lehenetsia ezgaitu, iraungitako "
 "alarmak gordetzeko konfiguratuta dauden bitartean."
 
-#: resources/resourcemodel.cpp:338
+#: resources/resourcemodel.cpp:339
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"
@@ -7586,56 +7624,56 @@ msgctxt "@item:intext What a resource is stored in (directory in filesystem)"
 msgid "Directory"
 msgstr "Direktorioa"
 
-#: resources/singlefileresource.cpp:176 resources/singlefileresource.cpp:350
+#: resources/singlefileresource.cpp:177 resources/singlefileresource.cpp:351
 #, kde-format
 msgctxt "@info"
 msgid "A previous load is still in progress."
 msgstr "Oraindik aurreko zama eragiketa bat egiten ari da."
 
-#: resources/singlefileresource.cpp:182 resources/singlefileresource.cpp:356
+#: resources/singlefileresource.cpp:183 resources/singlefileresource.cpp:357
 #, kde-format
 msgctxt "@info"
 msgid "A previous save is still in progress."
 msgstr "Oraindik aurreko gordetze eragiketa bat egiten ari da."
 
-#: resources/singlefileresource.cpp:231
+#: resources/singlefileresource.cpp:232
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create calendar file <filename>%1</filename>."
 msgstr "Ezin izan du egutegiaren <filename>%1</filename> fitxategia sortu."
 
-#: resources/singlefileresource.cpp:246
+#: resources/singlefileresource.cpp:247
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create writable calendar file <filename>%1</filename>."
 msgstr ""
 "Ezin izan du egutegi idazgarriaren <filename>%1</filename> fitxategia sortu."
 
-#: resources/singlefileresource.cpp:601
+#: resources/singlefileresource.cpp:602
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
 msgstr "Ezin izan du <filename>%1</filename> fitxategia zamatu."
 
-#: resources/singlefileresource.cpp:633
+#: resources/singlefileresource.cpp:634
 #, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "Egutegia ez dago irekita."
 
-#: resources/singlefileresource.cpp:646
+#: resources/singlefileresource.cpp:647
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "Ezin izan da <filename>%1</filename> fitxategia gorde."
 
-#: resources/singlefileresource.cpp:738
+#: resources/singlefileresource.cpp:739
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "Ezin izan da <filename>%1</filename> fitxategia zamatu. (%2)"
 
-#: resources/singlefileresource.cpp:775
+#: resources/singlefileresource.cpp:776
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"
@@ -8052,14 +8090,14 @@ msgstr ""
 "<filename>%6</filename><nl/>Baimenak: %7<nl/>Egoera: %8<nl/>Lehenetsitako "
 "egutegia: %9</para>"
 
-#: rtcwakeaction.cpp:87
+#: rtcwakeaction.cpp:88
 #, kde-kuit-format
 msgctxt "@text/plain"
 msgid "Could not run <command>%1</command> to set wake from suspend"
 msgstr ""
 "Ezin izan da, «esnatu esekitzetik» ezartzeko, <command>%1</command> exekutatu"
 
-#: rtcwakeaction.cpp:90
+#: rtcwakeaction.cpp:91
 #, kde-kuit-format
 msgctxt "@text/plain"
 msgid ""
@@ -8069,19 +8107,19 @@ msgstr ""
 "Errorea «esnatu esekitzetik» ezartzean.<nl/>Komandoa zen: <command>%1 %2</"
 "command><nl/>Errore-kodea: %3."
 
-#: sounddlg.cpp:41
+#: sounddlg.cpp:42
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat"
 msgstr "Errepikatu"
 
-#: sounddlg.cpp:42
+#: sounddlg.cpp:43
 #, kde-format
 msgctxt "@option:check"
 msgid "Set volume"
 msgstr "Ezarri bolumena"
 
-#: sounddlg.cpp:52
+#: sounddlg.cpp:53
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8091,79 +8129,79 @@ msgstr ""
 "Markatuta badago, soinu-fitxategia behin eta berriro joko da mezua azaltzen "
 "den bitartean."
 
-#: sounddlg.cpp:148
+#: sounddlg.cpp:149
 #, kde-format
 msgctxt "@label"
 msgid "Sound file:"
 msgstr "Soinu-fitxategia:"
 
-#: sounddlg.cpp:165 sounddlg.cpp:460
+#: sounddlg.cpp:166 sounddlg.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "Probatu soinua"
 
-#: sounddlg.cpp:166 sounddlg.cpp:461
+#: sounddlg.cpp:167 sounddlg.cpp:462
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
 msgstr "Jo hautatutako soinu-fitxategia."
 
-#: sounddlg.cpp:173
+#: sounddlg.cpp:174
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
 msgstr "Sartu jo beharreko soinu-fitxategi baten izena edo URLa."
 
-#: sounddlg.cpp:184
+#: sounddlg.cpp:185
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
 msgstr "Hautatu jo beharreko soinu-fitxategi bat."
 
-#: sounddlg.cpp:206
+#: sounddlg.cpp:207
 #, kde-format
 msgctxt "@label:spinbox Length of time to pause between repetitions"
 msgid "Pause between repetitions:"
 msgstr "Errepikapenen arteko etena:"
 
-#: sounddlg.cpp:213 sounddlg.cpp:270
+#: sounddlg.cpp:214 sounddlg.cpp:271
 #, kde-format
 msgctxt "@label"
 msgid "seconds"
 msgstr "segundo"
 
-#: sounddlg.cpp:215
+#: sounddlg.cpp:216
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how many seconds to pause between repetitions."
 msgstr "Sartu errepikapen arteko etenunearen iraupena segundotan."
 
-#: sounddlg.cpp:218
+#: sounddlg.cpp:219
 #, kde-format
 msgctxt "@title:group Sound volume"
 msgid "Volume"
 msgstr "Bolumena"
 
-#: sounddlg.cpp:234
+#: sounddlg.cpp:235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
 msgstr "Hautatu, soinu-fitxategia jotzeko bolumena aukeratzeko."
 
-#: sounddlg.cpp:242
+#: sounddlg.cpp:243
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the volume for playing the sound file."
 msgstr "Hautatu soinu-fitxategia jotzeko bolumena."
 
-#: sounddlg.cpp:253
+#: sounddlg.cpp:254
 #, kde-format
 msgctxt "@option:check"
 msgid "Fade"
 msgstr "Moteltzea"
 
-#: sounddlg.cpp:255
+#: sounddlg.cpp:256
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
@@ -8171,13 +8209,13 @@ msgstr ""
 "Hautatu bolumena ozentzea soinu-fitxategia jotzen hasten denean.Hautatu hau "
 "lehen aldiz soinu-fitxategia erreproduzitzean iraungitzeko."
 
-#: sounddlg.cpp:263
+#: sounddlg.cpp:264
 #, kde-format
 msgctxt "@label:spinbox Time period over which to fade the sound"
 msgid "Fade time:"
 msgstr "Moteltze-denbora:"
 
-#: sounddlg.cpp:272
+#: sounddlg.cpp:273
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8186,49 +8224,49 @@ msgstr ""
 "Sartu ezarritako bolumenera iritsi arte soinua zenbat segundoz moteldu behar "
 "den."
 
-#: sounddlg.cpp:279
+#: sounddlg.cpp:280
 #, kde-format
 msgctxt "@label:slider"
 msgid "Initial volume:"
 msgstr "Hasierako bolumena:"
 
-#: sounddlg.cpp:288
+#: sounddlg.cpp:289
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the initial volume for playing the sound file."
 msgstr "Hautatu soinu-fitxategia jotzeko hasierako bolumena."
 
-#: soundpicker.cpp:40
+#: soundpicker.cpp:41
 #, kde-format
 msgctxt "@label:listbox Listbox providing audio options"
 msgid "Sound:"
 msgstr "Soinua:"
 
-#: soundpicker.cpp:41
+#: soundpicker.cpp:42
 #, kde-format
 msgctxt "@item:inlistbox No sound"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: soundpicker.cpp:42
+#: soundpicker.cpp:43
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Beep"
 msgstr "Bip"
 
-#: soundpicker.cpp:43
+#: soundpicker.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Speak"
 msgstr "Mintzatu"
 
-#: soundpicker.cpp:44
+#: soundpicker.cpp:45
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Sound file"
 msgstr "Soinu-fitxategia"
 
-#: soundpicker.cpp:74
+#: soundpicker.cpp:75
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8250,31 +8288,31 @@ msgstr ""
 "%4</interface>: mezuaren testua esan egiten da (aukerak, dabilen Qt testutik-"
 "ahotserakoinstalazioa behar du). </item></list></para>"
 
-#: soundpicker.cpp:86
+#: soundpicker.cpp:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure sound file"
 msgstr "Konfiguratu soinu-fitxategia"
 
-#: soundpicker.cpp:87
+#: soundpicker.cpp:88
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
 msgstr "Konfiguratu alarma azaltzean jo beharreko soinu-fitxategi bat."
 
-#: soundpicker.cpp:256
+#: soundpicker.cpp:257
 #, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "Soinu-fitxategia"
 
-#: soundpicker.cpp:315
+#: soundpicker.cpp:316
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Audio fitxategiak"
 
-#: soundpicker.cpp:338
+#: soundpicker.cpp:339
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"
@@ -8507,30 +8545,30 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Hautatu alarma berriaren oinarri izango den txantiloi bat."
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "Alarma berria"
 
-#: traywindow.cpp:300
+#: traywindow.cpp:301
 #, kde-format
 msgid "Disabled"
 msgstr "Ezgaituta"
 
-#: traywindow.cpp:305
+#: traywindow.cpp:306
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(Alarma batzuk ezgaituta)"
 
-#: traywindow.cpp:365
+#: traywindow.cpp:366
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:367
+#: traywindow.cpp:368
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"
@@ -8773,6 +8811,10 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Esekitze egoeratik esnatzeko alarma aurreko minutu kopurua"
+
+#~ msgctxt "@label"
+#~ msgid "Suppress autostart at login"
+#~ msgstr "Kendu saio-hastean automatikoki abiatzea"
 
 #~ msgctxt "@info"
 #~ msgid ""

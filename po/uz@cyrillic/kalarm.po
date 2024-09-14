@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-13 00:40+0000\n"
+"POT-Creation-Date: 2024-09-14 00:41+0000\n"
 "PO-Revision-Date: 2006-12-17 13:25+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -148,7 +148,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Огоҳлантиришни ўчириш"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:328
+#: alarmtimewidget.cpp:137 editdlg.cpp:329
 #, fuzzy, kde-format
 #| msgid "Time from no&w:"
 msgctxt "@option:radio"
@@ -171,7 +171,7 @@ msgstr ""
 "Жорий вақтдан бошлаб белгиланган тафовутли вақт билан огоҳлантиришни "
 "режалаштиринг."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:339
+#: alarmtimewidget.cpp:149 editdlg.cpp:340
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -252,7 +252,7 @@ msgid ""
 "zone set in KAlarm's configuration dialog."
 msgstr ""
 
-#: alarmtimewidget.cpp:227 prefdlg.cpp:755
+#: alarmtimewidget.cpp:227 prefdlg.cpp:751
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
@@ -350,58 +350,58 @@ msgstr ""
 "Файлни илова қилиш хатоси:\n"
 "%1"
 
-#: autostart/autostart.cpp:48
+#: autostart/autostart.cpp:49
 #, fuzzy, kde-format
 msgid "KAlarm Autostart"
 msgstr "Тизимга &киришда автоматик бошлаш"
 
-#: autostart/autostart.cpp:49
+#: autostart/autostart.cpp:50
 #, fuzzy, kde-format
 msgid "KAlarm autostart at login"
 msgstr "Тизимга &киришда автоматик бошлаш"
 
-#: autostart/autostart.cpp:51
+#: autostart/autostart.cpp:52
 #, kde-format
 msgid "Copyright 2001-%1, David Jarvie"
 msgstr ""
 
-#: autostart/autostart.cpp:52 main.cpp:60
+#: autostart/autostart.cpp:53 main.cpp:60
 #, kde-format
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr ""
 
-#: autostart/autostart.cpp:52 main.cpp:60
+#: autostart/autostart.cpp:53 main.cpp:60
 #, kde-format
 msgid "Author"
 msgstr "Муаллиф"
 
-#: autostart/autostart.cpp:58
+#: autostart/autostart.cpp:59
 #, kde-format
 msgid "Application to run"
 msgstr ""
 
-#: autostart/autostart.cpp:59
+#: autostart/autostart.cpp:60
 #, fuzzy, kde-format
 #| msgid "Command Alarms"
 msgid "Command line arguments to pass to application"
 msgstr "Буйруқ орқали огоҳлантиришлар"
 
-#: birthdaydlg.cpp:49
+#: birthdaydlg.cpp:50
 #, fuzzy, kde-format
 #| msgid "Import Birthdays From KAddressBook"
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Манзиллар дафтаридан туғилган кунларни импорт қилиш"
 
-#: birthdaydlg.cpp:63 editdlg.cpp:244
+#: birthdaydlg.cpp:64 editdlg.cpp:245
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Огоҳлантириш тури"
 
-#: birthdaydlg.cpp:68 editdlg.cpp:252
+#: birthdaydlg.cpp:69 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -409,28 +409,28 @@ msgid ""
 "be unique."
 msgstr ""
 
-#: birthdaydlg.cpp:75
+#: birthdaydlg.cpp:76
 #, fuzzy, kde-format
 #| msgid "Birthday: "
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "Туғилган кун: "
 
-#: birthdaydlg.cpp:78
+#: birthdaydlg.cpp:79
 #, fuzzy, kde-format
 #| msgid "Alarm Text"
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Огоҳлантириш матни"
 
-#: birthdaydlg.cpp:81 prefdlg.cpp:1962
+#: birthdaydlg.cpp:82 prefdlg.cpp:1958
 #, fuzzy, kde-format
 #| msgid "Pre&fix:"
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "&Префикс:"
 
-#: birthdaydlg.cpp:88
+#: birthdaydlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -438,14 +438,14 @@ msgid ""
 "including any necessary trailing spaces."
 msgstr ""
 
-#: birthdaydlg.cpp:92
+#: birthdaydlg.cpp:93
 #, fuzzy, kde-format
 #| msgid "S&uffix:"
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "С&уффикс:"
 
-#: birthdaydlg.cpp:99
+#: birthdaydlg.cpp:100
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -453,14 +453,14 @@ msgid ""
 "any necessary leading spaces."
 msgstr ""
 
-#: birthdaydlg.cpp:103
+#: birthdaydlg.cpp:104
 #, fuzzy, kde-format
 #| msgid "Select Birthdays"
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "Туғилган кунларни танлаш"
 
-#: birthdaydlg.cpp:133
+#: birthdaydlg.cpp:134
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -471,21 +471,21 @@ msgid ""
 "Ctrl or Shift.</para>"
 msgstr ""
 
-#: birthdaydlg.cpp:139
+#: birthdaydlg.cpp:140
 #, fuzzy, kde-format
 #| msgid "Alarm Configuration"
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "Огоҳлантириш мосламаси"
 
-#: birthdaydlg.cpp:159
+#: birthdaydlg.cpp:160
 #, fuzzy, kde-format
 #| msgid "Check to display a reminder in advance of the birthday."
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr "Туғилган кундан олдин эслатиш учун шу ерни белгиланг."
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -494,270 +494,270 @@ msgid ""
 "birthday."
 msgstr ""
 
-#: birthdaydlg.cpp:162
+#: birthdaydlg.cpp:163
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
 msgstr ""
 
-#: birthdaydlg.cpp:195 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
 #, fuzzy, kde-format
 #| msgid "&Number of repetitions:"
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "&Такрорланиш сони:"
 
-#: birthdaydlg.cpp:197
+#: birthdaydlg.cpp:198
 #, fuzzy, kde-format
 #| msgid "Interval between alarm repetitions"
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
 msgstr "Огоҳлантиришни такрорлаш вақти"
 
-#: commandoptions.cpp:126
+#: commandoptions.cpp:127
 #, kde-format
 msgid "Prompt for confirmation when alarm is acknowledged"
 msgstr ""
 
-#: commandoptions.cpp:129
+#: commandoptions.cpp:130
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
 msgstr "Файлни хатга илова қилиш (керагида такрорлаш)"
 
-#: commandoptions.cpp:133
+#: commandoptions.cpp:134
 #, kde-format
 msgid "Auto-close alarm window after --late-cancel period"
 msgstr ""
 
-#: commandoptions.cpp:136
+#: commandoptions.cpp:137
 #, kde-format
 msgid "Blind copy email to self"
 msgstr ""
 
-#: commandoptions.cpp:139
+#: commandoptions.cpp:140
 #, kde-format
 msgid "Beep when message is displayed"
 msgstr "Хабар кўрсатилганда овоз бериш"
 
-#: commandoptions.cpp:142
+#: commandoptions.cpp:143
 #, kde-format
 msgid "Message background color (name or hex 0xRRGGBB)"
 msgstr "Хабарнинг орқа фон ранги (номи ёки 0xRRGGBB кўринишда)"
 
-#: commandoptions.cpp:146
+#: commandoptions.cpp:147
 #, kde-format
 msgid "Message foreground color (name or hex 0xRRGGBB)"
 msgstr "Хабарнинг олдин фон ранги (номи ёки 0xRRGGBB кўринишда)"
 
-#: commandoptions.cpp:150
+#: commandoptions.cpp:151
 #, kde-format
 msgid "Cancel alarm with the specified event ID"
 msgstr ""
 
-#: commandoptions.cpp:154
+#: commandoptions.cpp:155
 #, kde-format
 msgid "Disable the alarm"
 msgstr "Огоҳлантиришни ўчириш"
 
-#: commandoptions.cpp:157
+#: commandoptions.cpp:158
 #, fuzzy, kde-format
 #| msgid "Disable the alarm"
 msgid "Disable monitoring of all alarms"
 msgstr "Огоҳлантиришни ўчириш"
 
-#: commandoptions.cpp:160
+#: commandoptions.cpp:161
 #, fuzzy, kde-format
 msgid "Execute a shell command line"
 msgstr "Шелл буйруқлар сатрини ишга тушириш"
 
-#: commandoptions.cpp:164
+#: commandoptions.cpp:165
 #, kde-format
 msgid "Command line to generate alarm message text"
 msgstr ""
 
-#: commandoptions.cpp:168
+#: commandoptions.cpp:169
 #, fuzzy, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
 msgstr "Огоҳлантиришни кўрсатилган вақтда режалаштириш."
 
-#: commandoptions.cpp:172
+#: commandoptions.cpp:173
 #, fuzzy, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr "Огоҳлантириш хабарини дарҳол кўрсатиш"
 
-#: commandoptions.cpp:175
+#: commandoptions.cpp:176
 #, fuzzy, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr "Огоҳлантириш хабарини дарҳол кўрсатиш"
 
-#: commandoptions.cpp:178
+#: commandoptions.cpp:179
 #, fuzzy, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
 msgstr "Огоҳлантириш хабарини дарҳол кўрсатиш"
 
-#: commandoptions.cpp:181
+#: commandoptions.cpp:182
 #, fuzzy, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
 msgstr "Огоҳлантириш хабарини дарҳол кўрсатиш"
 
-#: commandoptions.cpp:184
+#: commandoptions.cpp:185
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
 msgstr ""
 
-#: commandoptions.cpp:188
+#: commandoptions.cpp:189
 #, kde-format
 msgid "File to display"
 msgstr "Кўрсатиш учун файл"
 
-#: commandoptions.cpp:192
+#: commandoptions.cpp:193
 #, kde-format
 msgid "KMail identity to use as sender of email"
 msgstr "Жўнатувчи сифатида ишлатиш учун KMail шахсиятидан фойдаланиш"
 
-#: commandoptions.cpp:196
+#: commandoptions.cpp:197
 #, kde-format
 msgid "Interval between alarm repetitions"
 msgstr "Огоҳлантиришни такрорлаш вақти"
 
-#: commandoptions.cpp:200
+#: commandoptions.cpp:201
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
 msgstr "Огоҳлантиришни KOrganizer'да ҳодиса сифатида кўрсатиш"
 
-#: commandoptions.cpp:203
+#: commandoptions.cpp:204
 #, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
 msgstr ""
 
-#: commandoptions.cpp:208
+#: commandoptions.cpp:209
 #, fuzzy, kde-format
 #| msgid "List of scheduled alarms"
 msgid "Output list of scheduled alarms to stdout"
 msgstr "Режалаштирилган огоҳлантиришлар рўйхати"
 
-#: commandoptions.cpp:211
+#: commandoptions.cpp:212
 #, kde-format
 msgid "Repeat alarm at every login"
 msgstr "Огоҳлантиришни тизимга ҳар кирганда такрорлаш"
 
-#: commandoptions.cpp:214
+#: commandoptions.cpp:215
 #, kde-format
 msgid "Send an email to the given address (repeat as needed)"
 msgstr ""
 
-#: commandoptions.cpp:218
+#: commandoptions.cpp:219
 #, fuzzy, kde-format
 #| msgctxt "Action to create a new alarm"
 #| msgid "New alarm"
 msgid "Name of alarm"
 msgstr "Янги огоҳлантириш"
 
-#: commandoptions.cpp:222
+#: commandoptions.cpp:223
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgid "Display alarm message as a notification"
 msgstr "Огоҳлантириш хабарини дарҳол кўрсатиш"
 
-#: commandoptions.cpp:225
+#: commandoptions.cpp:226
 #, kde-format
 msgid "Audio file to play once"
 msgstr "Бир марта ўйнаш учун аудио файли"
 
-#: commandoptions.cpp:229
+#: commandoptions.cpp:230
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Такрорлаб ўйнаш учун аудио файли"
 
-#: commandoptions.cpp:233
+#: commandoptions.cpp:234
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr ""
 
-#: commandoptions.cpp:237
+#: commandoptions.cpp:238
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr ""
 
-#: commandoptions.cpp:241
+#: commandoptions.cpp:242
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr ""
 
-#: commandoptions.cpp:245
+#: commandoptions.cpp:246
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr ""
 
-#: commandoptions.cpp:250
+#: commandoptions.cpp:251
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Кўрсатилган хабарни ўқиб эшиттириш"
 
-#: commandoptions.cpp:254
+#: commandoptions.cpp:255
 #, kde-format
 msgid "Email subject line"
 msgstr "Хатнинг мавзуси"
 
-#: commandoptions.cpp:259
+#: commandoptions.cpp:260
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
 
-#: commandoptions.cpp:264
+#: commandoptions.cpp:265
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 
-#: commandoptions.cpp:268
+#: commandoptions.cpp:269
 #, kde-format
 msgid "Display system tray icon"
 msgstr ""
 
-#: commandoptions.cpp:271
+#: commandoptions.cpp:272
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr ""
 
-#: commandoptions.cpp:275
+#: commandoptions.cpp:276
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 
-#: commandoptions.cpp:279
+#: commandoptions.cpp:280
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "Аудио файлнинг товуши"
 
-#: commandoptions.cpp:290
+#: commandoptions.cpp:291
 #, kde-format
 msgid "Message text to display"
 msgstr "Кўрсатиш учун хабар матни"
 
-#: commandoptions.cpp:454
+#: commandoptions.cpp:455
 #, fuzzy, kde-kuit-format
 #| msgid "%1: invalid email address"
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
 msgstr "%1: хато электрон почта манзили"
 
-#: commandoptions.cpp:577 commandoptions.cpp:592 commandoptions.cpp:671
+#: commandoptions.cpp:578 commandoptions.cpp:593 commandoptions.cpp:672
 #, fuzzy, kde-kuit-format
 #| msgid "Invalid %1 parameter"
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
 msgstr "Хато %1 параметр"
 
-#: commandoptions.cpp:581
+#: commandoptions.cpp:582
 #, fuzzy, kde-kuit-format
 #| msgid "%1 incompatible with %2"
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "%1 %2 билан мос келмайди"
 
-#: commandoptions.cpp:603
+#: commandoptions.cpp:604
 #, fuzzy, kde-kuit-format
 #| msgid "%1 incompatible with %2"
 msgctxt "@info:shell"
@@ -766,14 +766,14 @@ msgid ""
 "longer than <icode>%3</icode> interval"
 msgstr "%1 %2 билан мос келмайди"
 
-#: commandoptions.cpp:784
+#: commandoptions.cpp:785
 #, fuzzy, kde-format
 #| msgid "%1 incompatible with %2"
 msgctxt "@info:shell"
 msgid ": option(s) only valid with an appropriate action option or message"
 msgstr "%1 %2 билан мос келмайди"
 
-#: commandoptions.cpp:805 commandoptions.cpp:822
+#: commandoptions.cpp:806 commandoptions.cpp:823
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -781,28 +781,28 @@ msgid ""
 "Use --help to get a list of available command line options.\n"
 msgstr ""
 
-#: commandoptions.cpp:850
+#: commandoptions.cpp:851
 #, fuzzy, kde-kuit-format
 #| msgid "%1 incompatible with %2"
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
 msgstr "%1 %2 билан мос келмайди"
 
-#: commandoptions.cpp:852
+#: commandoptions.cpp:853
 #, fuzzy, kde-kuit-format
 #| msgid "%1 incompatible with %2"
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
 msgstr "%1 %2 билан мос келмайди"
 
-#: commandoptions.cpp:857
+#: commandoptions.cpp:858
 #, fuzzy, kde-kuit-format
 #| msgid "Invalid %1 parameter"
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
 msgstr "Хато %1 параметр"
 
-#: commandoptions.cpp:862
+#: commandoptions.cpp:863
 #, fuzzy, kde-kuit-format
 #| msgid "%1 incompatible with %2"
 msgctxt "@info:shell"
@@ -906,7 +906,7 @@ msgid "Select the holiday region to use."
 msgstr "Огоҳлантиришни режалаштириш учун вақтни кўрсатинг."
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
-#: data/kalarmconfig.kcfg:93 kalarmcalendar/kaeventformatter.cpp:92
+#: data/kalarmconfig.kcfg:93 kalarmcalendar/kaeventformatter.cpp:93
 #, fuzzy, kde-format
 #| msgid "&Foreground color:"
 msgctxt "@label"
@@ -921,7 +921,7 @@ msgid "Default foreground color for alarm message windows."
 msgstr "Огоҳлантириш хабарининг орқа фон рангини танлаш."
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
-#: data/kalarmconfig.kcfg:98 kalarmcalendar/kaeventformatter.cpp:94
+#: data/kalarmconfig.kcfg:98 kalarmcalendar/kaeventformatter.cpp:95
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Background color"
@@ -1014,31 +1014,61 @@ msgid ""
 "Desktops for which the auto-hide in system tray option is not available."
 msgstr ""
 
-#. i18n: ectx: label, entry (AutoStart), group (General)
+#. i18n: ectx: label, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:132
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Start at login"
 msgstr "Тизимга &киришда автоматик бошлаш"
 
-#. i18n: ectx: whatsthis, entry (AutoStart), group (General)
+#. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-"should always be checked unless you intend to discontinue use of KAlarm.</p>"
+"should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
 
-#. i18n: ectx: label, entry (Base_NoAutoStart), group (General)
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
 #, fuzzy, kde-format
+#| msgid "Run Mode"
 msgctxt "@label"
-msgid "Suppress autostart at login"
-msgstr "Тизимга &киришда автоматик бошлаш"
+msgid "Run mode"
+msgstr "Бажариш усули"
+
+#. i18n: ectx: whatsthis, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:138
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Whether to run KAlarm automatically on login, manually only, or not at all."
+msgstr ""
+
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:140
+#, kde-format
+msgctxt "@option"
+msgid "Run automatically"
+msgstr ""
+
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:141
+#, kde-format
+msgctxt "@option"
+msgid "Run manually only"
+msgstr ""
+
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:142
+#, fuzzy, kde-format
+msgctxt "@option"
+msgid "Do not run"
+msgstr "Такрор&ланмасин"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
-#: data/kalarmconfig.kcfg:141
+#: data/kalarmconfig.kcfg:147
 #, fuzzy, kde-format
 #| msgid "&Default time"
 msgctxt "@label"
@@ -1046,7 +1076,7 @@ msgid "Default defer time interval"
 msgstr "&Андоза вақт"
 
 #. i18n: ectx: whatsthis, entry (DefaultDeferTime), group (General)
-#: data/kalarmconfig.kcfg:142
+#: data/kalarmconfig.kcfg:148
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1055,14 +1085,14 @@ msgid ""
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (AskResource), group (General)
-#: data/kalarmconfig.kcfg:146
+#: data/kalarmconfig.kcfg:152
 #, kde-format
 msgctxt "@label"
 msgid "Prompt for which calendar to store in"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (AskResource), group (General)
-#: data/kalarmconfig.kcfg:147
+#: data/kalarmconfig.kcfg:153
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1072,14 +1102,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_ModalMessages), group (General)
-#: data/kalarmconfig.kcfg:151
+#: data/kalarmconfig.kcfg:157
 #, kde-format
 msgctxt "@label"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (Base_ModalMessages), group (General)
-#: data/kalarmconfig.kcfg:152
+#: data/kalarmconfig.kcfg:158
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1091,14 +1121,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_MessageButtonDelay), group (General)
-#: data/kalarmconfig.kcfg:156
+#: data/kalarmconfig.kcfg:162
 #, kde-format
 msgctxt "@label"
 msgid "Delay before message window buttons are enabled"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (Base_MessageButtonDelay), group (General)
-#: data/kalarmconfig.kcfg:161
+#: data/kalarmconfig.kcfg:167
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1114,14 +1144,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (TooltipAlarmCount), group (General)
-#: data/kalarmconfig.kcfg:167
+#: data/kalarmconfig.kcfg:173
 #, kde-format
 msgctxt "@label"
 msgid "Number of alarms to show in system tray tooltip"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
-#: data/kalarmconfig.kcfg:172
+#: data/kalarmconfig.kcfg:178
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1134,14 +1164,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:178
+#: data/kalarmconfig.kcfg:184
 #, kde-format
 msgctxt "@label"
 msgid "Show alarm times in system tray tooltip"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:179 prefdlg.cpp:1950
+#: data/kalarmconfig.kcfg:185 prefdlg.cpp:1946
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1151,14 +1181,14 @@ msgstr ""
 "Огоҳлантиришлар рўйхатидаги муддати ўтган огоҳлантиришлар учун рангни танлаш."
 
 #. i18n: ectx: label, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:184
+#: data/kalarmconfig.kcfg:190
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Show time to alarms in system tray tooltip"
 msgstr "Огоҳлантири&шга қолган вақтни кўрсатиш"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:185 prefdlg.cpp:1956
+#: data/kalarmconfig.kcfg:191 prefdlg.cpp:1952
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1168,14 +1198,14 @@ msgstr ""
 "Огоҳлантиришлар рўйхатидаги ўчирилган огоҳлантиришлар учун рангни танлаш."
 
 #. i18n: ectx: label, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:190
+#: data/kalarmconfig.kcfg:196
 #, kde-format
 msgctxt "@label"
 msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:191 prefdlg.cpp:1967
+#: data/kalarmconfig.kcfg:197 prefdlg.cpp:1963
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1184,14 +1214,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:196
+#: data/kalarmconfig.kcfg:202
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Email client"
 msgstr "Электрон почта дастури:"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:197
+#: data/kalarmconfig.kcfg:203
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1202,28 +1232,28 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:199
+#: data/kalarmconfig.kcfg:205
 #, fuzzy, kde-format
 msgctxt "@option"
 msgid "Sendmail"
 msgstr "&Sendmail"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:200
+#: data/kalarmconfig.kcfg:206
 #, fuzzy, kde-format
 msgctxt "@option"
 msgid "KMail"
 msgstr "&KMail"
 
 #. i18n: ectx: label, entry (Base_EmailCopyToKMail), group (General)
-#: data/kalarmconfig.kcfg:205
+#: data/kalarmconfig.kcfg:211
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Whether to copy sent emails into KMail's Sent folder."
 msgstr "Жўнатилган хатлардан KMail %1 жилдига нусха олиш"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailCopyToKMail), group (General)
-#: data/kalarmconfig.kcfg:206
+#: data/kalarmconfig.kcfg:212
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1232,14 +1262,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailFrom), group (General)
-#: data/kalarmconfig.kcfg:210
+#: data/kalarmconfig.kcfg:216
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "'From' email address"
 msgstr "Электрон почтангиз"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailFrom), group (General)
-#: data/kalarmconfig.kcfg:211
+#: data/kalarmconfig.kcfg:217
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1250,14 +1280,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
-#: data/kalarmconfig.kcfg:215
+#: data/kalarmconfig.kcfg:221
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "'Bcc' email address"
 msgstr "Электрон почтангиз"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailBccAddress), group (General)
-#: data/kalarmconfig.kcfg:216
+#: data/kalarmconfig.kcfg:222
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1269,7 +1299,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
-#: data/kalarmconfig.kcfg:220
+#: data/kalarmconfig.kcfg:226
 #, fuzzy, kde-format
 #| msgid "Command Alarms"
 msgctxt "@label"
@@ -1277,7 +1307,7 @@ msgid "Terminal for command alarms"
 msgstr "Буйруқ орқали огоҳлантиришлар"
 
 #. i18n: ectx: whatsthis, entry (Base_CmdXTermCommand), group (General)
-#: data/kalarmconfig.kcfg:221
+#: data/kalarmconfig.kcfg:227
 #, fuzzy, kde-format
 #| msgid "Check to execute the command in a terminal window"
 msgctxt "@info:whatsthis"
@@ -1287,28 +1317,28 @@ msgid ""
 msgstr "Терминал ойнасида буйруқни ишга тушириш учун шу ерни белгиланг"
 
 #. i18n: ectx: label, entry (Base_StartOfDay), group (General)
-#: data/kalarmconfig.kcfg:224
+#: data/kalarmconfig.kcfg:230
 #, kde-format
 msgctxt "@label"
 msgid "Start of day for date-only alarms"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (Base_StartOfDay), group (General)
-#: data/kalarmconfig.kcfg:225
+#: data/kalarmconfig.kcfg:231
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The earliest time of day at which a date-only alarm will be triggered."
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_WorkDayStart), group (General)
-#: data/kalarmconfig.kcfg:230
+#: data/kalarmconfig.kcfg:236
 #, kde-format
 msgctxt "@label"
 msgid "Start time of working day"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayStart), group (General)
-#: data/kalarmconfig.kcfg:231
+#: data/kalarmconfig.kcfg:237
 #, fuzzy, kde-format
 #| msgid "Enter the name or path of the log file."
 msgctxt "@info:whatsthis"
@@ -1316,14 +1346,14 @@ msgid "The start time of the working day."
 msgstr "Лог файлини номини ёки йўлини киритинг."
 
 #. i18n: ectx: label, entry (Base_WorkDayEnd), group (General)
-#: data/kalarmconfig.kcfg:236
+#: data/kalarmconfig.kcfg:242
 #, kde-format
 msgctxt "@label"
 msgid "End time of working day"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayEnd), group (General)
-#: data/kalarmconfig.kcfg:237
+#: data/kalarmconfig.kcfg:243
 #, fuzzy, kde-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
@@ -1331,14 +1361,14 @@ msgid "The end time of the working day."
 msgstr "Огоҳлантириш намунаси номини киритиш"
 
 #. i18n: ectx: label, entry (Base_WorkDays), group (General)
-#: data/kalarmconfig.kcfg:242
+#: data/kalarmconfig.kcfg:248
 #, kde-format
 msgctxt "@label"
 msgid "Working days"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDays), group (General)
-#: data/kalarmconfig.kcfg:243
+#: data/kalarmconfig.kcfg:249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1347,14 +1377,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:248
+#: data/kalarmconfig.kcfg:254
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Disabled alarm color"
 msgstr "Ў&чирилган огоҳлантиришнинг ранги:"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:249 prefdlg.cpp:1989
+#: data/kalarmconfig.kcfg:255 prefdlg.cpp:1985
 #, fuzzy, kde-format
 #| msgid "Choose the text color in the alarm list for disabled alarms."
 msgctxt "@info:whatsthis"
@@ -1363,14 +1393,14 @@ msgstr ""
 "Огоҳлантиришлар рўйхатидаги ўчирилган огоҳлантиришлар учун рангни танлаш."
 
 #. i18n: ectx: label, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:254
+#: data/kalarmconfig.kcfg:260
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Archived alarm color"
 msgstr "&Муддати ўтган огоҳлантиришнинг ранги:"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:255 prefdlg.cpp:2002
+#: data/kalarmconfig.kcfg:261 prefdlg.cpp:1998
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
@@ -1378,14 +1408,14 @@ msgstr ""
 "Огоҳлантиришлар рўйхатидаги муддати ўтган огоҳлантиришлар учун рангни танлаш."
 
 #. i18n: ectx: label, entry (ArchivedKeepDays), group (General)
-#: data/kalarmconfig.kcfg:260
+#: data/kalarmconfig.kcfg:266
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Days to keep expired alarms"
 msgstr "Муддати ўтган огоҳлантиришни олиб ташлаш"
 
 #. i18n: ectx: whatsthis, entry (ArchivedKeepDays), group (General)
-#: data/kalarmconfig.kcfg:265
+#: data/kalarmconfig.kcfg:271
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1398,14 +1428,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (KOrgEventDuration), group (General)
-#: data/kalarmconfig.kcfg:271
+#: data/kalarmconfig.kcfg:277
 #, kde-format
 msgctxt "@label"
 msgid "KOrganizer event duration"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (KOrgEventDuration), group (General)
-#: data/kalarmconfig.kcfg:272
+#: data/kalarmconfig.kcfg:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1414,14 +1444,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (WakeFromSuspendAdvance), group (General)
-#: data/kalarmconfig.kcfg:276
+#: data/kalarmconfig.kcfg:282
 #, kde-format
 msgctxt "@label"
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (WakeFromSuspendAdvance), group (General)
-#: data/kalarmconfig.kcfg:277
+#: data/kalarmconfig.kcfg:283
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1431,7 +1461,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (DefaultDisplayMethod), group (Defaults)
-#: data/kalarmconfig.kcfg:290
+#: data/kalarmconfig.kcfg:296
 #, fuzzy, kde-format
 #| msgid "Beep when message is displayed"
 msgctxt "@label"
@@ -1439,7 +1469,7 @@ msgid "Alarm message display method"
 msgstr "Хабар кўрсатилганда овоз бериш"
 
 #. i18n: ectx: whatsthis, entry (DefaultDisplayMethod), group (Defaults)
-#: data/kalarmconfig.kcfg:291
+#: data/kalarmconfig.kcfg:297
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1449,14 +1479,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
-#: data/kalarmconfig.kcfg:299
+#: data/kalarmconfig.kcfg:305
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Cancel if late (minutes)"
 msgstr "Кеч бўлса, бекор қилиш"
 
 #. i18n: ectx: whatsthis, entry (DefaultLateCancel), group (Defaults)
-#: data/kalarmconfig.kcfg:300
+#: data/kalarmconfig.kcfg:306
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1465,28 +1495,28 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (DefaultAutoClose), group (Defaults)
-#: data/kalarmconfig.kcfg:305
+#: data/kalarmconfig.kcfg:311
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Auto-close window after late-cancellation time"
 msgstr "Кечикканда бекор қилгандан сўнг ойнани автоматик ёпиш вақти"
 
 #. i18n: ectx: whatsthis, entry (DefaultAutoClose), group (Defaults)
-#: data/kalarmconfig.kcfg:306
+#: data/kalarmconfig.kcfg:312
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:310 kalarmcalendar/kaeventformatter.cpp:106
+#: data/kalarmconfig.kcfg:316 kalarmcalendar/kaeventformatter.cpp:107
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Confirm acknowledgement"
 msgstr "Тасдиқлаш"
 
 #. i18n: ectx: whatsthis, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:311
+#: data/kalarmconfig.kcfg:317
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1495,7 +1525,7 @@ msgid ""
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (DefaultCopyToKOrganizer), group (Defaults)
-#: data/kalarmconfig.kcfg:315
+#: data/kalarmconfig.kcfg:321
 #, fuzzy, kde-format
 #| msgid "Show in KOrganizer"
 msgctxt "@label"
@@ -1503,56 +1533,56 @@ msgid "Show in KOrganizer"
 msgstr "KOrganizer'да кўрсатиш"
 
 #. i18n: ectx: whatsthis, entry (DefaultCopyToKOrganizer), group (Defaults)
-#: data/kalarmconfig.kcfg:316
+#: data/kalarmconfig.kcfg:322
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"show in KOrganizer\"."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
-#: data/kalarmconfig.kcfg:320
+#: data/kalarmconfig.kcfg:326
 #, fuzzy, kde-format
 msgctxt "@label Label for audio options"
 msgid "Sound"
 msgstr "Товуш"
 
 #. i18n: ectx: whatsthis, entry (Base_DefaultSoundType), group (Defaults)
-#: data/kalarmconfig.kcfg:321
+#: data/kalarmconfig.kcfg:327
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default sound type in the alarm edit dialog."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
-#: data/kalarmconfig.kcfg:325
+#: data/kalarmconfig.kcfg:331
 #, fuzzy, kde-format
 msgctxt "@option"
 msgid "Play File"
 msgstr "Ҳамма файллар"
 
 #. i18n: ectx: label, entry (DefaultSoundFile), group (Defaults)
-#: data/kalarmconfig.kcfg:331
+#: data/kalarmconfig.kcfg:337
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Sound file"
 msgstr "Товуш ф&айли:"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundFile), group (Defaults)
-#: data/kalarmconfig.kcfg:332
+#: data/kalarmconfig.kcfg:338
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default sound file path in the alarm edit dialog."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:335 kalarmcalendar/kaeventformatter.cpp:114
+#: data/kalarmconfig.kcfg:341 kalarmcalendar/kaeventformatter.cpp:115
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Sound volume"
 msgstr "Товушни мослаш"
 
 #. i18n: ectx: whatsthis, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:336
+#: data/kalarmconfig.kcfg:342
 #, fuzzy, no-c-format, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1561,42 +1591,42 @@ msgid ""
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (DefaultSoundRepeat), group (Defaults)
-#: data/kalarmconfig.kcfg:342
+#: data/kalarmconfig.kcfg:348
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Repeat sound file"
 msgstr "Такрорлаш учун то&вуш файли"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundRepeat), group (Defaults)
-#: data/kalarmconfig.kcfg:343
+#: data/kalarmconfig.kcfg:349
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for sound repetition."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (DefaultCmdScript), group (Defaults)
-#: data/kalarmconfig.kcfg:347
+#: data/kalarmconfig.kcfg:353
 #, kde-format
 msgctxt "@label"
 msgid "Enter script"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdScript), group (Defaults)
-#: data/kalarmconfig.kcfg:348
+#: data/kalarmconfig.kcfg:354
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for command script entry."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:352
+#: data/kalarmconfig.kcfg:358
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Command output"
 msgstr "Буй&руқ"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:353
+#: data/kalarmconfig.kcfg:359
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1605,21 +1635,21 @@ msgid ""
 msgstr "Огоҳлантириш хабарини дарҳол кўрсатиш"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:355
+#: data/kalarmconfig.kcfg:361
 #, fuzzy, kde-format
 msgctxt "@option"
 msgid "Discard Output"
 msgstr "Ў&чириш"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:356
+#: data/kalarmconfig.kcfg:362
 #, fuzzy, kde-format
 msgctxt "@option"
 msgid "Log To File"
 msgstr "&Файлга сақлаш"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:357
+#: data/kalarmconfig.kcfg:363
 #, fuzzy, kde-format
 #| msgid "Execute in terminal window"
 msgctxt "@option"
@@ -1627,21 +1657,21 @@ msgid "Execute in terminal window"
 msgstr "Терминал ойнасида ишга тушириш"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:362 kalarmcalendar/kaeventformatter.cpp:137
+#: data/kalarmconfig.kcfg:368 kalarmcalendar/kaeventformatter.cpp:138
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Log file"
 msgstr "&Файлга сақлаш"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:363
+#: data/kalarmconfig.kcfg:369
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default log file path for command alarms in the alarm edit dialog."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (DefaultEmailBcc), group (Defaults)
-#: data/kalarmconfig.kcfg:366
+#: data/kalarmconfig.kcfg:372
 #, fuzzy, kde-format
 #| msgid "The email to send"
 msgctxt "@label"
@@ -1649,7 +1679,7 @@ msgid "Copy email to self"
 msgstr "Жўнатиш учун электрон почта"
 
 #. i18n: ectx: whatsthis, entry (DefaultEmailBcc), group (Defaults)
-#: data/kalarmconfig.kcfg:367
+#: data/kalarmconfig.kcfg:373
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1657,7 +1687,7 @@ msgid ""
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:371
+#: data/kalarmconfig.kcfg:377
 #, fuzzy, kde-format
 #| msgid "Repeat"
 msgctxt "@label"
@@ -1665,7 +1695,7 @@ msgid "Recurrence period"
 msgstr "Қайтариш"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:372 prefdlg.cpp:1454
+#: data/kalarmconfig.kcfg:378 prefdlg.cpp:1450
 #, fuzzy, kde-format
 #| msgid "The default setting for \"%1\" in the alarm edit dialog."
 msgctxt "@info:whatsthis"
@@ -1673,7 +1703,7 @@ msgid "The default setting for the recurrence rule in the alarm edit dialog."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:374
+#: data/kalarmconfig.kcfg:380
 #, fuzzy, kde-format
 #| msgid "Repeat"
 msgctxt "@option"
@@ -1681,7 +1711,7 @@ msgid "No recurrence"
 msgstr "Қайтариш"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:375
+#: data/kalarmconfig.kcfg:381
 #, fuzzy, kde-format
 #| msgid "At login"
 msgctxt "@option"
@@ -1689,21 +1719,21 @@ msgid "At login"
 msgstr "Тизимга киришда"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:376
+#: data/kalarmconfig.kcfg:382
 #, fuzzy, kde-format
 msgctxt "@option"
 msgid "Hourly/minutely"
 msgstr "Ҳар соат/дақиқада"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:385 prefdlg.cpp:1461
+#: data/kalarmconfig.kcfg:391 prefdlg.cpp:1457
 #, kde-format
 msgctxt "@label"
 msgid "In non-leap years, repeat yearly February 29th alarms on:"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:386
+#: data/kalarmconfig.kcfg:392
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1714,42 +1744,42 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:388
+#: data/kalarmconfig.kcfg:394
 #, fuzzy, kde-format
 msgctxt "@option"
 msgid "February 28th"
 msgstr "2&8-чи февраль"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:389
+#: data/kalarmconfig.kcfg:395
 #, fuzzy, kde-format
 msgctxt "@option"
 msgid "March 1st"
 msgstr "&1-чи март"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:390
+#: data/kalarmconfig.kcfg:396
 #, fuzzy, kde-format
 msgctxt "@option"
 msgid "Do not repeat"
 msgstr "Такрор&ланмасин"
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
-#: data/kalarmconfig.kcfg:396
+#: data/kalarmconfig.kcfg:402
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Reminder units"
 msgstr "Эсга солиш"
 
 #. i18n: ectx: whatsthis, entry (DefaultReminderUnits), group (Defaults)
-#: data/kalarmconfig.kcfg:397
+#: data/kalarmconfig.kcfg:403
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default reminder time units in the alarm edit dialog."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
-#: data/kalarmconfig.kcfg:400
+#: data/kalarmconfig.kcfg:406
 #, fuzzy, kde-format
 #| msgid "Hours/Minutes"
 msgctxt "@option"
@@ -1757,28 +1787,28 @@ msgid "Hours/Minutes"
 msgstr "Соат/дақиқа"
 
 #. i18n: ectx: label, entry (DefaultPreAction), group (Defaults)
-#: data/kalarmconfig.kcfg:405
+#: data/kalarmconfig.kcfg:411
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action"
 msgstr "Огоҳлантиришдан олдинги амал:"
 
 #. i18n: ectx: whatsthis, entry (DefaultPreAction), group (Defaults)
-#: data/kalarmconfig.kcfg:406
+#: data/kalarmconfig.kcfg:412
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute before displaying alarms."
 msgstr ""
 
 #. i18n: ectx: label, entry (DefaultExecPreActionOnDeferral), group (Defaults)
-#: data/kalarmconfig.kcfg:409
+#: data/kalarmconfig.kcfg:415
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Execute pre-alarm action for deferred alarms"
 msgstr "Огоҳлантиришдан олдинги амал:"
 
 #. i18n: ectx: whatsthis, entry (DefaultExecPreActionOnDeferral), group (Defaults)
-#: data/kalarmconfig.kcfg:410
+#: data/kalarmconfig.kcfg:416
 #, fuzzy, kde-format
 #| msgid "The default setting for \"%1\" in the alarm edit dialog."
 msgctxt "@info:whatsthis"
@@ -1788,14 +1818,14 @@ msgid ""
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (DefaultCancelOnPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:414
+#: data/kalarmconfig.kcfg:420
 #, kde-format
 msgctxt "@label"
 msgid "Cancel alarm on pre-alarm action error"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (DefaultCancelOnPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:415
+#: data/kalarmconfig.kcfg:421
 #, fuzzy, kde-format
 #| msgid "The default setting for \"%1\" in the alarm edit dialog."
 msgctxt "@info:whatsthis"
@@ -1805,14 +1835,14 @@ msgid ""
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (DefaultDontShowPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:419
+#: data/kalarmconfig.kcfg:425
 #, kde-format
 msgctxt "@label"
 msgid "Do not notify pre-alarm action errors"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (DefaultDontShowPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:420
+#: data/kalarmconfig.kcfg:426
 #, fuzzy, kde-format
 #| msgid "The default setting for \"%1\" in the alarm edit dialog."
 msgctxt "@info:whatsthis"
@@ -1822,56 +1852,56 @@ msgid ""
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
 #. i18n: ectx: label, entry (DefaultPostAction), group (Defaults)
-#: data/kalarmconfig.kcfg:424
+#: data/kalarmconfig.kcfg:430
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Post-alarm action"
 msgstr "Огоҳлантиришдан кейинги амал:"
 
 #. i18n: ectx: whatsthis, entry (DefaultPostAction), group (Defaults)
-#: data/kalarmconfig.kcfg:425
+#: data/kalarmconfig.kcfg:431
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute after alarm message windows are closed."
 msgstr "Огоҳлантириш хабарининг орқа фон рангини танлаш."
 
 #. i18n: ectx: label, entry (Base_QuitWarn), group (Notification Messages)
-#: data/kalarmconfig.kcfg:431
+#: data/kalarmconfig.kcfg:437
 #, kde-format
 msgctxt "@label"
 msgid "Warn before quitting"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (Base_QuitWarn), group (Notification Messages)
-#: data/kalarmconfig.kcfg:432
+#: data/kalarmconfig.kcfg:438
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Whether to suppress a warning prompt before quitting KAlarm."
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
-#: data/kalarmconfig.kcfg:436
+#: data/kalarmconfig.kcfg:442
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Confirm alarm deletions"
 msgstr "Огоҳлантиришни ўчиришда та&сдиқлаш"
 
 #. i18n: ectx: whatsthis, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
-#: data/kalarmconfig.kcfg:437 prefdlg.cpp:503
+#: data/kalarmconfig.kcfg:443 prefdlg.cpp:503
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation each time you delete an alarm."
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailQueuedNotify), group (Notification Messages)
-#: data/kalarmconfig.kcfg:441
+#: data/kalarmconfig.kcfg:447
 #, kde-format
 msgctxt "@label"
 msgid "Notify when remote emails are queued"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (Base_EmailQueuedNotify), group (Notification Messages)
-#: data/kalarmconfig.kcfg:442 prefdlg.cpp:1172
+#: data/kalarmconfig.kcfg:448 prefdlg.cpp:1168
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2016,7 +2046,7 @@ msgctxt "@info"
 msgid "Cannot defer reminder past the main alarm time (%1)"
 msgstr ""
 
-#: displaycalendar.cpp:127
+#: displaycalendar.cpp:128
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error loading calendar:\n"
@@ -2033,7 +2063,7 @@ msgstr ""
 "\n"
 "Илтимос файлни созланг ёки олиб ташланг."
 
-#: displaycalendar.cpp:171
+#: displaycalendar.cpp:172
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Failed to save calendar to\n"
@@ -2044,94 +2074,94 @@ msgstr ""
 "Календарни сақлаб бўлмади\n"
 "'%1'"
 
-#: editdlg.cpp:79
+#: editdlg.cpp:80
 #, fuzzy, kde-format
 #| msgid "Repeat"
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
 msgstr "Қайтариш"
 
-#: editdlg.cpp:86
+#: editdlg.cpp:87
 #, fuzzy, kde-format
 #| msgid "Show in KOrganizer"
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
 msgstr "KOrganizer'да кўрсатиш"
 
-#: editdlg.cpp:182
+#: editdlg.cpp:183
 #, fuzzy, kde-format
 #| msgid "Alarm Templates"
 msgctxt "@title:window"
 msgid "Alarm Template [read-only]"
 msgstr "Огоҳлантириш намуналари"
 
-#: editdlg.cpp:183
+#: editdlg.cpp:184
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Archived Alarm [read-only]"
 msgstr "KAlarm'ни активлаштириш"
 
-#: editdlg.cpp:184
+#: editdlg.cpp:185
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "KAlarm'ни активлаштириш"
 
-#: editdlg.cpp:195
+#: editdlg.cpp:196
 #, fuzzy, kde-format
 #| msgid "Schedule the alarm at the specified time."
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "Огоҳлантиришни кўрсатилган вақтда режалаштириш."
 
-#: editdlg.cpp:198
+#: editdlg.cpp:199
 #, fuzzy, kde-format
 #| msgid "Load Template..."
 msgctxt "@action:button"
 msgid "Load Template..."
 msgstr "Намунани юклаш..."
 
-#: editdlg.cpp:200
+#: editdlg.cpp:201
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
 msgstr "Огоҳлантиришни режалаштириш учун вақтни кўрсатинг."
 
-#: editdlg.cpp:204
+#: editdlg.cpp:205
 #, kde-format
 msgctxt "@action:button"
 msgid "Try"
 msgstr ""
 
-#: editdlg.cpp:214
+#: editdlg.cpp:215
 #, fuzzy, kde-format
 #| msgid "&Alarm"
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "&Огоҳлантириш"
 
-#: editdlg.cpp:244
+#: editdlg.cpp:245
 #, fuzzy, kde-format
 #| msgid "Template name:"
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "Намуна номи:"
 
-#: editdlg.cpp:251
+#: editdlg.cpp:252
 #, fuzzy, kde-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Огоҳлантириш намунаси номини киритиш"
 
-#: editdlg.cpp:257
+#: editdlg.cpp:258
 #, fuzzy, kde-format
 #| msgid "Action"
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Амал"
 
-#: editdlg.cpp:266
+#: editdlg.cpp:267
 #, fuzzy, kde-format
 #| msgid "Delete Alarm"
 #| msgid_plural "Delete Alarms"
@@ -2139,40 +2169,40 @@ msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "Огоҳлантиришни ўчириш"
 
-#: editdlg.cpp:269
+#: editdlg.cpp:270
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr ""
 
-#: editdlg.cpp:274
+#: editdlg.cpp:275
 #, fuzzy, kde-format
 #| msgid "C&hange..."
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "Ўз&гартириш"
 
-#: editdlg.cpp:276
+#: editdlg.cpp:277
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr ""
 
-#: editdlg.cpp:287 editdlg.cpp:348
+#: editdlg.cpp:288 editdlg.cpp:349
 #, fuzzy, kde-format
 #| msgid "Time"
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Вақт"
 
-#: editdlg.cpp:294
+#: editdlg.cpp:295
 #, fuzzy, kde-format
 #| msgid "&Default time"
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "&Андоза вақт"
 
-#: editdlg.cpp:296
+#: editdlg.cpp:297
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2180,20 +2210,20 @@ msgid ""
 "default start time will be used."
 msgstr ""
 
-#: editdlg.cpp:304
+#: editdlg.cpp:305
 #, fuzzy, kde-format
 #| msgid "Time:"
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Вақт:"
 
-#: editdlg.cpp:306
+#: editdlg.cpp:307
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr ""
 
-#: editdlg.cpp:312
+#: editdlg.cpp:313
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
@@ -2202,13 +2232,13 @@ msgid ""
 "%1</para>"
 msgstr "Огоҳлантириш намунаси номини киритиш"
 
-#: editdlg.cpp:319
+#: editdlg.cpp:320
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Сана:"
 
-#: editdlg.cpp:321
+#: editdlg.cpp:322
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
@@ -2217,7 +2247,7 @@ msgid ""
 "template."
 msgstr "Огоҳлантириш намунаси номини киритиш"
 
-#: editdlg.cpp:331
+#: editdlg.cpp:332
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2227,41 +2257,41 @@ msgstr ""
 "Жорий вақтдан бошлаб белгиланган тафовутли вақт билан огоҳлантиришни "
 "режалаштиринг."
 
-#: editdlg.cpp:387
+#: editdlg.cpp:388
 #, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr ""
 
-#: editdlg.cpp:389
+#: editdlg.cpp:390
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
 
-#: editdlg.cpp:406
+#: editdlg.cpp:407
 #, fuzzy, kde-format
 #| msgid "Check to copy the alarm into KOrganizer's calendar"
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "Огоҳлантиришни KOrganizer календарига кўчириш учун шу ерни белгиланг"
 
-#: editdlg.cpp:1008
+#: editdlg.cpp:1009
 #, fuzzy, kde-format
 #| msgid "You must enter a name for the alarm template"
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Огоҳлантириш намунаси номини киритишингиз шарт"
 
-#: editdlg.cpp:1012
+#: editdlg.cpp:1013
 #, fuzzy, kde-format
 #| msgid "Template name is already in use"
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Намуна номи аллақачон ишлатилмоқда"
 
-#: editdlg.cpp:1035
+#: editdlg.cpp:1036
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2270,7 +2300,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1068
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2278,7 +2308,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1071
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2286,20 +2316,20 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1093
+#: editdlg.cpp:1094
 #, fuzzy, kde-format
 #| msgid "Alarm date has already expired"
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Огоҳлантириш санаси аллақачон ўтиб кетган"
 
-#: editdlg.cpp:1098
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr ""
 
-#: editdlg.cpp:1127
+#: editdlg.cpp:1128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2307,7 +2337,7 @@ msgid ""
 "%1</interface> is checked."
 msgstr ""
 
-#: editdlg.cpp:1142
+#: editdlg.cpp:1143
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2315,7 +2345,7 @@ msgid ""
 "recurrence interval minus any reminder period"
 msgstr ""
 
-#: editdlg.cpp:1149
+#: editdlg.cpp:1150
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2323,125 +2353,125 @@ msgid ""
 "or weeks for a date-only alarm"
 msgstr ""
 
-#: editdlg.cpp:1180
+#: editdlg.cpp:1181
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Огоҳлантириш намунаси номини киритишингиз шарт"
 
-#: editdlg.cpp:1261
+#: editdlg.cpp:1262
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr ""
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1263
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr ""
 
-#: editdlg.cpp:1267
+#: editdlg.cpp:1268
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr ""
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1269
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr ""
 
-#: editdlgtypes.cpp:74
+#: editdlgtypes.cpp:75
 #, fuzzy, kde-format
 #| msgid "Choose Log File"
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Лог файлини танланг"
 
-#: editdlgtypes.cpp:87
+#: editdlgtypes.cpp:88
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "Огоҳлантиришларни кўрсатиш"
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:89
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "Огоҳлантириш рўйхати"
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:90
 #, fuzzy, kde-format
 #| msgid "Action"
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "Амал"
 
-#: editdlgtypes.cpp:90
+#: editdlgtypes.cpp:91
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Тасдиқлаш"
 
-#: editdlgtypes.cpp:126
+#: editdlgtypes.cpp:127
 #, fuzzy, kde-format
 #| msgid "New Alarm Template"
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Янги огоҳлантириш намунаси"
 
-#: editdlgtypes.cpp:126
+#: editdlgtypes.cpp:127
 #, fuzzy, kde-format
 #| msgid "Edit Alarm Template"
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Огоҳлантириш намунасини таҳрирлаш"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:128
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Огоҳлантиришларни кўрсатиш"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:128
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Огоҳлантиришларни кўрсатиш"
 
-#: editdlgtypes.cpp:140
+#: editdlgtypes.cpp:141
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Огоҳлантиришларни кўрсатиш"
 
-#: editdlgtypes.cpp:144
+#: editdlgtypes.cpp:145
 #, fuzzy, kde-format
 #| msgid "The alarm message"
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Огоҳлантириш хабари"
 
-#: editdlgtypes.cpp:145
+#: editdlgtypes.cpp:146
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr ""
 
-#: editdlgtypes.cpp:146
+#: editdlgtypes.cpp:147
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "Буй&руқ"
 
-#: editdlgtypes.cpp:166
+#: editdlgtypes.cpp:167
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2452,34 +2482,34 @@ msgid ""
 "display the output from a command.</item></list></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:181
+#: editdlgtypes.cpp:182
 #, fuzzy, kde-format
 #| msgid "Enter the text of the alarm message. It may be multi-line."
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Огоҳлантириш хабар матнини киритинг. Бу бир неча қатор бўлиши мумкин."
 
-#: editdlgtypes.cpp:194
+#: editdlgtypes.cpp:195
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "Кўрсатиш учун URL , матн ёки расм файлини кўрсатинг."
 
-#: editdlgtypes.cpp:201 editdlgtypes.cpp:890 sounddlg.cpp:183
+#: editdlgtypes.cpp:202 editdlgtypes.cpp:891 sounddlg.cpp:184
 #, fuzzy, kde-format
 #| msgid "Choose a file"
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Файлни танлаш"
 
-#: editdlgtypes.cpp:202
+#: editdlgtypes.cpp:203
 #, fuzzy, kde-format
 #| msgid "Select a text or image file to display."
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Кўрсатиш учун матн ёки расм файлини танланг."
 
-#: editdlgtypes.cpp:246
+#: editdlgtypes.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2487,7 +2517,7 @@ msgid ""
 "system."
 msgstr ""
 
-#: editdlgtypes.cpp:273
+#: editdlgtypes.cpp:274
 #, fuzzy, kde-format
 #| msgid "Check to display a reminder in advance of the birthday."
 msgctxt "@info:whatsthis"
@@ -2496,7 +2526,7 @@ msgid ""
 "alarm time(s)."
 msgstr "Туғилган кундан олдин эслатиш учун шу ерни белгиланг."
 
-#: editdlgtypes.cpp:274
+#: editdlgtypes.cpp:275
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2504,7 +2534,7 @@ msgid ""
 "reminder alarm.</para><para>%1</para>"
 msgstr "Огоҳлантиришни такрорлаш учун охириги кунни киритинг"
 
-#: editdlgtypes.cpp:275
+#: editdlgtypes.cpp:276
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2512,157 +2542,157 @@ msgid ""
 "alarm"
 msgstr ""
 
-#: editdlgtypes.cpp:285
+#: editdlgtypes.cpp:286
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr ""
 
-#: editdlgtypes.cpp:294
+#: editdlgtypes.cpp:295
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Огоҳлантириш хабарини дарҳол кўрсатиш"
 
-#: editdlgtypes.cpp:676
+#: editdlgtypes.cpp:677
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Огоҳлантириш хабарини дарҳол кўрсатиш"
 
-#: editdlgtypes.cpp:685
+#: editdlgtypes.cpp:686
 #, fuzzy, kde-format
 #| msgid "Display the file now"
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Файлни дарҳол кўрсатиш"
 
-#: editdlgtypes.cpp:695
+#: editdlgtypes.cpp:696
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Огоҳлантириш хабарини дарҳол кўрсатиш"
 
-#: editdlgtypes.cpp:727
+#: editdlgtypes.cpp:728
 #, fuzzy, kde-format
 #| msgid "Choose Text or Image File to Display"
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Кўрсатиш учун расм ёки матн файлини танланг"
 
-#: editdlgtypes.cpp:805
+#: editdlgtypes.cpp:806
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr ""
 
-#: editdlgtypes.cpp:806
+#: editdlgtypes.cpp:807
 #, fuzzy, kde-format
 #| msgid "Execute in terminal window"
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "Терминал ойнасида ишга тушириш"
 
-#: editdlgtypes.cpp:807
+#: editdlgtypes.cpp:808
 #, fuzzy, kde-format
 #| msgid "Execute in terminal window"
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "Терминал ойнасида ишга тушириш"
 
-#: editdlgtypes.cpp:837
+#: editdlgtypes.cpp:838
 #, fuzzy, kde-format
 #| msgid "New Alarm Template"
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Янги огоҳлантириш намунаси"
 
-#: editdlgtypes.cpp:837
+#: editdlgtypes.cpp:838
 #, fuzzy, kde-format
 #| msgid "Edit Alarm Template"
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Огоҳлантириш намунасини таҳрирлаш"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:839
 #, fuzzy, kde-format
 #| msgid "Command Alarms"
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Буйруқ орқали огоҳлантиришлар"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:839
 #, fuzzy, kde-format
 #| msgid "Command Alarms"
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Буйруқ орқали огоҳлантиришлар"
 
-#: editdlgtypes.cpp:846
+#: editdlgtypes.cpp:847
 #, fuzzy, kde-format
 #| msgid "Execute the specified command now"
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Кўрсатилган буйруқни дарҳол ишга тушириш"
 
-#: editdlgtypes.cpp:847
+#: editdlgtypes.cpp:848
 #, fuzzy, kde-format
 #| msgid "Execute the specified command now"
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Кўрсатилган буйруқни дарҳол ишга тушириш"
 
-#: editdlgtypes.cpp:854 specialactions.cpp:182
+#: editdlgtypes.cpp:855 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr ""
 
-#: editdlgtypes.cpp:855
+#: editdlgtypes.cpp:856
 #, fuzzy, kde-format
 #| msgid "The default setting for \"%1\" in the alarm edit dialog."
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
-#: editdlgtypes.cpp:861
+#: editdlgtypes.cpp:862
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Буй&руқ"
 
-#: editdlgtypes.cpp:869
+#: editdlgtypes.cpp:870
 #, fuzzy, kde-format
 #| msgid "Check to execute the command in a terminal window"
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "Терминал ойнасида буйруқни ишга тушириш учун шу ерни белгиланг"
 
-#: editdlgtypes.cpp:882
+#: editdlgtypes.cpp:883
 #, fuzzy, kde-format
 #| msgid "Enter the name or path of the log file."
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Лог файлини номини ёки йўлини киритинг."
 
-#: editdlgtypes.cpp:891
+#: editdlgtypes.cpp:892
 #, fuzzy, kde-format
 #| msgid "Select a log file."
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Лог файлини танлаш."
 
-#: editdlgtypes.cpp:894
+#: editdlgtypes.cpp:895
 #, fuzzy, kde-format
 #| msgid "Lo&g to file"
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "&Файлга сақлаш"
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:896
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2670,26 +2700,26 @@ msgid ""
 "to any existing contents of the file."
 msgstr ""
 
-#: editdlgtypes.cpp:902
+#: editdlgtypes.cpp:903
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Ў&чириш"
 
-#: editdlgtypes.cpp:903
+#: editdlgtypes.cpp:904
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Буй&руқ"
 
-#: editdlgtypes.cpp:1065
+#: editdlgtypes.cpp:1066
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Log file must be the name or path of a local file, with write permission."
 msgstr ""
 
-#: editdlgtypes.cpp:1075
+#: editdlgtypes.cpp:1076
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -2702,7 +2732,7 @@ msgstr ""
 "%1\n"
 "Ўзгаришларни сақлашга ишончингиз комилми?"
 
-#: editdlgtypes.cpp:1095
+#: editdlgtypes.cpp:1096
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Command executed:\n"
@@ -2713,55 +2743,55 @@ msgstr ""
 "Бажарилган буйруқ:\n"
 "%1"
 
-#: editdlgtypes.cpp:1129
+#: editdlgtypes.cpp:1130
 #, fuzzy, kde-format
 #| msgid "The email to send"
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "Жўнатиш учун электрон почта"
 
-#: editdlgtypes.cpp:1166
+#: editdlgtypes.cpp:1167
 #, fuzzy, kde-format
 #| msgid "New Alarm Template"
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "Янги огоҳлантириш намунаси"
 
-#: editdlgtypes.cpp:1166
+#: editdlgtypes.cpp:1167
 #, fuzzy, kde-format
 #| msgid "Edit Alarm Template"
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Огоҳлантириш намунасини таҳрирлаш"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1168
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "Электрон почта орқали огоҳлантиришлар"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1168
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Электрон почта орқали огоҳлантиришлар"
 
-#: editdlgtypes.cpp:1175
+#: editdlgtypes.cpp:1176
 #, fuzzy, kde-format
 #| msgid "Send the email to the specified addressees now"
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Кўрсатилган манзилларга хатни дарҳол жўнатиш"
 
-#: editdlgtypes.cpp:1176
+#: editdlgtypes.cpp:1177
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "&Sendmail"
 
-#: editdlgtypes.cpp:1187
+#: editdlgtypes.cpp:1188
 #, fuzzy, kde-format
 #| msgctxt "'From' email address"
 #| msgid "From:"
@@ -2769,7 +2799,7 @@ msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "Кимдан:"
 
-#: editdlgtypes.cpp:1193
+#: editdlgtypes.cpp:1194
 #, fuzzy, kde-format
 #| msgid ""
 #| "Your email address, used to identify you as the sender when sending email "
@@ -2782,7 +2812,7 @@ msgstr ""
 "Огоҳлантириш хати жўнатилганда, жўнатувчи сифатида ишлатиладиган электрон "
 "почта."
 
-#: editdlgtypes.cpp:1199
+#: editdlgtypes.cpp:1200
 #, fuzzy, kde-format
 #| msgctxt "Email addressee"
 #| msgid "To:"
@@ -2790,7 +2820,7 @@ msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "Кимга:"
 
-#: editdlgtypes.cpp:1204
+#: editdlgtypes.cpp:1205
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2798,21 +2828,21 @@ msgid ""
 "commas or semicolons."
 msgstr ""
 
-#: editdlgtypes.cpp:1215
+#: editdlgtypes.cpp:1216
 #, fuzzy, kde-format
 #| msgid "Open address book"
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Манзиллар дафтарини очиш"
 
-#: editdlgtypes.cpp:1216
+#: editdlgtypes.cpp:1217
 #, fuzzy, kde-format
 #| msgid "Select email addresses from your address book."
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Манзиллар дафтаридан электрон почталарни танлаш."
 
-#: editdlgtypes.cpp:1223
+#: editdlgtypes.cpp:1224
 #, fuzzy, kde-format
 #| msgctxt "Email subject"
 #| msgid "Subject:"
@@ -2820,89 +2850,89 @@ msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Мавзу:"
 
-#: editdlgtypes.cpp:1229
+#: editdlgtypes.cpp:1230
 #, fuzzy, kde-format
 #| msgid "Enter the email subject."
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Электрон почта мавзусини киритиш."
 
-#: editdlgtypes.cpp:1235
+#: editdlgtypes.cpp:1236
 #, fuzzy, kde-format
 #| msgid "Enter the email message."
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Электрон почта хабарини киритинг."
 
-#: editdlgtypes.cpp:1243
+#: editdlgtypes.cpp:1244
 #, fuzzy, kde-format
 #| msgid "Attachment&s:"
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "&Иловалар:"
 
-#: editdlgtypes.cpp:1252
+#: editdlgtypes.cpp:1253
 #, fuzzy, kde-format
 #| msgid "Files to send as attachments to the email."
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Хатга илова қилинадиган файллар."
 
-#: editdlgtypes.cpp:1256 resourceselector.cpp:76
+#: editdlgtypes.cpp:1257 resourceselector.cpp:76
 #, fuzzy, kde-format
 #| msgid "Add..."
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Қўшиш"
 
-#: editdlgtypes.cpp:1258
+#: editdlgtypes.cpp:1259
 #, fuzzy, kde-format
 #| msgid "Add an attachment to the email."
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Хатга илова қўшиш."
 
-#: editdlgtypes.cpp:1261 resourceselector.cpp:78
+#: editdlgtypes.cpp:1262 resourceselector.cpp:78
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "&Олиб ташлаш"
 
-#: editdlgtypes.cpp:1263
+#: editdlgtypes.cpp:1264
 #, fuzzy, kde-format
 #| msgid "Remove the highlighted attachment from the email."
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Танланган иловани хатдан олиб ташлаш."
 
-#: editdlgtypes.cpp:1268
+#: editdlgtypes.cpp:1269
 #, fuzzy, kde-format
 #| msgid "If checked, the alarm will send an email."
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "Белгиланса, огоҳлантириш электрон почта жўнатади."
 
-#: editdlgtypes.cpp:1450
+#: editdlgtypes.cpp:1451
 #, fuzzy, kde-kuit-format
 #| msgid "%1: invalid email address"
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "%1: хато электрон почта манзили"
 
-#: editdlgtypes.cpp:1457
+#: editdlgtypes.cpp:1458
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Электрон почтангиз"
 
-#: editdlgtypes.cpp:1474
+#: editdlgtypes.cpp:1475
 #, fuzzy, kde-kuit-format
 #| msgid "Invalid calendar file name: %1"
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "Календар файлнинг номи хато: %1"
 
-#: editdlgtypes.cpp:1478
+#: editdlgtypes.cpp:1479
 #, fuzzy, kde-format
 #| msgid ""
 #| "Do you really want to send the email now to the specified recipient(s)?"
@@ -2910,21 +2940,21 @@ msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "Ростдан ҳам кўрсатилган қабул қилувчи(лар)га хат жўнатишни истайсизми?"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1480
 #, fuzzy, kde-format
 #| msgid "Confirm Email"
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Хатни тасдиқлаш"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1480
 #, fuzzy, kde-format
 #| msgid "&Send"
 msgctxt "@action:button"
 msgid "Send"
 msgstr "&Жўнатиш"
 
-#: editdlgtypes.cpp:1505
+#: editdlgtypes.cpp:1506
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Email sent to:\n"
@@ -2935,7 +2965,7 @@ msgstr ""
 "Хат жўнатилди:\n"
 "%1%2"
 
-#: editdlgtypes.cpp:1508
+#: editdlgtypes.cpp:1509
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Email sent to:\n"
@@ -2946,81 +2976,81 @@ msgstr ""
 "Хат жўнатилди:\n"
 "%1%2"
 
-#: editdlgtypes.cpp:1537
+#: editdlgtypes.cpp:1538
 #, fuzzy, kde-format
 #| msgid "Choose File to Attach"
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Илова қилиш учун файлни танлаш"
 
-#: editdlgtypes.cpp:1620
+#: editdlgtypes.cpp:1621
 #, fuzzy, kde-format
 #| msgid "New Alarm Template"
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Янги огоҳлантириш намунаси"
 
-#: editdlgtypes.cpp:1620
+#: editdlgtypes.cpp:1621
 #, fuzzy, kde-format
 #| msgid "Edit Alarm Template"
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Огоҳлантириш намунасини таҳрирлаш"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1622
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Электрон почта орқали огоҳлантиришлар"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1622
 #, fuzzy, kde-format
 #| msgid "Edit Alarm"
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Огоҳлантиришни таҳрирлаш"
 
-#: editdlgtypes.cpp:1629
+#: editdlgtypes.cpp:1630
 #, fuzzy, kde-format
 #| msgid "Display the file now"
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Файлни дарҳол кўрсатиш"
 
-#: editdlgtypes.cpp:1630
+#: editdlgtypes.cpp:1631
 #, fuzzy, kde-format
 #| msgid "Display the file now"
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Файлни дарҳол кўрсатиш"
 
-#: editdlgtypes.cpp:1632
+#: editdlgtypes.cpp:1633
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
 msgstr "Огоҳлантириш кўрсатилганда ўйналадиган товуш файлини мослаш."
 
-#: editdlgtypes.cpp:1844
+#: editdlgtypes.cpp:1845
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr ""
 
-#: editdlgtypes.cpp:1850
+#: editdlgtypes.cpp:1851
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Ишга тушириш учун шелл буйруғини киритинг."
 
-#: editdlgtypes.cpp:1855
+#: editdlgtypes.cpp:1856
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Ишга тушириш учун шелл буйруғини киритинг."
 
-#: editdlgtypes.cpp:1917
+#: editdlgtypes.cpp:1918
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3028,13 +3058,13 @@ msgid ""
 "icode></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:1922
+#: editdlgtypes.cpp:1923
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
 msgstr "Ишга тушириш учун шелл буйруғини киритинг."
 
-#: eventlistview.cpp:33
+#: eventlistview.cpp:34
 #, fuzzy, kde-format
 #| msgid "List of scheduled alarms"
 msgctxt "@info:whatsthis"
@@ -3042,34 +3072,34 @@ msgid "List of scheduled alarms"
 msgstr "Режалаштирилган огоҳлантиришлар рўйхати"
 
 #. i18n: ectx: property (title), widget (QGroupBox, alarmTypeGroupBox)
-#: find.cpp:102 resources/singlefileresourceconfigdialog.ui:78
+#: find.cpp:103 resources/singlefileresourceconfigdialog.ui:78
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@title:group"
 msgid "Alarm Type"
 msgstr "Огоҳлантириш тури"
 
-#: find.cpp:108
+#: find.cpp:109
 #, fuzzy, kde-format
 #| msgid "Acti&ve"
 msgctxt "@option:check Alarm type"
 msgid "Active"
 msgstr "Акти&в"
 
-#: find.cpp:109
+#: find.cpp:110
 #, fuzzy, kde-format
 #| msgid "Check to include active alarms in the search."
 msgctxt "@info:whatsthis"
 msgid "Check to include active alarms in the search."
 msgstr "Актив огоҳлантиришларда ҳам қидириш учун шу ерни белгиланг."
 
-#: find.cpp:112
+#: find.cpp:113
 #, fuzzy, kde-format
 msgctxt "@option:check Alarm type"
 msgid "Archived"
 msgstr "Акти&в"
 
-#: find.cpp:113
+#: find.cpp:114
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3077,82 +3107,82 @@ msgid ""
 "available if archived alarms are currently being displayed."
 msgstr ""
 
-#: find.cpp:121
+#: find.cpp:122
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "@option:check Alarm action = text display"
 msgid "Text"
 msgstr "Матн"
 
-#: find.cpp:122
+#: find.cpp:123
 #, fuzzy, kde-format
 #| msgid "Check to include active alarms in the search."
 msgctxt "@info:whatsthis"
 msgid "Check to include text message alarms in the search."
 msgstr "Актив огоҳлантиришларда ҳам қидириш учун шу ерни белгиланг."
 
-#: find.cpp:125
+#: find.cpp:126
 #, fuzzy, kde-format
 msgctxt "@option:check Alarm action = file display"
 msgid "File"
 msgstr "Фай&л"
 
-#: find.cpp:126
+#: find.cpp:127
 #, fuzzy, kde-format
 #| msgid "Check to include active alarms in the search."
 msgctxt "@info:whatsthis"
 msgid "Check to include file alarms in the search."
 msgstr "Актив огоҳлантиришларда ҳам қидириш учун шу ерни белгиланг."
 
-#: find.cpp:129
+#: find.cpp:130
 #, fuzzy, kde-format
 #| msgid "Co&mmand"
 msgctxt "@option:check Alarm action"
 msgid "Command"
 msgstr "Буй&руқ"
 
-#: find.cpp:130
+#: find.cpp:131
 #, fuzzy, kde-format
 #| msgid "Check to include active alarms in the search."
 msgctxt "@info:whatsthis"
 msgid "Check to include command alarms in the search."
 msgstr "Актив огоҳлантиришларда ҳам қидириш учун шу ерни белгиланг."
 
-#: find.cpp:133
+#: find.cpp:134
 #, fuzzy, kde-format
 #| msgid "Email"
 msgctxt "@option:check Alarm action"
 msgid "Email"
 msgstr "Электрон почта"
 
-#: find.cpp:134
+#: find.cpp:135
 #, fuzzy, kde-format
 #| msgid "Check to include active alarms in the search."
 msgctxt "@info:whatsthis"
 msgid "Check to include email alarms in the search."
 msgstr "Актив огоҳлантиришларда ҳам қидириш учун шу ерни белгиланг."
 
-#: find.cpp:137
+#: find.cpp:138
 #, kde-format
 msgctxt "@option:check Alarm action"
 msgid "Audio"
 msgstr ""
 
-#: find.cpp:138
+#: find.cpp:139
 #, fuzzy, kde-format
 #| msgid "Check to include active alarms in the search."
 msgctxt "@info:whatsthis"
 msgid "Check to include audio alarms in the search."
 msgstr "Актив огоҳлантиришларда ҳам қидириш учун шу ерни белгиланг."
 
-#: find.cpp:236
+#: find.cpp:237
 #, fuzzy, kde-format
 #| msgid "No alarm types are selected to search"
 msgctxt "@info"
 msgid "No alarm types are selected to search"
 msgstr "Қидириш учун огоҳлантириш тури танланмаган"
 
-#: find.cpp:385
+#: find.cpp:386
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "End of alarm list reached.\n"
@@ -3165,7 +3195,7 @@ msgstr ""
 "Огоҳлантириш рўйхати охирига етди.\n"
 "Бошидан давом этишни истайсизми?"
 
-#: find.cpp:386
+#: find.cpp:387
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Beginning of alarm list reached.\n"
@@ -3255,45 +3285,45 @@ msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
 msgstr "Огоҳлантириш шрифти ва рангини танлаш"
 
-#: functions.cpp:146
+#: functions.cpp:147
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
 msgstr ""
 
-#: functions.cpp:196
+#: functions.cpp:197
 #, fuzzy, kde-format
 #| msgid "Enable &Alarms"
 msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "Огоҳлантиришларни &ёқиш"
 
-#: functions.cpp:222
+#: functions.cpp:223
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Огоҳлантириш рўйхати"
 
-#: functions.cpp:878
+#: functions.cpp:879
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "Календар файлининг манзили"
 
-#: functions.cpp:939
+#: functions.cpp:940
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "Календар файлининг манзили"
 
-#: functions.cpp:940
+#: functions.cpp:941
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr ""
 
-#: functions.cpp:965
+#: functions.cpp:966
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -3304,7 +3334,7 @@ msgstr ""
 "Аудио файлни очиб бўлмади:\n"
 "%1"
 
-#: functions.cpp:1004
+#: functions.cpp:1005
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Failed to save calendar to\n"
@@ -3315,7 +3345,7 @@ msgstr ""
 "Календарни сақлаб бўлмади\n"
 "'%1'"
 
-#: functions.cpp:1017
+#: functions.cpp:1018
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -3326,40 +3356,40 @@ msgstr ""
 "Аудио файлни очиб бўлмади:\n"
 "%1"
 
-#: functions.cpp:1036
+#: functions.cpp:1037
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "Огоҳлантиришни KOrganizer'да кўрсатиб бўлмади"
 
-#: functions.cpp:1037
+#: functions.cpp:1038
 #, fuzzy, kde-format
 #| msgid "Unable to show alarm in KOrganizer"
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "Огоҳлантиришни KOrganizer'да кўрсатиб бўлмади"
 
-#: functions.cpp:1040
+#: functions.cpp:1041
 #, fuzzy, kde-format
 #| msgid "Unable to update alarm in KOrganizer"
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "Огоҳлантиришни KOrganizer'да янгилаб бўлмади"
 
-#: functions.cpp:1043
+#: functions.cpp:1044
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "Огоҳлантиришни KOrganizer'дан ўчириб бўлмади"
 
-#: functions.cpp:1044
+#: functions.cpp:1045
 #, fuzzy, kde-format
 #| msgid "Unable to delete alarm from KOrganizer"
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "Огоҳлантиришни KOrganizer'дан ўчириб бўлмади"
 
-#: functions.cpp:1054
+#: functions.cpp:1055
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3370,7 +3400,7 @@ msgstr ""
 "%1\n"
 "Ўзгаришларни сақлашга ишончингиз комилми?"
 
-#: functions.cpp:1057
+#: functions.cpp:1058
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3381,7 +3411,7 @@ msgstr ""
 "%1\n"
 "Ўзгаришларни сақлашга ишончингиз комилми?"
 
-#: functions.cpp:1060
+#: functions.cpp:1061
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3392,25 +3422,25 @@ msgstr ""
 "%1\n"
 "Ўзгаришларни сақлашга ишончингиз комилми?"
 
-#: functions.cpp:1310
+#: functions.cpp:1311
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr ""
 
-#: functions.cpp:1344
+#: functions.cpp:1345
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr ""
 
-#: functions.cpp:1393
+#: functions.cpp:1394
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "Огоҳлантириш намунаси номини киритишингиз шарт"
 
-#: functions.cpp:1616
+#: functions.cpp:1617
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3421,7 +3451,7 @@ msgstr ""
 "%1\n"
 "Ўзгаришларни сақлашга ишончингиз комилми?"
 
-#: functions.cpp:1620
+#: functions.cpp:1621
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Alarms are currently disabled.\n"
@@ -3434,101 +3464,101 @@ msgstr ""
 "Ҳозирда огоҳлантиришлар ўчирилган.\n"
 "Огоҳлантиришларни ёқишни истайсизми?"
 
-#: functions.cpp:1621
+#: functions.cpp:1622
 #, fuzzy, kde-format
 #| msgid "Enable"
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Ёқиш"
 
-#: functions.cpp:1621
+#: functions.cpp:1622
 #, fuzzy, kde-format
 #| msgid "Keep Disabled"
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Ўчирилган ҳолида қолдириш"
 
-#: functions.cpp:1990
+#: functions.cpp:1991
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Огоҳлантиришни қайта яратишда хато"
 
-#: functions.cpp:1991
+#: functions.cpp:1992
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Огоҳлантиришни қайта яратишда хато"
 
-#: functions.cpp:1994
+#: functions.cpp:1995
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Огоҳлантиришни қайта яратишда хато"
 
-#: functions.cpp:1995
+#: functions.cpp:1996
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Огоҳлантиришни қайта яратишда хато"
 
-#: functions.cpp:1998
+#: functions.cpp:1999
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Муддати ўтган огоҳлантиришни қайта яратишда хато"
 
-#: functions.cpp:1999
+#: functions.cpp:2000
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Муддати ўтган огоҳлантиришни қайта яратишда хато"
 
-#: functions.cpp:2002
+#: functions.cpp:2003
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Янги огоҳлантириш намунаси яратиш"
 
-#: functions.cpp:2003
+#: functions.cpp:2004
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Янги огоҳлантириш намунаси яратиш"
 
-#: kalarmapp.cpp:812
+#: kalarmapp.cpp:810
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Quitting will disable alarms (once any alarm message windows are closed)."
 msgstr ""
 
-#: kalarmapp.cpp:822
+#: kalarmapp.cpp:820
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 
-#: kalarmapp.cpp:1039
+#: kalarmapp.cpp:1037
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1053
+#: kalarmapp.cpp:1051
 #, fuzzy, kde-kuit-format
 #| msgid "Error recreating alarm"
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Огоҳлантиришни қайта яратишда хато"
 
-#: kalarmapp.cpp:1109
+#: kalarmapp.cpp:1107
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "Кўриниш мосламалари"
 
-#: kalarmapp.cpp:1421
+#: kalarmapp.cpp:1419
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3537,13 +3567,13 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1461
+#: kalarmapp.cpp:1459
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "Кўриниш мосламалари"
 
-#: kalarmapp.cpp:1489
+#: kalarmapp.cpp:1487
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3553,7 +3583,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1497
+#: kalarmapp.cpp:1495
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3564,7 +3594,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2474
+#: kalarmapp.cpp:2472
 #, fuzzy, kde-format
 #| msgid "Failed to execute command:"
 msgctxt "@info"
@@ -3573,27 +3603,27 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Буйруқни ишга тушириб бўлмади:"
 
-#: kalarmapp.cpp:2627
+#: kalarmapp.cpp:2625
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Огоҳлантиришни қайта яратишда хато"
 
-#: kalarmapp.cpp:2723
+#: kalarmapp.cpp:2721
 #, fuzzy, kde-format
 #| msgid "Pre-alarm action:"
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Огоҳлантиришдан олдинги амал:"
 
-#: kalarmapp.cpp:2729
+#: kalarmapp.cpp:2727
 #, fuzzy, kde-format
 #| msgid "Post-alarm action:"
 msgctxt "@info"
 msgid "Post-alarm action:"
 msgstr "Огоҳлантиришдан кейинги амал:"
 
-#: kalarmcalendar/alarmtext.cpp:506
+#: kalarmcalendar/alarmtext.cpp:507
 #, fuzzy, kde-format
 #| msgctxt "'From' email address"
 #| msgid "From:"
@@ -3601,7 +3631,7 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "Кимдан:"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:336
+#: kalarmcalendar/alarmtext.cpp:508 messagedisplayhelper.cpp:337
 #, fuzzy, kde-format
 #| msgctxt "Email addressee"
 #| msgid "To:"
@@ -3609,7 +3639,7 @@ msgctxt "@info Email addressee"
 msgid "To:"
 msgstr "Кимга:"
 
-#: kalarmcalendar/alarmtext.cpp:508
+#: kalarmcalendar/alarmtext.cpp:509
 #, fuzzy, kde-format
 #| msgctxt "Copy-to in email headers"
 #| msgid "Cc:"
@@ -3617,14 +3647,14 @@ msgctxt "@info Copy-to in email headers"
 msgid "Cc:"
 msgstr "Нусха:"
 
-#: kalarmcalendar/alarmtext.cpp:509
+#: kalarmcalendar/alarmtext.cpp:510
 #, fuzzy, kde-format
 #| msgid "Date:"
 msgctxt "@info"
 msgid "Date:"
 msgstr "Сана:"
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:338
+#: kalarmcalendar/alarmtext.cpp:511 messagedisplayhelper.cpp:339
 #, fuzzy, kde-format
 #| msgctxt "Email subject"
 #| msgid "Subject:"
@@ -3632,7 +3662,7 @@ msgctxt "@info Email subject"
 msgid "Subject:"
 msgstr "Мавзу:"
 
-#: kalarmcalendar/alarmtext.cpp:512
+#: kalarmcalendar/alarmtext.cpp:513
 #, fuzzy, kde-format
 #| msgctxt "Email addressee"
 #| msgid "To:"
@@ -3640,21 +3670,21 @@ msgctxt "@info Todo calendar item's title field"
 msgid "To-do:"
 msgstr "Кимга:"
 
-#: kalarmcalendar/alarmtext.cpp:513
+#: kalarmcalendar/alarmtext.cpp:514
 #, fuzzy, kde-format
 #| msgid "Action"
 msgctxt "@info Todo calendar item's location field"
 msgid "Location:"
 msgstr "Амал"
 
-#: kalarmcalendar/alarmtext.cpp:514
+#: kalarmcalendar/alarmtext.cpp:515
 #, fuzzy, kde-format
 #| msgid "Date:"
 msgctxt "@info Todo calendar item's due date/time"
 msgid "Due:"
 msgstr "Сана:"
 
-#: kalarmcalendar/kacalendar.cpp:135
+#: kalarmcalendar/kacalendar.cpp:136
 #, kde-format
 msgid "KAlarm"
 msgstr "KAlarm"
@@ -3675,8 +3705,8 @@ msgid "At login"
 msgstr "Тизимга киришда"
 
 #: kalarmcalendar/kaevent.cpp:3090 kalarmcalendar/kaevent.cpp:3177
-#: kalarmcalendar/kaeventformatter.cpp:428
-#: kalarmcalendar/kaeventformatter.cpp:442
+#: kalarmcalendar/kaeventformatter.cpp:429
+#: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Minute"
@@ -3684,7 +3714,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 дақиқа"
 
 #: kalarmcalendar/kaevent.cpp:3092 kalarmcalendar/kaevent.cpp:3179
-#: kalarmcalendar/kaeventformatter.cpp:444
+#: kalarmcalendar/kaeventformatter.cpp:445
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Hour"
@@ -3700,7 +3730,7 @@ msgid "%1h %2m"
 msgstr "%1: %2"
 
 #: kalarmcalendar/kaevent.cpp:3097 kalarmcalendar/kaevent.cpp:3184
-#: kalarmcalendar/kaeventformatter.cpp:446
+#: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Day"
@@ -3742,416 +3772,416 @@ msgctxt "@info No repetition"
 msgid "None"
 msgstr "Йўқ"
 
-#: kalarmcalendar/kaeventformatter.cpp:37
+#: kalarmcalendar/kaeventformatter.cpp:38
 #, kde-format
 msgctxt "@label Unique identifier"
 msgid "UID"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:39
+#: kalarmcalendar/kaeventformatter.cpp:40
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@label"
 msgid "Alarm type"
 msgstr "Огоҳлантириш тури"
 
-#: kalarmcalendar/kaeventformatter.cpp:41
+#: kalarmcalendar/kaeventformatter.cpp:42
 #, fuzzy, kde-format
 #| msgid "Alarm Templates"
 msgctxt "@label"
 msgid "Alarm status"
 msgstr "Огоҳлантириш намуналари"
 
-#: kalarmcalendar/kaeventformatter.cpp:43
+#: kalarmcalendar/kaeventformatter.cpp:44
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@label"
 msgid "Alarm name"
 msgstr "Огоҳлантириш тури"
 
-#: kalarmcalendar/kaeventformatter.cpp:45
+#: kalarmcalendar/kaeventformatter.cpp:46
 #, fuzzy, kde-format
 #| msgid "Template name:"
 msgctxt "@label"
 msgid "Template name"
 msgstr "Намуна номи:"
 
-#: kalarmcalendar/kaeventformatter.cpp:47
+#: kalarmcalendar/kaeventformatter.cpp:48
 #, fuzzy, kde-format
 #| msgid "&Default time"
 msgctxt "@label"
 msgid "Creation time"
 msgstr "&Андоза вақт"
 
-#: kalarmcalendar/kaeventformatter.cpp:49
+#: kalarmcalendar/kaeventformatter.cpp:50
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Start time"
 msgstr "Тизимга &киришда автоматик бошлаш"
 
-#: kalarmcalendar/kaeventformatter.cpp:51
+#: kalarmcalendar/kaeventformatter.cpp:52
 #, fuzzy, kde-format
 #| msgid "Template name:"
 msgctxt "@label Start delay configured in an alarm template"
 msgid "Template after time"
 msgstr "Намуна номи:"
 
-#: kalarmcalendar/kaeventformatter.cpp:53
+#: kalarmcalendar/kaeventformatter.cpp:54
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Recurs"
 msgstr "%1 қуйидагини талаб қилади: %2"
 
-#: kalarmcalendar/kaeventformatter.cpp:55
+#: kalarmcalendar/kaeventformatter.cpp:56
 #, fuzzy, kde-format
 #| msgid "Repeat"
 msgctxt "@label"
 msgid "Recurrence"
 msgstr "Қайтариш"
 
-#: kalarmcalendar/kaeventformatter.cpp:57
+#: kalarmcalendar/kaeventformatter.cpp:58
 #, fuzzy, kde-format
 #| msgid "&Number of repetitions:"
 msgctxt "@label"
 msgid "Sub-repetition"
 msgstr "&Такрорланиш сони:"
 
-#: kalarmcalendar/kaeventformatter.cpp:59
+#: kalarmcalendar/kaeventformatter.cpp:60
 #, fuzzy, kde-format
 #| msgid "&Number of repetitions:"
 msgctxt "@label"
 msgid "Sub-repetition interval"
 msgstr "&Такрорланиш сони:"
 
-#: kalarmcalendar/kaeventformatter.cpp:61
+#: kalarmcalendar/kaeventformatter.cpp:62
 #, fuzzy, kde-format
 #| msgid "&Number of repetitions:"
 msgctxt "@label"
 msgid "Sub-repetition count"
 msgstr "&Такрорланиш сони:"
 
-#: kalarmcalendar/kaeventformatter.cpp:63
+#: kalarmcalendar/kaeventformatter.cpp:64
 #, fuzzy, kde-format
 #| msgid "&Number of repetitions:"
 msgctxt "@label"
 msgid "Next sub-repetition"
 msgstr "&Такрорланиш сони:"
 
-#: kalarmcalendar/kaeventformatter.cpp:65
+#: kalarmcalendar/kaeventformatter.cpp:66
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Work time only"
 msgstr "Вақт:"
 
-#: kalarmcalendar/kaeventformatter.cpp:67
+#: kalarmcalendar/kaeventformatter.cpp:68
 #, kde-format
 msgctxt "@label"
 msgid "Holidays excluded"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:69
+#: kalarmcalendar/kaeventformatter.cpp:70
 #, fuzzy, kde-format
 #| msgid "Repeat"
 msgctxt "@label"
 msgid "Next recurrence"
 msgstr "Қайтариш"
 
-#: kalarmcalendar/kaeventformatter.cpp:71
+#: kalarmcalendar/kaeventformatter.cpp:72
 #, kde-format
 msgctxt "@label"
 msgid "Late cancel"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:73
+#: kalarmcalendar/kaeventformatter.cpp:74
 #, kde-format
 msgctxt "@label Automatically close window"
 msgid "Auto close"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:75
+#: kalarmcalendar/kaeventformatter.cpp:76
 #, fuzzy, kde-format
 #| msgid "Show in KOrganizer"
 msgctxt "@label"
 msgid "Copy to KOrganizer"
 msgstr "KOrganizer'да кўрсатиш"
 
-#: kalarmcalendar/kaeventformatter.cpp:77
+#: kalarmcalendar/kaeventformatter.cpp:78
 #, fuzzy, kde-format
 #| msgid "Enable"
 msgctxt "@label"
 msgid "Enabled"
 msgstr "Ёқиш"
 
-#: kalarmcalendar/kaeventformatter.cpp:79
+#: kalarmcalendar/kaeventformatter.cpp:80
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Read-only"
 msgstr "фақат ўқишга"
 
-#: kalarmcalendar/kaeventformatter.cpp:81
+#: kalarmcalendar/kaeventformatter.cpp:82
 #, fuzzy, kde-format
 msgctxt "@label Whether alarm should be archived"
 msgid "Archive"
 msgstr "Акти&в"
 
-#: kalarmcalendar/kaeventformatter.cpp:83
+#: kalarmcalendar/kaeventformatter.cpp:84
 #, kde-format
 msgctxt "@label"
 msgid "Revision"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:85
+#: kalarmcalendar/kaeventformatter.cpp:86
 #, kde-format
 msgctxt "@label"
 msgid "Custom properties"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:88
+#: kalarmcalendar/kaeventformatter.cpp:89
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Message text"
 msgstr "Хабар"
 
-#: kalarmcalendar/kaeventformatter.cpp:90
+#: kalarmcalendar/kaeventformatter.cpp:91
 #, fuzzy, kde-format
 msgctxt "@label File to provide text for message"
 msgid "Message file"
 msgstr "Хабар"
 
-#: kalarmcalendar/kaeventformatter.cpp:96
+#: kalarmcalendar/kaeventformatter.cpp:97
 #, kde-format
 msgctxt "@label"
 msgid "Font"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:98
+#: kalarmcalendar/kaeventformatter.cpp:99
 #, fuzzy, kde-format
 msgctxt "@label Shell command to execute before alarm"
 msgid "Pre-alarm action"
 msgstr "Огоҳлантиришдан олдинги амал:"
 
-#: kalarmcalendar/kaeventformatter.cpp:100
+#: kalarmcalendar/kaeventformatter.cpp:101
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action cancel"
 msgstr "Огоҳлантиришдан олдинги амал:"
 
-#: kalarmcalendar/kaeventformatter.cpp:102
+#: kalarmcalendar/kaeventformatter.cpp:103
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action no error"
 msgstr "Огоҳлантиришдан олдинги амал:"
 
-#: kalarmcalendar/kaeventformatter.cpp:104
+#: kalarmcalendar/kaeventformatter.cpp:105
 #, fuzzy, kde-format
 msgctxt "@label Shell command to execute after alarm"
 msgid "Post-alarm action"
 msgstr "Огоҳлантиришдан кейинги амал:"
 
-#: kalarmcalendar/kaeventformatter.cpp:108
+#: kalarmcalendar/kaeventformatter.cpp:109
 #, kde-format
 msgctxt "@label"
 msgid "Akonadi Item ID"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:110
+#: kalarmcalendar/kaeventformatter.cpp:111
 #, fuzzy, kde-format
 msgctxt "@label Audio method"
 msgid "Sound"
 msgstr "Товуш"
 
-#: kalarmcalendar/kaeventformatter.cpp:112
+#: kalarmcalendar/kaeventformatter.cpp:113
 #, fuzzy, kde-format
 msgctxt "@label Whether audio should repeat"
 msgid "Sound repeat"
 msgstr "Такрор&ланмасин"
 
-#: kalarmcalendar/kaeventformatter.cpp:116
+#: kalarmcalendar/kaeventformatter.cpp:117
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Sound fade volume"
 msgstr "Товушни мослаш"
 
-#: kalarmcalendar/kaeventformatter.cpp:118
+#: kalarmcalendar/kaeventformatter.cpp:119
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Sound fade time"
 msgstr "Товуш ф&айли:"
 
-#: kalarmcalendar/kaeventformatter.cpp:120
+#: kalarmcalendar/kaeventformatter.cpp:121
 #, fuzzy, kde-format
 #| msgid "Reminder"
 msgctxt "@label Whether the alarm has a reminder"
 msgid "Reminder"
 msgstr "Эсга солиш"
 
-#: kalarmcalendar/kaeventformatter.cpp:122
+#: kalarmcalendar/kaeventformatter.cpp:123
 #, fuzzy, kde-format
 msgctxt "@label Whether reminder is on first recurrence only"
 msgid "Reminder once only"
 msgstr "Эсга солиш"
 
-#: kalarmcalendar/kaeventformatter.cpp:124
+#: kalarmcalendar/kaeventformatter.cpp:125
 #, kde-format
 msgctxt "@label Whether to use standard notification system"
 msgid "Notify"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:126
+#: kalarmcalendar/kaeventformatter.cpp:127
 #, fuzzy, kde-format
 msgctxt "@label Deferral type"
 msgid "Deferral"
 msgstr "Бекор қилиш"
 
-#: kalarmcalendar/kaeventformatter.cpp:128
+#: kalarmcalendar/kaeventformatter.cpp:129
 #, fuzzy, kde-format
 #| msgid "&Default time"
 msgctxt "@label"
 msgid "Deferral time"
 msgstr "&Андоза вақт"
 
-#: kalarmcalendar/kaeventformatter.cpp:130
+#: kalarmcalendar/kaeventformatter.cpp:131
 #, fuzzy, kde-format
 msgctxt "@label Default deferral delay"
 msgid "Deferral default"
 msgstr "Бекор қилиш"
 
-#: kalarmcalendar/kaeventformatter.cpp:132
+#: kalarmcalendar/kaeventformatter.cpp:133
 #, fuzzy, kde-format
 msgctxt "@label Whether deferral time is date-only by default"
 msgid "Deferral default date only"
 msgstr "Бекор қилиш"
 
-#: kalarmcalendar/kaeventformatter.cpp:135
+#: kalarmcalendar/kaeventformatter.cpp:136
 #, fuzzy, kde-format
 #| msgid "Co&mmand"
 msgctxt "@label A shell command"
 msgid "Command"
 msgstr "Буй&руқ"
 
-#: kalarmcalendar/kaeventformatter.cpp:139
+#: kalarmcalendar/kaeventformatter.cpp:140
 #, fuzzy, kde-format
 #| msgid "Execute in terminal window"
 msgctxt "@label Execute in terminal window"
 msgid "Execute in terminal"
 msgstr "Терминал ойнасида ишга тушириш"
 
-#: kalarmcalendar/kaeventformatter.cpp:141
+#: kalarmcalendar/kaeventformatter.cpp:142
 #, kde-format
 msgctxt "@label"
 msgid "Hide command error"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:144
+#: kalarmcalendar/kaeventformatter.cpp:145
 #, fuzzy, kde-format
 #| msgid "Email subject line"
 msgctxt "@label"
 msgid "Email subject"
 msgstr "Хатнинг мавзуси"
 
-#: kalarmcalendar/kaeventformatter.cpp:146
+#: kalarmcalendar/kaeventformatter.cpp:147
 #, fuzzy, kde-format
 #| msgid "Email subject line"
 msgctxt "@label Email address"
 msgid "Email sender ID"
 msgstr "Хатнинг мавзуси"
 
-#: kalarmcalendar/kaeventformatter.cpp:148
+#: kalarmcalendar/kaeventformatter.cpp:149
 #, fuzzy, kde-format
 #| msgid "Email"
 msgctxt "@label Email address"
 msgid "Email to"
 msgstr "Электрон почта"
 
-#: kalarmcalendar/kaeventformatter.cpp:150
+#: kalarmcalendar/kaeventformatter.cpp:151
 #, fuzzy, kde-format
 #| msgid "Email"
 msgctxt "@label true/false"
 msgid "Email bcc"
 msgstr "Электрон почта"
 
-#: kalarmcalendar/kaeventformatter.cpp:152
+#: kalarmcalendar/kaeventformatter.cpp:153
 #, fuzzy, kde-format
 #| msgid "Email"
 msgctxt "@label"
 msgid "Email body"
 msgstr "Электрон почта"
 
-#: kalarmcalendar/kaeventformatter.cpp:154
+#: kalarmcalendar/kaeventformatter.cpp:155
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Email attachments"
 msgstr "Электрон почта дастури:"
 
-#: kalarmcalendar/kaeventformatter.cpp:256
+#: kalarmcalendar/kaeventformatter.cpp:257
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@info Alarm type"
 msgid "Display (text)"
 msgstr "Огоҳлантиришларни кўрсатиш"
 
-#: kalarmcalendar/kaeventformatter.cpp:258
+#: kalarmcalendar/kaeventformatter.cpp:259
 #, fuzzy, kde-format
 #| msgid "Display the file now"
 msgctxt "@info Alarm type"
 msgid "Display (file)"
 msgstr "Файлни дарҳол кўрсатиш"
 
-#: kalarmcalendar/kaeventformatter.cpp:261
+#: kalarmcalendar/kaeventformatter.cpp:262
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info Alarm type"
 msgid "Display (command)"
 msgstr "Огоҳлантириш хабарини дарҳол кўрсатиш"
 
-#: kalarmcalendar/kaeventformatter.cpp:262
+#: kalarmcalendar/kaeventformatter.cpp:263
 #, fuzzy, kde-format
 #| msgid "Co&mmand"
 msgctxt "@info Alarm type"
 msgid "Command"
 msgstr "Буй&руқ"
 
-#: kalarmcalendar/kaeventformatter.cpp:264
+#: kalarmcalendar/kaeventformatter.cpp:265
 #, fuzzy, kde-format
 #| msgid "Email"
 msgctxt "@info Alarm type"
 msgid "Email"
 msgstr "Электрон почта"
 
-#: kalarmcalendar/kaeventformatter.cpp:266
+#: kalarmcalendar/kaeventformatter.cpp:267
 #, fuzzy, kde-format
 msgctxt "@info Alarm type"
 msgid "Audio"
 msgstr "Товуш ф&айли:"
 
-#: kalarmcalendar/kaeventformatter.cpp:273
+#: kalarmcalendar/kaeventformatter.cpp:274
 #, fuzzy, kde-format
 #| msgid "Acti&ve"
 msgctxt "@info Alarm type"
 msgid "Active"
 msgstr "Акти&в"
 
-#: kalarmcalendar/kaeventformatter.cpp:275
+#: kalarmcalendar/kaeventformatter.cpp:276
 #, fuzzy, kde-format
 msgctxt "@info Alarm type"
 msgid "Archived"
 msgstr "Акти&в"
 
-#: kalarmcalendar/kaeventformatter.cpp:277
+#: kalarmcalendar/kaeventformatter.cpp:278
 #, fuzzy, kde-format
 #| msgid "&Templates..."
 msgctxt "@info Alarm type"
 msgid "Template"
 msgstr "&Намуналар..."
 
-#: kalarmcalendar/kaeventformatter.cpp:296
+#: kalarmcalendar/kaeventformatter.cpp:297
 #, fuzzy, kde-format
 #| msgid "At login"
 msgctxt "@info Repeat at login"
 msgid "At login until %1"
 msgstr "Тизимга киришда"
 
-#: kalarmcalendar/kaeventformatter.cpp:337
+#: kalarmcalendar/kaeventformatter.cpp:338
 #, fuzzy, kde-format
 #| msgctxt "n days"
 #| msgid " %1d "
@@ -4159,35 +4189,35 @@ msgctxt "@info"
 msgid "%1"
 msgstr " %1к "
 
-#: kalarmcalendar/kaeventformatter.cpp:349
+#: kalarmcalendar/kaeventformatter.cpp:350
 #, fuzzy, kde-format
 #| msgid "&Default time"
 msgctxt "@info Using default font"
 msgid "Default"
 msgstr "&Андоза вақт"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:217
+#: kalarmcalendar/kaeventformatter.cpp:366 messagedisplayhelper.cpp:218
 #, fuzzy, kde-format
 #| msgid "Reminder"
 msgctxt "@info"
 msgid "Reminder"
 msgstr "Эсга солиш"
 
-#: kalarmcalendar/kaeventformatter.cpp:378
+#: kalarmcalendar/kaeventformatter.cpp:379
 #, kde-format
 msgctxt "@info"
 msgid "Speak"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:379
+#: kalarmcalendar/kaeventformatter.cpp:380
 #, fuzzy, kde-format
 #| msgid "Beep"
 msgctxt "@info"
 msgid "Beep"
 msgstr "Бип"
 
-#: kalarmcalendar/kaeventformatter.cpp:384
-#: kalarmcalendar/kaeventformatter.cpp:388
+#: kalarmcalendar/kaeventformatter.cpp:385
+#: kalarmcalendar/kaeventformatter.cpp:389
 #, fuzzy, kde-format
 #| msgctxt "Undo-action: message"
 #| msgid "%1: %2"
@@ -4195,7 +4225,7 @@ msgctxt "@info Percentage"
 msgid "%1%%"
 msgstr "%1: %2"
 
-#: kalarmcalendar/kaeventformatter.cpp:392
+#: kalarmcalendar/kaeventformatter.cpp:393
 #, fuzzy, kde-format
 #| msgid "seconds"
 msgctxt "@info"
@@ -4203,26 +4233,26 @@ msgid "1 Second"
 msgid_plural "%1 Seconds"
 msgstr[0] "сония"
 
-#: kalarmcalendar/kaeventformatter.cpp:417
+#: kalarmcalendar/kaeventformatter.cpp:418
 #, kde-format
 msgctxt "@info Error indication"
 msgid "error!"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:422
+#: kalarmcalendar/kaeventformatter.cpp:423
 #, kde-format
 msgctxt "@info General purpose status indication: yes or no"
 msgid "Yes"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:423
+#: kalarmcalendar/kaeventformatter.cpp:424
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Йўқ"
 
-#: kamail.cpp:68
+#: kamail.cpp:69
 #, fuzzy, kde-format
 #| msgid ""
 #| "Your email address, used to identify you as the sender when sending email "
@@ -4234,7 +4264,7 @@ msgstr ""
 "Огоҳлантириш хати жўнатилганда, жўнатувчи сифатида ишлатиладиган электрон "
 "почта."
 
-#: kamail.cpp:71
+#: kamail.cpp:72
 #, fuzzy, kde-format
 #| msgctxt "KMail folder name: this should be translated the same as in kmail"
 #| msgid "sent-mail"
@@ -4243,7 +4273,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "Жўнатилган"
 
-#: kamail.cpp:101
+#: kamail.cpp:102
 #, fuzzy, kde-kuit-format
 #| msgid "Co&py sent emails into KMail's %1 folder"
 msgctxt "@info"
@@ -4252,7 +4282,7 @@ msgid ""
 "found"
 msgstr "Жўнатилган хатлардан KMail %1 жилдига нусха олиш"
 
-#: kamail.cpp:107
+#: kamail.cpp:108
 #, fuzzy, kde-kuit-format
 #| msgid "Co&py sent emails into KMail's %1 folder"
 msgctxt "@info"
@@ -4261,7 +4291,7 @@ msgid ""
 "no email address"
 msgstr "Жўнатилган хатлардан KMail %1 жилдига нусха олиш"
 
-#: kamail.cpp:117
+#: kamail.cpp:118
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4270,7 +4300,7 @@ msgid ""
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 
-#: kamail.cpp:121
+#: kamail.cpp:122
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -4284,7 +4314,7 @@ msgstr ""
 "%1\n"
 "Ўзгаришларни сақлашга ишончингиз комилми?"
 
-#: kamail.cpp:126
+#: kamail.cpp:127
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -4297,13 +4327,13 @@ msgstr ""
 "%1\n"
 "Ўзгаришларни сақлашга ишончингиз комилми?"
 
-#: kamail.cpp:156
+#: kamail.cpp:157
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr ""
 
-#: kamail.cpp:283
+#: kamail.cpp:284
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -4314,7 +4344,7 @@ msgstr ""
 "Файлни илова қилиш хатоси:\n"
 "%1"
 
-#: kamail.cpp:293
+#: kamail.cpp:294
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Attachment not found:\n"
@@ -4325,21 +4355,21 @@ msgstr ""
 "Илова топилмади:\n"
 "%1"
 
-#: kamail.cpp:374
+#: kamail.cpp:375
 #, fuzzy, kde-format
 #| msgid "An email has been queued to be sent"
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Хат жўнатиш учун навбатга қўйилди"
 
-#: kamail.cpp:540
+#: kamail.cpp:541
 #, fuzzy, kde-format
 #| msgid "Failed to send email"
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Хатни жўнатиш муваффақиятсиз тугади"
 
-#: kamail.cpp:541
+#: kamail.cpp:542
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error sending email"
@@ -4399,21 +4429,21 @@ msgid ""
 "cancellation period"
 msgstr "Кечикканда бекор қилгандан сўнг ойнани автоматик ёпиш вақти"
 
-#: lib/file.cpp:107
+#: lib/file.cpp:108
 #, fuzzy, kde-format
 #| msgid "Please select a file to display"
 msgctxt "@info"
 msgid "Please select a file to display"
 msgstr "Илтимос кўрсатиш учун файлни танланг"
 
-#: lib/file.cpp:109
+#: lib/file.cpp:110
 #, fuzzy, kde-format
 #| msgid "Please select a file to display"
 msgctxt "@info"
 msgid "Please select a file to play"
 msgstr "Илтимос кўрсатиш учун файлни танланг"
 
-#: lib/file.cpp:115
+#: lib/file.cpp:116
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -4424,7 +4454,7 @@ msgstr ""
 "%1\n"
 "ўқиб бўлмайди"
 
-#: lib/file.cpp:117
+#: lib/file.cpp:118
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -4435,7 +4465,7 @@ msgstr ""
 "%1\n"
 "ўқиб бўлмайди"
 
-#: lib/file.cpp:118
+#: lib/file.cpp:119
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -4446,7 +4476,7 @@ msgstr ""
 "%1\n"
 "ўқиб бўлмайди"
 
-#: lib/file.cpp:119
+#: lib/file.cpp:120
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -4457,13 +4487,13 @@ msgstr ""
 "%1\n"
 "матн ёки расм файлига ўхшамайди"
 
-#: lib/file.cpp:178
+#: lib/file.cpp:179
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox File type"
 msgid "All files"
 msgstr "Календар файлининг манзили"
 
-#: lib/filedialog.cpp:55
+#: lib/filedialog.cpp:56
 #, fuzzy, kde-format
 #| msgid "Failed to open file"
 msgctxt "@option:check"
@@ -4558,7 +4588,7 @@ msgid ""
 "larger step (6 hours / 5 minutes)."
 msgstr ""
 
-#: lib/timezonecombo.cpp:18
+#: lib/timezonecombo.cpp:19
 #, fuzzy, kde-format
 msgid "System time zone"
 msgstr "Вақт:"
@@ -4574,7 +4604,7 @@ msgstr "KDE учун огоҳлантириш, буйруқ ва хат жўна
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr ""
 
-#: mainwindow.cpp:440
+#: mainwindow.cpp:441
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Failed to save calendar to\n"
@@ -4587,129 +4617,129 @@ msgstr ""
 "Календарни сақлаб бўлмади\n"
 "'%1'"
 
-#: mainwindow.cpp:460
+#: mainwindow.cpp:461
 #, fuzzy, kde-format
 #| msgid "&Templates..."
 msgctxt "@action"
 msgid "Templates..."
 msgstr "&Намуналар..."
 
-#: mainwindow.cpp:464 templatedlg.cpp:74
+#: mainwindow.cpp:465 templatedlg.cpp:74
 #, fuzzy, kde-format
 #| msgid "&New..."
 msgctxt "@action"
 msgid "New"
 msgstr "Я&нги..."
 
-#: mainwindow.cpp:470
+#: mainwindow.cpp:471
 #, fuzzy, kde-format
 #| msgid "Create Tem&plate..."
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "На&муна яратиш..."
 
-#: mainwindow.cpp:474
+#: mainwindow.cpp:475
 #, fuzzy, kde-format
 #| msgid "&Copy..."
 msgctxt "@action"
 msgid "Copy..."
 msgstr "&Нусха олиш"
 
-#: mainwindow.cpp:479 resourceselector.cpp:301
+#: mainwindow.cpp:480 resourceselector.cpp:301
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "&Таҳрирлаш"
 
-#: mainwindow.cpp:484
+#: mainwindow.cpp:485
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Огоҳлантиришни ўчириш"
 
-#: mainwindow.cpp:490
+#: mainwindow.cpp:491
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Огоҳлантириш мосламаси"
 
-#: mainwindow.cpp:495
+#: mainwindow.cpp:496
 #, fuzzy, kde-format
 #| msgid "Reac&tivate"
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Қайта акти&влаштириш"
 
-#: mainwindow.cpp:509
+#: mainwindow.cpp:510
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr ""
 
-#: mainwindow.cpp:519
+#: mainwindow.cpp:520
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Муддати ўтган огоҳлантиришларни кўрсатиш"
 
-#: mainwindow.cpp:524
+#: mainwindow.cpp:525
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Огоҳлантири&шга қолган вақтни кўрсатиш"
 
-#: mainwindow.cpp:528
+#: mainwindow.cpp:529
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Календар файлининг манзили"
 
-#: mainwindow.cpp:532
+#: mainwindow.cpp:533
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr ""
 
-#: mainwindow.cpp:543
+#: mainwindow.cpp:544
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "&Туғилган кунларни импорт қилиш..."
 
-#: mainwindow.cpp:549
+#: mainwindow.cpp:550
 #, fuzzy, kde-format
 #| msgid "Import &Birthdays..."
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "&Туғилган кунларни импорт қилиш..."
 
-#: mainwindow.cpp:554
+#: mainwindow.cpp:555
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "&Туғилган кунларни импорт қилиш..."
 
-#: mainwindow.cpp:558 resourceselector.cpp:319
+#: mainwindow.cpp:559 resourceselector.cpp:319
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "&Туғилган кунларни импорт қилиш..."
 
-#: mainwindow.cpp:562
+#: mainwindow.cpp:563
 #, fuzzy, kde-format
 #| msgid "&Refresh Alarms"
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Огоҳлантиришларни &янгилаш"
 
-#: mainwindow.cpp:806
+#: mainwindow.cpp:807
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "Ростдан ҳам ушбу огоҳлантиришни тасдиқлайсизми?"
 
-#: mainwindow.cpp:808
+#: mainwindow.cpp:809
 #, fuzzy, kde-format
 #| msgid "Delete Alarm"
 #| msgid_plural "Delete Alarms"
@@ -4718,31 +4748,31 @@ msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
 msgstr[0] "Огоҳлантиришни ўчириш"
 
-#: mainwindow.cpp:809 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Огоҳлантиришни ўчириш"
 
-#: mainwindow.cpp:903
+#: mainwindow.cpp:904
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Муддати ўтган огоҳлантиришларни бекитиш"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Муддати ўтган огоҳлантиришларни кўрсатиш"
 
-#: mainwindow.cpp:980
+#: mainwindow.cpp:981
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "&Туғилган кунларни импорт қилиш..."
 
-#: mainwindow.cpp:1232
+#: mainwindow.cpp:1233
 #, fuzzy, kde-format
 #| msgctxt "Undo-action: message"
 #| msgid "%1: %2"
@@ -4750,68 +4780,68 @@ msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1: %2"
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, fuzzy, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1%2:%3"
 
-#: mainwindow.cpp:1299
+#: mainwindow.cpp:1300
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1301
+#: mainwindow.cpp:1302
 #, fuzzy, kde-format
 #| msgid "Hide Time t&o Alarms"
 msgid "Hide menu bar"
 msgstr "Огоҳлантиришлар у&чун вақтни бекитиш"
 
-#: mainwindow.cpp:1541
+#: mainwindow.cpp:1542
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Огоҳлантиришларни кўрсатиш"
 
-#: mainwindow.cpp:1543
+#: mainwindow.cpp:1544
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Электрон почта орқали огоҳлантиришлар"
 
-#: mainwindow.cpp:1545
+#: mainwindow.cpp:1546
 #, fuzzy, kde-format
 #| msgid "Command Alarms"
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Буйруқ орқали огоҳлантиришлар"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1548
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Огоҳлантириш тури"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, fuzzy, kde-format
 #| msgid "Choose Alarm Font & Color"
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Огоҳлантириш шрифти ва рангини танлаш"
 
-#: mainwindow.cpp:1681
+#: mainwindow.cpp:1682
 #, fuzzy, kde-format
 #| msgid "Enable"
 msgctxt "@action"
 msgid "Enable"
 msgstr "Ёқиш"
 
-#: mainwindow.cpp:1681
+#: mainwindow.cpp:1682
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -4828,104 +4858,104 @@ msgstr ""
 "Огоҳлантириш рўйхати бошига етди.\n"
 "Охиридан давом этишни истайсизми?"
 
-#: messagedisplayhelper.cpp:203
+#: messagedisplayhelper.cpp:204
 #, fuzzy, kde-format
 #| msgid "Reminder"
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "Эсга солиш"
 
-#: messagedisplayhelper.cpp:204 messagedisplayhelper.cpp:408
+#: messagedisplayhelper.cpp:205 messagedisplayhelper.cpp:409
 #, fuzzy, kde-format
 #| msgid "Message"
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Хабар"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Файл топилмади"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, fuzzy, kde-format
 #| msgid "Failed to open file"
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Файлни очиш муваффақиятсиз тугади"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgctxt "@info"
 msgid "File not found"
 msgstr "Файл топилмади"
 
-#: messagedisplayhelper.cpp:352
+#: messagedisplayhelper.cpp:353
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr ""
 
-#: messagedisplayhelper.cpp:481
+#: messagedisplayhelper.cpp:482
 #, fuzzy, kde-format
 #| msgid "Today"
 msgctxt "@info"
 msgid "Today"
 msgstr "Бугун"
 
-#: messagedisplayhelper.cpp:483
+#: messagedisplayhelper.cpp:484
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
 msgid_plural "in %1 days' time"
 msgstr[0] "Эртага"
 
-#: messagedisplayhelper.cpp:485
+#: messagedisplayhelper.cpp:486
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
 msgid_plural "in %1 weeks' time"
 msgstr[0] "1 ҳафтадан сўнг"
 
-#: messagedisplayhelper.cpp:499
+#: messagedisplayhelper.cpp:500
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
 msgid_plural "in %1 minutes' time"
 msgstr[0] "1 дақиқадан сўнг"
 
-#: messagedisplayhelper.cpp:501
+#: messagedisplayhelper.cpp:502
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
 msgid_plural "in %1 hours' time"
 msgstr[0] "1 соатдан сўнг"
 
-#: messagedisplayhelper.cpp:504
+#: messagedisplayhelper.cpp:505
 #, fuzzy, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
 msgid_plural "%1 hours"
 msgstr[0] "1 соат"
 
-#: messagedisplayhelper.cpp:505
+#: messagedisplayhelper.cpp:506
 #, fuzzy, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
 msgid_plural "in %2 %1 minutes' time"
 msgstr[0] "1 дақиқадан сўнг"
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, fuzzy, kde-format
 #| msgid "Enter the email message."
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Электрон почта хабарини киритинг."
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
@@ -4943,7 +4973,7 @@ msgctxt "@action:button"
 msgid "Defer"
 msgstr "Бекор қилиш"
 
-#: messagewindow.cpp:227
+#: messagewindow.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4951,86 +4981,86 @@ msgid ""
 "display)."
 msgstr ""
 
-#: messagewindow.cpp:244
+#: messagewindow.cpp:245
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr ""
 
-#: messagewindow.cpp:278
+#: messagewindow.cpp:279
 #, fuzzy, kde-format
 #| msgid "Select a text or image file to display."
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr "Кўрсатиш учун матн ёки расм файлини танланг."
 
-#: messagewindow.cpp:298
+#: messagewindow.cpp:299
 #, fuzzy, kde-format
 #| msgid "The alarm message"
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr "Огоҳлантириш хабари"
 
-#: messagewindow.cpp:325
+#: messagewindow.cpp:326
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr ""
 
-#: messagewindow.cpp:358
+#: messagewindow.cpp:359
 #, fuzzy, kde-format
 #| msgid "The email to send"
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr "Жўнатиш учун электрон почта"
 
-#: messagewindow.cpp:408
+#: messagewindow.cpp:409
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr ""
 
-#: messagewindow.cpp:425
+#: messagewindow.cpp:426
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Огоҳлантиришни тасдиқлаш"
 
-#: messagewindow.cpp:430 resourceselector.cpp:77 templatedlg.cpp:81
+#: messagewindow.cpp:431 resourceselector.cpp:77 templatedlg.cpp:81
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "&Таҳрирлаш"
 
-#: messagewindow.cpp:434
+#: messagewindow.cpp:435
 #, fuzzy, kde-format
 #| msgid "Edit the alarm."
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "Огоҳлантиришни таҳрирлаш."
 
-#: messagewindow.cpp:435
+#: messagewindow.cpp:436
 #, fuzzy, kde-format
 #| msgid "Edit the alarm."
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Огоҳлантиришни таҳрирлаш."
 
-#: messagewindow.cpp:439
+#: messagewindow.cpp:440
 #, fuzzy, kde-format
 #| msgid "&New..."
 msgctxt "@action:button"
 msgid "Defer..."
 msgstr "Я&нги..."
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:444
 #, fuzzy, kde-format
 #| msgid "Schedule the alarm at the specified time."
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "Огоҳлантиришни кўрсатилган вақтда режалаштириш."
 
-#: messagewindow.cpp:444
+#: messagewindow.cpp:445
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5038,67 +5068,67 @@ msgid ""
 "specify when the alarm should be redisplayed.</para>"
 msgstr ""
 
-#: messagewindow.cpp:458 sounddlg.cpp:443
+#: messagewindow.cpp:459 sounddlg.cpp:444
 #, fuzzy, kde-format
 #| msgid "Stop sound"
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Товушни тўхтатиш"
 
-#: messagewindow.cpp:459 sounddlg.cpp:444
+#: messagewindow.cpp:460 sounddlg.cpp:445
 #, fuzzy, kde-format
 #| msgid "Stop playing the sound"
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "Товушни ўйнашни тўхтатиш"
 
-#: messagewindow.cpp:473
+#: messagewindow.cpp:474
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "KMail &шахсиятларидан фойдаланиш"
 
-#: messagewindow.cpp:474
+#: messagewindow.cpp:475
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "KMail &шахсиятларидан фойдаланиш"
 
-#: messagewindow.cpp:482
+#: messagewindow.cpp:483
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "KMail &шахсиятларидан фойдаланиш"
 
-#: messagewindow.cpp:483
+#: messagewindow.cpp:484
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "KMail &шахсиятларидан фойдаланиш"
 
-#: messagewindow.cpp:1075
+#: messagewindow.cpp:1076
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Ростдан ҳам ушбу огоҳлантиришни тасдиқлайсизми?"
 
-#: messagewindow.cpp:1076
+#: messagewindow.cpp:1077
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Огоҳлантиришни тасдиқлаш"
 
-#: messagewindow.cpp:1076
+#: messagewindow.cpp:1077
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "&Тасдиқлаш"
 
-#: messagewindow.cpp:1131
+#: messagewindow.cpp:1132
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info"
@@ -5468,7 +5498,7 @@ msgctxt "@info"
 msgid "Command to invoke terminal window not found: <command>%1</command>"
 msgstr "Терминал ойнасида буйруқни ишга тушириш учун шу ерни белгиланг"
 
-#: prefdlg.cpp:706
+#: prefdlg.cpp:702
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5476,7 +5506,7 @@ msgid ""
 "<application>KAlarm</application>"
 msgstr ""
 
-#: prefdlg.cpp:717
+#: prefdlg.cpp:713
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5484,7 +5514,7 @@ msgid ""
 ">except if you manually start it."
 msgstr ""
 
-#: prefdlg.cpp:762
+#: prefdlg.cpp:758
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5492,19 +5522,19 @@ msgid ""
 "its default for displaying and entering dates and times."
 msgstr ""
 
-#: prefdlg.cpp:776
+#: prefdlg.cpp:772
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Holiday region:"
 msgstr ""
 
-#: prefdlg.cpp:785
+#: prefdlg.cpp:781
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which holiday region to use"
 msgstr ""
 
-#: prefdlg.cpp:793
+#: prefdlg.cpp:789
 #, fuzzy, kde-format
 #| msgctxt "Undo-action: message"
 #| msgid "%1: %2"
@@ -5512,20 +5542,20 @@ msgctxt "Holiday region, region language"
 msgid "%1 (%2)"
 msgstr "%1: %2"
 
-#: prefdlg.cpp:797
+#: prefdlg.cpp:793
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "No holiday region"
 msgid "None"
 msgstr "Йўқ"
 
-#: prefdlg.cpp:815
+#: prefdlg.cpp:811
 #, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
 msgstr ""
 
-#: prefdlg.cpp:823
+#: prefdlg.cpp:819
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5534,20 +5564,20 @@ msgid ""
 "is fully restored by the time the alarm triggers."
 msgstr ""
 
-#: prefdlg.cpp:824
+#: prefdlg.cpp:820
 #, fuzzy, kde-format
 #| msgid "hours/minutes"
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
 msgstr "соат/дақиқа"
 
-#: prefdlg.cpp:838
+#: prefdlg.cpp:834
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Start of day for date-only alarms:"
 msgstr ""
 
-#: prefdlg.cpp:845
+#: prefdlg.cpp:841
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the name or path of the log file."
 msgctxt "@info:whatsthis"
@@ -5556,34 +5586,34 @@ msgid ""
 "</para><para>%1</para>"
 msgstr "Лог файлини номини ёки йўлини киритинг."
 
-#: prefdlg.cpp:850
+#: prefdlg.cpp:846
 #, kde-format
 msgctxt "@title:group"
 msgid "Working Hours"
 msgstr ""
 
-#: prefdlg.cpp:865
+#: prefdlg.cpp:861
 #, fuzzy, kde-format
 #| msgid "Select the day of the week on which to repeat the alarm"
 msgctxt "@info:whatsthis"
 msgid "Check the days in the week which are work days"
 msgstr "Огоҳлантириш такрорланадиган ҳафта кунини танланг"
 
-#: prefdlg.cpp:875
+#: prefdlg.cpp:871
 #, fuzzy, kde-format
 #| msgid "&Default time"
 msgctxt "@label:spinbox"
 msgid "Daily start time:"
 msgstr "&Андоза вақт"
 
-#: prefdlg.cpp:882
+#: prefdlg.cpp:878
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the name or path of the log file."
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the start time of the working day.</para><para>%1</para>"
 msgstr "Лог файлини номини ёки йўлини киритинг."
 
-#: prefdlg.cpp:894
+#: prefdlg.cpp:890
 #, fuzzy, kde-format
 #| msgctxt "Time period over which to fade the sound"
 #| msgid "Fade time:"
@@ -5591,27 +5621,27 @@ msgctxt "@label:spinbox"
 msgid "Daily end time:"
 msgstr "Сўниш вақти:"
 
-#: prefdlg.cpp:901
+#: prefdlg.cpp:897
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the end time of the working day.</para><para>%1</para>"
 msgstr "Огоҳлантириш намунаси номини киритиш"
 
-#: prefdlg.cpp:906
+#: prefdlg.cpp:902
 #, fuzzy, kde-format
 #| msgid "Show in KOrganizer"
 msgctxt "@title:group"
 msgid "KOrganizer"
 msgstr "KOrganizer'да кўрсатиш"
 
-#: prefdlg.cpp:914
+#: prefdlg.cpp:910
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "KOrganizer event duration:"
 msgstr ""
 
-#: prefdlg.cpp:921
+#: prefdlg.cpp:917
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
@@ -5620,19 +5650,19 @@ msgid ""
 "copied to KOrganizer.</para><para>%1</para>"
 msgstr "Огоҳлантириш намунаси номини киритиш"
 
-#: prefdlg.cpp:990
+#: prefdlg.cpp:986
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "New Alarms && Templates"
 msgstr "Янги огоҳлантириш намунаси"
 
-#: prefdlg.cpp:995
+#: prefdlg.cpp:991
 #, kde-format
 msgctxt "@option:radio"
 msgid "Store in default calendar"
 msgstr ""
 
-#: prefdlg.cpp:997
+#: prefdlg.cpp:993
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5640,13 +5670,13 @@ msgid ""
 "prompting."
 msgstr ""
 
-#: prefdlg.cpp:999
+#: prefdlg.cpp:995
 #, kde-format
 msgctxt "@option:radio"
 msgid "Prompt for which calendar to store in"
 msgstr ""
 
-#: prefdlg.cpp:1002
+#: prefdlg.cpp:998
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5656,20 +5686,20 @@ msgid ""
 "calendar.</para>"
 msgstr ""
 
-#: prefdlg.cpp:1007
+#: prefdlg.cpp:1003
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Archived Alarms"
 msgstr "KAlarm'ни активлаштириш"
 
-#: prefdlg.cpp:1012
+#: prefdlg.cpp:1008
 #, fuzzy, kde-format
 #| msgid "Keep alarms after e&xpiry"
 msgctxt "@option:check"
 msgid "Keep alarms after expiry"
 msgstr "Огоҳлантиришларни муддатидан сўн&г ҳам сақлаш"
 
-#: prefdlg.cpp:1015
+#: prefdlg.cpp:1011
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5677,20 +5707,20 @@ msgid ""
 "which were never triggered)."
 msgstr ""
 
-#: prefdlg.cpp:1021
+#: prefdlg.cpp:1017
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Discard archived alarms after:"
 msgstr "Ў&чирилган огоҳлантиришнинг ранги:"
 
-#: prefdlg.cpp:1030
+#: prefdlg.cpp:1026
 #, fuzzy, kde-format
 #| msgid "days"
 msgctxt "@label Time unit for user-entered number"
 msgid "days"
 msgstr "кун"
 
-#: prefdlg.cpp:1034
+#: prefdlg.cpp:1030
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5698,19 +5728,19 @@ msgid ""
 "archived alarms should be stored."
 msgstr ""
 
-#: prefdlg.cpp:1037
+#: prefdlg.cpp:1033
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Clear Archived Alarms"
 msgstr "Муддати ўтган о&гоҳлантиришларни тозалаш"
 
-#: prefdlg.cpp:1040
+#: prefdlg.cpp:1036
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete all existing archived alarms."
 msgstr "Мавжуд муддати ўтган огоҳлантиришларни ўчириш."
 
-#: prefdlg.cpp:1041
+#: prefdlg.cpp:1037
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5718,7 +5748,7 @@ msgid ""
 "calendar only)."
 msgstr "Ростдан ҳам ушбу огоҳлантиришни тасдиқлайсизми?"
 
-#: prefdlg.cpp:1087
+#: prefdlg.cpp:1083
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5728,13 +5758,13 @@ msgid ""
 "para>"
 msgstr ""
 
-#: prefdlg.cpp:1104
+#: prefdlg.cpp:1100
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete all archived alarms?"
 msgstr "Ростдан ҳам ушбу огоҳлантиришни тасдиқлайсизми?"
 
-#: prefdlg.cpp:1105
+#: prefdlg.cpp:1101
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -5742,32 +5772,32 @@ msgid ""
 "calendar?"
 msgstr "Ростдан ҳам ушбу огоҳлантиришни тасдиқлайсизми?"
 
-#: prefdlg.cpp:1123
+#: prefdlg.cpp:1119
 #, fuzzy, kde-format
 #| msgid "Email client:"
 msgctxt "@label"
 msgid "Email client:"
 msgstr "Электрон почта дастури:"
 
-#: prefdlg.cpp:1126
+#: prefdlg.cpp:1122
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "KMail"
 msgstr "&KMail"
 
-#: prefdlg.cpp:1127
+#: prefdlg.cpp:1123
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Sendmail"
 msgstr "&Sendmail"
 
-#: prefdlg.cpp:1140
+#: prefdlg.cpp:1136
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
 msgstr ""
 
-#: prefdlg.cpp:1143
+#: prefdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5778,7 +5808,7 @@ msgid ""
 "sendmail compatible mail transport agent.</item></list></para>"
 msgstr ""
 
-#: prefdlg.cpp:1151
+#: prefdlg.cpp:1147
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5788,7 +5818,7 @@ msgid ""
 "transport agent.</item></list></para>"
 msgstr ""
 
-#: prefdlg.cpp:1161
+#: prefdlg.cpp:1157
 #, fuzzy, kde-kuit-format
 #| msgid "Co&py sent emails into KMail's %1 folder"
 msgctxt "@option:check"
@@ -5797,7 +5827,7 @@ msgid ""
 "resource> folder"
 msgstr "Жўнатилган хатлардан KMail %1 жилдига нусха олиш"
 
-#: prefdlg.cpp:1162
+#: prefdlg.cpp:1158
 #, fuzzy, kde-kuit-format
 #| msgid "After sending an email, store a copy in KMail's %1 folder"
 msgctxt "@info:whatsthis"
@@ -5806,20 +5836,20 @@ msgid ""
 "<resource>%1</resource> folder"
 msgstr "Хатни жўнатгандан сўнг ундан KMail %1 жилдига нусха олиш"
 
-#: prefdlg.cpp:1170
+#: prefdlg.cpp:1166
 #, kde-format
 msgctxt "@option:check"
 msgid "Notify when remote emails are queued"
 msgstr ""
 
-#: prefdlg.cpp:1178
+#: prefdlg.cpp:1174
 #, fuzzy, kde-format
 #| msgid "Your Email Address"
 msgctxt "@title:group"
 msgid "Your Email Address"
 msgstr "Электрон почтангиз"
 
-#: prefdlg.cpp:1184
+#: prefdlg.cpp:1180
 #, fuzzy, kde-format
 #| msgctxt "'From' email address"
 #| msgid "From:"
@@ -5827,7 +5857,7 @@ msgctxt "@label 'From' email address"
 msgid "From:"
 msgstr "Кимдан:"
 
-#: prefdlg.cpp:1196
+#: prefdlg.cpp:1192
 #, fuzzy, kde-format
 #| msgid ""
 #| "Your email address, used to identify you as the sender when sending email "
@@ -5840,14 +5870,14 @@ msgstr ""
 "Огоҳлантириш хати жўнатилганда, жўнатувчи сифатида ишлатиладиган электрон "
 "почта."
 
-#: prefdlg.cpp:1203 prefdlg.cpp:1239
+#: prefdlg.cpp:1199 prefdlg.cpp:1235
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
 msgstr "KMail &шахсиятларидан фойдаланиш"
 
-#: prefdlg.cpp:1206
+#: prefdlg.cpp:1202
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Your email address, used to identify you as the sender when sending email "
@@ -5860,14 +5890,14 @@ msgstr ""
 "Огоҳлантириш хати жўнатилганда, жўнатувчи сифатида ишлатиладиган электрон "
 "почта."
 
-#: prefdlg.cpp:1210
+#: prefdlg.cpp:1206
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@option:radio"
 msgid "Use <application>KMail</application> identities"
 msgstr "KMail &шахсиятларидан фойдаланиш"
 
-#: prefdlg.cpp:1213
+#: prefdlg.cpp:1209
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5878,13 +5908,13 @@ msgid ""
 "application>'s identities to use."
 msgstr ""
 
-#: prefdlg.cpp:1220
+#: prefdlg.cpp:1216
 #, kde-format
 msgctxt "@label 'Bcc' email address"
 msgid "Bcc:"
 msgstr ""
 
-#: prefdlg.cpp:1231
+#: prefdlg.cpp:1227
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5894,7 +5924,7 @@ msgid ""
 "login name."
 msgstr ""
 
-#: prefdlg.cpp:1242
+#: prefdlg.cpp:1238
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5902,13 +5932,13 @@ msgid ""
 "application>, for blind copying email alarms to yourself."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
-#: prefdlg.cpp:1344
+#: prefdlg.cpp:1340
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "No valid 'Bcc' email address is specified."
 msgstr "Электрон почтангиз"
 
-#: prefdlg.cpp:1351
+#: prefdlg.cpp:1347
 #, fuzzy, kde-format
 #| msgid ""
 #| "%1\n"
@@ -5919,7 +5949,7 @@ msgstr ""
 "%1\n"
 "Ўзгаришларни сақлашга ишончингиз комилми?"
 
-#: prefdlg.cpp:1357
+#: prefdlg.cpp:1353
 #, fuzzy, kde-kuit-format
 #| msgid "No email address is currently set in the KDE Control Center. %1"
 msgctxt "@info"
@@ -5928,7 +5958,7 @@ msgid ""
 "application>.</para><para>%1</para><para>%2</para>"
 msgstr "KDE бошқарув марказида электрон почта кўрсатилмаган. %1"
 
-#: prefdlg.cpp:1362
+#: prefdlg.cpp:1358
 #, fuzzy, kde-kuit-format
 #| msgid "No KMail identities currently exist. %1"
 msgctxt "@info"
@@ -5937,7 +5967,7 @@ msgid ""
 "para><para>%1</para><para>%2</para>"
 msgstr "KMail шахсияти мавжуд эмас. %1"
 
-#: prefdlg.cpp:1380
+#: prefdlg.cpp:1376
 #, fuzzy, kde-kuit-format
 #| msgid "The default setting for \"%1\" in the alarm edit dialog."
 msgctxt "@info:whatsthis"
@@ -5945,27 +5975,27 @@ msgid ""
 "The default setting for <interface>%1</interface> in the alarm edit dialog."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
-#: prefdlg.cpp:1389 prefdlg.cpp:1844
+#: prefdlg.cpp:1385 prefdlg.cpp:1840
 #, fuzzy, kde-format
 #| msgid "General"
 msgctxt "@title:tab"
 msgid "General"
 msgstr "Умумий"
 
-#: prefdlg.cpp:1395
+#: prefdlg.cpp:1391
 #, kde-format
 msgctxt "@title:tab Settings specific to alarm type"
 msgid "Type Specific"
 msgstr ""
 
-#: prefdlg.cpp:1401
+#: prefdlg.cpp:1397
 #, fuzzy, kde-format
 #| msgid "Font & Color"
 msgctxt "@title:tab"
 msgid "Font && Color"
 msgstr "Шрифт ва ранг"
 
-#: prefdlg.cpp:1417
+#: prefdlg.cpp:1413
 #, fuzzy, kde-format
 #| msgid "The default setting for \"%1\" in the alarm edit dialog."
 msgctxt "@info:whatsthis"
@@ -5974,32 +6004,32 @@ msgid ""
 "dialog."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
-#: prefdlg.cpp:1441
+#: prefdlg.cpp:1437
 #, fuzzy, kde-format
 #| msgid "Repeat"
 msgctxt "@label:listbox"
 msgid "Recurrence:"
 msgstr "Қайтариш"
 
-#: prefdlg.cpp:1474
+#: prefdlg.cpp:1470
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "February 28th"
 msgstr "2&8-чи февраль"
 
-#: prefdlg.cpp:1478
+#: prefdlg.cpp:1474
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "March 1st"
 msgstr "&1-чи март"
 
-#: prefdlg.cpp:1482
+#: prefdlg.cpp:1478
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Do not repeat"
 msgstr "Такрор&ланмасин"
 
-#: prefdlg.cpp:1487
+#: prefdlg.cpp:1483
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6008,33 +6038,33 @@ msgid ""
 "existing alarms is not re-evaluated when you change this setting.</note>"
 msgstr ""
 
-#: prefdlg.cpp:1493
+#: prefdlg.cpp:1489
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@title:group"
 msgid "Display Alarms"
 msgstr "Огоҳлантиришларни кўрсатиш"
 
-#: prefdlg.cpp:1511
+#: prefdlg.cpp:1507
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Reminder units:"
 msgstr "Эсга солиш"
 
-#: prefdlg.cpp:1514
+#: prefdlg.cpp:1510
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Minutes"
 msgstr "1 дақиқа"
 
-#: prefdlg.cpp:1515
+#: prefdlg.cpp:1511
 #, fuzzy, kde-format
 #| msgid "Hours/Minutes"
 msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
 msgstr "Соат/дақиқа"
 
-#: prefdlg.cpp:1518
+#: prefdlg.cpp:1514
 #, fuzzy, kde-format
 #| msgid "The default setting for \"%1\" in the alarm edit dialog."
 msgctxt "@info:whatsthis"
@@ -6043,19 +6073,19 @@ msgid ""
 "soon."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
-#: prefdlg.cpp:1524
+#: prefdlg.cpp:1520
 #, fuzzy, kde-format
 msgctxt "@title:group Audio options group"
 msgid "Sound"
 msgstr "Товуш"
 
-#: prefdlg.cpp:1543
+#: prefdlg.cpp:1539
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Repeat sound file"
 msgstr "Такрорлаш учун то&вуш файли"
 
-#: prefdlg.cpp:1546
+#: prefdlg.cpp:1542
 #, fuzzy, kde-kuit-format
 #| msgid "The default setting for \"%1\" in the alarm edit dialog."
 msgctxt "@info:whatsthis sound file 'Repeat' checkbox"
@@ -6064,61 +6094,61 @@ msgid ""
 "edit dialog."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
-#: prefdlg.cpp:1552
+#: prefdlg.cpp:1548
 #, fuzzy, kde-format
 #| msgid "Sound &file:"
 msgctxt "@label:textbox"
 msgid "Sound file:"
 msgstr "Товуш ф&айли:"
 
-#: prefdlg.cpp:1560
+#: prefdlg.cpp:1556
 #, fuzzy, kde-format
 #| msgid "Choose a sound file"
 msgctxt "@info:tooltip"
 msgid "Choose a sound file"
 msgstr "Товуш файлини танлаш"
 
-#: prefdlg.cpp:1562
+#: prefdlg.cpp:1558
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
-#: prefdlg.cpp:1571
+#: prefdlg.cpp:1567
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select to set the default volume for sound files in the alarm edit dialog."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
-#: prefdlg.cpp:1575
+#: prefdlg.cpp:1571
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default volume for sound files in the alarm edit dialog."
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
-#: prefdlg.cpp:1585
+#: prefdlg.cpp:1581
 #, fuzzy, kde-format
 #| msgid "Command Alarms"
 msgctxt "@title:group"
 msgid "Command Alarms"
 msgstr "Буйруқ орқали огоҳлантиришлар"
 
-#: prefdlg.cpp:1604
+#: prefdlg.cpp:1600
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@title:group"
 msgid "Email Alarms"
 msgstr "Электрон почта орқали огоҳлантиришлар"
 
-#: prefdlg.cpp:1617
+#: prefdlg.cpp:1613
 #, fuzzy, kde-format
 #| msgid "Message Font && Color"
 msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "Хабарнинг шрифт ва ранги"
 
-#: prefdlg.cpp:1823
+#: prefdlg.cpp:1819
 #, fuzzy, kde-kuit-format
 #| msgid "The default setting for \"%1\" in the alarm edit dialog."
 msgctxt "@info"
@@ -6127,20 +6157,20 @@ msgid ""
 "the default sound type"
 msgstr "Огоҳлантиришни таҳрирлаш ойнасидаги \"%1\" учун андоза мослама."
 
-#: prefdlg.cpp:1850
+#: prefdlg.cpp:1846
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "Огоҳлантириш рўйхати"
 
-#: prefdlg.cpp:1853
+#: prefdlg.cpp:1849
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "Огоҳлантири&шга қолган вақтни кўрсатиш"
 
-#: prefdlg.cpp:1855
+#: prefdlg.cpp:1851
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6149,13 +6179,13 @@ msgid ""
 "indication.</para>"
 msgstr ""
 
-#: prefdlg.cpp:1884
+#: prefdlg.cpp:1880
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr ""
 
-#: prefdlg.cpp:1888
+#: prefdlg.cpp:1884
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6163,13 +6193,13 @@ msgid ""
 "regardless of whether alarms are due."
 msgstr ""
 
-#: prefdlg.cpp:1892
+#: prefdlg.cpp:1888
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr ""
 
-#: prefdlg.cpp:1896
+#: prefdlg.cpp:1892
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6178,7 +6208,7 @@ msgid ""
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
 
-#: prefdlg.cpp:1902
+#: prefdlg.cpp:1898
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6188,26 +6218,26 @@ msgid ""
 "to show hidden icons."
 msgstr ""
 
-#: prefdlg.cpp:1905
+#: prefdlg.cpp:1901
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr ""
 
-#: prefdlg.cpp:1917
+#: prefdlg.cpp:1913
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr ""
 
-#: prefdlg.cpp:1924
+#: prefdlg.cpp:1920
 #, fuzzy, kde-format
 #| msgid "Show next &24 hours' alarms"
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
 msgstr "Кейинги 24 с&оат ичидаги огоҳлантиришларни кўрсатиш"
 
-#: prefdlg.cpp:1928
+#: prefdlg.cpp:1924
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6216,14 +6246,14 @@ msgid ""
 msgstr ""
 "Огоҳлантиришлар рўйхатидаги ўчирилган огоҳлантиришлар учун рангни танлаш."
 
-#: prefdlg.cpp:1934
+#: prefdlg.cpp:1930
 #, fuzzy, kde-format
 #| msgid "Ma&ximum number of alarms to show:"
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "&Кўрсатиладиган огоҳлантиришларнинг максимал сони:"
 
-#: prefdlg.cpp:1943
+#: prefdlg.cpp:1939
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6231,46 +6261,46 @@ msgid ""
 "tooltip. Check to enter an upper limit on the number to be displayed."
 msgstr ""
 
-#: prefdlg.cpp:1947
+#: prefdlg.cpp:1943
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "Огоҳлантириш вақ&тини кўрсатиш"
 
-#: prefdlg.cpp:1953
+#: prefdlg.cpp:1949
 #, fuzzy, kde-format
 #| msgid "Show time u&ntil alarm"
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "Огоҳлантири&шга қолган вақтни кўрсатиш"
 
-#: prefdlg.cpp:1971
+#: prefdlg.cpp:1967
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "Огоҳлантириш рўйхати"
 
-#: prefdlg.cpp:1983
+#: prefdlg.cpp:1979
 #, fuzzy, kde-format
 #| msgid "Di&sabled alarm color:"
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "Ў&чирилган огоҳлантиришнинг ранги:"
 
-#: prefdlg.cpp:1996
+#: prefdlg.cpp:1992
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "Ў&чирилган огоҳлантиришнинг ранги:"
 
-#: prefdlg.cpp:2009
+#: prefdlg.cpp:2005
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr ""
 
-#: prefdlg.cpp:2021
+#: prefdlg.cpp:2017
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6281,25 +6311,25 @@ msgid ""
 "time after the window is displayed.</item></list></para>"
 msgstr ""
 
-#: prefdlg.cpp:2024
+#: prefdlg.cpp:2020
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr ""
 
-#: prefdlg.cpp:2028
+#: prefdlg.cpp:2024
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr ""
 
-#: prefdlg.cpp:2037
+#: prefdlg.cpp:2033
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr ""
 
-#: prefdlg.cpp:2045
+#: prefdlg.cpp:2041
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6308,7 +6338,7 @@ msgid ""
 "acknowledged."
 msgstr ""
 
-#: prefdlg.cpp:2049
+#: prefdlg.cpp:2045
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6316,13 +6346,13 @@ msgid ""
 "window is shown."
 msgstr ""
 
-#: prefdlg.cpp:2057
+#: prefdlg.cpp:2053
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr ""
 
-#: prefdlg.cpp:2060
+#: prefdlg.cpp:2056
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7389,26 +7419,26 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "Такрор&ланмасин"
 
-#: resources/migration/fileresourcemigrator.cpp:255
+#: resources/migration/fileresourcemigrator.cpp:256
 #, fuzzy, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "KAlarm'ни активлаштириш"
 
-#: resources/migration/fileresourcemigrator.cpp:257
+#: resources/migration/fileresourcemigrator.cpp:258
 #, fuzzy, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "KAlarm'ни активлаштириш"
 
-#: resources/migration/fileresourcemigrator.cpp:259
+#: resources/migration/fileresourcemigrator.cpp:260
 #, fuzzy, kde-format
 #| msgid "Alarm Templates"
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "Огоҳлантириш намуналари"
 
-#: resources/migration/fileresourcemigrator.cpp:279
+#: resources/migration/fileresourcemigrator.cpp:280
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -7421,134 +7451,134 @@ msgstr ""
 "Аудио файлни очиб бўлмади:\n"
 "%1"
 
-#: resources/resourcedatamodelbase.cpp:65
+#: resources/resourcedatamodelbase.cpp:66
 #, fuzzy, kde-format
 msgctxt "@item:intext"
 msgid "Active Alarms"
 msgstr "KAlarm'ни активлаштириш"
 
-#: resources/resourcedatamodelbase.cpp:67
+#: resources/resourcedatamodelbase.cpp:68
 #, fuzzy, kde-format
 msgctxt "@item:intext"
 msgid "Archived Alarms"
 msgstr "KAlarm'ни активлаштириш"
 
-#: resources/resourcedatamodelbase.cpp:69
+#: resources/resourcedatamodelbase.cpp:70
 #, fuzzy, kde-format
 #| msgid "Alarm Templates"
 msgctxt "@item:intext"
 msgid "Alarm Templates"
 msgstr "Огоҳлантириш намуналари"
 
-#: resources/resourcedatamodelbase.cpp:85
+#: resources/resourcedatamodelbase.cpp:86
 #, fuzzy, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only"
 msgstr "фақат ўқишга"
 
-#: resources/resourcedatamodelbase.cpp:88
+#: resources/resourcedatamodelbase.cpp:89
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (old format)"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:91
+#: resources/resourcedatamodelbase.cpp:92
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (other format)"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:113
+#: resources/resourcedatamodelbase.cpp:114
 #, fuzzy, kde-format
 #| msgid "Time"
 msgctxt "@title:column"
 msgid "Time"
 msgstr "Вақт"
 
-#: resources/resourcedatamodelbase.cpp:115
+#: resources/resourcedatamodelbase.cpp:116
 #, fuzzy, kde-format
 msgctxt "@title:column"
 msgid "Time To"
 msgstr "Вақт"
 
-#: resources/resourcedatamodelbase.cpp:117
+#: resources/resourcedatamodelbase.cpp:118
 #, fuzzy, kde-format
 #| msgid "Repeat"
 msgctxt "@title:column"
 msgid "Repeat"
 msgstr "Қайтариш"
 
-#: resources/resourcedatamodelbase.cpp:119
+#: resources/resourcedatamodelbase.cpp:120
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:121
+#: resources/resourcedatamodelbase.cpp:122
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:123
+#: resources/resourcedatamodelbase.cpp:124
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Исми"
 
-#: resources/resourcedatamodelbase.cpp:125
+#: resources/resourcedatamodelbase.cpp:126
 #, fuzzy, kde-format
 #| msgid "Message, File or Command"
 msgctxt "@title:column"
 msgid "Message, File or Command"
 msgstr "Хабар, файл ёки буйруқ"
 
-#: resources/resourcedatamodelbase.cpp:127
+#: resources/resourcedatamodelbase.cpp:128
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column Template name"
 msgid "Name"
 msgstr "Исми"
 
-#: resources/resourcedatamodelbase.cpp:139
+#: resources/resourcedatamodelbase.cpp:140
 #, fuzzy, kde-format
 msgctxt "@title:column"
 msgid "Calendars"
 msgstr "Календар файлининг манзили"
 
-#: resources/resourcedatamodelbase.cpp:450
+#: resources/resourcedatamodelbase.cpp:451
 #, fuzzy, kde-format
 #| msgid "Command execution error:"
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
 msgstr "Буйруқни ишга тушириш хатоси:"
 
-#: resources/resourcedatamodelbase.cpp:452
+#: resources/resourcedatamodelbase.cpp:453
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
 msgstr "Огоҳлантиришдан олдинги амал:"
 
-#: resources/resourcedatamodelbase.cpp:454
+#: resources/resourcedatamodelbase.cpp:455
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
 msgstr "Огоҳлантиришдан кейинги амал:"
 
-#: resources/resourcedatamodelbase.cpp:456
+#: resources/resourcedatamodelbase.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:487
+#: resources/resourcedatamodelbase.cpp:488
 #, fuzzy, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
 msgstr "Ў&чириш"
 
-#: resources/resourcedatamodelbase.cpp:490
+#: resources/resourcedatamodelbase.cpp:491
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -7559,7 +7589,7 @@ msgstr ""
 "Файлни илова қилиш хатоси:\n"
 "%1"
 
-#: resources/resourcedatamodelbase.cpp:495
+#: resources/resourcedatamodelbase.cpp:496
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -7570,48 +7600,48 @@ msgstr ""
 "Файлни илова қилиш хатоси:\n"
 "%1"
 
-#: resources/resourcedatamodelbase.cpp:556
+#: resources/resourcedatamodelbase.cpp:557
 #, fuzzy, kde-format
 #| msgid "Next scheduled date and time of the alarm"
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
 msgstr "Навбатдаги режалаштирилган сана ва огоҳлантириш вақти"
 
-#: resources/resourcedatamodelbase.cpp:558
+#: resources/resourcedatamodelbase.cpp:559
 #, fuzzy, kde-format
 #| msgid "Next scheduled date and time of the alarm"
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
 msgstr "Навбатдаги режалаштирилган сана ва огоҳлантириш вақти"
 
-#: resources/resourcedatamodelbase.cpp:560
+#: resources/resourcedatamodelbase.cpp:561
 #, fuzzy, kde-format
 #| msgid "How often the alarm recurs"
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
 msgstr "Огоҳлантириш қанча такрорланади"
 
-#: resources/resourcedatamodelbase.cpp:562
+#: resources/resourcedatamodelbase.cpp:563
 #, fuzzy, kde-format
 #| msgid "Background color of alarm message"
 msgctxt "@info:whatsthis"
 msgid "Background color of alarm message"
 msgstr "Огоҳлантириш хабари учун орқа фон ранги"
 
-#: resources/resourcedatamodelbase.cpp:564
+#: resources/resourcedatamodelbase.cpp:565
 #, fuzzy, kde-format
 #| msgid "Alarm type (message, file, command or email)"
 msgctxt "@info:whatsthis"
 msgid "Alarm type (message, file, command or email)"
 msgstr "Огоҳлантириш тури (хабар, файл, буйруқ ёки электрон почта)"
 
-#: resources/resourcedatamodelbase.cpp:566
+#: resources/resourcedatamodelbase.cpp:567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:568
+#: resources/resourcedatamodelbase.cpp:569
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7619,21 +7649,21 @@ msgid ""
 "email subject line"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:570
+#: resources/resourcedatamodelbase.cpp:571
 #, fuzzy, kde-format
 #| msgid "Name of the alarm template"
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
 msgstr "Огоҳлантириш намунасининг номи"
 
-#: resources/resourcedatamodelbase.cpp:662
-#: resources/resourcedatamodelbase.cpp:762
+#: resources/resourcedatamodelbase.cpp:663
+#: resources/resourcedatamodelbase.cpp:763
 #, kde-format
 msgctxt "@info Alarm never occurs"
 msgid "Never"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:768
+#: resources/resourcedatamodelbase.cpp:769
 #, fuzzy, no-c-format, kde-format
 #| msgctxt "n days"
 #| msgid " %1d "
@@ -7641,7 +7671,7 @@ msgctxt "@info n days"
 msgid "%1d"
 msgstr " %1к "
 
-#: resources/resourcedatamodelbase.cpp:778
+#: resources/resourcedatamodelbase.cpp:779
 #, fuzzy, kde-format
 #| msgctxt "Undo-action: message"
 #| msgid "%1: %2"
@@ -7649,7 +7679,7 @@ msgctxt "@info hours:minutes"
 msgid "%1:%2"
 msgstr "%1: %2"
 
-#: resources/resourcedatamodelbase.cpp:785
+#: resources/resourcedatamodelbase.cpp:786
 #, fuzzy, kde-format
 #| msgctxt "days hours:minutes"
 #| msgid " %1d %2:%3 "
@@ -7657,13 +7687,13 @@ msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
 msgstr " %1к %2:%3 "
 
-#: resources/resourcemodel.cpp:328
+#: resources/resourcemodel.cpp:329
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
 msgstr "Ростдан ҳам ушбу огоҳлантиришни тасдиқлайсизми?"
 
-#: resources/resourcemodel.cpp:334
+#: resources/resourcemodel.cpp:335
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -7671,7 +7701,7 @@ msgid ""
 "are configured to be kept."
 msgstr "Ростдан ҳам ушбу огоҳлантиришни тасдиқлайсизми?"
 
-#: resources/resourcemodel.cpp:338
+#: resources/resourcemodel.cpp:339
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"
@@ -7764,19 +7794,19 @@ msgctxt "@item:intext What a resource is stored in (directory in filesystem)"
 msgid "Directory"
 msgstr "Огоҳлантиришларни кўрсатиш"
 
-#: resources/singlefileresource.cpp:176 resources/singlefileresource.cpp:350
+#: resources/singlefileresource.cpp:177 resources/singlefileresource.cpp:351
 #, kde-format
 msgctxt "@info"
 msgid "A previous load is still in progress."
 msgstr ""
 
-#: resources/singlefileresource.cpp:182 resources/singlefileresource.cpp:356
+#: resources/singlefileresource.cpp:183 resources/singlefileresource.cpp:357
 #, kde-format
 msgctxt "@info"
 msgid "A previous save is still in progress."
 msgstr ""
 
-#: resources/singlefileresource.cpp:231
+#: resources/singlefileresource.cpp:232
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -7787,7 +7817,7 @@ msgstr ""
 "Аудио файлни очиб бўлмади:\n"
 "%1"
 
-#: resources/singlefileresource.cpp:246
+#: resources/singlefileresource.cpp:247
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -7798,7 +7828,7 @@ msgstr ""
 "Аудио файлни очиб бўлмади:\n"
 "%1"
 
-#: resources/singlefileresource.cpp:601
+#: resources/singlefileresource.cpp:602
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -7809,13 +7839,13 @@ msgstr ""
 "Аудио файлни очиб бўлмади:\n"
 "%1"
 
-#: resources/singlefileresource.cpp:633
+#: resources/singlefileresource.cpp:634
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "Календар файлининг манзили"
 
-#: resources/singlefileresource.cpp:646
+#: resources/singlefileresource.cpp:647
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -7826,7 +7856,7 @@ msgstr ""
 "Аудио файлни очиб бўлмади:\n"
 "%1"
 
-#: resources/singlefileresource.cpp:738
+#: resources/singlefileresource.cpp:739
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -7837,7 +7867,7 @@ msgstr ""
 "Аудио файлни очиб бўлмади:\n"
 "%1"
 
-#: resources/singlefileresource.cpp:775
+#: resources/singlefileresource.cpp:776
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -8256,13 +8286,13 @@ msgid ""
 "calendar: %9</para>"
 msgstr ""
 
-#: rtcwakeaction.cpp:87
+#: rtcwakeaction.cpp:88
 #, kde-kuit-format
 msgctxt "@text/plain"
 msgid "Could not run <command>%1</command> to set wake from suspend"
 msgstr ""
 
-#: rtcwakeaction.cpp:90
+#: rtcwakeaction.cpp:91
 #, kde-kuit-format
 msgctxt "@text/plain"
 msgid ""
@@ -8270,21 +8300,21 @@ msgid ""
 "command><nl/>Error code: %3."
 msgstr ""
 
-#: sounddlg.cpp:41
+#: sounddlg.cpp:42
 #, fuzzy, kde-format
 #| msgid "Repeat"
 msgctxt "@option:check"
 msgid "Repeat"
 msgstr "Қайтариш"
 
-#: sounddlg.cpp:42
+#: sounddlg.cpp:43
 #, fuzzy, kde-format
 #| msgid "Set volume"
 msgctxt "@option:check"
 msgid "Set volume"
 msgstr "Товушни мослаш"
 
-#: sounddlg.cpp:52
+#: sounddlg.cpp:53
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8292,93 +8322,93 @@ msgid ""
 "message is displayed."
 msgstr "Огоҳлантириш кўрсатилганда ўйналадиган товуш файлини мослаш."
 
-#: sounddlg.cpp:148
+#: sounddlg.cpp:149
 #, fuzzy, kde-format
 #| msgid "Sound &file:"
 msgctxt "@label"
 msgid "Sound file:"
 msgstr "Товуш ф&айли:"
 
-#: sounddlg.cpp:165 sounddlg.cpp:460
+#: sounddlg.cpp:166 sounddlg.cpp:461
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "Товушни ўйнашни тўхтатиш"
 
-#: sounddlg.cpp:166 sounddlg.cpp:461
+#: sounddlg.cpp:167 sounddlg.cpp:462
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
 msgstr "Такрорлаш учун то&вуш файли"
 
-#: sounddlg.cpp:173
+#: sounddlg.cpp:174
 #, fuzzy, kde-format
 #| msgid "Enter the name or URL of a sound file to play."
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
 msgstr "Ўйнаш учун товуш файлининг номи ёки манзилини киритинг."
 
-#: sounddlg.cpp:184
+#: sounddlg.cpp:185
 #, fuzzy, kde-format
 #| msgid "Select a sound file to play."
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
 msgstr "Ўйнаш учун товуш файлини танлаш."
 
-#: sounddlg.cpp:206
+#: sounddlg.cpp:207
 #, fuzzy, kde-format
 #| msgid "Interval between alarm repetitions"
 msgctxt "@label:spinbox Length of time to pause between repetitions"
 msgid "Pause between repetitions:"
 msgstr "Огоҳлантиришни такрорлаш вақти"
 
-#: sounddlg.cpp:213 sounddlg.cpp:270
+#: sounddlg.cpp:214 sounddlg.cpp:271
 #, fuzzy, kde-format
 #| msgid "seconds"
 msgctxt "@label"
 msgid "seconds"
 msgstr "сония"
 
-#: sounddlg.cpp:215
+#: sounddlg.cpp:216
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how many seconds to pause between repetitions."
 msgstr "Огоҳлантиришни такрорлаш учун охириги кунни киритинг"
 
-#: sounddlg.cpp:218
+#: sounddlg.cpp:219
 #, fuzzy, kde-format
 #| msgid "Volume"
 msgctxt "@title:group Sound volume"
 msgid "Volume"
 msgstr "Товуш"
 
-#: sounddlg.cpp:234
+#: sounddlg.cpp:235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
 msgstr ""
 
-#: sounddlg.cpp:242
+#: sounddlg.cpp:243
 #, fuzzy, kde-format
 #| msgid "Enter the name or path of the log file."
 msgctxt "@info:whatsthis"
 msgid "Choose the volume for playing the sound file."
 msgstr "Лог файлини номини ёки йўлини киритинг."
 
-#: sounddlg.cpp:253
+#: sounddlg.cpp:254
 #, fuzzy, kde-format
 #| msgid "Fade"
 msgctxt "@option:check"
 msgid "Fade"
 msgstr "Сўниш"
 
-#: sounddlg.cpp:255
+#: sounddlg.cpp:256
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
 msgstr ""
 
-#: sounddlg.cpp:263
+#: sounddlg.cpp:264
 #, fuzzy, kde-format
 #| msgctxt "Time period over which to fade the sound"
 #| msgid "Fade time:"
@@ -8386,60 +8416,60 @@ msgctxt "@label:spinbox Time period over which to fade the sound"
 msgid "Fade time:"
 msgstr "Сўниш вақти:"
 
-#: sounddlg.cpp:272
+#: sounddlg.cpp:273
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many seconds to fade the sound before reaching the set volume."
 msgstr ""
 
-#: sounddlg.cpp:279
+#: sounddlg.cpp:280
 #, fuzzy, kde-format
 #| msgid "Set volume"
 msgctxt "@label:slider"
 msgid "Initial volume:"
 msgstr "Товушни мослаш"
 
-#: sounddlg.cpp:288
+#: sounddlg.cpp:289
 #, fuzzy, kde-format
 #| msgid "Enter the name or path of the log file."
 msgctxt "@info:whatsthis"
 msgid "Choose the initial volume for playing the sound file."
 msgstr "Лог файлини номини ёки йўлини киритинг."
 
-#: soundpicker.cpp:40
+#: soundpicker.cpp:41
 #, fuzzy, kde-format
 msgctxt "@label:listbox Listbox providing audio options"
 msgid "Sound:"
 msgstr "&Товуш"
 
-#: soundpicker.cpp:41
+#: soundpicker.cpp:42
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox No sound"
 msgid "None"
 msgstr "Йўқ"
 
-#: soundpicker.cpp:42
+#: soundpicker.cpp:43
 #, fuzzy, kde-format
 #| msgid "Beep"
 msgctxt "@item:inlistbox"
 msgid "Beep"
 msgstr "Бип"
 
-#: soundpicker.cpp:43
+#: soundpicker.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Speak"
 msgstr ""
 
-#: soundpicker.cpp:44
+#: soundpicker.cpp:45
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Sound file"
 msgstr "Товуш ф&айли:"
 
-#: soundpicker.cpp:74
+#: soundpicker.cpp:75
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8453,33 +8483,33 @@ msgid ""
 "list></para>"
 msgstr ""
 
-#: soundpicker.cpp:86
+#: soundpicker.cpp:87
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure sound file"
 msgstr "Товуш файлини танлаш"
 
-#: soundpicker.cpp:87
+#: soundpicker.cpp:88
 #, fuzzy, kde-format
 #| msgid "Configure a sound file to play when the alarm is displayed."
 msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
 msgstr "Огоҳлантириш кўрсатилганда ўйналадиган товуш файлини мослаш."
 
-#: soundpicker.cpp:256
+#: soundpicker.cpp:257
 #, fuzzy, kde-format
 #| msgid "Sound File"
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "Товуш файли"
 
-#: soundpicker.cpp:315
+#: soundpicker.cpp:316
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Товуш ф&айли:"
 
-#: soundpicker.cpp:338
+#: soundpicker.cpp:339
 #, fuzzy, kde-format
 #| msgid "Choose Sound File"
 msgctxt "@title:window"
@@ -8709,31 +8739,31 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Огоҳлантиришни режалаштириш учун вақтни кўрсатинг."
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, fuzzy, kde-format
 #| msgid "New Alarm"
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "Янги огоҳлантириш"
 
-#: traywindow.cpp:300
+#: traywindow.cpp:301
 #, fuzzy, kde-format
 msgid "Disabled"
 msgstr "Ў&чириш"
 
-#: traywindow.cpp:305
+#: traywindow.cpp:306
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr ""
 
-#: traywindow.cpp:365
+#: traywindow.cpp:366
 #, fuzzy, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:367
+#: traywindow.cpp:368
 #, fuzzy, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"
@@ -8977,6 +9007,11 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
+
+#, fuzzy
+#~ msgctxt "@label"
+#~ msgid "Suppress autostart at login"
+#~ msgstr "Тизимга &киришда автоматик бошлаш"
 
 #, fuzzy
 #~ msgctxt "@option:check"

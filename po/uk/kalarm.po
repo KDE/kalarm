@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-13 00:40+0000\n"
-"PO-Revision-Date: 2024-09-11 11:11+0300\n"
+"POT-Creation-Date: 2024-09-14 00:41+0000\n"
+"PO-Revision-Date: 2024-09-13 17:44+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -147,7 +147,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Відкласти на:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:328
+#: alarmtimewidget.cpp:137 editdlg.cpp:329
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
@@ -165,7 +165,7 @@ msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "Запланувати нагадування через вказаний проміжок часу від поточного."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:339
+#: alarmtimewidget.cpp:149 editdlg.cpp:340
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -243,7 +243,7 @@ msgstr ""
 "Оберіть часовий пояс, який відрізняється від типового часового поясу, "
 "встановленого у діалоговому вікні налаштувань KAlarm, для цього нагадування."
 
-#: alarmtimewidget.cpp:227 prefdlg.cpp:755
+#: alarmtimewidget.cpp:227 prefdlg.cpp:751
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
@@ -328,55 +328,55 @@ msgstr ""
 "<para>Помилка під час спроби відтворення звукового файла <filename>%1</"
 "filename></para>"
 
-#: autostart/autostart.cpp:48
+#: autostart/autostart.cpp:49
 #, kde-format
 msgid "KAlarm Autostart"
 msgstr "Автозапуск KAlarm"
 
-#: autostart/autostart.cpp:49
+#: autostart/autostart.cpp:50
 #, kde-format
 msgid "KAlarm autostart at login"
 msgstr "Автозапуск KAlarm при вході"
 
-#: autostart/autostart.cpp:51
+#: autostart/autostart.cpp:52
 #, kde-format
 msgid "Copyright 2001-%1, David Jarvie"
 msgstr "© David Jarvie, 2001–%1"
 
-#: autostart/autostart.cpp:52 main.cpp:60
+#: autostart/autostart.cpp:53 main.cpp:60
 #, kde-format
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
 
-#: autostart/autostart.cpp:52 main.cpp:60
+#: autostart/autostart.cpp:53 main.cpp:60
 #, kde-format
 msgid "Author"
 msgstr "Автор"
 
-#: autostart/autostart.cpp:58
+#: autostart/autostart.cpp:59
 #, kde-format
 msgid "Application to run"
 msgstr "Програма, яку слід запустити"
 
-#: autostart/autostart.cpp:59
+#: autostart/autostart.cpp:60
 #, kde-format
 msgid "Command line arguments to pass to application"
 msgstr "Параметри командного рядка, які слід передати програмі"
 
-#: birthdaydlg.cpp:49
+#: birthdaydlg.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Імпортувати дні народження з KAddressBook"
 
-#: birthdaydlg.cpp:63 editdlg.cpp:244
+#: birthdaydlg.cpp:64 editdlg.cpp:245
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Назва нагадування:"
 
-#: birthdaydlg.cpp:68 editdlg.cpp:252
+#: birthdaydlg.cpp:69 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -386,25 +386,25 @@ msgstr ""
 "Введіть назву, яка допоможе вам у ідентифікації цього нагадування. Назва є "
 "необов'язковою і може повторюватися."
 
-#: birthdaydlg.cpp:75
+#: birthdaydlg.cpp:76
 #, kde-format
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "День народження: "
 
-#: birthdaydlg.cpp:78
+#: birthdaydlg.cpp:79
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Текст нагадування"
 
-#: birthdaydlg.cpp:81 prefdlg.cpp:1962
+#: birthdaydlg.cpp:82 prefdlg.cpp:1958
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "Префікс:"
 
-#: birthdaydlg.cpp:88
+#: birthdaydlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -414,13 +414,13 @@ msgstr ""
 "Введіть текст (включаючи потрібні кінцеві пробіли), який буде показано перед "
 "іменем людини в повідомленні нагадування."
 
-#: birthdaydlg.cpp:92
+#: birthdaydlg.cpp:93
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "Суфікс:"
 
-#: birthdaydlg.cpp:99
+#: birthdaydlg.cpp:100
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -430,13 +430,13 @@ msgstr ""
 "Введіть текст, (включаючи потрібні початкові пробіли), який буде показано "
 "після імені особи в повідомленні нагадування."
 
-#: birthdaydlg.cpp:103
+#: birthdaydlg.cpp:104
 #, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "Виберіть дні народження"
 
-#: birthdaydlg.cpp:133
+#: birthdaydlg.cpp:134
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -452,13 +452,13 @@ msgstr ""
 "вибирати декілька нагадувань одночасно тягнучи мишкою по списку, або "
 "клацаючи мишкою при натиснутих Ctrl чи Shift.</para>"
 
-#: birthdaydlg.cpp:139
+#: birthdaydlg.cpp:140
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "Налаштування нагадування"
 
-#: birthdaydlg.cpp:159
+#: birthdaydlg.cpp:160
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
@@ -466,7 +466,7 @@ msgstr ""
 "Позначте, щоб наказати програмі показувати додаткове нагадування до чи після "
 "дати дня народження."
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -478,266 +478,266 @@ msgstr ""
 "завчасне нагадування. Це додаток до нагадування, яке показується в самий "
 "день народження."
 
-#: birthdaydlg.cpp:162
+#: birthdaydlg.cpp:163
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
 msgstr "Вкажіть, буде нагадування задіяно до чи після дати дня народження."
 
-#: birthdaydlg.cpp:195 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
 #, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "Підповторення"
 
-#: birthdaydlg.cpp:197
+#: birthdaydlg.cpp:198
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
 msgstr "Встановити додаткове повторення нагадування"
 
-#: commandoptions.cpp:126
+#: commandoptions.cpp:127
 #, kde-format
 msgid "Prompt for confirmation when alarm is acknowledged"
 msgstr "Вимагати підтвердження про ознайомлення з нагадуванням"
 
-#: commandoptions.cpp:129
+#: commandoptions.cpp:130
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
 msgstr "Долучити файл до електронної пошти (повторювати при потребі)"
 
-#: commandoptions.cpp:133
+#: commandoptions.cpp:134
 #, kde-format
 msgid "Auto-close alarm window after --late-cancel period"
 msgstr "Автоматично закривати вікно після закінчення періоду спізнення"
 
-#: commandoptions.cpp:136
+#: commandoptions.cpp:137
 #, kde-format
 msgid "Blind copy email to self"
 msgstr "Надіслати приховану копію собі"
 
-#: commandoptions.cpp:139
+#: commandoptions.cpp:140
 #, kde-format
 msgid "Beep when message is displayed"
 msgstr "Давати гудок при показі повідомлення"
 
-#: commandoptions.cpp:142
+#: commandoptions.cpp:143
 #, kde-format
 msgid "Message background color (name or hex 0xRRGGBB)"
 msgstr "Колір тла повідомлення (назва або шіст. 0xRRGGBB)"
 
-#: commandoptions.cpp:146
+#: commandoptions.cpp:147
 #, kde-format
 msgid "Message foreground color (name or hex 0xRRGGBB)"
 msgstr "Колір тексту повідомлення (назва або шіст. 0xRRGGBB)"
 
-#: commandoptions.cpp:150
+#: commandoptions.cpp:151
 #, kde-format
 msgid "Cancel alarm with the specified event ID"
 msgstr "Скасувати нагадування з вказаним ІД події"
 
-#: commandoptions.cpp:154
+#: commandoptions.cpp:155
 #, kde-format
 msgid "Disable the alarm"
 msgstr "Вимкнути нагадування"
 
-#: commandoptions.cpp:157
+#: commandoptions.cpp:158
 #, kde-format
 msgid "Disable monitoring of all alarms"
 msgstr "Вимкнути спостереження за всіма нагадуваннями"
 
-#: commandoptions.cpp:160
+#: commandoptions.cpp:161
 #, kde-format
 msgid "Execute a shell command line"
 msgstr "Виконати команду оболонки"
 
-#: commandoptions.cpp:164
+#: commandoptions.cpp:165
 #, kde-format
 msgid "Command line to generate alarm message text"
 msgstr "Командний рядок для створення тексту повідомлення нагадування"
 
-#: commandoptions.cpp:168
+#: commandoptions.cpp:169
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
 msgstr "Показати вікно для редагування вказаного нагадування"
 
-#: commandoptions.cpp:172
+#: commandoptions.cpp:173
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr "Показати вікно для редагування нового візуального нагадування"
 
-#: commandoptions.cpp:175
+#: commandoptions.cpp:176
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr "Показати вікно для редагування нового нагадування"
 
-#: commandoptions.cpp:178
+#: commandoptions.cpp:179
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
 msgstr "Показати вікно для редагування нового нагадування електронним листом"
 
-#: commandoptions.cpp:181
+#: commandoptions.cpp:182
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
 msgstr "Показати вікно для редагування нового звукового нагадування"
 
-#: commandoptions.cpp:184
+#: commandoptions.cpp:185
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
 msgstr "Показати вікно для редагування нагадування за шаблоном"
 
-#: commandoptions.cpp:188
+#: commandoptions.cpp:189
 #, kde-format
 msgid "File to display"
 msgstr "Показати файл"
 
-#: commandoptions.cpp:192
+#: commandoptions.cpp:193
 #, kde-format
 msgid "KMail identity to use as sender of email"
 msgstr "Профіль KMail, який використовується як відправник листа"
 
-#: commandoptions.cpp:196
+#: commandoptions.cpp:197
 #, kde-format
 msgid "Interval between alarm repetitions"
 msgstr "Інтервал між повтореннями нагадування"
 
-#: commandoptions.cpp:200
+#: commandoptions.cpp:201
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
 msgstr "Показати нагадування як подію в KOrganizer"
 
-#: commandoptions.cpp:203
+#: commandoptions.cpp:204
 #, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
 msgstr ""
 "Скасувати нагадування, якщо воно більше, ніж на «період» спізнилось, коли "
 "спрацювало"
 
-#: commandoptions.cpp:208
+#: commandoptions.cpp:209
 #, kde-format
 msgid "Output list of scheduled alarms to stdout"
 msgstr "Вивести список запланованих нагадувань до стандартного виведення"
 
-#: commandoptions.cpp:211
+#: commandoptions.cpp:212
 #, kde-format
 msgid "Repeat alarm at every login"
 msgstr "Повторювати нагадування при кожному вході в систему"
 
-#: commandoptions.cpp:214
+#: commandoptions.cpp:215
 #, kde-format
 msgid "Send an email to the given address (repeat as needed)"
 msgstr "Відіслати ел. пошту на дані адреси (повторювати за потреби)"
 
-#: commandoptions.cpp:218
+#: commandoptions.cpp:219
 #, kde-format
 msgid "Name of alarm"
 msgstr "Назва нагадування"
 
-#: commandoptions.cpp:222
+#: commandoptions.cpp:223
 #, kde-format
 msgid "Display alarm message as a notification"
 msgstr "Показати повідомлення нагадування як сповіщення"
 
-#: commandoptions.cpp:225
+#: commandoptions.cpp:226
 #, kde-format
 msgid "Audio file to play once"
 msgstr "Відтворити аудіофайл один раз"
 
-#: commandoptions.cpp:229
+#: commandoptions.cpp:230
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Відтворювати аудіофайл безперервно"
 
-#: commandoptions.cpp:233
+#: commandoptions.cpp:234
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr ""
 "Вказати частоту повторення нагадування використовуючи синтаксис iCalendar"
 
-#: commandoptions.cpp:237
+#: commandoptions.cpp:238
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "Показувати завчасне нагадування до чи після основного нагадування"
 
-#: commandoptions.cpp:241
+#: commandoptions.cpp:242
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "Показувати завчасне нагадування тільки до чи після першого повторення"
 
-#: commandoptions.cpp:245
+#: commandoptions.cpp:246
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Кількість разів повторення нагадування (включно з першим разом)"
 
-#: commandoptions.cpp:250
+#: commandoptions.cpp:251
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Декламувати повідомлення, коли його показано"
 
-#: commandoptions.cpp:254
+#: commandoptions.cpp:255
 #, kde-format
 msgid "Email subject line"
 msgstr "Рядок теми ел. пошти"
 
-#: commandoptions.cpp:259
+#: commandoptions.cpp:260
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
 "Імітувати системний час [[[yyyy-]mm-]dd-]hh:mm [TZ] (режим усування вад)"
 
-#: commandoptions.cpp:264
+#: commandoptions.cpp:265
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Час [[[yyyy-]mm-]dd-]hh:mm [TZ], або дата yyyy-mm-dd [TZ] приведення в дію"
 
-#: commandoptions.cpp:268
+#: commandoptions.cpp:269
 #, kde-format
 msgid "Display system tray icon"
 msgstr "Показувати піктограму системного лотка"
 
-#: commandoptions.cpp:271
+#: commandoptions.cpp:272
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Привести нагадування в дію з вказаним ІД події"
 
-#: commandoptions.cpp:275
+#: commandoptions.cpp:276
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Повторювати до часу [[[yyyy-]mm-]dd-]hh:mm [TZ], або дати yyyy-mm-dd [TZ]"
 
-#: commandoptions.cpp:279
+#: commandoptions.cpp:280
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "Гучність відтворення звукового файла"
 
-#: commandoptions.cpp:290
+#: commandoptions.cpp:291
 #, kde-format
 msgid "Message text to display"
 msgstr "Текст повідомлення, що буде показано"
 
-#: commandoptions.cpp:454
+#: commandoptions.cpp:455
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
 msgstr "<icode>%1</icode>: неправильна адреса електронної пошти"
 
-#: commandoptions.cpp:577 commandoptions.cpp:592 commandoptions.cpp:671
+#: commandoptions.cpp:578 commandoptions.cpp:593 commandoptions.cpp:672
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
 msgstr "Неправильний <icode>%1</icode> параметр для нагадування дати"
 
-#: commandoptions.cpp:581
+#: commandoptions.cpp:582
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "<icode>%1</icode> скоріше, ніж <icode>%2</icode>"
 
-#: commandoptions.cpp:603
+#: commandoptions.cpp:604
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid ""
@@ -747,7 +747,7 @@ msgstr ""
 "Некоректні параметри <icode>%1</icode> та <icode>%2</icode>: повторення "
 "перевищують інтервал <icode>%3</icode>"
 
-#: commandoptions.cpp:784
+#: commandoptions.cpp:785
 #, kde-format
 msgctxt "@info:shell"
 msgid ": option(s) only valid with an appropriate action option or message"
@@ -755,7 +755,7 @@ msgstr ""
 ": параметр(и) можна використовувати лише з визначенням відповідного варіанта "
 "дії або повідомлення"
 
-#: commandoptions.cpp:805 commandoptions.cpp:822
+#: commandoptions.cpp:806 commandoptions.cpp:823
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -766,25 +766,25 @@ msgstr ""
 "Скористайтеся параметром --help для отримання списку можливих параметрів "
 "командного рядка.\n"
 
-#: commandoptions.cpp:850
+#: commandoptions.cpp:851
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
 msgstr "<icode>%1</icode> потребує <icode>%2</icode>"
 
-#: commandoptions.cpp:852
+#: commandoptions.cpp:853
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
 msgstr "<icode>%1</icode> потребує <icode>%2</icode> або <icode>%3</icode>"
 
-#: commandoptions.cpp:857
+#: commandoptions.cpp:858
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
 msgstr "Неправильний параметр <icode>%1</icode>"
 
-#: commandoptions.cpp:862
+#: commandoptions.cpp:863
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> incompatible with <icode>%2</icode>"
@@ -893,7 +893,7 @@ msgid "Select the holiday region to use."
 msgstr "Виберіть діапазон вихідних, який буде використано."
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
-#: data/kalarmconfig.kcfg:93 kalarmcalendar/kaeventformatter.cpp:92
+#: data/kalarmconfig.kcfg:93 kalarmcalendar/kaeventformatter.cpp:93
 #, kde-format
 msgctxt "@label"
 msgid "Foreground color"
@@ -907,7 +907,7 @@ msgid "Default foreground color for alarm message windows."
 msgstr "Типовий колір тексту для вікон повідомлень нагадувань."
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
-#: data/kalarmconfig.kcfg:98 kalarmcalendar/kaeventformatter.cpp:94
+#: data/kalarmconfig.kcfg:98 kalarmcalendar/kaeventformatter.cpp:95
 #, kde-format
 msgctxt "@label"
 msgid "Background color"
@@ -1013,41 +1013,83 @@ msgstr ""
 "Стільниці, у яких варіант із автоматичним приховуванням у системному лотку "
 "недоступний."
 
-#. i18n: ectx: label, entry (AutoStart), group (General)
+#. i18n: ectx: label, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:132
 #, kde-format
 msgctxt "@label"
 msgid "Start at login"
 msgstr "Запускати при вході"
 
-#. i18n: ectx: whatsthis, entry (AutoStart), group (General)
+#. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:whatsthis"
+#| msgid ""
+#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
+#| "should always be checked unless you intend to discontinue use of KAlarm.</"
+#| "p>"
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-"should always be checked unless you intend to discontinue use of KAlarm.</p>"
+"should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
 "<p>Автоматично запускати KAlarm кожного разу, коли запускається KDE.</"
 "p><p>Цей параметр слід тримати увімкненим, якщо ви бажаєте безперервно "
 "використовувати KAlarm.</p>"
 
-#. i18n: ectx: label, entry (Base_NoAutoStart), group (General)
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:group"
+#| msgid "Run Mode"
 msgctxt "@label"
-msgid "Suppress autostart at login"
-msgstr "Придушити автозапуск KAlarm при вході"
+msgid "Run mode"
+msgstr "Режим виконання"
+
+#. i18n: ectx: whatsthis, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:138
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Whether to run KAlarm automatically on login, manually only, or not at all."
+msgstr ""
+
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:140
+#, fuzzy, kde-format
+#| msgctxt "@option:radio"
+#| msgid "Run automatically"
+msgctxt "@option"
+msgid "Run automatically"
+msgstr "Запускати автоматично"
+
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:141
+#, fuzzy, kde-format
+#| msgctxt "@option:radio"
+#| msgid "Run manually only"
+msgctxt "@option"
+msgid "Run manually only"
+msgstr "Запускати лише вручну"
+
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:142
+#, fuzzy, kde-format
+#| msgctxt "@option:radio"
+#| msgid "Do not run"
+msgctxt "@option"
+msgid "Do not run"
+msgstr "Не запускати"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
-#: data/kalarmconfig.kcfg:141
+#: data/kalarmconfig.kcfg:147
 #, kde-format
 msgctxt "@label"
 msgid "Default defer time interval"
 msgstr "Типовий проміжок часу відкладення"
 
 #. i18n: ectx: whatsthis, entry (DefaultDeferTime), group (General)
-#: data/kalarmconfig.kcfg:142
+#: data/kalarmconfig.kcfg:148
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1058,14 +1100,14 @@ msgstr ""
 "проміжок буде використано у діалоговому вікні відкладення нагадувань."
 
 #. i18n: ectx: label, entry (AskResource), group (General)
-#: data/kalarmconfig.kcfg:146
+#: data/kalarmconfig.kcfg:152
 #, kde-format
 msgctxt "@label"
 msgid "Prompt for which calendar to store in"
 msgstr "Запитувати про те, у якому календарі слід зберігати"
 
 #. i18n: ectx: whatsthis, entry (AskResource), group (General)
-#: data/kalarmconfig.kcfg:147
+#: data/kalarmconfig.kcfg:153
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1079,14 +1121,14 @@ msgstr ""
 "типовому календарі застарілих нагадувань.</p>"
 
 #. i18n: ectx: label, entry (Base_ModalMessages), group (General)
-#: data/kalarmconfig.kcfg:151
+#: data/kalarmconfig.kcfg:157
 #, kde-format
 msgctxt "@label"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Вікна нагадувань мають поля заголовків і автоматичний фокус клавіатури"
 
 #. i18n: ectx: whatsthis, entry (Base_ModalMessages), group (General)
-#: data/kalarmconfig.kcfg:152
+#: data/kalarmconfig.kcfg:158
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1103,14 +1145,14 @@ msgstr ""
 "неможливо пересувати та міняти його розмір.</li></ul></p>"
 
 #. i18n: ectx: label, entry (Base_MessageButtonDelay), group (General)
-#: data/kalarmconfig.kcfg:156
+#: data/kalarmconfig.kcfg:162
 #, kde-format
 msgctxt "@label"
 msgid "Delay before message window buttons are enabled"
 msgstr "Затримка перед вмиканням кнопок вікна повідомлень"
 
 #. i18n: ectx: whatsthis, entry (Base_MessageButtonDelay), group (General)
-#: data/kalarmconfig.kcfg:161
+#: data/kalarmconfig.kcfg:167
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1135,14 +1177,14 @@ msgstr ""
 "      "
 
 #. i18n: ectx: label, entry (TooltipAlarmCount), group (General)
-#: data/kalarmconfig.kcfg:167
+#: data/kalarmconfig.kcfg:173
 #, kde-format
 msgctxt "@label"
 msgid "Number of alarms to show in system tray tooltip"
 msgstr "Кількість нагадувань, які показуватимуть підказки у лотку"
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
-#: data/kalarmconfig.kcfg:172
+#: data/kalarmconfig.kcfg:178
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1161,14 +1203,14 @@ msgstr ""
 "      "
 
 #. i18n: ectx: label, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:178
+#: data/kalarmconfig.kcfg:184
 #, kde-format
 msgctxt "@label"
 msgid "Show alarm times in system tray tooltip"
 msgstr "Показувати час до нагадування у підказці системного лотка"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:179 prefdlg.cpp:1950
+#: data/kalarmconfig.kcfg:185 prefdlg.cpp:1946
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1179,14 +1221,14 @@ msgstr ""
 "нагадування."
 
 #. i18n: ectx: label, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:184
+#: data/kalarmconfig.kcfg:190
 #, kde-format
 msgctxt "@label"
 msgid "Show time to alarms in system tray tooltip"
 msgstr "Показувати час до нагадування у підказці системного лотка"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:185 prefdlg.cpp:1956
+#: data/kalarmconfig.kcfg:191 prefdlg.cpp:1952
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1196,14 +1238,14 @@ msgstr ""
 "Вкажіть чи показувати в підказці системного лотка час до кожного нагадування."
 
 #. i18n: ectx: label, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:190
+#: data/kalarmconfig.kcfg:196
 #, kde-format
 msgctxt "@label"
 msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr "Префікс часу до нагадування в підказці системного лотка"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:191 prefdlg.cpp:1967
+#: data/kalarmconfig.kcfg:197 prefdlg.cpp:1963
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1214,14 +1256,14 @@ msgstr ""
 "до нагадування."
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:196
+#: data/kalarmconfig.kcfg:202
 #, kde-format
 msgctxt "@label"
 msgid "Email client"
 msgstr "Клієнт ел. пошти"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:197
+#: data/kalarmconfig.kcfg:203
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1237,28 +1279,28 @@ msgstr ""
 "sendmail або сумісного з sendmail агента пересилання пошти.</li></ul></p>"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:199
+#: data/kalarmconfig.kcfg:205
 #, kde-format
 msgctxt "@option"
 msgid "Sendmail"
 msgstr "Sendmail"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:200
+#: data/kalarmconfig.kcfg:206
 #, kde-format
 msgctxt "@option"
 msgid "KMail"
 msgstr "KMail"
 
 #. i18n: ectx: label, entry (Base_EmailCopyToKMail), group (General)
-#: data/kalarmconfig.kcfg:205
+#: data/kalarmconfig.kcfg:211
 #, kde-format
 msgctxt "@label"
 msgid "Whether to copy sent emails into KMail's Sent folder."
 msgstr "Чи копіювати надіслані листи до теки надісланих KMail."
 
 #. i18n: ectx: whatsthis, entry (Base_EmailCopyToKMail), group (General)
-#: data/kalarmconfig.kcfg:206
+#: data/kalarmconfig.kcfg:212
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1269,14 +1311,14 @@ msgstr ""
 "Застосовне, лише якщо як поштовий клієнт вибрано sendmail."
 
 #. i18n: ectx: label, entry (Base_EmailFrom), group (General)
-#: data/kalarmconfig.kcfg:210
+#: data/kalarmconfig.kcfg:216
 #, kde-format
 msgctxt "@label"
 msgid "'From' email address"
 msgstr "Адреса ел. пошти «Від»"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailFrom), group (General)
-#: data/kalarmconfig.kcfg:211
+#: data/kalarmconfig.kcfg:217
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1292,14 +1334,14 @@ msgstr ""
 "електронної пошти напряму."
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
-#: data/kalarmconfig.kcfg:215
+#: data/kalarmconfig.kcfg:221
 #, kde-format
 msgctxt "@label"
 msgid "'Bcc' email address"
 msgstr "Ел. пошта «Прихованої копії»"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailBccAddress), group (General)
-#: data/kalarmconfig.kcfg:216
+#: data/kalarmconfig.kcfg:222
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1317,14 +1359,14 @@ msgstr ""
 "введіть адресу електронної пошти напряму."
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
-#: data/kalarmconfig.kcfg:220
+#: data/kalarmconfig.kcfg:226
 #, kde-format
 msgctxt "@label"
 msgid "Terminal for command alarms"
 msgstr "Термінал для нагадувань-команд"
 
 #. i18n: ectx: whatsthis, entry (Base_CmdXTermCommand), group (General)
-#: data/kalarmconfig.kcfg:221
+#: data/kalarmconfig.kcfg:227
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1335,56 +1377,56 @@ msgstr ""
 "спеціальними кодами, описаними у довіднику з KAlarm."
 
 #. i18n: ectx: label, entry (Base_StartOfDay), group (General)
-#: data/kalarmconfig.kcfg:224
+#: data/kalarmconfig.kcfg:230
 #, kde-format
 msgctxt "@label"
 msgid "Start of day for date-only alarms"
 msgstr "Початок дня для нагадувань за датами"
 
 #. i18n: ectx: whatsthis, entry (Base_StartOfDay), group (General)
-#: data/kalarmconfig.kcfg:225
+#: data/kalarmconfig.kcfg:231
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The earliest time of day at which a date-only alarm will be triggered."
 msgstr "Найраніший час дня, коли можна вмикати нагадування за датами."
 
 #. i18n: ectx: label, entry (Base_WorkDayStart), group (General)
-#: data/kalarmconfig.kcfg:230
+#: data/kalarmconfig.kcfg:236
 #, kde-format
 msgctxt "@label"
 msgid "Start time of working day"
 msgstr "Початок робочого дня"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayStart), group (General)
-#: data/kalarmconfig.kcfg:231
+#: data/kalarmconfig.kcfg:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The start time of the working day."
 msgstr "Час початку робочого дня."
 
 #. i18n: ectx: label, entry (Base_WorkDayEnd), group (General)
-#: data/kalarmconfig.kcfg:236
+#: data/kalarmconfig.kcfg:242
 #, kde-format
 msgctxt "@label"
 msgid "End time of working day"
 msgstr "Завершення робочого дня"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayEnd), group (General)
-#: data/kalarmconfig.kcfg:237
+#: data/kalarmconfig.kcfg:243
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The end time of the working day."
 msgstr "Час завершення робочого дня."
 
 #. i18n: ectx: label, entry (Base_WorkDays), group (General)
-#: data/kalarmconfig.kcfg:242
+#: data/kalarmconfig.kcfg:248
 #, kde-format
 msgctxt "@label"
 msgid "Working days"
 msgstr "Робочі дні"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDays), group (General)
-#: data/kalarmconfig.kcfg:243
+#: data/kalarmconfig.kcfg:249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1395,42 +1437,42 @@ msgstr ""
 "= Неділя."
 
 #. i18n: ectx: label, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:248
+#: data/kalarmconfig.kcfg:254
 #, kde-format
 msgctxt "@label"
 msgid "Disabled alarm color"
 msgstr "Колір вимкненого нагадування"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:249 prefdlg.cpp:1989
+#: data/kalarmconfig.kcfg:255 prefdlg.cpp:1985
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for disabled alarms."
 msgstr "Виберіть колір тексту нагадувань зі списку вимкнених."
 
 #. i18n: ectx: label, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:254
+#: data/kalarmconfig.kcfg:260
 #, kde-format
 msgctxt "@label"
 msgid "Archived alarm color"
 msgstr "Колір застарілого нагадування"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:255 prefdlg.cpp:2002
+#: data/kalarmconfig.kcfg:261 prefdlg.cpp:1998
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
 msgstr "Виберіть колір тексту нагадувань зі списку застарілих."
 
 #. i18n: ectx: label, entry (ArchivedKeepDays), group (General)
-#: data/kalarmconfig.kcfg:260
+#: data/kalarmconfig.kcfg:266
 #, kde-format
 msgctxt "@label"
 msgid "Days to keep expired alarms"
 msgstr "Зберігати застарілі нагадування (у днях)"
 
 #. i18n: ectx: whatsthis, entry (ArchivedKeepDays), group (General)
-#: data/kalarmconfig.kcfg:265
+#: data/kalarmconfig.kcfg:271
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1449,14 +1491,14 @@ msgstr ""
 "      "
 
 #. i18n: ectx: label, entry (KOrgEventDuration), group (General)
-#: data/kalarmconfig.kcfg:271
+#: data/kalarmconfig.kcfg:277
 #, kde-format
 msgctxt "@label"
 msgid "KOrganizer event duration"
 msgstr "Тривалість події KOrganizer"
 
 #. i18n: ectx: whatsthis, entry (KOrgEventDuration), group (General)
-#: data/kalarmconfig.kcfg:272
+#: data/kalarmconfig.kcfg:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1467,14 +1509,14 @@ msgstr ""
 "KOrganizer."
 
 #. i18n: ectx: label, entry (WakeFromSuspendAdvance), group (General)
-#: data/kalarmconfig.kcfg:276
+#: data/kalarmconfig.kcfg:282
 #, kde-format
 msgctxt "@label"
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Кількість хвилин до нагадування, за які слід пробудити систему від сну"
 
 #. i18n: ectx: whatsthis, entry (WakeFromSuspendAdvance), group (General)
-#: data/kalarmconfig.kcfg:277
+#: data/kalarmconfig.kcfg:283
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1487,14 +1529,14 @@ msgstr ""
 "системи після періоду сну."
 
 #. i18n: ectx: label, entry (DefaultDisplayMethod), group (Defaults)
-#: data/kalarmconfig.kcfg:290
+#: data/kalarmconfig.kcfg:296
 #, kde-format
 msgctxt "@label"
 msgid "Alarm message display method"
 msgstr "Спосіб показу повідомлення нагадування"
 
 #. i18n: ectx: whatsthis, entry (DefaultDisplayMethod), group (Defaults)
-#: data/kalarmconfig.kcfg:291
+#: data/kalarmconfig.kcfg:297
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1507,14 +1549,14 @@ msgstr ""
 "чи скористатися системною сповіщень."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
-#: data/kalarmconfig.kcfg:299
+#: data/kalarmconfig.kcfg:305
 #, kde-format
 msgctxt "@label"
 msgid "Cancel if late (minutes)"
 msgstr "Скасувати, якщо пройшло (у хвилинах)"
 
 #. i18n: ectx: whatsthis, entry (DefaultLateCancel), group (Defaults)
-#: data/kalarmconfig.kcfg:300
+#: data/kalarmconfig.kcfg:306
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1526,14 +1568,14 @@ msgstr ""
 "запізнілість, >0 — кількість хвилин перед скасуванням."
 
 #. i18n: ectx: label, entry (DefaultAutoClose), group (Defaults)
-#: data/kalarmconfig.kcfg:305
+#: data/kalarmconfig.kcfg:311
 #, kde-format
 msgctxt "@label"
 msgid "Auto-close window after late-cancellation time"
 msgstr "Автоматично закривати вікно після закінчення періоду спізнення"
 
 #. i18n: ectx: whatsthis, entry (DefaultAutoClose), group (Defaults)
-#: data/kalarmconfig.kcfg:306
+#: data/kalarmconfig.kcfg:312
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
@@ -1542,14 +1584,14 @@ msgstr ""
 "прострочено»."
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:310 kalarmcalendar/kaeventformatter.cpp:106
+#: data/kalarmconfig.kcfg:316 kalarmcalendar/kaeventformatter.cpp:107
 #, kde-format
 msgctxt "@label"
 msgid "Confirm acknowledgement"
 msgstr "Підтвердити ознайомлення"
 
 #. i18n: ectx: whatsthis, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:311
+#: data/kalarmconfig.kcfg:317
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1560,14 +1602,14 @@ msgstr ""
 "ознайомлення з нагадуванням»."
 
 #. i18n: ectx: label, entry (DefaultCopyToKOrganizer), group (Defaults)
-#: data/kalarmconfig.kcfg:315
+#: data/kalarmconfig.kcfg:321
 #, kde-format
 msgctxt "@label"
 msgid "Show in KOrganizer"
 msgstr "Показувати в KOrganizer"
 
 #. i18n: ectx: whatsthis, entry (DefaultCopyToKOrganizer), group (Defaults)
-#: data/kalarmconfig.kcfg:316
+#: data/kalarmconfig.kcfg:322
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"show in KOrganizer\"."
@@ -1576,49 +1618,49 @@ msgstr ""
 "KOrganizer»."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
-#: data/kalarmconfig.kcfg:320
+#: data/kalarmconfig.kcfg:326
 #, kde-format
 msgctxt "@label Label for audio options"
 msgid "Sound"
 msgstr "Звук"
 
 #. i18n: ectx: whatsthis, entry (Base_DefaultSoundType), group (Defaults)
-#: data/kalarmconfig.kcfg:321
+#: data/kalarmconfig.kcfg:327
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default sound type in the alarm edit dialog."
 msgstr "Типовий тип звуку у вікні редагування нагадування."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
-#: data/kalarmconfig.kcfg:325
+#: data/kalarmconfig.kcfg:331
 #, kde-format
 msgctxt "@option"
 msgid "Play File"
 msgstr "Відтворити файл"
 
 #. i18n: ectx: label, entry (DefaultSoundFile), group (Defaults)
-#: data/kalarmconfig.kcfg:331
+#: data/kalarmconfig.kcfg:337
 #, kde-format
 msgctxt "@label"
 msgid "Sound file"
 msgstr "Звуковий файл"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundFile), group (Defaults)
-#: data/kalarmconfig.kcfg:332
+#: data/kalarmconfig.kcfg:338
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default sound file path in the alarm edit dialog."
 msgstr "Типовий шлях до звукового файла у вікні редагування нагадування."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:335 kalarmcalendar/kaeventformatter.cpp:114
+#: data/kalarmconfig.kcfg:341 kalarmcalendar/kaeventformatter.cpp:115
 #, kde-format
 msgctxt "@label"
 msgid "Sound volume"
 msgstr "Гучність звуку"
 
 #. i18n: ectx: whatsthis, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:336
+#: data/kalarmconfig.kcfg:342
 #, no-c-format, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1629,28 +1671,28 @@ msgstr ""
 "100 % — відповідна гучність."
 
 #. i18n: ectx: label, entry (DefaultSoundRepeat), group (Defaults)
-#: data/kalarmconfig.kcfg:342
+#: data/kalarmconfig.kcfg:348
 #, kde-format
 msgctxt "@label"
 msgid "Repeat sound file"
 msgstr "Повторити звуковий файл"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundRepeat), group (Defaults)
-#: data/kalarmconfig.kcfg:343
+#: data/kalarmconfig.kcfg:349
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for sound repetition."
 msgstr "Типовий параметр у вікні редагування нагадування для повторення звуку."
 
 #. i18n: ectx: label, entry (DefaultCmdScript), group (Defaults)
-#: data/kalarmconfig.kcfg:347
+#: data/kalarmconfig.kcfg:353
 #, kde-format
 msgctxt "@label"
 msgid "Enter script"
 msgstr "Введіть скрипт"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdScript), group (Defaults)
-#: data/kalarmconfig.kcfg:348
+#: data/kalarmconfig.kcfg:354
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for command script entry."
@@ -1658,14 +1700,14 @@ msgstr ""
 "Типовий параметр у вікні редагування нагадування для запису скрипту команди."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:352
+#: data/kalarmconfig.kcfg:358
 #, kde-format
 msgctxt "@label"
 msgid "Command output"
 msgstr "Вивід команди"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:353
+#: data/kalarmconfig.kcfg:359
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1676,35 +1718,35 @@ msgstr ""
 "вивід нагадування-команди."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:355
+#: data/kalarmconfig.kcfg:361
 #, kde-format
 msgctxt "@option"
 msgid "Discard Output"
 msgstr "Відкинути вивід"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:356
+#: data/kalarmconfig.kcfg:362
 #, kde-format
 msgctxt "@option"
 msgid "Log To File"
 msgstr "Зберегти до файла"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:357
+#: data/kalarmconfig.kcfg:363
 #, kde-format
 msgctxt "@option"
 msgid "Execute in terminal window"
 msgstr "Виконати у вікні термінала"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:362 kalarmcalendar/kaeventformatter.cpp:137
+#: data/kalarmconfig.kcfg:368 kalarmcalendar/kaeventformatter.cpp:138
 #, kde-format
 msgctxt "@label"
 msgid "Log file"
 msgstr "Файл журналу"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:363
+#: data/kalarmconfig.kcfg:369
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default log file path for command alarms in the alarm edit dialog."
@@ -1713,14 +1755,14 @@ msgstr ""
 "нагадування."
 
 #. i18n: ectx: label, entry (DefaultEmailBcc), group (Defaults)
-#: data/kalarmconfig.kcfg:366
+#: data/kalarmconfig.kcfg:372
 #, kde-format
 msgctxt "@label"
 msgid "Copy email to self"
 msgstr "Копія ел. листа собі"
 
 #. i18n: ectx: whatsthis, entry (DefaultEmailBcc), group (Defaults)
-#: data/kalarmconfig.kcfg:367
+#: data/kalarmconfig.kcfg:373
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1730,14 +1772,14 @@ msgstr ""
 "електронних листів собі."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:371
+#: data/kalarmconfig.kcfg:377
 #, kde-format
 msgctxt "@label"
 msgid "Recurrence period"
 msgstr "Проміжок повторення"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:372 prefdlg.cpp:1454
+#: data/kalarmconfig.kcfg:378 prefdlg.cpp:1450
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default setting for the recurrence rule in the alarm edit dialog."
@@ -1745,35 +1787,35 @@ msgstr ""
 "Типовий параметр для правила повторення у вікні редагування нагадування."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:374
+#: data/kalarmconfig.kcfg:380
 #, kde-format
 msgctxt "@option"
 msgid "No recurrence"
 msgstr "Не повторювати"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:375
+#: data/kalarmconfig.kcfg:381
 #, kde-format
 msgctxt "@option"
 msgid "At login"
 msgstr "Під час входу"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:376
+#: data/kalarmconfig.kcfg:382
 #, kde-format
 msgctxt "@option"
 msgid "Hourly/minutely"
 msgstr "За годинами/хвилинами"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:385 prefdlg.cpp:1461
+#: data/kalarmconfig.kcfg:391 prefdlg.cpp:1457
 #, kde-format
 msgctxt "@label"
 msgid "In non-leap years, repeat yearly February 29th alarms on:"
 msgstr "В не високосні роки повторювати щорічні нагадування 29 лютого:"
 
 #. i18n: ectx: whatsthis, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:386
+#: data/kalarmconfig.kcfg:392
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1788,35 +1830,35 @@ msgstr ""
 "нагадування."
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:388
+#: data/kalarmconfig.kcfg:394
 #, kde-format
 msgctxt "@option"
 msgid "February 28th"
 msgstr "28-е лютого"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:389
+#: data/kalarmconfig.kcfg:395
 #, kde-format
 msgctxt "@option"
 msgid "March 1st"
 msgstr "1-е березня"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:390
+#: data/kalarmconfig.kcfg:396
 #, kde-format
 msgctxt "@option"
 msgid "Do not repeat"
 msgstr "Не повторювати"
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
-#: data/kalarmconfig.kcfg:396
+#: data/kalarmconfig.kcfg:402
 #, kde-format
 msgctxt "@label"
 msgid "Reminder units"
 msgstr "Одиниці завчасного нагадування"
 
 #. i18n: ectx: whatsthis, entry (DefaultReminderUnits), group (Defaults)
-#: data/kalarmconfig.kcfg:397
+#: data/kalarmconfig.kcfg:403
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default reminder time units in the alarm edit dialog."
@@ -1825,35 +1867,35 @@ msgstr ""
 "нагадувань."
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
-#: data/kalarmconfig.kcfg:400
+#: data/kalarmconfig.kcfg:406
 #, kde-format
 msgctxt "@option"
 msgid "Hours/Minutes"
 msgstr "Години/хвилини"
 
 #. i18n: ectx: label, entry (DefaultPreAction), group (Defaults)
-#: data/kalarmconfig.kcfg:405
+#: data/kalarmconfig.kcfg:411
 #, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action"
 msgstr "Дія перед нагадуванням"
 
 #. i18n: ectx: whatsthis, entry (DefaultPreAction), group (Defaults)
-#: data/kalarmconfig.kcfg:406
+#: data/kalarmconfig.kcfg:412
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute before displaying alarms."
 msgstr "Типова команда, яку слід виконати до показу нагадування."
 
 #. i18n: ectx: label, entry (DefaultExecPreActionOnDeferral), group (Defaults)
-#: data/kalarmconfig.kcfg:409
+#: data/kalarmconfig.kcfg:415
 #, kde-format
 msgctxt "@label"
 msgid "Execute pre-alarm action for deferred alarms"
 msgstr "Виконувати дію з попереднього нагадування для відкладених нагадувань"
 
 #. i18n: ectx: whatsthis, entry (DefaultExecPreActionOnDeferral), group (Defaults)
-#: data/kalarmconfig.kcfg:410
+#: data/kalarmconfig.kcfg:416
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1864,14 +1906,14 @@ msgstr ""
 "нагадування до виконання дій з відкладеного нагадування."
 
 #. i18n: ectx: label, entry (DefaultCancelOnPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:414
+#: data/kalarmconfig.kcfg:420
 #, kde-format
 msgctxt "@label"
 msgid "Cancel alarm on pre-alarm action error"
 msgstr "Скасувати нагадування за помилки попередньої дії"
 
 #. i18n: ectx: whatsthis, entry (DefaultCancelOnPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:415
+#: data/kalarmconfig.kcfg:421
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1882,14 +1924,14 @@ msgstr ""
 "попередньої команди зазнає невдачі."
 
 #. i18n: ectx: label, entry (DefaultDontShowPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:419
+#: data/kalarmconfig.kcfg:425
 #, kde-format
 msgctxt "@label"
 msgid "Do not notify pre-alarm action errors"
 msgstr "Не сповіщати про помилки попередньої до нагадування команди"
 
 #. i18n: ectx: whatsthis, entry (DefaultDontShowPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:420
+#: data/kalarmconfig.kcfg:426
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1900,14 +1942,14 @@ msgstr ""
 "помилку, якщо спроба виконання попередньої команди зазнає невдачі."
 
 #. i18n: ectx: label, entry (DefaultPostAction), group (Defaults)
-#: data/kalarmconfig.kcfg:424
+#: data/kalarmconfig.kcfg:430
 #, kde-format
 msgctxt "@label"
 msgid "Post-alarm action"
 msgstr "Дія після нагадування"
 
 #. i18n: ectx: whatsthis, entry (DefaultPostAction), group (Defaults)
-#: data/kalarmconfig.kcfg:425
+#: data/kalarmconfig.kcfg:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute after alarm message windows are closed."
@@ -1915,14 +1957,14 @@ msgstr ""
 "Типова команд, яку слід виконати після закриття вікон повідомлень нагадувань."
 
 #. i18n: ectx: label, entry (Base_QuitWarn), group (Notification Messages)
-#: data/kalarmconfig.kcfg:431
+#: data/kalarmconfig.kcfg:437
 #, kde-format
 msgctxt "@label"
 msgid "Warn before quitting"
 msgstr "Попереджати перед виходом"
 
 #. i18n: ectx: whatsthis, entry (Base_QuitWarn), group (Notification Messages)
-#: data/kalarmconfig.kcfg:432
+#: data/kalarmconfig.kcfg:438
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Whether to suppress a warning prompt before quitting KAlarm."
@@ -1930,14 +1972,14 @@ msgstr ""
 "Визначає, чи буде показано попередження перед завершенням роботи KAlarm."
 
 #. i18n: ectx: label, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
-#: data/kalarmconfig.kcfg:436
+#: data/kalarmconfig.kcfg:442
 #, kde-format
 msgctxt "@label"
 msgid "Confirm alarm deletions"
 msgstr "Підтверджувати вилучення нагадувань"
 
 #. i18n: ectx: whatsthis, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
-#: data/kalarmconfig.kcfg:437 prefdlg.cpp:503
+#: data/kalarmconfig.kcfg:443 prefdlg.cpp:503
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation each time you delete an alarm."
@@ -1946,14 +1988,14 @@ msgstr ""
 "на підтвердження."
 
 #. i18n: ectx: label, entry (Base_EmailQueuedNotify), group (Notification Messages)
-#: data/kalarmconfig.kcfg:441
+#: data/kalarmconfig.kcfg:447
 #, kde-format
 msgctxt "@label"
 msgid "Notify when remote emails are queued"
 msgstr "Сповіщати, якщо віддалену ел. пошту поставлено у чергу"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailQueuedNotify), group (Notification Messages)
-#: data/kalarmconfig.kcfg:442 prefdlg.cpp:1172
+#: data/kalarmconfig.kcfg:448 prefdlg.cpp:1168
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2101,7 +2143,7 @@ msgstr ""
 "Неможливо відкласти завчасне нагадування на час після головного нагадування "
 "(%1)"
 
-#: displaycalendar.cpp:127
+#: displaycalendar.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2111,127 +2153,127 @@ msgstr ""
 "<para>Помилка під час завантаження календаря:</para><para><filename>%1</"
 "filename></para><para>Будь ласка, виправте або вилучіть файл.</para>"
 
-#: displaycalendar.cpp:171
+#: displaycalendar.cpp:172
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save calendar to <filename>%1</filename>"
 msgstr "Не вдалось зберегти календар до <filename>%1</filename>"
 
-#: editdlg.cpp:79
+#: editdlg.cpp:80
 #, kde-format
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
 msgstr "Повторення - [%1]"
 
-#: editdlg.cpp:86
+#: editdlg.cpp:87
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
 msgstr "Показувати в KOrganizer"
 
-#: editdlg.cpp:182
+#: editdlg.cpp:183
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Template [read-only]"
 msgstr "Шаблон нагадування [лише читання]"
 
-#: editdlg.cpp:183
+#: editdlg.cpp:184
 #, kde-format
 msgctxt "@title:window"
 msgid "Archived Alarm [read-only]"
 msgstr "Застаріле нагадування [лише читання]"
 
-#: editdlg.cpp:184
+#: editdlg.cpp:185
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "Нагадування [лише читання]"
 
-#: editdlg.cpp:195
+#: editdlg.cpp:196
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "Запланувати нагадування на вказаний час."
 
-#: editdlg.cpp:198
+#: editdlg.cpp:199
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
 msgstr "Завантажити шаблон…"
 
-#: editdlg.cpp:200
+#: editdlg.cpp:201
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
 msgstr "Виберіть шаблон, на основі якого слід створити нове нагадування"
 
-#: editdlg.cpp:204
+#: editdlg.cpp:205
 #, kde-format
 msgctxt "@action:button"
 msgid "Try"
 msgstr "Спробувати"
 
-#: editdlg.cpp:214
+#: editdlg.cpp:215
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "Нагадування"
 
-#: editdlg.cpp:244
+#: editdlg.cpp:245
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "Назва шаблону:"
 
-#: editdlg.cpp:251
+#: editdlg.cpp:252
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Введіть назву шаблону нагадування"
 
-#: editdlg.cpp:257
+#: editdlg.cpp:258
 #, kde-format
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Дія"
 
-#: editdlg.cpp:266
+#: editdlg.cpp:267
 #, kde-format
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "Відкладене нагадування"
 
-#: editdlg.cpp:269
+#: editdlg.cpp:270
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "Відкладено до:"
 
-#: editdlg.cpp:274
+#: editdlg.cpp:275
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "Змінити…"
 
-#: editdlg.cpp:276
+#: editdlg.cpp:277
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "Змініть час відкладання нагадування або скасуйте відкладання"
 
-#: editdlg.cpp:287 editdlg.cpp:348
+#: editdlg.cpp:288 editdlg.cpp:349
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Час"
 
-#: editdlg.cpp:294
+#: editdlg.cpp:295
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "Типовий час"
 
-#: editdlg.cpp:296
+#: editdlg.cpp:297
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2241,19 +2283,19 @@ msgstr ""
 "Не вказувати час початку для нагадувань на основі цього шаблону. Буде "
 "використано типовий час початку."
 
-#: editdlg.cpp:304
+#: editdlg.cpp:305
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Час:"
 
-#: editdlg.cpp:306
+#: editdlg.cpp:307
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "Вкажіть час початку для нагадувань на основі цього шаблону."
 
-#: editdlg.cpp:312
+#: editdlg.cpp:313
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2263,13 +2305,13 @@ msgstr ""
 "<para>Введіть час початку для нагадувань, заснованих на цьому шаблоні.</"
 "para><para>%1</para>"
 
-#: editdlg.cpp:319
+#: editdlg.cpp:320
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Лише дата"
 
-#: editdlg.cpp:321
+#: editdlg.cpp:322
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2279,7 +2321,7 @@ msgstr ""
 "Встановити параметр <interface>Будь-коли</interface> для нагадувань на "
 "основі цього шаблону."
 
-#: editdlg.cpp:331
+#: editdlg.cpp:332
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2289,13 +2331,13 @@ msgstr ""
 "Запланувати, щоб нагадування на основі цього шаблону вмикались через "
 "вказаний проміжок часу після створення нагадування."
 
-#: editdlg.cpp:387
+#: editdlg.cpp:388
 #, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "Пробудження від сну"
 
-#: editdlg.cpp:389
+#: editdlg.cpp:390
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2304,25 +2346,25 @@ msgstr ""
 "Позначте, щоб систему було пробуджено, якщо нагадування спрацює, коли "
 "систему буде приспано"
 
-#: editdlg.cpp:406
+#: editdlg.cpp:407
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "Позначте, щоб копіювати нагадування до календаря KOrganizer"
 
-#: editdlg.cpp:1008
+#: editdlg.cpp:1009
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Вам слід ввести назву шаблону нагадування"
 
-#: editdlg.cpp:1012
+#: editdlg.cpp:1013
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Назву шаблону вже використано"
 
-#: editdlg.cpp:1035
+#: editdlg.cpp:1036
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2334,7 +2376,7 @@ msgstr ""
 "para><para>Відтепер, нагадування буде виконано з точністю до хвилини до "
 "вказано моменту часу.</para>"
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1068
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2344,7 +2386,7 @@ msgstr ""
 "Початкова дата не відповідає шаблону повтору нагадування, отже його буде "
 "змінено на дату наступного повтору (%1)."
 
-#: editdlg.cpp:1071
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2354,19 +2396,19 @@ msgstr ""
 "Початкова дата/час не відповідає шаблону повтору нагадування, отже дату/час "
 "буде змінено на дату/час наступного повтору (%1)."
 
-#: editdlg.cpp:1093
+#: editdlg.cpp:1094
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Повторення вже застаріло"
 
-#: editdlg.cpp:1098
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Нагадування не буде виконуватися під час робочих годин"
 
-#: editdlg.cpp:1127
+#: editdlg.cpp:1128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2376,7 +2418,7 @@ msgstr ""
 "Період завчасного нагадування має бути коротшим, ніж інтервал повторення, "
 "якщо не ввімкнено <interface>%1</interface>."
 
-#: editdlg.cpp:1142
+#: editdlg.cpp:1143
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2386,7 +2428,7 @@ msgstr ""
 "Тривалість повторення простого нагадування має бути меншою за проміжок "
 "повторення мінус будь-який період завчасного нагадування"
 
-#: editdlg.cpp:1149
+#: editdlg.cpp:1150
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2396,115 +2438,115 @@ msgstr ""
 "Для повторення з певною циклічністю, цей проміжок слід вказати у одиницях "
 "днів або тижнів для нагадування за датою"
 
-#: editdlg.cpp:1180
+#: editdlg.cpp:1181
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Вам слід вибрати календар, у якому буде збережено нагадування"
 
-#: editdlg.cpp:1261
+#: editdlg.cpp:1262
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Менше параметрів <<"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1263
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Показати скорочений список"
 
-#: editdlg.cpp:1267
+#: editdlg.cpp:1268
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Більше параметрів >>"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1269
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr "Показати увесь список"
 
-#: editdlgtypes.cpp:74
+#: editdlgtypes.cpp:75
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Виберіть файл журналу"
 
-#: editdlgtypes.cpp:87
+#: editdlgtypes.cpp:88
 #, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "Спосіб показу:"
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:89
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "Вікно"
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:90
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "Сповіщення"
 
-#: editdlgtypes.cpp:90
+#: editdlgtypes.cpp:91
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Підтвердити отримання"
 
-#: editdlgtypes.cpp:126
+#: editdlgtypes.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Новий шаблон візуального нагадування"
 
-#: editdlgtypes.cpp:126
+#: editdlgtypes.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Змінити шаблон візуального нагадування"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Нове візуальне нагадування"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Редагувати візуальне нагадування"
 
-#: editdlgtypes.cpp:140
+#: editdlgtypes.cpp:141
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Тип показу:"
 
-#: editdlgtypes.cpp:144
+#: editdlgtypes.cpp:145
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Текстове повідомлення"
 
-#: editdlgtypes.cpp:145
+#: editdlgtypes.cpp:146
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr "Вміст файла"
 
-#: editdlgtypes.cpp:146
+#: editdlgtypes.cpp:147
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "Вивід команди"
 
-#: editdlgtypes.cpp:166
+#: editdlgtypes.cpp:167
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2520,32 +2562,32 @@ msgstr ""
 "або зображення.</item><item><interface>%3</interface>: нагадування покаже "
 "вивід команди.</item></list></para>"
 
-#: editdlgtypes.cpp:181
+#: editdlgtypes.cpp:182
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Введіть текст нагадування. Текст може складатися з декількох рядків."
 
-#: editdlgtypes.cpp:194
+#: editdlgtypes.cpp:195
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr ""
 "Введіть назву чи адресу файла тексту або зображення, який ви хочете показати."
 
-#: editdlgtypes.cpp:201 editdlgtypes.cpp:890 sounddlg.cpp:183
+#: editdlgtypes.cpp:202 editdlgtypes.cpp:891 sounddlg.cpp:184
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Виберіть файл"
 
-#: editdlgtypes.cpp:202
+#: editdlgtypes.cpp:203
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Виберіть для показу файл тексту або зображення."
 
-#: editdlgtypes.cpp:246
+#: editdlgtypes.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2555,7 +2597,7 @@ msgstr ""
 "Виберіть, слід показувати нагадування у вікні чи скористатися системою "
 "сповіщень."
 
-#: editdlgtypes.cpp:273
+#: editdlgtypes.cpp:274
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2565,7 +2607,7 @@ msgstr ""
 "Позначте, якщо слід додатково показувати нагадування до чи після часу "
 "основного нагадування."
 
-#: editdlgtypes.cpp:274
+#: editdlgtypes.cpp:275
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2575,7 +2617,7 @@ msgstr ""
 "<para>Вкажіть час до чи після основного нагадування, коли слід виконувати "
 "завчасне нагадування.</para><para>%1</para>"
 
-#: editdlgtypes.cpp:275
+#: editdlgtypes.cpp:276
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2584,103 +2626,103 @@ msgid ""
 msgstr ""
 "Вкажіть, буде нагадування задіяно до чи після дати основного нагадування"
 
-#: editdlgtypes.cpp:285
+#: editdlgtypes.cpp:286
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr "Ввімкніть, щоб у вас вимагалось підтвердження отримання нагадування."
 
-#: editdlgtypes.cpp:294
+#: editdlgtypes.cpp:295
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Показати нагадування зараз"
 
-#: editdlgtypes.cpp:676
+#: editdlgtypes.cpp:677
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Показати нагадування тепер"
 
-#: editdlgtypes.cpp:685
+#: editdlgtypes.cpp:686
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Показати файл тепер"
 
-#: editdlgtypes.cpp:695
+#: editdlgtypes.cpp:696
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Показати вивід команди тепер"
 
-#: editdlgtypes.cpp:727
+#: editdlgtypes.cpp:728
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Виберіть файл тексту або зображення для показу"
 
-#: editdlgtypes.cpp:805
+#: editdlgtypes.cpp:806
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "Ввести скрипт"
 
-#: editdlgtypes.cpp:806
+#: editdlgtypes.cpp:807
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "Виконати у вікні термінала"
 
-#: editdlgtypes.cpp:807
+#: editdlgtypes.cpp:808
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "Виконати у вікні термінала"
 
-#: editdlgtypes.cpp:837
+#: editdlgtypes.cpp:838
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Новий шаблон нагадування з команди"
 
-#: editdlgtypes.cpp:837
+#: editdlgtypes.cpp:838
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Змінити шаблон нагадування з команди"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:839
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Нове нагадування з команди"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:839
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Редагувати нагадування з команди"
 
-#: editdlgtypes.cpp:846
+#: editdlgtypes.cpp:847
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Виконати вказану команду тепер"
 
-#: editdlgtypes.cpp:847
+#: editdlgtypes.cpp:848
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Виконати вказану команду зараз"
 
-#: editdlgtypes.cpp:854 specialactions.cpp:182
+#: editdlgtypes.cpp:855 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr "Не сповіщати про помилки"
 
-#: editdlgtypes.cpp:855
+#: editdlgtypes.cpp:856
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
@@ -2688,37 +2730,37 @@ msgstr ""
 "Не показувати повідомлення про помилку, якщо спроба виконання команди зазнає "
 "невдачі."
 
-#: editdlgtypes.cpp:861
+#: editdlgtypes.cpp:862
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Вивід команди"
 
-#: editdlgtypes.cpp:869
+#: editdlgtypes.cpp:870
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "Позначте, щоб виконати команду в вікні термінала"
 
-#: editdlgtypes.cpp:882
+#: editdlgtypes.cpp:883
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Введіть назву або шлях файла журналу."
 
-#: editdlgtypes.cpp:891
+#: editdlgtypes.cpp:892
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Виберіть файл журналу."
 
-#: editdlgtypes.cpp:894
+#: editdlgtypes.cpp:895
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "Записувати журнал у файл"
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:896
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2728,19 +2770,19 @@ msgstr ""
 "Позначте, щоб записувати вивід команди у локальний файл журналу. Вивід буде "
 "додано після існуючого вмісту файла."
 
-#: editdlgtypes.cpp:902
+#: editdlgtypes.cpp:903
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Відкинути"
 
-#: editdlgtypes.cpp:903
+#: editdlgtypes.cpp:904
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Позначте, щоб відкидати вивід команди."
 
-#: editdlgtypes.cpp:1065
+#: editdlgtypes.cpp:1066
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2748,7 +2790,7 @@ msgid ""
 msgstr ""
 "Файл журналу повинен мати назву або шлях локального файла з дозволом запису."
 
-#: editdlgtypes.cpp:1075
+#: editdlgtypes.cpp:1076
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2758,61 +2800,61 @@ msgstr ""
 "<para>Не вибрано термінала для нагадувань командою.</para><para>Будь ласка, "
 "вкажіть його у вікні параметрів <application>KAlarm</application>.</para>"
 
-#: editdlgtypes.cpp:1095
+#: editdlgtypes.cpp:1096
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
 msgstr "Виконано команду: <icode>%1</icode>"
 
-#: editdlgtypes.cpp:1129
+#: editdlgtypes.cpp:1130
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "Копія ел. пошти до себе"
 
-#: editdlgtypes.cpp:1166
+#: editdlgtypes.cpp:1167
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "Новий шаблон нагадування через ел. поштою"
 
-#: editdlgtypes.cpp:1166
+#: editdlgtypes.cpp:1167
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Редагувати шаблон нагадування ел. поштою"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1168
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "Нове нагадування ел. поштою"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1168
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Редагувати нагадування ел. поштою"
 
-#: editdlgtypes.cpp:1175
+#: editdlgtypes.cpp:1176
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Надіслати ел.пошту до вказаних адресатів тепер"
 
-#: editdlgtypes.cpp:1176
+#: editdlgtypes.cpp:1177
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "Надіслати повідомлення зараз"
 
-#: editdlgtypes.cpp:1187
+#: editdlgtypes.cpp:1188
 #, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "Від:"
 
-#: editdlgtypes.cpp:1193
+#: editdlgtypes.cpp:1194
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2822,13 +2864,13 @@ msgstr ""
 "Ваш профіль адреси ел. пошти буде використано для позначення відправника при "
 "надсиланні нагадувань електронною поштою."
 
-#: editdlgtypes.cpp:1199
+#: editdlgtypes.cpp:1200
 #, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "До:"
 
-#: editdlgtypes.cpp:1204
+#: editdlgtypes.cpp:1205
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2838,169 +2880,169 @@ msgstr ""
 "Введіть адреси електронної пошти отримувачів. Відділяйте адреси одну від "
 "другої комою або крапкою з комою."
 
-#: editdlgtypes.cpp:1215
+#: editdlgtypes.cpp:1216
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Відкрити адресну книгу"
 
-#: editdlgtypes.cpp:1216
+#: editdlgtypes.cpp:1217
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Виберіть адреси електронної пошти з вашої адресної книги."
 
-#: editdlgtypes.cpp:1223
+#: editdlgtypes.cpp:1224
 #, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Тема:"
 
-#: editdlgtypes.cpp:1229
+#: editdlgtypes.cpp:1230
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Введіть тему електронної пошти."
 
-#: editdlgtypes.cpp:1235
+#: editdlgtypes.cpp:1236
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Введіть повідомлення електронної пошти."
 
-#: editdlgtypes.cpp:1243
+#: editdlgtypes.cpp:1244
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "Долучення:"
 
-#: editdlgtypes.cpp:1252
+#: editdlgtypes.cpp:1253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Файли, які відіслати по електронній пошті як долучення."
 
-#: editdlgtypes.cpp:1256 resourceselector.cpp:76
+#: editdlgtypes.cpp:1257 resourceselector.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Додати…"
 
-#: editdlgtypes.cpp:1258
+#: editdlgtypes.cpp:1259
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Додати долучення до електронної пошти."
 
-#: editdlgtypes.cpp:1261 resourceselector.cpp:78
+#: editdlgtypes.cpp:1262 resourceselector.cpp:78
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Вилучити"
 
-#: editdlgtypes.cpp:1263
+#: editdlgtypes.cpp:1264
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Вилучити позначені долучення з електронної пошти."
 
-#: editdlgtypes.cpp:1268
+#: editdlgtypes.cpp:1269
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "Якщо ввімкнено, вам буде відсилатись прихована копія."
 
-#: editdlgtypes.cpp:1450
+#: editdlgtypes.cpp:1451
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "Неправильна адреса електронної пошти: <email>%1</email>"
 
-#: editdlgtypes.cpp:1457
+#: editdlgtypes.cpp:1458
 #, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Не вказано адресу електронної пошти"
 
-#: editdlgtypes.cpp:1474
+#: editdlgtypes.cpp:1475
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "Некоректне долучення ел. пошти: <filename>%1</filename>"
 
-#: editdlgtypes.cpp:1478
+#: editdlgtypes.cpp:1479
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "Ви справді хочете тепер відіслати ел. пошту до вказаних адресатів?"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1480
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Підтвердити ел. пошту"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1480
 #, kde-format
 msgctxt "@action:button"
 msgid "Send"
 msgstr "Надіслати"
 
-#: editdlgtypes.cpp:1505
+#: editdlgtypes.cpp:1506
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
 msgstr "Ел. пошту відіслано до:<nl/>%1<nl/>Прихована копія: <email>%2</email>"
 
-#: editdlgtypes.cpp:1508
+#: editdlgtypes.cpp:1509
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
 msgstr "Ел. пошту надіслано до:<nl/>%1"
 
-#: editdlgtypes.cpp:1537
+#: editdlgtypes.cpp:1538
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Виберіть файл для долучення"
 
-#: editdlgtypes.cpp:1620
+#: editdlgtypes.cpp:1621
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Новий шаблон звукового нагадування"
 
-#: editdlgtypes.cpp:1620
+#: editdlgtypes.cpp:1621
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Редагування шаблону звукового нагадування"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1622
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Нове звукове нагадування"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1622
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Редагування звукового нагадування"
 
-#: editdlgtypes.cpp:1629
+#: editdlgtypes.cpp:1630
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Відтворити звуковий файл зараз"
 
-#: editdlgtypes.cpp:1630
+#: editdlgtypes.cpp:1631
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Відтворити звуковий файл зараз"
 
-#: editdlgtypes.cpp:1632
+#: editdlgtypes.cpp:1633
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3009,25 +3051,25 @@ msgstr ""
 "Якщо позначено, звуковий файл буде відтворюватися безперервно, доки не буде "
 "натиснуто %1."
 
-#: editdlgtypes.cpp:1844
+#: editdlgtypes.cpp:1845
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "Позначте, щоб ввести вміст скрипту замість оболонки командного рядка"
 
-#: editdlgtypes.cpp:1850
+#: editdlgtypes.cpp:1851
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Введіть команду оболонки для виконання."
 
-#: editdlgtypes.cpp:1855
+#: editdlgtypes.cpp:1856
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Введіть вміст скрипту для виконання"
 
-#: editdlgtypes.cpp:1917
+#: editdlgtypes.cpp:1918
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3037,44 +3079,44 @@ msgstr ""
 "<para>Команді не вдалося встановити змінні середовища:</para><para><icode>"
 "%1</icode></para>"
 
-#: editdlgtypes.cpp:1922
+#: editdlgtypes.cpp:1923
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
 msgstr "Будь ласка, введіть команду або скрипт, який слід виконати"
 
-#: eventlistview.cpp:33
+#: eventlistview.cpp:34
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of scheduled alarms"
 msgstr "Список запланованих нагадувань"
 
 #. i18n: ectx: property (title), widget (QGroupBox, alarmTypeGroupBox)
-#: find.cpp:102 resources/singlefileresourceconfigdialog.ui:78
+#: find.cpp:103 resources/singlefileresourceconfigdialog.ui:78
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Type"
 msgstr "Тип нагадування"
 
-#: find.cpp:108
+#: find.cpp:109
 #, kde-format
 msgctxt "@option:check Alarm type"
 msgid "Active"
 msgstr "Активний"
 
-#: find.cpp:109
+#: find.cpp:110
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include active alarms in the search."
 msgstr "Позначте, щоб включити до пошуку активні нагадування."
 
-#: find.cpp:112
+#: find.cpp:113
 #, kde-format
 msgctxt "@option:check Alarm type"
 msgid "Archived"
 msgstr "Архівовано"
 
-#: find.cpp:113
+#: find.cpp:114
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3084,73 +3126,73 @@ msgstr ""
 "Позначте, щоб включати до пошуку застарілі нагадування. Цей параметр "
 "доступний, лише якщо показано застарілі нагадування."
 
-#: find.cpp:121
+#: find.cpp:122
 #, kde-format
 msgctxt "@option:check Alarm action = text display"
 msgid "Text"
 msgstr "Текст"
 
-#: find.cpp:122
+#: find.cpp:123
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include text message alarms in the search."
 msgstr "Позначте, щоб включити до пошуку текстові повідомлення нагадувань."
 
-#: find.cpp:125
+#: find.cpp:126
 #, kde-format
 msgctxt "@option:check Alarm action = file display"
 msgid "File"
 msgstr "Файл"
 
-#: find.cpp:126
+#: find.cpp:127
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include file alarms in the search."
 msgstr "Позначте, щоб включати в пошук файлові нагадування."
 
-#: find.cpp:129
+#: find.cpp:130
 #, kde-format
 msgctxt "@option:check Alarm action"
 msgid "Command"
 msgstr "Команда"
 
-#: find.cpp:130
+#: find.cpp:131
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include command alarms in the search."
 msgstr "Позначте, щоб включити до пошуку нагадування-команди."
 
-#: find.cpp:133
+#: find.cpp:134
 #, kde-format
 msgctxt "@option:check Alarm action"
 msgid "Email"
 msgstr "Ел. пошта"
 
-#: find.cpp:134
+#: find.cpp:135
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include email alarms in the search."
 msgstr "Позначте, щоб включити до пошуку нагадування електронною поштою."
 
-#: find.cpp:137
+#: find.cpp:138
 #, kde-format
 msgctxt "@option:check Alarm action"
 msgid "Audio"
 msgstr "Звук"
 
-#: find.cpp:138
+#: find.cpp:139
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include audio alarms in the search."
 msgstr "Позначте, щоб включити до пошуку нагадування звуком."
 
-#: find.cpp:236
+#: find.cpp:237
 #, kde-format
 msgctxt "@info"
 msgid "No alarm types are selected to search"
 msgstr "Не вибрано типів нагадувань для пошуку"
 
-#: find.cpp:385
+#: find.cpp:386
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3160,7 +3202,7 @@ msgstr ""
 "<para>Ми досягли кінця списку нагадувань.</para><para>Продовжити з початку?</"
 "para>"
 
-#: find.cpp:386
+#: find.cpp:387
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3239,43 +3281,43 @@ msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
 msgstr "Виберіть шрифт та колір нагадування"
 
-#: functions.cpp:146
+#: functions.cpp:147
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
 msgstr "Зупинити відтворення"
 
-#: functions.cpp:196
+#: functions.cpp:197
 #, kde-format
 msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "Увімкнути нагадування"
 
-#: functions.cpp:222
+#: functions.cpp:223
 #, kde-format
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Розподілити вікна"
 
-#: functions.cpp:878
+#: functions.cpp:879
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "Імпортування файлів календарів"
 
-#: functions.cpp:939
+#: functions.cpp:940
 #, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "файли календарів"
 
-#: functions.cpp:940
+#: functions.cpp:941
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr "Вибір календаря для експорту"
 
-#: functions.cpp:965
+#: functions.cpp:966
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
@@ -3283,93 +3325,93 @@ msgstr ""
 "Помилка під час завантаження календаря для додавання до:<nl/><filename>%1</"
 "filename>"
 
-#: functions.cpp:1004
+#: functions.cpp:1005
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
 msgstr "Не вдалось зберегти новий календар до:<nl/> <filename>%1</filename>"
 
-#: functions.cpp:1017
+#: functions.cpp:1018
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
 msgstr ""
 "Не вдається вивантажити новий календар до:<nl/> <filename>%1</filename>"
 
-#: functions.cpp:1036
+#: functions.cpp:1037
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "Не вдається показати нагадування в KOrganizer"
 
-#: functions.cpp:1037
+#: functions.cpp:1038
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "Не вдається показати нагадування в KOrganizer"
 
-#: functions.cpp:1040
+#: functions.cpp:1041
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "Не вдається оновити нагадування в KOrganizer"
 
-#: functions.cpp:1043
+#: functions.cpp:1044
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "Не вдається вилучити нагадування з KOrganizer"
 
-#: functions.cpp:1044
+#: functions.cpp:1045
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "Не вдається вилучити нагадування з KOrganizer"
 
-#: functions.cpp:1054
+#: functions.cpp:1055
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
 msgstr "<para>%1</para><para>(Не вдалося запустити KOrganizer)</para>"
 
-#: functions.cpp:1057
+#: functions.cpp:1058
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
 msgstr "<para>%1</para><para>(KOrganizer запущено не повністю)</para>"
 
-#: functions.cpp:1060
+#: functions.cpp:1061
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
 msgstr "<para>%1</para><para>(Помилка обміну даними з KOrganizer)</para>"
 
-#: functions.cpp:1310
+#: functions.cpp:1311
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr "Заплановане пробудження зі стану призупинки роботи було скасовано."
 
-#: functions.cpp:1344
+#: functions.cpp:1345
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr "Помилка під час спроби отримання уповноваження (%1)"
 
-#: functions.cpp:1393
+#: functions.cpp:1394
 #, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "Вам слід увімкнути календар, у якому буде збережено шаблон"
 
-#: functions.cpp:1616
+#: functions.cpp:1617
 #, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
 msgstr ""
 "<para>%1</para><para>Будь ласка, встановіть її у вікні параметрів.</para>"
 
-#: functions.cpp:1620
+#: functions.cpp:1621
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3379,67 +3421,67 @@ msgstr ""
 "<para>Зараз нагадування вимкнено.</para><para>Бажаєте увімкнути нагадування?"
 "</para>"
 
-#: functions.cpp:1621
+#: functions.cpp:1622
 #, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Увімкнути"
 
-#: functions.cpp:1621
+#: functions.cpp:1622
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Залишити вимкненим"
 
-#: functions.cpp:1990
+#: functions.cpp:1991
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Помилка під час збереження нагадувань"
 
-#: functions.cpp:1991
+#: functions.cpp:1992
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Помилка під час збереження нагадування"
 
-#: functions.cpp:1994
+#: functions.cpp:1995
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Помилка під вилучення нагадування"
 
-#: functions.cpp:1995
+#: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Помилка під час вилучення нагадування"
 
-#: functions.cpp:1998
+#: functions.cpp:1999
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Помилка під час збереження знову активованих нагадувань"
 
-#: functions.cpp:1999
+#: functions.cpp:2000
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Помилка під час збереження знову активованого нагадування"
 
-#: functions.cpp:2002
+#: functions.cpp:2003
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Помилка під час збереження шаблонів нагадувань"
 
-#: functions.cpp:2003
+#: functions.cpp:2004
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Помилка під час збереження шаблону нагадування"
 
-#: kalarmapp.cpp:812
+#: kalarmapp.cpp:810
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3448,7 +3490,7 @@ msgstr ""
 "Після виходу з програми нагадування показуватись не будуть\n"
 "(якщо всі вікна повідомлень також закриті)."
 
-#: kalarmapp.cpp:822
+#: kalarmapp.cpp:820
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
@@ -3456,25 +3498,25 @@ msgstr ""
 "Завершення роботи програми призведе до скасування запланованого пробудження "
 "системи"
 
-#: kalarmapp.cpp:1039
+#: kalarmapp.cpp:1037
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Не вдалося створити нагадування: не визначено типового календаря"
 
-#: kalarmapp.cpp:1053
+#: kalarmapp.cpp:1051
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Помилка під час створення нагадування"
 
-#: kalarmapp.cpp:1109
+#: kalarmapp.cpp:1107
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: подію <resource>%2</resource> не знайдено або вона не є унікальною"
 
-#: kalarmapp.cpp:1421
+#: kalarmapp.cpp:1419
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3487,14 +3529,14 @@ msgstr ""
 "скористайтеся пунктом меню <interface>Перегляд | Показати календарі</"
 "interface>, потім позначте або змініть стан пунктів календарів."
 
-#: kalarmapp.cpp:1461
+#: kalarmapp.cpp:1459
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 "%1: подію <resource>%2</resource> не знайдено або її не можна змінювати"
 
-#: kalarmapp.cpp:1489
+#: kalarmapp.cpp:1487
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3509,7 +3551,7 @@ msgstr ""
 "меню <interface>Перегляд | Показати календарі</interface>, потім позначте "
 "або змініть стан пунктів календарів."
 
-#: kalarmapp.cpp:1497
+#: kalarmapp.cpp:1495
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3526,7 +3568,7 @@ msgstr ""
 "нагадувань і позначте пункт <interface>Використовувати як типовий для "
 "застарілих нагадувань</interface>."
 
-#: kalarmapp.cpp:2474
+#: kalarmapp.cpp:2472
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3536,73 +3578,73 @@ msgstr ""
 "Не вдалося виконати команду\n"
 "(не вибрано термінал для нагадувань командою)"
 
-#: kalarmapp.cpp:2627
+#: kalarmapp.cpp:2625
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Помилка створення тимчасового файла скрипту"
 
-#: kalarmapp.cpp:2723
+#: kalarmapp.cpp:2721
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Дія перед нагадуванням:"
 
-#: kalarmapp.cpp:2729
+#: kalarmapp.cpp:2727
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
 msgstr "Дія після нагадування:"
 
-#: kalarmcalendar/alarmtext.cpp:506
+#: kalarmcalendar/alarmtext.cpp:507
 #, kde-format
 msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "Від:"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:336
+#: kalarmcalendar/alarmtext.cpp:508 messagedisplayhelper.cpp:337
 #, kde-format
 msgctxt "@info Email addressee"
 msgid "To:"
 msgstr "До:"
 
-#: kalarmcalendar/alarmtext.cpp:508
+#: kalarmcalendar/alarmtext.cpp:509
 #, kde-format
 msgctxt "@info Copy-to in email headers"
 msgid "Cc:"
 msgstr "Копія:"
 
-#: kalarmcalendar/alarmtext.cpp:509
+#: kalarmcalendar/alarmtext.cpp:510
 #, kde-format
 msgctxt "@info"
 msgid "Date:"
 msgstr "Дата:"
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:338
+#: kalarmcalendar/alarmtext.cpp:511 messagedisplayhelper.cpp:339
 #, kde-format
 msgctxt "@info Email subject"
 msgid "Subject:"
 msgstr "Тема:"
 
-#: kalarmcalendar/alarmtext.cpp:512
+#: kalarmcalendar/alarmtext.cpp:513
 #, kde-format
 msgctxt "@info Todo calendar item's title field"
 msgid "To-do:"
 msgstr "Завдання:"
 
-#: kalarmcalendar/alarmtext.cpp:513
+#: kalarmcalendar/alarmtext.cpp:514
 #, kde-format
 msgctxt "@info Todo calendar item's location field"
 msgid "Location:"
 msgstr "Розташування:"
 
-#: kalarmcalendar/alarmtext.cpp:514
+#: kalarmcalendar/alarmtext.cpp:515
 #, kde-format
 msgctxt "@info Todo calendar item's due date/time"
 msgid "Due:"
 msgstr "Виконання:"
 
-#: kalarmcalendar/kacalendar.cpp:135
+#: kalarmcalendar/kacalendar.cpp:136
 #, kde-format
 msgid "KAlarm"
 msgstr "KAlarm"
@@ -3620,8 +3662,8 @@ msgid "At login"
 msgstr "Під час входу"
 
 #: kalarmcalendar/kaevent.cpp:3090 kalarmcalendar/kaevent.cpp:3177
-#: kalarmcalendar/kaeventformatter.cpp:428
-#: kalarmcalendar/kaeventformatter.cpp:442
+#: kalarmcalendar/kaeventformatter.cpp:429
+#: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
 msgctxt "@info"
 msgid "1 Minute"
@@ -3632,7 +3674,7 @@ msgstr[2] "%1 хвилин"
 msgstr[3] "%1 хвилина"
 
 #: kalarmcalendar/kaevent.cpp:3092 kalarmcalendar/kaevent.cpp:3179
-#: kalarmcalendar/kaeventformatter.cpp:444
+#: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
 msgid "1 Hour"
@@ -3649,7 +3691,7 @@ msgid "%1h %2m"
 msgstr "%1г. %2хв."
 
 #: kalarmcalendar/kaevent.cpp:3097 kalarmcalendar/kaevent.cpp:3184
-#: kalarmcalendar/kaeventformatter.cpp:446
+#: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
 msgid "1 Day"
@@ -3701,422 +3743,422 @@ msgctxt "@info No repetition"
 msgid "None"
 msgstr "Немає"
 
-#: kalarmcalendar/kaeventformatter.cpp:37
+#: kalarmcalendar/kaeventformatter.cpp:38
 #, kde-format
 msgctxt "@label Unique identifier"
 msgid "UID"
 msgstr "UID"
 
-#: kalarmcalendar/kaeventformatter.cpp:39
+#: kalarmcalendar/kaeventformatter.cpp:40
 #, kde-format
 msgctxt "@label"
 msgid "Alarm type"
 msgstr "Тип нагадування"
 
-#: kalarmcalendar/kaeventformatter.cpp:41
+#: kalarmcalendar/kaeventformatter.cpp:42
 #, kde-format
 msgctxt "@label"
 msgid "Alarm status"
 msgstr "Стан нагадування"
 
-#: kalarmcalendar/kaeventformatter.cpp:43
+#: kalarmcalendar/kaeventformatter.cpp:44
 #, kde-format
 msgctxt "@label"
 msgid "Alarm name"
 msgstr "Назва нагадування"
 
-#: kalarmcalendar/kaeventformatter.cpp:45
+#: kalarmcalendar/kaeventformatter.cpp:46
 #, kde-format
 msgctxt "@label"
 msgid "Template name"
 msgstr "Назва шаблону"
 
-#: kalarmcalendar/kaeventformatter.cpp:47
+#: kalarmcalendar/kaeventformatter.cpp:48
 #, kde-format
 msgctxt "@label"
 msgid "Creation time"
 msgstr "Час створення"
 
-#: kalarmcalendar/kaeventformatter.cpp:49
+#: kalarmcalendar/kaeventformatter.cpp:50
 #, kde-format
 msgctxt "@label"
 msgid "Start time"
 msgstr "Час початку"
 
-#: kalarmcalendar/kaeventformatter.cpp:51
+#: kalarmcalendar/kaeventformatter.cpp:52
 #, kde-format
 msgctxt "@label Start delay configured in an alarm template"
 msgid "Template after time"
 msgstr "Час затримки з шаблону"
 
-#: kalarmcalendar/kaeventformatter.cpp:53
+#: kalarmcalendar/kaeventformatter.cpp:54
 #, kde-format
 msgctxt "@label"
 msgid "Recurs"
 msgstr "Повторюється"
 
-#: kalarmcalendar/kaeventformatter.cpp:55
+#: kalarmcalendar/kaeventformatter.cpp:56
 #, kde-format
 msgctxt "@label"
 msgid "Recurrence"
 msgstr "Повторення"
 
-#: kalarmcalendar/kaeventformatter.cpp:57
+#: kalarmcalendar/kaeventformatter.cpp:58
 #, kde-format
 msgctxt "@label"
 msgid "Sub-repetition"
 msgstr "Підповторення"
 
-#: kalarmcalendar/kaeventformatter.cpp:59
+#: kalarmcalendar/kaeventformatter.cpp:60
 #, kde-format
 msgctxt "@label"
 msgid "Sub-repetition interval"
 msgstr "Інтервал між підповтореннями"
 
-#: kalarmcalendar/kaeventformatter.cpp:61
+#: kalarmcalendar/kaeventformatter.cpp:62
 #, kde-format
 msgctxt "@label"
 msgid "Sub-repetition count"
 msgstr "Кількість підповторень"
 
-#: kalarmcalendar/kaeventformatter.cpp:63
+#: kalarmcalendar/kaeventformatter.cpp:64
 #, kde-format
 msgctxt "@label"
 msgid "Next sub-repetition"
 msgstr "Наступне підповторення"
 
-#: kalarmcalendar/kaeventformatter.cpp:65
+#: kalarmcalendar/kaeventformatter.cpp:66
 #, kde-format
 msgctxt "@label"
 msgid "Work time only"
 msgstr "Лише у робочий час"
 
-#: kalarmcalendar/kaeventformatter.cpp:67
+#: kalarmcalendar/kaeventformatter.cpp:68
 #, kde-format
 msgctxt "@label"
 msgid "Holidays excluded"
 msgstr "Вихідні виключено"
 
-#: kalarmcalendar/kaeventformatter.cpp:69
+#: kalarmcalendar/kaeventformatter.cpp:70
 #, kde-format
 msgctxt "@label"
 msgid "Next recurrence"
 msgstr "Наступне повторення"
 
-#: kalarmcalendar/kaeventformatter.cpp:71
+#: kalarmcalendar/kaeventformatter.cpp:72
 #, kde-format
 msgctxt "@label"
 msgid "Late cancel"
 msgstr "Скасування у разі прострочення"
 
-#: kalarmcalendar/kaeventformatter.cpp:73
+#: kalarmcalendar/kaeventformatter.cpp:74
 #, kde-format
 msgctxt "@label Automatically close window"
 msgid "Auto close"
 msgstr "Автоматично закрити"
 
-#: kalarmcalendar/kaeventformatter.cpp:75
+#: kalarmcalendar/kaeventformatter.cpp:76
 #, kde-format
 msgctxt "@label"
 msgid "Copy to KOrganizer"
 msgstr "Копіювати до KOrganizer"
 
-#: kalarmcalendar/kaeventformatter.cpp:77
+#: kalarmcalendar/kaeventformatter.cpp:78
 #, kde-format
 msgctxt "@label"
 msgid "Enabled"
 msgstr "Увімкнено"
 
-#: kalarmcalendar/kaeventformatter.cpp:79
+#: kalarmcalendar/kaeventformatter.cpp:80
 #, kde-format
 msgctxt "@label"
 msgid "Read-only"
 msgstr "Тільки читання"
 
-#: kalarmcalendar/kaeventformatter.cpp:81
+#: kalarmcalendar/kaeventformatter.cpp:82
 #, kde-format
 msgctxt "@label Whether alarm should be archived"
 msgid "Archive"
 msgstr "Архівувати"
 
-#: kalarmcalendar/kaeventformatter.cpp:83
+#: kalarmcalendar/kaeventformatter.cpp:84
 #, kde-format
 msgctxt "@label"
 msgid "Revision"
 msgstr "Модифікація"
 
-#: kalarmcalendar/kaeventformatter.cpp:85
+#: kalarmcalendar/kaeventformatter.cpp:86
 #, kde-format
 msgctxt "@label"
 msgid "Custom properties"
 msgstr "Нетипові властивості"
 
-#: kalarmcalendar/kaeventformatter.cpp:88
+#: kalarmcalendar/kaeventformatter.cpp:89
 #, kde-format
 msgctxt "@label"
 msgid "Message text"
 msgstr "Текст повідомлення"
 
-#: kalarmcalendar/kaeventformatter.cpp:90
+#: kalarmcalendar/kaeventformatter.cpp:91
 #, kde-format
 msgctxt "@label File to provide text for message"
 msgid "Message file"
 msgstr "Файл повідомлення"
 
-#: kalarmcalendar/kaeventformatter.cpp:96
+#: kalarmcalendar/kaeventformatter.cpp:97
 #, kde-format
 msgctxt "@label"
 msgid "Font"
 msgstr "Шрифт"
 
-#: kalarmcalendar/kaeventformatter.cpp:98
+#: kalarmcalendar/kaeventformatter.cpp:99
 #, kde-format
 msgctxt "@label Shell command to execute before alarm"
 msgid "Pre-alarm action"
 msgstr "Дія перед нагадуванням"
 
-#: kalarmcalendar/kaeventformatter.cpp:100
+#: kalarmcalendar/kaeventformatter.cpp:101
 #, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action cancel"
 msgstr "Скасування попередньої дії"
 
-#: kalarmcalendar/kaeventformatter.cpp:102
+#: kalarmcalendar/kaeventformatter.cpp:103
 #, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action no error"
 msgstr "Дія перед нагадуванням без помилок"
 
-#: kalarmcalendar/kaeventformatter.cpp:104
+#: kalarmcalendar/kaeventformatter.cpp:105
 #, kde-format
 msgctxt "@label Shell command to execute after alarm"
 msgid "Post-alarm action"
 msgstr "Дія після нагадування"
 
-#: kalarmcalendar/kaeventformatter.cpp:108
+#: kalarmcalendar/kaeventformatter.cpp:109
 #, kde-format
 msgctxt "@label"
 msgid "Akonadi Item ID"
 msgstr "Ід. запису Akonadi"
 
-#: kalarmcalendar/kaeventformatter.cpp:110
+#: kalarmcalendar/kaeventformatter.cpp:111
 #, kde-format
 msgctxt "@label Audio method"
 msgid "Sound"
 msgstr "Звук"
 
-#: kalarmcalendar/kaeventformatter.cpp:112
+#: kalarmcalendar/kaeventformatter.cpp:113
 #, kde-format
 msgctxt "@label Whether audio should repeat"
 msgid "Sound repeat"
 msgstr "Повторення звуку"
 
-#: kalarmcalendar/kaeventformatter.cpp:116
+#: kalarmcalendar/kaeventformatter.cpp:117
 #, kde-format
 msgctxt "@label"
 msgid "Sound fade volume"
 msgstr "Рівень зміни гучності"
 
-#: kalarmcalendar/kaeventformatter.cpp:118
+#: kalarmcalendar/kaeventformatter.cpp:119
 #, kde-format
 msgctxt "@label"
 msgid "Sound fade time"
 msgstr "Час зміни гучності"
 
-#: kalarmcalendar/kaeventformatter.cpp:120
+#: kalarmcalendar/kaeventformatter.cpp:121
 #, kde-format
 msgctxt "@label Whether the alarm has a reminder"
 msgid "Reminder"
 msgstr "Завчасне нагадування"
 
-#: kalarmcalendar/kaeventformatter.cpp:122
+#: kalarmcalendar/kaeventformatter.cpp:123
 #, kde-format
 msgctxt "@label Whether reminder is on first recurrence only"
 msgid "Reminder once only"
 msgstr "Завчасне нагадування лише для першого повторення"
 
-#: kalarmcalendar/kaeventformatter.cpp:124
+#: kalarmcalendar/kaeventformatter.cpp:125
 #, kde-format
 msgctxt "@label Whether to use standard notification system"
 msgid "Notify"
 msgstr "Сповіщення"
 
-#: kalarmcalendar/kaeventformatter.cpp:126
+#: kalarmcalendar/kaeventformatter.cpp:127
 #, kde-format
 msgctxt "@label Deferral type"
 msgid "Deferral"
 msgstr "Відтермінування"
 
-#: kalarmcalendar/kaeventformatter.cpp:128
+#: kalarmcalendar/kaeventformatter.cpp:129
 #, kde-format
 msgctxt "@label"
 msgid "Deferral time"
 msgstr "Час відтермінування"
 
-#: kalarmcalendar/kaeventformatter.cpp:130
+#: kalarmcalendar/kaeventformatter.cpp:131
 #, kde-format
 msgctxt "@label Default deferral delay"
 msgid "Deferral default"
 msgstr "Типове відтермінування"
 
-#: kalarmcalendar/kaeventformatter.cpp:132
+#: kalarmcalendar/kaeventformatter.cpp:133
 #, kde-format
 msgctxt "@label Whether deferral time is date-only by default"
 msgid "Deferral default date only"
 msgstr "Типове відтермінування лише за датою"
 
-#: kalarmcalendar/kaeventformatter.cpp:135
+#: kalarmcalendar/kaeventformatter.cpp:136
 #, kde-format
 msgctxt "@label A shell command"
 msgid "Command"
 msgstr "Команда"
 
-#: kalarmcalendar/kaeventformatter.cpp:139
+#: kalarmcalendar/kaeventformatter.cpp:140
 #, kde-format
 msgctxt "@label Execute in terminal window"
 msgid "Execute in terminal"
 msgstr "Виконати у вікні термінала"
 
-#: kalarmcalendar/kaeventformatter.cpp:141
+#: kalarmcalendar/kaeventformatter.cpp:142
 #, kde-format
 msgctxt "@label"
 msgid "Hide command error"
 msgstr "Приховати помилку команди"
 
-#: kalarmcalendar/kaeventformatter.cpp:144
+#: kalarmcalendar/kaeventformatter.cpp:145
 #, kde-format
 msgctxt "@label"
 msgid "Email subject"
 msgstr "Тема повідомлення"
 
-#: kalarmcalendar/kaeventformatter.cpp:146
+#: kalarmcalendar/kaeventformatter.cpp:147
 #, kde-format
 msgctxt "@label Email address"
 msgid "Email sender ID"
 msgstr "Ід. відправника повідомлення"
 
-#: kalarmcalendar/kaeventformatter.cpp:148
+#: kalarmcalendar/kaeventformatter.cpp:149
 #, kde-format
 msgctxt "@label Email address"
 msgid "Email to"
 msgstr "Адреса надсилання"
 
-#: kalarmcalendar/kaeventformatter.cpp:150
+#: kalarmcalendar/kaeventformatter.cpp:151
 #, kde-format
 msgctxt "@label true/false"
 msgid "Email bcc"
 msgstr "Прихована копія"
 
-#: kalarmcalendar/kaeventformatter.cpp:152
+#: kalarmcalendar/kaeventformatter.cpp:153
 #, kde-format
 msgctxt "@label"
 msgid "Email body"
 msgstr "Текст повідомлення"
 
-#: kalarmcalendar/kaeventformatter.cpp:154
+#: kalarmcalendar/kaeventformatter.cpp:155
 #, kde-format
 msgctxt "@label"
 msgid "Email attachments"
 msgstr "Долучення"
 
-#: kalarmcalendar/kaeventformatter.cpp:256
+#: kalarmcalendar/kaeventformatter.cpp:257
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (text)"
 msgstr "Показ (тексту)"
 
-#: kalarmcalendar/kaeventformatter.cpp:258
+#: kalarmcalendar/kaeventformatter.cpp:259
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (file)"
 msgstr "Показ (файла)"
 
-#: kalarmcalendar/kaeventformatter.cpp:261
+#: kalarmcalendar/kaeventformatter.cpp:262
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (command)"
 msgstr "Показ (виводу команди)"
 
-#: kalarmcalendar/kaeventformatter.cpp:262
+#: kalarmcalendar/kaeventformatter.cpp:263
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Command"
 msgstr "Команда"
 
-#: kalarmcalendar/kaeventformatter.cpp:264
+#: kalarmcalendar/kaeventformatter.cpp:265
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Email"
 msgstr "Ел. пошта"
 
-#: kalarmcalendar/kaeventformatter.cpp:266
+#: kalarmcalendar/kaeventformatter.cpp:267
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Audio"
 msgstr "Звук"
 
-#: kalarmcalendar/kaeventformatter.cpp:273
+#: kalarmcalendar/kaeventformatter.cpp:274
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Active"
 msgstr "Активний"
 
-#: kalarmcalendar/kaeventformatter.cpp:275
+#: kalarmcalendar/kaeventformatter.cpp:276
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Archived"
 msgstr "Архівовано"
 
-#: kalarmcalendar/kaeventformatter.cpp:277
+#: kalarmcalendar/kaeventformatter.cpp:278
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Template"
 msgstr "Шаблон"
 
-#: kalarmcalendar/kaeventformatter.cpp:296
+#: kalarmcalendar/kaeventformatter.cpp:297
 #, kde-format
 msgctxt "@info Repeat at login"
 msgid "At login until %1"
 msgstr "Під час входу до %1"
 
-#: kalarmcalendar/kaeventformatter.cpp:337
+#: kalarmcalendar/kaeventformatter.cpp:338
 #, kde-format
 msgctxt "@info"
 msgid "%1"
 msgstr "%1"
 
-#: kalarmcalendar/kaeventformatter.cpp:349
+#: kalarmcalendar/kaeventformatter.cpp:350
 #, kde-format
 msgctxt "@info Using default font"
 msgid "Default"
 msgstr "Типовий"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:217
+#: kalarmcalendar/kaeventformatter.cpp:366 messagedisplayhelper.cpp:218
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
 msgstr "Нагадування"
 
-#: kalarmcalendar/kaeventformatter.cpp:378
+#: kalarmcalendar/kaeventformatter.cpp:379
 #, kde-format
 msgctxt "@info"
 msgid "Speak"
 msgstr "Декламувати"
 
-#: kalarmcalendar/kaeventformatter.cpp:379
+#: kalarmcalendar/kaeventformatter.cpp:380
 #, kde-format
 msgctxt "@info"
 msgid "Beep"
 msgstr "Гудок"
 
-#: kalarmcalendar/kaeventformatter.cpp:384
-#: kalarmcalendar/kaeventformatter.cpp:388
+#: kalarmcalendar/kaeventformatter.cpp:385
+#: kalarmcalendar/kaeventformatter.cpp:389
 #, kde-format
 msgctxt "@info Percentage"
 msgid "%1%%"
 msgstr "%1%%"
 
-#: kalarmcalendar/kaeventformatter.cpp:392
+#: kalarmcalendar/kaeventformatter.cpp:393
 #, kde-format
 msgctxt "@info"
 msgid "1 Second"
@@ -4126,25 +4168,25 @@ msgstr[1] "%1 секунди"
 msgstr[2] "%1 секунд"
 msgstr[3] "одна секунда"
 
-#: kalarmcalendar/kaeventformatter.cpp:417
+#: kalarmcalendar/kaeventformatter.cpp:418
 #, kde-format
 msgctxt "@info Error indication"
 msgid "error!"
 msgstr "помилка!"
 
-#: kalarmcalendar/kaeventformatter.cpp:422
+#: kalarmcalendar/kaeventformatter.cpp:423
 #, kde-format
 msgctxt "@info General purpose status indication: yes or no"
 msgid "Yes"
 msgstr "Так"
 
-#: kalarmcalendar/kaeventformatter.cpp:423
+#: kalarmcalendar/kaeventformatter.cpp:424
 #, kde-format
 msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Ні"
 
-#: kamail.cpp:68
+#: kamail.cpp:69
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4153,14 +4195,14 @@ msgstr ""
 "Для того, щоб нагадування електронною поштою працювало, потрібно налаштувати "
 "адресу електронної пошти для «Від»."
 
-#: kamail.cpp:71
+#: kamail.cpp:72
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "відіслані"
 
-#: kamail.cpp:101
+#: kamail.cpp:102
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4168,7 +4210,7 @@ msgid ""
 "found"
 msgstr "Некоректна адреса «Від».<nl/>Не знайдено особу <resource>%1</resource>"
 
-#: kamail.cpp:107
+#: kamail.cpp:108
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4178,7 +4220,7 @@ msgstr ""
 "Нечинна адреса «Від».<nl/>Особа <resource>%1</resource> не має адреси "
 "електронної пошти"
 
-#: kamail.cpp:117
+#: kamail.cpp:118
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4190,7 +4232,7 @@ msgstr ""
 "пошти).</para><para>Будь ласка, вкажіть її в <application>KMail</"
 "application> або у вікні параметрів <application>KAlarm</application>.</para>"
 
-#: kamail.cpp:121
+#: kamail.cpp:122
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4202,7 +4244,7 @@ msgstr ""
 "адресу у <application>KMail</application> або у вікні параметрів "
 "<application>KAlarm</application>.</para>"
 
-#: kamail.cpp:126
+#: kamail.cpp:127
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4212,37 +4254,37 @@ msgstr ""
 "<para>Не налаштовано адресу «Від».</para><para>Будь ласка, налаштуйте її у "
 "вікні параметрів <application>KAlarm</application>.</para>"
 
-#: kamail.cpp:156
+#: kamail.cpp:157
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "Не знайдено <command>%1</command>"
 
-#: kamail.cpp:283
+#: kamail.cpp:284
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Помилка долучення файла: <filename>%1</filename>"
 
-#: kamail.cpp:293
+#: kamail.cpp:294
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Долучення не знайдено: <filename>%1</filename>"
 
-#: kamail.cpp:374
+#: kamail.cpp:375
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Ел. пошта знаходиться в черзі для відсилання"
 
-#: kamail.cpp:540
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Не вдалося надіслати ел. листа"
 
-#: kamail.cpp:541
+#: kamail.cpp:542
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"
@@ -4305,49 +4347,49 @@ msgid ""
 msgstr ""
 "Автоматично закривати вікно нагадування після закінчення періоду спізнення"
 
-#: lib/file.cpp:107
+#: lib/file.cpp:108
 #, kde-format
 msgctxt "@info"
 msgid "Please select a file to display"
 msgstr "Виберіть файл для показу"
 
-#: lib/file.cpp:109
+#: lib/file.cpp:110
 #, kde-format
 msgctxt "@info"
 msgid "Please select a file to play"
 msgstr "Виберіть файл для відтворення"
 
-#: lib/file.cpp:115
+#: lib/file.cpp:116
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> is a folder"
 msgstr "<filename>%1</filename> - це тека"
 
-#: lib/file.cpp:117
+#: lib/file.cpp:118
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> not found"
 msgstr "<filename>%1</filename> не знайдено"
 
-#: lib/file.cpp:118
+#: lib/file.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> is not readable"
 msgstr "Не вдалося прочитати <filename>%1</filename>"
 
-#: lib/file.cpp:119
+#: lib/file.cpp:120
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> appears not to be a text or image file"
 msgstr "<filename>%1</filename> здається не є файлом тексту або зображення"
 
-#: lib/file.cpp:178
+#: lib/file.cpp:179
 #, kde-format
 msgctxt "@item:inlistbox File type"
 msgid "All files"
 msgstr "усі файли"
 
-#: lib/filedialog.cpp:55
+#: lib/filedialog.cpp:56
 #, kde-format
 msgctxt "@option:check"
 msgid "Append to existing file"
@@ -4431,7 +4473,7 @@ msgstr ""
 "Під час клацання на кнопку зменшення/збільшення часу натисніть клавішу "
 "Shift, щоб міняти час більшим інтервалом (6 годин / 5 хвилин)."
 
-#: lib/timezonecombo.cpp:18
+#: lib/timezonecombo.cpp:19
 #, kde-format
 msgid "System time zone"
 msgstr "Часовий пояс системи"
@@ -4448,7 +4490,7 @@ msgstr ""
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "© David Jarvie, 2001–%1"
 
-#: mainwindow.cpp:440
+#: mainwindow.cpp:441
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4458,115 +4500,115 @@ msgstr ""
 "Не вдалось створити меню (можливо, <filename>%1</filename> відсутній або "
 "пошкоджений)"
 
-#: mainwindow.cpp:460
+#: mainwindow.cpp:461
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
 msgstr "Шаблони…"
 
-#: mainwindow.cpp:464 templatedlg.cpp:74
+#: mainwindow.cpp:465 templatedlg.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Створити"
 
-#: mainwindow.cpp:470
+#: mainwindow.cpp:471
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "Створити шаблон…"
 
-#: mainwindow.cpp:474
+#: mainwindow.cpp:475
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
 msgstr "Скопіювати…"
 
-#: mainwindow.cpp:479 resourceselector.cpp:301
+#: mainwindow.cpp:480 resourceselector.cpp:301
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Змінити…"
 
-#: mainwindow.cpp:484
+#: mainwindow.cpp:485
 #, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Вилучити"
 
-#: mainwindow.cpp:490
+#: mainwindow.cpp:491
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Вилучити без підтвердження"
 
-#: mainwindow.cpp:495
+#: mainwindow.cpp:496
 #, kde-format
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Повторна активація"
 
-#: mainwindow.cpp:509
+#: mainwindow.cpp:510
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Пробудити від сну…"
 
-#: mainwindow.cpp:519
+#: mainwindow.cpp:520
 #, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Показувати застарілі нагадування"
 
-#: mainwindow.cpp:524
+#: mainwindow.cpp:525
 #, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Показувати у системному лотку"
 
-#: mainwindow.cpp:528
+#: mainwindow.cpp:529
 #, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Показати календарі"
 
-#: mainwindow.cpp:532
+#: mainwindow.cpp:533
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr "Показати засіб вибору дати"
 
-#: mainwindow.cpp:543
+#: mainwindow.cpp:544
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Імпортувати нагадування…"
 
-#: mainwindow.cpp:549
+#: mainwindow.cpp:550
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Імпортувати дні народження…"
 
-#: mainwindow.cpp:554
+#: mainwindow.cpp:555
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "Експортувати вибрані нагадування…"
 
-#: mainwindow.cpp:558 resourceselector.cpp:319
+#: mainwindow.cpp:559 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "Експортувати…"
 
-#: mainwindow.cpp:562
+#: mainwindow.cpp:563
 #, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Оновити нагадування"
 
-#: mainwindow.cpp:806
+#: mainwindow.cpp:807
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4576,7 +4618,7 @@ msgstr[1] "Ви дійсно хочете вилучити %1 вибраних �
 msgstr[2] "Ви дійсно хочете вилучити %1 вибраних нагадувань?"
 msgstr[3] "Ви дійсно хочете вилучити %1 вибране нагадування?"
 
-#: mainwindow.cpp:808
+#: mainwindow.cpp:809
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4586,43 +4628,43 @@ msgstr[1] "Вилучити нагадування"
 msgstr[2] "Вилучити нагадування"
 msgstr[3] "Вилучити нагадування"
 
-#: mainwindow.cpp:809 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Вилучити"
 
-#: mainwindow.cpp:903
+#: mainwindow.cpp:904
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Ховати застарілі нагадування"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Показувати застарілі нагадування"
 
-#: mainwindow.cpp:980
+#: mainwindow.cpp:981
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Імпортувати дні народження"
 
-#: mainwindow.cpp:1232
+#: mainwindow.cpp:1233
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1299
+#: mainwindow.cpp:1300
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4631,48 +4673,48 @@ msgstr ""
 "<qt>За допомогою цього пункту можна повністю сховати смужку меню. Наказати "
 "програмі знову показувати цю смужку можна клавіатурним скороченням %1.</qt>"
 
-#: mainwindow.cpp:1301
+#: mainwindow.cpp:1302
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Приховати смужку меню"
 
-#: mainwindow.cpp:1541
+#: mainwindow.cpp:1542
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Візуальне нагадування"
 
-#: mainwindow.cpp:1543
+#: mainwindow.cpp:1544
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Нагадування ел. поштою"
 
-#: mainwindow.cpp:1545
+#: mainwindow.cpp:1546
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Нагадування з командою"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1548
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Тип нагадування"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Виберіть який тип нагадування створити:"
 
-#: mainwindow.cpp:1681
+#: mainwindow.cpp:1682
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Увімкнути"
 
-#: mainwindow.cpp:1681
+#: mainwindow.cpp:1682
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -4686,49 +4728,49 @@ msgstr ""
 "<para>Не вдалося відкласти нагадування:</para><para>Нагадування не знайдено."
 "</para>"
 
-#: messagedisplayhelper.cpp:203
+#: messagedisplayhelper.cpp:204
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "Нагадування"
 
-#: messagedisplayhelper.cpp:204 messagedisplayhelper.cpp:408
+#: messagedisplayhelper.cpp:205 messagedisplayhelper.cpp:409
 #, kde-format
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Повідомлення"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Файл є текою"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Не вдалося відкрити файл"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File not found"
 msgstr "Файл не знайдено"
 
-#: messagedisplayhelper.cpp:352
+#: messagedisplayhelper.cpp:353
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr "Помилка"
 
-#: messagedisplayhelper.cpp:481
+#: messagedisplayhelper.cpp:482
 #, kde-format
 msgctxt "@info"
 msgid "Today"
 msgstr "Сьогодні"
 
-#: messagedisplayhelper.cpp:483
+#: messagedisplayhelper.cpp:484
 #, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
@@ -4738,7 +4780,7 @@ msgstr[1] "за %1 дні"
 msgstr[2] "за %1 днів"
 msgstr[3] "за %1 день"
 
-#: messagedisplayhelper.cpp:485
+#: messagedisplayhelper.cpp:486
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -4748,7 +4790,7 @@ msgstr[1] "протягом %1 тижнів"
 msgstr[2] "протягом %1 тижнів"
 msgstr[3] "протягом тижня"
 
-#: messagedisplayhelper.cpp:499
+#: messagedisplayhelper.cpp:500
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
@@ -4758,7 +4800,7 @@ msgstr[1] "за %1 хвилини"
 msgstr[2] "за %1 хвилин"
 msgstr[3] "за %1 хвилину"
 
-#: messagedisplayhelper.cpp:501
+#: messagedisplayhelper.cpp:502
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
@@ -4768,7 +4810,7 @@ msgstr[1] "протягом %1 години"
 msgstr[2] "протягом %1 годин"
 msgstr[3] "протягом %1 години"
 
-#: messagedisplayhelper.cpp:504
+#: messagedisplayhelper.cpp:505
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
@@ -4778,7 +4820,7 @@ msgstr[1] "%1 години"
 msgstr[2] "%1 годин"
 msgstr[3] "1 годину"
 
-#: messagedisplayhelper.cpp:505
+#: messagedisplayhelper.cpp:506
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
@@ -4788,13 +4830,13 @@ msgstr[1] "за %2 %1 хвилини"
 msgstr[2] "за %2 %1 хвилин"
 msgstr[3] "за %2 1 хвилину"
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Неможливо декламувати повідомлення"
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
@@ -4812,7 +4854,7 @@ msgctxt "@action:button"
 msgid "Defer"
 msgstr "Відкласти"
 
-#: messagewindow.cpp:227
+#: messagewindow.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4822,79 +4864,79 @@ msgstr ""
 "Заплановані дата/час цього повідомлення (на відміну від часу, коли воно буде "
 "справді показане)."
 
-#: messagewindow.cpp:244
+#: messagewindow.cpp:245
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr "Файл, вміст якого показано нижче"
 
-#: messagewindow.cpp:278
+#: messagewindow.cpp:279
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr "Вміст файла, який буде показано"
 
-#: messagewindow.cpp:298
+#: messagewindow.cpp:299
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr "Повідомлення нагадування"
 
-#: messagewindow.cpp:325
+#: messagewindow.cpp:326
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr "Вивід команди нагадування"
 
-#: messagewindow.cpp:358
+#: messagewindow.cpp:359
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr "Ел. пошта для відсилання"
 
-#: messagewindow.cpp:408
+#: messagewindow.cpp:409
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr "Більше не показувати це повідомлення про помилку для цього нагадування"
 
-#: messagewindow.cpp:425
+#: messagewindow.cpp:426
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Підтвердити нагадування"
 
-#: messagewindow.cpp:430 resourceselector.cpp:77 templatedlg.cpp:81
+#: messagewindow.cpp:431 resourceselector.cpp:77 templatedlg.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "Змінити…"
 
-#: messagewindow.cpp:434
+#: messagewindow.cpp:435
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "Редагувати нагадування"
 
-#: messagewindow.cpp:435
+#: messagewindow.cpp:436
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Редагувати нагадування."
 
-#: messagewindow.cpp:439
+#: messagewindow.cpp:440
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
 msgstr "Відкласти…"
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:444
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "Відкласти нагадування"
 
-#: messagewindow.cpp:444
+#: messagewindow.cpp:445
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4904,61 +4946,61 @@ msgstr ""
 "<para>Відкласти нагадування на пізніше.</para><para>Вас запитають про час, "
 "коли потрібно знову показати це нагадування.</para>"
 
-#: messagewindow.cpp:458 sounddlg.cpp:443
+#: messagewindow.cpp:459 sounddlg.cpp:444
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Зупинити звук"
 
-#: messagewindow.cpp:459 sounddlg.cpp:444
+#: messagewindow.cpp:460 sounddlg.cpp:445
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "Зупинити відтворення звуку"
 
-#: messagewindow.cpp:473
+#: messagewindow.cpp:474
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "Знайти у <application>KMail</application>"
 
-#: messagewindow.cpp:474
+#: messagewindow.cpp:475
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "Знайти і виділити цей лист в <application>KMail</application>"
 
-#: messagewindow.cpp:482
+#: messagewindow.cpp:483
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Задіяти <application>KAlarm</application>"
 
-#: messagewindow.cpp:483
+#: messagewindow.cpp:484
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Активувати <application>KAlarm</application>"
 
-#: messagewindow.cpp:1075
+#: messagewindow.cpp:1076
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Ви справді хочете підтвердити це нагадування?"
 
-#: messagewindow.cpp:1076
+#: messagewindow.cpp:1077
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Підтвердити нагадування"
 
-#: messagewindow.cpp:1076
+#: messagewindow.cpp:1077
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Підтвердити"
 
-#: messagewindow.cpp:1131
+#: messagewindow.cpp:1132
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -5126,7 +5168,7 @@ msgstr "Режим виконання"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run automatically"
-msgstr ""
+msgstr "Запускати автоматично"
 
 #: prefdlg.cpp:459
 #, kde-format
@@ -5135,12 +5177,14 @@ msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
 msgstr ""
+"Запускати KAlarm автоматично після входу до системи. Для звичайної роботи "
+"KAlarm вам слід позначити цей пункт."
 
 #: prefdlg.cpp:462
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run manually only"
-msgstr ""
+msgstr "Запускати лише вручну"
 
 #: prefdlg.cpp:465
 #, kde-format
@@ -5149,14 +5193,14 @@ msgid ""
 "Only run KAlarm manually, never automatically. KAlarm will only function "
 "when you manually start it."
 msgstr ""
+"Запускати KAlarm лише вручну, не автоматично. KAlarm працюватиме, лише якщо "
+"ви запустите програму вручну."
 
 #: prefdlg.cpp:468
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Do not run"
-msgstr "Не повторювати"
+msgstr "Не запускати"
 
 #: prefdlg.cpp:471
 #, kde-format
@@ -5165,14 +5209,14 @@ msgid ""
 "Stop using KAlarm. If you later run it again, it will then resume normal "
 "functioning."
 msgstr ""
+"Припинити користування KAlarm. Якщо пізніше ви запустите програму знову, "
+"вона відновити звичайний режим роботи."
 
 #: prefdlg.cpp:474
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Activate <application>KAlarm</application>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr "Активувати <application>KAlarm</application>"
+msgstr "Для звичайного запуску <application>KAlarm</application>"
 
 #: prefdlg.cpp:481
 #, kde-format
@@ -5328,29 +5372,27 @@ msgctxt "@info"
 msgid "Command to invoke terminal window not found: <command>%1</command>"
 msgstr "Не знайдено команди для виклику вікна термінала: <command>%1</command>"
 
-#: prefdlg.cpp:706
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "You should not uncheck this option unless you intend to discontinue use "
-#| "of <application>KAlarm</application>"
+#: prefdlg.cpp:702
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "You should not check this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
-"Вам не варто знімати позначення з цього пункту, якщо ви не маєте наміру "
-"перестати використовувати <application>KAlarm</application>"
+"Вам не варто позначати цей пункт, якщо ви не маєте наміру перестати "
+"використовувати <application>KAlarm</application>"
 
-#: prefdlg.cpp:717
+#: prefdlg.cpp:713
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
 msgstr ""
+"Вимикає роботу <application>KAlarm</application>,<nl/>аж доки ви не "
+"запустите програму вручну."
 
-#: prefdlg.cpp:762
+#: prefdlg.cpp:758
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5360,37 +5402,37 @@ msgstr ""
 "Виберіть часовий пояс, який <application>KAlarm</application> має типово "
 "використовувати для показу і введення дат і часу."
 
-#: prefdlg.cpp:776
+#: prefdlg.cpp:772
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Holiday region:"
 msgstr "Діапазон вихідних:"
 
-#: prefdlg.cpp:785
+#: prefdlg.cpp:781
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which holiday region to use"
 msgstr "Виберіть потрібний діапазон вихідних"
 
-#: prefdlg.cpp:793
+#: prefdlg.cpp:789
 #, kde-format
 msgctxt "Holiday region, region language"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: prefdlg.cpp:797
+#: prefdlg.cpp:793
 #, kde-format
 msgctxt "No holiday region"
 msgid "None"
 msgstr "Немає"
 
-#: prefdlg.cpp:815
+#: prefdlg.cpp:811
 #, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
 msgstr "Пробудити від сну до нагадування:"
 
-#: prefdlg.cpp:823
+#: prefdlg.cpp:819
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5402,19 +5444,19 @@ msgstr ""
 "нагадування для налаштованих нагадувань з пробудженням від сну. Цей проміжок "
 "часу потрібний для повноцінного відновлення системи після періоду сну."
 
-#: prefdlg.cpp:824
+#: prefdlg.cpp:820
 #, kde-format
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
 msgstr "хвилин"
 
-#: prefdlg.cpp:838
+#: prefdlg.cpp:834
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Start of day for date-only alarms:"
 msgstr "Початок дня для нагадувань дат:"
 
-#: prefdlg.cpp:845
+#: prefdlg.cpp:841
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5424,55 +5466,55 @@ msgstr ""
 "<para>Рання година доби, коли можна задіювати нагадування дати (тобто "
 "нагадування з зазначенням «будь-який час»).</para><para>%1</para>"
 
-#: prefdlg.cpp:850
+#: prefdlg.cpp:846
 #, kde-format
 msgctxt "@title:group"
 msgid "Working Hours"
 msgstr "Робочі години"
 
-#: prefdlg.cpp:865
+#: prefdlg.cpp:861
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check the days in the week which are work days"
 msgstr "Позначте дні тижня, які є робочими"
 
-#: prefdlg.cpp:875
+#: prefdlg.cpp:871
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily start time:"
 msgstr "Початок дня:"
 
-#: prefdlg.cpp:882
+#: prefdlg.cpp:878
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the start time of the working day.</para><para>%1</para>"
 msgstr "<para>Введіть час початку робочого дня.</para><para>%1</para>"
 
-#: prefdlg.cpp:894
+#: prefdlg.cpp:890
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily end time:"
 msgstr "Кінець дня:"
 
-#: prefdlg.cpp:901
+#: prefdlg.cpp:897
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the end time of the working day.</para><para>%1</para>"
 msgstr "<para>Введіть час завершення робочого дня.</para><para>%1</para>"
 
-#: prefdlg.cpp:906
+#: prefdlg.cpp:902
 #, kde-format
 msgctxt "@title:group"
 msgid "KOrganizer"
 msgstr "KOrganizer"
 
-#: prefdlg.cpp:914
+#: prefdlg.cpp:910
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "KOrganizer event duration:"
 msgstr "Тривалість події KOrganizer:"
 
-#: prefdlg.cpp:921
+#: prefdlg.cpp:917
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5482,19 +5524,19 @@ msgstr ""
 "<para>Введіть тривалість події у годинах з хвилинами для подій, які "
 "копіюються до KOrganizer.</para><para>%1</para>"
 
-#: prefdlg.cpp:990
+#: prefdlg.cpp:986
 #, kde-format
 msgctxt "@title:group"
 msgid "New Alarms && Templates"
 msgstr "Нові нагадування і шаблони"
 
-#: prefdlg.cpp:995
+#: prefdlg.cpp:991
 #, kde-format
 msgctxt "@option:radio"
 msgid "Store in default calendar"
 msgstr "Зберегти у типовому календарі"
 
-#: prefdlg.cpp:997
+#: prefdlg.cpp:993
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5504,13 +5546,13 @@ msgstr ""
 "Додати нові нагадування і шаблони нагадування до типових календарів, без "
 "підтвердження."
 
-#: prefdlg.cpp:999
+#: prefdlg.cpp:995
 #, kde-format
 msgctxt "@option:radio"
 msgid "Prompt for which calendar to store in"
 msgstr "Запитувати про те, у якому календарі зберігати"
 
-#: prefdlg.cpp:1002
+#: prefdlg.cpp:998
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5524,19 +5566,19 @@ msgstr ""
 "декілька календарів.</para><para>Зауважте, що застарілі нагадування завжди "
 "зберігаються у типовому календарі застарілих нагадувань.</para>"
 
-#: prefdlg.cpp:1007
+#: prefdlg.cpp:1003
 #, kde-format
 msgctxt "@title:group"
 msgid "Archived Alarms"
 msgstr "Застарілі нагадування"
 
-#: prefdlg.cpp:1012
+#: prefdlg.cpp:1008
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep alarms after expiry"
 msgstr "Зберігати застарілі нагадування"
 
-#: prefdlg.cpp:1015
+#: prefdlg.cpp:1011
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5546,19 +5588,19 @@ msgstr ""
 "Позначте, щоб зберігати застарілі або вилучені нагадування (за винятком "
 "вилучених нагадувань, які ніколи не було задіяно)."
 
-#: prefdlg.cpp:1021
+#: prefdlg.cpp:1017
 #, kde-format
 msgctxt "@option:check"
 msgid "Discard archived alarms after:"
 msgstr "Вилучати застарілі нагадування після:"
 
-#: prefdlg.cpp:1030
+#: prefdlg.cpp:1026
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "days"
 msgstr "днів"
 
-#: prefdlg.cpp:1034
+#: prefdlg.cpp:1030
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5568,19 +5610,19 @@ msgstr ""
 "Зніміть позначку, щоб застарілі нагадування зберігались без часових "
 "обмежень. Позначте, щоб вказати скільки часу зберігати застарілі нагадування."
 
-#: prefdlg.cpp:1037
+#: prefdlg.cpp:1033
 #, kde-format
 msgctxt "@action:button"
 msgid "Clear Archived Alarms"
 msgstr "Вилучити застарілі нагадування"
 
-#: prefdlg.cpp:1040
+#: prefdlg.cpp:1036
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete all existing archived alarms."
 msgstr "Вилучити всі існуючі застарілі нагадування."
 
-#: prefdlg.cpp:1041
+#: prefdlg.cpp:1037
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5590,7 +5632,7 @@ msgstr ""
 "Вилучити всі існуючі застарілі нагадування (лише з типового календаря для "
 "застарілих нагадувань)."
 
-#: prefdlg.cpp:1087
+#: prefdlg.cpp:1083
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5605,13 +5647,13 @@ msgstr ""
 "календарів, щоб вибрати типовий календар для зберігання застарілих "
 "нагадувань.</para>"
 
-#: prefdlg.cpp:1104
+#: prefdlg.cpp:1100
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete all archived alarms?"
 msgstr "Ви справді хочете вилучити всі застарілі нагадування?"
 
-#: prefdlg.cpp:1105
+#: prefdlg.cpp:1101
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -5621,25 +5663,25 @@ msgstr ""
 "Ви дійсно хочете вилучити всі нагадування з типового календаря для "
 "нагадувань?"
 
-#: prefdlg.cpp:1123
+#: prefdlg.cpp:1119
 #, kde-format
 msgctxt "@label"
 msgid "Email client:"
 msgstr "Клієнт ел. пошти:"
 
-#: prefdlg.cpp:1126
+#: prefdlg.cpp:1122
 #, kde-format
 msgctxt "@option:radio"
 msgid "KMail"
 msgstr "KMail"
 
-#: prefdlg.cpp:1127
+#: prefdlg.cpp:1123
 #, kde-format
 msgctxt "@option:radio"
 msgid "Sendmail"
 msgstr "Sendmail"
 
-#: prefdlg.cpp:1140
+#: prefdlg.cpp:1136
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
@@ -5647,7 +5689,7 @@ msgstr ""
 "Виберіть спосіб надсилання повідомлень, якщо буде активовано нагадування "
 "електронною поштою."
 
-#: prefdlg.cpp:1143
+#: prefdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5664,7 +5706,7 @@ msgstr ""
 "<application>sendmail</application> або сумісного з sendmail агента "
 "пересилання пошти.</item></list></para>"
 
-#: prefdlg.cpp:1151
+#: prefdlg.cpp:1147
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5678,7 +5720,7 @@ msgstr ""
 "використання <application>sendmail</application> або сумісного з sendmail "
 "агента пересилання пошти.</item></list></para>"
 
-#: prefdlg.cpp:1161
+#: prefdlg.cpp:1157
 #, kde-kuit-format
 msgctxt "@option:check"
 msgid ""
@@ -5688,7 +5730,7 @@ msgstr ""
 "Копіювати надіслані листи до теки <resource>%1</resource> "
 "<application>KMail</application>"
 
-#: prefdlg.cpp:1162
+#: prefdlg.cpp:1158
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5698,25 +5740,25 @@ msgstr ""
 "Після надсилання електронного листа, зберегти його копію в теці "
 "<application>KMail</application> <resource>%1</resource>"
 
-#: prefdlg.cpp:1170
+#: prefdlg.cpp:1166
 #, kde-format
 msgctxt "@option:check"
 msgid "Notify when remote emails are queued"
 msgstr "Повідомляти, якщо віддалену ел. пошту поставлено у чергу"
 
-#: prefdlg.cpp:1178
+#: prefdlg.cpp:1174
 #, kde-format
 msgctxt "@title:group"
 msgid "Your Email Address"
 msgstr "Адреса вашої ел. пошти"
 
-#: prefdlg.cpp:1184
+#: prefdlg.cpp:1180
 #, kde-format
 msgctxt "@label 'From' email address"
 msgid "From:"
 msgstr "Від:"
 
-#: prefdlg.cpp:1196
+#: prefdlg.cpp:1192
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5726,13 +5768,13 @@ msgstr ""
 "Адреса вашої електронної пошти використовується, щоб вказати вас, як "
 "відправника, для надсилання нагадувань електронною поштою."
 
-#: prefdlg.cpp:1203 prefdlg.cpp:1239
+#: prefdlg.cpp:1199 prefdlg.cpp:1235
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
 msgstr "Використовувати типовий профіль <application>KMail</application>"
 
-#: prefdlg.cpp:1206
+#: prefdlg.cpp:1202
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5743,13 +5785,13 @@ msgstr ""
 "електронною поштою використовувати типову адресу електронної пошти, вказану "
 "у <application>KMail</application>."
 
-#: prefdlg.cpp:1210
+#: prefdlg.cpp:1206
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use <application>KMail</application> identities"
 msgstr "Використовувати профілі <application>KMail</application>"
 
-#: prefdlg.cpp:1213
+#: prefdlg.cpp:1209
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5765,13 +5807,13 @@ msgstr ""
 "<application>KMail</application>. Для нових нагадувань електронною поштою ви "
 "зможете вибрати певний профіль з <application>KMail</application>."
 
-#: prefdlg.cpp:1220
+#: prefdlg.cpp:1216
 #, kde-format
 msgctxt "@label 'Bcc' email address"
 msgid "Bcc:"
 msgstr "Прихована копія:"
 
-#: prefdlg.cpp:1231
+#: prefdlg.cpp:1227
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5785,7 +5827,7 @@ msgstr ""
 "приховані копії на ваш обліковий запис на комп'ютері, де запущено програма "
 "<application>KAlarm</application>, просто вкажіть своє ім'я користувача."
 
-#: prefdlg.cpp:1242
+#: prefdlg.cpp:1238
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5796,19 +5838,19 @@ msgstr ""
 "використовувати типову адресу електронної пошти з <application>KMail</"
 "application>."
 
-#: prefdlg.cpp:1344
+#: prefdlg.cpp:1340
 #, kde-format
 msgctxt "@info"
 msgid "No valid 'Bcc' email address is specified."
 msgstr "Не вказано коректної адреси для поля «Прихована копія»."
 
-#: prefdlg.cpp:1351
+#: prefdlg.cpp:1347
 #, kde-format
 msgctxt "@info"
 msgid "Are you sure you want to save your changes?"
 msgstr "Ви справді бажаєте зберегти зроблені вами зміни?"
 
-#: prefdlg.cpp:1357
+#: prefdlg.cpp:1353
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5818,7 +5860,7 @@ msgstr ""
 "<para>Зараз у <application>KMail</application> не встановлено типової адреси "
 "електронної пошти.</para><para>%1</para><para>%2</para>"
 
-#: prefdlg.cpp:1362
+#: prefdlg.cpp:1358
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5828,7 +5870,7 @@ msgstr ""
 "<para>Зараз не існує жодного профілю <application>KMail</application>.</"
 "para><para>%1</para><para>%2</para>"
 
-#: prefdlg.cpp:1380
+#: prefdlg.cpp:1376
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5837,25 +5879,25 @@ msgstr ""
 "Типовий параметр для <interface>%1</interface> у вікні редагування "
 "нагадувань."
 
-#: prefdlg.cpp:1389 prefdlg.cpp:1844
+#: prefdlg.cpp:1385 prefdlg.cpp:1840
 #, kde-format
 msgctxt "@title:tab"
 msgid "General"
 msgstr "Загальні"
 
-#: prefdlg.cpp:1395
+#: prefdlg.cpp:1391
 #, kde-format
 msgctxt "@title:tab Settings specific to alarm type"
 msgid "Type Specific"
 msgstr "Специфіка типу"
 
-#: prefdlg.cpp:1401
+#: prefdlg.cpp:1397
 #, kde-format
 msgctxt "@title:tab"
 msgid "Font && Color"
 msgstr "Шрифт і колір"
 
-#: prefdlg.cpp:1417
+#: prefdlg.cpp:1413
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5865,31 +5907,31 @@ msgstr ""
 "Типовим значенням параметра способу показу повідомлення нагадування є "
 "діалогове вікно нагадування."
 
-#: prefdlg.cpp:1441
+#: prefdlg.cpp:1437
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Recurrence:"
 msgstr "Повторення:"
 
-#: prefdlg.cpp:1474
+#: prefdlg.cpp:1470
 #, kde-format
 msgctxt "@option:radio"
 msgid "February 28th"
 msgstr "28-е лютого"
 
-#: prefdlg.cpp:1478
+#: prefdlg.cpp:1474
 #, kde-format
 msgctxt "@option:radio"
 msgid "March 1st"
 msgstr "1-е березня"
 
-#: prefdlg.cpp:1482
+#: prefdlg.cpp:1478
 #, kde-format
 msgctxt "@option:radio"
 msgid "Do not repeat"
 msgstr "Не повторювати"
 
-#: prefdlg.cpp:1487
+#: prefdlg.cpp:1483
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5902,31 +5944,31 @@ msgstr ""
 "налаштування не має жодного впливу на заплановані за розкладом нагадування.</"
 "note>"
 
-#: prefdlg.cpp:1493
+#: prefdlg.cpp:1489
 #, kde-format
 msgctxt "@title:group"
 msgid "Display Alarms"
 msgstr "Візуальні нагадування"
 
-#: prefdlg.cpp:1511
+#: prefdlg.cpp:1507
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Reminder units:"
 msgstr "Одиниці завчасного нагадування:"
 
-#: prefdlg.cpp:1514
+#: prefdlg.cpp:1510
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Minutes"
 msgstr "Хвилини"
 
-#: prefdlg.cpp:1515
+#: prefdlg.cpp:1511
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
 msgstr "Години/хвилини"
 
-#: prefdlg.cpp:1518
+#: prefdlg.cpp:1514
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5936,19 +5978,19 @@ msgstr ""
 "Типові одиниці виміру часу для завчасного нагадування у вікні редагування "
 "нагадувань."
 
-#: prefdlg.cpp:1524
+#: prefdlg.cpp:1520
 #, kde-format
 msgctxt "@title:group Audio options group"
 msgid "Sound"
 msgstr "Звук"
 
-#: prefdlg.cpp:1543
+#: prefdlg.cpp:1539
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat sound file"
 msgstr "Повторити звуковий файл"
 
-#: prefdlg.cpp:1546
+#: prefdlg.cpp:1542
 #, kde-kuit-format
 msgctxt "@info:whatsthis sound file 'Repeat' checkbox"
 msgid ""
@@ -5958,19 +6000,19 @@ msgstr ""
 "Типовий параметр для файла звуку <interface>%1</interface> у вікні "
 "редагування нагадувань."
 
-#: prefdlg.cpp:1552
+#: prefdlg.cpp:1548
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Sound file:"
 msgstr "Файл звуку:"
 
-#: prefdlg.cpp:1560
+#: prefdlg.cpp:1556
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a sound file"
 msgstr "Виберіть звуковий файл"
 
-#: prefdlg.cpp:1562
+#: prefdlg.cpp:1558
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
@@ -5978,7 +6020,7 @@ msgstr ""
 "Введіть стандартний файл звуку для використання у вікні редагування "
 "нагадувань."
 
-#: prefdlg.cpp:1571
+#: prefdlg.cpp:1567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5987,32 +6029,32 @@ msgstr ""
 "Позначте, щоб встановити типову гучність для відтворення звукових файлів у "
 "вікні редагування нагадування."
 
-#: prefdlg.cpp:1575
+#: prefdlg.cpp:1571
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default volume for sound files in the alarm edit dialog."
 msgstr ""
 "Типова гучність відтворення звукових файлів у вікні редагування нагадувань."
 
-#: prefdlg.cpp:1585
+#: prefdlg.cpp:1581
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Alarms"
 msgstr "Нагадування-команди"
 
-#: prefdlg.cpp:1604
+#: prefdlg.cpp:1600
 #, kde-format
 msgctxt "@title:group"
 msgid "Email Alarms"
 msgstr "Нагадування ел. поштою"
 
-#: prefdlg.cpp:1617
+#: prefdlg.cpp:1613
 #, kde-format
 msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "Шрифт і колір повідомлення"
 
-#: prefdlg.cpp:1823
+#: prefdlg.cpp:1819
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6022,19 +6064,19 @@ msgstr ""
 "Ви маєте вказати звуковий файл, якщо вибрано <interface>%1</interface> як "
 "типовий тип звуку"
 
-#: prefdlg.cpp:1850
+#: prefdlg.cpp:1846
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "Вікна нагадувань"
 
-#: prefdlg.cpp:1853
+#: prefdlg.cpp:1849
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "Показувати в системному лотку"
 
-#: prefdlg.cpp:1855
+#: prefdlg.cpp:1851
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6046,13 +6088,13 @@ msgstr ""
 "показувалася у системному лотку. Показ піктограми у лотку надає можливість "
 "простого доступу до програми і показу стану.</para>"
 
-#: prefdlg.cpp:1884
+#: prefdlg.cpp:1880
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr "Завжди показувати"
 
-#: prefdlg.cpp:1888
+#: prefdlg.cpp:1884
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6062,13 +6104,13 @@ msgstr ""
 "Позначте, щоб піктограму <application>KAlarm</application> було показано у "
 "системному лотку, незалежно від того, чи призначено нагадування."
 
-#: prefdlg.cpp:1892
+#: prefdlg.cpp:1888
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr "Автоматично ховати, якщо немає активних нагадувань"
 
-#: prefdlg.cpp:1896
+#: prefdlg.cpp:1892
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6081,7 +6123,7 @@ msgstr ""
 "піктограму можна зробити видимою за допомогою параметра показу прихованих "
 "піктограм віджета системного лотка."
 
-#: prefdlg.cpp:1902
+#: prefdlg.cpp:1898
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6096,25 +6138,25 @@ msgstr ""
 "видимою за допомогою параметра показу прихованих піктограм віджета "
 "системного лотка."
 
-#: prefdlg.cpp:1905
+#: prefdlg.cpp:1901
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr "Автоматично ховати, якщо не призначено нагадування протягом:"
 
-#: prefdlg.cpp:1917
+#: prefdlg.cpp:1913
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "Підказка системного лотка"
 
-#: prefdlg.cpp:1924
+#: prefdlg.cpp:1920
 #, kde-format
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
 msgstr "Нагадування наступних 24 годин"
 
-#: prefdlg.cpp:1928
+#: prefdlg.cpp:1924
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6124,13 +6166,13 @@ msgstr ""
 "Вкажіть чи включати в підказку системного лотка короткий список нагадувань "
 "наступних 24 годин."
 
-#: prefdlg.cpp:1934
+#: prefdlg.cpp:1930
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "Максимальна кількість показаних нагадувань:"
 
-#: prefdlg.cpp:1943
+#: prefdlg.cpp:1939
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6141,43 +6183,43 @@ msgstr ""
 "підказці системного лотка. Позначте, щоб обмежити їхню максимальну кількість "
 "до вказаної."
 
-#: prefdlg.cpp:1947
+#: prefdlg.cpp:1943
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "Показувати час нагадування"
 
-#: prefdlg.cpp:1953
+#: prefdlg.cpp:1949
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "Показувати час до нагадування"
 
-#: prefdlg.cpp:1971
+#: prefdlg.cpp:1967
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "Список нагадувань"
 
-#: prefdlg.cpp:1983
+#: prefdlg.cpp:1979
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "Колір вимкненого нагадування:"
 
-#: prefdlg.cpp:1996
+#: prefdlg.cpp:1992
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "Колір застарілих нагадувань:"
 
-#: prefdlg.cpp:2009
+#: prefdlg.cpp:2005
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Вікна повідомлень нагадувань"
 
-#: prefdlg.cpp:2021
+#: prefdlg.cpp:2017
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6193,25 +6235,25 @@ msgstr ""
 "нагадувань по центру вікна, але вимкнути кнопки на короткий проміжок часу "
 "після показу вікна.</item></list></para>"
 
-#: prefdlg.cpp:2024
+#: prefdlg.cpp:2020
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Розташовувати вікна подалі від курсора"
 
-#: prefdlg.cpp:2028
+#: prefdlg.cpp:2024
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "Вікна по центру, затримка активації кнопок вікна"
 
-#: prefdlg.cpp:2037
+#: prefdlg.cpp:2033
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Затримка активації кнопок (у секундах):"
 
-#: prefdlg.cpp:2045
+#: prefdlg.cpp:2041
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6223,7 +6265,7 @@ msgstr ""
 "повідомлення нагадування для зменшення ймовірності того, що нагадування "
 "випадково залишаться непоміченими."
 
-#: prefdlg.cpp:2049
+#: prefdlg.cpp:2045
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6233,13 +6275,13 @@ msgstr ""
 "Введіть час, який кнопки вікна залишатимуться вимкненими після появи вікна "
 "повідомлення нагадування."
 
-#: prefdlg.cpp:2057
+#: prefdlg.cpp:2053
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Вікна нагадувань зі смужками заголовків і автоматичним фокусом"
 
-#: prefdlg.cpp:2060
+#: prefdlg.cpp:2056
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7259,25 +7301,25 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "Не імпортувати"
 
-#: resources/migration/fileresourcemigrator.cpp:255
+#: resources/migration/fileresourcemigrator.cpp:256
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "Задіяні нагадування"
 
-#: resources/migration/fileresourcemigrator.cpp:257
+#: resources/migration/fileresourcemigrator.cpp:258
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "Застарілі нагадування"
 
-#: resources/migration/fileresourcemigrator.cpp:259
+#: resources/migration/fileresourcemigrator.cpp:260
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "Шаблони нагадувань"
 
-#: resources/migration/fileresourcemigrator.cpp:279
+#: resources/migration/fileresourcemigrator.cpp:280
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -7287,176 +7329,176 @@ msgstr ""
 "<para>Не вдалося створити типовий календар <resource>%1</resource></"
 "para><para>Розташування: <filename>%2</filename></para>"
 
-#: resources/resourcedatamodelbase.cpp:65
+#: resources/resourcedatamodelbase.cpp:66
 #, kde-format
 msgctxt "@item:intext"
 msgid "Active Alarms"
 msgstr "Задіяні нагадування"
 
-#: resources/resourcedatamodelbase.cpp:67
+#: resources/resourcedatamodelbase.cpp:68
 #, kde-format
 msgctxt "@item:intext"
 msgid "Archived Alarms"
 msgstr "Застарілі нагадування"
 
-#: resources/resourcedatamodelbase.cpp:69
+#: resources/resourcedatamodelbase.cpp:70
 #, kde-format
 msgctxt "@item:intext"
 msgid "Alarm Templates"
 msgstr "Шаблони нагадувань"
 
-#: resources/resourcedatamodelbase.cpp:85
+#: resources/resourcedatamodelbase.cpp:86
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only"
 msgstr "Лише читання"
 
-#: resources/resourcedatamodelbase.cpp:88
+#: resources/resourcedatamodelbase.cpp:89
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (old format)"
 msgstr "Лише читання (застарілий формат)"
 
-#: resources/resourcedatamodelbase.cpp:91
+#: resources/resourcedatamodelbase.cpp:92
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (other format)"
 msgstr "Лише читання (інший формат)"
 
-#: resources/resourcedatamodelbase.cpp:113
+#: resources/resourcedatamodelbase.cpp:114
 #, kde-format
 msgctxt "@title:column"
 msgid "Time"
 msgstr "Час"
 
-#: resources/resourcedatamodelbase.cpp:115
+#: resources/resourcedatamodelbase.cpp:116
 #, kde-format
 msgctxt "@title:column"
 msgid "Time To"
 msgstr "Час до"
 
-#: resources/resourcedatamodelbase.cpp:117
+#: resources/resourcedatamodelbase.cpp:118
 #, kde-format
 msgctxt "@title:column"
 msgid "Repeat"
 msgstr "Повторити"
 
-#: resources/resourcedatamodelbase.cpp:119
+#: resources/resourcedatamodelbase.cpp:120
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
 msgstr "Колір"
 
-#: resources/resourcedatamodelbase.cpp:121
+#: resources/resourcedatamodelbase.cpp:122
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Тип"
 
-#: resources/resourcedatamodelbase.cpp:123
+#: resources/resourcedatamodelbase.cpp:124
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Назва"
 
-#: resources/resourcedatamodelbase.cpp:125
+#: resources/resourcedatamodelbase.cpp:126
 #, kde-format
 msgctxt "@title:column"
 msgid "Message, File or Command"
 msgstr "Повідомлення, файл або команда"
 
-#: resources/resourcedatamodelbase.cpp:127
+#: resources/resourcedatamodelbase.cpp:128
 #, kde-format
 msgctxt "@title:column Template name"
 msgid "Name"
 msgstr "Назва"
 
-#: resources/resourcedatamodelbase.cpp:139
+#: resources/resourcedatamodelbase.cpp:140
 #, kde-format
 msgctxt "@title:column"
 msgid "Calendars"
 msgstr "Календарі"
 
-#: resources/resourcedatamodelbase.cpp:450
+#: resources/resourcedatamodelbase.cpp:451
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
 msgstr "Помилка під час виконання команди"
 
-#: resources/resourcedatamodelbase.cpp:452
+#: resources/resourcedatamodelbase.cpp:453
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
 msgstr "Спроба виконання дія перед нагадуванням була невдалою"
 
-#: resources/resourcedatamodelbase.cpp:454
+#: resources/resourcedatamodelbase.cpp:455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
 msgstr "Спроба виконання дія після нагадування була невдалою"
 
-#: resources/resourcedatamodelbase.cpp:456
+#: resources/resourcedatamodelbase.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
 msgstr ""
 "Спроба виконання попередніх та наступних за нагадуванням дій зазнала невдачі"
 
-#: resources/resourcedatamodelbase.cpp:487
+#: resources/resourcedatamodelbase.cpp:488
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: resources/resourcedatamodelbase.cpp:490
+#: resources/resourcedatamodelbase.cpp:491
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 msgstr "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 
-#: resources/resourcedatamodelbase.cpp:495
+#: resources/resourcedatamodelbase.cpp:496
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename>"
 msgstr "%1<nl/>%2: <filename>%3</filename>"
 
-#: resources/resourcedatamodelbase.cpp:556
+#: resources/resourcedatamodelbase.cpp:557
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
 msgstr "Дата і час наступного нагадування"
 
-#: resources/resourcedatamodelbase.cpp:558
+#: resources/resourcedatamodelbase.cpp:559
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
 msgstr "Скільки залишилось до наступного нагадування"
 
-#: resources/resourcedatamodelbase.cpp:560
+#: resources/resourcedatamodelbase.cpp:561
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
 msgstr "Інтервал між повтореннями нагадування"
 
-#: resources/resourcedatamodelbase.cpp:562
+#: resources/resourcedatamodelbase.cpp:563
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Background color of alarm message"
 msgstr "Колір тла повідомлення нагадування"
 
-#: resources/resourcedatamodelbase.cpp:564
+#: resources/resourcedatamodelbase.cpp:565
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm type (message, file, command or email)"
 msgstr "Тип нагадування (повідомлення, файл, команда або відсилання ел. пошти)"
 
-#: resources/resourcedatamodelbase.cpp:566
+#: resources/resourcedatamodelbase.cpp:567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
 msgstr "Назва нагадування або текст нагадування, якщо назва є порожньою"
 
-#: resources/resourcedatamodelbase.cpp:568
+#: resources/resourcedatamodelbase.cpp:569
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7466,44 +7508,44 @@ msgstr ""
 "Текст нагадування, назва і шлях до текстового файла, команда для виконання, "
 "або рядок теми ел. пошти"
 
-#: resources/resourcedatamodelbase.cpp:570
+#: resources/resourcedatamodelbase.cpp:571
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
 msgstr "Назва шаблону нагадування"
 
-#: resources/resourcedatamodelbase.cpp:662
-#: resources/resourcedatamodelbase.cpp:762
+#: resources/resourcedatamodelbase.cpp:663
+#: resources/resourcedatamodelbase.cpp:763
 #, kde-format
 msgctxt "@info Alarm never occurs"
 msgid "Never"
 msgstr "Ніколи"
 
-#: resources/resourcedatamodelbase.cpp:768
+#: resources/resourcedatamodelbase.cpp:769
 #, no-c-format, kde-format
 msgctxt "@info n days"
 msgid "%1d"
 msgstr "%1d"
 
-#: resources/resourcedatamodelbase.cpp:778
+#: resources/resourcedatamodelbase.cpp:779
 #, kde-format
 msgctxt "@info hours:minutes"
 msgid "%1:%2"
 msgstr "%1:%2"
 
-#: resources/resourcedatamodelbase.cpp:785
+#: resources/resourcedatamodelbase.cpp:786
 #, kde-format
 msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
 msgstr "%1д %2:%3"
 
-#: resources/resourcemodel.cpp:328
+#: resources/resourcemodel.cpp:329
 #, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
 msgstr "Ви не можете вимкнути ваш типовий активний календар нагадування."
 
-#: resources/resourcemodel.cpp:334
+#: resources/resourcemodel.cpp:335
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -7513,7 +7555,7 @@ msgstr ""
 "Ви не можете вимкнути ваш типовий календар застарілих повідомлень, доки "
 "налаштовано збереження  прострочених нагадувань."
 
-#: resources/resourcemodel.cpp:338
+#: resources/resourcemodel.cpp:339
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"
@@ -7610,25 +7652,25 @@ msgctxt "@item:intext What a resource is stored in (directory in filesystem)"
 msgid "Directory"
 msgstr "Каталог"
 
-#: resources/singlefileresource.cpp:176 resources/singlefileresource.cpp:350
+#: resources/singlefileresource.cpp:177 resources/singlefileresource.cpp:351
 #, kde-format
 msgctxt "@info"
 msgid "A previous load is still in progress."
 msgstr "Попередню дію із завантаження ще не завершено."
 
-#: resources/singlefileresource.cpp:182 resources/singlefileresource.cpp:356
+#: resources/singlefileresource.cpp:183 resources/singlefileresource.cpp:357
 #, kde-format
 msgctxt "@info"
 msgid "A previous save is still in progress."
 msgstr "Попередню дію зі збереження ще не завершено."
 
-#: resources/singlefileresource.cpp:231
+#: resources/singlefileresource.cpp:232
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create calendar file <filename>%1</filename>."
 msgstr "Не вдалося створити файл календаря <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:246
+#: resources/singlefileresource.cpp:247
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create writable calendar file <filename>%1</filename>."
@@ -7636,31 +7678,31 @@ msgstr ""
 "Не вдалося створити придатний до запису файл календаря <filename>%1</"
 "filename>."
 
-#: resources/singlefileresource.cpp:601
+#: resources/singlefileresource.cpp:602
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
 msgstr "Не вдалося завантажити файл <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:633
+#: resources/singlefileresource.cpp:634
 #, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "Календар не відкрито."
 
-#: resources/singlefileresource.cpp:646
+#: resources/singlefileresource.cpp:647
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "Не вдалося зберегти файл <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:738
+#: resources/singlefileresource.cpp:739
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "Не вдалося завантажити файл <filename>%1</filename>. (%2)"
 
-#: resources/singlefileresource.cpp:775
+#: resources/singlefileresource.cpp:776
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"
@@ -8078,14 +8120,14 @@ msgstr ""
 "%4<nl/>%5: <filename>%6</filename><nl/>Права доступу: %7<nl/>Стан: %8<nl/"
 ">Типовий календар: %9</para>"
 
-#: rtcwakeaction.cpp:87
+#: rtcwakeaction.cpp:88
 #, kde-kuit-format
 msgctxt "@text/plain"
 msgid "Could not run <command>%1</command> to set wake from suspend"
 msgstr ""
 "Не вдалося запустити <command>%1</command> для встановлення часу пробудження"
 
-#: rtcwakeaction.cpp:90
+#: rtcwakeaction.cpp:91
 #, kde-kuit-format
 msgctxt "@text/plain"
 msgid ""
@@ -8095,19 +8137,19 @@ msgstr ""
 "Помилка під час встановлення пробудження від сну.<nl/>Команда: <command>%1 "
 "%2</command><nl/>Код помилки: %3."
 
-#: sounddlg.cpp:41
+#: sounddlg.cpp:42
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat"
 msgstr "Повторити"
 
-#: sounddlg.cpp:42
+#: sounddlg.cpp:43
 #, kde-format
 msgctxt "@option:check"
 msgid "Set volume"
 msgstr "Встановити гучність"
 
-#: sounddlg.cpp:52
+#: sounddlg.cpp:53
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8117,93 +8159,93 @@ msgstr ""
 "Якщо позначено, звуковий файл буде відтворюватися безперервно, доки буде "
 "показуватись повідомлення."
 
-#: sounddlg.cpp:148
+#: sounddlg.cpp:149
 #, kde-format
 msgctxt "@label"
 msgid "Sound file:"
 msgstr "Звуковий файл:"
 
-#: sounddlg.cpp:165 sounddlg.cpp:460
+#: sounddlg.cpp:166 sounddlg.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "Перевірити звук"
 
-#: sounddlg.cpp:166 sounddlg.cpp:461
+#: sounddlg.cpp:167 sounddlg.cpp:462
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
 msgstr "Відтворити вибраний звуковий файл."
 
-#: sounddlg.cpp:173
+#: sounddlg.cpp:174
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
 msgstr "Введіть назву чи адресу звукового файла для відтворення."
 
-#: sounddlg.cpp:184
+#: sounddlg.cpp:185
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
 msgstr "Виберіть звуковий файл для відтворення."
 
-#: sounddlg.cpp:206
+#: sounddlg.cpp:207
 #, kde-format
 msgctxt "@label:spinbox Length of time to pause between repetitions"
 msgid "Pause between repetitions:"
 msgstr "Інтервал між повтореннями:"
 
-#: sounddlg.cpp:213 sounddlg.cpp:270
+#: sounddlg.cpp:214 sounddlg.cpp:271
 #, kde-format
 msgctxt "@label"
 msgid "seconds"
 msgstr "секунди"
 
-#: sounddlg.cpp:215
+#: sounddlg.cpp:216
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how many seconds to pause between repetitions."
 msgstr ""
 "Введіть тривалість проміжку (у секундах) між послідовними повтореннями."
 
-#: sounddlg.cpp:218
+#: sounddlg.cpp:219
 #, kde-format
 msgctxt "@title:group Sound volume"
 msgid "Volume"
 msgstr "Гучність"
 
-#: sounddlg.cpp:234
+#: sounddlg.cpp:235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
 msgstr "Виберіть, щоб вибрати гучність відтворення звукового файла."
 
-#: sounddlg.cpp:242
+#: sounddlg.cpp:243
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the volume for playing the sound file."
 msgstr "Виберіть гучність відтворення звукового файла."
 
-#: sounddlg.cpp:253
+#: sounddlg.cpp:254
 #, kde-format
 msgctxt "@option:check"
 msgid "Fade"
 msgstr "Згасання"
 
-#: sounddlg.cpp:255
+#: sounddlg.cpp:256
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
 msgstr ""
 "Виберіть, щоб зменшити гучність відтворення на початку звукового файла."
 
-#: sounddlg.cpp:263
+#: sounddlg.cpp:264
 #, kde-format
 msgctxt "@label:spinbox Time period over which to fade the sound"
 msgid "Fade time:"
 msgstr "Час згасання:"
 
-#: sounddlg.cpp:272
+#: sounddlg.cpp:273
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8212,49 +8254,49 @@ msgstr ""
 "Введіть тривалість наростання гучності в секундах перед тим, як звук набуде "
 "нормальної гучності."
 
-#: sounddlg.cpp:279
+#: sounddlg.cpp:280
 #, kde-format
 msgctxt "@label:slider"
 msgid "Initial volume:"
 msgstr "Початкова гучність:"
 
-#: sounddlg.cpp:288
+#: sounddlg.cpp:289
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the initial volume for playing the sound file."
 msgstr "Виберіть початкову гучність відтворення звукового файла."
 
-#: soundpicker.cpp:40
+#: soundpicker.cpp:41
 #, kde-format
 msgctxt "@label:listbox Listbox providing audio options"
 msgid "Sound:"
 msgstr "Звук:"
 
-#: soundpicker.cpp:41
+#: soundpicker.cpp:42
 #, kde-format
 msgctxt "@item:inlistbox No sound"
 msgid "None"
 msgstr "Без звуку"
 
-#: soundpicker.cpp:42
+#: soundpicker.cpp:43
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Beep"
 msgstr "Гудок"
 
-#: soundpicker.cpp:43
+#: soundpicker.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Speak"
 msgstr "Декламувати"
 
-#: soundpicker.cpp:44
+#: soundpicker.cpp:45
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Sound file"
 msgstr "Звуковий файл"
 
-#: soundpicker.cpp:74
+#: soundpicker.cpp:75
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8277,31 +8319,31 @@ msgstr ""
 "повідомлення. (Щоб можна було скористатися цим варіантом, слід належним "
 "чином налаштувати озвучення тексту у Qt.)</item></list></para>"
 
-#: soundpicker.cpp:86
+#: soundpicker.cpp:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure sound file"
 msgstr "Налаштувати звуковий файл"
 
-#: soundpicker.cpp:87
+#: soundpicker.cpp:88
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
 msgstr "Вкажіть звуковий файл для відтворення під час показу нагадування."
 
-#: soundpicker.cpp:256
+#: soundpicker.cpp:257
 #, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "Звуковий файл"
 
-#: soundpicker.cpp:315
+#: soundpicker.cpp:316
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "файли звукових даних"
 
-#: soundpicker.cpp:338
+#: soundpicker.cpp:339
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"
@@ -8537,30 +8579,30 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Виберіть шаблон, на основі якого зробити нове нагадування."
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "Створити нагадування"
 
-#: traywindow.cpp:300
+#: traywindow.cpp:301
 #, kde-format
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: traywindow.cpp:305
+#: traywindow.cpp:306
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(Деякі з нагадувань вимкнено)"
 
-#: traywindow.cpp:365
+#: traywindow.cpp:366
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:367
+#: traywindow.cpp:368
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"
@@ -8807,6 +8849,10 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Кількість хвилин до нагадування, за які слід пробудити систему від сну"
+
+#~ msgctxt "@label"
+#~ msgid "Suppress autostart at login"
+#~ msgstr "Придушити автозапуск KAlarm при вході"
 
 #~ msgctxt "@info"
 #~ msgid ""

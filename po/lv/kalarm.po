@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-13 00:40+0000\n"
+"POT-Creation-Date: 2024-09-14 00:41+0000\n"
 "PO-Revision-Date: 2012-07-05 12:56+0300\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian\n"
@@ -165,7 +165,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Atlikt līdz:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:328
+#: alarmtimewidget.cpp:137 editdlg.cpp:329
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
@@ -183,7 +183,7 @@ msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "Ieplānot atgādinājumu pēc norādītā laika intervāla no šī brīža."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:339
+#: alarmtimewidget.cpp:149 editdlg.cpp:340
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -272,7 +272,7 @@ msgstr ""
 "Izvēlieties no noklusētās, konfigurācijas dialoglogā iestatītās, atšķirīgu "
 "laika joslu šim atgādinājumam."
 
-#: alarmtimewidget.cpp:227 prefdlg.cpp:755
+#: alarmtimewidget.cpp:227 prefdlg.cpp:751
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
@@ -369,60 +369,60 @@ msgstr ""
 "<para>Kļūda atskaņojot audio failu: <filename>%1</filename></para><para>%2</"
 "para>"
 
-#: autostart/autostart.cpp:48
+#: autostart/autostart.cpp:49
 #, kde-format
 msgid "KAlarm Autostart"
 msgstr "KAlarm autopalaišana"
 
-#: autostart/autostart.cpp:49
+#: autostart/autostart.cpp:50
 #, kde-format
 msgid "KAlarm autostart at login"
 msgstr "KAlarm automātiska palaišana piesakoties"
 
-#: autostart/autostart.cpp:51
+#: autostart/autostart.cpp:52
 #, fuzzy, kde-format
 #| msgid "Copyright 2001-2012, David Jarvie"
 msgid "Copyright 2001-%1, David Jarvie"
 msgstr "Autortiesības 2001-2012, David Jarvie"
 
-#: autostart/autostart.cpp:52 main.cpp:60
+#: autostart/autostart.cpp:53 main.cpp:60
 #, fuzzy, kde-format
 #| msgid "David Jarvie"
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
 
-#: autostart/autostart.cpp:52 main.cpp:60
+#: autostart/autostart.cpp:53 main.cpp:60
 #, kde-format
 msgid "Author"
 msgstr ""
 
-#: autostart/autostart.cpp:58
+#: autostart/autostart.cpp:59
 #, fuzzy, kde-format
 #| msgid "Application to autostart"
 msgid "Application to run"
 msgstr "Programma, ko palaist automātiski"
 
-#: autostart/autostart.cpp:59
+#: autostart/autostart.cpp:60
 #, fuzzy, kde-format
 #| msgid "Command line arguments"
 msgid "Command line arguments to pass to application"
 msgstr "Komandrindas argumenti"
 
-#: birthdaydlg.cpp:49
+#: birthdaydlg.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Importēt dzimšanas dienas no KAddressBook"
 
-#: birthdaydlg.cpp:63 editdlg.cpp:244
+#: birthdaydlg.cpp:64 editdlg.cpp:245
 #, fuzzy, kde-format
 #| msgid "Alarm types."
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Atgādinājuma tipi."
 
-#: birthdaydlg.cpp:68 editdlg.cpp:252
+#: birthdaydlg.cpp:69 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -430,7 +430,7 @@ msgid ""
 "be unique."
 msgstr ""
 
-#: birthdaydlg.cpp:75
+#: birthdaydlg.cpp:76
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Birthday: "
@@ -438,19 +438,19 @@ msgctxt "@info"
 msgid "Birthday: "
 msgstr "Dzimšanas diena: "
 
-#: birthdaydlg.cpp:78
+#: birthdaydlg.cpp:79
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Atgādinājuma teksts"
 
-#: birthdaydlg.cpp:81 prefdlg.cpp:1962
+#: birthdaydlg.cpp:82 prefdlg.cpp:1958
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "Prefikss:"
 
-#: birthdaydlg.cpp:88
+#: birthdaydlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -460,13 +460,13 @@ msgstr ""
 "Ievadiet tekstu, ieskaitot vajadzīgās sekojošās atstarpes, kas parādīsies "
 "pirms personas vārda atgādinājuma ziņojumā."
 
-#: birthdaydlg.cpp:92
+#: birthdaydlg.cpp:93
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "Sufikss:"
 
-#: birthdaydlg.cpp:99
+#: birthdaydlg.cpp:100
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -476,13 +476,13 @@ msgstr ""
 "Ievadiet tekstu, ieskaitot vajadzīgās sekojošās atstarpes, kas parādīsies "
 "pēc personas vārda atgādinājuma ziņojumā."
 
-#: birthdaydlg.cpp:103
+#: birthdaydlg.cpp:104
 #, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "Izvēlieties dzimšanas dienas"
 
-#: birthdaydlg.cpp:133
+#: birthdaydlg.cpp:134
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -499,13 +499,13 @@ msgstr ""
 "sarakstam, vai arī noklikšķinot ar peli, vienlaikus turot nospiestu 'Ctrl' "
 "vai 'Shift' taustiņu.</para>"
 
-#: birthdaydlg.cpp:139
+#: birthdaydlg.cpp:140
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "Atgādinājuma konfigurācija"
 
-#: birthdaydlg.cpp:159
+#: birthdaydlg.cpp:160
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
@@ -513,7 +513,7 @@ msgstr ""
 "Atzīmējiet, lai dzimšanas dienas tuvošanās laikā vai pēc tās rādītu arī "
 "papildu atgādinātāju."
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -525,7 +525,7 @@ msgstr ""
 "papildu atgādinātāju. Tas ir papildus galvenajam atgādinātājam, kas tiek "
 "parādīts dzimšanas dienā."
 
-#: birthdaydlg.cpp:162
+#: birthdaydlg.cpp:163
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -533,226 +533,226 @@ msgid ""
 msgstr ""
 "Izvēlieties, vai papildu atgādinājumu palaist pirms vai pēc dzimšanas dienas."
 
-#: birthdaydlg.cpp:195 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
 #, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "Apakšatkārtošanās"
 
-#: birthdaydlg.cpp:197
+#: birthdaydlg.cpp:198
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
 msgstr "Uzstādīt atgādinājuma papildu atkārtošanos"
 
-#: commandoptions.cpp:126
+#: commandoptions.cpp:127
 #, kde-format
 msgid "Prompt for confirmation when alarm is acknowledged"
 msgstr "Prasīt apliecinājumu, kad atgādinājums tiek apstiprināts"
 
-#: commandoptions.cpp:129
+#: commandoptions.cpp:130
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
 msgstr "Pievienot failu e-pastam (atkārtot pēc vajadzības)"
 
-#: commandoptions.cpp:133
+#: commandoptions.cpp:134
 #, kde-format
 msgid "Auto-close alarm window after --late-cancel period"
 msgstr "Automātiski aizvērt logu pēc '--late-cancel' laika perioda"
 
-#: commandoptions.cpp:136
+#: commandoptions.cpp:137
 #, kde-format
 msgid "Blind copy email to self"
 msgstr "Kopēt e-pastu uz sevi"
 
-#: commandoptions.cpp:139
+#: commandoptions.cpp:140
 #, kde-format
 msgid "Beep when message is displayed"
 msgstr "Atskaņot pīkstienu, kad tiek parādīts ziņojums"
 
-#: commandoptions.cpp:142
+#: commandoptions.cpp:143
 #, kde-format
 msgid "Message background color (name or hex 0xRRGGBB)"
 msgstr "Ziņojuma fona krāsa (nosaukums vai heksadecimālais skaitlis 0xRRGGBB)"
 
-#: commandoptions.cpp:146
+#: commandoptions.cpp:147
 #, kde-format
 msgid "Message foreground color (name or hex 0xRRGGBB)"
 msgstr ""
 "Ziņojuma priekšplāna krāsa (nosaukums vai heksadecimālais skaitlis 0xRRGGBB)"
 
-#: commandoptions.cpp:150
+#: commandoptions.cpp:151
 #, kde-format
 msgid "Cancel alarm with the specified event ID"
 msgstr "Atcelt atgādinājumu ar norādīto notikuma ID"
 
-#: commandoptions.cpp:154
+#: commandoptions.cpp:155
 #, kde-format
 msgid "Disable the alarm"
 msgstr "Izslēgt atgādinājumu"
 
-#: commandoptions.cpp:157
+#: commandoptions.cpp:158
 #, kde-format
 msgid "Disable monitoring of all alarms"
 msgstr "Izslēgt visu atgādinājumu novērošanu"
 
-#: commandoptions.cpp:160
+#: commandoptions.cpp:161
 #, kde-format
 msgid "Execute a shell command line"
 msgstr "Izpildīt čaulas komandrindu"
 
-#: commandoptions.cpp:164
+#: commandoptions.cpp:165
 #, kde-format
 msgid "Command line to generate alarm message text"
 msgstr "Komandrinda atgādinājuma ziņojuma teksta izveidošanai"
 
-#: commandoptions.cpp:168
+#: commandoptions.cpp:169
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
 msgstr ""
 "Parādīt atgādinājuma rediģēšanas dialoglogu, lai rediģētu norādīto "
 "atgādinājumu"
 
-#: commandoptions.cpp:172
+#: commandoptions.cpp:173
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr ""
 "Parādīt atgādinājuma rediģēšanas dialoglogu, lai rediģētu jauno ekrāna "
 "atgādinājumu"
 
-#: commandoptions.cpp:175
+#: commandoptions.cpp:176
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr ""
 "Parādīt atgādinājuma rediģēšanas dialoglogu, lai rediģētu jauno komandas "
 "atgādinājumu"
 
-#: commandoptions.cpp:178
+#: commandoptions.cpp:179
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
 msgstr ""
 "Parādīt atgādinājuma rediģēšanas dialoglogu, lai rediģētu jauno e-pasta "
 "atgādinājumu"
 
-#: commandoptions.cpp:181
+#: commandoptions.cpp:182
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
 msgstr ""
 "Parādīt atgādinājuma rediģēšanas dialoglogu, lai rediģētu jauno audio "
 "atgādinājumu"
 
-#: commandoptions.cpp:184
+#: commandoptions.cpp:185
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
 msgstr ""
 "Parādīt atgādinājuma rediģēšanas dialoglogu, sākumuzstādījumu ar sagatavi"
 
-#: commandoptions.cpp:188
+#: commandoptions.cpp:189
 #, kde-format
 msgid "File to display"
 msgstr "Rādāmais fails"
 
-#: commandoptions.cpp:192
+#: commandoptions.cpp:193
 #, kde-format
 msgid "KMail identity to use as sender of email"
 msgstr "KMail identitāte, ko lietot kā e-pasta nosūtītāju"
 
-#: commandoptions.cpp:196
+#: commandoptions.cpp:197
 #, kde-format
 msgid "Interval between alarm repetitions"
 msgstr "Intervāls starp atgādinājuma atkārtojumiem"
 
-#: commandoptions.cpp:200
+#: commandoptions.cpp:201
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
 msgstr "Rādīt atgādinājumu kā notikumu iekš KOrganizer"
 
-#: commandoptions.cpp:203
+#: commandoptions.cpp:204
 #, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
 msgstr ""
 "Atcelt atgādinājumu, ja, to palaižot, kavējums ir lielāks nekā 'period'"
 
-#: commandoptions.cpp:208
+#: commandoptions.cpp:209
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "List of scheduled alarms"
 msgid "Output list of scheduled alarms to stdout"
 msgstr "Ieplānoto atgādinājumu saraksts"
 
-#: commandoptions.cpp:211
+#: commandoptions.cpp:212
 #, kde-format
 msgid "Repeat alarm at every login"
 msgstr "Atkārtot atgādinājumu katrā pieteikšanas reizē"
 
-#: commandoptions.cpp:214
+#: commandoptions.cpp:215
 #, kde-format
 msgid "Send an email to the given address (repeat as needed)"
 msgstr "Nosūtīt e-pastu uz doto adresi (atkārtot pēc vajadzības)"
 
-#: commandoptions.cpp:218
+#: commandoptions.cpp:219
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Action to create a new alarm"
 #| msgid "New alarm"
 msgid "Name of alarm"
 msgstr "Jauns atgādinājums"
 
-#: commandoptions.cpp:222
+#: commandoptions.cpp:223
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the alarm message now"
 msgid "Display alarm message as a notification"
 msgstr "Rādīt atgādinājuma ziņojumu tūlīt"
 
-#: commandoptions.cpp:225
+#: commandoptions.cpp:226
 #, kde-format
 msgid "Audio file to play once"
 msgstr "Audio fails, ko atskaņot vienreiz"
 
-#: commandoptions.cpp:229
+#: commandoptions.cpp:230
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Audio fails, ko atskaņot atkārtoti"
 
-#: commandoptions.cpp:233
+#: commandoptions.cpp:234
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "Norādiet atgādinājuma atkārtošanos, izmantojot iCalendar sintaksi"
 
-#: commandoptions.cpp:237
+#: commandoptions.cpp:238
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "Parādīt papildu atgādinājumu pirms vai pēc galvenā atgādinājuma"
 
-#: commandoptions.cpp:241
+#: commandoptions.cpp:242
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr ""
 "Parādīt papildu atgādinājumu vienreiz, pirms vai pēc pirmās galvenā "
 "atgādinājuma atkārtošanās"
 
-#: commandoptions.cpp:245
+#: commandoptions.cpp:246
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Atgādinājuma atkārtošanas reižu skaits (ieskaitot sākotnējo palaišanu)"
 
-#: commandoptions.cpp:250
+#: commandoptions.cpp:251
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Izrunāt ziņojumu, kad tas tiek parādīts"
 
-#: commandoptions.cpp:254
+#: commandoptions.cpp:255
 #, kde-format
 msgid "Email subject line"
 msgstr "Sūtīt pa e-pastu tēmas rindu"
 
-#: commandoptions.cpp:259
+#: commandoptions.cpp:260
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
 "Imitēt sistēmas laiku [[[yyyy-]mm-]dd-]hh:mm [TZ] (atkļūdošanas režīms)"
 
-#: commandoptions.cpp:264
+#: commandoptions.cpp:265
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
@@ -760,52 +760,52 @@ msgstr ""
 "Palaist atgādinājumu šādā laikā - [[[gggg-]mm-]dd-]hh:mm [TZ], vai datumā - "
 "gggg-mm-dd [TZ]"
 
-#: commandoptions.cpp:268
+#: commandoptions.cpp:269
 #, kde-format
 msgid "Display system tray icon"
 msgstr "Rādīt sistēmas joslas ikonu"
 
-#: commandoptions.cpp:271
+#: commandoptions.cpp:272
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Palaist atgādinājumu ar norādīto notikuma ID"
 
-#: commandoptions.cpp:275
+#: commandoptions.cpp:276
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Atkārtot līdz šādam laikam - [[[gggg-]mm-]dd-]hh:mm [TZ], vai datumam - gggg-"
 "mm-dd [TZ]"
 
-#: commandoptions.cpp:279
+#: commandoptions.cpp:280
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "Skaļums, ar kādu atskaņot audio failu"
 
-#: commandoptions.cpp:290
+#: commandoptions.cpp:291
 #, kde-format
 msgid "Message text to display"
 msgstr "Rādāmais ziņojuma teksts"
 
-#: commandoptions.cpp:454
+#: commandoptions.cpp:455
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
 msgstr "<icode>%1</icode>: nederīga e-pasta adrese"
 
-#: commandoptions.cpp:577 commandoptions.cpp:592 commandoptions.cpp:671
+#: commandoptions.cpp:578 commandoptions.cpp:593 commandoptions.cpp:672
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
 msgstr "Nepareizs <icode>%1</icode> parametrs 'tikai datums' atgādinājumam"
 
-#: commandoptions.cpp:581
+#: commandoptions.cpp:582
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "<icode>%1</icode> agrāks par <icode>%2</icode>"
 
-#: commandoptions.cpp:603
+#: commandoptions.cpp:604
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid ""
@@ -815,13 +815,13 @@ msgstr ""
 "Nepareizi <icode>%1</icode> un <icode>%2</icode> parametri: atkārtošana ir "
 "garāka par <icode>%3</icode> intervālu"
 
-#: commandoptions.cpp:784
+#: commandoptions.cpp:785
 #, kde-format
 msgctxt "@info:shell"
 msgid ": option(s) only valid with an appropriate action option or message"
 msgstr ": opcija(s) derīga tikai ar atbilstošu darbības opciju vai ziņojumu"
 
-#: commandoptions.cpp:805 commandoptions.cpp:822
+#: commandoptions.cpp:806 commandoptions.cpp:823
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -831,25 +831,25 @@ msgstr ""
 "\n"
 "Lietojiet --help, lai saņemtu pieejamo komandrindas opciju sarakstu.\n"
 
-#: commandoptions.cpp:850
+#: commandoptions.cpp:851
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
 msgstr "<icode>%1</icode> nepieciešams <icode>%2</icode>"
 
-#: commandoptions.cpp:852
+#: commandoptions.cpp:853
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
 msgstr "<icode>%1</icode> nepieciešams <icode>%2</icode> vai <icode>%3</icode>"
 
-#: commandoptions.cpp:857
+#: commandoptions.cpp:858
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
 msgstr "Nepareizs <icode>%1</icode> parametrs"
 
-#: commandoptions.cpp:862
+#: commandoptions.cpp:863
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> incompatible with <icode>%2</icode>"
@@ -960,7 +960,7 @@ msgid "Select the holiday region to use."
 msgstr "Izvēlieties izmantojamo brīvdienu reģionu."
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
-#: data/kalarmconfig.kcfg:93 kalarmcalendar/kaeventformatter.cpp:92
+#: data/kalarmconfig.kcfg:93 kalarmcalendar/kaeventformatter.cpp:93
 #, kde-format
 msgctxt "@label"
 msgid "Foreground color"
@@ -974,7 +974,7 @@ msgid "Default foreground color for alarm message windows."
 msgstr "Noklusētā priekšplāna krāsa atgādinājumu ziņojumu logiem."
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
-#: data/kalarmconfig.kcfg:98 kalarmcalendar/kaeventformatter.cpp:94
+#: data/kalarmconfig.kcfg:98 kalarmcalendar/kaeventformatter.cpp:95
 #, kde-format
 msgctxt "@label"
 msgid "Background color"
@@ -1090,14 +1090,14 @@ msgid ""
 "Desktops for which the auto-hide in system tray option is not available."
 msgstr ""
 
-#. i18n: ectx: label, entry (AutoStart), group (General)
+#. i18n: ectx: label, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:132
 #, kde-format
 msgctxt "@label"
 msgid "Start at login"
 msgstr "Palaist piesakoties"
 
-#. i18n: ectx: whatsthis, entry (AutoStart), group (General)
+#. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
@@ -1108,28 +1108,61 @@ msgstr "Palaist piesakoties"
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-"should always be checked unless you intend to discontinue use of KAlarm.</p>"
+"should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
 "<para>Automātiski palaist <application>KAlarm</application> līdz ar KDE "
 "palaišanu.</para><para>Šajai opcijai vienmēr vajadzētu būt atzīmētai, ja "
 "vien nedomājat pārtaukt <application>KAlarm</application> lietošanu.</para>"
 
-#. i18n: ectx: label, entry (Base_NoAutoStart), group (General)
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:group"
+#| msgid "Run Mode"
 msgctxt "@label"
-msgid "Suppress autostart at login"
-msgstr "Apspiest automātisko palaišanu piesakoties"
+msgid "Run mode"
+msgstr "Palaišanas režīms"
+
+#. i18n: ectx: whatsthis, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:138
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Whether to run KAlarm automatically on login, manually only, or not at all."
+msgstr ""
+
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:140
+#, kde-format
+msgctxt "@option"
+msgid "Run automatically"
+msgstr ""
+
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:141
+#, kde-format
+msgctxt "@option"
+msgid "Run manually only"
+msgstr ""
+
+#. i18n: ectx: label, entry (Base_RunMode), group (General)
+#: data/kalarmconfig.kcfg:142
+#, fuzzy, kde-format
+#| msgctxt "@option:radio"
+#| msgid "Do not repeat"
+msgctxt "@option"
+msgid "Do not run"
+msgstr "Neatkārtot"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
-#: data/kalarmconfig.kcfg:141
+#: data/kalarmconfig.kcfg:147
 #, kde-format
 msgctxt "@label"
 msgid "Default defer time interval"
 msgstr "Noklusētais atliktā laika intervāls"
 
 #. i18n: ectx: whatsthis, entry (DefaultDeferTime), group (General)
-#: data/kalarmconfig.kcfg:142
+#: data/kalarmconfig.kcfg:148
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1140,14 +1173,14 @@ msgstr ""
 "izmanto 'Atlikt atgādinājumu' dialoglogs."
 
 #. i18n: ectx: label, entry (AskResource), group (General)
-#: data/kalarmconfig.kcfg:146
+#: data/kalarmconfig.kcfg:152
 #, kde-format
 msgctxt "@label"
 msgid "Prompt for which calendar to store in"
 msgstr "Jautāt, kurā kalendārā glabāt"
 
 #. i18n: ectx: whatsthis, entry (AskResource), group (General)
-#: data/kalarmconfig.kcfg:147
+#: data/kalarmconfig.kcfg:153
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -1167,14 +1200,14 @@ msgstr ""
 "noklusētajā arhivēto atgādinājumu kalendārā.</para>"
 
 #. i18n: ectx: label, entry (Base_ModalMessages), group (General)
-#: data/kalarmconfig.kcfg:151
+#: data/kalarmconfig.kcfg:157
 #, kde-format
 msgctxt "@label"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Ziņojuma logiem ir nosaukuma josla, un tie pieņem tastatūras ievadi"
 
 #. i18n: ectx: whatsthis, entry (Base_ModalMessages), group (General)
-#: data/kalarmconfig.kcfg:152
+#: data/kalarmconfig.kcfg:158
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -1199,14 +1232,14 @@ msgstr ""
 "izmēru maiņa.</item></list></para>"
 
 #. i18n: ectx: label, entry (Base_MessageButtonDelay), group (General)
-#: data/kalarmconfig.kcfg:156
+#: data/kalarmconfig.kcfg:162
 #, kde-format
 msgctxt "@label"
 msgid "Delay before message window buttons are enabled"
 msgstr "Aizture pirms ziņojuma loga pogu ieslēgšanas"
 
 #. i18n: ectx: whatsthis, entry (Base_MessageButtonDelay), group (General)
-#: data/kalarmconfig.kcfg:161
+#: data/kalarmconfig.kcfg:167
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -1242,14 +1275,14 @@ msgstr ""
 "      "
 
 #. i18n: ectx: label, entry (TooltipAlarmCount), group (General)
-#: data/kalarmconfig.kcfg:167
+#: data/kalarmconfig.kcfg:173
 #, kde-format
 msgctxt "@label"
 msgid "Number of alarms to show in system tray tooltip"
 msgstr "Atgādinājumu skaits, ko rādīt sistēmas ikonu joslas paskaidrē"
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
-#: data/kalarmconfig.kcfg:172
+#: data/kalarmconfig.kcfg:178
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -1276,14 +1309,14 @@ msgstr ""
 "       "
 
 #. i18n: ectx: label, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:178
+#: data/kalarmconfig.kcfg:184
 #, kde-format
 msgctxt "@label"
 msgid "Show alarm times in system tray tooltip"
 msgstr "Rādīt atgādinājumu laikus sistēmas ikonu joslas paskaidrē"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:179 prefdlg.cpp:1950
+#: data/kalarmconfig.kcfg:185 prefdlg.cpp:1946
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1293,14 +1326,14 @@ msgstr ""
 "Norādiet, vai sistēmas ikonu joslā rādīt paskaidri ar atgādinājumu laikiem."
 
 #. i18n: ectx: label, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:184
+#: data/kalarmconfig.kcfg:190
 #, kde-format
 msgctxt "@label"
 msgid "Show time to alarms in system tray tooltip"
 msgstr "Rādīt laiku līdz atgādinājumiem sistēmas ikonu joslas paskaidrē"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:185 prefdlg.cpp:1956
+#: data/kalarmconfig.kcfg:191 prefdlg.cpp:1952
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1311,14 +1344,14 @@ msgstr ""
 "atgādinājumiem."
 
 #. i18n: ectx: label, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:190
+#: data/kalarmconfig.kcfg:196
 #, kde-format
 msgctxt "@label"
 msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr "'Laiks līdz atgādinājumam' prefikss sistēmas ikonu joslas paskaidrē"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:191 prefdlg.cpp:1967
+#: data/kalarmconfig.kcfg:197 prefdlg.cpp:1963
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1329,14 +1362,14 @@ msgstr ""
 "atgādinājumam."
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:196
+#: data/kalarmconfig.kcfg:202
 #, kde-format
 msgctxt "@label"
 msgid "Email client"
 msgstr "E-pasta klients"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:197
+#: data/kalarmconfig.kcfg:203
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -1363,28 +1396,28 @@ msgstr ""
 "transporta aģenta lietošanai.</item></list></para>"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:199
+#: data/kalarmconfig.kcfg:205
 #, kde-format
 msgctxt "@option"
 msgid "Sendmail"
 msgstr "Sendmail"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:200
+#: data/kalarmconfig.kcfg:206
 #, kde-format
 msgctxt "@option"
 msgid "KMail"
 msgstr "KMail"
 
 #. i18n: ectx: label, entry (Base_EmailCopyToKMail), group (General)
-#: data/kalarmconfig.kcfg:205
+#: data/kalarmconfig.kcfg:211
 #, kde-format
 msgctxt "@label"
 msgid "Whether to copy sent emails into KMail's Sent folder."
 msgstr "Kopēt nosūtītos e-pastus uz KMail 'Nosūtītās' mapi."
 
 #. i18n: ectx: whatsthis, entry (Base_EmailCopyToKMail), group (General)
-#: data/kalarmconfig.kcfg:206
+#: data/kalarmconfig.kcfg:212
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1395,14 +1428,14 @@ msgstr ""
 "tad, ja par e-pasta klientu ir izvēlēts 'sendmail'."
 
 #. i18n: ectx: label, entry (Base_EmailFrom), group (General)
-#: data/kalarmconfig.kcfg:210
+#: data/kalarmconfig.kcfg:216
 #, kde-format
 msgctxt "@label"
 msgid "'From' email address"
 msgstr "'No' e-pasta adrese"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailFrom), group (General)
-#: data/kalarmconfig.kcfg:211
+#: data/kalarmconfig.kcfg:217
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -1423,14 +1456,14 @@ msgstr ""
 "kādu no KMail identitātēm, vai arī ievadiet faktisko e-pasta adresi."
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
-#: data/kalarmconfig.kcfg:215
+#: data/kalarmconfig.kcfg:221
 #, kde-format
 msgctxt "@label"
 msgid "'Bcc' email address"
 msgstr "'Bcc' e-pasta adrese"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailBccAddress), group (General)
-#: data/kalarmconfig.kcfg:216
+#: data/kalarmconfig.kcfg:222
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -1454,14 +1487,14 @@ msgstr ""
 "iestatījumos uzstādīto adresi, vai arī ievadiet faktisko e-pasta adresi."
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
-#: data/kalarmconfig.kcfg:220
+#: data/kalarmconfig.kcfg:226
 #, kde-format
 msgctxt "@label"
 msgid "Terminal for command alarms"
 msgstr "Terminālis komandas atgādinājumiem"
 
 #. i18n: ectx: whatsthis, entry (Base_CmdXTermCommand), group (General)
-#: data/kalarmconfig.kcfg:221
+#: data/kalarmconfig.kcfg:227
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1472,14 +1505,14 @@ msgstr ""
 "KAlarm rokasgrāmatā aprakstītie speciālie kodi."
 
 #. i18n: ectx: label, entry (Base_StartOfDay), group (General)
-#: data/kalarmconfig.kcfg:224
+#: data/kalarmconfig.kcfg:230
 #, kde-format
 msgctxt "@label"
 msgid "Start of day for date-only alarms"
 msgstr "Dienas sākums 'tikai datums' atgādinātājiem"
 
 #. i18n: ectx: whatsthis, entry (Base_StartOfDay), group (General)
-#: data/kalarmconfig.kcfg:225
+#: data/kalarmconfig.kcfg:231
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The earliest time of day at which a date-only alarm will be triggered."
@@ -1487,42 +1520,42 @@ msgstr ""
 "Agrākais diennakts laiks, kādā tiks palaists 'tikai datums' atgādinātājs."
 
 #. i18n: ectx: label, entry (Base_WorkDayStart), group (General)
-#: data/kalarmconfig.kcfg:230
+#: data/kalarmconfig.kcfg:236
 #, kde-format
 msgctxt "@label"
 msgid "Start time of working day"
 msgstr "Darba dienas sākuma laiks"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayStart), group (General)
-#: data/kalarmconfig.kcfg:231
+#: data/kalarmconfig.kcfg:237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The start time of the working day."
 msgstr "Darba dienas sākuma laiks."
 
 #. i18n: ectx: label, entry (Base_WorkDayEnd), group (General)
-#: data/kalarmconfig.kcfg:236
+#: data/kalarmconfig.kcfg:242
 #, kde-format
 msgctxt "@label"
 msgid "End time of working day"
 msgstr "Darba dienas beigu laiks"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayEnd), group (General)
-#: data/kalarmconfig.kcfg:237
+#: data/kalarmconfig.kcfg:243
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The end time of the working day."
 msgstr "Darba dienas beigu laiks."
 
 #. i18n: ectx: label, entry (Base_WorkDays), group (General)
-#: data/kalarmconfig.kcfg:242
+#: data/kalarmconfig.kcfg:248
 #, kde-format
 msgctxt "@label"
 msgid "Working days"
 msgstr "Darba dienas"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDays), group (General)
-#: data/kalarmconfig.kcfg:243
+#: data/kalarmconfig.kcfg:249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1533,14 +1566,14 @@ msgstr ""
 "Pirmdiena ... 64 = Svētdiena."
 
 #. i18n: ectx: label, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:248
+#: data/kalarmconfig.kcfg:254
 #, kde-format
 msgctxt "@label"
 msgid "Disabled alarm color"
 msgstr "Atslēgto atgādinājumu krāsa"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:249 prefdlg.cpp:1989
+#: data/kalarmconfig.kcfg:255 prefdlg.cpp:1985
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for disabled alarms."
@@ -1548,14 +1581,14 @@ msgstr ""
 "Izvēlieties teksta krāsu atgādinājumu sarakstā atslēgtajiem atgādinājumiem."
 
 #. i18n: ectx: label, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:254
+#: data/kalarmconfig.kcfg:260
 #, kde-format
 msgctxt "@label"
 msgid "Archived alarm color"
 msgstr "Arhivēto atgādinājumu krāsa"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:255 prefdlg.cpp:2002
+#: data/kalarmconfig.kcfg:261 prefdlg.cpp:1998
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
@@ -1563,14 +1596,14 @@ msgstr ""
 "Izvēlieties teksta krāsu atgādinājumu sarakstā arhivētajiem atgādinājumiem."
 
 #. i18n: ectx: label, entry (ArchivedKeepDays), group (General)
-#: data/kalarmconfig.kcfg:260
+#: data/kalarmconfig.kcfg:266
 #, kde-format
 msgctxt "@label"
 msgid "Days to keep expired alarms"
 msgstr "Izpildīto atgādinājumu paturēšanas ilgums (dienās)"
 
 #. i18n: ectx: whatsthis, entry (ArchivedKeepDays), group (General)
-#: data/kalarmconfig.kcfg:265
+#: data/kalarmconfig.kcfg:271
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -1597,14 +1630,14 @@ msgstr ""
 "      "
 
 #. i18n: ectx: label, entry (KOrgEventDuration), group (General)
-#: data/kalarmconfig.kcfg:271
+#: data/kalarmconfig.kcfg:277
 #, kde-format
 msgctxt "@label"
 msgid "KOrganizer event duration"
 msgstr "KOrganizer notikuma ilgums"
 
 #. i18n: ectx: whatsthis, entry (KOrgEventDuration), group (General)
-#: data/kalarmconfig.kcfg:272
+#: data/kalarmconfig.kcfg:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1614,14 +1647,14 @@ msgstr ""
 "Ievadiet notikuma ilgumu minūtēs atgādinājumiem, kuri ir iekopēti KOrganizer."
 
 #. i18n: ectx: label, entry (WakeFromSuspendAdvance), group (General)
-#: data/kalarmconfig.kcfg:276
+#: data/kalarmconfig.kcfg:282
 #, kde-format
 msgctxt "@label"
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Ilgums minūtēs no pamošanās līdz atgādinājumam"
 
 #. i18n: ectx: whatsthis, entry (WakeFromSuspendAdvance), group (General)
-#: data/kalarmconfig.kcfg:277
+#: data/kalarmconfig.kcfg:283
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1634,7 +1667,7 @@ msgstr ""
 "palaišanas brīdī sistēmas darbība ir pilnībā atjaunota."
 
 #. i18n: ectx: label, entry (DefaultDisplayMethod), group (Defaults)
-#: data/kalarmconfig.kcfg:290
+#: data/kalarmconfig.kcfg:296
 #, fuzzy, kde-format
 #| msgid "Beep when message is displayed"
 msgctxt "@label"
@@ -1642,7 +1675,7 @@ msgid "Alarm message display method"
 msgstr "Atskaņot pīkstienu, kad tiek parādīts ziņojums"
 
 #. i18n: ectx: whatsthis, entry (DefaultDisplayMethod), group (Defaults)
-#: data/kalarmconfig.kcfg:291
+#: data/kalarmconfig.kcfg:297
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1652,14 +1685,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
-#: data/kalarmconfig.kcfg:299
+#: data/kalarmconfig.kcfg:305
 #, kde-format
 msgctxt "@label"
 msgid "Cancel if late (minutes)"
 msgstr "Atcelt, ja nokavēts (minūtes)"
 
 #. i18n: ectx: whatsthis, entry (DefaultLateCancel), group (Defaults)
-#: data/kalarmconfig.kcfg:300
+#: data/kalarmconfig.kcfg:306
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1671,14 +1704,14 @@ msgstr ""
 "pirms atcelšanas."
 
 #. i18n: ectx: label, entry (DefaultAutoClose), group (Defaults)
-#: data/kalarmconfig.kcfg:305
+#: data/kalarmconfig.kcfg:311
 #, kde-format
 msgctxt "@label"
 msgid "Auto-close window after late-cancellation time"
 msgstr "Automātiski aizvērt logu pēc 'atcelt, ja nokavēts par' laika perioda"
 
 #. i18n: ectx: whatsthis, entry (DefaultAutoClose), group (Defaults)
-#: data/kalarmconfig.kcfg:306
+#: data/kalarmconfig.kcfg:312
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
@@ -1687,14 +1720,14 @@ msgstr ""
 "'Automātiski aizvērt, ja nokavēts'."
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:310 kalarmcalendar/kaeventformatter.cpp:106
+#: data/kalarmconfig.kcfg:316 kalarmcalendar/kaeventformatter.cpp:107
 #, kde-format
 msgctxt "@label"
 msgid "Confirm acknowledgement"
 msgstr "Apliecināt apstiprināšanu"
 
 #. i18n: ectx: whatsthis, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:311
+#: data/kalarmconfig.kcfg:317
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1705,14 +1738,14 @@ msgstr ""
 "'Apliecināt atgādinājuma apstiprināšanu'."
 
 #. i18n: ectx: label, entry (DefaultCopyToKOrganizer), group (Defaults)
-#: data/kalarmconfig.kcfg:315
+#: data/kalarmconfig.kcfg:321
 #, kde-format
 msgctxt "@label"
 msgid "Show in KOrganizer"
 msgstr "Rādīt iekš KOrganizer"
 
 #. i18n: ectx: whatsthis, entry (DefaultCopyToKOrganizer), group (Defaults)
-#: data/kalarmconfig.kcfg:316
+#: data/kalarmconfig.kcfg:322
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"show in KOrganizer\"."
@@ -1721,49 +1754,49 @@ msgstr ""
 "iekš KOrganizer'."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
-#: data/kalarmconfig.kcfg:320
+#: data/kalarmconfig.kcfg:326
 #, kde-format
 msgctxt "@label Label for audio options"
 msgid "Sound"
 msgstr "Skaņa"
 
 #. i18n: ectx: whatsthis, entry (Base_DefaultSoundType), group (Defaults)
-#: data/kalarmconfig.kcfg:321
+#: data/kalarmconfig.kcfg:327
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default sound type in the alarm edit dialog."
 msgstr "Noklusētais skaņas tips atgādinājumu rediģēšanas dialoglogā."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
-#: data/kalarmconfig.kcfg:325
+#: data/kalarmconfig.kcfg:331
 #, kde-format
 msgctxt "@option"
 msgid "Play File"
 msgstr "Atskaņot failu"
 
 #. i18n: ectx: label, entry (DefaultSoundFile), group (Defaults)
-#: data/kalarmconfig.kcfg:331
+#: data/kalarmconfig.kcfg:337
 #, kde-format
 msgctxt "@label"
 msgid "Sound file"
 msgstr "Skaņas fails"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundFile), group (Defaults)
-#: data/kalarmconfig.kcfg:332
+#: data/kalarmconfig.kcfg:338
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default sound file path in the alarm edit dialog."
 msgstr "Noklusētais skaņas faila ceļš atgādinājumu rediģēšanas dialoglogā."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:335 kalarmcalendar/kaeventformatter.cpp:114
+#: data/kalarmconfig.kcfg:341 kalarmcalendar/kaeventformatter.cpp:115
 #, kde-format
 msgctxt "@label"
 msgid "Sound volume"
 msgstr "Skaņas skaļums"
 
 #. i18n: ectx: whatsthis, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:336
+#: data/kalarmconfig.kcfg:342
 #, no-c-format, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1774,14 +1807,14 @@ msgstr ""
 "neatzīmētu skaļumu, vai '0' - 100%"
 
 #. i18n: ectx: label, entry (DefaultSoundRepeat), group (Defaults)
-#: data/kalarmconfig.kcfg:342
+#: data/kalarmconfig.kcfg:348
 #, kde-format
 msgctxt "@label"
 msgid "Repeat sound file"
 msgstr "Atkārtot skaņas failu"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundRepeat), group (Defaults)
-#: data/kalarmconfig.kcfg:343
+#: data/kalarmconfig.kcfg:349
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for sound repetition."
@@ -1790,14 +1823,14 @@ msgstr ""
 "atkārtošanai."
 
 #. i18n: ectx: label, entry (DefaultCmdScript), group (Defaults)
-#: data/kalarmconfig.kcfg:347
+#: data/kalarmconfig.kcfg:353
 #, kde-format
 msgctxt "@label"
 msgid "Enter script"
 msgstr "Ievadīt skriptu"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdScript), group (Defaults)
-#: data/kalarmconfig.kcfg:348
+#: data/kalarmconfig.kcfg:354
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for command script entry."
@@ -1806,14 +1839,14 @@ msgstr ""
 "ierakstam."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:352
+#: data/kalarmconfig.kcfg:358
 #, kde-format
 msgctxt "@label"
 msgid "Command output"
 msgstr "Komandas izvade"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:353
+#: data/kalarmconfig.kcfg:359
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1824,35 +1857,35 @@ msgstr ""
 "atgādinājuma izvades nosūtīšanai."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:355
+#: data/kalarmconfig.kcfg:361
 #, kde-format
 msgctxt "@option"
 msgid "Discard Output"
 msgstr "Izmest izvadi"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:356
+#: data/kalarmconfig.kcfg:362
 #, kde-format
 msgctxt "@option"
 msgid "Log To File"
 msgstr "Žurnalēt failā"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
-#: data/kalarmconfig.kcfg:357
+#: data/kalarmconfig.kcfg:363
 #, kde-format
 msgctxt "@option"
 msgid "Execute in terminal window"
 msgstr "Izpildīt termināla logā"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:362 kalarmcalendar/kaeventformatter.cpp:137
+#: data/kalarmconfig.kcfg:368 kalarmcalendar/kaeventformatter.cpp:138
 #, kde-format
 msgctxt "@label"
 msgid "Log file"
 msgstr "Žurnāla fails"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:363
+#: data/kalarmconfig.kcfg:369
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default log file path for command alarms in the alarm edit dialog."
@@ -1861,14 +1894,14 @@ msgstr ""
 "rediģēšanas dialoglogā."
 
 #. i18n: ectx: label, entry (DefaultEmailBcc), group (Defaults)
-#: data/kalarmconfig.kcfg:366
+#: data/kalarmconfig.kcfg:372
 #, kde-format
 msgctxt "@label"
 msgid "Copy email to self"
 msgstr "Kopēt e-pastu uz sevi"
 
 #. i18n: ectx: whatsthis, entry (DefaultEmailBcc), group (Defaults)
-#: data/kalarmconfig.kcfg:367
+#: data/kalarmconfig.kcfg:373
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1878,14 +1911,14 @@ msgstr ""
 "kopēšanai uz savu kontu."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:371
+#: data/kalarmconfig.kcfg:377
 #, kde-format
 msgctxt "@label"
 msgid "Recurrence period"
 msgstr "Atkārtošanās periods"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:372 prefdlg.cpp:1454
+#: data/kalarmconfig.kcfg:378 prefdlg.cpp:1450
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default setting for the recurrence rule in the alarm edit dialog."
@@ -1894,35 +1927,35 @@ msgstr ""
 "dialoglogā."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:374
+#: data/kalarmconfig.kcfg:380
 #, kde-format
 msgctxt "@option"
 msgid "No recurrence"
 msgstr "Neatkārtojas"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:375
+#: data/kalarmconfig.kcfg:381
 #, kde-format
 msgctxt "@option"
 msgid "At login"
 msgstr "Piesakoties"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:376
+#: data/kalarmconfig.kcfg:382
 #, kde-format
 msgctxt "@option"
 msgid "Hourly/minutely"
 msgstr "Katru stundu/minūti"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:385 prefdlg.cpp:1461
+#: data/kalarmconfig.kcfg:391 prefdlg.cpp:1457
 #, kde-format
 msgctxt "@label"
 msgid "In non-leap years, repeat yearly February 29th alarms on:"
 msgstr "Īsajos gados 29. februāra atgādinājumus atkārtot:"
 
 #. i18n: ectx: whatsthis, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:386
+#: data/kalarmconfig.kcfg:392
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -1943,35 +1976,35 @@ msgstr ""
 "pārrēķināta.</note>"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:388
+#: data/kalarmconfig.kcfg:394
 #, kde-format
 msgctxt "@option"
 msgid "February 28th"
 msgstr "28. februārī"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:389
+#: data/kalarmconfig.kcfg:395
 #, kde-format
 msgctxt "@option"
 msgid "March 1st"
 msgstr "1. martā"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:390
+#: data/kalarmconfig.kcfg:396
 #, kde-format
 msgctxt "@option"
 msgid "Do not repeat"
 msgstr "Neatkārtot"
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
-#: data/kalarmconfig.kcfg:396
+#: data/kalarmconfig.kcfg:402
 #, kde-format
 msgctxt "@label"
 msgid "Reminder units"
 msgstr "Papildu atgādinājuma vienības"
 
 #. i18n: ectx: whatsthis, entry (DefaultReminderUnits), group (Defaults)
-#: data/kalarmconfig.kcfg:397
+#: data/kalarmconfig.kcfg:403
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default reminder time units in the alarm edit dialog."
@@ -1980,35 +2013,35 @@ msgstr ""
 "dialoglogā."
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
-#: data/kalarmconfig.kcfg:400
+#: data/kalarmconfig.kcfg:406
 #, kde-format
 msgctxt "@option"
 msgid "Hours/Minutes"
 msgstr "Stundas/Minūtes"
 
 #. i18n: ectx: label, entry (DefaultPreAction), group (Defaults)
-#: data/kalarmconfig.kcfg:405
+#: data/kalarmconfig.kcfg:411
 #, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action"
 msgstr "Pirmsatgādinājuma darbība"
 
 #. i18n: ectx: whatsthis, entry (DefaultPreAction), group (Defaults)
-#: data/kalarmconfig.kcfg:406
+#: data/kalarmconfig.kcfg:412
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute before displaying alarms."
 msgstr "Noklusētā komanda, ko izpildīt pirms atgādinājumu rādīšanas."
 
 #. i18n: ectx: label, entry (DefaultExecPreActionOnDeferral), group (Defaults)
-#: data/kalarmconfig.kcfg:409
+#: data/kalarmconfig.kcfg:415
 #, kde-format
 msgctxt "@label"
 msgid "Execute pre-alarm action for deferred alarms"
 msgstr "Izpildīt pirmsatgādinājuma darbību atliktajiem atgādinājumiem"
 
 #. i18n: ectx: whatsthis, entry (DefaultExecPreActionOnDeferral), group (Defaults)
-#: data/kalarmconfig.kcfg:410
+#: data/kalarmconfig.kcfg:416
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2019,14 +2052,14 @@ msgstr ""
 "atliktā atgādinājuma palaišanas."
 
 #. i18n: ectx: label, entry (DefaultCancelOnPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:414
+#: data/kalarmconfig.kcfg:420
 #, kde-format
 msgctxt "@label"
 msgid "Cancel alarm on pre-alarm action error"
 msgstr "Atcelt atgādinājumu, ja pirmsatgādinājuma darbībā rodas kļūda"
 
 #. i18n: ectx: whatsthis, entry (DefaultCancelOnPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:415
+#: data/kalarmconfig.kcfg:421
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2037,14 +2070,14 @@ msgstr ""
 "darbības komandas izpilde neizdodas."
 
 #. i18n: ectx: label, entry (DefaultDontShowPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:419
+#: data/kalarmconfig.kcfg:425
 #, kde-format
 msgctxt "@label"
 msgid "Do not notify pre-alarm action errors"
 msgstr "Neziņot par pirmsatgādinājuma darbības kļūdām"
 
 #. i18n: ectx: whatsthis, entry (DefaultDontShowPreActionError), group (Defaults)
-#: data/kalarmconfig.kcfg:420
+#: data/kalarmconfig.kcfg:426
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2055,14 +2088,14 @@ msgstr ""
 "pirmsatgādinājuma darbības komanda neizdodas."
 
 #. i18n: ectx: label, entry (DefaultPostAction), group (Defaults)
-#: data/kalarmconfig.kcfg:424
+#: data/kalarmconfig.kcfg:430
 #, kde-format
 msgctxt "@label"
 msgid "Post-alarm action"
 msgstr "Pēcatgādinājuma darbība"
 
 #. i18n: ectx: whatsthis, entry (DefaultPostAction), group (Defaults)
-#: data/kalarmconfig.kcfg:425
+#: data/kalarmconfig.kcfg:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute after alarm message windows are closed."
@@ -2070,28 +2103,28 @@ msgstr ""
 "Noklusētā komanda, ko izpildīt pēc atgādinājuma ziņojumu logu aizvēršanas."
 
 #. i18n: ectx: label, entry (Base_QuitWarn), group (Notification Messages)
-#: data/kalarmconfig.kcfg:431
+#: data/kalarmconfig.kcfg:437
 #, kde-format
 msgctxt "@label"
 msgid "Warn before quitting"
 msgstr "Brīdināt pirms iziešanas"
 
 #. i18n: ectx: whatsthis, entry (Base_QuitWarn), group (Notification Messages)
-#: data/kalarmconfig.kcfg:432
+#: data/kalarmconfig.kcfg:438
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Whether to suppress a warning prompt before quitting KAlarm."
 msgstr "Nerādīt brīdinājuma uzvedni pirms iziešanas no KAlarm."
 
 #. i18n: ectx: label, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
-#: data/kalarmconfig.kcfg:436
+#: data/kalarmconfig.kcfg:442
 #, kde-format
 msgctxt "@label"
 msgid "Confirm alarm deletions"
 msgstr "Apstiprināt atgādinājumu dzēšanu"
 
 #. i18n: ectx: whatsthis, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
-#: data/kalarmconfig.kcfg:437 prefdlg.cpp:503
+#: data/kalarmconfig.kcfg:443 prefdlg.cpp:503
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation each time you delete an alarm."
@@ -2099,14 +2132,14 @@ msgstr ""
 "Atzīmējiet, lai tiktu pieprasīts apstiprinājums katra atgādinājuma dzēšanai."
 
 #. i18n: ectx: label, entry (Base_EmailQueuedNotify), group (Notification Messages)
-#: data/kalarmconfig.kcfg:441
+#: data/kalarmconfig.kcfg:447
 #, kde-format
 msgctxt "@label"
 msgid "Notify when remote emails are queued"
 msgstr "Paziņot, kad tiek ierindoti attālinātie e-pasti"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailQueuedNotify), group (Notification Messages)
-#: data/kalarmconfig.kcfg:442 prefdlg.cpp:1172
+#: data/kalarmconfig.kcfg:448 prefdlg.cpp:1168
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2263,7 +2296,7 @@ msgctxt "@info"
 msgid "Cannot defer reminder past the main alarm time (%1)"
 msgstr "Nevar atlikt papildu atgādinājumu pēc galvenā atgādinājuma laika (%1)"
 
-#: displaycalendar.cpp:127
+#: displaycalendar.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2273,55 +2306,55 @@ msgstr ""
 "<para>Kļūda ielādējot kalendāru:</para><para><filename>%1</filename> </"
 "para><para>Lūdzu, salabojiet to, vai izdzēsiet failu.</para>"
 
-#: displaycalendar.cpp:171
+#: displaycalendar.cpp:172
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save calendar to <filename>%1</filename>"
 msgstr "Neizdevās saglabāt kalendāru uz <filename>%1</filename>"
 
-#: editdlg.cpp:79
+#: editdlg.cpp:80
 #, kde-format
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
 msgstr "Atkārtošanās - [%1]"
 
-#: editdlg.cpp:86
+#: editdlg.cpp:87
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
 msgstr "Rādīt iekš KOrganizer"
 
-#: editdlg.cpp:182
+#: editdlg.cpp:183
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Template [read-only]"
 msgstr "Atgādinājuma sagatave [tikai lasāma]"
 
-#: editdlg.cpp:183
+#: editdlg.cpp:184
 #, kde-format
 msgctxt "@title:window"
 msgid "Archived Alarm [read-only]"
 msgstr "Arhivētais atgādinājums [tikai lasāms]"
 
-#: editdlg.cpp:184
+#: editdlg.cpp:185
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "Atgādinājums [tikai lasāms]"
 
-#: editdlg.cpp:195
+#: editdlg.cpp:196
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "Ieplānot atgādinājumu norādītajā laikā."
 
-#: editdlg.cpp:198
+#: editdlg.cpp:199
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
 msgstr "Ielādēt sagatavi..."
 
-#: editdlg.cpp:200
+#: editdlg.cpp:201
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select a template to base the new alarm on."
@@ -2329,73 +2362,73 @@ msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
 msgstr "Izvēlieties sagatavi, uz kuru bāzēt jauno atgādinājumu."
 
-#: editdlg.cpp:204
+#: editdlg.cpp:205
 #, kde-format
 msgctxt "@action:button"
 msgid "Try"
 msgstr ""
 
-#: editdlg.cpp:214
+#: editdlg.cpp:215
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "Atgādinājums"
 
-#: editdlg.cpp:244
+#: editdlg.cpp:245
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "Sagataves nosaukums:"
 
-#: editdlg.cpp:251
+#: editdlg.cpp:252
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Ievadiet atgādinājuma sagataves nosaukumu"
 
-#: editdlg.cpp:257
+#: editdlg.cpp:258
 #, kde-format
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Darbība"
 
-#: editdlg.cpp:266
+#: editdlg.cpp:267
 #, kde-format
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "Atliktais atgādinājums"
 
-#: editdlg.cpp:269
+#: editdlg.cpp:270
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "Atlikt līdz:"
 
-#: editdlg.cpp:274
+#: editdlg.cpp:275
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "Mainīt..."
 
-#: editdlg.cpp:276
+#: editdlg.cpp:277
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "Mainīt atgādinājuma atlikšanas laiku, vai atcelt atlikšanu"
 
-#: editdlg.cpp:287 editdlg.cpp:348
+#: editdlg.cpp:288 editdlg.cpp:349
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Laiks"
 
-#: editdlg.cpp:294
+#: editdlg.cpp:295
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "Noklusētais laiks"
 
-#: editdlg.cpp:296
+#: editdlg.cpp:297
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2405,19 +2438,19 @@ msgstr ""
 "Nenorādīt atgādinājumu sākuma laiku, balstoties uz šo sagatavi. Tiks lietots "
 "normālais noklusējuma sākuma laiks."
 
-#: editdlg.cpp:304
+#: editdlg.cpp:305
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Laiks:"
 
-#: editdlg.cpp:306
+#: editdlg.cpp:307
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "Norādīt atgādinājumu sākuma laiku, balstoties uz šo sagatavi."
 
-#: editdlg.cpp:312
+#: editdlg.cpp:313
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2427,13 +2460,13 @@ msgstr ""
 "<para>Ievadīt atgādinājumu sākuma laiku, balstoties uz šo sagatavi.</"
 "para><para>%1</para>"
 
-#: editdlg.cpp:319
+#: editdlg.cpp:320
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Tikai datums"
 
-#: editdlg.cpp:321
+#: editdlg.cpp:322
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2443,7 +2476,7 @@ msgstr ""
 "Iestatiet <interface>Jebkurā laikā</interface> atgādinājumu opciju, "
 "balstoties uz šo sagatavi."
 
-#: editdlg.cpp:331
+#: editdlg.cpp:332
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2453,7 +2486,7 @@ msgstr ""
 "Iestatīt atgādinājumus, lai tie, balstoties uz šo sagatavi, tiek palaisti "
 "pēc norādītā laika intervāla no to izveidošanas brīža."
 
-#: editdlg.cpp:387
+#: editdlg.cpp:388
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Wake From Suspend"
@@ -2461,32 +2494,32 @@ msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "Pamosties no iemigšanas"
 
-#: editdlg.cpp:389
+#: editdlg.cpp:390
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
 
-#: editdlg.cpp:406
+#: editdlg.cpp:407
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "Atzīmējiet, lai kopētu atgādinājumu KOrganizer kalendārā"
 
-#: editdlg.cpp:1008
+#: editdlg.cpp:1009
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Jums jāievada atgādinājuma sagataves nosaukumu"
 
-#: editdlg.cpp:1012
+#: editdlg.cpp:1013
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Sagataves nosaukums jau ir aizņemts"
 
-#: editdlg.cpp:1035
+#: editdlg.cpp:1036
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2495,7 +2528,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1068
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2505,7 +2538,7 @@ msgstr ""
 "Sākuma datums nesakrīt ar atgādinājuma atkārtošanās shēmu, tādēļ tas tiks "
 "iestatīts uz nākamo atkārtošanās datumu (%1)."
 
-#: editdlg.cpp:1071
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2515,19 +2548,19 @@ msgstr ""
 "Sākuma datums/laiks nesakrīt ar atgādinājuma atkārtošanās shēmu, tādēļ tas "
 "tiks iestatīts uz nākamo atkārtošanās datumu/laiku (%1)."
 
-#: editdlg.cpp:1093
+#: editdlg.cpp:1094
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Atkārtošanās termiņš jau ir beidzies"
 
-#: editdlg.cpp:1098
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Atgādinājums netiks palaists darba laikā"
 
-#: editdlg.cpp:1127
+#: editdlg.cpp:1128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2537,7 +2570,7 @@ msgstr ""
 "Papildu atgādinājuma periodam jābūt īsākam par atkārtošanās intervālu, ja "
 "vien nav atzīmēts <interface>%1</interface>."
 
-#: editdlg.cpp:1142
+#: editdlg.cpp:1143
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2547,7 +2580,7 @@ msgstr ""
 "Atkārtošanās iekš atkārtošanās ilgumam jābūt mazākam nekā atkārtošanās "
 "intervāls mīnus jebkurš papildu atgādinājums"
 
-#: editdlg.cpp:1149
+#: editdlg.cpp:1150
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2557,13 +2590,13 @@ msgstr ""
 "Atkārtošanās iekš atkārtošanās periodam kā ilguma vienībām jābūt dienām vai "
 "nedēļām ('tikai datums' atgādinājumiem)"
 
-#: editdlg.cpp:1180
+#: editdlg.cpp:1181
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Jums jāizvēlas kalendārs, kurā saglabāt atgādinājumu"
 
-#: editdlg.cpp:1261
+#: editdlg.cpp:1262
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2571,7 +2604,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Mazāk opciju <<"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1263
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2579,13 +2612,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Mazāk opciju <<"
 
-#: editdlg.cpp:1267
+#: editdlg.cpp:1268
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Vairāk opciju >>"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1269
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
@@ -2593,20 +2626,20 @@ msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr "Vairāk opciju >>"
 
-#: editdlgtypes.cpp:74
+#: editdlgtypes.cpp:75
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Izvēlieties žurnāla failu"
 
-#: editdlgtypes.cpp:87
+#: editdlgtypes.cpp:88
 #, fuzzy, kde-format
 #| msgid "Display name."
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "Attēlojamais nosaukums."
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:89
 #, fuzzy, kde-format
 #| msgctxt "@title:tab"
 #| msgid "Alarm Windows"
@@ -2614,7 +2647,7 @@ msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "Atgādinājumu logi"
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:90
 #, fuzzy, kde-format
 #| msgctxt "@label:textbox"
 #| msgid "Location:"
@@ -2622,61 +2655,61 @@ msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "Vieta:"
 
-#: editdlgtypes.cpp:90
+#: editdlgtypes.cpp:91
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Apliecināt apstiprināšanu"
 
-#: editdlgtypes.cpp:126
+#: editdlgtypes.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Jauna ekrāna atgādinājuma sagatave"
 
-#: editdlgtypes.cpp:126
+#: editdlgtypes.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Rediģēt ekrāna atgādinājuma sagatavi"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Jauns ekrāna atgādinājums"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Rediģēt ekrāna atgādinājumu"
 
-#: editdlgtypes.cpp:140
+#: editdlgtypes.cpp:141
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Attēlošanas tips:"
 
-#: editdlgtypes.cpp:144
+#: editdlgtypes.cpp:145
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Teksta ziņojums"
 
-#: editdlgtypes.cpp:145
+#: editdlgtypes.cpp:146
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr "Faila saturs"
 
-#: editdlgtypes.cpp:146
+#: editdlgtypes.cpp:147
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "Komandas izvade"
 
-#: editdlgtypes.cpp:166
+#: editdlgtypes.cpp:167
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2692,31 +2725,31 @@ msgstr ""
 "faila saturu. </item><item><interface>%3</interface>: atgādinājumā rādīs "
 "komandas izvadi.</item></list></para>"
 
-#: editdlgtypes.cpp:181
+#: editdlgtypes.cpp:182
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Ievadiet atgādinājuma ziņojuma tekstu. Tas var būt vairākās rindās."
 
-#: editdlgtypes.cpp:194
+#: editdlgtypes.cpp:195
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "Ievadiet nosaukumu vai URL rādāmajam teksta vai attēla failam."
 
-#: editdlgtypes.cpp:201 editdlgtypes.cpp:890 sounddlg.cpp:183
+#: editdlgtypes.cpp:202 editdlgtypes.cpp:891 sounddlg.cpp:184
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Izvēlieties failu"
 
-#: editdlgtypes.cpp:202
+#: editdlgtypes.cpp:203
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Izvēlieties rādāmo teksta vai attēla failu."
 
-#: editdlgtypes.cpp:246
+#: editdlgtypes.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2724,7 +2757,7 @@ msgid ""
 "system."
 msgstr ""
 
-#: editdlgtypes.cpp:273
+#: editdlgtypes.cpp:274
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2734,7 +2767,7 @@ msgstr ""
 "Atzīmējiet, lai rādītu arī papildu atgādinātāju noteiktu laiku (s) pirms vai "
 "pēc galvenā atgādinājuma sākšanās."
 
-#: editdlgtypes.cpp:274
+#: editdlgtypes.cpp:275
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2744,7 +2777,7 @@ msgstr ""
 "<para>Ievadiet, cik ilgi pirms vai pēc galvenā atgādinājuma sākšanās parādīt "
 "papildu atgādinājumu.</para><para>%1</para>"
 
-#: editdlgtypes.cpp:275
+#: editdlgtypes.cpp:276
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2754,7 +2787,7 @@ msgstr ""
 "Izvēlieties, vai papildu atgādinājumu palaist pirms vai pēc galvenā "
 "atgādinājuma"
 
-#: editdlgtypes.cpp:285
+#: editdlgtypes.cpp:286
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
@@ -2762,7 +2795,7 @@ msgstr ""
 "Atzīmējiet, lai tiktu pieprasīts apliecinājums, kad atgādinājums tiek "
 "apstiprināts."
 
-#: editdlgtypes.cpp:294
+#: editdlgtypes.cpp:295
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the alarm message now"
@@ -2770,79 +2803,79 @@ msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Rādīt atgādinājuma ziņojumu tūlīt"
 
-#: editdlgtypes.cpp:676
+#: editdlgtypes.cpp:677
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Rādīt atgādinājuma ziņojumu tūlīt"
 
-#: editdlgtypes.cpp:685
+#: editdlgtypes.cpp:686
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Rādīt failu tūlīt"
 
-#: editdlgtypes.cpp:695
+#: editdlgtypes.cpp:696
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Rādīt komandas izvadi tūlīt"
 
-#: editdlgtypes.cpp:727
+#: editdlgtypes.cpp:728
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Izvēlieties rādāmo teksta vai attēla failu"
 
-#: editdlgtypes.cpp:805
+#: editdlgtypes.cpp:806
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "Ievadīt skriptu"
 
-#: editdlgtypes.cpp:806
+#: editdlgtypes.cpp:807
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "Izpildīt termināla logā"
 
-#: editdlgtypes.cpp:807
+#: editdlgtypes.cpp:808
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "Izpildīt termināla logā"
 
-#: editdlgtypes.cpp:837
+#: editdlgtypes.cpp:838
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Jauna komandas atgādinājuma sagatave"
 
-#: editdlgtypes.cpp:837
+#: editdlgtypes.cpp:838
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Rediģēt komandas atgādinājuma sagatavi"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:839
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Jauns komandas atgādinājums"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:839
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Rediģēt komandas atgādinājumu"
 
-#: editdlgtypes.cpp:846
+#: editdlgtypes.cpp:847
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Izpildīt norādīto komandu tūlīt"
 
-#: editdlgtypes.cpp:847
+#: editdlgtypes.cpp:848
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Execute the specified command now"
@@ -2850,13 +2883,13 @@ msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Izpildīt norādīto komandu tūlīt"
 
-#: editdlgtypes.cpp:854 specialactions.cpp:182
+#: editdlgtypes.cpp:855 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr "Neziņot par kļūdām"
 
-#: editdlgtypes.cpp:855
+#: editdlgtypes.cpp:856
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -2867,37 +2900,37 @@ msgstr ""
 "Nerādīt kļūdas statusu vai kļūdas ziņojumu, ja pirmsatgādinājuma darbības "
 "komandas izpilde neizdodas."
 
-#: editdlgtypes.cpp:861
+#: editdlgtypes.cpp:862
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Komandas izvade"
 
-#: editdlgtypes.cpp:869
+#: editdlgtypes.cpp:870
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "Atzīmējiet, lai izpildītu komandu termināla logā"
 
-#: editdlgtypes.cpp:882
+#: editdlgtypes.cpp:883
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Ievadiet nosaukumu vai ceļu žurnāla failam."
 
-#: editdlgtypes.cpp:891
+#: editdlgtypes.cpp:892
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Izvēlieties žurnāla failu."
 
-#: editdlgtypes.cpp:894
+#: editdlgtypes.cpp:895
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "Žurnalēt failā"
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:896
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2907,19 +2940,19 @@ msgstr ""
 "Atzīmējiet, lai žurnalētu komandas izvadi vietējā failā. Izvade tiks "
 "pievienota esošajam faila saturam."
 
-#: editdlgtypes.cpp:902
+#: editdlgtypes.cpp:903
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Izmest"
 
-#: editdlgtypes.cpp:903
+#: editdlgtypes.cpp:904
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Atzīmējiet, lai izmestu komandas izvadi."
 
-#: editdlgtypes.cpp:1065
+#: editdlgtypes.cpp:1066
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2928,7 +2961,7 @@ msgstr ""
 "Žurnāla failam jābūt vietēja faila nosaukumam vai ceļam, ar rakstīšanas "
 "atļauju."
 
-#: editdlgtypes.cpp:1075
+#: editdlgtypes.cpp:1076
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -2943,49 +2976,49 @@ msgstr ""
 "iestatiet to <application>KAlarm</application> konfigurācijas dialoglogā.</"
 "para>"
 
-#: editdlgtypes.cpp:1095
+#: editdlgtypes.cpp:1096
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
 msgstr "Izpildīta komanda: <icode>%1</icode>"
 
-#: editdlgtypes.cpp:1129
+#: editdlgtypes.cpp:1130
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "Kopēt e-pastu uz sevi"
 
-#: editdlgtypes.cpp:1166
+#: editdlgtypes.cpp:1167
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "Jauna e-pasta atgādinājuma sagatave"
 
-#: editdlgtypes.cpp:1166
+#: editdlgtypes.cpp:1167
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Rediģēt e-pasta atgādinājuma sagatavi"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1168
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "Jauns e-pasta atgādinājums"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1168
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Rediģēt e-pasta atgādinājumu"
 
-#: editdlgtypes.cpp:1175
+#: editdlgtypes.cpp:1176
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Nosūtīt e-pastu uz norādītajām adresēm tūlīt"
 
-#: editdlgtypes.cpp:1176
+#: editdlgtypes.cpp:1177
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "Sendmail"
@@ -2993,13 +3026,13 @@ msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "Sendmail"
 
-#: editdlgtypes.cpp:1187
+#: editdlgtypes.cpp:1188
 #, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "No:"
 
-#: editdlgtypes.cpp:1193
+#: editdlgtypes.cpp:1194
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3009,13 +3042,13 @@ msgstr ""
 "Jūsu e-pasta identitāte, kas tiek izmantota, lai identificētu jūs kā "
 "nosūtītāju, kad tiek sūtīti e-pasta atgādinājumi."
 
-#: editdlgtypes.cpp:1199
+#: editdlgtypes.cpp:1200
 #, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "Uz:"
 
-#: editdlgtypes.cpp:1204
+#: editdlgtypes.cpp:1205
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3025,157 +3058,157 @@ msgstr ""
 "Ievadiet e-pasta saņēmēju adreses. Atdaliet vairākas adreses ar komatiem vai "
 "semikoliem."
 
-#: editdlgtypes.cpp:1215
+#: editdlgtypes.cpp:1216
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Atvērt adrešu grāmatu"
 
-#: editdlgtypes.cpp:1216
+#: editdlgtypes.cpp:1217
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Izvēlieties e-pasta adreses no jūsu adrešu grāmatas."
 
-#: editdlgtypes.cpp:1223
+#: editdlgtypes.cpp:1224
 #, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Temats:"
 
-#: editdlgtypes.cpp:1229
+#: editdlgtypes.cpp:1230
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Ievadiet e-pasta tematu."
 
-#: editdlgtypes.cpp:1235
+#: editdlgtypes.cpp:1236
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Ievadiet e-pasta ziņojumu."
 
-#: editdlgtypes.cpp:1243
+#: editdlgtypes.cpp:1244
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "Pielikumi:"
 
-#: editdlgtypes.cpp:1252
+#: editdlgtypes.cpp:1253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Faili, kurus sūtīt kā pielikumus uz e-pastu."
 
-#: editdlgtypes.cpp:1256 resourceselector.cpp:76
+#: editdlgtypes.cpp:1257 resourceselector.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Pievienot..."
 
-#: editdlgtypes.cpp:1258
+#: editdlgtypes.cpp:1259
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Pievienot pielikumu e-pastam."
 
-#: editdlgtypes.cpp:1261 resourceselector.cpp:78
+#: editdlgtypes.cpp:1262 resourceselector.cpp:78
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Izņemt"
 
-#: editdlgtypes.cpp:1263
+#: editdlgtypes.cpp:1264
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Izņemt no e-pasta izcelto pielikumu."
 
-#: editdlgtypes.cpp:1268
+#: editdlgtypes.cpp:1269
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "Ja atzīmēts, e-pasts tiks akli pārkopēts jums."
 
-#: editdlgtypes.cpp:1450
+#: editdlgtypes.cpp:1451
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "Nederīga e-pasta adrese: <email>%1</email>"
 
-#: editdlgtypes.cpp:1457
+#: editdlgtypes.cpp:1458
 #, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Nav norādīta e-pasta adrese"
 
-#: editdlgtypes.cpp:1474
+#: editdlgtypes.cpp:1475
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "Nederīgs e-pasta pielikums: <filename>%1</filename>"
 
-#: editdlgtypes.cpp:1478
+#: editdlgtypes.cpp:1479
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "Vai tiešām vēlaties nosūtīt e-pastu norādītajiem saņēmējiem tūlīt?"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1480
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Apstiprināt e-pastu"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1480
 #, kde-format
 msgctxt "@action:button"
 msgid "Send"
 msgstr "Sūtīt"
 
-#: editdlgtypes.cpp:1505
+#: editdlgtypes.cpp:1506
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
 msgstr "E-pasts nosūtīts uz:<nl/>%1<nl/>Bcc: <email>%2</email>"
 
-#: editdlgtypes.cpp:1508
+#: editdlgtypes.cpp:1509
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
 msgstr "E-pasts nosūtīts uz:<nl/>%1"
 
-#: editdlgtypes.cpp:1537
+#: editdlgtypes.cpp:1538
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Izvēlieties pievienojamo failu"
 
-#: editdlgtypes.cpp:1620
+#: editdlgtypes.cpp:1621
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Jauna audio atgādinājuma sagatave"
 
-#: editdlgtypes.cpp:1620
+#: editdlgtypes.cpp:1621
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Rediģēt audio atgādinājuma sagatavi"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1622
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Jauns audio atgādinājums"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1622
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Rediģēt audio atgādinājumu"
 
-#: editdlgtypes.cpp:1629
+#: editdlgtypes.cpp:1630
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the file now"
@@ -3183,7 +3216,7 @@ msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Rādīt failu tūlīt"
 
-#: editdlgtypes.cpp:1630
+#: editdlgtypes.cpp:1631
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the file now"
@@ -3191,7 +3224,7 @@ msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Rādīt failu tūlīt"
 
-#: editdlgtypes.cpp:1632
+#: editdlgtypes.cpp:1633
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3204,25 +3237,25 @@ msgstr ""
 "Ja atzīmēts, skaņas fails tiks atskaņots atkārtoti kamēr tiek rādīts "
 "ziņojums."
 
-#: editdlgtypes.cpp:1844
+#: editdlgtypes.cpp:1845
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "Atzīmējiet, lai ievadītu nevis čaulas komandrindu, bet skripta saturu"
 
-#: editdlgtypes.cpp:1850
+#: editdlgtypes.cpp:1851
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Ievadiet izpildāmo čaulas komandu."
 
-#: editdlgtypes.cpp:1855
+#: editdlgtypes.cpp:1856
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Ievadiet izpildāmā skripta saturu."
 
-#: editdlgtypes.cpp:1917
+#: editdlgtypes.cpp:1918
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3230,44 +3263,44 @@ msgid ""
 "icode></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:1922
+#: editdlgtypes.cpp:1923
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
 msgstr "Lūdzu, ievadiet izpildāmo komandu vai skriptu."
 
-#: eventlistview.cpp:33
+#: eventlistview.cpp:34
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "List of scheduled alarms"
 msgstr "Ieplānoto atgādinājumu saraksts"
 
 #. i18n: ectx: property (title), widget (QGroupBox, alarmTypeGroupBox)
-#: find.cpp:102 resources/singlefileresourceconfigdialog.ui:78
+#: find.cpp:103 resources/singlefileresourceconfigdialog.ui:78
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Type"
 msgstr "Atgādinājuma tips"
 
-#: find.cpp:108
+#: find.cpp:109
 #, kde-format
 msgctxt "@option:check Alarm type"
 msgid "Active"
 msgstr "Aktīvs"
 
-#: find.cpp:109
+#: find.cpp:110
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include active alarms in the search."
 msgstr "Atzīmējiet, lai meklēšanā iekļautu aktīvos atgādinājumus."
 
-#: find.cpp:112
+#: find.cpp:113
 #, kde-format
 msgctxt "@option:check Alarm type"
 msgid "Archived"
 msgstr "Arhivētie"
 
-#: find.cpp:113
+#: find.cpp:114
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3277,73 +3310,73 @@ msgstr ""
 "Atzīmējiet, lai meklēšanā iekļautu arhivētos atgādinājumus. Šī opcija ir "
 "pieejama tikai tad, ja arhivētie atgādinājumi pašreiz tiek rādīti."
 
-#: find.cpp:121
+#: find.cpp:122
 #, kde-format
 msgctxt "@option:check Alarm action = text display"
 msgid "Text"
 msgstr "Teksts"
 
-#: find.cpp:122
+#: find.cpp:123
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include text message alarms in the search."
 msgstr "Atzīmējiet, lai meklēšanā iekļautu teksta ziņojumu atgādinājumus."
 
-#: find.cpp:125
+#: find.cpp:126
 #, kde-format
 msgctxt "@option:check Alarm action = file display"
 msgid "File"
 msgstr "Fails"
 
-#: find.cpp:126
+#: find.cpp:127
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include file alarms in the search."
 msgstr "Atzīmējiet, lai meklēšanā iekļautu failu atgādinājumus."
 
-#: find.cpp:129
+#: find.cpp:130
 #, kde-format
 msgctxt "@option:check Alarm action"
 msgid "Command"
 msgstr "Komanda"
 
-#: find.cpp:130
+#: find.cpp:131
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include command alarms in the search."
 msgstr "Atzīmējiet, lai meklēšanā iekļautu komandu atgādinājumus."
 
-#: find.cpp:133
+#: find.cpp:134
 #, kde-format
 msgctxt "@option:check Alarm action"
 msgid "Email"
 msgstr "E-pasts"
 
-#: find.cpp:134
+#: find.cpp:135
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include email alarms in the search."
 msgstr "Atzīmējiet, lai meklēšanā iekļautu e-pasta atgādinājumus."
 
-#: find.cpp:137
+#: find.cpp:138
 #, kde-format
 msgctxt "@option:check Alarm action"
 msgid "Audio"
 msgstr "Audio"
 
-#: find.cpp:138
+#: find.cpp:139
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include audio alarms in the search."
 msgstr "Atzīmējiet, lai meklēšanā iekļautu audio atgādinājumus."
 
-#: find.cpp:236
+#: find.cpp:237
 #, kde-format
 msgctxt "@info"
 msgid "No alarm types are selected to search"
 msgstr "Meklēšanai nav izvēlēts neviens atgādinājuma tips"
 
-#: find.cpp:385
+#: find.cpp:386
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3353,7 +3386,7 @@ msgstr ""
 "<para>Sasniegtas atgādinājumu saraksta beigas.</para><para>Turpināt no "
 "sākuma?</para>"
 
-#: find.cpp:386
+#: find.cpp:387
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3434,13 +3467,13 @@ msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
 msgstr "Izvēlieties atgādinājuma fonta krāsu"
 
-#: functions.cpp:146
+#: functions.cpp:147
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
 msgstr "Apstādināt atskaņošanu"
 
-#: functions.cpp:196
+#: functions.cpp:197
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Enable &Alarms"
@@ -3448,13 +3481,13 @@ msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "Ieslēgt &atgādinājumus"
 
-#: functions.cpp:222
+#: functions.cpp:223
 #, kde-format
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Izkliedēt logus"
 
-#: functions.cpp:878
+#: functions.cpp:879
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Calendar Files"
@@ -3462,7 +3495,7 @@ msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "Kalendāra faili"
 
-#: functions.cpp:939
+#: functions.cpp:940
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Calendar Files"
@@ -3470,63 +3503,63 @@ msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "Kalendāra faili"
 
-#: functions.cpp:940
+#: functions.cpp:941
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr "Izvēlieties eksporta kalendāru"
 
-#: functions.cpp:965
+#: functions.cpp:966
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
 msgstr ""
 "Kļūda ielādējot kalendāru pievienošanai pie:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1004
+#: functions.cpp:1005
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
 msgstr "Neizdevās saglabāt jauno kalendāru uz:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1017
+#: functions.cpp:1018
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
 msgstr ""
 "Neizdevās augšupielādēt jauno kalendāru uz:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1036
+#: functions.cpp:1037
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "Neizdevās parādīt atgādinājumus iekš KOrganizer"
 
-#: functions.cpp:1037
+#: functions.cpp:1038
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "Neizdevās parādīt atgādinājumu iekš KOrganizer"
 
-#: functions.cpp:1040
+#: functions.cpp:1041
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "Neizdevās atjaunināt atgādinājumu iekš KOrganizer"
 
-#: functions.cpp:1043
+#: functions.cpp:1044
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "Neizdevās dzēst atgādinājumus no KOrganizer"
 
-#: functions.cpp:1044
+#: functions.cpp:1045
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "Neizdevās dzēst atgādinājumu no KOrganizer"
 
-#: functions.cpp:1054
+#: functions.cpp:1055
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
@@ -3534,44 +3567,44 @@ msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
 msgstr "<para>%1</para><para>(Kļūda sazinoties ar KOrganizer)</para>"
 
-#: functions.cpp:1057
+#: functions.cpp:1058
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
 msgstr "<para>%1</para><para>(KOrganizer nav pilnībā palaists)</para>"
 
-#: functions.cpp:1060
+#: functions.cpp:1061
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
 msgstr "<para>%1</para><para>(Kļūda sazinoties ar KOrganizer)</para>"
 
-#: functions.cpp:1310
+#: functions.cpp:1311
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr "Ieplānotā pamošanās no iemigšanas tika atcelta."
 
-#: functions.cpp:1344
+#: functions.cpp:1345
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr "Kļūda saņemot autorizāciju (%1)"
 
-#: functions.cpp:1393
+#: functions.cpp:1394
 #, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "Jums jāaktivizē sagatavju kalendārs, kurā sagatavi saglabāt"
 
-#: functions.cpp:1616
+#: functions.cpp:1617
 #, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
 msgstr ""
 "<para>%1</para><para>Lūdzu, iestatiet to konfigurācijas dialoglogā.</para>"
 
-#: functions.cpp:1620
+#: functions.cpp:1621
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3581,67 +3614,67 @@ msgstr ""
 "<para>Atgādinājumi pašreiz ir atslēgti.</para><para>Vai vēlieties tos "
 "ieslēgt?</para>"
 
-#: functions.cpp:1621
+#: functions.cpp:1622
 #, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Ieslēgt"
 
-#: functions.cpp:1621
+#: functions.cpp:1622
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Atstāt atslēgtus"
 
-#: functions.cpp:1990
+#: functions.cpp:1991
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Kļūda saglabājot atgādinājumus"
 
-#: functions.cpp:1991
+#: functions.cpp:1992
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Kļūda saglabājot atgādinājumu"
 
-#: functions.cpp:1994
+#: functions.cpp:1995
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Kļūda dzēšot atgādinājumus"
 
-#: functions.cpp:1995
+#: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Kļūda dzēšot atgādinājumu"
 
-#: functions.cpp:1998
+#: functions.cpp:1999
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Kļūda saglabājot atkārtoti aktivizētus atgādinājumus"
 
-#: functions.cpp:1999
+#: functions.cpp:2000
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Kļūda saglabājot atkārtoti aktivizētu atgādinājumu"
 
-#: functions.cpp:2002
+#: functions.cpp:2003
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Kļūda saglabājot atgādinājumu sagataves"
 
-#: functions.cpp:2003
+#: functions.cpp:2004
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Kļūda saglabājot atgādinājuma sagatavi"
 
-#: kalarmapp.cpp:812
+#: kalarmapp.cpp:810
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3650,19 +3683,19 @@ msgstr ""
 "Aizvēršana izslēgs atgādinājumus (tiklīdz jebkuri trauksmju ziņojumu logi "
 "tiks aizvērti)."
 
-#: kalarmapp.cpp:822
+#: kalarmapp.cpp:820
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Iziešana atcels ieplānoto atmošanos no iemigšanas."
 
-#: kalarmapp.cpp:1039
+#: kalarmapp.cpp:1037
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1053
+#: kalarmapp.cpp:1051
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info/plain"
 #| msgid "Error recreating alarm"
@@ -3670,7 +3703,7 @@ msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Kļūda izveidojot no jauna atgādinājumu"
 
-#: kalarmapp.cpp:1109
+#: kalarmapp.cpp:1107
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:shell"
 #| msgid ""
@@ -3682,7 +3715,7 @@ msgstr ""
 "<icode>%1</icode>: notikums <resource>%2</resource> nav atrasts, vai arī nav "
 "rediģējams"
 
-#: kalarmapp.cpp:1421
+#: kalarmapp.cpp:1419
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3691,7 +3724,7 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1461
+#: kalarmapp.cpp:1459
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:shell"
 #| msgid ""
@@ -3703,7 +3736,7 @@ msgstr ""
 "<icode>%1</icode>: notikums <resource>%2</resource> nav atrasts, vai arī nav "
 "rediģējams"
 
-#: kalarmapp.cpp:1489
+#: kalarmapp.cpp:1487
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3713,7 +3746,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1497
+#: kalarmapp.cpp:1495
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3724,7 +3757,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2474
+#: kalarmapp.cpp:2472
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3734,25 +3767,25 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Neizdevās izpildīt komandu (piekļuve čaulai nav atļauta)"
 
-#: kalarmapp.cpp:2627
+#: kalarmapp.cpp:2625
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Kļūda izveidojot pagaidu skripta failu"
 
-#: kalarmapp.cpp:2723
+#: kalarmapp.cpp:2721
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Pirmsatgādinājuma darbība:"
 
-#: kalarmapp.cpp:2729
+#: kalarmapp.cpp:2727
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
 msgstr "Pēcatgādinājuma darbība:"
 
-#: kalarmcalendar/alarmtext.cpp:506
+#: kalarmcalendar/alarmtext.cpp:507
 #, fuzzy, kde-format
 #| msgctxt "@label:listbox 'From' email address"
 #| msgid "From:"
@@ -3760,37 +3793,37 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "No:"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:336
+#: kalarmcalendar/alarmtext.cpp:508 messagedisplayhelper.cpp:337
 #, kde-format
 msgctxt "@info Email addressee"
 msgid "To:"
 msgstr "Uz:"
 
-#: kalarmcalendar/alarmtext.cpp:508
+#: kalarmcalendar/alarmtext.cpp:509
 #, kde-format
 msgctxt "@info Copy-to in email headers"
 msgid "Cc:"
 msgstr ""
 
-#: kalarmcalendar/alarmtext.cpp:509
+#: kalarmcalendar/alarmtext.cpp:510
 #, kde-format
 msgctxt "@info"
 msgid "Date:"
 msgstr ""
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:338
+#: kalarmcalendar/alarmtext.cpp:511 messagedisplayhelper.cpp:339
 #, kde-format
 msgctxt "@info Email subject"
 msgid "Subject:"
 msgstr "Temats:"
 
-#: kalarmcalendar/alarmtext.cpp:512
+#: kalarmcalendar/alarmtext.cpp:513
 #, kde-format
 msgctxt "@info Todo calendar item's title field"
 msgid "To-do:"
 msgstr ""
 
-#: kalarmcalendar/alarmtext.cpp:513
+#: kalarmcalendar/alarmtext.cpp:514
 #, fuzzy, kde-format
 #| msgctxt "@info/plain File path or URL"
 #| msgid "Location: %1"
@@ -3798,13 +3831,13 @@ msgctxt "@info Todo calendar item's location field"
 msgid "Location:"
 msgstr "Vieta: %1"
 
-#: kalarmcalendar/alarmtext.cpp:514
+#: kalarmcalendar/alarmtext.cpp:515
 #, kde-format
 msgctxt "@info Todo calendar item's due date/time"
 msgid "Due:"
 msgstr ""
 
-#: kalarmcalendar/kacalendar.cpp:135
+#: kalarmcalendar/kacalendar.cpp:136
 #, kde-format
 msgid "KAlarm"
 msgstr "KAlarm"
@@ -3826,8 +3859,8 @@ msgid "At login"
 msgstr "Piesakoties"
 
 #: kalarmcalendar/kaevent.cpp:3090 kalarmcalendar/kaevent.cpp:3177
-#: kalarmcalendar/kaeventformatter.cpp:428
-#: kalarmcalendar/kaeventformatter.cpp:442
+#: kalarmcalendar/kaeventformatter.cpp:429
+#: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Minutes"
@@ -3839,7 +3872,7 @@ msgstr[1] "Minūtes"
 msgstr[2] "Minūtes"
 
 #: kalarmcalendar/kaevent.cpp:3092 kalarmcalendar/kaevent.cpp:3179
-#: kalarmcalendar/kaeventformatter.cpp:444
+#: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
 msgid "1 Hour"
@@ -3855,7 +3888,7 @@ msgid "%1h %2m"
 msgstr ""
 
 #: kalarmcalendar/kaevent.cpp:3097 kalarmcalendar/kaevent.cpp:3184
-#: kalarmcalendar/kaeventformatter.cpp:446
+#: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
 msgid "1 Day"
@@ -3913,20 +3946,20 @@ msgctxt "@info No repetition"
 msgid "None"
 msgstr "Nav"
 
-#: kalarmcalendar/kaeventformatter.cpp:37
+#: kalarmcalendar/kaeventformatter.cpp:38
 #, kde-format
 msgctxt "@label Unique identifier"
 msgid "UID"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:39
+#: kalarmcalendar/kaeventformatter.cpp:40
 #, fuzzy, kde-format
 #| msgid "Alarm types."
 msgctxt "@label"
 msgid "Alarm type"
 msgstr "Atgādinājuma tipi."
 
-#: kalarmcalendar/kaeventformatter.cpp:41
+#: kalarmcalendar/kaeventformatter.cpp:42
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Alarm templates"
@@ -3934,14 +3967,14 @@ msgctxt "@label"
 msgid "Alarm status"
 msgstr "Atgādinājumu sagataves"
 
-#: kalarmcalendar/kaeventformatter.cpp:43
+#: kalarmcalendar/kaeventformatter.cpp:44
 #, fuzzy, kde-format
 #| msgid "Alarm types."
 msgctxt "@label"
 msgid "Alarm name"
 msgstr "Atgādinājuma tipi."
 
-#: kalarmcalendar/kaeventformatter.cpp:45
+#: kalarmcalendar/kaeventformatter.cpp:46
 #, fuzzy, kde-format
 #| msgctxt "@label:textbox"
 #| msgid "Template name:"
@@ -3949,7 +3982,7 @@ msgctxt "@label"
 msgid "Template name"
 msgstr "Sagataves nosaukums:"
 
-#: kalarmcalendar/kaeventformatter.cpp:47
+#: kalarmcalendar/kaeventformatter.cpp:48
 #, fuzzy, kde-format
 #| msgctxt "@option:radio"
 #| msgid "Default time"
@@ -3957,7 +3990,7 @@ msgctxt "@label"
 msgid "Creation time"
 msgstr "Noklusētais laiks"
 
-#: kalarmcalendar/kaeventformatter.cpp:49
+#: kalarmcalendar/kaeventformatter.cpp:50
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Start at login"
@@ -3965,7 +3998,7 @@ msgctxt "@label"
 msgid "Start time"
 msgstr "Palaist piesakoties"
 
-#: kalarmcalendar/kaeventformatter.cpp:51
+#: kalarmcalendar/kaeventformatter.cpp:52
 #, fuzzy, kde-format
 #| msgctxt "@label:textbox"
 #| msgid "Template name:"
@@ -3973,13 +4006,13 @@ msgctxt "@label Start delay configured in an alarm template"
 msgid "Template after time"
 msgstr "Sagataves nosaukums:"
 
-#: kalarmcalendar/kaeventformatter.cpp:53
+#: kalarmcalendar/kaeventformatter.cpp:54
 #, kde-format
 msgctxt "@label"
 msgid "Recurs"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:55
+#: kalarmcalendar/kaeventformatter.cpp:56
 #, fuzzy, kde-format
 #| msgctxt "@label:listbox"
 #| msgid "Recurrence:"
@@ -3987,7 +4020,7 @@ msgctxt "@label"
 msgid "Recurrence"
 msgstr "Atkārtošanās:"
 
-#: kalarmcalendar/kaeventformatter.cpp:57
+#: kalarmcalendar/kaeventformatter.cpp:58
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Sub-Repetition"
@@ -3995,7 +4028,7 @@ msgctxt "@label"
 msgid "Sub-repetition"
 msgstr "Apakšatkārtošanās"
 
-#: kalarmcalendar/kaeventformatter.cpp:59
+#: kalarmcalendar/kaeventformatter.cpp:60
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Sub-Repetition"
@@ -4003,7 +4036,7 @@ msgctxt "@label"
 msgid "Sub-repetition interval"
 msgstr "Apakšatkārtošanās"
 
-#: kalarmcalendar/kaeventformatter.cpp:61
+#: kalarmcalendar/kaeventformatter.cpp:62
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Sub-Repetition"
@@ -4011,7 +4044,7 @@ msgctxt "@label"
 msgid "Sub-repetition count"
 msgstr "Apakšatkārtošanās"
 
-#: kalarmcalendar/kaeventformatter.cpp:63
+#: kalarmcalendar/kaeventformatter.cpp:64
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Sub-Repetition"
@@ -4019,7 +4052,7 @@ msgctxt "@label"
 msgid "Next sub-repetition"
 msgstr "Apakšatkārtošanās"
 
-#: kalarmcalendar/kaeventformatter.cpp:65
+#: kalarmcalendar/kaeventformatter.cpp:66
 #, fuzzy, kde-format
 #| msgctxt "@option:radio"
 #| msgid "Date only"
@@ -4027,13 +4060,13 @@ msgctxt "@label"
 msgid "Work time only"
 msgstr "Tikai datums"
 
-#: kalarmcalendar/kaeventformatter.cpp:67
+#: kalarmcalendar/kaeventformatter.cpp:68
 #, kde-format
 msgctxt "@label"
 msgid "Holidays excluded"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:69
+#: kalarmcalendar/kaeventformatter.cpp:70
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "No recurrence"
@@ -4041,19 +4074,19 @@ msgctxt "@label"
 msgid "Next recurrence"
 msgstr "Neatkārtojas"
 
-#: kalarmcalendar/kaeventformatter.cpp:71
+#: kalarmcalendar/kaeventformatter.cpp:72
 #, kde-format
 msgctxt "@label"
 msgid "Late cancel"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:73
+#: kalarmcalendar/kaeventformatter.cpp:74
 #, kde-format
 msgctxt "@label Automatically close window"
 msgid "Auto close"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:75
+#: kalarmcalendar/kaeventformatter.cpp:76
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Show in KOrganizer"
@@ -4061,7 +4094,7 @@ msgctxt "@label"
 msgid "Copy to KOrganizer"
 msgstr "Rādīt iekš KOrganizer"
 
-#: kalarmcalendar/kaeventformatter.cpp:77
+#: kalarmcalendar/kaeventformatter.cpp:78
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Enabled"
@@ -4069,7 +4102,7 @@ msgctxt "@label"
 msgid "Enabled"
 msgstr "Ieslēgts"
 
-#: kalarmcalendar/kaeventformatter.cpp:79
+#: kalarmcalendar/kaeventformatter.cpp:80
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Read-only"
@@ -4077,7 +4110,7 @@ msgctxt "@label"
 msgid "Read-only"
 msgstr "Tikai lasāms"
 
-#: kalarmcalendar/kaeventformatter.cpp:81
+#: kalarmcalendar/kaeventformatter.cpp:82
 #, fuzzy, kde-format
 #| msgctxt "@option:check Alarm type"
 #| msgid "Archived"
@@ -4085,19 +4118,19 @@ msgctxt "@label Whether alarm should be archived"
 msgid "Archive"
 msgstr "Arhivētie"
 
-#: kalarmcalendar/kaeventformatter.cpp:83
+#: kalarmcalendar/kaeventformatter.cpp:84
 #, kde-format
 msgctxt "@label"
 msgid "Revision"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:85
+#: kalarmcalendar/kaeventformatter.cpp:86
 #, kde-format
 msgctxt "@label"
 msgid "Custom properties"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:88
+#: kalarmcalendar/kaeventformatter.cpp:89
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Message font"
@@ -4105,7 +4138,7 @@ msgctxt "@label"
 msgid "Message text"
 msgstr "Ziņojuma fonts"
 
-#: kalarmcalendar/kaeventformatter.cpp:90
+#: kalarmcalendar/kaeventformatter.cpp:91
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Message font"
@@ -4113,13 +4146,13 @@ msgctxt "@label File to provide text for message"
 msgid "Message file"
 msgstr "Ziņojuma fonts"
 
-#: kalarmcalendar/kaeventformatter.cpp:96
+#: kalarmcalendar/kaeventformatter.cpp:97
 #, kde-format
 msgctxt "@label"
 msgid "Font"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:98
+#: kalarmcalendar/kaeventformatter.cpp:99
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Pre-alarm action"
@@ -4127,7 +4160,7 @@ msgctxt "@label Shell command to execute before alarm"
 msgid "Pre-alarm action"
 msgstr "Pirmsatgādinājuma darbība"
 
-#: kalarmcalendar/kaeventformatter.cpp:100
+#: kalarmcalendar/kaeventformatter.cpp:101
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Pre-alarm action"
@@ -4135,7 +4168,7 @@ msgctxt "@label"
 msgid "Pre-alarm action cancel"
 msgstr "Pirmsatgādinājuma darbība"
 
-#: kalarmcalendar/kaeventformatter.cpp:102
+#: kalarmcalendar/kaeventformatter.cpp:103
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Pre-alarm action"
@@ -4143,7 +4176,7 @@ msgctxt "@label"
 msgid "Pre-alarm action no error"
 msgstr "Pirmsatgādinājuma darbība"
 
-#: kalarmcalendar/kaeventformatter.cpp:104
+#: kalarmcalendar/kaeventformatter.cpp:105
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Post-alarm action"
@@ -4151,7 +4184,7 @@ msgctxt "@label Shell command to execute after alarm"
 msgid "Post-alarm action"
 msgstr "Pēcatgādinājuma darbība"
 
-#: kalarmcalendar/kaeventformatter.cpp:108
+#: kalarmcalendar/kaeventformatter.cpp:109
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "Akonadi"
@@ -4159,7 +4192,7 @@ msgctxt "@label"
 msgid "Akonadi Item ID"
 msgstr "Akonadi"
 
-#: kalarmcalendar/kaeventformatter.cpp:110
+#: kalarmcalendar/kaeventformatter.cpp:111
 #, fuzzy, kde-format
 #| msgctxt "@label Label for audio options"
 #| msgid "Sound"
@@ -4167,7 +4200,7 @@ msgctxt "@label Audio method"
 msgid "Sound"
 msgstr "Skaņa"
 
-#: kalarmcalendar/kaeventformatter.cpp:112
+#: kalarmcalendar/kaeventformatter.cpp:113
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "Do not repeat"
@@ -4175,7 +4208,7 @@ msgctxt "@label Whether audio should repeat"
 msgid "Sound repeat"
 msgstr "Neatkārtot"
 
-#: kalarmcalendar/kaeventformatter.cpp:116
+#: kalarmcalendar/kaeventformatter.cpp:117
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Sound volume"
@@ -4183,7 +4216,7 @@ msgctxt "@label"
 msgid "Sound fade volume"
 msgstr "Skaņas skaļums"
 
-#: kalarmcalendar/kaeventformatter.cpp:118
+#: kalarmcalendar/kaeventformatter.cpp:119
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Sound file"
@@ -4191,7 +4224,7 @@ msgctxt "@label"
 msgid "Sound fade time"
 msgstr "Skaņas fails"
 
-#: kalarmcalendar/kaeventformatter.cpp:120
+#: kalarmcalendar/kaeventformatter.cpp:121
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Reminder"
@@ -4199,7 +4232,7 @@ msgctxt "@label Whether the alarm has a reminder"
 msgid "Reminder"
 msgstr "Papildu atgādinājums"
 
-#: kalarmcalendar/kaeventformatter.cpp:122
+#: kalarmcalendar/kaeventformatter.cpp:123
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Reminder for first recurrence only"
@@ -4207,13 +4240,13 @@ msgctxt "@label Whether reminder is on first recurrence only"
 msgid "Reminder once only"
 msgstr "Papildu atgādinājums tikai priekš pirmās atkārtošanās"
 
-#: kalarmcalendar/kaeventformatter.cpp:124
+#: kalarmcalendar/kaeventformatter.cpp:125
 #, kde-format
 msgctxt "@label Whether to use standard notification system"
 msgid "Notify"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:126
+#: kalarmcalendar/kaeventformatter.cpp:127
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "&Defer..."
@@ -4221,7 +4254,7 @@ msgctxt "@label Deferral type"
 msgid "Deferral"
 msgstr "&Atlikt..."
 
-#: kalarmcalendar/kaeventformatter.cpp:128
+#: kalarmcalendar/kaeventformatter.cpp:129
 #, fuzzy, kde-format
 #| msgctxt "@option:radio"
 #| msgid "Default time"
@@ -4229,19 +4262,19 @@ msgctxt "@label"
 msgid "Deferral time"
 msgstr "Noklusētais laiks"
 
-#: kalarmcalendar/kaeventformatter.cpp:130
+#: kalarmcalendar/kaeventformatter.cpp:131
 #, kde-format
 msgctxt "@label Default deferral delay"
 msgid "Deferral default"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:132
+#: kalarmcalendar/kaeventformatter.cpp:133
 #, kde-format
 msgctxt "@label Whether deferral time is date-only by default"
 msgid "Deferral default date only"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:135
+#: kalarmcalendar/kaeventformatter.cpp:136
 #, fuzzy, kde-format
 #| msgctxt "@option:check Alarm action"
 #| msgid "Command"
@@ -4249,7 +4282,7 @@ msgctxt "@label A shell command"
 msgid "Command"
 msgstr "Komanda"
 
-#: kalarmcalendar/kaeventformatter.cpp:139
+#: kalarmcalendar/kaeventformatter.cpp:140
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "Execute in terminal window"
@@ -4257,27 +4290,27 @@ msgctxt "@label Execute in terminal window"
 msgid "Execute in terminal"
 msgstr "Izpildīt termināla logā"
 
-#: kalarmcalendar/kaeventformatter.cpp:141
+#: kalarmcalendar/kaeventformatter.cpp:142
 #, kde-format
 msgctxt "@label"
 msgid "Hide command error"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:144
+#: kalarmcalendar/kaeventformatter.cpp:145
 #, fuzzy, kde-format
 #| msgid "Email subject line"
 msgctxt "@label"
 msgid "Email subject"
 msgstr "Sūtīt pa e-pastu tēmas rindu"
 
-#: kalarmcalendar/kaeventformatter.cpp:146
+#: kalarmcalendar/kaeventformatter.cpp:147
 #, fuzzy, kde-format
 #| msgid "Email subject line"
 msgctxt "@label Email address"
 msgid "Email sender ID"
 msgstr "Sūtīt pa e-pastu tēmas rindu"
 
-#: kalarmcalendar/kaeventformatter.cpp:148
+#: kalarmcalendar/kaeventformatter.cpp:149
 #, fuzzy, kde-format
 #| msgctxt "@option:check Alarm action"
 #| msgid "Email"
@@ -4285,7 +4318,7 @@ msgctxt "@label Email address"
 msgid "Email to"
 msgstr "E-pasts"
 
-#: kalarmcalendar/kaeventformatter.cpp:150
+#: kalarmcalendar/kaeventformatter.cpp:151
 #, fuzzy, kde-format
 #| msgctxt "@option:check Alarm action"
 #| msgid "Email"
@@ -4293,7 +4326,7 @@ msgctxt "@label true/false"
 msgid "Email bcc"
 msgstr "E-pasts"
 
-#: kalarmcalendar/kaeventformatter.cpp:152
+#: kalarmcalendar/kaeventformatter.cpp:153
 #, fuzzy, kde-format
 #| msgctxt "@option:check Alarm action"
 #| msgid "Email"
@@ -4301,7 +4334,7 @@ msgctxt "@label"
 msgid "Email body"
 msgstr "E-pasts"
 
-#: kalarmcalendar/kaeventformatter.cpp:154
+#: kalarmcalendar/kaeventformatter.cpp:155
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Email client"
@@ -4309,7 +4342,7 @@ msgctxt "@label"
 msgid "Email attachments"
 msgstr "E-pasta klients"
 
-#: kalarmcalendar/kaeventformatter.cpp:256
+#: kalarmcalendar/kaeventformatter.cpp:257
 #, fuzzy, kde-format
 #| msgctxt "@label:listbox"
 #| msgid "Display type:"
@@ -4317,7 +4350,7 @@ msgctxt "@info Alarm type"
 msgid "Display (text)"
 msgstr "Attēlošanas tips:"
 
-#: kalarmcalendar/kaeventformatter.cpp:258
+#: kalarmcalendar/kaeventformatter.cpp:259
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the file now"
@@ -4325,7 +4358,7 @@ msgctxt "@info Alarm type"
 msgid "Display (file)"
 msgstr "Rādīt failu tūlīt"
 
-#: kalarmcalendar/kaeventformatter.cpp:261
+#: kalarmcalendar/kaeventformatter.cpp:262
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the command output now"
@@ -4333,7 +4366,7 @@ msgctxt "@info Alarm type"
 msgid "Display (command)"
 msgstr "Rādīt komandas izvadi tūlīt"
 
-#: kalarmcalendar/kaeventformatter.cpp:262
+#: kalarmcalendar/kaeventformatter.cpp:263
 #, fuzzy, kde-format
 #| msgctxt "@option:check Alarm action"
 #| msgid "Command"
@@ -4341,7 +4374,7 @@ msgctxt "@info Alarm type"
 msgid "Command"
 msgstr "Komanda"
 
-#: kalarmcalendar/kaeventformatter.cpp:264
+#: kalarmcalendar/kaeventformatter.cpp:265
 #, fuzzy, kde-format
 #| msgctxt "@option:check Alarm action"
 #| msgid "Email"
@@ -4349,7 +4382,7 @@ msgctxt "@info Alarm type"
 msgid "Email"
 msgstr "E-pasts"
 
-#: kalarmcalendar/kaeventformatter.cpp:266
+#: kalarmcalendar/kaeventformatter.cpp:267
 #, fuzzy, kde-format
 #| msgctxt "@option:check Alarm action"
 #| msgid "Audio"
@@ -4357,7 +4390,7 @@ msgctxt "@info Alarm type"
 msgid "Audio"
 msgstr "Audio"
 
-#: kalarmcalendar/kaeventformatter.cpp:273
+#: kalarmcalendar/kaeventformatter.cpp:274
 #, fuzzy, kde-format
 #| msgctxt "@option:check Alarm type"
 #| msgid "Active"
@@ -4365,7 +4398,7 @@ msgctxt "@info Alarm type"
 msgid "Active"
 msgstr "Aktīvs"
 
-#: kalarmcalendar/kaeventformatter.cpp:275
+#: kalarmcalendar/kaeventformatter.cpp:276
 #, fuzzy, kde-format
 #| msgctxt "@option:check Alarm type"
 #| msgid "Archived"
@@ -4373,7 +4406,7 @@ msgctxt "@info Alarm type"
 msgid "Archived"
 msgstr "Arhivētie"
 
-#: kalarmcalendar/kaeventformatter.cpp:277
+#: kalarmcalendar/kaeventformatter.cpp:278
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Templates..."
@@ -4381,7 +4414,7 @@ msgctxt "@info Alarm type"
 msgid "Template"
 msgstr "Sa&gataves..."
 
-#: kalarmcalendar/kaeventformatter.cpp:296
+#: kalarmcalendar/kaeventformatter.cpp:297
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "At login"
@@ -4389,7 +4422,7 @@ msgctxt "@info Repeat at login"
 msgid "At login until %1"
 msgstr "Piesakoties"
 
-#: kalarmcalendar/kaeventformatter.cpp:337
+#: kalarmcalendar/kaeventformatter.cpp:338
 #, fuzzy, kde-format
 #| msgctxt "@info/plain n days"
 #| msgid "%1d"
@@ -4397,7 +4430,7 @@ msgctxt "@info"
 msgid "%1"
 msgstr "%1d"
 
-#: kalarmcalendar/kaeventformatter.cpp:349
+#: kalarmcalendar/kaeventformatter.cpp:350
 #, fuzzy, kde-format
 #| msgctxt "@option:radio"
 #| msgid "Default time"
@@ -4405,13 +4438,13 @@ msgctxt "@info Using default font"
 msgid "Default"
 msgstr "Noklusētais laiks"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:217
+#: kalarmcalendar/kaeventformatter.cpp:366 messagedisplayhelper.cpp:218
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
 msgstr "Papildu atgādinājums"
 
-#: kalarmcalendar/kaeventformatter.cpp:378
+#: kalarmcalendar/kaeventformatter.cpp:379
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Speak"
@@ -4419,7 +4452,7 @@ msgctxt "@info"
 msgid "Speak"
 msgstr "Izrunāt"
 
-#: kalarmcalendar/kaeventformatter.cpp:379
+#: kalarmcalendar/kaeventformatter.cpp:380
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Beep"
@@ -4427,14 +4460,14 @@ msgctxt "@info"
 msgid "Beep"
 msgstr "Pīkstiens"
 
-#: kalarmcalendar/kaeventformatter.cpp:384
-#: kalarmcalendar/kaeventformatter.cpp:388
+#: kalarmcalendar/kaeventformatter.cpp:385
+#: kalarmcalendar/kaeventformatter.cpp:389
 #, kde-format
 msgctxt "@info Percentage"
 msgid "%1%%"
 msgstr ""
 
-#: kalarmcalendar/kaeventformatter.cpp:392
+#: kalarmcalendar/kaeventformatter.cpp:393
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "seconds"
@@ -4445,7 +4478,7 @@ msgstr[0] "sekundes"
 msgstr[1] "sekundes"
 msgstr[2] "sekundes"
 
-#: kalarmcalendar/kaeventformatter.cpp:417
+#: kalarmcalendar/kaeventformatter.cpp:418
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Error"
@@ -4453,7 +4486,7 @@ msgctxt "@info Error indication"
 msgid "error!"
 msgstr "Kļūda"
 
-#: kalarmcalendar/kaeventformatter.cpp:422
+#: kalarmcalendar/kaeventformatter.cpp:423
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
 #| msgid "Yes"
@@ -4461,7 +4494,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "Yes"
 msgstr "Jā"
 
-#: kalarmcalendar/kaeventformatter.cpp:423
+#: kalarmcalendar/kaeventformatter.cpp:424
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
 #| msgid "No"
@@ -4469,7 +4502,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Nē"
 
-#: kamail.cpp:68
+#: kamail.cpp:69
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -4482,7 +4515,7 @@ msgstr ""
 "'No' e-pasta adresei jābūt konfigurētai, lai varētu izpildīt e-pasta "
 "atgādinājumus."
 
-#: kamail.cpp:71
+#: kamail.cpp:72
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@info/plain KMail folder name: this should be translated the same as in "
@@ -4493,7 +4526,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "nosūtītās"
 
-#: kamail.cpp:101
+#: kamail.cpp:102
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4503,7 +4536,7 @@ msgstr ""
 "Nederīga 'No' e-pasta adrese.<nl/>E-pasta identitāte <resource>%1</resource> "
 "nav atrasta"
 
-#: kamail.cpp:107
+#: kamail.cpp:108
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4513,7 +4546,7 @@ msgstr ""
 "Nederīga 'No' e-pasta adrese.<nl/>E-pasta identitātei <resource>%1</"
 "resource> nav e-pasta adreses"
 
-#: kamail.cpp:117
+#: kamail.cpp:118
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4526,7 +4559,7 @@ msgstr ""
 "application> vai <application>KAlarm</application> konfigurācijas dialoglogā."
 "</para>"
 
-#: kamail.cpp:121
+#: kamail.cpp:122
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4543,7 +4576,7 @@ msgstr ""
 "iestatiet to KDE sistēmas iestatījumos vai <application>KAlarm</application> "
 "konfigurācijas dialoglogā.</para>"
 
-#: kamail.cpp:126
+#: kamail.cpp:127
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4554,7 +4587,7 @@ msgstr ""
 "iestatiet to <application>KAlarm</application> konfigurācijas dialoglogā.</"
 "para>"
 
-#: kamail.cpp:156
+#: kamail.cpp:157
 #, fuzzy, kde-kuit-format
 #| msgctxt "@text/plain"
 #| msgid "Could not run <command>%1</command> to set wake from suspend"
@@ -4564,31 +4597,31 @@ msgstr ""
 "Neizdevās palaist <command>%1</command>, lai iestatītu pamošanos no "
 "iemigšanas"
 
-#: kamail.cpp:283
+#: kamail.cpp:284
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Kļūda pievienojot failu: <filename>%1</filename>"
 
-#: kamail.cpp:293
+#: kamail.cpp:294
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Pielikums nav atrasts: <filename>%1</filename>"
 
-#: kamail.cpp:374
+#: kamail.cpp:375
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "E-pasts tika ierindots nosūtīšanai"
 
-#: kamail.cpp:540
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Neizdevās nosūtīt e-pastu"
 
-#: kamail.cpp:541
+#: kamail.cpp:542
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"
@@ -4652,43 +4685,43 @@ msgstr ""
 "Automātiski aizvērt atgādinājuma logu pēc 'atcelt, ja nokavēts par' laika "
 "perioda aizritēšanas"
 
-#: lib/file.cpp:107
+#: lib/file.cpp:108
 #, kde-format
 msgctxt "@info"
 msgid "Please select a file to display"
 msgstr "Lūdzu, izvēlieties rādāmo failu"
 
-#: lib/file.cpp:109
+#: lib/file.cpp:110
 #, kde-format
 msgctxt "@info"
 msgid "Please select a file to play"
 msgstr "Lūdzu, izvēlieties atskaņojamo failu"
 
-#: lib/file.cpp:115
+#: lib/file.cpp:116
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> is a folder"
 msgstr "<filename>%1</filename> ir mape"
 
-#: lib/file.cpp:117
+#: lib/file.cpp:118
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> not found"
 msgstr "<filename>%1</filename> nav atrasts"
 
-#: lib/file.cpp:118
+#: lib/file.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> is not readable"
 msgstr "<filename>%1</filename> nav lasāms"
 
-#: lib/file.cpp:119
+#: lib/file.cpp:120
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> appears not to be a text or image file"
 msgstr "<filename>%1</filename> nav teksta vai attēla fails"
 
-#: lib/file.cpp:178
+#: lib/file.cpp:179
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Calendar Files"
@@ -4696,7 +4729,7 @@ msgctxt "@item:inlistbox File type"
 msgid "All files"
 msgstr "Kalendāra faili"
 
-#: lib/filedialog.cpp:55
+#: lib/filedialog.cpp:56
 #, kde-format
 msgctxt "@option:check"
 msgid "Append to existing file"
@@ -4784,7 +4817,7 @@ msgstr ""
 "Nospiediet 'Shift' taustiņu peles rullīša ritināšanas laikā, lai koriģētu "
 "laiku lielākiem soļiem (6 stundas / 5 minūtes)."
 
-#: lib/timezonecombo.cpp:18
+#: lib/timezonecombo.cpp:19
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Ignore time zone"
@@ -4804,7 +4837,7 @@ msgstr ""
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "Autortiesības 2001-2012, David Jarvie"
 
-#: mainwindow.cpp:440
+#: mainwindow.cpp:441
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4814,7 +4847,7 @@ msgstr ""
 "Kļūda izveidojot izvēlnes (iespējams, <filename>%1</filename> nav atrasts "
 "vai arī ir bojāts)"
 
-#: mainwindow.cpp:460
+#: mainwindow.cpp:461
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Templates..."
@@ -4822,13 +4855,13 @@ msgctxt "@action"
 msgid "Templates..."
 msgstr "Sa&gataves..."
 
-#: mainwindow.cpp:464 templatedlg.cpp:74
+#: mainwindow.cpp:465 templatedlg.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Jauns"
 
-#: mainwindow.cpp:470
+#: mainwindow.cpp:471
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Create Tem&plate..."
@@ -4836,7 +4869,7 @@ msgctxt "@action"
 msgid "Create Template..."
 msgstr "I&zveidot sagatavi..."
 
-#: mainwindow.cpp:474
+#: mainwindow.cpp:475
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Copy..."
@@ -4844,7 +4877,7 @@ msgctxt "@action"
 msgid "Copy..."
 msgstr "&Kopēt..."
 
-#: mainwindow.cpp:479 resourceselector.cpp:301
+#: mainwindow.cpp:480 resourceselector.cpp:301
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Edit..."
@@ -4852,7 +4885,7 @@ msgctxt "@action"
 msgid "Edit..."
 msgstr "Rediģēt..."
 
-#: mainwindow.cpp:484
+#: mainwindow.cpp:485
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Delete"
@@ -4860,13 +4893,13 @@ msgctxt "@action"
 msgid "Delete"
 msgstr "Dzēst"
 
-#: mainwindow.cpp:490
+#: mainwindow.cpp:491
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Dzēst bez apstiprināšanas"
 
-#: mainwindow.cpp:495
+#: mainwindow.cpp:496
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Reac&tivate"
@@ -4874,13 +4907,13 @@ msgctxt "@action"
 msgid "Reactivate"
 msgstr "A&tkārtoti aktivizēt"
 
-#: mainwindow.cpp:509
+#: mainwindow.cpp:510
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Pamodināt no iemigšanas..."
 
-#: mainwindow.cpp:519
+#: mainwindow.cpp:520
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Show Archived Alarms"
@@ -4888,7 +4921,7 @@ msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Rādīt arhivētos atgādinājumus"
 
-#: mainwindow.cpp:524
+#: mainwindow.cpp:525
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show in System &Tray"
@@ -4896,7 +4929,7 @@ msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Rādī&t sistēmas ikonu joslā"
 
-#: mainwindow.cpp:528
+#: mainwindow.cpp:529
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show &Calendars"
@@ -4904,13 +4937,13 @@ msgctxt "@action"
 msgid "Show Calendars"
 msgstr "&Rādīt kalendārus"
 
-#: mainwindow.cpp:532
+#: mainwindow.cpp:533
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr ""
 
-#: mainwindow.cpp:543
+#: mainwindow.cpp:544
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Import &Alarms..."
@@ -4918,7 +4951,7 @@ msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Importēt &atgādinājumus..."
 
-#: mainwindow.cpp:549
+#: mainwindow.cpp:550
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Import &Birthdays..."
@@ -4926,7 +4959,7 @@ msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Importēt d&zimšanas dienas..."
 
-#: mainwindow.cpp:554
+#: mainwindow.cpp:555
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "E&xport Selected Alarms..."
@@ -4934,7 +4967,7 @@ msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "E&ksportēt iezīmētos atgādinājumus..."
 
-#: mainwindow.cpp:558 resourceselector.cpp:319
+#: mainwindow.cpp:559 resourceselector.cpp:319
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "E&xport..."
@@ -4942,7 +4975,7 @@ msgctxt "@action"
 msgid "Export..."
 msgstr "&Eksportēt..."
 
-#: mainwindow.cpp:562
+#: mainwindow.cpp:563
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Refresh Alarms"
@@ -4950,7 +4983,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "A&tsvaidzināt atgādinājumus"
 
-#: mainwindow.cpp:806
+#: mainwindow.cpp:807
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4959,7 +4992,7 @@ msgstr[0] "Vai tiešām vēlaties dzēst %1 izvēlēto atgādinājumu?"
 msgstr[1] "Vai tiešām vēlaties dzēst %1 izvēlētos atgādinājumus?"
 msgstr[2] "Vai tiešām vēlaties dzēst %1 izvēlētos atgādinājumus?"
 
-#: mainwindow.cpp:808
+#: mainwindow.cpp:809
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4968,85 +5001,85 @@ msgstr[0] "Dzēst atgādinājumu"
 msgstr[1] "Dzēst atgādinājumus"
 msgstr[2] "Dzēst atgādinājumus"
 
-#: mainwindow.cpp:809 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Dzēst"
 
-#: mainwindow.cpp:903
+#: mainwindow.cpp:904
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Slēpt arhivētos atgādinājumus"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Rādīt arhivētos atgādinājumus"
 
-#: mainwindow.cpp:980
+#: mainwindow.cpp:981
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Importēt dzimšanas dienas"
 
-#: mainwindow.cpp:1232
+#: mainwindow.cpp:1233
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1299
+#: mainwindow.cpp:1300
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1301
+#: mainwindow.cpp:1302
 #, kde-format
 msgid "Hide menu bar"
 msgstr ""
 
-#: mainwindow.cpp:1541
+#: mainwindow.cpp:1542
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Ekrāna atgādinājums"
 
-#: mainwindow.cpp:1543
+#: mainwindow.cpp:1544
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "E-pasta atgādinājums"
 
-#: mainwindow.cpp:1545
+#: mainwindow.cpp:1546
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Komandas atgādinājums"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1548
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Atgādinājuma tips"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Izvēlieties izveidojamo atgādinājuma tipu:"
 
-#: mainwindow.cpp:1681
+#: mainwindow.cpp:1682
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Enable"
@@ -5054,7 +5087,7 @@ msgctxt "@action"
 msgid "Enable"
 msgstr "Ieslēgt"
 
-#: mainwindow.cpp:1681
+#: mainwindow.cpp:1682
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@action"
@@ -5068,49 +5101,49 @@ msgid "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"
 msgstr ""
 "<para>Nevar atlikt atgādinājumu:</para><para>Atgādinājums nav atrasts.</para>"
 
-#: messagedisplayhelper.cpp:203
+#: messagedisplayhelper.cpp:204
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "Papildu atgādinājums"
 
-#: messagedisplayhelper.cpp:204 messagedisplayhelper.cpp:408
+#: messagedisplayhelper.cpp:205 messagedisplayhelper.cpp:409
 #, kde-format
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Ziņojums"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Fails ir mape"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Neizdevās atvērt failu"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File not found"
 msgstr "Fails nav atrasts"
 
-#: messagedisplayhelper.cpp:352
+#: messagedisplayhelper.cpp:353
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr "Kļūda"
 
-#: messagedisplayhelper.cpp:481
+#: messagedisplayhelper.cpp:482
 #, kde-format
 msgctxt "@info"
 msgid "Today"
 msgstr "Šodien"
 
-#: messagedisplayhelper.cpp:483
+#: messagedisplayhelper.cpp:484
 #, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
@@ -5119,7 +5152,7 @@ msgstr[0] "pēc %1 dienas"
 msgstr[1] "pēc %1 dienām"
 msgstr[2] "pēc %1 dienām"
 
-#: messagedisplayhelper.cpp:485
+#: messagedisplayhelper.cpp:486
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -5128,7 +5161,7 @@ msgstr[0] "pēc %1 nedēļas"
 msgstr[1] "pēc %1 nedēļām"
 msgstr[2] "pēc %1 nedēļām"
 
-#: messagedisplayhelper.cpp:499
+#: messagedisplayhelper.cpp:500
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
@@ -5137,7 +5170,7 @@ msgstr[0] "pēc %1 minūtes"
 msgstr[1] "pēc %1 minūtēm"
 msgstr[2] "pēc %1 minūtēm"
 
-#: messagedisplayhelper.cpp:501
+#: messagedisplayhelper.cpp:502
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
@@ -5146,7 +5179,7 @@ msgstr[0] "pēc %1 stundas"
 msgstr[1] "pēc %1 stundām"
 msgstr[2] "pēc %1 stundām"
 
-#: messagedisplayhelper.cpp:504
+#: messagedisplayhelper.cpp:505
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
@@ -5155,7 +5188,7 @@ msgstr[0] "%1 stunda"
 msgstr[1] "%1 stundas"
 msgstr[2] "%1 stundu"
 
-#: messagedisplayhelper.cpp:505
+#: messagedisplayhelper.cpp:506
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
@@ -5164,13 +5197,13 @@ msgstr[0] "pēc %2 un %1 minūtes"
 msgstr[1] "pēc %2 un %1 minūtēm"
 msgstr[2] "pēc %2 un %1 minūtēm"
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Neizdevās izrunāt ziņojumu"
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
@@ -5192,7 +5225,7 @@ msgctxt "@action:button"
 msgid "Defer"
 msgstr "&Atlikt..."
 
-#: messagewindow.cpp:227
+#: messagewindow.cpp:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5200,55 +5233,55 @@ msgid ""
 "display)."
 msgstr "Ieplānotais datums/laiks ziņojumam (nevis īstais parādīšanas laiks)."
 
-#: messagewindow.cpp:244
+#: messagewindow.cpp:245
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr "Fails, kura saturs ir parādīts zemāk"
 
-#: messagewindow.cpp:278
+#: messagewindow.cpp:279
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr "Rādāmā faila saturs"
 
-#: messagewindow.cpp:298
+#: messagewindow.cpp:299
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr "Atgādinājuma ziņojums"
 
-#: messagewindow.cpp:325
+#: messagewindow.cpp:326
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr "Atgādinājuma komandas izvade"
 
-#: messagewindow.cpp:358
+#: messagewindow.cpp:359
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr "Sūtāmais e-pasts"
 
-#: messagewindow.cpp:408
+#: messagewindow.cpp:409
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr "Vairs nerādīt šo kļūdu ziņojumu šim atgādinājumam"
 
-#: messagewindow.cpp:425
+#: messagewindow.cpp:426
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Apstiprināt atgādinājumu"
 
-#: messagewindow.cpp:430 resourceselector.cpp:77 templatedlg.cpp:81
+#: messagewindow.cpp:431 resourceselector.cpp:77 templatedlg.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "Rediģēt..."
 
-#: messagewindow.cpp:434
+#: messagewindow.cpp:435
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the alarm."
@@ -5256,13 +5289,13 @@ msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "Rediģēt atgādinājumu."
 
-#: messagewindow.cpp:435
+#: messagewindow.cpp:436
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Rediģēt atgādinājumu."
 
-#: messagewindow.cpp:439
+#: messagewindow.cpp:440
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "&Defer..."
@@ -5270,7 +5303,7 @@ msgctxt "@action:button"
 msgid "Defer..."
 msgstr "&Atlikt..."
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:444
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Defer the alarm until the specified time."
@@ -5278,7 +5311,7 @@ msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "Atlikt atgādinājumu līdz norādītajam laikam."
 
-#: messagewindow.cpp:444
+#: messagewindow.cpp:445
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5288,61 +5321,61 @@ msgstr ""
 "<para>Atlikt atgādinājumu uz vēlāku laiku.</para><para>Jums tiks pieprasīts "
 "norādīt, kad atgādinājumu parādīt vēlreiz.</para>"
 
-#: messagewindow.cpp:458 sounddlg.cpp:443
+#: messagewindow.cpp:459 sounddlg.cpp:444
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Apturēt"
 
-#: messagewindow.cpp:459 sounddlg.cpp:444
+#: messagewindow.cpp:460 sounddlg.cpp:445
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "Apturēt skaņas atskaņošanu"
 
-#: messagewindow.cpp:473
+#: messagewindow.cpp:474
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "Atrast iekš <application>KMail</application>"
 
-#: messagewindow.cpp:474
+#: messagewindow.cpp:475
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "Atrast un izcelt šo e-pastu iekš <application>KMail</application>"
 
-#: messagewindow.cpp:482
+#: messagewindow.cpp:483
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Aktivizēt  <application>KAlarm</application>"
 
-#: messagewindow.cpp:483
+#: messagewindow.cpp:484
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Aktivizēt  <application>KAlarm</application>"
 
-#: messagewindow.cpp:1075
+#: messagewindow.cpp:1076
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Vai tiešām vēlaties apstiprināt šo atgādinājumu?"
 
-#: messagewindow.cpp:1076
+#: messagewindow.cpp:1077
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Apstiprināt atgādinājumu"
 
-#: messagewindow.cpp:1076
+#: messagewindow.cpp:1077
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Apstiprināt"
 
-#: messagewindow.cpp:1131
+#: messagewindow.cpp:1132
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -5722,7 +5755,7 @@ msgctxt "@info"
 msgid "Command to invoke terminal window not found: <command>%1</command>"
 msgstr "Komanda termināla loga izsaukšanai nav atrasta: <command>%1</command>"
 
-#: prefdlg.cpp:706
+#: prefdlg.cpp:702
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -5736,7 +5769,7 @@ msgstr ""
 "Jums nevajadzētu noņemt šo atzīmi, ja nedomājat pārtraukt "
 "<application>KAlarm</application> lietošanu"
 
-#: prefdlg.cpp:717
+#: prefdlg.cpp:713
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5744,7 +5777,7 @@ msgid ""
 ">except if you manually start it."
 msgstr ""
 
-#: prefdlg.cpp:762
+#: prefdlg.cpp:758
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5758,38 +5791,38 @@ msgstr ""
 "Izvēlieties laika zonu, kuru <application>KAlarm</application> lietos kā "
 "noklusēto datumu un laiku rādīšanai un ievadīšanai."
 
-#: prefdlg.cpp:776
+#: prefdlg.cpp:772
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Holiday region:"
 msgstr "Brīvdienu reģions:"
 
-#: prefdlg.cpp:785
+#: prefdlg.cpp:781
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which holiday region to use"
 msgstr "Izvēlieties, kuru brīvdienu reģionu izmantot"
 
-#: prefdlg.cpp:793
+#: prefdlg.cpp:789
 #, kde-format
 msgctxt "Holiday region, region language"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: prefdlg.cpp:797
+#: prefdlg.cpp:793
 #, kde-format
 msgctxt "No holiday region"
 msgid "None"
 msgstr "Nav"
 
-#: prefdlg.cpp:815
+#: prefdlg.cpp:811
 #, fuzzy, kde-format
 #| msgid "Wake From Suspend Alarm"
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
 msgstr "'Pamodināt no iemigšanas' atgādinājums"
 
-#: prefdlg.cpp:823
+#: prefdlg.cpp:819
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5806,7 +5839,7 @@ msgstr ""
 "iemigšanas stāvokļa. To var izmantot, lai pārliecinātos, ka atgādinājuma "
 "palaišanas brīdī sistēmas darbība ir pilnībā atjaunota."
 
-#: prefdlg.cpp:824
+#: prefdlg.cpp:820
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Time units"
 #| msgid "minutes"
@@ -5814,13 +5847,13 @@ msgctxt "@label Time unit for user entered number"
 msgid "minutes"
 msgstr "minūtes"
 
-#: prefdlg.cpp:838
+#: prefdlg.cpp:834
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Start of day for date-only alarms:"
 msgstr "Dienas sākums 'tikai datums' atgādinātājiem:"
 
-#: prefdlg.cpp:845
+#: prefdlg.cpp:841
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5830,55 +5863,55 @@ msgstr ""
 "<para>Agrākais diennakts laiks, kādā tiks palaists 'tikai datums' "
 "atgādinātājs. </para><para>%1</para>"
 
-#: prefdlg.cpp:850
+#: prefdlg.cpp:846
 #, kde-format
 msgctxt "@title:group"
 msgid "Working Hours"
 msgstr "Darba laiks"
 
-#: prefdlg.cpp:865
+#: prefdlg.cpp:861
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check the days in the week which are work days"
 msgstr "Atzīmējiet tās nedēļas dienas, kuras ir darba dienas"
 
-#: prefdlg.cpp:875
+#: prefdlg.cpp:871
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily start time:"
 msgstr "Dienas sākuma laiks:"
 
-#: prefdlg.cpp:882
+#: prefdlg.cpp:878
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the start time of the working day.</para><para>%1</para>"
 msgstr "<para>Ievadiet darba dienas sākuma laiku.</para><para>%1</para>"
 
-#: prefdlg.cpp:894
+#: prefdlg.cpp:890
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily end time:"
 msgstr "Dienas beigu laiks:"
 
-#: prefdlg.cpp:901
+#: prefdlg.cpp:897
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the end time of the working day.</para><para>%1</para>"
 msgstr "<para>Ievadiet darba dienas beigu laiku.</para><para>%1</para>"
 
-#: prefdlg.cpp:906
+#: prefdlg.cpp:902
 #, kde-format
 msgctxt "@title:group"
 msgid "KOrganizer"
 msgstr "KOrganizer"
 
-#: prefdlg.cpp:914
+#: prefdlg.cpp:910
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "KOrganizer event duration:"
 msgstr "KOrganizer notikuma ilgums:"
 
-#: prefdlg.cpp:921
+#: prefdlg.cpp:917
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5888,19 +5921,19 @@ msgstr ""
 "<para>Ievadiet notikuma ilgumu stundās un minūtēs atgādinājumiem, kuri ir "
 "iekopēti KOrganizer.</para><para>%1</para>"
 
-#: prefdlg.cpp:990
+#: prefdlg.cpp:986
 #, kde-format
 msgctxt "@title:group"
 msgid "New Alarms && Templates"
 msgstr "Jauni atgādinājumi un sagataves"
 
-#: prefdlg.cpp:995
+#: prefdlg.cpp:991
 #, kde-format
 msgctxt "@option:radio"
 msgid "Store in default calendar"
 msgstr "Glabāt noklusētajā kalendārā"
 
-#: prefdlg.cpp:997
+#: prefdlg.cpp:993
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5910,13 +5943,13 @@ msgstr ""
 "Bez jautāšanas pievienot visus jaunos atgādinājumus un atgādinājumu "
 "sagataves noklusētajiem kalendāriem."
 
-#: prefdlg.cpp:999
+#: prefdlg.cpp:995
 #, kde-format
 msgctxt "@option:radio"
 msgid "Prompt for which calendar to store in"
 msgstr "Jautāt, kurā kalendārā glabāt"
 
-#: prefdlg.cpp:1002
+#: prefdlg.cpp:998
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5936,19 +5969,19 @@ msgstr ""
 "para><para>Ievērojiet, ka arhivētie atgādinājumi vienmēr tiek glabāti "
 "noklusētajā arhivēto atgādinājumu kalendārā.</para>"
 
-#: prefdlg.cpp:1007
+#: prefdlg.cpp:1003
 #, kde-format
 msgctxt "@title:group"
 msgid "Archived Alarms"
 msgstr "Arhivētie atgādinājumi"
 
-#: prefdlg.cpp:1012
+#: prefdlg.cpp:1008
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep alarms after expiry"
 msgstr "Paturēt atgādinājumus pēc to termiņa beigšanās"
 
-#: prefdlg.cpp:1015
+#: prefdlg.cpp:1011
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5958,19 +5991,19 @@ msgstr ""
 "Atzīmējiet, lai arhivētu atgādinājumus pēc termiņa beigšanās vai dzēšanas "
 "(izņemot dzēstos atgādinājumus, kuri vispār netika palaisti)."
 
-#: prefdlg.cpp:1021
+#: prefdlg.cpp:1017
 #, kde-format
 msgctxt "@option:check"
 msgid "Discard archived alarms after:"
 msgstr "Izmest arhivētos atgādinājumus pēc:"
 
-#: prefdlg.cpp:1030
+#: prefdlg.cpp:1026
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "days"
 msgstr "dienām"
 
-#: prefdlg.cpp:1034
+#: prefdlg.cpp:1030
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5980,19 +6013,19 @@ msgstr ""
 "Noņemiet atzīmi, lai glabātu arhivētos atgādinājumus bezgalīgi. Atzīmējiet, "
 "lai ievadītu, cik ilgi arhivētos atgādinājumus būtu jāglabā."
 
-#: prefdlg.cpp:1037
+#: prefdlg.cpp:1033
 #, kde-format
 msgctxt "@action:button"
 msgid "Clear Archived Alarms"
 msgstr "Notīrīt arhivētos atgādinājumus"
 
-#: prefdlg.cpp:1040
+#: prefdlg.cpp:1036
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete all existing archived alarms."
 msgstr "Dzēst visus esošos arhivētos atgādinājumus."
 
-#: prefdlg.cpp:1041
+#: prefdlg.cpp:1037
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6002,7 +6035,7 @@ msgstr ""
 "Dzēst visus esošos arhivētos atgādinājumus (tikai no noklusētā arhivēto "
 "atgādinājumu kalendāra)."
 
-#: prefdlg.cpp:1087
+#: prefdlg.cpp:1083
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6016,13 +6049,13 @@ msgstr ""
 "atgādinājumus pēc to izpildes, vispirms lietojiet kalendāru skatu, lai "
 "izvēlētos noklusēto arhivēto atgādinājumu kalendāru.</para>"
 
-#: prefdlg.cpp:1104
+#: prefdlg.cpp:1100
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete all archived alarms?"
 msgstr "Vai tiešām vēlaties dzēst visus arhivētos atgādinājumus?"
 
-#: prefdlg.cpp:1105
+#: prefdlg.cpp:1101
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -6032,31 +6065,31 @@ msgstr ""
 "Vai tiešām vēlaties dzēst visus atgādinājumus noklusētajā arhivēto "
 "atgādinājumu kalendārā?"
 
-#: prefdlg.cpp:1123
+#: prefdlg.cpp:1119
 #, kde-format
 msgctxt "@label"
 msgid "Email client:"
 msgstr "E-pasta klients:"
 
-#: prefdlg.cpp:1126
+#: prefdlg.cpp:1122
 #, kde-format
 msgctxt "@option:radio"
 msgid "KMail"
 msgstr "KMail"
 
-#: prefdlg.cpp:1127
+#: prefdlg.cpp:1123
 #, kde-format
 msgctxt "@option:radio"
 msgid "Sendmail"
 msgstr "Sendmail"
 
-#: prefdlg.cpp:1140
+#: prefdlg.cpp:1136
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
 msgstr ""
 
-#: prefdlg.cpp:1143
+#: prefdlg.cpp:1139
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -6083,7 +6116,7 @@ msgstr ""
 "sistēma ir konfigurēta <application>sendmail</application> vai arī ar "
 "sendmail savietojama pasta transporta aģenta lietošanai.</item></list></para>"
 
-#: prefdlg.cpp:1151
+#: prefdlg.cpp:1147
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -6109,7 +6142,7 @@ msgstr ""
 "sistēma ir konfigurēta <application>sendmail</application> vai arī ar "
 "sendmail savietojama pasta transporta aģenta lietošanai.</item></list></para>"
 
-#: prefdlg.cpp:1161
+#: prefdlg.cpp:1157
 #, kde-kuit-format
 msgctxt "@option:check"
 msgid ""
@@ -6119,7 +6152,7 @@ msgstr ""
 "Kopēt nosūtītos e-pastus <application>KMail</application> <resource>%1</"
 "resource> mapē"
 
-#: prefdlg.cpp:1162
+#: prefdlg.cpp:1158
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6129,25 +6162,25 @@ msgstr ""
 "Pēc e-pasta nosūtīšanas glabāt kopiju <application>KMail</application> "
 "<resource>%1</resource> mapē"
 
-#: prefdlg.cpp:1170
+#: prefdlg.cpp:1166
 #, kde-format
 msgctxt "@option:check"
 msgid "Notify when remote emails are queued"
 msgstr "Paziņot, kad tiek ierindoti attālinātie e-pasti"
 
-#: prefdlg.cpp:1178
+#: prefdlg.cpp:1174
 #, kde-format
 msgctxt "@title:group"
 msgid "Your Email Address"
 msgstr "Jūsu e-pasta adrese"
 
-#: prefdlg.cpp:1184
+#: prefdlg.cpp:1180
 #, kde-format
 msgctxt "@label 'From' email address"
 msgid "From:"
 msgstr "No:"
 
-#: prefdlg.cpp:1196
+#: prefdlg.cpp:1192
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6157,7 +6190,7 @@ msgstr ""
 "Jūsu e-pasta adrese, kas tiek izmantota, lai identificētu jūs kā nosūtītāju, "
 "kad tiek sūtīti e-pasta atgādinājumi."
 
-#: prefdlg.cpp:1203 prefdlg.cpp:1239
+#: prefdlg.cpp:1199 prefdlg.cpp:1235
 #, fuzzy, kde-kuit-format
 #| msgctxt "@option:radio"
 #| msgid "Use <application>KMail</application> identities"
@@ -6165,7 +6198,7 @@ msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
 msgstr "Lietot <application>KMail</application> identitātes"
 
-#: prefdlg.cpp:1206
+#: prefdlg.cpp:1202
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -6179,13 +6212,13 @@ msgstr ""
 "Atzīmējiet, lai lietotu KDE sistēmas iestatījumos uzstādīto e-pasta adresi "
 "jūsu kā nosūtītāja identificēšanai, kad tiek sūtīti e-pasta atgādinājumi."
 
-#: prefdlg.cpp:1210
+#: prefdlg.cpp:1206
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use <application>KMail</application> identities"
 msgstr "Lietot <application>KMail</application> identitātes"
 
-#: prefdlg.cpp:1213
+#: prefdlg.cpp:1209
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6202,13 +6235,13 @@ msgstr ""
 "atgādinājumiem jūs varēsiet izvēlēties, kuru no <application>KMail</"
 "application> identitātēm lietot."
 
-#: prefdlg.cpp:1220
+#: prefdlg.cpp:1216
 #, kde-format
 msgctxt "@label 'Bcc' email address"
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: prefdlg.cpp:1231
+#: prefdlg.cpp:1227
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6222,7 +6255,7 @@ msgstr ""
 "datorā, kurā palaists <application>KAlarm</application>, varat vienkārši "
 "ievadīt savu pieteikšanās lietotājvārdu."
 
-#: prefdlg.cpp:1242
+#: prefdlg.cpp:1238
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -6236,7 +6269,7 @@ msgstr ""
 "Atzīmējiet, lai e-pasta atgādinājumu kopēšanai sev lietotu KDE sistēmas "
 "iestatījumos uzstādīto e-pasta adresi."
 
-#: prefdlg.cpp:1344
+#: prefdlg.cpp:1340
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "No valid 'Bcc' email address is specified."
@@ -6244,7 +6277,7 @@ msgctxt "@info"
 msgid "No valid 'Bcc' email address is specified."
 msgstr "Nav norādīta derīga 'Bcc' e-pasta adrese."
 
-#: prefdlg.cpp:1351
+#: prefdlg.cpp:1347
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid ""
@@ -6253,7 +6286,7 @@ msgctxt "@info"
 msgid "Are you sure you want to save your changes?"
 msgstr "<para>%1</para><para>Vai tiešām vēlaties saglabāt izmaiņas?</para>"
 
-#: prefdlg.cpp:1357
+#: prefdlg.cpp:1353
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "No email address is currently set in KDE System Settings. %1"
@@ -6264,7 +6297,7 @@ msgid ""
 msgstr ""
 "KDE sistēmas iestatījumos pašreiz nav uzstādītas nevienas e-pasta adreses. %1"
 
-#: prefdlg.cpp:1362
+#: prefdlg.cpp:1358
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "No <application>KMail</application> identities currently exist. %1"
@@ -6275,7 +6308,7 @@ msgid ""
 msgstr ""
 "Pašreiz neeksistē nevienas <application>KMail</application> identitātes. %1"
 
-#: prefdlg.cpp:1380
+#: prefdlg.cpp:1376
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6284,25 +6317,25 @@ msgstr ""
 "Noklusētie <interface>%1</interface> iestatījumi atgādinājumu rediģēšanas "
 "dialoglogā."
 
-#: prefdlg.cpp:1389 prefdlg.cpp:1844
+#: prefdlg.cpp:1385 prefdlg.cpp:1840
 #, kde-format
 msgctxt "@title:tab"
 msgid "General"
 msgstr "Vispārīgi"
 
-#: prefdlg.cpp:1395
+#: prefdlg.cpp:1391
 #, kde-format
 msgctxt "@title:tab Settings specific to alarm type"
 msgid "Type Specific"
 msgstr ""
 
-#: prefdlg.cpp:1401
+#: prefdlg.cpp:1397
 #, kde-format
 msgctxt "@title:tab"
 msgid "Font && Color"
 msgstr "Fonti un krāsas"
 
-#: prefdlg.cpp:1417
+#: prefdlg.cpp:1413
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -6315,13 +6348,13 @@ msgstr ""
 "Noklusētais iestatījums atkārtošanās noteikumam atgādinājumu rediģēšanas "
 "dialoglogā."
 
-#: prefdlg.cpp:1441
+#: prefdlg.cpp:1437
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Recurrence:"
 msgstr "Atkārtošanās:"
 
-#: prefdlg.cpp:1474
+#: prefdlg.cpp:1470
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "February 28th"
@@ -6329,7 +6362,7 @@ msgctxt "@option:radio"
 msgid "February 28th"
 msgstr "28. februārī"
 
-#: prefdlg.cpp:1478
+#: prefdlg.cpp:1474
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "March 1st"
@@ -6337,13 +6370,13 @@ msgctxt "@option:radio"
 msgid "March 1st"
 msgstr "1. martā"
 
-#: prefdlg.cpp:1482
+#: prefdlg.cpp:1478
 #, kde-format
 msgctxt "@option:radio"
 msgid "Do not repeat"
 msgstr "Neatkārtot"
 
-#: prefdlg.cpp:1487
+#: prefdlg.cpp:1483
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -6362,31 +6395,31 @@ msgstr ""
 "iestatījumu, esošo atgādinājumu nākamā ieplānotā palaišana netiek "
 "pārrēķināta.</note>"
 
-#: prefdlg.cpp:1493
+#: prefdlg.cpp:1489
 #, kde-format
 msgctxt "@title:group"
 msgid "Display Alarms"
 msgstr "Rādīt atgādinājumus"
 
-#: prefdlg.cpp:1511
+#: prefdlg.cpp:1507
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Reminder units:"
 msgstr "Papildu atgādinājuma vienības:"
 
-#: prefdlg.cpp:1514
+#: prefdlg.cpp:1510
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Minutes"
 msgstr "Minūtes"
 
-#: prefdlg.cpp:1515
+#: prefdlg.cpp:1511
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
 msgstr "Stundas/Minūtes"
 
-#: prefdlg.cpp:1518
+#: prefdlg.cpp:1514
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6396,19 +6429,19 @@ msgstr ""
 "Noklusētās vienības papildu atgādinājumam rediģēšanas dialoglogā, drīz "
 "sagaidāmajiem atgādinājumiem."
 
-#: prefdlg.cpp:1524
+#: prefdlg.cpp:1520
 #, kde-format
 msgctxt "@title:group Audio options group"
 msgid "Sound"
 msgstr "Skaņa"
 
-#: prefdlg.cpp:1543
+#: prefdlg.cpp:1539
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat sound file"
 msgstr "Atkārtot skaņas failu"
 
-#: prefdlg.cpp:1546
+#: prefdlg.cpp:1542
 #, kde-kuit-format
 msgctxt "@info:whatsthis sound file 'Repeat' checkbox"
 msgid ""
@@ -6418,19 +6451,19 @@ msgstr ""
 "Noklusētais iestatījums skaņas failam <interface>%1</interface> atgādinājumu "
 "rediģēšanas dialoglogā."
 
-#: prefdlg.cpp:1552
+#: prefdlg.cpp:1548
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Sound file:"
 msgstr "Skaņas fails:"
 
-#: prefdlg.cpp:1560
+#: prefdlg.cpp:1556
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a sound file"
 msgstr "Izvēlieties skaņas failu"
 
-#: prefdlg.cpp:1562
+#: prefdlg.cpp:1558
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
@@ -6438,7 +6471,7 @@ msgstr ""
 "Ievadiet noklusēto skaņas failu, ko izmantot atgādinājumu rediģēšanas "
 "dialoglogā."
 
-#: prefdlg.cpp:1571
+#: prefdlg.cpp:1567
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Enter the default sound file to use in the alarm edit dialog."
@@ -6449,7 +6482,7 @@ msgstr ""
 "Ievadiet noklusēto skaņas failu, ko izmantot atgādinājumu rediģēšanas "
 "dialoglogā."
 
-#: prefdlg.cpp:1575
+#: prefdlg.cpp:1571
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Enter the default sound file to use in the alarm edit dialog."
@@ -6459,25 +6492,25 @@ msgstr ""
 "Ievadiet noklusēto skaņas failu, ko izmantot atgādinājumu rediģēšanas "
 "dialoglogā."
 
-#: prefdlg.cpp:1585
+#: prefdlg.cpp:1581
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Alarms"
 msgstr "Komandas atgādinājumi"
 
-#: prefdlg.cpp:1604
+#: prefdlg.cpp:1600
 #, kde-format
 msgctxt "@title:group"
 msgid "Email Alarms"
 msgstr "E-pasta atgādinājumi"
 
-#: prefdlg.cpp:1617
+#: prefdlg.cpp:1613
 #, kde-format
 msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "Ziņojuma fonts un krāsa"
 
-#: prefdlg.cpp:1823
+#: prefdlg.cpp:1819
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6487,19 +6520,19 @@ msgstr ""
 "Jums jāievada skaņas fails, kad <interface>%1</interface> ir izvēlēts kā "
 "noklusētais skaņas tips"
 
-#: prefdlg.cpp:1850
+#: prefdlg.cpp:1846
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "Atgādinājumu logi"
 
-#: prefdlg.cpp:1853
+#: prefdlg.cpp:1849
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "Rādīt sistēmas ikonu joslā"
 
-#: prefdlg.cpp:1855
+#: prefdlg.cpp:1851
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -6516,13 +6549,13 @@ msgstr ""
 "sistēmas ikonu joslā. Rādot to ikonu joslā, tiek nodrošināta vienkārša "
 "piekļuve programmas funkcijām un arī statusa rādījumi.</para>"
 
-#: prefdlg.cpp:1884
+#: prefdlg.cpp:1880
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr "Vienmēr rādīt"
 
-#: prefdlg.cpp:1888
+#: prefdlg.cpp:1884
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6532,13 +6565,13 @@ msgstr ""
 "Atzīmējiet, lai rādītu <application>KAlarm</application> ikonu sistēmas "
 "ikonu joslā neatkarīgi no tā, vai ir ieplānoti atgādinājumi."
 
-#: prefdlg.cpp:1892
+#: prefdlg.cpp:1888
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr "Automātiski paslēpt, ja nav aktīvu atgādinājumu"
 
-#: prefdlg.cpp:1896
+#: prefdlg.cpp:1892
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6551,7 +6584,7 @@ msgstr ""
 "vienmēr var tikt padarīta redzama, izmantojot sistēmas joslas opciju 'Rādīt "
 "slēptās ikonas'."
 
-#: prefdlg.cpp:1902
+#: prefdlg.cpp:1898
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6565,19 +6598,19 @@ msgstr ""
 "atgādinājums. Kad paslēpta, ikona vienmēr var tikt padarīta redzama, "
 "izmantojot sistēmas joslas opciju 'Rādīt slēptās ikonas'."
 
-#: prefdlg.cpp:1905
+#: prefdlg.cpp:1901
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr "Automātiski paslēpt, ja nav atgādinājumu šādā laika periodā:"
 
-#: prefdlg.cpp:1917
+#: prefdlg.cpp:1913
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "Sistēmas ikonu joslas paskaidres"
 
-#: prefdlg.cpp:1924
+#: prefdlg.cpp:1920
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Show next &24 hours' alarms"
@@ -6585,7 +6618,7 @@ msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
 msgstr "Rādīt nākamo &24 stundu atgādinājumus"
 
-#: prefdlg.cpp:1928
+#: prefdlg.cpp:1924
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6595,13 +6628,13 @@ msgstr ""
 "Norādiet, vai sistēmas ikonu joslas paskaidrē iekļaut kopsavilkumu par "
 "atgādinājumiem, kas tiks rādīti nākamajās 24 stundās."
 
-#: prefdlg.cpp:1934
+#: prefdlg.cpp:1930
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "Maksimālais rādāmo atgādinājumu skaits:"
 
-#: prefdlg.cpp:1943
+#: prefdlg.cpp:1939
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6612,43 +6645,43 @@ msgstr ""
 "ikonu joslas paskaidrē. Atzīmējiet, lai ievadītu rādāmo atgādinājumu skaita "
 "ierobežojumu."
 
-#: prefdlg.cpp:1947
+#: prefdlg.cpp:1943
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "Rādīt atgādinājuma laiku"
 
-#: prefdlg.cpp:1953
+#: prefdlg.cpp:1949
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "Rādīt laiku līdz atgādinājumam"
 
-#: prefdlg.cpp:1971
+#: prefdlg.cpp:1967
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "Atgādinājumu saraksts"
 
-#: prefdlg.cpp:1983
+#: prefdlg.cpp:1979
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "Atslēgto atgādinājumu krāsa:"
 
-#: prefdlg.cpp:1996
+#: prefdlg.cpp:1992
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "Arhivēto atgādinājumu krāsa:"
 
-#: prefdlg.cpp:2009
+#: prefdlg.cpp:2005
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Atgādinājuma ziņojumu logi"
 
-#: prefdlg.cpp:2021
+#: prefdlg.cpp:2017
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6664,26 +6697,26 @@ msgstr ""
 "item><item>Novietot atgādinājuma ziņojumu logus ekrāna centrā, bet pēc loga "
 "parādīšanās uz īsu brīdi noslēgt apstiprinājuma pogas. </item></list></para>"
 
-#: prefdlg.cpp:2024
+#: prefdlg.cpp:2020
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Novietot logus tālu no peles kursora"
 
-#: prefdlg.cpp:2028
+#: prefdlg.cpp:2024
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr ""
 "Novietot logus ekrāna centrā, aizkavēt apstiprinājuma pogu aktivizēšanu"
 
-#: prefdlg.cpp:2037
+#: prefdlg.cpp:2033
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Pogu aktivēšanas aizture (sekundēs):"
 
-#: prefdlg.cpp:2045
+#: prefdlg.cpp:2041
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -6698,7 +6731,7 @@ msgstr ""
 "Ievadiet, cik ilgi pogām vajadzētu palikt noslēgtām pēc atgādinājuma "
 "ziņojuma loga parādīšanās."
 
-#: prefdlg.cpp:2049
+#: prefdlg.cpp:2045
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6708,13 +6741,13 @@ msgstr ""
 "Ievadiet, cik ilgi pogām vajadzētu palikt noslēgtām pēc atgādinājuma "
 "ziņojuma loga parādīšanās."
 
-#: prefdlg.cpp:2057
+#: prefdlg.cpp:2053
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Ziņojuma logiem ir nosaukuma josla, un tie pieņem tastatūras ievadi"
 
-#: prefdlg.cpp:2060
+#: prefdlg.cpp:2056
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -7795,7 +7828,7 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "Neatkārtot"
 
-#: resources/migration/fileresourcemigrator.cpp:255
+#: resources/migration/fileresourcemigrator.cpp:256
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Active Alarms"
@@ -7803,7 +7836,7 @@ msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "Aktīvie atgādinājumi"
 
-#: resources/migration/fileresourcemigrator.cpp:257
+#: resources/migration/fileresourcemigrator.cpp:258
 #, fuzzy, kde-format
 #| msgctxt "@title:group"
 #| msgid "Archived Alarms"
@@ -7811,7 +7844,7 @@ msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "Arhivētie atgādinājumi"
 
-#: resources/migration/fileresourcemigrator.cpp:259
+#: resources/migration/fileresourcemigrator.cpp:260
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Alarm Templates"
@@ -7819,7 +7852,7 @@ msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "Atgādinājumu sagataves"
 
-#: resources/migration/fileresourcemigrator.cpp:279
+#: resources/migration/fileresourcemigrator.cpp:280
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info/plain"
 #| msgid "Failed to create default calendar <resource>%1</resource>"
@@ -7829,7 +7862,7 @@ msgid ""
 "para><para>Location: <filename>%2</filename></para>"
 msgstr "Neizdevās izveidot noklusēto kalendāru <resource>%1</resource>"
 
-#: resources/resourcedatamodelbase.cpp:65
+#: resources/resourcedatamodelbase.cpp:66
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Active Alarms"
@@ -7837,7 +7870,7 @@ msgctxt "@item:intext"
 msgid "Active Alarms"
 msgstr "Aktīvie atgādinājumi"
 
-#: resources/resourcedatamodelbase.cpp:67
+#: resources/resourcedatamodelbase.cpp:68
 #, fuzzy, kde-format
 #| msgctxt "@title:group"
 #| msgid "Archived Alarms"
@@ -7845,7 +7878,7 @@ msgctxt "@item:intext"
 msgid "Archived Alarms"
 msgstr "Arhivētie atgādinājumi"
 
-#: resources/resourcedatamodelbase.cpp:69
+#: resources/resourcedatamodelbase.cpp:70
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Alarm Templates"
@@ -7853,7 +7886,7 @@ msgctxt "@item:intext"
 msgid "Alarm Templates"
 msgstr "Atgādinājumu sagataves"
 
-#: resources/resourcedatamodelbase.cpp:85
+#: resources/resourcedatamodelbase.cpp:86
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Read-only"
@@ -7861,7 +7894,7 @@ msgctxt "@item:intext Calendar status"
 msgid "Read-only"
 msgstr "Tikai lasāms"
 
-#: resources/resourcedatamodelbase.cpp:88
+#: resources/resourcedatamodelbase.cpp:89
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Read-only (old format)"
@@ -7869,7 +7902,7 @@ msgctxt "@item:intext Calendar status"
 msgid "Read-only (old format)"
 msgstr "Tikai lasāms (vecais formāts)"
 
-#: resources/resourcedatamodelbase.cpp:91
+#: resources/resourcedatamodelbase.cpp:92
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Read-only (other format)"
@@ -7877,37 +7910,37 @@ msgctxt "@item:intext Calendar status"
 msgid "Read-only (other format)"
 msgstr "Tikai lasāms (cits formāts)"
 
-#: resources/resourcedatamodelbase.cpp:113
+#: resources/resourcedatamodelbase.cpp:114
 #, kde-format
 msgctxt "@title:column"
 msgid "Time"
 msgstr "Laiks"
 
-#: resources/resourcedatamodelbase.cpp:115
+#: resources/resourcedatamodelbase.cpp:116
 #, kde-format
 msgctxt "@title:column"
 msgid "Time To"
 msgstr "Laiks līdz"
 
-#: resources/resourcedatamodelbase.cpp:117
+#: resources/resourcedatamodelbase.cpp:118
 #, kde-format
 msgctxt "@title:column"
 msgid "Repeat"
 msgstr "Atkārtot"
 
-#: resources/resourcedatamodelbase.cpp:119
+#: resources/resourcedatamodelbase.cpp:120
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:121
+#: resources/resourcedatamodelbase.cpp:122
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:123
+#: resources/resourcedatamodelbase.cpp:124
 #, fuzzy, kde-format
 #| msgctxt "@title:column Template name"
 #| msgid "Name"
@@ -7915,104 +7948,104 @@ msgctxt "@title:column"
 msgid "Name"
 msgstr "Nosaukums"
 
-#: resources/resourcedatamodelbase.cpp:125
+#: resources/resourcedatamodelbase.cpp:126
 #, kde-format
 msgctxt "@title:column"
 msgid "Message, File or Command"
 msgstr "Ziņojums, fails vai komanda"
 
-#: resources/resourcedatamodelbase.cpp:127
+#: resources/resourcedatamodelbase.cpp:128
 #, kde-format
 msgctxt "@title:column Template name"
 msgid "Name"
 msgstr "Nosaukums"
 
-#: resources/resourcedatamodelbase.cpp:139
+#: resources/resourcedatamodelbase.cpp:140
 #, kde-format
 msgctxt "@title:column"
 msgid "Calendars"
 msgstr "Kalendāri"
 
-#: resources/resourcedatamodelbase.cpp:450
+#: resources/resourcedatamodelbase.cpp:451
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
 msgstr "Komandas izpilde neizdevās"
 
-#: resources/resourcedatamodelbase.cpp:452
+#: resources/resourcedatamodelbase.cpp:453
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
 msgstr "Pirmsatgādinājuma darbības izpilde neizdevās"
 
-#: resources/resourcedatamodelbase.cpp:454
+#: resources/resourcedatamodelbase.cpp:455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
 msgstr "Pēcatgādinājuma darbības izpilde neizdevās"
 
-#: resources/resourcedatamodelbase.cpp:456
+#: resources/resourcedatamodelbase.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
 msgstr "Pirms- un pēcatgādinājuma darbības izpilde neizdevās"
 
-#: resources/resourcedatamodelbase.cpp:487
+#: resources/resourcedatamodelbase.cpp:488
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
 msgstr "Atslēgts"
 
-#: resources/resourcedatamodelbase.cpp:490
+#: resources/resourcedatamodelbase.cpp:491
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 msgstr "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 
-#: resources/resourcedatamodelbase.cpp:495
+#: resources/resourcedatamodelbase.cpp:496
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename>"
 msgstr "%1<nl/>%2: <filename>%3</filename>"
 
-#: resources/resourcedatamodelbase.cpp:556
+#: resources/resourcedatamodelbase.cpp:557
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
 msgstr "Nākamais ieplānotais atgādinājuma datums un laiks"
 
-#: resources/resourcedatamodelbase.cpp:558
+#: resources/resourcedatamodelbase.cpp:559
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
 msgstr "Cik ilgi līdz nākamajam ieplānotajam atgādinājuma palaidējam"
 
-#: resources/resourcedatamodelbase.cpp:560
+#: resources/resourcedatamodelbase.cpp:561
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
 msgstr "Cik bieži atgādinājums atkārtojas"
 
-#: resources/resourcedatamodelbase.cpp:562
+#: resources/resourcedatamodelbase.cpp:563
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Background color of alarm message"
 msgstr "Atgādinājuma ziņojuma fona krāsa"
 
-#: resources/resourcedatamodelbase.cpp:564
+#: resources/resourcedatamodelbase.cpp:565
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm type (message, file, command or email)"
 msgstr "Atgādinājuma tips (ziņojums, fails, komanda vai e-pasts)"
 
-#: resources/resourcedatamodelbase.cpp:566
+#: resources/resourcedatamodelbase.cpp:567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:568
+#: resources/resourcedatamodelbase.cpp:569
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8022,14 +8055,14 @@ msgstr ""
 "Atgādinājuma ziņojuma teksts, rādāmā teksta faila URL, izpildāmā komanda vai "
 "e-pasta temats"
 
-#: resources/resourcedatamodelbase.cpp:570
+#: resources/resourcedatamodelbase.cpp:571
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
 msgstr "Atgādinājuma sagataves nosaukums"
 
-#: resources/resourcedatamodelbase.cpp:662
-#: resources/resourcedatamodelbase.cpp:762
+#: resources/resourcedatamodelbase.cpp:663
+#: resources/resourcedatamodelbase.cpp:763
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Alarm never occurs"
 #| msgid "Never"
@@ -8037,7 +8070,7 @@ msgctxt "@info Alarm never occurs"
 msgid "Never"
 msgstr "Nekad"
 
-#: resources/resourcedatamodelbase.cpp:768
+#: resources/resourcedatamodelbase.cpp:769
 #, fuzzy, no-c-format, kde-format
 #| msgctxt "@info/plain n days"
 #| msgid "%1d"
@@ -8045,7 +8078,7 @@ msgctxt "@info n days"
 msgid "%1d"
 msgstr "%1d"
 
-#: resources/resourcedatamodelbase.cpp:778
+#: resources/resourcedatamodelbase.cpp:779
 #, fuzzy, kde-format
 #| msgctxt "@info/plain hours:minutes"
 #| msgid "%1:%2"
@@ -8053,7 +8086,7 @@ msgctxt "@info hours:minutes"
 msgid "%1:%2"
 msgstr "%1:%2"
 
-#: resources/resourcedatamodelbase.cpp:785
+#: resources/resourcedatamodelbase.cpp:786
 #, fuzzy, kde-format
 #| msgctxt "@info/plain days hours:minutes"
 #| msgid "%1d %2:%3"
@@ -8061,13 +8094,13 @@ msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
 msgstr "%1d %2:%3"
 
-#: resources/resourcemodel.cpp:328
+#: resources/resourcemodel.cpp:329
 #, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
 msgstr "Jūs nevarat atslēgt noklusēto aktīvo atgādinājumu kalendāru."
 
-#: resources/resourcemodel.cpp:334
+#: resources/resourcemodel.cpp:335
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -8077,7 +8110,7 @@ msgstr ""
 "Jūs nevarat atslēgt noklusēto aktīvo atgādinājumu kalendāru, kamēr "
 "izpildītie atgādinājumi ir konfigurēti, lai tiktu paturēti."
 
-#: resources/resourcemodel.cpp:338
+#: resources/resourcemodel.cpp:339
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"
@@ -8194,19 +8227,19 @@ msgctxt "@item:intext What a resource is stored in (directory in filesystem)"
 msgid "Directory"
 msgstr "Mape"
 
-#: resources/singlefileresource.cpp:176 resources/singlefileresource.cpp:350
+#: resources/singlefileresource.cpp:177 resources/singlefileresource.cpp:351
 #, kde-format
 msgctxt "@info"
 msgid "A previous load is still in progress."
 msgstr ""
 
-#: resources/singlefileresource.cpp:182 resources/singlefileresource.cpp:356
+#: resources/singlefileresource.cpp:183 resources/singlefileresource.cpp:357
 #, kde-format
 msgctxt "@info"
 msgid "A previous save is still in progress."
 msgstr ""
 
-#: resources/singlefileresource.cpp:231
+#: resources/singlefileresource.cpp:232
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -8214,7 +8247,7 @@ msgctxt "@info"
 msgid "Could not create calendar file <filename>%1</filename>."
 msgstr "Neizdevās ielādēt kalendāru <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:246
+#: resources/singlefileresource.cpp:247
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -8222,7 +8255,7 @@ msgctxt "@info"
 msgid "Could not create writable calendar file <filename>%1</filename>."
 msgstr "Neizdevās ielādēt kalendāru <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:601
+#: resources/singlefileresource.cpp:602
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -8230,7 +8263,7 @@ msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
 msgstr "Neizdevās ielādēt kalendāru <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:633
+#: resources/singlefileresource.cpp:634
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Calendar Configuration"
@@ -8238,7 +8271,7 @@ msgctxt "@info"
 msgid "Calendar not open."
 msgstr "Kalendāra konfigurācija"
 
-#: resources/singlefileresource.cpp:646
+#: resources/singlefileresource.cpp:647
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -8246,7 +8279,7 @@ msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "Neizdevās ielādēt kalendāru <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:738
+#: resources/singlefileresource.cpp:739
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -8254,7 +8287,7 @@ msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "Neizdevās ielādēt kalendāru <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:775
+#: resources/singlefileresource.cpp:776
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -8735,7 +8768,7 @@ msgstr ""
 "<filename>%6</filename><nl/>Atļaujas: %7<nl/>Statuss: %8<nl/> Noklusētais "
 "kalendārs: %9</para>"
 
-#: rtcwakeaction.cpp:87
+#: rtcwakeaction.cpp:88
 #, kde-kuit-format
 msgctxt "@text/plain"
 msgid "Could not run <command>%1</command> to set wake from suspend"
@@ -8743,7 +8776,7 @@ msgstr ""
 "Neizdevās palaist <command>%1</command>, lai iestatītu pamošanos no "
 "iemigšanas"
 
-#: rtcwakeaction.cpp:90
+#: rtcwakeaction.cpp:91
 #, fuzzy, kde-kuit-format
 #| msgctxt "@text/plain"
 #| msgid ""
@@ -8757,19 +8790,19 @@ msgstr ""
 "Kļūda iestatot pamošanos no iemigšanas.<nl/>Komanda bija: <command>%1</"
 "command><nl/>Kļūdas kods: %2."
 
-#: sounddlg.cpp:41
+#: sounddlg.cpp:42
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat"
 msgstr "Atkārtot"
 
-#: sounddlg.cpp:42
+#: sounddlg.cpp:43
 #, kde-format
 msgctxt "@option:check"
 msgid "Set volume"
 msgstr "Iestatīt skaļumu"
 
-#: sounddlg.cpp:52
+#: sounddlg.cpp:53
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8779,79 +8812,79 @@ msgstr ""
 "Ja atzīmēts, skaņas fails tiks atskaņots atkārtoti kamēr tiek rādīts "
 "ziņojums."
 
-#: sounddlg.cpp:148
+#: sounddlg.cpp:149
 #, kde-format
 msgctxt "@label"
 msgid "Sound file:"
 msgstr "Skaņas fails:"
 
-#: sounddlg.cpp:165 sounddlg.cpp:460
+#: sounddlg.cpp:166 sounddlg.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "Izmēģināt skaņu"
 
-#: sounddlg.cpp:166 sounddlg.cpp:461
+#: sounddlg.cpp:167 sounddlg.cpp:462
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
 msgstr "Atskaņot izvēlēto skaņas failu."
 
-#: sounddlg.cpp:173
+#: sounddlg.cpp:174
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
 msgstr "Ievadiet atskaņojamā faila nosaukumu vai URL."
 
-#: sounddlg.cpp:184
+#: sounddlg.cpp:185
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
 msgstr "Izvēlieties atskaņojamo failu."
 
-#: sounddlg.cpp:206
+#: sounddlg.cpp:207
 #, kde-format
 msgctxt "@label:spinbox Length of time to pause between repetitions"
 msgid "Pause between repetitions:"
 msgstr "Pauze starp atgādinājuma atkārtojumiem:"
 
-#: sounddlg.cpp:213 sounddlg.cpp:270
+#: sounddlg.cpp:214 sounddlg.cpp:271
 #, kde-format
 msgctxt "@label"
 msgid "seconds"
 msgstr "sekundes"
 
-#: sounddlg.cpp:215
+#: sounddlg.cpp:216
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how many seconds to pause between repetitions."
 msgstr "Ievadiet, cik sekunžu pauzi ieturēt starp atkārtojumiem."
 
-#: sounddlg.cpp:218
+#: sounddlg.cpp:219
 #, kde-format
 msgctxt "@title:group Sound volume"
 msgid "Volume"
 msgstr "Skaļums"
 
-#: sounddlg.cpp:234
+#: sounddlg.cpp:235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
 msgstr "Atzīmējiet, lai izvēlētos skaļumu skaņas faila atskaņošanai."
 
-#: sounddlg.cpp:242
+#: sounddlg.cpp:243
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the volume for playing the sound file."
 msgstr "Izvēlieties skaļumu skaņas faila atskaņošanai."
 
-#: sounddlg.cpp:253
+#: sounddlg.cpp:254
 #, kde-format
 msgctxt "@option:check"
 msgid "Fade"
 msgstr "Pakāpeniski"
 
-#: sounddlg.cpp:255
+#: sounddlg.cpp:256
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
@@ -8859,13 +8892,13 @@ msgstr ""
 "Izvēlieties šo, lai pakāpeniski palielinātu skaļumu, kad pirmo reizi tiek "
 "sākta skaņas faila atskaņošana."
 
-#: sounddlg.cpp:263
+#: sounddlg.cpp:264
 #, kde-format
 msgctxt "@label:spinbox Time period over which to fade the sound"
 msgid "Fade time:"
 msgstr "Pakāp. skaļuma laiks:"
 
-#: sounddlg.cpp:272
+#: sounddlg.cpp:273
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8874,49 +8907,49 @@ msgstr ""
 "Ievadiet, cik ilgi (sekundēs) pakāpeniski palielināt skaļumu, līdz tiek "
 "sasniegta uzstādītā vērtība."
 
-#: sounddlg.cpp:279
+#: sounddlg.cpp:280
 #, kde-format
 msgctxt "@label:slider"
 msgid "Initial volume:"
 msgstr "Sākotnējais skaļums:"
 
-#: sounddlg.cpp:288
+#: sounddlg.cpp:289
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the initial volume for playing the sound file."
 msgstr "Izvēlieties sākotnējo skaļumu skaņas faila atskaņošanai."
 
-#: soundpicker.cpp:40
+#: soundpicker.cpp:41
 #, kde-format
 msgctxt "@label:listbox Listbox providing audio options"
 msgid "Sound:"
 msgstr "Skaņa:"
 
-#: soundpicker.cpp:41
+#: soundpicker.cpp:42
 #, kde-format
 msgctxt "@item:inlistbox No sound"
 msgid "None"
 msgstr "Nav"
 
-#: soundpicker.cpp:42
+#: soundpicker.cpp:43
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Beep"
 msgstr "Pīkstiens"
 
-#: soundpicker.cpp:43
+#: soundpicker.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Speak"
 msgstr "Izrunāt"
 
-#: soundpicker.cpp:44
+#: soundpicker.cpp:45
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Sound file"
 msgstr "Skaņas fails"
 
-#: soundpicker.cpp:74
+#: soundpicker.cpp:75
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8930,25 +8963,25 @@ msgid ""
 "list></para>"
 msgstr ""
 
-#: soundpicker.cpp:86
+#: soundpicker.cpp:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure sound file"
 msgstr "Konfigurēt skaņas failu"
 
-#: soundpicker.cpp:87
+#: soundpicker.cpp:88
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
 msgstr "Konfigurēt failu, ko atskaņot, kad tiek parādīts atgādinājums."
 
-#: soundpicker.cpp:256
+#: soundpicker.cpp:257
 #, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "Skaņas fails"
 
-#: soundpicker.cpp:315
+#: soundpicker.cpp:316
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Sound file"
@@ -8956,7 +8989,7 @@ msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Skaņas fails"
 
-#: soundpicker.cpp:338
+#: soundpicker.cpp:339
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"
@@ -9204,7 +9237,7 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Izvēlieties sagatavi, uz kuru bāzēt jauno atgādinājumu."
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&New Alarm"
@@ -9212,18 +9245,18 @@ msgctxt "@action"
 msgid "New Alarm"
 msgstr "Jau&ns atgādinājums"
 
-#: traywindow.cpp:300
+#: traywindow.cpp:301
 #, kde-format
 msgid "Disabled"
 msgstr "Atslēgts"
 
-#: traywindow.cpp:305
+#: traywindow.cpp:306
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(Daži atgādinājumi ir izslēgti)"
 
-#: traywindow.cpp:365
+#: traywindow.cpp:366
 #, fuzzy, kde-format
 #| msgctxt "@info/plain prefix + hours:minutes"
 #| msgid "(%1%2:%3)"
@@ -9231,7 +9264,7 @@ msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:367
+#: traywindow.cpp:368
 #, fuzzy, kde-format
 #| msgctxt "@info/plain prefix + hours:minutes"
 #| msgid "%1%2:%3"
@@ -9521,6 +9554,10 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Ilgums minūtēs no pamošanās līdz atgādinājumam"
+
+#~ msgctxt "@label"
+#~ msgid "Suppress autostart at login"
+#~ msgstr "Apspiest automātisko palaišanu piesakoties"
 
 #~ msgctxt "@info"
 #~ msgid ""
