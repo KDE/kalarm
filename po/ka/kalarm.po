@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-14 00:41+0000\n"
-"PO-Revision-Date: 2024-09-13 06:03+0200\n"
+"PO-Revision-Date: 2024-09-14 05:30+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1002,26 +1002,18 @@ msgstr "შესვლისას გაშვება"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-#| "should always be checked unless you intend to discontinue use of KAlarm.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
 "<p>KAlarm-ის ავტომატური გაშვება KDE-სთან ერთად.</p><p>ეს პარამეტრი ყოველთვის "
-"ჩართული უნდა იყოს იმ შემთხვევის გარდა, თუ აპირებთ, KAlarm-ის გამოყენება აღარ "
-"გააგრძელოთ.<p>"
+"ჩართული უნდა იყოს თუ RunMode=Auto. წინააღმდეგ შემთხვევაში კი - გამორთული.<p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Run Mode"
+#, kde-format
 msgctxt "@label"
 msgid "Run mode"
 msgstr "გაშვების რეჟიმი"
@@ -1032,31 +1024,25 @@ msgstr "გაშვების რეჟიმი"
 msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
-msgstr ""
+msgstr "გავუშვა KAlarm ავტომატურად შესვლისას, მხოლოდ, ხელით, თუ საერთოდ არა."
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:140
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Run automatically"
+#, kde-format
 msgctxt "@option"
 msgid "Run automatically"
 msgstr "ავტომატურად გაშვება"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:141
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Run manually only"
+#, kde-format
 msgctxt "@option"
 msgid "Run manually only"
-msgstr "მხოლოდ, ხელით"
+msgstr "მხოლოდ, ხელით გაშვება"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:142
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not run"
+#, kde-format
 msgctxt "@option"
 msgid "Do not run"
 msgstr "არ გაუშვა"

@@ -94,7 +94,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->11 de setembre de 2024</date>
+>12 de setembre de 2024</date>
 <releaseinfo
 >3.10.0 (KDE Gear 24.12)</releaseinfo>
 
@@ -3114,18 +3114,36 @@
 <listitem>
 <para
 ><guilabel
->Inicia automàticament en iniciar la sessió</guilabel
->: El &kalarm; ha d'estar executant-se perquè les alarmes s'activin, de manera que el &kalarm; normalment s'inicia automàticament a l'inici de sessió per a assegurar que el &kalarm; s'executa en tot moment tret que sortiu manualment. Desseleccioneu aquesta opció si no voleu reiniciar el &kalarm; automàticament a partir d'ara; això inhabilitarà totes les alarmes una vegada que sortiu del &kalarm;, a menys que l'executeu manualment de nou.</para>
+>Mode d'execució</guilabel
+>: Això permet seleccionar si el &kalarm; s'hauria d'executar automàticament, manualment o no.</para>
 
-<warning
-><para
->Aquesta opció sempre s'haurà de marcar a menys que preteneu deixar d'emprar el &kalarm;.</para
-></warning>
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Executa automàticament</guilabel
+>: Seleccioneu-ho per a executar el &kalarm; automàticament en iniciar la sessió per a assegurar-vos que sempre s'executa. Aquesta opció s'ha de seleccionar perquè el &kalarm; funcioni amb normalitat i sempre activi les alarmes.</para>
+</listitem>
 
-<note
-><para
->Aquesta opció es tornarà a seleccionar automàticament cada vegada que s'executi el &kalarm;. De manera que si anteriorment havíeu desmarcat aquesta opció i voleu continuar amb evitar l'execució del &kalarm; en iniciar la sessió, necessitareu desmarcar-la cada vegada que executeu el programa.</para
-></note>
+<listitem>
+<para
+><guilabel
+>Executa només manualment</guilabel
+>: Seleccioneu-ho si només voleu utilitzar el &kalarm; ocasionalment. No s'executarà automàticament, i haureu d'executar-lo manualment quan ho necessiteu. Un cop surti (o després de tancar la sessió), ja no funcionarà ni activarà alarmes fins que l'executeu manualment de nou.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>No executis</guilabel
+>: Seleccioneu-ho si voleu deixar d'utilitzar el &kalarm;. Ja no s'iniciarà a l'inici de sessió ni després de sortir o tancar, ja no activarà alarmes.</para>
+
+<para
+>Tingueu en compte que si més tard executeu el &kalarm; de nou després de seleccionar aquesta opció, el &kalarm; reprendrà el funcionament normal i s'executarà automàticament en iniciar la sessió. Si encara no voleu utilitzar el &kalarm; després d'això, haureu de seleccionar aquesta opció <guilabel
+>No executis</guilabel
+> una vegada més.</para>
+</listitem>
+</itemizedlist>
 </listitem>
 
 <listitem>
