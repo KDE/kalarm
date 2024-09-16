@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-14 00:41+0000\n"
-"PO-Revision-Date: 2024-09-11 23:00+0200\n"
+"PO-Revision-Date: 2024-09-15 21:56+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -1020,26 +1020,19 @@ msgstr "Abiatu saioa hastean"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-#| "should always be checked unless you intend to discontinue use of KAlarm.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
-"<p>KAlarm automatikoki abiatu KDE abiatzen duzun guztietan.</p><p>Aukera hau "
-"beti gaituta egon beharko litzateke KAlarm-en erabilera eten nahi duzunean "
-"ezik.</p>"
+"<p>KAlarm automatikoki abiatu KDE abiatzen duzunean.</p><p>Aukera hau beti "
+"egia gisa ezarrita egon beharko litzateke RunMode=Auto bada, bestela gezurra "
+"gisa.</p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Run Mode"
+#, kde-format
 msgctxt "@label"
 msgid "Run mode"
 msgstr "Exekuzio modua"
@@ -1051,29 +1044,29 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
 msgstr ""
+"Saioa hastean KAlarm, automatikoki edo eskuz exekutatu behar den, edo ez den "
+"exekutatu ere egin behar."
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:140
 #, kde-format
 msgctxt "@option"
 msgid "Run automatically"
-msgstr ""
+msgstr "Exekutatu automatikoki"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:141
 #, kde-format
 msgctxt "@option"
 msgid "Run manually only"
-msgstr ""
+msgstr "Exekutatu eskuz bakarrik"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:142
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option"
 msgid "Do not run"
-msgstr "Ez errepikatu"
+msgstr "Ez exekutatu"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:147
@@ -5140,7 +5133,7 @@ msgstr "Exekuzio modua"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run automatically"
-msgstr ""
+msgstr "Exekutatu automatikoki"
 
 #: prefdlg.cpp:459
 #, kde-format
@@ -5149,12 +5142,14 @@ msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
 msgstr ""
+"Abiatu KAlarm automatikoki saioa hastean. Aukera hau markatu behar da KAlarm-"
+"en funtzionamendu normala gaitzeko."
 
 #: prefdlg.cpp:462
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run manually only"
-msgstr ""
+msgstr "Exekutatu eskuz bakarrik"
 
 #: prefdlg.cpp:465
 #, kde-format
@@ -5163,14 +5158,14 @@ msgid ""
 "Only run KAlarm manually, never automatically. KAlarm will only function "
 "when you manually start it."
 msgstr ""
+"KAlarm eskuz bakarrik exekutatu, inoiz ez automatikoki. Kalarm ibiliko da "
+"bakarrik eskuz abiatzen duzunean."
 
 #: prefdlg.cpp:468
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Do not run"
-msgstr "Ez errepikatu"
+msgstr "Ez exekutatu"
 
 #: prefdlg.cpp:471
 #, kde-format
@@ -5179,14 +5174,14 @@ msgid ""
 "Stop using KAlarm. If you later run it again, it will then resume normal "
 "functioning."
 msgstr ""
+"Utzi KAlarm erabiltzeari. Geroago berriz exekutatzen baduzu, orduan "
+"funtzionamendu normalari berrekingo dio."
 
 #: prefdlg.cpp:474
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Activate <application>KAlarm</application>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr "Aktibatu <application>KAlarm</application>"
+msgstr "<application>KAlarm</application> normal exekutatzeko"
 
 #: prefdlg.cpp:481
 #, kde-format
@@ -5345,17 +5340,13 @@ msgstr ""
 "Terminal-lehioa exekutatzeko komandoa ez da aurkitu: <command>%1</command>"
 
 #: prefdlg.cpp:702
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "You should not uncheck this option unless you intend to discontinue use "
-#| "of <application>KAlarm</application>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "You should not check this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
-"Ez zenuke aukera hau desmarkatu behar <application>KAlarm</application>en "
+"Ez zenuke aukera hau markatu behar <application>KAlarm</application>en "
 "erabilera bertan behera utzi nahi ez baduzu behintzat"
 
 #: prefdlg.cpp:713
@@ -5365,6 +5356,8 @@ msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
 msgstr ""
+"Honek <application>KAlarm</application> funtzionatzea saihestuko du<nl/"
+">eskuz abiatzen duzunean salbu."
 
 #: prefdlg.cpp:758
 #, kde-kuit-format

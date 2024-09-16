@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-14 00:41+0000\n"
-"PO-Revision-Date: 2024-09-12 09:05+0200\n"
+"PO-Revision-Date: 2024-09-14 18:44+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -35,9 +35,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
-"X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
+"X-Environment: kde\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -5359,7 +5359,7 @@ msgstr "Mode de fonctionnement"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run automatically"
-msgstr ""
+msgstr "Lancer automatiquement"
 
 #: prefdlg.cpp:459
 #, kde-format
@@ -5368,12 +5368,14 @@ msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
 msgstr ""
+"Démarrez KAlarm automatiquement lors de la connexion. Cette option doit être "
+"sélectionnée pour permettre le fonctionnement normal de KAlarm."
 
 #: prefdlg.cpp:462
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run manually only"
-msgstr ""
+msgstr "Lancer manuellement uniquement"
 
 #: prefdlg.cpp:465
 #, kde-format
@@ -5382,14 +5384,14 @@ msgid ""
 "Only run KAlarm manually, never automatically. KAlarm will only function "
 "when you manually start it."
 msgstr ""
+"Exécutez KAlarm uniquement manuellement, jamais automatiquement. KAlarm ne "
+"fonctionnera que lorsque vous le démarrez manuellement."
 
 #: prefdlg.cpp:468
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Do not run"
-msgstr "Ne pas répéter"
+msgstr "Ne pas lancer"
 
 #: prefdlg.cpp:471
 #, kde-format
@@ -5398,14 +5400,14 @@ msgid ""
 "Stop using KAlarm. If you later run it again, it will then resume normal "
 "functioning."
 msgstr ""
+"Arrêtez d'utiliser KAlarm. Si vous le relancez plus tard, il reprendra alors "
+"son fonctionnement normal."
 
 #: prefdlg.cpp:474
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Activate <application>KAlarm</application>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr "Activer <application>KAlarm</application>"
+msgstr "Pour lancer <application>KAlarm</application> normalement"
 
 #: prefdlg.cpp:481
 #, kde-format
@@ -5567,17 +5569,13 @@ msgstr ""
 "La commande d'appel du terminal est introuvable : <command>%1</command>"
 
 #: prefdlg.cpp:702
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "You should not uncheck this option unless you intend to discontinue use "
-#| "of <application>KAlarm</application>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "You should not check this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
-"Vous ne devriez pas désélectionner cette option tant que vous souhaitez "
+"Vous ne devriez pas désélectionner cette option sauf si vous souhaitez "
 "utiliser <application>KAlarm</application>."
 
 #: prefdlg.cpp:713
@@ -5587,6 +5585,8 @@ msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
 msgstr ""
+"Cela empêchera <application>KAlarm</application> de fonctionner<nl/>, sauf "
+"si vous le démarrez manuellement."
 
 #: prefdlg.cpp:758
 #, kde-kuit-format

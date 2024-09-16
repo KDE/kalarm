@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-14 00:41+0000\n"
-"PO-Revision-Date: 2024-08-01 10:43+0200\n"
+"PO-Revision-Date: 2024-09-14 12:26+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
@@ -1040,26 +1040,18 @@ msgstr "Inicia automàticament en iniciar la sessió"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-#| "should always be checked unless you intend to discontinue use of KAlarm.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
-"<p>Inicia automàticament el seguiment d'alarmes cada vegada que inicieu KDE."
-"</p><p>Esta opció sempre hauria d'estar marcada, excepte si teniu la "
-"intenció de discontinuar l'ús de KAlarm.</p>"
+"<p>Inicia automàticament KAlarm cada vegada que inicieu KDE.</p><p>Esta "
+"opció sempre hauria de ser certa si RunMode=Auto, altrament falasa.</p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Run Mode"
+#, kde-format
 msgctxt "@label"
 msgid "Run mode"
 msgstr "Mode d'execució"
@@ -1071,29 +1063,29 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
 msgstr ""
+"Si KAlarm s'hauria d'executar automàticament en iniciar la sessió, només "
+"manualment o no."
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:140
 #, kde-format
 msgctxt "@option"
 msgid "Run automatically"
-msgstr ""
+msgstr "Executa automàticament"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:141
 #, kde-format
 msgctxt "@option"
 msgid "Run manually only"
-msgstr ""
+msgstr "Executa només manualment"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:142
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option"
 msgid "Do not run"
-msgstr "No repetisques"
+msgstr "No executes"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:147
@@ -5189,7 +5181,7 @@ msgstr "Mode d'execució"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run automatically"
-msgstr ""
+msgstr "Executa automàticament"
 
 #: prefdlg.cpp:459
 #, kde-format
@@ -5198,12 +5190,14 @@ msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
 msgstr ""
+"Inicia KAlarm automàticament en iniciar la sessió. Esta opció s'ha de marcar "
+"per a activar el funcionament normal de KAlarm."
 
 #: prefdlg.cpp:462
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run manually only"
-msgstr ""
+msgstr "Executa només manualment"
 
 #: prefdlg.cpp:465
 #, kde-format
@@ -5212,14 +5206,14 @@ msgid ""
 "Only run KAlarm manually, never automatically. KAlarm will only function "
 "when you manually start it."
 msgstr ""
+"KAlarm només s'executa manualment, mai automàticament. KAlarm només "
+"funcionarà quan l'inicieu manualment."
 
 #: prefdlg.cpp:468
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Do not run"
-msgstr "No repetisques"
+msgstr "No executes"
 
 #: prefdlg.cpp:471
 #, kde-format
@@ -5228,14 +5222,14 @@ msgid ""
 "Stop using KAlarm. If you later run it again, it will then resume normal "
 "functioning."
 msgstr ""
+"Deixa d'utilitzar KAlarm. Si després l'executeu de nou, es reprendrà el "
+"funcionament normal."
 
 #: prefdlg.cpp:474
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Activate <application>KAlarm</application>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr "Activa <application>KAlarm</application>"
+msgstr "Per a executar normalment <application>KAlarm</application>"
 
 #: prefdlg.cpp:481
 #, kde-format
@@ -5397,18 +5391,14 @@ msgstr ""
 "command>"
 
 #: prefdlg.cpp:702
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "You should not uncheck this option unless you intend to discontinue use "
-#| "of <application>KAlarm</application>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "You should not check this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
-"No hauríeu de desmarcar esta opció excepte si teniu la intenció de "
-"discontinuar l'ús de <application>KAlarm</application>"
+"No hauríeu de marcar esta opció excepte si teniu la intenció de discontinuar "
+"l'ús de <application>KAlarm</application>"
 
 #: prefdlg.cpp:713
 #, kde-kuit-format
@@ -5417,6 +5407,8 @@ msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
 msgstr ""
+"Evitarà que <application>KAlarm</application> funcione<nl/>excepte si "
+"l'inicieu manualment."
 
 #: prefdlg.cpp:758
 #, kde-kuit-format
@@ -8790,15 +8782,7 @@ msgstr ""
 "No s'ha pogut planificar l'hora d'activació per a una alarma de només data"
 
 #: wakedlg.cpp:150
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>This wakeup will cancel any existing wakeup which has been set by "
-#| "KAlarm or any other application, because your computer can only schedule "
-#| "a single wakeup time.</para><para><b>Note:</b> Wake From Suspend is not "
-#| "supported at all on some computers, especially older ones, and some "
-#| "computers only support setting a wakeup time up to 24 hours ahead. You "
-#| "may wish to set up a test alarm to check your system's capability.</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>This wakeup will cancel any existing wakeup which has been set by "
@@ -8810,11 +8794,11 @@ msgid ""
 msgstr ""
 "<para>Esta activació cancel·larà qualsevol activació existent que s'haja "
 "establit en KAlarm o qualsevol altra aplicació, perquè l'ordinador només pot "
-"planificar una única hora d'activació.</para><para><b>Nota:</b> L'activació "
-"des de suspensió no està admesa en tots els ordinadors, especialment els "
-"antics, i alguns ordinadors només permeten establir una hora d'activació "
-"fins 24 hores més avant. Potser desitjareu establir una alarma de prova per "
-"a verificar les capacitats del sistema.</para>"
+"planificar una única hora d'activació.</para><para><note> L'activació des de "
+"suspensió no està admesa en tots els ordinadors, especialment els antics, i "
+"alguns ordinadors només permeten establir una hora d'activació fins 24 hores "
+"més avant. Potser desitjareu establir una alarma de prova per a verificar "
+"les capacitats del sistema.</note></para>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: wakedlg.ui:21
@@ -8911,31 +8895,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Nombre de minuts abans de l'alarma per a activar des de la suspensió"
-
-#~ msgctxt "@label"
-#~ msgid "Suppress autostart at login"
-#~ msgstr "Suprimix l'inici automàtic en iniciar la sessió"
-
-# skip-rule: punctuation-period-no
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "Do you want to start KAlarm at login?<nl/>(Note that alarms will be "
-#~ "disabled if KAlarm is not started.)"
-#~ msgstr ""
-#~ "Voleu iniciar KAlarm automàticament en iniciar la sessió?<nl/>(Cal tindre "
-#~ "present que es desactivaran les alarmes si no s'inicia KAlarm)."
-
-#~ msgctxt "@option:check"
-#~ msgid "Start at login"
-#~ msgstr "Inicia automàticament en iniciar la sessió"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid ""
-#~ "<para>Automatically start <application>KAlarm</application> whenever you "
-#~ "start KDE.</para><para>This option should always be checked unless you "
-#~ "intend to discontinue use of <application>KAlarm</application>.</para>"
-#~ msgstr ""
-#~ "<para>Inicia automàticament <application>KAlarm</application> cada vegada "
-#~ "que inicieu KDE.</para><para>Esta opció sempre hauria d'estar marcada, "
-#~ "excepte si teniu la intenció de discontinuar l'ús de <application>KAlarm</"
-#~ "application>.</para>"
