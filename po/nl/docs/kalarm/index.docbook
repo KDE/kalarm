@@ -94,7 +94,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2024-09-02</date>
+>2024-9-12</date>
 <releaseinfo
 >3.10.0 (KDE Gear 24.12)</releaseinfo>
 
@@ -3122,29 +3122,47 @@
 <listitem>
 <para
 ><guilabel
->Opstarten bij aanmelden</guilabel
->: zal &kalarm; automatisch opstarten bij het aanmelden bij een sessie, om er zeker van te zijn dat &kalarm; altijd actief is tenzij u handmatig afsluit.</para>
+>Uitvoeringsmodus</guilabel
+>: dit biedt u te selecteren of &kalarm; automatisch moet worden uitgevoerd, handmatig of helemaal niet.</para>
 
-<warning
-><para
->Deze optie zou altijd actief moeten zijn tenzij u het gebruik van &kalarm; niet wilt voortzetten.</para
-></warning>
-
-<note
-><para
->Deze optie wordt automatisch opnieuw geselecteerd wanneer &kalarm; actief wordt. Dus als u deze optie hebt gedeactiveerd en wilt voorkomen dat &kalarm; actief wordt bij aanmelden, dan moet u deze optie opnieuw deactiveren elke keer dat u &kalarm; uitvoert.</para
-></note>
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Automatisch uitvoeren</guilabel
+>: dit selecteren om &kalarm; automatisch na aanmelden uit te voeren om te verzekeren dat het altijd actief is. Deze optie moet geselecteerd worden om &kalarm; normaal te laten functioneren en om altijd alarmen te starten.</para>
 </listitem>
 
 <listitem>
 <para
 ><guilabel
->Waarschuwing voor af te sluiten</guilabel
->: Wanneer alarmen zijn uitgeschakeld terwijl &kalarm; niet actief is, doet het selecteren van deze optie vragen u vragen om bevestiging als u probeert &kalarm; te beëindigen met de optie bij het pictogram in het systeemvak <menuchoice
+>Alleen handmatig uitvoeren</guilabel
+>: dit selecteren als u het &kalarm; alleen af en toe wilt gebruiken. Het zal niet automatisch actief worden en u moet het handmatig uitvoeren wanneer u het vereist. Nadat het afsluit (of nadat u zich afmeldt), zal het niet langer functioneren of alarmen starten totdat u het handmatig opnieuw start.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Niet uitvoeren</guilabel
+>: dit selecteren als u wilt stoppen met het gebruik van &kalarm;. Het zal niet langer gestart worden bij aanmelden en nadat het afsluit of u meldt zich af, zal het niet langer alarmen starten.</para>
+
+<para
+>Merk op dat als u later &kalarm; opnieuw uitvoert na het selecteren van deze optie, &kalarm; weer normaal zal functioneren en automatisch actief zal zijn na aanmelden. Als u nog steeds &kalarm; daarna niet wilt gebruiken, u dan deze optie <guilabel
+>Niet uitvoeren</guilabel
+> nog eens moet selecteren.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Waarschuwing voor afsluiten</guilabel
+>: &kalarm; moet actief zijn om alarmen te starten. Selecteer deze optie zodat wanneer u probeert &kalarm; af te sluiten met de optie <menuchoice
 ><guimenu
 >Afsluiten</guimenu
 ></menuchoice
->. Dit voorkomt het per ongeluk uitschakelen van alarmen. Voor de veiligheid wordt deze optie standaard automatisch opnieuw ingeschakeld wanneer u uitvoeringsmodus wijzigt.</para>
+> u gewaarschuwd wordt dat alarmen uitgeschakeld zullen worden en gevraagd worden om bevestiging. Voor de veiligheid wordt deze optie standaard automatisch opnieuw ingeschakeld wanneer u de uitvoeringsmodus wijzigt.</para>
 </listitem>
 
 <listitem

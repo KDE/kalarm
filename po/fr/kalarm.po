@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-14 00:41+0000\n"
-"PO-Revision-Date: 2024-09-14 18:44+0200\n"
+"PO-Revision-Date: 2024-09-15 14:24+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -748,7 +748,7 @@ msgstr "Sujet du courrier électronique"
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
-"Simuler le temps système [[[yyyy-]mm-]jj-]hh:mm [FH] (mode de débogage)"
+"Simuler le temps système [[[aaaa-] mm-] jj-]hh:mm [FH] (mode de débogage)"
 
 #: commandoptions.cpp:265
 #, kde-format
@@ -1094,29 +1094,22 @@ msgstr "Démarrer automatiquement à l'identification"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-#| "should always be checked unless you intend to discontinue use of KAlarm.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
-"<p>Démarrer automatiquement <application>KAlarm</application> dès que vous "
-"démarrez KDE.</p><p>Cette option devrait toujours être sélectionnée à moins "
-"que vous ne souhaitiez plus utiliser <application>KAlarm</application>.</p>"
+"<p>Démarrer automatiquement KAlarm dès que vous démarrez KDE.</p><p>Cette "
+"option devrait toujours être sélectionnée à « Vrai » si le paramètre "
+"« RunMode » est égal à « Auto » sinon « Faux ».</p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Run Mode"
+#, kde-format
 msgctxt "@label"
 msgid "Run mode"
-msgstr "Mode de fonctionnement"
+msgstr "Mode de lancement"
 
 #. i18n: ectx: whatsthis, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:138
@@ -1125,29 +1118,29 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
 msgstr ""
+"Définir si KAlarm doit être lancé automatiquement lors de la connexion, "
+"manuellement uniquement ou pas du tout."
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:140
 #, kde-format
 msgctxt "@option"
 msgid "Run automatically"
-msgstr ""
+msgstr "Lancer automatiquement"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:141
 #, kde-format
 msgctxt "@option"
 msgid "Run manually only"
-msgstr ""
+msgstr "Lancer manuellement uniquement"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:142
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option"
 msgid "Do not run"
-msgstr "Ne pas répéter"
+msgstr "Ne pas lancer"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:147
@@ -1414,7 +1407,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "'Bcc' email address"
-msgstr "Adresse électronique pour le champ « CCC »"
+msgstr "Adresse électronique pour le champ « BCC »"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:222
@@ -3120,7 +3113,7 @@ msgstr "Envoyer"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
-msgstr "Courriel envoyé à : <nl />%1<nl />CCC : <email>%2</email>"
+msgstr "Courriel envoyé à : <nl />%1<nl />BCC : <email>%2</email>"
 
 #: editdlgtypes.cpp:1509
 #, kde-kuit-format
@@ -4067,19 +4060,19 @@ msgstr "Police"
 #, kde-format
 msgctxt "@label Shell command to execute before alarm"
 msgid "Pre-alarm action"
-msgstr "Action de préalarme"
+msgstr "Action de pré-alarme"
 
 #: kalarmcalendar/kaeventformatter.cpp:101
 #, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action cancel"
-msgstr "Annulation de l'action de préalarme"
+msgstr "Annulation de l'action de pré-alarme"
 
 #: kalarmcalendar/kaeventformatter.cpp:103
 #, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action no error"
-msgstr "Action de préalarme sans erreur"
+msgstr "Action de pré-alarme sans erreur"
 
 #: kalarmcalendar/kaeventformatter.cpp:105
 #, kde-format

@@ -993,28 +993,19 @@ msgstr "Spustit při přihlášení"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-#| "should always be checked unless you intend to discontinue use of KAlarm.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
-"<p>Automaticky spustit KAlarm, jakmile spustíte KDE.</p><p>Tato volba by "
-"měla být vybrána vždy, kromě situace, že byste KAlarm nechtěli používat.</p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Run Mode"
+#, kde-format
 msgctxt "@label"
 msgid "Run mode"
-msgstr "Režim spouštění"
+msgstr ""
 
 #. i18n: ectx: whatsthis, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:138
@@ -1040,12 +1031,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:142
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option"
 msgid "Do not run"
-msgstr "Neopakovat"
+msgstr ""
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:147
@@ -5098,12 +5087,10 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:468
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Do not run"
-msgstr "Neopakovat"
+msgstr ""
 
 #: prefdlg.cpp:471
 #, kde-format
@@ -5114,12 +5101,10 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:474
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Activate <application>KAlarm</application>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr "Aktivovat <application>KAlarm</application>"
+msgstr ""
 
 #: prefdlg.cpp:481
 #, kde-format
@@ -5268,18 +5253,12 @@ msgstr ""
 "Příkaz pro vyvolání okna terminálu nebyl nalezen: <command>%1</command>"
 
 #: prefdlg.cpp:702
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "You should not uncheck this option unless you intend to discontinue use "
-#| "of <application>KAlarm</application>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "You should not check this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
-"Pokud si přejete <application>KAlarm</application> nadále používat, nemůžete "
-"tuto volbu deaktivovat."
 
 #: prefdlg.cpp:713
 #, kde-kuit-format
@@ -8641,22 +8620,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Počet minut před upomínkou pro probrání z uspání"
-
-#~ msgctxt "@label"
-#~ msgid "Suppress autostart at login"
-#~ msgstr "Potlačit automatické spuštění KAlarmu při přihlášení"
-
-#~ msgctxt "@option:check"
-#~ msgid "Start at login"
-#~ msgstr "Spustit při přihlášení"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid ""
-#~ "<para>Automatically start <application>KAlarm</application> whenever you "
-#~ "start KDE.</para><para>This option should always be checked unless you "
-#~ "intend to discontinue use of <application>KAlarm</application>.</para>"
-#~ msgstr ""
-#~ "<para>Automaticky spustí <application>KAlarm</application>, jakmile "
-#~ "spustíte KDE.</para><para>Tato volba by měla být vybrána vždy, kromě "
-#~ "situace, že byste <application>KAlarm</application> nechtěli používat.</"
-#~ "para>"
