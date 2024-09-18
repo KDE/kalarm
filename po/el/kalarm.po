@@ -208,20 +208,16 @@ msgstr[0] "1 ώρα"
 msgstr[1] "%1 ώρες"
 
 #: alarmtimewidget.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr "Σ&τις"
+msgstr "1 μέρα"
 
 #: alarmtimewidget.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "weeks"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "εβδομάδες"
+msgstr "1 εβδομάδα"
 
 #: alarmtimewidget.cpp:169
 #, fuzzy, kde-format
@@ -308,16 +304,12 @@ msgid "Cannot initialize audio system: %1"
 msgstr ""
 
 #: audioplayer_mpv.cpp:105 audioplayer_mpv.cpp:170
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
 msgstr ""
-"<para>Σφάλμα αναπαραγωγής αρχείου ήχου: <filename>%1</filename></para><para>"
+"<para>Σφάλμα αναπαραγωγής αρχείου ήχου <filename>%1</filename></para><para>"
 "%2</para>"
 
 #: audioplayer_mpv.cpp:132
@@ -4079,9 +4071,7 @@ msgid "Notify"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:127
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Defer"
+#, kde-format
 msgctxt "@label Deferral type"
 msgid "Deferral"
 msgstr "Αναβολή"
@@ -4219,12 +4209,10 @@ msgid "At login until %1"
 msgstr "Στη σύνδεση"
 
 #: kalarmcalendar/kaeventformatter.cpp:338
-#, fuzzy, kde-format
-#| msgctxt "@info n days"
-#| msgid "%1d"
+#, kde-format
 msgctxt "@info"
 msgid "%1"
-msgstr "%1d"
+msgstr "%1"
 
 #: kalarmcalendar/kaeventformatter.cpp:350
 #, fuzzy, kde-format
@@ -4823,11 +4811,10 @@ msgid "Enable"
 msgstr "Ενεργοποίηση"
 
 #: mainwindow.cpp:1682
-#, fuzzy, kde-format
-#| msgid "Disabled"
+#, kde-format
 msgctxt "@action"
 msgid "Disable"
-msgstr "Ανενεργό"
+msgstr "Απενεργοποίηση"
 
 #: messagedisplay.cpp:271
 #, kde-kuit-format
@@ -5469,17 +5456,13 @@ msgstr ""
 "Η εντολή επίκλησης του παραθύρου τερματικού δε βρέθηκε: <command>%1</command>"
 
 #: prefdlg.cpp:702
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "You should not uncheck this option unless you intend to discontinue use "
-#| "of <application>KAlarm</application>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "You should not check this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
-"Δεν πρέπει να απενεργοποιήσετε αυτή την επιλογή εκτός και αν σκοπεύετε να "
+"Δεν πρέπει να ενεργοποιήσετε αυτή την επιλογή εκτός και αν σκοπεύετε να "
 "πάψετε να χρησιμοποιείτε το <application>KAlarm</application>"
 
 #: prefdlg.cpp:713
