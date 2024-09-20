@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-14 00:41+0000\n"
-"PO-Revision-Date: 2024-09-13 20:27+0200\n"
+"PO-Revision-Date: 2024-09-19 19:07+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -1016,28 +1016,21 @@ msgstr "Автоматично стартиране при влизане"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-#| "should always be checked unless you intend to discontinue use of KAlarm.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
-"<p>Автоматично стартиране на KAlarm при влизане в KDE.</p><p>Отметката "
-"трябва да бъде винаги включена, освен ако не искате да ползвате KAlarm.</p>"
+"<p>Автоматично стартиране на KAlarm при стартиране на KDE.</p><p>Отметката "
+"трябва да бъде винаги включена, освен ако RunMode=Auto.</p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Run Mode"
+#, kde-format
 msgctxt "@label"
 msgid "Run mode"
-msgstr "Режим на работа"
+msgstr "Режим на стартиране"
 
 #. i18n: ectx: whatsthis, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:138
@@ -1046,30 +1039,26 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
 msgstr ""
+"Дали да се стартира KAlarm автоматично при влизане или ръчно или въобще да "
+"не се включва."
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:140
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Run automatically"
+#, kde-format
 msgctxt "@option"
 msgid "Run automatically"
 msgstr "Автоматично"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:141
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Run manually only"
+#, kde-format
 msgctxt "@option"
 msgid "Run manually only"
 msgstr "Само ръчно"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:142
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not run"
+#, kde-format
 msgctxt "@option"
 msgid "Do not run"
 msgstr "Да не се изпълнява"
