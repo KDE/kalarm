@@ -14,14 +14,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-14 00:41+0000\n"
-"PO-Revision-Date: 2024-08-09 03:37+0900\n"
+"PO-Revision-Date: 2024-09-23 21:24+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 24.08.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -972,25 +972,18 @@ msgstr "在登入時啟動"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-#| "should always be checked unless you intend to discontinue use of KAlarm.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
-"<p>當您啟動 KDE 時自動開始 KAlarm。</p> <p>這個選項應該被勾選，除非您不打算繼"
-"續使用 KAlarm。</p>"
+"<p>當您啟動 KDE 時自動開始 KAlarm。</p><p>RunMode=Auto 時這個選項應該總是設"
+"為 true，RunMode 非 Auto 時則應為 false。</p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Run Mode"
+#, kde-format
 msgctxt "@label"
 msgid "Run mode"
 msgstr "執行模式"
@@ -1001,30 +994,28 @@ msgstr "執行模式"
 msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
-msgstr ""
+msgstr "要在登入時自動執行 KAlarm、僅手動執行 KAlarm，還是不要執行 KAlarm。"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:140
 #, kde-format
 msgctxt "@option"
 msgid "Run automatically"
-msgstr ""
+msgstr "自動執行"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:141
 #, kde-format
 msgctxt "@option"
 msgid "Run manually only"
-msgstr ""
+msgstr "僅手動執行"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:142
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option"
 msgid "Do not run"
-msgstr "不重複"
+msgstr "不要執行"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:147
@@ -4915,7 +4906,7 @@ msgstr "執行模式"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run automatically"
-msgstr ""
+msgstr "自動執行"
 
 #: prefdlg.cpp:459
 #, kde-format
@@ -4923,13 +4914,13 @@ msgctxt "@info:tooltip"
 msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
-msgstr ""
+msgstr "登入時自動啟動 KAlarm。只有在勾選此選項時 KAlarm 才能正常運作。"
 
 #: prefdlg.cpp:462
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run manually only"
-msgstr ""
+msgstr "僅手動執行"
 
 #: prefdlg.cpp:465
 #, kde-format
@@ -4938,14 +4929,13 @@ msgid ""
 "Only run KAlarm manually, never automatically. KAlarm will only function "
 "when you manually start it."
 msgstr ""
+"僅手動執行 KAlarm，不要自動執行。KAlarm 只會在您有手動啟動它時才會正常運作。"
 
 #: prefdlg.cpp:468
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Do not run"
-msgstr "不重複"
+msgstr "不要執行"
 
 #: prefdlg.cpp:471
 #, kde-format
@@ -4953,15 +4943,13 @@ msgctxt "@info:tooltip"
 msgid ""
 "Stop using KAlarm. If you later run it again, it will then resume normal "
 "functioning."
-msgstr ""
+msgstr "停止使用 KAlarm。如果您之後再次執行它，KAlarm 則會恢復正常運作。"
 
 #: prefdlg.cpp:474
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Activate <application>KAlarm</application>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr "啟動 <application>KAlarm</application>"
+msgstr "要已普通方式執行 <application>KAlarm</application>"
 
 #: prefdlg.cpp:481
 #, kde-format
@@ -5105,18 +5093,14 @@ msgid "Command to invoke terminal window not found: <command>%1</command>"
 msgstr "找不到啟動終端機視窗的指令：<command>%1</command>"
 
 #: prefdlg.cpp:702
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "You should not uncheck this option unless you intend to discontinue use "
-#| "of <application>KAlarm</application>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "You should not check this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
-"除非您不打算繼續使用 <application>KAlarm</application>，否則不建議取消此選"
-"項。"
+"除非您不打算繼續使用 <application>KAlarm</application>，否則不建議取消勾選此"
+"選項。"
 
 #: prefdlg.cpp:713
 #, kde-kuit-format
@@ -5124,7 +5108,7 @@ msgctxt "@info"
 msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
-msgstr ""
+msgstr "這會防止 <application>KAlarm</application> 運作<nl/>除非您手動啟動它。"
 
 #: prefdlg.cpp:758
 #, kde-kuit-format
@@ -8338,15 +8322,7 @@ msgid "Cannot schedule wakeup time for a date-only alarm"
 msgstr "無法在日期型鬧鐘安排喚醒時間"
 
 #: wakedlg.cpp:150
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>This wakeup will cancel any existing wakeup which has been set by "
-#| "KAlarm or any other application, because your computer can only schedule "
-#| "a single wakeup time.</para><para><b>Note:</b> Wake From Suspend is not "
-#| "supported at all on some computers, especially older ones, and some "
-#| "computers only support setting a wakeup time up to 24 hours ahead. You "
-#| "may wish to set up a test alarm to check your system's capability.</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>This wakeup will cancel any existing wakeup which has been set by "
@@ -8357,9 +8333,9 @@ msgid ""
 "test alarm to check your system's capability.</note></para>"
 msgstr ""
 "<para>這個喚醒設定會取消掉所有之前 KAlarm 或其它應用程式所設定的喚醒設定，因"
-"為您的電腦只能安排一個喚醒時間。</para> <para><b>注意：</b>從休眠中喚醒的功能"
-"在某些電腦上並沒有完整支援，特別是舊式的電腦，有的電腦只支援將喚醒時間設在廿"
-"四小時內。您可以先試著設定一組測試鬧鐘來檢查您的系統相容性。</para> "
+"為您的電腦只能安排一個喚醒時間。</para> <para><note>從休眠中喚醒的功能在某些"
+"電腦上並沒有完整支援，特別是舊式的電腦，有的電腦只支援將喚醒時間設在廿四小時"
+"內。您可以先試著設定一組測試鬧鐘來檢查您的系統相容性。</note></para>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: wakedlg.ui:21
