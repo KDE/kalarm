@@ -123,6 +123,24 @@ void AudioPlayer::fadeStep()
     }
 }
 
+/******************************************************************************
+* Set the status to a non-error value.
+*/
+void AudioPlayer::setOkStatus(Status stat)
+{
+    Q_ASSERT(stat != Error);
+    mStatus = stat;
+}
+
+/******************************************************************************
+* Set the status to Error, and set the error message to display to the user.
+*/
+void AudioPlayer::setErrorStatus(const QString& errorMessage)
+{
+    mError = errorMessage;
+    mStatus = Error;
+}
+
 QString AudioPlayer::popError()
 {
     const QString err = mError;

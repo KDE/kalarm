@@ -33,7 +33,7 @@ AudioPlayerVlc::AudioPlayerVlc(Type type, const QUrl& audioFile, float volume, f
     mAudioInstance = libvlc_new(1, argv);
     if (!mAudioInstance)
     {
-        mError = i18nc("@info", "Cannot initialize audio system");
+        setErrorStatus(i18nc("@info", "Cannot initialize audio system"));
         qCCritical(KALARM_LOG) << "AudioPlayer: Error initializing VLC audio";
         return;
     }
@@ -43,7 +43,7 @@ AudioPlayerVlc::AudioPlayerVlc(Type type, const QUrl& audioFile, float volume, f
                           : libvlc_media_new_location(mAudioInstance, mFile.toLocal8Bit().constData());
     if (!media)
     {
-        mError = xi18nc("@info", "<para>Error opening audio file: <filename>%1</filename></para>", mFile);
+        setErrorStatus(xi18nc("@info", "<para>Error opening audio file: <filename>%1</filename></para>", mFile));
         qCCritical(KALARM_LOG) << "AudioPlayer: Error opening audio file:" << mFile;
         return;
     }
@@ -57,7 +57,7 @@ AudioPlayerVlc::AudioPlayerVlc(Type type, const QUrl& audioFile, float volume, f
     mAudioPlayer = libvlc_media_list_player_new(mAudioInstance);
     if (!mAudioPlayer)
     {
-        mError = i18nc("@info", "Cannot initialize audio player");
+        setErrorStatus(i18nc("@info", "Cannot initialize audio player"));
         qCCritical(KALARM_LOG) << "AudioPlayer: Error initializing audio list player";
         return;
     }
@@ -66,7 +66,7 @@ AudioPlayerVlc::AudioPlayerVlc(Type type, const QUrl& audioFile, float volume, f
     libvlc_media_player_t* mediaPlayer = libvlc_media_player_new(mAudioInstance);
     if (!mediaPlayer)
     {
-        mError = i18nc("@info", "Cannot initialize audio player");
+        setErrorStatus(i18nc("@info", "Cannot initialize audio player"));
         qCCritical(KALARM_LOG) << "AudioPlayer: Error initializing audio player";
         libvlc_media_list_player_release(mAudioPlayer);
         mAudioPlayer = nullptr;
@@ -78,7 +78,7 @@ AudioPlayerVlc::AudioPlayerVlc(Type type, const QUrl& audioFile, float volume, f
     if (mVolume > 0)
         internalSetVolume();
 
-    mStatus = Ready;
+    setOkStatus(Ready);
 }
 
 /******************************************************************************
@@ -140,7 +140,7 @@ bool AudioPlayerVlc::play()
 
     if (libvlc_media_list_player_play_item_at_index(mAudioPlayer, 0) < 0)
     {
-        mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para>", mFile);
+        setErrorStatus(xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para>", mFile));
         qCWarning(KALARM_LOG) << "AudioPlayerVlc::play: Failed to play sound with VLC:" << mFile;
         Q_EMIT finished(false);
         return false;
@@ -153,7 +153,7 @@ bool AudioPlayerVlc::play()
     }
     if (mCheckPlayTimer)
         mCheckPlayTimer->start(1000);
-    mStatus = Playing;
+    setOkStatus(Playing);
     return true;
 }
 
@@ -194,7 +194,7 @@ void AudioPlayerVlc::finish_callback(const libvlc_event_t* event, void* userdata
 */
 void AudioPlayerVlc::playFinished(uint32_t event)
 {
-    mStatus = Ready;
+    setOkStatus(Ready);
     mFadeStart = 0;
     if (mCheckPlayTimer)
         mCheckPlayTimer->stop();
@@ -208,7 +208,7 @@ void AudioPlayerVlc::playFinished(uint32_t event)
         default:
         {
             qCCritical(KALARM_LOG) << "AudioPlayerVlc::playFinished: Play failure:" << mFile;
-            mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para>", mFile);
+            setErrorStatus(xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para>", mFile));
             result = false;
             break;
         }

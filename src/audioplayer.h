@@ -47,18 +47,26 @@ protected:
     AudioPlayer(Type, const QUrl& audioFile, float volume, float fadeVolume, int fadeSeconds, QObject* parent = nullptr);
     virtual void internalSetVolume() = 0;
 
-    static AudioPlayer*    mInstance;
-    static QString         mError;
-    QString                mFile;
-    float                  mVolume;        // configured end volume
-    float                  mFadeVolume;    // configured start volume
-    float                  mFadeStep;
-    float                  mCurrentVolume;
-    QTimer*                mFadeTimer {nullptr};
-    time_t                 mFadeStart {0};
-    int                    mFadeSeconds;   // configured time to fade from mFadeVolume to mVolume
-    Status                 mStatus {Error};
-    bool                   mNoFinishedSignal {false};
+    /** Set the status to a non-error value. */
+    void setOkStatus(Status status);
+
+    /** Set the status to Error, and set the error message to display to the user. */
+    void setErrorStatus(const QString& errorMessage);
+
+    static AudioPlayer* mInstance;
+    QString             mFile;
+    float               mVolume;        // configured end volume
+    float               mFadeVolume;    // configured start volume
+    float               mFadeStep;
+    float               mCurrentVolume;
+    QTimer*             mFadeTimer {nullptr};
+    time_t              mFadeStart {0};
+    int                 mFadeSeconds;   // configured time to fade from mFadeVolume to mVolume
+    bool                mNoFinishedSignal {false};
+
+private:
+    static QString      mError;
+    Status              mStatus {Error};
 };
 
 
