@@ -33,14 +33,14 @@ public:
     static bool providesFade();
 
 public Q_SLOTS:
-    virtual bool    play() = 0;
-    virtual void    stop() = 0;
+    virtual bool play() = 0;
+    virtual void stop() = 0;
 
 Q_SIGNALS:
-    void    finished(bool ok);
+    void finished(bool ok);
 
 private Q_SLOTS:
-    void    fadeStep();
+    void fadeStep();
 
 protected:
     AudioPlayer(Type, const QUrl& audioFile, QObject* parent = nullptr);

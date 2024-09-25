@@ -11,8 +11,8 @@
 #include "audioplayer.h"
 
 struct libvlc_instance_t;
-struct libvlc_media_list_t;
-struct libvlc_media_list_player_t;
+struct libvlc_media_t;
+struct libvlc_media_player_t;
 struct libvlc_event_t;
 
 class AudioPlayerVlc : public AudioPlayer
@@ -24,12 +24,12 @@ public:
     static bool backendProvidesFade() { return true; }
 
 public Q_SLOTS:
-    bool    play() override;
-    void    stop() override;
+    bool play() override;
+    void stop() override;
 
 private Q_SLOTS:
-    void    playFinished(uint32_t event);
-    void    checkPlay();
+    void playFinished(uint32_t event);
+    void checkPlay();
 
 protected:
     void internalSetVolume() override;
@@ -37,11 +37,10 @@ protected:
 private:
     static void finish_callback(const libvlc_event_t* event, void* data);
 
-    libvlc_instance_t*          mAudioInstance {nullptr};
-    libvlc_media_list_t*        mMediaList {nullptr};
-    libvlc_media_list_player_t* mAudioPlayer {nullptr};
-    QTimer*                     mCheckPlayTimer {nullptr};
-    bool                        mPlayedAlready {false};
+    libvlc_instance_t*     mAudioInstance {nullptr};
+    libvlc_media_t*        mAudioMedia {nullptr};
+    libvlc_media_player_t* mAudioPlayer {nullptr};
+    QTimer*                mCheckPlayTimer {nullptr};
 };
 
 // vim: et sw=4:

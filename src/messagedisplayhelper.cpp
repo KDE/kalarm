@@ -1075,11 +1075,13 @@ void AudioPlayerThread::checkAudioPlay()
                 stop();
                 return;
             }
-            if (mRepeatPause > 0)
+            if (mRepeatPause >= 0)
             {
-                // Pause before playing the file again
+                // Pause before playing the file again.
+                // Set a minimum pause of 1 second: VLC at least can't handle 0.
                 mPausing = true;
-                QTimer::singleShot(mRepeatPause * 1000, this, &AudioPlayerThread::checkAudioPlay);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
+                const int pause = mRepeatPause > 1 ? mRepeatPause : 1;
+                QTimer::singleShot(pause * 1000, this, &AudioPlayerThread::checkAudioPlay);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
                 mMutex.unlock();
                 return;
             }

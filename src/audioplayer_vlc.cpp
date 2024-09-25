@@ -38,45 +38,15 @@ AudioPlayerVlc::AudioPlayerVlc(Type type, const QUrl& audioFile, float volume, f
         return;
     }
 
-    libvlc_media_t* media = audioFile.isLocalFile()
-                          ? libvlc_media_new_path(mAudioInstance, QFile::encodeName(mFile).constData())
-                          : libvlc_media_new_location(mAudioInstance, mFile.toLocal8Bit().constData());
-    if (!media)
+    mAudioMedia = audioFile.isLocalFile()
+                ? libvlc_media_new_path(mAudioInstance, QFile::encodeName(mFile).constData())
+                : libvlc_media_new_location(mAudioInstance, mFile.toLocal8Bit().constData());
+    if (!mAudioMedia)
     {
         setErrorStatus(xi18nc("@info", "<para>Error opening audio file: <filename>%1</filename></para>", mFile));
         qCCritical(KALARM_LOG) << "AudioPlayer: Error opening audio file:" << mFile;
         return;
     }
-
-    // It is necessary to use a libVLC media list in order to repeat audio files,
-    // since it doesn't seem to be possible to repeat an audio file using a simple
-    // libVLC media player.
-    mMediaList = libvlc_media_list_new(mAudioInstance);
-    libvlc_media_list_add_media(mMediaList, media);
-    libvlc_media_release(media);
-    mAudioPlayer = libvlc_media_list_player_new(mAudioInstance);
-    if (!mAudioPlayer)
-    {
-        setErrorStatus(i18nc("@info", "Cannot initialize audio player"));
-        qCCritical(KALARM_LOG) << "AudioPlayer: Error initializing audio list player";
-        return;
-    }
-    libvlc_media_list_player_set_media_list(mAudioPlayer, mMediaList);
-
-    libvlc_media_player_t* mediaPlayer = libvlc_media_player_new(mAudioInstance);
-    if (!mediaPlayer)
-    {
-        setErrorStatus(i18nc("@info", "Cannot initialize audio player"));
-        qCCritical(KALARM_LOG) << "AudioPlayer: Error initializing audio player";
-        libvlc_media_list_player_release(mAudioPlayer);
-        mAudioPlayer = nullptr;
-        return;
-    }
-    libvlc_media_player_set_role(mediaPlayer, libvlc_role_Notification);
-    libvlc_media_list_player_set_media_player(mAudioPlayer, mediaPlayer);
-
-    if (mVolume > 0)
-        internalSetVolume();
 
     setOkStatus(Ready);
 }
@@ -94,16 +64,13 @@ AudioPlayerVlc::~AudioPlayerVlc()
     }
     if (mAudioPlayer)
     {
-        libvlc_media_player_t* mediaPlayer = libvlc_media_list_player_get_media_player(mAudioPlayer);
-        if (mediaPlayer)
-            libvlc_media_player_release(mediaPlayer);
-        libvlc_media_list_player_release(mAudioPlayer);
+        libvlc_media_player_release(mAudioPlayer);
         mAudioPlayer = nullptr;
     }
-    if (mMediaList)
+    if (mAudioMedia)
     {
-        libvlc_media_list_release(mMediaList);
-        mMediaList = nullptr;
+        libvlc_media_release(mAudioMedia);
+        mAudioMedia = nullptr;
     }
     if (mAudioInstance)
     {
@@ -118,34 +85,50 @@ AudioPlayerVlc::~AudioPlayerVlc()
 */
 bool AudioPlayerVlc::play()
 {
-    if (!mAudioPlayer)
+    if (mAudioPlayer)
         return false;
 
     qCDebug(KALARM_LOG) << "AudioPlayerVlc::play";
-    if (!mPlayedAlready)
-    {
-        libvlc_media_player_t* mediaPlayer = libvlc_media_list_player_get_media_player(mAudioPlayer);
-        libvlc_event_manager_t* eventManager = libvlc_media_player_event_manager(mediaPlayer);
-        if (libvlc_event_attach(eventManager, libvlc_MediaPlayerStopped, &finish_callback, this))
-        {
-            qCWarning(KALARM_LOG) << "AudioPlayerVlc: Error setting completion callback";
-            if (!mCheckPlayTimer)
-            {
-                mCheckPlayTimer = new QTimer(this);
-                connect(mCheckPlayTimer, &QTimer::timeout, this, &AudioPlayerVlc::checkPlay);
-            }
-        }
-        libvlc_event_attach(eventManager, libvlc_MediaPlayerEncounteredError, &finish_callback, this);
-    }
 
-    if (libvlc_media_list_player_play_item_at_index(mAudioPlayer, 0) < 0)
+    // Note that libVLC has some issues which require workarounds to allow
+    // audio files to be replayed.
+    // There doesn't seem to be any way of replaying the audio file if the
+    // media player is reused, so it's necessary to create a new media player
+    // each time the audio file is played.
+    // Using a media list player instead can allow replaying to work, but it
+    // fails on some systems with a VLC "cache_read stream error".
+    mAudioPlayer = libvlc_media_player_new_from_media(mAudioMedia);
+    if (!mAudioPlayer)
+    {
+        setErrorStatus(i18nc("@info", "Cannot initialize audio player"));
+        qCCritical(KALARM_LOG) << "AudioPlayer: Error initializing audio player";
+        return false;
+    }
+    libvlc_media_player_set_role(mAudioPlayer, libvlc_role_Notification);
+
+    if (mVolume > 0)
+        internalSetVolume();
+
+    libvlc_event_manager_t* eventManager = libvlc_media_player_event_manager(mAudioPlayer);
+    if (libvlc_event_attach(eventManager, libvlc_MediaPlayerStopped, &finish_callback, this))
+    {
+        qCWarning(KALARM_LOG) << "AudioPlayerVlc: Error setting completion callback";
+        if (!mCheckPlayTimer)
+        {
+            mCheckPlayTimer = new QTimer(this);
+            connect(mCheckPlayTimer, &QTimer::timeout, this, &AudioPlayerVlc::checkPlay);
+        }
+    }
+    // Does the Error event need to be watched??
+    libvlc_event_attach(eventManager, libvlc_MediaPlayerEncounteredError, &finish_callback, this);
+
+    if (libvlc_media_player_play(mAudioPlayer) < 0)
     {
         setErrorStatus(xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para>", mFile));
         qCWarning(KALARM_LOG) << "AudioPlayerVlc::play: Failed to play sound with VLC:" << mFile;
         Q_EMIT finished(false);
         return false;
     }
-    mPlayedAlready = true;
     if (mFadeTimer  &&  mVolume != mCurrentVolume)
     {
         mFadeStart = time(nullptr);
@@ -163,9 +146,7 @@ bool AudioPlayerVlc::play()
 void AudioPlayerVlc::internalSetVolume()
 {
     qCDebug(KALARM_LOG) << "AudioPlayerVlc::internalSetVolume" << mCurrentVolume;
-    libvlc_media_player_t* mediaPlayer = libvlc_media_list_player_get_media_player(mAudioPlayer);
-    if (mediaPlayer)
-        libvlc_audio_set_volume(mediaPlayer, static_cast<int>(mCurrentVolume * 100));
+    libvlc_audio_set_volume(mAudioPlayer, static_cast<int>(mCurrentVolume * 100));
 }
 
 /******************************************************************************
@@ -173,12 +154,8 @@ void AudioPlayerVlc::internalSetVolume()
 */
 void AudioPlayerVlc::checkPlay()
 {
-    if (!libvlc_media_list_player_is_playing(mAudioPlayer))
-    {
+    if (!libvlc_media_player_is_playing(mAudioPlayer))
         playFinished(libvlc_MediaPlayerStopped);
-        if (mCheckPlayTimer)
-            mCheckPlayTimer->stop();
-    }
 }
 
 /******************************************************************************
@@ -187,6 +164,8 @@ void AudioPlayerVlc::checkPlay()
 void AudioPlayerVlc::finish_callback(const libvlc_event_t* event, void* userdata)
 {
     QMetaObject::invokeMethod(static_cast<AudioPlayerVlc*>(userdata), "playFinished", Q_ARG(uint32_t, event->type));
+    if (event->type == libvlc_MediaPlayerEncounteredError)
+        qCWarning(KALARM_LOG) << "AudioPlayerVlc: Error while playing";
 }
 
 /******************************************************************************
@@ -203,6 +182,11 @@ void AudioPlayerVlc::playFinished(uint32_t event)
     {
         case libvlc_MediaPlayerStopped:
             qCDebug(KALARM_LOG) << "AudioPlayerVlc::playFinished:" << mFile;
+            if (mAudioPlayer)
+            {
+                libvlc_media_player_release(mAudioPlayer);
+                mAudioPlayer = nullptr;
+            }
             result = true;
             break;
         default:
@@ -227,8 +211,8 @@ void AudioPlayerVlc::stop()
     qCDebug(KALARM_LOG) << "AudioPlayerVlc::stop";
     if (mCheckPlayTimer)
         mCheckPlayTimer->stop();
-    if (mAudioPlayer  &&  libvlc_media_list_player_is_playing(mAudioPlayer))
-        libvlc_media_list_player_stop(mAudioPlayer);
+    if (mAudioPlayer  &&  libvlc_media_player_is_playing(mAudioPlayer))
+        libvlc_media_player_stop(mAudioPlayer);
 }
 
 #include "moc_audioplayer_vlc.cpp"
