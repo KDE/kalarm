@@ -68,6 +68,8 @@ AudioPlayerVlc::AudioPlayerVlc(Type type, const QUrl& audioFile, float volume, f
     {
         mError = i18nc("@info", "Cannot initialize audio player");
         qCCritical(KALARM_LOG) << "AudioPlayer: Error initializing audio player";
+        libvlc_media_list_player_release(mAudioPlayer);
+        mAudioPlayer = nullptr;
         return;
     }
     libvlc_media_player_set_role(mediaPlayer, libvlc_role_Notification);
