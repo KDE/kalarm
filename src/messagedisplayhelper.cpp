@@ -1049,10 +1049,17 @@ void AudioPlayerThread::execute()
 void AudioPlayerThread::checkAudioPlay()
 {
     mMutex.lock();
-    if (mPlayer->status() != AudioPlayer::Ready)
+    switch (mPlayer->status())
     {
-        mMutex.unlock();
-        return;
+        case AudioPlayer::Ready:
+            break;
+        case AudioPlayer::Error:
+            mMutex.unlock();
+            stop();
+            return;
+        default:
+            mMutex.unlock();
+            return;
     }
     if (mPausing)
         mPausing = false;
