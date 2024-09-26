@@ -1307,19 +1307,19 @@ void EmailPrefTab::setEmailBccAddress(bool useSystemSettings, const QString& add
     mEmailBccAddress->setText(useSystemSettings ? QString() : address.trimmed());
 }
 
-void EmailPrefTab::slotEmailClientChanged(QAbstractButton* button)
+void EmailPrefTab::slotEmailClientChanged(QAbstractButton*, QAbstractButton* button)
 {
     if (mEmailCopyToKMail)
         mEmailCopyToKMail->setEnabled(button == mSendmailButton  &&  Preferences::useAkonadiIfAvailable());
 }
 
-void EmailPrefTab::slotFromAddrChanged(QAbstractButton* button)
+void EmailPrefTab::slotFromAddrChanged(QAbstractButton*, QAbstractButton* button)
 {
     mEmailAddress->setEnabled(button == mFromAddrButton);
     mAddressChanged = true;
 }
 
-void EmailPrefTab::slotBccAddrChanged(QAbstractButton* button)
+void EmailPrefTab::slotBccAddrChanged(QAbstractButton*, QAbstractButton* button)
 {
     mEmailBccAddress->setEnabled(button == mBccAddrButton);
     mBccAddressChanged = true;
@@ -2223,13 +2223,13 @@ void ViewPrefTab::slotTooltipTimeToToggled(bool on)
     mTooltipTimeToPrefixLabel->setEnabled(on);
 }
 
-void ViewPrefTab::slotAutoHideSysTrayChanged(QAbstractButton* button)
+void ViewPrefTab::slotAutoHideSysTrayChanged(QAbstractButton*, QAbstractButton* button)
 {
     if (mAutoHideSystemTray)
         mAutoHideSystemTrayPeriod->setEnabled(mAutoHideSystemTray->id(button) == 2);
 }
 
-void ViewPrefTab::slotWindowPosChanged(QAbstractButton* button)
+void ViewPrefTab::slotWindowPosChanged(QAbstractButton*, QAbstractButton* button)
 {
     const bool enable = mWindowPosition ? mWindowPosition->id(button) : true;
     mWindowButtonDelay->setEnabled(enable);

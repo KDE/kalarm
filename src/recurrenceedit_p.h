@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit_p.h  -  private classes for recurrenceedit.cpp
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -137,7 +137,7 @@ protected:
     virtual void     daySelected(int /*day*/)  { }
 
 protected Q_SLOTS:
-    virtual void     clicked(QAbstractButton*);
+    virtual void     clicked(QAbstractButton*, QAbstractButton*);
 
 private Q_SLOTS:
     virtual void     slotDaySelected(int index);
@@ -186,7 +186,7 @@ protected:
     void             daySelected(int day) override;
 
 protected Q_SLOTS:
-    void             clicked(QAbstractButton*) override;
+    void             clicked(QAbstractButton*, QAbstractButton*) override;
 
 private Q_SLOTS:
     void             enableFeb29();

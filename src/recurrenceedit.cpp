@@ -388,9 +388,10 @@ QWidget* RecurrenceEdit::checkData(const KADateTime& startDateTime, QString& err
 }
 
 /******************************************************************************
-* Called when a recurrence period radio button is clicked.
+* Called when a recurrence period radio button is clicked, or the selection
+* changes.
 */
-void RecurrenceEdit::periodClicked(QAbstractButton* button)
+void RecurrenceEdit::periodClicked(QAbstractButton*, QAbstractButton* button)
 {
     const RepeatType oldType = mRuleButtonType;
     const bool none     = (button == mNoneButton);
@@ -466,7 +467,8 @@ void RecurrenceEdit::slotAnyTimeToggled(bool on)
 }
 
 /******************************************************************************
-* Called when a recurrence range type radio button is clicked.
+* Called when a recurrence range type radio button is clicked, or the selection
+* changes.
 */
 void RecurrenceEdit::rangeTypeClicked()
 {
@@ -1425,7 +1427,7 @@ void MonthYearRule::enableSelection(DayPosType type)
     mDayOfWeekCombo->setEnabled(!date);
 }
 
-void MonthYearRule::clicked(QAbstractButton* button)
+void MonthYearRule::clicked(QAbstractButton*, QAbstractButton* button)
 {
     enableSelection(button == mDayButton ? DATE : POS);
 }
@@ -1629,9 +1631,9 @@ QWidget* YearlyRule::validate(QString& errorMessage)
 * Called when a yearly recurrence type radio button is clicked,
 * to enable/disable month checkboxes as appropriate for the date selected.
 */
-void YearlyRule::clicked(QAbstractButton* button)
+void YearlyRule::clicked(QAbstractButton* oldButton, QAbstractButton* button)
 {
-    MonthYearRule::clicked(button);
+    MonthYearRule::clicked(oldButton, button);
     daySelected(buttonType(button) == DATE ? date() : 1);
 }
 

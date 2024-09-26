@@ -165,9 +165,9 @@ protected:
     void showEvent(QShowEvent*) override;
 
 private Q_SLOTS:
-    void         slotEmailClientChanged(QAbstractButton*);
-    void         slotFromAddrChanged(QAbstractButton*);
-    void         slotBccAddrChanged(QAbstractButton*);
+    void         slotEmailClientChanged(QAbstractButton*, QAbstractButton*);
+    void         slotFromAddrChanged(QAbstractButton*, QAbstractButton*);
+    void         slotBccAddrChanged(QAbstractButton*, QAbstractButton*);
     void         slotAddressChanged()    { mAddressChanged = true; }
 
 private:
@@ -253,8 +253,8 @@ private Q_SLOTS:
     void         slotTooltipMaxToggled(bool);
     void         slotTooltipTimeToggled(bool);
     void         slotTooltipTimeToToggled(bool);
-    void         slotAutoHideSysTrayChanged(QAbstractButton*);
-    void         slotWindowPosChanged(QAbstractButton*);
+    void         slotAutoHideSysTrayChanged(QAbstractButton*, QAbstractButton*);
+    void         slotWindowPosChanged(QAbstractButton*, QAbstractButton*);
 
 private:
     void         setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix);

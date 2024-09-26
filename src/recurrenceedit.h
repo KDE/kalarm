@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2024 David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  SPDX-FileCopyrightText: 2000, 2001 Cornelius Schumacher <schumacher@kde.org>
@@ -95,7 +95,7 @@ protected:
     void          showEvent(QShowEvent*) override;
 
 private Q_SLOTS:
-    void          periodClicked(QAbstractButton*);
+    void          periodClicked(QAbstractButton*, QAbstractButton*);
     void          rangeTypeClicked();
     void          repeatCountChanged(int value);
     void          slotAnyTimeToggled(bool);
