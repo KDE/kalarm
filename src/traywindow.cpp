@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -61,38 +61,29 @@ TrayWindow::TrayWindow(MainWindow* parent)
     setStatus(KStatusNotifierItem::Active);
     // Set up the context menu
     mActionEnabled = KAlarm::createAlarmEnableAction(this);
-    addAction(QStringLiteral("tAlarmsEnable"), mActionEnabled);
     contextMenu()->addAction(mActionEnabled);
     connect(theApp(), &KAlarmApp::alarmEnabledToggled, this, &TrayWindow::setEnabledStatus);
     contextMenu()->addSeparator();
 
     mActionNew = new NewAlarmAction(false, i18nc("@action", "New Alarm"), this);
-    addAction(QStringLiteral("tNew"), mActionNew);
     contextMenu()->addAction(mActionNew);
     connect(mActionNew, &NewAlarmAction::selected, this, &TrayWindow::slotNewAlarm);
     connect(mActionNew, &NewAlarmAction::selectedTemplate, this, &TrayWindow::slotNewFromTemplate);
     contextMenu()->addSeparator();
 
     QAction* a = KAlarm::createStopPlayAction(this);
-    addAction(QStringLiteral("tStopPlay"), a);
     contextMenu()->addAction(a);
     QObject::connect(theApp(), &KAlarmApp::audioPlaying, a, &QAction::setVisible);
     QObject::connect(theApp(), &KAlarmApp::audioPlaying, this, &TrayWindow::updateStatus);
 
     a = KAlarm::createSpreadWindowsAction(this);
-    addAction(QStringLiteral("tSpread"), a);
     contextMenu()->addAction(a);
     contextMenu()->addSeparator();
     contextMenu()->addAction(KStandardAction::preferences(this, &TrayWindow::slotPreferences, this));
 
     // Disable standard quit behaviour. We have to intercept the quit event
     // (which triggers KStatusNotifierItem to quit unconditionally).
-    QAction* act = action(QStringLiteral("quit"));
-    if (act)
-    {
-        disconnect(act, &QAction::triggered, this, nullptr);
-        connect(act, &QAction::triggered, this, &TrayWindow::slotQuit);
-    }
+    connect(this, &KStatusNotifierItem::quitRequested, this, &TrayWindow::slotQuit);
 
     // Set icon to correspond with the alarms enabled menu status
     setEnabledStatus(theApp()->alarmsEnabled());
@@ -175,6 +166,7 @@ void TrayWindow::slotPreferences()
 */
 void TrayWindow::slotQuit()
 {
+    abortQuit();    // cancel the default quit action
     // Note: QTimer::singleShot(0, ...) never calls the slot.
     QTimer::singleShot(1, this, &TrayWindow::slotQuitAfter);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
