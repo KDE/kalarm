@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 00:41+0000\n"
+"POT-Creation-Date: 2024-09-26 00:39+0000\n"
 "PO-Revision-Date: 2024-01-27 18:05+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -290,19 +290,19 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "Время напоминания уже прошло"
 
-#: audioplayer_mpv.cpp:40 audioplayer_vlc.cpp:36
+#: audioplayer_mpv.cpp:41 audioplayer_vlc.cpp:36
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
 msgstr ""
 
-#: audioplayer_mpv.cpp:48 audioplayer_mpv.cpp:56
+#: audioplayer_mpv.cpp:49 audioplayer_mpv.cpp:57
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
 msgstr ""
 
-#: audioplayer_mpv.cpp:105 audioplayer_mpv.cpp:170
+#: audioplayer_mpv.cpp:106 audioplayer_mpv.cpp:171
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -315,7 +315,7 @@ msgstr ""
 "<para>Ошибка воспроизведения звукового файла: <filename>%1</filename></"
 "para><para>%2</para>"
 
-#: audioplayer_mpv.cpp:132
+#: audioplayer_mpv.cpp:133
 #, kde-format
 msgctxt "@info"
 msgid "Cannot set the audio volume: %1"
@@ -333,13 +333,13 @@ msgstr ""
 "<para>Ошибка воспроизведения звукового файла: <filename>%1</filename></"
 "para><para>%2</para>"
 
-#: audioplayer_vlc.cpp:60 audioplayer_vlc.cpp:69
+#: audioplayer_vlc.cpp:103
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr ""
 
-#: audioplayer_vlc.cpp:141 audioplayer_vlc.cpp:209
+#: audioplayer_vlc.cpp:127 audioplayer_vlc.cpp:195
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""

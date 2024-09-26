@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 00:41+0000\n"
+"POT-Creation-Date: 2024-09-26 00:39+0000\n"
 "PO-Revision-Date: 2021-05-15 16:59+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -307,19 +307,19 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "Timpul alarmei a expirat deja"
 
-#: audioplayer_mpv.cpp:40 audioplayer_vlc.cpp:36
+#: audioplayer_mpv.cpp:41 audioplayer_vlc.cpp:36
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
 msgstr ""
 
-#: audioplayer_mpv.cpp:48 audioplayer_mpv.cpp:56
+#: audioplayer_mpv.cpp:49 audioplayer_mpv.cpp:57
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
 msgstr ""
 
-#: audioplayer_mpv.cpp:105 audioplayer_mpv.cpp:170
+#: audioplayer_mpv.cpp:106 audioplayer_mpv.cpp:171
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error attaching file: <filename>%1</filename>"
@@ -328,7 +328,7 @@ msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
 msgstr "Eroare la atașarea fișierului: <filename>%1</filename>"
 
-#: audioplayer_mpv.cpp:132
+#: audioplayer_mpv.cpp:133
 #, kde-format
 msgctxt "@info"
 msgid "Cannot set the audio volume: %1"
@@ -342,13 +342,13 @@ msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr "Eroare la atașarea fișierului: <filename>%1</filename>"
 
-#: audioplayer_vlc.cpp:60 audioplayer_vlc.cpp:69
+#: audioplayer_vlc.cpp:103
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr ""
 
-#: audioplayer_vlc.cpp:141 audioplayer_vlc.cpp:209
+#: audioplayer_vlc.cpp:127 audioplayer_vlc.cpp:195
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error attaching file: <filename>%1</filename>"
