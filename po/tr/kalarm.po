@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-10 02:28+0000\n"
+"POT-Creation-Date: 2024-09-26 02:30+0000\n"
 "PO-Revision-Date: 2024-08-01 13:02+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -297,13 +297,13 @@ msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr "<para>Ses dosyası açılırken hata: <filename>%1</filename></para>"
 
-#: audioplayer.cpp:99 audioplayer.cpp:108
+#: audioplayer.cpp:164
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr "Ses çalar ilklendirilemiyor"
 
-#: audioplayer.cpp:201 audioplayer.cpp:281
+#: audioplayer.cpp:188 audioplayer.cpp:266
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"

@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-10 02:28+0000\n"
+"POT-Creation-Date: 2024-09-26 02:30+0000\n"
 "PO-Revision-Date: 2024-04-18 16:04+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -310,7 +310,7 @@ msgstr ""
 "<para>Virhe toistettaessa äänitiedostoa: <filename>%1</filename></para><para>"
 "%2</para>"
 
-#: audioplayer.cpp:99 audioplayer.cpp:108
+#: audioplayer.cpp:164
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Cannot initialize audio player: %1"
@@ -318,7 +318,7 @@ msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr "Äänisoitinta ei saada valmisteltua: %1"
 
-#: audioplayer.cpp:201 audioplayer.cpp:281
+#: audioplayer.cpp:188 audioplayer.cpp:266
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""

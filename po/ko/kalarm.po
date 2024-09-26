@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-10 02:28+0000\n"
+"POT-Creation-Date: 2024-09-26 02:30+0000\n"
 "PO-Revision-Date: 2023-07-23 23:20+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -294,13 +294,13 @@ msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr "파일 첨부 오류: <filename>%1</filename>"
 
-#: audioplayer.cpp:99 audioplayer.cpp:108
+#: audioplayer.cpp:164
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr ""
 
-#: audioplayer.cpp:201 audioplayer.cpp:281
+#: audioplayer.cpp:188 audioplayer.cpp:266
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error attaching file: <filename>%1</filename>"

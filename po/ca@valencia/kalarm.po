@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-10 02:28+0000\n"
+"POT-Creation-Date: 2024-09-26 02:30+0000\n"
 "PO-Revision-Date: 2024-07-31 11:53+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -294,13 +294,13 @@ msgstr ""
 "<para>S'ha produït un error en reproduir el fitxer d'àudio: <filename>%1</"
 "filename></para>"
 
-#: audioplayer.cpp:99 audioplayer.cpp:108
+#: audioplayer.cpp:164
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr "No s'ha pogut restablir el reproductor d'àudio"
 
-#: audioplayer.cpp:201 audioplayer.cpp:281
+#: audioplayer.cpp:188 audioplayer.cpp:266
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
