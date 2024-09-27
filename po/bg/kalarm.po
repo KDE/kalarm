@@ -8740,29 +8740,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Брой минути преди алармата, за да се събуди от приспиване"
-
-#, fuzzy
-#~| msgctxt "@info"
-#~| msgid ""
-#~| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#~| "para>"
-#~ msgctxt "@info"
-#~ msgid "<para>Error opening audio file: <filename>%1</filename>"
-#~ msgstr ""
-#~ "<para>Грешка при възпроизвеждане на аудио файл: <filename>%1</filename></"
-#~ "para><para>%2</para>"
-
-#~ msgctxt "@info"
-#~ msgid "Cannot set audio player properties: %1"
-#~ msgstr "Не може да се зададат свойства на аудио плеър: %1"
-
-#~ msgctxt "@info"
-#~ msgid "Unsupported audio format, or corrupt data"
-#~ msgstr "Неподдържан аудио формат или повредени данни"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
-#~ msgstr ""
-#~ "<para>Не може да се  зареди файл <filename>%1</filename>.</para><para>%2</"
-#~ "para>"
