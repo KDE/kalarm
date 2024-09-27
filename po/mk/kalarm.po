@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 00:39+0000\n"
+"POT-Creation-Date: 2024-09-27 00:40+0000\n"
 "PO-Revision-Date: 2007-02-28 14:12+0100\n"
 "Last-Translator: Bozidar Proevski <bobibobi@freemail.com.mk>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -6897,28 +6897,28 @@ msgctxt "@info"
 msgid "End date/time is earlier than start date/time"
 msgstr "Крајниот датум и време се пред почетниот датум и време"
 
-#: recurrenceedit.cpp:651
+#: recurrenceedit.cpp:653
 #, fuzzy, kde-format
 #| msgid "Date cannot be earlier than %1"
 msgctxt "@info"
 msgid "Date cannot be earlier than start date"
 msgstr "Датумот не може да биде порано од %1"
 
-#: recurrenceedit.cpp:1064
+#: recurrenceedit.cpp:1066
 #, fuzzy, kde-format
 #| msgid "Recur e&very"
 msgctxt "@label:spinbox"
 msgid "Recur every"
 msgstr "Повтору&вај секои"
 
-#: recurrenceedit.cpp:1131
+#: recurrenceedit.cpp:1133
 #, fuzzy, kde-format
 #| msgid "hours:minutes"
 msgctxt "@label Time units for user-entered numbers"
 msgid "hours:minutes"
 msgstr "часови:минути"
 
-#: recurrenceedit.cpp:1132
+#: recurrenceedit.cpp:1134
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter the number of hours and minutes between repetitions of the alarm"
@@ -6926,7 +6926,7 @@ msgctxt "@info:whatsthis"
 msgid "Enter the number of hours and minutes between repetitions of the alarm"
 msgstr "Внесете го бројот на часови и минути меѓу повторувањата на алармот"
 
-#: recurrenceedit.cpp:1152
+#: recurrenceedit.cpp:1154
 #, fuzzy, kde-format
 #| msgctxt "On: Tuesday"
 #| msgid "O&n:"
@@ -6934,28 +6934,28 @@ msgctxt "@label On: Tuesday"
 msgid "On:"
 msgstr "&Во:"
 
-#: recurrenceedit.cpp:1235
+#: recurrenceedit.cpp:1237
 #, fuzzy, kde-format
 #| msgid "No day selected"
 msgctxt "@info"
 msgid "No day selected"
 msgstr "Не е избран ден"
 
-#: recurrenceedit.cpp:1264
+#: recurrenceedit.cpp:1266
 #, fuzzy, kde-format
 #| msgid "day(s)"
 msgctxt "@label Time unit for user-entered number"
 msgid "day(s)"
 msgstr "денови"
 
-#: recurrenceedit.cpp:1265
+#: recurrenceedit.cpp:1267
 #, fuzzy, kde-format
 #| msgid "Enter the number of days between repetitions of the alarm"
 msgctxt "@info:whatsthis"
 msgid "Enter the number of days between repetitions of the alarm"
 msgstr "Внесете го бројот на денови меѓу повторувањата на алармот"
 
-#: recurrenceedit.cpp:1266
+#: recurrenceedit.cpp:1268
 #, fuzzy, kde-format
 #| msgid "Select the days of the week on which the alarm is allowed to occur"
 msgctxt "@info:whatsthis"
@@ -6963,28 +6963,28 @@ msgid "Select the days of the week on which the alarm is allowed to occur"
 msgstr ""
 "Изберете ги деновите од седмицата на кои е дозволено повторувањето на алармот"
 
-#: recurrenceedit.cpp:1277
+#: recurrenceedit.cpp:1279
 #, fuzzy, kde-format
 #| msgid "week(s)"
 msgctxt "@label Time unit for user-entered number"
 msgid "week(s)"
 msgstr "седмици"
 
-#: recurrenceedit.cpp:1278
+#: recurrenceedit.cpp:1280
 #, fuzzy, kde-format
 #| msgid "Enter the number of weeks between repetitions of the alarm"
 msgctxt "@info:whatsthis"
 msgid "Enter the number of weeks between repetitions of the alarm"
 msgstr "Внесете го бројот на седмици меѓу повторувањата на алармот"
 
-#: recurrenceedit.cpp:1279
+#: recurrenceedit.cpp:1281
 #, fuzzy, kde-format
 #| msgid "Select the days of the week on which to repeat the alarm"
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which to repeat the alarm"
 msgstr "Изберете ги деновите од седмицата на кои се повторува алармот"
 
-#: recurrenceedit.cpp:1301
+#: recurrenceedit.cpp:1303
 #, fuzzy, kde-format
 #| msgctxt "On day number in the month"
 #| msgid "O&n day"
@@ -6992,14 +6992,14 @@ msgctxt "@option:radio On day number in the month"
 msgid "On day"
 msgstr "&На ден"
 
-#: recurrenceedit.cpp:1305
+#: recurrenceedit.cpp:1307
 #, fuzzy, kde-format
 #| msgid "Repeat the alarm on the selected day of the month"
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm on the selected day of the month"
 msgstr "Го повторува алармот на избраниот ден од месецот"
 
-#: recurrenceedit.cpp:1314
+#: recurrenceedit.cpp:1316
 #, fuzzy, kde-format
 #| msgctxt "Last day of month"
 #| msgid "Last"
@@ -7007,14 +7007,14 @@ msgctxt "@item:inlistbox Last day of month"
 msgid "Last"
 msgstr "последниот"
 
-#: recurrenceedit.cpp:1316
+#: recurrenceedit.cpp:1318
 #, fuzzy, kde-format
 #| msgid "Select the day of the month on which to repeat the alarm"
 msgctxt "@info:whatsthis"
 msgid "Select the day of the month on which to repeat the alarm"
 msgstr "Изберете го денот од месецот на кој да се повтори алармот"
 
-#: recurrenceedit.cpp:1323
+#: recurrenceedit.cpp:1325
 #, fuzzy, kde-format
 #| msgctxt "On the 1st Tuesday"
 #| msgid "On t&he"
@@ -7022,7 +7022,7 @@ msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
 msgstr "Н&а"
 
-#: recurrenceedit.cpp:1327
+#: recurrenceedit.cpp:1329
 #, fuzzy, kde-format
 #| msgid ""
 #| "Repeat the alarm on one day of the week, in the selected week of the month"
@@ -7032,42 +7032,42 @@ msgid ""
 msgstr ""
 "Го повторува алармот еден ден од седмицата , во избраната седмица од месецот"
 
-#: recurrenceedit.cpp:1332
+#: recurrenceedit.cpp:1334
 #, fuzzy, kde-format
 #| msgid "1st"
 msgctxt "@item:inlistbox"
 msgid "1st"
 msgstr "1"
 
-#: recurrenceedit.cpp:1333
+#: recurrenceedit.cpp:1335
 #, fuzzy, kde-format
 #| msgid "2nd"
 msgctxt "@item:inlistbox"
 msgid "2nd"
 msgstr "2"
 
-#: recurrenceedit.cpp:1334
+#: recurrenceedit.cpp:1336
 #, fuzzy, kde-format
 #| msgid "3rd"
 msgctxt "@item:inlistbox"
 msgid "3rd"
 msgstr "3"
 
-#: recurrenceedit.cpp:1335
+#: recurrenceedit.cpp:1337
 #, fuzzy, kde-format
 #| msgid "4th"
 msgctxt "@item:inlistbox"
 msgid "4th"
 msgstr "4"
 
-#: recurrenceedit.cpp:1336
+#: recurrenceedit.cpp:1338
 #, fuzzy, kde-format
 #| msgid "5th"
 msgctxt "@item:inlistbox"
 msgid "5th"
 msgstr "5"
 
-#: recurrenceedit.cpp:1337
+#: recurrenceedit.cpp:1339
 #, fuzzy, kde-format
 #| msgctxt "Last day of month"
 #| msgid "Last"
@@ -7075,21 +7075,21 @@ msgctxt "@item:inlistbox Last Monday in March"
 msgid "Last"
 msgstr "последниот"
 
-#: recurrenceedit.cpp:1338
+#: recurrenceedit.cpp:1340
 #, fuzzy, kde-format
 #| msgid "2nd Last"
 msgctxt "@item:inlistbox"
 msgid "2nd Last"
 msgstr "претпоследен"
 
-#: recurrenceedit.cpp:1339
+#: recurrenceedit.cpp:1341
 #, fuzzy, kde-format
 #| msgid "2nd Last"
 msgctxt "@item:inlistbox"
 msgid "3rd Last"
 msgstr "претпоследен"
 
-#: recurrenceedit.cpp:1340
+#: recurrenceedit.cpp:1342
 #, fuzzy, kde-format
 #| msgctxt "Last day of month"
 #| msgid "Last"
@@ -7097,7 +7097,7 @@ msgctxt "@item:inlistbox"
 msgid "4th Last"
 msgstr "последниот"
 
-#: recurrenceedit.cpp:1341
+#: recurrenceedit.cpp:1343
 #, fuzzy, kde-format
 #| msgctxt "Last day of month"
 #| msgid "Last"
@@ -7105,7 +7105,7 @@ msgctxt "@item:inlistbox"
 msgid "5th Last"
 msgstr "последниот"
 
-#: recurrenceedit.cpp:1344
+#: recurrenceedit.cpp:1346
 #, fuzzy, kde-format
 #| msgctxt "Every (Monday...) in month"
 #| msgid "Every"
@@ -7113,76 +7113,76 @@ msgctxt "@item:inlistbox Every (Monday...) in month"
 msgid "Every"
 msgstr "секој"
 
-#: recurrenceedit.cpp:1347
+#: recurrenceedit.cpp:1349
 #, fuzzy, kde-format
 #| msgid "Select the week of the month in which to repeat the alarm"
 msgctxt "@info:whatsthis"
 msgid "Select the week of the month in which to repeat the alarm"
 msgstr "Изберете ја седмицата од месецот во која ќе се повторува алармот"
 
-#: recurrenceedit.cpp:1361
+#: recurrenceedit.cpp:1363
 #, fuzzy, kde-format
 #| msgid "Select the day of the week on which to repeat the alarm"
 msgctxt "@info:whatsthis"
 msgid "Select the day of the week on which to repeat the alarm"
 msgstr "Изберете го денот од седмицата во кој ќе се повторува алармот"
 
-#: recurrenceedit.cpp:1483
+#: recurrenceedit.cpp:1485
 #, fuzzy, kde-format
 #| msgid "month(s)"
 msgctxt "@label Time unit for user-entered number"
 msgid "month(s)"
 msgstr "месеци"
 
-#: recurrenceedit.cpp:1484
+#: recurrenceedit.cpp:1486
 #, fuzzy, kde-format
 #| msgid "Enter the number of months between repetitions of the alarm"
 msgctxt "@info:whatsthis"
 msgid "Enter the number of months between repetitions of the alarm"
 msgstr "Внесете го бројот на месеци меѓу повторувањата на алармот"
 
-#: recurrenceedit.cpp:1495
+#: recurrenceedit.cpp:1497
 #, fuzzy, kde-format
 #| msgid "year(s)"
 msgctxt "@label Time unit for user-entered number"
 msgid "year(s)"
 msgstr "години"
 
-#: recurrenceedit.cpp:1496
+#: recurrenceedit.cpp:1498
 #, fuzzy, kde-format
 #| msgid "Enter the number of years between repetitions of the alarm"
 msgctxt "@info:whatsthis"
 msgid "Enter the number of years between repetitions of the alarm"
 msgstr "Внесете го бројот на години меѓу повторувањата на алармот"
 
-#: recurrenceedit.cpp:1503
+#: recurrenceedit.cpp:1505
 #, fuzzy, kde-format
 #| msgid "Monthly"
 msgctxt "@label List of months to select"
 msgid "Months:"
 msgstr "Месечно"
 
-#: recurrenceedit.cpp:1521
+#: recurrenceedit.cpp:1523
 #, fuzzy, kde-format
 #| msgid "Select the months of the year in which to repeat the alarm"
 msgctxt "@info:whatsthis"
 msgid "Select the months of the year in which to repeat the alarm"
 msgstr "Изберете ги месеците го годината во кои ќе се повторува алармот"
 
-#: recurrenceedit.cpp:1530
+#: recurrenceedit.cpp:1532
 #, kde-format
 msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
 msgstr ""
 
-#: recurrenceedit.cpp:1534
+#: recurrenceedit.cpp:1536
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox No date"
 msgid "None"
 msgstr "Нема"
 
-#: recurrenceedit.cpp:1535
+#: recurrenceedit.cpp:1537
 #, fuzzy, kde-format
 #| msgctxt "1st March (short form)"
 #| msgid "1 Mar"
@@ -7190,7 +7190,7 @@ msgctxt "@item:inlistbox 1st March (short form)"
 msgid "1 Mar"
 msgstr "1 март"
 
-#: recurrenceedit.cpp:1536
+#: recurrenceedit.cpp:1538
 #, fuzzy, kde-format
 #| msgctxt "28th February (short form)"
 #| msgid "28 Feb"
@@ -7198,7 +7198,7 @@ msgctxt "@item:inlistbox 28th February (short form)"
 msgid "28 Feb"
 msgstr "28 фев"
 
-#: recurrenceedit.cpp:1542
+#: recurrenceedit.cpp:1544
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7206,7 +7206,7 @@ msgid ""
 "leap years"
 msgstr ""
 
-#: recurrenceedit.cpp:1624
+#: recurrenceedit.cpp:1626
 #, fuzzy, kde-format
 #| msgid "No month selected"
 msgctxt "@info"
@@ -9024,25 +9024,25 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Изберете образец врз кој ќе се базира новиот аларм."
 
-#: traywindow.cpp:69
+#: traywindow.cpp:68
 #, fuzzy, kde-format
 #| msgid "New Alarm"
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "Нов аларм"
 
-#: traywindow.cpp:301
+#: traywindow.cpp:293
 #, fuzzy, kde-format
 msgid "Disabled"
 msgstr "О&невозможи"
 
-#: traywindow.cpp:306
+#: traywindow.cpp:298
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr ""
 
-#: traywindow.cpp:366
+#: traywindow.cpp:358
 #, fuzzy, kde-format
 #| msgctxt "prefix + hours:minutes"
 #| msgid "(%1%2:%3)"
@@ -9050,7 +9050,7 @@ msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:368
+#: traywindow.cpp:360
 #, fuzzy, kde-format
 #| msgctxt "prefix + hours:minutes"
 #| msgid "%1%2:%3"

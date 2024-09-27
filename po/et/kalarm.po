@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 00:39+0000\n"
+"POT-Creation-Date: 2024-09-27 00:40+0000\n"
 "PO-Revision-Date: 2020-05-15 08:19+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -6790,13 +6790,13 @@ msgctxt "@info"
 msgid "End date/time is earlier than start date/time"
 msgstr "Lõppkuupäev/aeg on varasem kui alguskuupäev/aeg"
 
-#: recurrenceedit.cpp:651
+#: recurrenceedit.cpp:653
 #, kde-format
 msgctxt "@info"
 msgid "Date cannot be earlier than start date"
 msgstr "Kuupäev ei saa olla varasem kui alguskuupäev"
 
-#: recurrenceedit.cpp:1064
+#: recurrenceedit.cpp:1066
 #, fuzzy, kde-format
 #| msgctxt "@label:spinbox"
 #| msgid "Recur e&very"
@@ -6804,19 +6804,19 @@ msgctxt "@label:spinbox"
 msgid "Recur every"
 msgstr "K&ordumise intervall:"
 
-#: recurrenceedit.cpp:1131
+#: recurrenceedit.cpp:1133
 #, kde-format
 msgctxt "@label Time units for user-entered numbers"
 msgid "hours:minutes"
 msgstr "tunnid:minutid"
 
-#: recurrenceedit.cpp:1132
+#: recurrenceedit.cpp:1134
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of hours and minutes between repetitions of the alarm"
 msgstr "Sisesta häire kordamise intervall (tundides ja minutites)."
 
-#: recurrenceedit.cpp:1152
+#: recurrenceedit.cpp:1154
 #, fuzzy, kde-format
 #| msgctxt "@label On: Tuesday"
 #| msgid "O&n:"
@@ -6824,49 +6824,49 @@ msgctxt "@label On: Tuesday"
 msgid "On:"
 msgstr "Nä&dalapäeva valik:"
 
-#: recurrenceedit.cpp:1235
+#: recurrenceedit.cpp:1237
 #, kde-format
 msgctxt "@info"
 msgid "No day selected"
 msgstr "Päeva pole valitud"
 
-#: recurrenceedit.cpp:1264
+#: recurrenceedit.cpp:1266
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "day(s)"
 msgstr "päev(a)"
 
-#: recurrenceedit.cpp:1265
+#: recurrenceedit.cpp:1267
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of days between repetitions of the alarm"
 msgstr "Mitu päeva on häire kordumise vahel"
 
-#: recurrenceedit.cpp:1266
+#: recurrenceedit.cpp:1268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which the alarm is allowed to occur"
 msgstr "Vali häire nädalapäev"
 
-#: recurrenceedit.cpp:1277
+#: recurrenceedit.cpp:1279
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "week(s)"
 msgstr "nädal(at)"
 
-#: recurrenceedit.cpp:1278
+#: recurrenceedit.cpp:1280
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of weeks between repetitions of the alarm"
 msgstr "Mitu nädalat on häire kordumise vahel"
 
-#: recurrenceedit.cpp:1279
+#: recurrenceedit.cpp:1281
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which to repeat the alarm"
 msgstr "Vali häire kordamise nädalapäev"
 
-#: recurrenceedit.cpp:1301
+#: recurrenceedit.cpp:1303
 #, fuzzy, kde-format
 #| msgctxt "@option:radio On day number in the month"
 #| msgid "O&n day"
@@ -6874,25 +6874,25 @@ msgctxt "@option:radio On day number in the month"
 msgid "On day"
 msgstr "&Kuupäev:"
 
-#: recurrenceedit.cpp:1305
+#: recurrenceedit.cpp:1307
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm on the selected day of the month"
 msgstr "Korda häiret kuu määratud päevani"
 
-#: recurrenceedit.cpp:1314
+#: recurrenceedit.cpp:1316
 #, kde-format
 msgctxt "@item:inlistbox Last day of month"
 msgid "Last"
 msgstr "viimane"
 
-#: recurrenceedit.cpp:1316
+#: recurrenceedit.cpp:1318
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the month on which to repeat the alarm"
 msgstr "Vali häire kordamise kuu päev "
 
-#: recurrenceedit.cpp:1323
+#: recurrenceedit.cpp:1325
 #, fuzzy, kde-format
 #| msgctxt "@option:radio On the 1st Tuesday"
 #| msgid "On t&he"
@@ -6900,128 +6900,128 @@ msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
 msgstr "K&uu"
 
-#: recurrenceedit.cpp:1327
+#: recurrenceedit.cpp:1329
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Repeat the alarm on one day of the week, in the selected week of the month"
 msgstr "Korda häiret määratud kuu nädala ühel päeval"
 
-#: recurrenceedit.cpp:1332
+#: recurrenceedit.cpp:1334
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1st"
 msgstr "1."
 
-#: recurrenceedit.cpp:1333
+#: recurrenceedit.cpp:1335
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "2nd"
 msgstr "2."
 
-#: recurrenceedit.cpp:1334
+#: recurrenceedit.cpp:1336
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "3rd"
 msgstr "3."
 
-#: recurrenceedit.cpp:1335
+#: recurrenceedit.cpp:1337
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "4th"
 msgstr "4."
 
-#: recurrenceedit.cpp:1336
+#: recurrenceedit.cpp:1338
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th"
 msgstr "5."
 
-#: recurrenceedit.cpp:1337
+#: recurrenceedit.cpp:1339
 #, kde-format
 msgctxt "@item:inlistbox Last Monday in March"
 msgid "Last"
 msgstr "viimane"
 
-#: recurrenceedit.cpp:1338
+#: recurrenceedit.cpp:1340
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "2nd Last"
 msgstr "eelviimane"
 
-#: recurrenceedit.cpp:1339
+#: recurrenceedit.cpp:1341
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "3rd Last"
 msgstr "eel-eelviimane"
 
-#: recurrenceedit.cpp:1340
+#: recurrenceedit.cpp:1342
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "4th Last"
 msgstr "eel-eel-eelviimane"
 
-#: recurrenceedit.cpp:1341
+#: recurrenceedit.cpp:1343
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th Last"
 msgstr "eel-eel-eel-eelviimane"
 
-#: recurrenceedit.cpp:1344
+#: recurrenceedit.cpp:1346
 #, kde-format
 msgctxt "@item:inlistbox Every (Monday...) in month"
 msgid "Every"
 msgstr "iga"
 
-#: recurrenceedit.cpp:1347
+#: recurrenceedit.cpp:1349
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the week of the month in which to repeat the alarm"
 msgstr "Vali häire kordamise kuu nädal"
 
-#: recurrenceedit.cpp:1361
+#: recurrenceedit.cpp:1363
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the week on which to repeat the alarm"
 msgstr "Vali häire kordamise nädalapäev"
 
-#: recurrenceedit.cpp:1483
+#: recurrenceedit.cpp:1485
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "month(s)"
 msgstr "kuu(d)"
 
-#: recurrenceedit.cpp:1484
+#: recurrenceedit.cpp:1486
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of months between repetitions of the alarm"
 msgstr "Mitu kuud on häire kordumise vahel"
 
-#: recurrenceedit.cpp:1495
+#: recurrenceedit.cpp:1497
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "year(s)"
 msgstr "aasta(t)"
 
-#: recurrenceedit.cpp:1496
+#: recurrenceedit.cpp:1498
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of years between repetitions of the alarm"
 msgstr "Mitu aastat on häire kordumise vahel"
 
-#: recurrenceedit.cpp:1503
+#: recurrenceedit.cpp:1505
 #, kde-format
 msgctxt "@label List of months to select"
 msgid "Months:"
 msgstr "Kuud:"
 
-#: recurrenceedit.cpp:1521
+#: recurrenceedit.cpp:1523
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the months of the year in which to repeat the alarm"
 msgstr "Vali häire kordamise kuud"
 
-#: recurrenceedit.cpp:1530
+#: recurrenceedit.cpp:1532
 #, fuzzy, kde-format
 #| msgctxt "@label:listbox"
 #| msgid "February 2&9th alarm in non-leap years:"
@@ -7029,25 +7029,25 @@ msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
 msgstr "2&9. veebruari häire mitteliigaastal:"
 
-#: recurrenceedit.cpp:1534
+#: recurrenceedit.cpp:1536
 #, kde-format
 msgctxt "@item:inlistbox No date"
 msgid "None"
 msgstr "Puudub"
 
-#: recurrenceedit.cpp:1535
+#: recurrenceedit.cpp:1537
 #, kde-format
 msgctxt "@item:inlistbox 1st March (short form)"
 msgid "1 Mar"
 msgstr "1. märts"
 
-#: recurrenceedit.cpp:1536
+#: recurrenceedit.cpp:1538
 #, kde-format
 msgctxt "@item:inlistbox 28th February (short form)"
 msgid "28 Feb"
 msgstr "28. veebruar"
 
-#: recurrenceedit.cpp:1542
+#: recurrenceedit.cpp:1544
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7057,7 +7057,7 @@ msgstr ""
 "Vali, kas ja kui jah, siis millisel päeval käivitada 29. veebruari häire "
 "mitteliigaastal"
 
-#: recurrenceedit.cpp:1624
+#: recurrenceedit.cpp:1626
 #, kde-format
 msgctxt "@info"
 msgid "No month selected"
@@ -8818,7 +8818,7 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Vali mall, mille alusel uus häire luua."
 
-#: traywindow.cpp:69
+#: traywindow.cpp:68
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&New Alarm"
@@ -8826,24 +8826,24 @@ msgctxt "@action"
 msgid "New Alarm"
 msgstr "&Uus häire"
 
-#: traywindow.cpp:301
+#: traywindow.cpp:293
 #, kde-format
 msgid "Disabled"
 msgstr "Keelatud"
 
-#: traywindow.cpp:306
+#: traywindow.cpp:298
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(mõned häired on keelatud)"
 
-#: traywindow.cpp:366
+#: traywindow.cpp:358
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:368
+#: traywindow.cpp:360
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"

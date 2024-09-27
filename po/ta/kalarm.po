@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 00:39+0000\n"
+"POT-Creation-Date: 2024-09-27 00:40+0000\n"
 "PO-Revision-Date: 2024-09-08 13:16+0200\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -6470,255 +6470,255 @@ msgctxt "@info"
 msgid "End date/time is earlier than start date/time"
 msgstr "முடியும் தேதி/நேரம், துவக்க தேதி/நேரத்திற்கு முன்னால் உள்ளது"
 
-#: recurrenceedit.cpp:651
+#: recurrenceedit.cpp:653
 #, kde-format
 msgctxt "@info"
 msgid "Date cannot be earlier than start date"
 msgstr "துவக்க தேதிக்கு முன்னால் இது இருக்க முடியாது"
 
-#: recurrenceedit.cpp:1064
+#: recurrenceedit.cpp:1066
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Recur every"
 msgstr "இந்த இடைவெளியில் மீளத்தூண்டு:"
 
-#: recurrenceedit.cpp:1131
+#: recurrenceedit.cpp:1133
 #, kde-format
 msgctxt "@label Time units for user-entered numbers"
 msgid "hours:minutes"
 msgstr "மணி:நிமிடம்"
 
-#: recurrenceedit.cpp:1132
+#: recurrenceedit.cpp:1134
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of hours and minutes between repetitions of the alarm"
 msgstr ""
 "அலாரத்தின் மறுநிகழ்வுகளுக்கு இடையேயான நேரத்தை மணிகள் மற்றும் நிமிடங்களாக உள்ளிடுங்கள்"
 
-#: recurrenceedit.cpp:1152
+#: recurrenceedit.cpp:1154
 #, kde-format
 msgctxt "@label On: Tuesday"
 msgid "On:"
 msgstr "இந்நாளில்:"
 
-#: recurrenceedit.cpp:1235
+#: recurrenceedit.cpp:1237
 #, kde-format
 msgctxt "@info"
 msgid "No day selected"
 msgstr "எந்த நாளும் தேர்ந்தெடுக்கப்படவில்லை"
 
-#: recurrenceedit.cpp:1264
+#: recurrenceedit.cpp:1266
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "day(s)"
 msgstr "நாள்(கள்)"
 
-#: recurrenceedit.cpp:1265
+#: recurrenceedit.cpp:1267
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of days between repetitions of the alarm"
 msgstr "அலாரம் எத்தனை நாட்களுக்கு ஒருமுறை தூண்டப்பட வேண்டுமென்பதை இங்கு உள்ளிடுங்கள்"
 
-#: recurrenceedit.cpp:1266
+#: recurrenceedit.cpp:1268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which the alarm is allowed to occur"
 msgstr "வாரத்தின் எந்த நாட்களில் அலாரம் நிகழலாம் என்பதை தேர்ந்தெடுங்கள்"
 
-#: recurrenceedit.cpp:1277
+#: recurrenceedit.cpp:1279
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "week(s)"
 msgstr "வாரங்கள்"
 
-#: recurrenceedit.cpp:1278
+#: recurrenceedit.cpp:1280
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of weeks between repetitions of the alarm"
 msgstr "அலாரம் எத்தனை வாரங்களுக்கு ஒருமுறை தூண்டப்பட வேண்டுமென்பதை இங்கு உள்ளிடுங்கள்"
 
-#: recurrenceedit.cpp:1279
+#: recurrenceedit.cpp:1281
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which to repeat the alarm"
 msgstr "வாரத்தின் எந்த நாட்களில் அலாரம் நிகழ வேண்டும் என்பதை தேர்ந்தெடுங்கள்"
 
-#: recurrenceedit.cpp:1301
+#: recurrenceedit.cpp:1303
 #, kde-format
 msgctxt "@option:radio On day number in the month"
 msgid "On day"
 msgstr "இத்தேதியில்:"
 
-#: recurrenceedit.cpp:1305
+#: recurrenceedit.cpp:1307
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm on the selected day of the month"
 msgstr "தேர்ந்தெடுக்கப்பட்ட மாத தேதியில் அலாரத்தை மீளத்தூண்டு"
 
-#: recurrenceedit.cpp:1314
+#: recurrenceedit.cpp:1316
 #, kde-format
 msgctxt "@item:inlistbox Last day of month"
 msgid "Last"
 msgstr "கடைசி"
 
-#: recurrenceedit.cpp:1316
+#: recurrenceedit.cpp:1318
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the month on which to repeat the alarm"
 msgstr "ஒவ்வொரு மாத‍த்திலும் எக்கிழமையில் அலாரத்தை மீளத்தூண்ட வேண்டுமென்பதை தேர்ந்தெடுங்கள்"
 
-#: recurrenceedit.cpp:1323
+#: recurrenceedit.cpp:1325
 #, kde-format
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
 msgstr " "
 
-#: recurrenceedit.cpp:1327
+#: recurrenceedit.cpp:1329
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Repeat the alarm on one day of the week, in the selected week of the month"
 msgstr "ஒவ்வொரு மாத‍த்திலும், தேரந்தெடுக்கப்பட்ட வாரத்தில் ஒரு நாளில் அலாரத்தை மீளத்தூண்டும்"
 
-#: recurrenceedit.cpp:1332
+#: recurrenceedit.cpp:1334
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1st"
 msgstr "1வது"
 
-#: recurrenceedit.cpp:1333
+#: recurrenceedit.cpp:1335
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "2nd"
 msgstr "2வது"
 
-#: recurrenceedit.cpp:1334
+#: recurrenceedit.cpp:1336
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "3rd"
 msgstr "3வது"
 
-#: recurrenceedit.cpp:1335
+#: recurrenceedit.cpp:1337
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "4th"
 msgstr "4வது"
 
-#: recurrenceedit.cpp:1336
+#: recurrenceedit.cpp:1338
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th"
 msgstr "5வது"
 
-#: recurrenceedit.cpp:1337
+#: recurrenceedit.cpp:1339
 #, kde-format
 msgctxt "@item:inlistbox Last Monday in March"
 msgid "Last"
 msgstr "கடைசி"
 
-#: recurrenceedit.cpp:1338
+#: recurrenceedit.cpp:1340
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "2nd Last"
 msgstr "கடைசியிலிருந்து 2வது"
 
-#: recurrenceedit.cpp:1339
+#: recurrenceedit.cpp:1341
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "3rd Last"
 msgstr "கடைசியிலிருந்து 3வது"
 
-#: recurrenceedit.cpp:1340
+#: recurrenceedit.cpp:1342
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "4th Last"
 msgstr "கடைசியிலிருந்து 4வது"
 
-#: recurrenceedit.cpp:1341
+#: recurrenceedit.cpp:1343
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th Last"
 msgstr "கடைசியிலிருந்து 5வது"
 
-#: recurrenceedit.cpp:1344
+#: recurrenceedit.cpp:1346
 #, kde-format
 msgctxt "@item:inlistbox Every (Monday...) in month"
 msgid "Every"
 msgstr "ஒவ்வொரு"
 
-#: recurrenceedit.cpp:1347
+#: recurrenceedit.cpp:1349
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the week of the month in which to repeat the alarm"
 msgstr "மாத‍த்தின் எந்த வாரத்தில் அலாரத்தை தூண்ட வேண்டுமென்பதை தேர்ந்தெடுங்கள்"
 
-#: recurrenceedit.cpp:1361
+#: recurrenceedit.cpp:1363
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the week on which to repeat the alarm"
 msgstr "எந்த வாரநாளில் அலாரத்தை தூண்ட வேண்டுமென்பதை தேர்ந்தெடுங்கள்"
 
-#: recurrenceedit.cpp:1483
+#: recurrenceedit.cpp:1485
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "month(s)"
 msgstr "மாதங்கள்"
 
-#: recurrenceedit.cpp:1484
+#: recurrenceedit.cpp:1486
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of months between repetitions of the alarm"
 msgstr "எத்தனை மாதங்களுக்கு ஒரு முறை அலாரம் தூண்டப்பட வேண்டுமென்பதை இங்கு உள்ளிடுங்கள்"
 
-#: recurrenceedit.cpp:1495
+#: recurrenceedit.cpp:1497
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "year(s)"
 msgstr "வருடங்கள்"
 
-#: recurrenceedit.cpp:1496
+#: recurrenceedit.cpp:1498
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of years between repetitions of the alarm"
 msgstr "எத்தனை ஆண்டுகளுக்கு ஒருமுறை அலாரம் தூண்டப்பட வேண்டுமென்பதை இங்கு உள்ளிடுங்கள்"
 
-#: recurrenceedit.cpp:1503
+#: recurrenceedit.cpp:1505
 #, kde-format
 msgctxt "@label List of months to select"
 msgid "Months:"
 msgstr "மாதங்கள்:"
 
-#: recurrenceedit.cpp:1521
+#: recurrenceedit.cpp:1523
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the months of the year in which to repeat the alarm"
 msgstr "வருடத்தின் எந்த மாதங்களில் அலாரத்தை தூண்ட வேண்டுமென்பதை தேர்ந்தெடுங்கள்"
 
-#: recurrenceedit.cpp:1530
+#: recurrenceedit.cpp:1532
 #, kde-format
 msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
 msgstr "சாதாரண ஆண்டுகளில் பிப்ரவரி 29-க்கு பதிலாக:"
 
-#: recurrenceedit.cpp:1534
+#: recurrenceedit.cpp:1536
 #, kde-format
 msgctxt "@item:inlistbox No date"
 msgid "None"
 msgstr "ஏதுமில்லை"
 
-#: recurrenceedit.cpp:1535
+#: recurrenceedit.cpp:1537
 #, kde-format
 msgctxt "@item:inlistbox 1st March (short form)"
 msgid "1 Mar"
 msgstr "மார். 1"
 
-#: recurrenceedit.cpp:1536
+#: recurrenceedit.cpp:1538
 #, kde-format
 msgctxt "@item:inlistbox 28th February (short form)"
 msgid "28 Feb"
 msgstr "பிப். 28"
 
-#: recurrenceedit.cpp:1542
+#: recurrenceedit.cpp:1544
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6729,7 +6729,7 @@ msgstr ""
 "leap ஆண்டுகளில்) எப்போது தூண்டப்பட வேண்டும் (அல்லது தூண்டப்பட வேண்டாமா) என்பதை "
 "தேர்ந்தெடுங்கள்"
 
-#: recurrenceedit.cpp:1624
+#: recurrenceedit.cpp:1626
 #, kde-format
 msgctxt "@info"
 msgid "No month selected"
@@ -8440,30 +8440,30 @@ msgid "Select a template to base the new alarm on."
 msgstr ""
 "புதிய அலாரத்தை எந்த வார்ப்புருவின் அடிப்படையில் உருவாக்க வேண்டுமென்பதை தேர்ந்தெடுங்கள்."
 
-#: traywindow.cpp:69
+#: traywindow.cpp:68
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "புதிய அலாரம்"
 
-#: traywindow.cpp:301
+#: traywindow.cpp:293
 #, kde-format
 msgid "Disabled"
 msgstr "முடக்கப்பட்டுள்ளது"
 
-#: traywindow.cpp:306
+#: traywindow.cpp:298
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(சில அலாரங்கள் முடக்கப்பட்டுள்ளன)"
 
-#: traywindow.cpp:366
+#: traywindow.cpp:358
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:368
+#: traywindow.cpp:360
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"

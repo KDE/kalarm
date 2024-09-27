@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 00:39+0000\n"
+"POT-Creation-Date: 2024-09-27 00:40+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -6862,13 +6862,13 @@ msgctxt "@info"
 msgid "End date/time is earlier than start date/time"
 msgstr "កាលបរិច្ឆេទ/ពេលវេលា​​បញ្ចប់ ​គឺ​មុន​កាលបរិច្ឆេទ/ពេលវេលា​​ចាប់ផ្ដើម"
 
-#: recurrenceedit.cpp:651
+#: recurrenceedit.cpp:653
 #, kde-format
 msgctxt "@info"
 msgid "Date cannot be earlier than start date"
 msgstr "កាល​បរិច្ឆេទ​មិន​អាច​មុន​កាលបរិច្ឆេទ​ចាប់​ផ្ដើម​ឡើយ​"
 
-#: recurrenceedit.cpp:1064
+#: recurrenceedit.cpp:1066
 #, fuzzy, kde-format
 #| msgctxt "@label:spinbox"
 #| msgid "Recur e&very"
@@ -6876,19 +6876,19 @@ msgctxt "@label:spinbox"
 msgid "Recur every"
 msgstr "កើត​ឡើងវិញ​រៀងរាល់"
 
-#: recurrenceedit.cpp:1131
+#: recurrenceedit.cpp:1133
 #, kde-format
 msgctxt "@label Time units for user-entered numbers"
 msgid "hours:minutes"
 msgstr "ម៉ោង ៖ នាទី"
 
-#: recurrenceedit.cpp:1132
+#: recurrenceedit.cpp:1134
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of hours and minutes between repetitions of the alarm"
 msgstr "បញ្ចូល​ចំនួន​ម៉ោង និង​នាទី​រវាង​ការ​ធ្វើ​ឡើងវិញ​របស់​ការ​ជូនដំណឹង"
 
-#: recurrenceedit.cpp:1152
+#: recurrenceedit.cpp:1154
 #, fuzzy, kde-format
 #| msgctxt "@label On: Tuesday"
 #| msgid "O&n:"
@@ -6896,49 +6896,49 @@ msgctxt "@label On: Tuesday"
 msgid "On:"
 msgstr "នៅ ៖"
 
-#: recurrenceedit.cpp:1235
+#: recurrenceedit.cpp:1237
 #, kde-format
 msgctxt "@info"
 msgid "No day selected"
 msgstr "គ្មាន​ថ្ងៃ​ដែលបាន​ជ្រើស​ទេ"
 
-#: recurrenceedit.cpp:1264
+#: recurrenceedit.cpp:1266
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "day(s)"
 msgstr "ថ្ងៃ"
 
-#: recurrenceedit.cpp:1265
+#: recurrenceedit.cpp:1267
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of days between repetitions of the alarm"
 msgstr "បញ្ចូល​ចំនួន​ថ្ងៃ​រវាង​ការ​ធ្វើការជូន​ដំណឹង​ឡើងវិញ"
 
-#: recurrenceedit.cpp:1266
+#: recurrenceedit.cpp:1268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which the alarm is allowed to occur"
 msgstr "ជ្រើស​ថ្ងៃ​ក្នុង​សប្ដាហ៍​ដែល​អនុញ្ញាត​ឲ្យ​កើតឡើង​ការ​ជូនដំណឹង"
 
-#: recurrenceedit.cpp:1277
+#: recurrenceedit.cpp:1279
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "week(s)"
 msgstr "សប្តាហ៍"
 
-#: recurrenceedit.cpp:1278
+#: recurrenceedit.cpp:1280
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of weeks between repetitions of the alarm"
 msgstr "បញ្ចូល​ចំនួន​សប្ដាហ៍​រវាង​ការ​ធ្វើ​ការ​ជូន​ដំណឹង​ឡើងវិញ"
 
-#: recurrenceedit.cpp:1279
+#: recurrenceedit.cpp:1281
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which to repeat the alarm"
 msgstr "ជ្រើស​ថ្ងៃ​នៃសប្តាហ៍​​ដែល​ត្រូវ​ធ្វើ​ការ​ជូនដំណឹង​ឡើង​វិញ"
 
-#: recurrenceedit.cpp:1301
+#: recurrenceedit.cpp:1303
 #, fuzzy, kde-format
 #| msgctxt "@option:radio On day number in the month"
 #| msgid "O&n day"
@@ -6946,25 +6946,25 @@ msgctxt "@option:radio On day number in the month"
 msgid "On day"
 msgstr "នៅ​ថ្ងៃ"
 
-#: recurrenceedit.cpp:1305
+#: recurrenceedit.cpp:1307
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm on the selected day of the month"
 msgstr "ធ្វើ​ការជូនដំណឹង​ឡើងវិញ នៅ​ថ្ងៃ​ដែលបាន​ជ្រើស​ក្នុង​ខែ"
 
-#: recurrenceedit.cpp:1314
+#: recurrenceedit.cpp:1316
 #, kde-format
 msgctxt "@item:inlistbox Last day of month"
 msgid "Last"
 msgstr "ចុង​ក្រោយ"
 
-#: recurrenceedit.cpp:1316
+#: recurrenceedit.cpp:1318
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the month on which to repeat the alarm"
 msgstr "ជ្រើស​ថ្ងៃ​ក្នុង​ខែ​ដែល​ត្រូវ​ធ្វើ​ការ​ជូនដំណឹង​ឡើង​វិញ"
 
-#: recurrenceedit.cpp:1323
+#: recurrenceedit.cpp:1325
 #, fuzzy, kde-format
 #| msgctxt "@option:radio On the 1st Tuesday"
 #| msgid "On t&he"
@@ -6972,128 +6972,128 @@ msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
 msgstr "នៅ​ថ្ងៃទី"
 
-#: recurrenceedit.cpp:1327
+#: recurrenceedit.cpp:1329
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Repeat the alarm on one day of the week, in the selected week of the month"
 msgstr "ធ្វើ​ការជូនដំណឹង​ឡើវិញ​មួយ​ថ្ងៃ​ក្នុង​មួយ​សប្តាហ៍ ក្នុង​សប្តាហ៍​ដែល​បាន​ជ្រើស​ក្នុង​ខែ"
 
-#: recurrenceedit.cpp:1332
+#: recurrenceedit.cpp:1334
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1st"
 msgstr "ទី ១"
 
-#: recurrenceedit.cpp:1333
+#: recurrenceedit.cpp:1335
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "2nd"
 msgstr "ទី ២"
 
-#: recurrenceedit.cpp:1334
+#: recurrenceedit.cpp:1336
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "3rd"
 msgstr "ទី ៣"
 
-#: recurrenceedit.cpp:1335
+#: recurrenceedit.cpp:1337
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "4th"
 msgstr "ទី ៤"
 
-#: recurrenceedit.cpp:1336
+#: recurrenceedit.cpp:1338
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th"
 msgstr "ទី ៥"
 
-#: recurrenceedit.cpp:1337
+#: recurrenceedit.cpp:1339
 #, kde-format
 msgctxt "@item:inlistbox Last Monday in March"
 msgid "Last"
 msgstr "ចុង​ក្រោយ"
 
-#: recurrenceedit.cpp:1338
+#: recurrenceedit.cpp:1340
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "2nd Last"
 msgstr "ទី ២ ចុង​ក្រោយ"
 
-#: recurrenceedit.cpp:1339
+#: recurrenceedit.cpp:1341
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "3rd Last"
 msgstr "ទី ៣ ចុង​ក្រោយ"
 
-#: recurrenceedit.cpp:1340
+#: recurrenceedit.cpp:1342
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "4th Last"
 msgstr "ទី ៤ ចុង​ក្រោយ"
 
-#: recurrenceedit.cpp:1341
+#: recurrenceedit.cpp:1343
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th Last"
 msgstr "ទី ៥ ចុង​ក្រោយ"
 
-#: recurrenceedit.cpp:1344
+#: recurrenceedit.cpp:1346
 #, kde-format
 msgctxt "@item:inlistbox Every (Monday...) in month"
 msgid "Every"
 msgstr "រៀងរាល់"
 
-#: recurrenceedit.cpp:1347
+#: recurrenceedit.cpp:1349
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the week of the month in which to repeat the alarm"
 msgstr "ជ្រើស​សប្តាហ៍​ក្នុង​ខែ​ដែល​ត្រូវ​ធ្វើការ​ជូនដំណឹង​ឡើងវិញ"
 
-#: recurrenceedit.cpp:1361
+#: recurrenceedit.cpp:1363
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the week on which to repeat the alarm"
 msgstr "ជ្រើស​ថ្ងៃ​ក្នុង​សប្តាហ៍​​ដែល​ត្រូវ​ធ្វើ​ការជូនដំណឹង​ឡើងវិញ"
 
-#: recurrenceedit.cpp:1483
+#: recurrenceedit.cpp:1485
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "month(s)"
 msgstr "ខែ"
 
-#: recurrenceedit.cpp:1484
+#: recurrenceedit.cpp:1486
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of months between repetitions of the alarm"
 msgstr "បញ្ចូល​​ចំនួន​ខែ​រវាងការធ្វើ​ការ​ជូនដំណឹង​ឡើងវិញ ។"
 
-#: recurrenceedit.cpp:1495
+#: recurrenceedit.cpp:1497
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "year(s)"
 msgstr "ឆ្នាំ"
 
-#: recurrenceedit.cpp:1496
+#: recurrenceedit.cpp:1498
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of years between repetitions of the alarm"
 msgstr "បញ្ចូល​​ចំនួនឆ្នាំ​​រវាងការធ្វើ​ការ​ជូន​ដំណឹង​ឡើងវិញ ។"
 
-#: recurrenceedit.cpp:1503
+#: recurrenceedit.cpp:1505
 #, kde-format
 msgctxt "@label List of months to select"
 msgid "Months:"
 msgstr "ខែ ៖"
 
-#: recurrenceedit.cpp:1521
+#: recurrenceedit.cpp:1523
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the months of the year in which to repeat the alarm"
 msgstr "ជ្រើស​ខែ​នៃ​ឆ្នាំ​ដែល​ត្រូវ​ធ្វើ​ការជូនដំណឹង​ឡើងវិញ"
 
-#: recurrenceedit.cpp:1530
+#: recurrenceedit.cpp:1532
 #, fuzzy, kde-format
 #| msgctxt "@label:listbox"
 #| msgid "February 2&9th alarm in non-leap years:"
@@ -7101,25 +7101,25 @@ msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
 msgstr "ការជូនដំណឹង​​នៅ​ថ្ងៃ​ទី ២៩ កុម្ភៈ ក្នុង​ឆ្នាំ​មិន​បង្គ្រប់ ៖"
 
-#: recurrenceedit.cpp:1534
+#: recurrenceedit.cpp:1536
 #, kde-format
 msgctxt "@item:inlistbox No date"
 msgid "None"
 msgstr "គ្មាន"
 
-#: recurrenceedit.cpp:1535
+#: recurrenceedit.cpp:1537
 #, kde-format
 msgctxt "@item:inlistbox 1st March (short form)"
 msgid "1 Mar"
 msgstr "១ មីនា"
 
-#: recurrenceedit.cpp:1536
+#: recurrenceedit.cpp:1538
 #, kde-format
 msgctxt "@item:inlistbox 28th February (short form)"
 msgid "28 Feb"
 msgstr "២៨ កុម្ភៈ"
 
-#: recurrenceedit.cpp:1542
+#: recurrenceedit.cpp:1544
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7129,7 +7129,7 @@ msgstr ""
 "ជ្រើស​កាលបរិច្ឆេទ (ប្រសិនបើ​មាន) ដែល​ការជូនដំណឹង​នៅ​ថ្ងៃទី ២៩ ខែ​ កុម្ភៈ គួរកើតឡើង​ក្នុង​ឆ្នាំមិន​"
 "បង្គ្រប់ ។"
 
-#: recurrenceedit.cpp:1624
+#: recurrenceedit.cpp:1626
 #, kde-format
 msgctxt "@info"
 msgid "No month selected"
@@ -8996,7 +8996,7 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "ជ្រើស​ពុម្ព​ដើម្បី​ជាមូលដ្ឋាន​សម្រាប់​ដាក់​ការ​ជូនដំណឹង​ថ្មី ។"
 
-#: traywindow.cpp:69
+#: traywindow.cpp:68
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&New Alarm"
@@ -9004,18 +9004,18 @@ msgctxt "@action"
 msgid "New Alarm"
 msgstr "ការជូនដំណឹង​ថ្មី"
 
-#: traywindow.cpp:301
+#: traywindow.cpp:293
 #, kde-format
 msgid "Disabled"
 msgstr "បិទ​"
 
-#: traywindow.cpp:306
+#: traywindow.cpp:298
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(ម៉ោង​រោទ៍​ខ្លះ​ត្រូវ​បាន​បិទ)"
 
-#: traywindow.cpp:366
+#: traywindow.cpp:358
 #, fuzzy, kde-format
 #| msgctxt "@info/plain prefix + hours:minutes"
 #| msgid "(%1%2:%3)"
@@ -9023,7 +9023,7 @@ msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2 ៖%3)"
 
-#: traywindow.cpp:368
+#: traywindow.cpp:360
 #, fuzzy, kde-format
 #| msgctxt "@info/plain prefix + hours:minutes"
 #| msgid "%1%2:%3"

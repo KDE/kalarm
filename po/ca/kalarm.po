@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 00:39+0000\n"
+"POT-Creation-Date: 2024-09-27 00:40+0000\n"
 "PO-Revision-Date: 2024-09-14 12:26+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -6615,55 +6615,55 @@ msgctxt "@info"
 msgid "End date/time is earlier than start date/time"
 msgstr "La data i hora finals són anteriors a la data i hora inicials"
 
-#: recurrenceedit.cpp:651
+#: recurrenceedit.cpp:653
 #, kde-format
 msgctxt "@info"
 msgid "Date cannot be earlier than start date"
 msgstr "La data no pot ser anterior a la data d'inici"
 
-#: recurrenceedit.cpp:1064
+#: recurrenceedit.cpp:1066
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Recur every"
 msgstr "Repeteix cada"
 
-#: recurrenceedit.cpp:1131
+#: recurrenceedit.cpp:1133
 #, kde-format
 msgctxt "@label Time units for user-entered numbers"
 msgid "hours:minutes"
 msgstr "hores:minuts"
 
-#: recurrenceedit.cpp:1132
+#: recurrenceedit.cpp:1134
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of hours and minutes between repetitions of the alarm"
 msgstr "Introduïu el nombre d'hores i minuts entre les repeticions de l'alarma"
 
-#: recurrenceedit.cpp:1152
+#: recurrenceedit.cpp:1154
 #, kde-format
 msgctxt "@label On: Tuesday"
 msgid "On:"
 msgstr "El:"
 
-#: recurrenceedit.cpp:1235
+#: recurrenceedit.cpp:1237
 #, kde-format
 msgctxt "@info"
 msgid "No day selected"
 msgstr "Cap dia seleccionat"
 
-#: recurrenceedit.cpp:1264
+#: recurrenceedit.cpp:1266
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "day(s)"
 msgstr "dia/es"
 
-#: recurrenceedit.cpp:1265
+#: recurrenceedit.cpp:1267
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of days between repetitions of the alarm"
 msgstr "Introduïu el nombre de dies entre les repeticions de l'alarma"
 
-#: recurrenceedit.cpp:1266
+#: recurrenceedit.cpp:1268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which the alarm is allowed to occur"
@@ -6671,55 +6671,55 @@ msgstr ""
 "Seleccioneu els dies de la setmana en els que es permet la repetició de "
 "l'alarma"
 
-#: recurrenceedit.cpp:1277
+#: recurrenceedit.cpp:1279
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "week(s)"
 msgstr "setmana/es"
 
-#: recurrenceedit.cpp:1278
+#: recurrenceedit.cpp:1280
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of weeks between repetitions of the alarm"
 msgstr "Introduïu el nombre de setmanes entre les repeticions de l'alarma"
 
-#: recurrenceedit.cpp:1279
+#: recurrenceedit.cpp:1281
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which to repeat the alarm"
 msgstr "Seleccioneu els dies de la setmana en els que es repetirà l'alarma"
 
-#: recurrenceedit.cpp:1301
+#: recurrenceedit.cpp:1303
 #, kde-format
 msgctxt "@option:radio On day number in the month"
 msgid "On day"
 msgstr "En el dia"
 
-#: recurrenceedit.cpp:1305
+#: recurrenceedit.cpp:1307
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm on the selected day of the month"
 msgstr "Repeteix l'alarma el dia seleccionat del mes"
 
-#: recurrenceedit.cpp:1314
+#: recurrenceedit.cpp:1316
 #, kde-format
 msgctxt "@item:inlistbox Last day of month"
 msgid "Last"
 msgstr "Últim"
 
-#: recurrenceedit.cpp:1316
+#: recurrenceedit.cpp:1318
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the month on which to repeat the alarm"
 msgstr "Seleccioneu el dia del mes en el qual repetir l'alarma"
 
-#: recurrenceedit.cpp:1323
+#: recurrenceedit.cpp:1325
 #, kde-format
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
 msgstr "En el"
 
-#: recurrenceedit.cpp:1327
+#: recurrenceedit.cpp:1329
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6727,145 +6727,145 @@ msgid ""
 msgstr ""
 "Repetir l'alarma en el dia de la setmana, en la setmana seleccionada del mes"
 
-#: recurrenceedit.cpp:1332
+#: recurrenceedit.cpp:1334
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1st"
 msgstr "1r"
 
-#: recurrenceedit.cpp:1333
+#: recurrenceedit.cpp:1335
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "2nd"
 msgstr "2n"
 
-#: recurrenceedit.cpp:1334
+#: recurrenceedit.cpp:1336
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "3rd"
 msgstr "3r"
 
-#: recurrenceedit.cpp:1335
+#: recurrenceedit.cpp:1337
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "4th"
 msgstr "4t"
 
-#: recurrenceedit.cpp:1336
+#: recurrenceedit.cpp:1338
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th"
 msgstr "5è"
 
-#: recurrenceedit.cpp:1337
+#: recurrenceedit.cpp:1339
 #, kde-format
 msgctxt "@item:inlistbox Last Monday in March"
 msgid "Last"
 msgstr "Últim"
 
-#: recurrenceedit.cpp:1338
+#: recurrenceedit.cpp:1340
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "2nd Last"
 msgstr "2n últim"
 
-#: recurrenceedit.cpp:1339
+#: recurrenceedit.cpp:1341
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "3rd Last"
 msgstr "3r últim"
 
-#: recurrenceedit.cpp:1340
+#: recurrenceedit.cpp:1342
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "4th Last"
 msgstr "4t últim"
 
-#: recurrenceedit.cpp:1341
+#: recurrenceedit.cpp:1343
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th Last"
 msgstr "5è últim"
 
-#: recurrenceedit.cpp:1344
+#: recurrenceedit.cpp:1346
 #, kde-format
 msgctxt "@item:inlistbox Every (Monday...) in month"
 msgid "Every"
 msgstr "Cada"
 
-#: recurrenceedit.cpp:1347
+#: recurrenceedit.cpp:1349
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the week of the month in which to repeat the alarm"
 msgstr "Selecciona la setmana del mes en la que es repetirà l'alarma"
 
-#: recurrenceedit.cpp:1361
+#: recurrenceedit.cpp:1363
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the week on which to repeat the alarm"
 msgstr "Seleccionar el dia de la setmana en el que es repetirà l'alarma"
 
-#: recurrenceedit.cpp:1483
+#: recurrenceedit.cpp:1485
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "month(s)"
 msgstr "mes/os"
 
-#: recurrenceedit.cpp:1484
+#: recurrenceedit.cpp:1486
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of months between repetitions of the alarm"
 msgstr "Introduïu el nombre de mesos entre les repeticions de l'alarma"
 
-#: recurrenceedit.cpp:1495
+#: recurrenceedit.cpp:1497
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "year(s)"
 msgstr "any/s"
 
-#: recurrenceedit.cpp:1496
+#: recurrenceedit.cpp:1498
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of years between repetitions of the alarm"
 msgstr "Introduïu el nombre d'anys entre les repeticions de l'alarma"
 
-#: recurrenceedit.cpp:1503
+#: recurrenceedit.cpp:1505
 #, kde-format
 msgctxt "@label List of months to select"
 msgid "Months:"
 msgstr "Mesos:"
 
-#: recurrenceedit.cpp:1521
+#: recurrenceedit.cpp:1523
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the months of the year in which to repeat the alarm"
 msgstr "Seleccioneu els mesos de l'any en els quals repetir l'alarma"
 
-#: recurrenceedit.cpp:1530
+#: recurrenceedit.cpp:1532
 #, kde-format
 msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
 msgstr "Alarma el 29 de febrer als anys que no siguin de traspàs:"
 
-#: recurrenceedit.cpp:1534
+#: recurrenceedit.cpp:1536
 #, kde-format
 msgctxt "@item:inlistbox No date"
 msgid "None"
 msgstr "Cap"
 
-#: recurrenceedit.cpp:1535
+#: recurrenceedit.cpp:1537
 #, kde-format
 msgctxt "@item:inlistbox 1st March (short form)"
 msgid "1 Mar"
 msgstr "1 mar"
 
-#: recurrenceedit.cpp:1536
+#: recurrenceedit.cpp:1538
 #, kde-format
 msgctxt "@item:inlistbox 28th February (short form)"
 msgid "28 Feb"
 msgstr "28 feb"
 
-#: recurrenceedit.cpp:1542
+#: recurrenceedit.cpp:1544
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6875,7 +6875,7 @@ msgstr ""
 "Seleccioneu la data, si cal, en què s'ha d'activar l'alarma del 29 de febrer "
 "en els anys que no siguin de traspàs"
 
-#: recurrenceedit.cpp:1624
+#: recurrenceedit.cpp:1626
 #, kde-format
 msgctxt "@info"
 msgid "No month selected"
@@ -8606,30 +8606,30 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Escolliu una plantilla en la qual basar l'alarma nova."
 
-#: traywindow.cpp:69
+#: traywindow.cpp:68
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "Alarma nova"
 
-#: traywindow.cpp:301
+#: traywindow.cpp:293
 #, kde-format
 msgid "Disabled"
 msgstr "Desactivada"
 
-#: traywindow.cpp:306
+#: traywindow.cpp:298
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(Algunes alarmes desactivades)"
 
-#: traywindow.cpp:366
+#: traywindow.cpp:358
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:368
+#: traywindow.cpp:360
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"
