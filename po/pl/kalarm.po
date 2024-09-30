@@ -1,6 +1,6 @@
 # translation of kalarm.po to
 # translation of alarmdaemonctrl.po to
-# Version: $Revision: 1691507 $
+# Version: $Revision: 1691713 $
 #
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2004, 2005, 2006.
@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-27 00:40+0000\n"
-"PO-Revision-Date: 2024-08-03 11:30+0200\n"
+"PO-Revision-Date: 2024-09-29 10:00+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -1021,28 +1021,21 @@ msgstr "Uruchom po zalogowaniu"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-#| "should always be checked unless you intend to discontinue use of KAlarm.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
-"<p>Samoczynnie uruchom KAlarm przy rozpoczęciu pracy z KDE.</p><p>Opcja ta "
-"powinna być zawsze zaznaczona, chyba że chcesz przerwać używanie KAlarm.</p>"
+"<p>Uruchom KAlarm wraz z KDE.</p><p>Ustawienie to powinno być zawsze "
+"ustawione na true , jeśli RunMode=Auto, w przeciwnym przypadku na false.</p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Run Mode"
+#, kde-format
 msgctxt "@label"
 msgid "Run mode"
-msgstr "Uruchamianie"
+msgstr "Tryb działania"
 
 #. i18n: ectx: whatsthis, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:138
@@ -1051,29 +1044,28 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
 msgstr ""
+"Określa czy uruchomić KAlarm zaraz po zalogowaniu, tylko ręcznie czy w ogóle."
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:140
 #, kde-format
 msgctxt "@option"
 msgid "Run automatically"
-msgstr ""
+msgstr "Uruchom sam"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:141
 #, kde-format
 msgctxt "@option"
 msgid "Run manually only"
-msgstr ""
+msgstr "Uruchamiaj tylko ręcznie"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:142
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option"
 msgid "Do not run"
-msgstr "Nie powtarzaj"
+msgstr "Nie uruchamiaj"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:147
@@ -5146,7 +5138,7 @@ msgstr "Uruchamianie"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run automatically"
-msgstr ""
+msgstr "Uruchom sam"
 
 #: prefdlg.cpp:459
 #, kde-format
@@ -5155,12 +5147,14 @@ msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
 msgstr ""
+"Uruchom KAlarm po zalogowaniu. Należy zaznaczyć to pole, aby KAlarm mógł "
+"działać poprawnie."
 
 #: prefdlg.cpp:462
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run manually only"
-msgstr ""
+msgstr "Uruchamiaj tylko ręcznie"
 
 #: prefdlg.cpp:465
 #, kde-format
@@ -5169,14 +5163,14 @@ msgid ""
 "Only run KAlarm manually, never automatically. KAlarm will only function "
 "when you manually start it."
 msgstr ""
+"Uruchamiaj KAlarm tylko ręcznie, nigdy samoczynnie. KAlarm będzie działał "
+"tylko, gdy uruchomisz go ręcznie."
 
 #: prefdlg.cpp:468
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Do not run"
-msgstr "Nie powtarzaj"
+msgstr "Nie uruchamiaj"
 
 #: prefdlg.cpp:471
 #, kde-format
@@ -5185,14 +5179,14 @@ msgid ""
 "Stop using KAlarm. If you later run it again, it will then resume normal "
 "functioning."
 msgstr ""
+"Przestań używać KAlarm. Jeśli później uruchomisz go ponownie, to wznowi on "
+"swoje działanie."
 
 #: prefdlg.cpp:474
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Activate <application>KAlarm</application>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr "Otwórz <application>KAlarm</application>"
+msgstr "Aby uruchomić <application>KAlarm</application> normalnie"
 
 #: prefdlg.cpp:481
 #, kde-format
@@ -5349,17 +5343,13 @@ msgstr ""
 "Nie znaleziono polecenia do otworzenia okna terminala: <command>%1</command>"
 
 #: prefdlg.cpp:702
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "You should not uncheck this option unless you intend to discontinue use "
-#| "of <application>KAlarm</application>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "You should not check this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
-"Nie powinno się wyłączać tej opcji, chyba że chcesz przestać używać "
+"Nie zaznaczaj tego pola, jeśli nie chcesz przestać korzystać z "
 "<application>KAlarm</application>"
 
 #: prefdlg.cpp:713
@@ -5369,6 +5359,8 @@ msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
 msgstr ""
+"Uniemożliwi to <application>KAlarm</application> działanie<nl/>,chyba że "
+"uruchomisz go ręcznie."
 
 #: prefdlg.cpp:758
 #, kde-kuit-format
@@ -8695,15 +8687,7 @@ msgid "Cannot schedule wakeup time for a date-only alarm"
 msgstr "Nie można zaplanować czasu pobudki dla alarmu tylko daty"
 
 #: wakedlg.cpp:150
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>This wakeup will cancel any existing wakeup which has been set by "
-#| "KAlarm or any other application, because your computer can only schedule "
-#| "a single wakeup time.</para><para><b>Note:</b> Wake From Suspend is not "
-#| "supported at all on some computers, especially older ones, and some "
-#| "computers only support setting a wakeup time up to 24 hours ahead. You "
-#| "may wish to set up a test alarm to check your system's capability.</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>This wakeup will cancel any existing wakeup which has been set by "
@@ -8715,11 +8699,11 @@ msgid ""
 msgstr ""
 "<para>Ta pobudka pomija jakąkolwiek istniejącą pobudkę, która został "
 "ustawiona przez KAlarm lub jakikolwiek inny program, bo twój komputer może "
-"zaplanować tylko pojedynczy czas pobudki.</para><para><b>Zauważ:</b> Pobudka "
-"ze uśpienia nie jest obsługiwana w ogóle na pewnych komputerach, szczególnie "
-"na tych starych, a niektóre komputery obsługują ustawienie pobudki tylko do "
-"24 godzin w przód. Możesz chcieć ustawić alarm testowy,,, aby sprawdzić "
-"możliwości swojego sprzętu.</para>"
+"zaplanować tylko pojedynczy czas pobudki.</para><para><note>Pobudka ze "
+"uśpienia nie jest obsługiwana w ogóle na pewnych komputerach, szczególnie na "
+"tych starych, a niektóre komputery obsługują ustawienie pobudki tylko do 24 "
+"godzin w przód. Możesz chcieć ustawić alarm testowy,,, aby sprawdzić "
+"możliwości swojego sprzętu.</note></para>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: wakedlg.ui:21
