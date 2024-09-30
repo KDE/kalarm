@@ -383,7 +383,7 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
         mTimeSpec = dt.timeSpec().isValid() ? dt.timeSpec() : KADateTime::LocalZone;
     else
     {
-        const QTimeZone tz = (dt.timeSpec() == KADateTime::LocalZone) ? QTimeZone() : dt.timeZone();
+        const QTimeZone tz = (dt.timeSpec() == KADateTime::LocalZone) ? QTimeZone() : dt.namedTimeZone();
         mTimeZone->setTimeZone(tz);
         slotTimeZoneChanged();
     }

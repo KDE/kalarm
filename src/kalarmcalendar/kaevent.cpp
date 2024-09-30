@@ -3,7 +3,7 @@
  *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -4774,7 +4774,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
     // The alarm occurs at different times of day.
     // We may need to check for a full annual cycle of seasonal time changes, in
     // case it only occurs during working hours after a time change.
-    const QTimeZone tz = kdt.timeZone();
+    const QTimeZone tz = kdt.namedTimeZone();
     // Get time zone transitions for the next 10 years.
     const QDateTime endTransitionsTime = QDateTime::currentDateTimeUtc().addYears(10);
     const QTimeZone::OffsetDataList tzTransitions = tz.transitions(mStartDateTime.qDateTime(), endTransitionsTime);
@@ -5848,7 +5848,9 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr& event)
         const int adjustment = oldDt.time().secsTo(midnight);
         if (adjustment)
         {
-            event->setDtStart(QDateTime(oldDt.date(), midnight, oldDt.timeSpec()));
+            QDateTime newDt = oldDt;
+            newDt.setTime(midnight);
+            event->setDtStart(newDt);
             int deferralOffset = 0;
             AlarmMap alarmMap;
             readAlarms(event, &alarmMap);

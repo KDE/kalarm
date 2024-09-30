@@ -226,23 +226,38 @@ public:
         bool isValid() const;
 
         /**
-         * Returns the time zone for the date/time, according to the time
+         * Returns the new (Qt >= 6.5) QTimeZone equivalent for the time
          * specification type as follows:
-         * - @c TimeZone  : the specified time zone is returned.
-         * - @c UTC       : a UTC time zone is returned.
-         * - @c LocalZone : the current local time zone is returned.
+         * - @c TimeZone      : the time zone is returned.
+         * - @c UTC           : UTC is returned.
+         * - @c OffsetFromUTC : the offset from UTC is returned.
+         * - @c LocalZone     : a "local time" instance is returned, NOT the
+         *                      system time zone.
          *
          * @return time zone as defined above, or invalid in all other cases
          * @see isUtc(), isLocal()
          */
-        QTimeZone timeZone() const;
+        QTimeZone qTimeZone() const;
+
+        /**
+         * Returns the fully fledged time zone (i.e. not a UTC offset) for the
+         * time specification type as follows:
+         * - @c TimeZone      : the specified time zone is returned.
+         * - @c UTC           : the UTC time zone is returned.
+         * - @c LocalZone     : the current local time zone is returned.
+         * - @c OffsetFromUTC : an invalid time zone is returned.
+         *
+         * @return time zone as defined above, or invalid in all other cases
+         * @see isUtc(), isLocal()
+         */
+        QTimeZone namedTimeZone() const;
 
         /**
          * Returns the time specification type, i.e. whether it is
          * UTC, has a time zone, etc.
          *
          * @return specification type
-         * @see isLocalZone(), isUtc(), timeZone()
+         * @see isLocalZone(), isUtc(), namedTimeZone(), qTimeZone()
          */
         SpecType type() const;
 
@@ -251,7 +266,7 @@ public:
          * system time zone.
          *
          * @return @c true if local system time zone
-         * @see isUtc(), isOffsetFromUtc(), timeZone()
+         * @see isUtc(), isOffsetFromUtc(), namedTimeZone(), qTimeZone()
          */
         bool isLocalZone() const;
 
@@ -261,7 +276,7 @@ public:
          * or is type @c OffsetFromUTC with a zero UTC offset.
          *
          * @return @c true if UTC
-         * @see isLocal(), isOffsetFromUtc(), timeZone()
+         * @see isLocal(), isOffsetFromUtc(), namedTimeZone(), qTimeZone()
          */
         bool isUtc() const;
 
@@ -302,7 +317,7 @@ public:
 	 * will follow changes to the system time zone.
          *
          * @param tz new time zone
-         * @see timeZone(), setType(SpecType)
+         * @see namedTimeZone(), qTimeZone(), setType(SpecType)
          */
         void setType(const QTimeZone& tz);
 
@@ -605,21 +620,36 @@ public:
     QDateTime qDateTime() const;
 
     /**
-     * Returns the time zone for the date/time. If the date/time is specified
-     * as a UTC time, a UTC time zone is always returned. If it is specified as
-     * LocalZone, the system time zone is returned.
+     * Returns the new (Qt >= 6.5) QTimeZone for the date/time,
+     * depending on the timeSpec() as follows:
+     * - @c TimeZone      : the time zone is returned.
+     * - @c UTC           : UTC is returned.
+     * - @c OffsetFromUTC : the offset from UTC is returned.
+     * - @c LocalZone     : a "local time" instance is returned, NOT the
+     *                      system time zone.
      *
-     * @return time zone, or invalid if a local time at a fixed UTC offset
+     * @return time zone as defined above, or invalid in all other cases
      * @see isUtc(), isLocal()
      */
-    QTimeZone timeZone() const;
+    QTimeZone qTimeZone() const;
+
+    /**
+     * Returns the fully fledged time zone (i.e. not a UTC offset) for the date/time.
+     * If the date/time is specified as a UTC time, the UTC time zone is
+     * returned. If it is specified as LocalZone, the system time zone is
+     * returned.
+     *
+     * @return time zone, or invalid if a time at a fixed UTC offset
+     * @see isUtc(), isLocal()
+     */
+    QTimeZone namedTimeZone() const;
 
     /**
      * Returns the time specification of the date/time, i.e. whether it is
      * UTC, what time zone it is, etc.
      *
      * @return time specification
-     * @see isLocalZone(), isUtc(), timeZone()
+     * @see isLocalZone(), isUtc(), namedTimeZone(), qTimeZone()
      */
     Spec timeSpec() const;
 
@@ -628,7 +658,7 @@ public:
      * UTC, has a time zone, etc.
      *
      * @return specification type
-     * @see timeSpec(), isLocalZone(), isUtc(), timeZone()
+     * @see timeSpec(), isLocalZone(), isUtc(), namedTimeZone(), qTimeZone()
      */
     SpecType timeType() const;
 
@@ -637,7 +667,7 @@ public:
      * system time zone.
      *
      * @return @c true if local system time zone
-     * @see isUtc(), isOffsetFromUtc(), timeZone()
+     * @see isUtc(), isOffsetFromUtc(), namedTimeZone(), qTimeZone()
      */
     bool isLocalZone() const;
 
@@ -648,7 +678,7 @@ public:
      * (SpecType == OffsetFromUTC with zero UTC offset).
      *
      * @return @c true if UTC
-     * @see isLocal(), isOffsetFromUtc(), timeZone()
+     * @see isLocal(), isOffsetFromUtc(), namedTimeZone(), qTimeZone()
      */
     bool isUtc() const;
 
@@ -844,7 +874,7 @@ public:
      * absolute time which this instance represents.
      *
      * @param spec new time specification
-     * @see timeSpec(), timeZone()
+     * @see timeSpec(), namedTimeZone(), qTimeZone()
      */
     void setTimeSpec(const Spec& spec);
 

@@ -165,7 +165,24 @@ void KADateTime::Spec::setType(const QTimeZone& tz)
         d->type = KADateTime::Invalid;
 }
 
-QTimeZone KADateTime::Spec::timeZone() const
+QTimeZone KADateTime::Spec::qTimeZone() const
+{
+    switch (d->type)
+    {
+        case KADateTime::TimeZone:
+            return d->tz;
+        case KADateTime::UTC:
+            return QTimeZone::utc();
+        case KADateTime::OffsetFromUTC:
+            return QTimeZone(d->utcOffset);
+        case KADateTime::LocalZone:
+            return QTimeZone(QTimeZone::LocalTime);
+        default:
+            return {};
+    }
+}
+
+QTimeZone KADateTime::Spec::namedTimeZone() const
 {
     switch (d->type)
     {
@@ -260,7 +277,7 @@ QDataStream& operator<<(QDataStream& s, const KADateTime::Spec& spec)
             s << static_cast<quint8>('o') << spec.utcOffset();
             break;
         case KADateTime::TimeZone:
-            s << static_cast<quint8>('z') << (spec.timeZone().isValid() ? spec.timeZone().id() : QByteArray());
+            s << static_cast<quint8>('z') << (spec.namedTimeZone().isValid() ? spec.namedTimeZone().id() : QByteArray());
             break;
         case KADateTime::LocalZone:
             s << static_cast<quint8>('c');
@@ -324,7 +341,7 @@ public:
 
     KADateTimePrivate(const QDate& d, const QTime& t, const KADateTime::Spec& s, bool donly = false)
         : QSharedData()
-        , mDt(QDateTime(d, t, Qt::UTC))
+        , mDt(QDateTime(d, t, QTimeZone(QTimeZone::UTC)))
         , specType(s.type())
         , utcCached(false)
         , convertedCached(false)
@@ -410,7 +427,7 @@ public:
         if (specType == KADateTime::LocalZone)
         {
             QDateTime dtl(mDt);
-            dtl.setTimeSpec(Qt::LocalTime);
+            dtl.setTimeZone(QTimeZone(QTimeZone::LocalTime));
             return dtl;
         }
         return mDt;
@@ -582,7 +599,7 @@ void KADateTimePrivate::setDtSpec(const KADateTime::Spec& s)
             mDt.setTimeZone(QTimeZone::fromSecondsAheadOfUtc(s.utcOffset()));
             break;
         case KADateTime::TimeZone:
-            mDt.setTimeZone(s.timeZone());
+            mDt.setTimeZone(s.namedTimeZone());
             break;
         case KADateTime::LocalZone:
             mDt.setTimeZone(QTimeZone::systemTimeZone());
@@ -607,7 +624,7 @@ void KADateTimePrivate::setSpec(const KADateTime::Spec& other)
         {
             case KADateTime::TimeZone:
             {
-                const QTimeZone tz = other.timeZone();
+                const QTimeZone tz = other.namedTimeZone();
                 if (mDt.timeZone() != tz)
                 {
                     mDt.setTimeZone(tz);
@@ -1094,7 +1111,24 @@ KADateTime::SpecType KADateTime::timeType() const
     return d->specType;
 }
 
-QTimeZone KADateTime::timeZone() const
+QTimeZone KADateTime::qTimeZone() const
+{
+    switch (d->specType)
+    {
+        case UTC:
+            return QTimeZone::utc();
+        case OffsetFromUTC:
+            return QTimeZone(d->spec().utcOffset());
+        case TimeZone:
+            return d->timeZone();
+        case LocalZone:
+            return QTimeZone(QTimeZone::LocalTime);
+        default:
+            return {};
+    }
+}
+
+QTimeZone KADateTime::namedTimeZone() const
 {
     switch (d->specType)
     {
@@ -1252,7 +1286,7 @@ KADateTime KADateTime::toTimeSpec(const Spec& spec) const
     {
         KADateTime result;
         QTimeZone local;
-        d->newToZone(result.d, spec.timeZone(), local);  // cache the time zone conversion
+        d->newToZone(result.d, spec.namedTimeZone(), local);  // cache the time zone conversion
         return result;
     }
     QTimeZone local;
@@ -1463,7 +1497,7 @@ KADateTime KADateTime::currentDateTime(const Spec& spec)
         case UTC:
             return currentUtcDateTime();
         case TimeZone:
-            if (spec.timeZone() != QTimeZone::systemTimeZone())
+            if (spec.namedTimeZone() != QTimeZone::systemTimeZone())
                 break;
             [[fallthrough]]; // fall through to LocalZone
         case LocalZone:
@@ -2762,7 +2796,7 @@ void KADateTime::setSimulatedSystemTime(const KADateTime& newTime)
     if (newTime.isValid())
     {
         KADateTimePrivate::simulationOffset = realCurrentLocalDateTime().secsTo_long(newTime);
-        KADateTimePrivate::simulationLocalZone = newTime.timeZone();
+        KADateTimePrivate::simulationLocalZone = newTime.namedTimeZone();
     }
     else
     {
@@ -3160,7 +3194,7 @@ QDateTime fromStr(const QString& string, const QString& format, int& utcOffset,
             hour += 12;
     }
 
-    QDateTime dt(d, QTime(hour, minute, second, millisec), (tzoffset == 0 ? Qt::UTC : Qt::LocalTime));
+    QDateTime dt(d, QTime(hour, minute, second, millisec), QTimeZone(tzoffset == 0 ? QTimeZone::UTC : QTimeZone::LocalTime));
 
     utcOffset = (tzoffset == NO_NUMBER) ? 0 : tzoffset * 60;
 
@@ -3407,7 +3441,7 @@ int offsetAtZoneTime(const QTimeZone& tz, const QDateTime& zoneDateTime, int* se
     if (secondOffset)
     {
         // Check if there is a daylight savings shift around zoneDateTime.
-        const QDateTime utc = QDateTime(zoneDateTime.date(), zoneDateTime.time(), Qt::UTC).addSecs(-offset);
+        const QDateTime utc = QDateTime(zoneDateTime.date(), zoneDateTime.time(), QTimeZone(QTimeZone::UTC)).addSecs(-offset);
         QTimeZone::OffsetData transition;
         int step = checkTzTransitionBackwards(transition, tz, utc, zoneDateTime);
         if (step < 0)

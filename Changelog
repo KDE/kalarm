@@ -1,8 +1,9 @@
 KAlarm Change Log
 
-=== Version 3.10.0 (KDE Gear 24.12) --- 12 September 2024 ===
+=== Version 3.10.0 (KDE Gear 24.12) --- 30 September 2024 ===
 * Provide build option to use VLC or MPV to play sounds.
 * Show all Run Mode options in Preferences dialogue. 
+* Convert to Qt 6.5 QDateTime/QTimeZone changes.
 
 === Version 3.9.2 (KDE Gear 24.08.2) --- 26 September 2024 ===
 * Fix crash if kernel alarm timers are supported.

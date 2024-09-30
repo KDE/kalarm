@@ -3,7 +3,7 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -119,8 +119,11 @@ public:
      */
     KADateTime calendarKDateTime() const;
 
-    /** Returns the time zone of the value. */
-    QTimeZone timeZone() const;
+    /** Returns the new (Qt >= 6.5) QTimeZone for the value. */
+    QTimeZone qTimeZone() const;
+
+    /** Returns the fully fledged time zone (i.e. not a UTC offset) of the value. */
+    QTimeZone namedTimeZone() const;
 
     /** Returns the time specification of the value. */
     KADateTime::Spec timeSpec() const;

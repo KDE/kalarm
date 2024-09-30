@@ -365,7 +365,7 @@ QTimeZone Preferences::timeSpecAsZone()
 
 void Preferences::setTimeSpec(const KADateTime::Spec& spec)
 {
-    self()->setBase_TimeZone(spec.type() == KADateTime::TimeZone ? QString::fromLatin1(spec.timeZone().id()) : QString());
+    self()->setBase_TimeZone(spec.type() == KADateTime::TimeZone ? QString::fromLatin1(spec.namedTimeZone().id()) : QString());
 }
 
 void Preferences::timeZoneChange(const QString& zone)

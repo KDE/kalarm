@@ -3,7 +3,7 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -66,11 +66,9 @@ QTimeZone KARecurrence::Private::toTimeZone(const KADateTime::Spec& spec)
     switch (spec.type())
     {
         case KADateTime::LocalZone:
-            return QTimeZone::systemTimeZone();
         case KADateTime::UTC:
-            return QTimeZone::utc();
         case KADateTime::TimeZone:
-	    return spec.timeZone();
+	    return spec.namedTimeZone();
         case KADateTime::OffsetFromUTC:
             return QTimeZone(spec.utcOffset());
         case KADateTime::Invalid:

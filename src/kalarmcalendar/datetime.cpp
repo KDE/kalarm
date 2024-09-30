@@ -3,7 +3,7 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -181,9 +181,14 @@ KADateTime DateTime::calendarKDateTime() const
     return d->mDateTime;
 }
 
-QTimeZone DateTime::timeZone() const
+QTimeZone DateTime::qTimeZone() const
 {
-    return d->mDateTime.timeZone();
+    return d->mDateTime.qTimeZone();
+}
+
+QTimeZone DateTime::namedTimeZone() const
+{
+    return d->mDateTime.namedTimeZone();
 }
 
 KADateTime::Spec DateTime::timeSpec() const

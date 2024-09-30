@@ -2,7 +2,7 @@
    This file is part of kalarmcal library, which provides access to KAlarm
    calendar data.
 
-   SPDX-FileCopyrightText: 2005, 2011, 2018 David Jarvie <djarvie@kde.org>
+   SPDX-FileCopyrightText: 2005-2024 David Jarvie <djarvie@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -17,6 +17,7 @@ class KADateTimeTest : public QObject
 private Q_SLOTS:
     void specConstructors();
     void specSet();
+    void qDateTime();
     void constructors();
     void toUtc();
     void toOffsetFromUtc();

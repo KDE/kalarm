@@ -925,7 +925,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
 void TimePrefTab::restore(bool, bool)
 {
     KADateTime::Spec timeSpec = Preferences::timeSpec();
-    mTimeZone->setTimeZone(timeSpec.type() == KADateTime::TimeZone ? timeSpec.timeZone() : QTimeZone());
+    mTimeZone->setTimeZone(timeSpec.type() == KADateTime::TimeZone ? timeSpec.namedTimeZone() : QTimeZone());
     const int ix = Preferences::holidays().isValid() ? mHolidays->findData(Preferences::holidays().regionCode()) : 0;
     mHolidays->setCurrentIndex(ix);
     if (mPreWakeSuspend)

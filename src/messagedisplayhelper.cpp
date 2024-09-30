@@ -456,7 +456,7 @@ QString MessageDisplayHelper::dateTimeToDisplay() const
             const QDateTime dt = mDateTime.qDateTime();
             tm = locale.toString(dt, QLocale::ShortFormat);
             if (showZone)
-                tm += ' '_L1 + mDateTime.timeZone().displayName(dt, QTimeZone::ShortName, locale);
+                tm += ' '_L1 + mDateTime.namedTimeZone().displayName(dt, QTimeZone::ShortName, locale);
         }
     }
     return tm;
@@ -593,7 +593,7 @@ bool MessageDisplayHelper::saveProperties(KConfigGroup& config)
             }
             else if (mDateTime.timeType() == KADateTime::TimeZone)
             {
-                const QTimeZone tz = mDateTime.timeZone();
+                const QTimeZone tz = mDateTime.namedTimeZone();
                 if (tz.isValid())
                     zone = tz.id();
             }

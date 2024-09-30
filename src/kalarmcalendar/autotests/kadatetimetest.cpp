@@ -2,7 +2,7 @@
    This file is part of kalarmcal library, which provides access to KAlarm
    calendar data.
 
-   SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
+   SPDX-FileCopyrightText: 2005-2024 David Jarvie <djarvie@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -59,7 +59,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(!invalid.isUtc());
     QVERIFY(!invalid.isOffsetFromUtc());
     QCOMPARE(invalid.utcOffset(), 0);
-    QVERIFY(!invalid.timeZone().isValid());
+    QVERIFY(!invalid.namedTimeZone().isValid());
+    QVERIFY(!invalid.qTimeZone().isValid());
 
     // Time zone
     KADateTime::Spec tz(london);
@@ -69,7 +70,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(!tz.isOffsetFromUtc());
     QVERIFY(!tz.isLocalZone());
     QCOMPARE(tz.utcOffset(), 0);
-    QCOMPARE(tz.timeZone(), london);
+    QCOMPARE(tz.namedTimeZone(), london);
+    QCOMPARE(tz.qTimeZone(), london);
 
     KADateTime::Spec tzLocal(losAngeles);
     QVERIFY(tzLocal.isValid());
@@ -78,7 +80,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(!tzLocal.isOffsetFromUtc());
     QVERIFY(!tzLocal.isLocalZone());
     QCOMPARE(tzLocal.utcOffset(), 0);
-    QCOMPARE(tzLocal.timeZone(), losAngeles);
+    QCOMPARE(tzLocal.namedTimeZone(), losAngeles);
+    QCOMPARE(tzLocal.qTimeZone(), losAngeles);
 
     // ... copy constructor
     KADateTime::Spec tzCopy(tz);
@@ -88,7 +91,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(!tzCopy.isOffsetFromUtc());
     QVERIFY(!tzCopy.isLocalZone());
     QCOMPARE(tzCopy.utcOffset(), 0);
-    QCOMPARE(tzCopy.timeZone(), london);
+    QCOMPARE(tzCopy.namedTimeZone(), london);
+    QCOMPARE(tzCopy.qTimeZone(), london);
 
     // Local time zone
     KADateTime::Spec local(KADateTime::LocalZone);
@@ -99,7 +103,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(!local.isOffsetFromUtc());
     QVERIFY(local.isLocalZone());
     QCOMPARE(local.utcOffset(), 0);
-    QCOMPARE(local.timeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(local.namedTimeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(local.qTimeZone(), QTimeZone(QTimeZone::LocalTime));
 
     KADateTime::Spec localx(KADateTime::Spec(KADateTime::LocalZone, 2 * 3600));
     QVERIFY(localx.isValid());
@@ -109,7 +114,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(!localx.isOffsetFromUtc());
     QVERIFY(localx.isLocalZone());
     QCOMPARE(localx.utcOffset(), 0);
-    QCOMPARE(localx.timeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(localx.namedTimeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(localx.qTimeZone(), QTimeZone(QTimeZone::LocalTime));
 
     KADateTime::Spec local2 = KADateTime::Spec::LocalZone();
     QVERIFY(local2.isValid());
@@ -119,7 +125,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(!local2.isOffsetFromUtc());
     QVERIFY(local2.isLocalZone());
     QCOMPARE(local2.utcOffset(), 0);
-    QCOMPARE(local2.timeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(local2.namedTimeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(local2.qTimeZone(), QTimeZone(QTimeZone::LocalTime));
 
     // ... copy constructor
     KADateTime::Spec localCopy(local);
@@ -130,7 +137,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(!localCopy.isOffsetFromUtc());
     QVERIFY(localCopy.isLocalZone());
     QCOMPARE(localCopy.utcOffset(), 0);
-    QCOMPARE(localCopy.timeZone(), losAngeles);
+    QCOMPARE(localCopy.namedTimeZone(), losAngeles);
+    QCOMPARE(localCopy.qTimeZone(), QTimeZone(QTimeZone::LocalTime));
 
     // UTC
     KADateTime::Spec utc(KADateTime::UTC);
@@ -140,7 +148,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(!utc.isOffsetFromUtc());
     QVERIFY(!utc.isLocalZone());
     QCOMPARE(utc.utcOffset(), 0);
-    QCOMPARE(utc.timeZone(), QTimeZone::utc());
+    QCOMPARE(utc.namedTimeZone(), QTimeZone::utc());
+    QCOMPARE(utc.qTimeZone(), QTimeZone::utc());
 
     KADateTime::Spec utcx(KADateTime::UTC, 2 * 3600);
     QVERIFY(utcx.isValid());
@@ -149,7 +158,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(!utcx.isOffsetFromUtc());
     QVERIFY(!utcx.isLocalZone());
     QCOMPARE(utcx.utcOffset(), 0);
-    QCOMPARE(utcx.timeZone(), QTimeZone::utc());
+    QCOMPARE(utcx.namedTimeZone(), QTimeZone::utc());
+    QCOMPARE(utcx.qTimeZone(), QTimeZone::utc());
 
     const KADateTime::Spec &utc2 = KADateTime::Spec::UTC();
     QVERIFY(utc2.isValid());
@@ -158,7 +168,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(!utc2.isOffsetFromUtc());
     QVERIFY(!utc2.isLocalZone());
     QCOMPARE(utc2.utcOffset(), 0);
-    QCOMPARE(utc2.timeZone(), QTimeZone::utc());
+    QCOMPARE(utc2.namedTimeZone(), QTimeZone::utc());
+    QCOMPARE(utc2.qTimeZone(), QTimeZone::utc());
 
     // ... copy constructor
     KADateTime::Spec utcCopy(utc);
@@ -168,7 +179,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(!utcCopy.isOffsetFromUtc());
     QVERIFY(!utcCopy.isLocalZone());
     QCOMPARE(utcCopy.utcOffset(), 0);
-    QCOMPARE(utcCopy.timeZone(), QTimeZone::utc());
+    QCOMPARE(utcCopy.namedTimeZone(), QTimeZone::utc());
+    QCOMPARE(utcCopy.qTimeZone(), QTimeZone::utc());
 
     // Offset from UTC
     KADateTime::Spec offset0(KADateTime::OffsetFromUTC);
@@ -178,7 +190,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(offset0.isOffsetFromUtc());
     QVERIFY(!offset0.isLocalZone());
     QCOMPARE(offset0.utcOffset(), 0);
-    QVERIFY(!offset0.timeZone().isValid());
+    QVERIFY(!offset0.namedTimeZone().isValid());
+    QCOMPARE(offset0.qTimeZone(), QTimeZone::utc());
 
     KADateTime::Spec offset(KADateTime::Spec(KADateTime::OffsetFromUTC, -2 * 3600));
     QVERIFY(offset.isValid());
@@ -187,7 +200,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(offset.isOffsetFromUtc());
     QVERIFY(!offset.isLocalZone());
     QCOMPARE(offset.utcOffset(), -2 * 3600);
-    QVERIFY(!offset.timeZone().isValid());
+    QVERIFY(!offset.namedTimeZone().isValid());
+    QCOMPARE(offset.qTimeZone(), QTimeZone(-2 * 3600));
 
     KADateTime::Spec offset2 = KADateTime::Spec::OffsetFromUTC(2 * 3600);
     QVERIFY(offset2.isValid());
@@ -196,7 +210,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(offset2.isOffsetFromUtc());
     QVERIFY(!offset2.isLocalZone());
     QCOMPARE(offset2.utcOffset(), 2 * 3600);
-    QVERIFY(!offset2.timeZone().isValid());
+    QVERIFY(!offset2.namedTimeZone().isValid());
+    QCOMPARE(offset2.qTimeZone(), QTimeZone(2 * 3600));
 
     // ... copy constructor
     KADateTime::Spec offsetCopy(offset);
@@ -206,7 +221,8 @@ void KADateTimeTest::specConstructors()
     QVERIFY(offsetCopy.isOffsetFromUtc());
     QVERIFY(!offsetCopy.isLocalZone());
     QCOMPARE(offsetCopy.utcOffset(), -2 * 3600);
-    QVERIFY(!offsetCopy.timeZone().isValid());
+    QVERIFY(!offsetCopy.namedTimeZone().isValid());
+    QCOMPARE(offsetCopy.qTimeZone(), QTimeZone(-2 * 3600));
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
@@ -290,6 +306,50 @@ void KADateTimeTest::specSet()
 }
 
 //////////////////////////////////////////////////////
+// QDateTime time spec assumption checks
+//////////////////////////////////////////////////////
+
+void KADateTimeTest::qDateTime()
+{
+    QDate d(2001, 2, 13);
+    QTime t(3, 45, 14);
+    QDateTime dtLocal(d, t, QTimeZone(QTimeZone::LocalTime));
+    QDateTime dtUTC(d, t, QTimeZone(QTimeZone::UTC));
+    QTimeZone london("Europe/London");
+
+    QByteArray originalZone = qgetenv("TZ");   // save the original local time zone
+    qputenv("TZ", ":Europe/London");
+    ::tzset();
+    QDateTime dtUTCtoLondon = dtUTC.toLocalTime();
+    // It's now set to Qt::LocalTime, so fix the zone to the current local zone,
+    // to prevent it following what is next set by tzset().
+    dtUTCtoLondon.setTimeZone(dtUTCtoLondon.timeZone().asBackendZone());
+
+    // Ensure that local time is different from UTC and different from 'london'
+    qputenv("TZ", ":America/Los_Angeles");
+    ::tzset();
+
+    // Check time spec
+    QDateTime dateTime(QDate(2020, 6, 10), QTime(10, 32, 44), dtUTCtoLondon.timeZone());
+    dateTime.setTimeZone(QTimeZone(QTimeZone::LocalTime));
+    QCOMPARE(dateTime.timeRepresentation(), QTimeZone(QTimeZone::LocalTime));
+    dateTime.setTimeZone(QTimeZone(QTimeZone::UTC));
+    QCOMPARE(dateTime.timeZone(), QTimeZone::utc());
+    dateTime.setTimeZone(QTimeZone::fromSecondsAheadOfUtc(3600 * 4));
+    QCOMPARE(dateTime.timeZone(), QTimeZone(3600 * 4));
+    dateTime.setTimeZone(dtUTCtoLondon.timeZone());
+    QCOMPARE(dateTime.timeZone(), QTimeZone(QByteArray("Europe/London")));
+
+    // Restore the original local time zone
+    if (originalZone.isEmpty()) {
+        unsetenv("TZ");
+    } else {
+        qputenv("TZ", originalZone);
+    }
+    ::tzset();
+}
+
+//////////////////////////////////////////////////////
 // Constructors and basic property information methods
 //////////////////////////////////////////////////////
 
@@ -297,14 +357,17 @@ void KADateTimeTest::constructors()
 {
     QDate d(2001, 2, 13);
     QTime t(3, 45, 14);
-    QDateTime dtLocal(d, t, Qt::LocalTime);
-    QDateTime dtUTC(d, t, Qt::UTC);
+    QDateTime dtLocal(d, t, QTimeZone(QTimeZone::LocalTime));
+    QDateTime dtUTC(d, t, QTimeZone(QTimeZone::UTC));
     QTimeZone london("Europe/London");
 
     QByteArray originalZone = qgetenv("TZ");   // save the original local time zone
     qputenv("TZ", ":Europe/London");
     ::tzset();
     QDateTime dtUTCtoLondon = dtUTC.toLocalTime();
+    // It's now set to Qt::LocalTime, so fix the zone to the current local zone,
+    // to prevent it following what is next set by tzset().
+    dtUTCtoLondon.setTimeZone(dtUTCtoLondon.timeZone().asBackendZone());
 
     // Ensure that local time is different from UTC and different from 'london'
     qputenv("TZ", ":America/Los_Angeles");
@@ -326,7 +389,8 @@ void KADateTimeTest::constructors()
     QVERIFY(!datetimeL.isUtc());
     QVERIFY(!datetimeL.isOffsetFromUtc());
     QCOMPARE(datetimeL.utcOffset(), -8 * 3600);
-    QCOMPARE(datetimeL.timeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(datetimeL.namedTimeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(datetimeL.qTimeZone(), QTimeZone(QTimeZone::LocalTime));
     QCOMPARE(datetimeL.date(), dtLocal.date());
     QCOMPARE(datetimeL.time(), dtLocal.time());
     QCOMPARE(datetimeL.qDateTime(), dtLocal);
@@ -340,7 +404,8 @@ void KADateTimeTest::constructors()
     QVERIFY(datetimeU.isUtc());
     QVERIFY(!datetimeU.isOffsetFromUtc());
     QCOMPARE(datetimeU.utcOffset(), 0);
-    QCOMPARE(datetimeU.timeZone(), QTimeZone::utc());
+    QCOMPARE(datetimeU.namedTimeZone(), QTimeZone::utc());
+    QCOMPARE(datetimeU.qTimeZone(), QTimeZone::utc());
     QCOMPARE(datetimeU.date(), dtUTC.date());
     QCOMPARE(datetimeU.time(), dtUTC.time());
     QCOMPARE(datetimeU.qDateTime(), dtUTC);
@@ -355,7 +420,8 @@ void KADateTimeTest::constructors()
     QVERIFY(!dateTz.isOffsetFromUtc());
     QVERIFY(!dateTz.isLocalZone());
     QCOMPARE(dateTz.utcOffset(), 0);
-    QCOMPARE(dateTz.timeZone(), london);
+    QCOMPARE(dateTz.namedTimeZone(), london);
+    QCOMPARE(dateTz.qTimeZone(), london);
     QCOMPARE(dateTz.date(), d);
     QCOMPARE(dateTz.time(), QTime(0, 0, 0));
     QCOMPARE(dateTz.qDateTime(), QDateTime(d, QTime(0, 0, 0), london));
@@ -369,7 +435,8 @@ void KADateTimeTest::constructors()
     QVERIFY(!dateTimeTz.isOffsetFromUtc());
     QVERIFY(!dateTimeTz.isLocalZone());
     QCOMPARE(dateTimeTz.utcOffset(), 0);
-    QCOMPARE(dateTimeTz.timeZone(), london);
+    QCOMPARE(dateTimeTz.namedTimeZone(), london);
+    QCOMPARE(dateTimeTz.qTimeZone(), london);
     QCOMPARE(dateTimeTz.date(), d);
     QCOMPARE(dateTimeTz.time(), QTime(3, 45, 14));
     QCOMPARE(dateTimeTz.qDateTime(), QDateTime(d, QTime(3, 45, 14), london));
@@ -383,7 +450,8 @@ void KADateTimeTest::constructors()
     QVERIFY(!datetimeTz.isOffsetFromUtc());
     QVERIFY(!datetimeTz.isLocalZone());
     QCOMPARE(datetimeTz.utcOffset(), 0);
-    QCOMPARE(datetimeTz.timeZone(), london);
+    QCOMPARE(datetimeTz.namedTimeZone(), london);
+    QCOMPARE(datetimeTz.qTimeZone(), london);
     QCOMPARE(datetimeTz.date(), dtLocal.date());
     QCOMPARE(datetimeTz.time(), QTime(11, 45, 14));
     QCOMPARE(datetimeTz.qDateTime(), dtLocal.toTimeZone(london));
@@ -397,7 +465,8 @@ void KADateTimeTest::constructors()
     QVERIFY(!datetimeTz2.isOffsetFromUtc());
     QVERIFY(!datetimeTz2.isLocalZone());
     QCOMPARE(datetimeTz2.utcOffset(), 0);
-    QCOMPARE(datetimeTz2.timeZone(), london);
+    QCOMPARE(datetimeTz2.namedTimeZone(), london);
+    QCOMPARE(datetimeTz2.qTimeZone(), london);
     QCOMPARE(datetimeTz2.date(), dtUTCtoLondon.date());
     QCOMPARE(datetimeTz2.time(), dtUTCtoLondon.time());
     QCOMPARE(datetimeTz2.qDateTime(), dtUTC);
@@ -412,7 +481,8 @@ void KADateTimeTest::constructors()
     QVERIFY(!datetimeTzCopy.isOffsetFromUtc());
     QVERIFY(!datetimeTzCopy.isLocalZone());
     QCOMPARE(datetimeTzCopy.utcOffset(), 0);
-    QCOMPARE(datetimeTzCopy.timeZone(), datetimeTz.timeZone());
+    QCOMPARE(datetimeTzCopy.namedTimeZone(), datetimeTz.namedTimeZone());
+    QCOMPARE(datetimeTzCopy.qTimeZone(), datetimeTz.qTimeZone());
     QCOMPARE(datetimeTzCopy.date(), datetimeTz.date());
     QCOMPARE(datetimeTzCopy.time(), datetimeTz.time());
     QCOMPARE(datetimeTzCopy.qDateTime(), datetimeTz.qDateTime());
@@ -427,10 +497,11 @@ void KADateTimeTest::constructors()
     QVERIFY(!date_UTC.isOffsetFromUtc());
     QVERIFY(!date_UTC.isLocalZone());
     QCOMPARE(date_UTC.utcOffset(), 0);
-    QCOMPARE(date_UTC.timeZone(), QTimeZone::utc());
+    QCOMPARE(date_UTC.namedTimeZone(), QTimeZone::utc());
+    QCOMPARE(date_UTC.qTimeZone(), QTimeZone::utc());
     QCOMPARE(date_UTC.date(), d);
     QCOMPARE(date_UTC.time(), QTime(0, 0, 0));
-    QCOMPARE(date_UTC.qDateTime(), QDateTime(d, QTime(0, 0, 0), Qt::UTC));
+    QCOMPARE(date_UTC.qDateTime(), QDateTime(d, QTime(0, 0, 0), QTimeZone(QTimeZone::UTC)));
 
     KADateTime dateTime_UTC(d, t, KADateTime::UTC);
     QVERIFY(!dateTime_UTC.isNull());
@@ -441,10 +512,11 @@ void KADateTimeTest::constructors()
     QVERIFY(!dateTime_UTC.isOffsetFromUtc());
     QVERIFY(!dateTime_UTC.isLocalZone());
     QCOMPARE(dateTime_UTC.utcOffset(), 0);
-    QCOMPARE(dateTime_UTC.timeZone(), QTimeZone::utc());
+    QCOMPARE(dateTime_UTC.namedTimeZone(), QTimeZone::utc());
+    QCOMPARE(dateTime_UTC.qTimeZone(), QTimeZone::utc());
     QCOMPARE(dateTime_UTC.date(), d);
     QCOMPARE(dateTime_UTC.time(), t);
-    QCOMPARE(dateTime_UTC.qDateTime(), QDateTime(d, t, Qt::UTC));
+    QCOMPARE(dateTime_UTC.qDateTime(), QDateTime(d, t, QTimeZone(QTimeZone::UTC)));
 
     KADateTime datetime_UTC(dtLocal, KADateTime::UTC);
     QVERIFY(!datetime_UTC.isNull());
@@ -455,7 +527,8 @@ void KADateTimeTest::constructors()
     QVERIFY(!datetime_UTC.isOffsetFromUtc());
     QVERIFY(!datetime_UTC.isLocalZone());
     QCOMPARE(datetime_UTC.utcOffset(), 0);
-    QCOMPARE(datetime_UTC.timeZone(), QTimeZone::utc());
+    QCOMPARE(datetime_UTC.namedTimeZone(), QTimeZone::utc());
+    QCOMPARE(datetime_UTC.qTimeZone(), QTimeZone::utc());
     {
         QDateTime utc = dtLocal.toUTC();
         QCOMPARE(datetime_UTC.date(), utc.date());
@@ -472,7 +545,8 @@ void KADateTimeTest::constructors()
     QVERIFY(!datetime_UTC2.isOffsetFromUtc());
     QVERIFY(!datetime_UTC2.isLocalZone());
     QCOMPARE(datetime_UTC2.utcOffset(), 0);
-    QCOMPARE(datetime_UTC2.timeZone(), QTimeZone::utc());
+    QCOMPARE(datetime_UTC2.namedTimeZone(), QTimeZone::utc());
+    QCOMPARE(datetime_UTC2.qTimeZone(), QTimeZone::utc());
     QCOMPARE(datetime_UTC2.date(), dtUTC.date());
     QCOMPARE(datetime_UTC2.time(), dtUTC.time());
     QCOMPARE(datetime_UTC2.qDateTime(), dtUTC);
@@ -487,7 +561,8 @@ void KADateTimeTest::constructors()
     QVERIFY(!datetime_UTCCopy.isOffsetFromUtc());
     QVERIFY(!datetime_UTCCopy.isLocalZone());
     QCOMPARE(datetime_UTCCopy.utcOffset(), 0);
-    QCOMPARE(datetime_UTCCopy.timeZone(), datetime_UTC.timeZone());
+    QCOMPARE(datetime_UTCCopy.namedTimeZone(), datetime_UTC.namedTimeZone());
+    QCOMPARE(datetime_UTCCopy.qTimeZone(), datetime_UTC.namedTimeZone());
     QCOMPARE(datetime_UTCCopy.date(), datetime_UTC.date());
     QCOMPARE(datetime_UTCCopy.time(), datetime_UTC.time());
     QCOMPARE(datetime_UTCCopy.qDateTime(), datetime_UTC.qDateTime());
@@ -502,10 +577,11 @@ void KADateTimeTest::constructors()
     QVERIFY(date_OffsetFromUTC.isOffsetFromUtc());
     QVERIFY(!date_OffsetFromUTC.isLocalZone());
     QCOMPARE(date_OffsetFromUTC.utcOffset(), -2 * 3600);
-    QVERIFY(!date_OffsetFromUTC.timeZone().isValid());
+    QVERIFY(!date_OffsetFromUTC.namedTimeZone().isValid());
+    QCOMPARE(date_OffsetFromUTC.qTimeZone(), QTimeZone(-2 * 3600));
     QCOMPARE(date_OffsetFromUTC.date(), d);
     QCOMPARE(date_OffsetFromUTC.time(), QTime(0, 0, 0));
-    QCOMPARE(date_OffsetFromUTC.qDateTime(), QDateTime(d, QTime(0, 0, 0), Qt::OffsetFromUTC, -2 * 3600));
+    QCOMPARE(date_OffsetFromUTC.qDateTime(), QDateTime(d, QTime(0, 0, 0), QTimeZone::fromSecondsAheadOfUtc(-2 * 3600)));
 
     KADateTime dateTime_OffsetFromUTC(d, t, KADateTime::Spec::OffsetFromUTC(2 * 3600));
     QVERIFY(!dateTime_OffsetFromUTC.isNull());
@@ -516,10 +592,11 @@ void KADateTimeTest::constructors()
     QVERIFY(dateTime_OffsetFromUTC.isOffsetFromUtc());
     QVERIFY(!dateTime_OffsetFromUTC.isLocalZone());
     QCOMPARE(dateTime_OffsetFromUTC.utcOffset(), 2 * 3600);
-    QVERIFY(!dateTime_OffsetFromUTC.timeZone().isValid());
+    QVERIFY(!dateTime_OffsetFromUTC.namedTimeZone().isValid());
+    QCOMPARE(dateTime_OffsetFromUTC.qTimeZone(), QTimeZone(2 * 3600));
     QCOMPARE(dateTime_OffsetFromUTC.date(), d);
     QCOMPARE(dateTime_OffsetFromUTC.time(), t);
-    QCOMPARE(dateTime_OffsetFromUTC.qDateTime(), QDateTime(d, t, Qt::OffsetFromUTC, 2 * 3600));
+    QCOMPARE(dateTime_OffsetFromUTC.qDateTime(), QDateTime(d, t, QTimeZone::fromSecondsAheadOfUtc(2 * 3600)));
 
     KADateTime datetime_OffsetFromUTC(dtLocal, KADateTime::Spec::OffsetFromUTC(-2 * 3600));
     QVERIFY(!datetime_OffsetFromUTC.isNull());
@@ -530,7 +607,8 @@ void KADateTimeTest::constructors()
     QVERIFY(datetime_OffsetFromUTC.isOffsetFromUtc());
     QVERIFY(!datetime_OffsetFromUTC.isLocalZone());
     QCOMPARE(datetime_OffsetFromUTC.utcOffset(), -2 * 3600);
-    QVERIFY(!datetime_OffsetFromUTC.timeZone().isValid());
+    QVERIFY(!datetime_OffsetFromUTC.namedTimeZone().isValid());
+    QCOMPARE(datetime_OffsetFromUTC.qTimeZone(), QTimeZone(-2 * 3600));
     QCOMPARE(datetime_OffsetFromUTC.date(), dtLocal.date());
     QCOMPARE(datetime_OffsetFromUTC.time(), dtLocal.time().addSecs(6 * 3600));
     QCOMPARE(datetime_OffsetFromUTC.qDateTime(), dtLocal.toOffsetFromUtc(-2 * 3600));
@@ -544,10 +622,11 @@ void KADateTimeTest::constructors()
     QVERIFY(datetime_OffsetFromUTC2.isOffsetFromUtc());
     QVERIFY(!datetime_OffsetFromUTC2.isLocalZone());
     QCOMPARE(datetime_OffsetFromUTC2.utcOffset(), 2 * 3600);
-    QVERIFY(!datetime_OffsetFromUTC2.timeZone().isValid());
+    QVERIFY(!datetime_OffsetFromUTC2.namedTimeZone().isValid());
+    QCOMPARE(datetime_OffsetFromUTC2.qTimeZone(), QTimeZone(2 * 3600));
     {
         QDateTime dtof = dtUTC.addSecs(2 * 3600);
-        dtof.setTimeSpec(Qt::LocalTime);
+        dtof.setTimeZone(QTimeZone(QTimeZone::LocalTime));
         QCOMPARE(datetime_OffsetFromUTC2.date(), dtof.date());
         QCOMPARE(datetime_OffsetFromUTC2.time(), dtof.time());
     }
@@ -563,7 +642,8 @@ void KADateTimeTest::constructors()
     QVERIFY(datetime_OffsetFromUTCCopy.isOffsetFromUtc());
     QVERIFY(!datetime_OffsetFromUTCCopy.isLocalZone());
     QCOMPARE(datetime_OffsetFromUTCCopy.utcOffset(), -2 * 3600);
-    QVERIFY(!datetime_OffsetFromUTCCopy.timeZone().isValid());
+    QVERIFY(!datetime_OffsetFromUTCCopy.namedTimeZone().isValid());
+    QCOMPARE(datetime_OffsetFromUTCCopy.qTimeZone(), QTimeZone(-2 * 3600));
     QCOMPARE(datetime_OffsetFromUTCCopy.date(), datetime_OffsetFromUTC.date());
     QCOMPARE(datetime_OffsetFromUTCCopy.time(), datetime_OffsetFromUTC.time());
     QCOMPARE(datetime_OffsetFromUTCCopy.qDateTime(), datetime_OffsetFromUTC.qDateTime());
@@ -579,10 +659,11 @@ void KADateTimeTest::constructors()
     QVERIFY(!date_LocalZone.isOffsetFromUtc());
     QVERIFY(date_LocalZone.isLocalZone());
     QCOMPARE(date_LocalZone.utcOffset(), -8 * 3600);
-    QCOMPARE(date_LocalZone.timeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(date_LocalZone.namedTimeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(date_LocalZone.qTimeZone(), QTimeZone(QTimeZone::LocalTime));
     QCOMPARE(date_LocalZone.date(), d);
     QCOMPARE(date_LocalZone.time(), QTime(0, 0, 0));
-    QCOMPARE(date_LocalZone.qDateTime(), QDateTime(d, QTime(0, 0, 0), Qt::LocalTime));
+    QCOMPARE(date_LocalZone.qDateTime(), QDateTime(d, QTime(0, 0, 0), QTimeZone(QTimeZone::LocalTime)));
 
     KADateTime dateTime_LocalZone(d, t, KADateTime::LocalZone);
     QVERIFY(!dateTime_LocalZone.isNull());
@@ -594,10 +675,11 @@ void KADateTimeTest::constructors()
     QVERIFY(!dateTime_LocalZone.isOffsetFromUtc());
     QVERIFY(dateTime_LocalZone.isLocalZone());
     QCOMPARE(dateTime_LocalZone.utcOffset(), -8 * 3600);
-    QCOMPARE(dateTime_LocalZone.timeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(dateTime_LocalZone.namedTimeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(dateTime_LocalZone.qTimeZone(), QTimeZone(QTimeZone::LocalTime));
     QCOMPARE(dateTime_LocalZone.date(), d);
     QCOMPARE(dateTime_LocalZone.time(), t);
-    QCOMPARE(dateTime_LocalZone.qDateTime(), QDateTime(d, t, Qt::LocalTime));
+    QCOMPARE(dateTime_LocalZone.qDateTime(), QDateTime(d, t, QTimeZone(QTimeZone::LocalTime)));
 
     KADateTime datetime_LocalZone(dtLocal, KADateTime::LocalZone);
     QVERIFY(!datetime_LocalZone.isNull());
@@ -609,7 +691,8 @@ void KADateTimeTest::constructors()
     QVERIFY(!datetime_LocalZone.isOffsetFromUtc());
     QVERIFY(datetime_LocalZone.isLocalZone());
     QCOMPARE(datetime_LocalZone.utcOffset(), -8 * 3600);
-    QCOMPARE(datetime_LocalZone.timeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(datetime_LocalZone.namedTimeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(datetime_LocalZone.qTimeZone(), QTimeZone(QTimeZone::LocalTime));
     QCOMPARE(datetime_LocalZone.date(), dtLocal.date());
     QCOMPARE(datetime_LocalZone.time(), dtLocal.time());
     QCOMPARE(datetime_LocalZone.qDateTime(), dtLocal);
@@ -624,7 +707,8 @@ void KADateTimeTest::constructors()
     QVERIFY(!datetime_LocalZone2.isOffsetFromUtc());
     QVERIFY(datetime_LocalZone2.isLocalZone());
     QCOMPARE(datetime_LocalZone2.utcOffset(), -8 * 3600);
-    QCOMPARE(datetime_LocalZone2.timeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(datetime_LocalZone2.namedTimeZone(), QTimeZone::systemTimeZone());
+    QCOMPARE(datetime_LocalZone2.qTimeZone(), QTimeZone(QTimeZone::LocalTime));
     {
         QDateTime local = dtUTC.toLocalTime();
         QCOMPARE(datetime_LocalZone2.date(), local.date());
@@ -643,7 +727,8 @@ void KADateTimeTest::constructors()
     QVERIFY(!datetime_LocalZoneCopy.isOffsetFromUtc());
     QVERIFY(datetime_LocalZoneCopy.isLocalZone());
     QCOMPARE(datetime_LocalZoneCopy.utcOffset(), -8 * 3600);
-    QCOMPARE(datetime_LocalZoneCopy.timeZone(), datetime_LocalZone.timeZone());
+    QCOMPARE(datetime_LocalZoneCopy.namedTimeZone(), datetime_LocalZone.namedTimeZone());
+    QCOMPARE(datetime_LocalZoneCopy.qTimeZone(), datetime_LocalZone.qTimeZone());
     QCOMPARE(datetime_LocalZoneCopy.date(), datetime_LocalZone.date());
     QCOMPARE(datetime_LocalZoneCopy.time(), datetime_LocalZone.time());
     QCOMPARE(datetime_LocalZoneCopy.qDateTime(), datetime_LocalZone.qDateTime());
@@ -1086,13 +1171,13 @@ void KADateTimeTest::toZone()
     // Zone -> Zone
     KADateTime londonWinter(QDate(2005, 1, 1), QTime(0, 0, 0), london);
     KADateTime locWinter = londonWinter.toZone(losAngeles);
-    QCOMPARE(locWinter.timeZone(), losAngeles);
+    QCOMPARE(locWinter.namedTimeZone(), losAngeles);
     QCOMPARE(locWinter.date(), QDate(2004, 12, 31));
     QCOMPARE(locWinter.time(), QTime(16, 0, 0));
     QVERIFY(londonWinter == locWinter);
     KADateTime londonSummer(QDate(2005, 6, 1), QTime(0, 0, 0), london);
     KADateTime locSummer = londonSummer.toZone(losAngeles);
-    QCOMPARE(locWinter.timeZone(), losAngeles);
+    QCOMPARE(locWinter.namedTimeZone(), losAngeles);
     QCOMPARE(locSummer.date(), QDate(2005, 5, 31));
     QCOMPARE(locSummer.time(), QTime(16, 0, 0));
     QVERIFY(londonSummer == locSummer);
@@ -1102,7 +1187,7 @@ void KADateTimeTest::toZone()
     // UTC offset -> Zone
     KADateTime offset(QDate(2005, 6, 6), QTime(11, 2, 30), KADateTime::Spec::OffsetFromUTC(-5400)); // -0130
     KADateTime locOffset = offset.toZone(losAngeles);
-    QCOMPARE(locOffset.timeZone(), losAngeles);
+    QCOMPARE(locOffset.namedTimeZone(), losAngeles);
     QCOMPARE(locOffset.date(), QDate(2005, 6, 6));
     QCOMPARE(locOffset.time(), QTime(5, 32, 30));
     QVERIFY(offset == locOffset);
@@ -1111,7 +1196,7 @@ void KADateTimeTest::toZone()
     // Local time -> Zone
     KADateTime localz(QDate(2005, 6, 6), QTime(11, 2, 30), KADateTime::LocalZone);
     KADateTime locLocalz = localz.toZone(losAngeles);
-    QCOMPARE(locLocalz.timeZone(), losAngeles);
+    QCOMPARE(locLocalz.namedTimeZone(), losAngeles);
     QCOMPARE(locLocalz.date(), QDate(2005, 6, 6));
     QCOMPARE(locLocalz.time(), QTime(3, 2, 30));
     QVERIFY(localz == locLocalz);
@@ -1120,7 +1205,7 @@ void KADateTimeTest::toZone()
     // UTC -> Zone
     KADateTime utc(QDate(2005, 6, 6), QTime(11, 2, 30), KADateTime::UTC);
     KADateTime locUtc = utc.toZone(losAngeles);
-    QCOMPARE(locUtc.timeZone(), losAngeles);
+    QCOMPARE(locUtc.namedTimeZone(), losAngeles);
     QCOMPARE(locUtc.date(), QDate(2005, 6, 6));
     QCOMPARE(locUtc.time(), QTime(4, 2, 30));
     QVERIFY(utc == locUtc);
@@ -1225,25 +1310,25 @@ void KADateTimeTest::toTimeSpec()
 
     // To Zone
     KADateTime zoneZone = zone.toTimeSpec(cairoSpec);
-    QCOMPARE(zoneZone.timeZone(), cairo);
+    QCOMPARE(zoneZone.namedTimeZone(), cairo);
     QVERIFY(zoneZone == KADateTime(QDate(2005, 7, 1), QTime(4, 0, 0), cairo));
     QVERIFY(zone.timeSpec() != cairoSpec);
     QVERIFY(zoneZone.timeSpec() == cairoSpec);
 
     KADateTime zoneOffset = offset.toTimeSpec(cairoSpec);
-    QCOMPARE(zoneOffset.timeZone(), cairo);
+    QCOMPARE(zoneOffset.namedTimeZone(), cairo);
     QVERIFY(zoneOffset == KADateTime(QDate(2005, 6, 6), QTime(5, 32, 30), cairo));
     QVERIFY(offset.timeSpec() != cairoSpec);
     QVERIFY(zoneOffset.timeSpec() == cairoSpec);
 
     KADateTime zoneLocalz = localz.toTimeSpec(cairoSpec);
-    QCOMPARE(zoneLocalz.timeZone(), cairo);
+    QCOMPARE(zoneLocalz.namedTimeZone(), cairo);
     QVERIFY(zoneLocalz == KADateTime(QDate(2005, 6, 6), QTime(11, 2, 30), cairo));
     QVERIFY(localz.timeSpec() != cairoSpec);
     QVERIFY(zoneLocalz.timeSpec() == cairoSpec);
 
     KADateTime zoneUtc = utc.toTimeSpec(cairoSpec);
-    QCOMPARE(zoneUtc.timeZone(), cairo);
+    QCOMPARE(zoneUtc.namedTimeZone(), cairo);
     QVERIFY(zoneUtc == KADateTime(QDate(2005, 6, 6), QTime(4, 2, 30), cairo));
     QVERIFY(utc.timeSpec() != cairoSpec);
     QVERIFY(zoneUtc.timeSpec() == cairoSpec);
@@ -1337,25 +1422,25 @@ void KADateTimeTest::toTimeSpec()
     // To Zone
     zoneZone = zoned.toTimeSpec(cairoSpec);
     QVERIFY(zoneZone.isDateOnly());
-    QCOMPARE(zoneZone.timeZone(), cairo);
+    QCOMPARE(zoneZone.namedTimeZone(), cairo);
     QVERIFY(zoneZone == KADateTime(QDate(2005, 7, 1), cairo));
     QVERIFY(zoneZone != zoned);
 
     zoneOffset = offsetd.toTimeSpec(cairoSpec);
     QVERIFY(zoneOffset.isDateOnly());
-    QCOMPARE(zoneOffset.timeZone(), cairo);
+    QCOMPARE(zoneOffset.namedTimeZone(), cairo);
     QVERIFY(zoneOffset == KADateTime(QDate(2005, 6, 6), cairo));
     QVERIFY(zoneOffset != offsetd);
 
     zoneLocalz = localzd.toTimeSpec(cairoSpec);
     QVERIFY(zoneLocalz.isDateOnly());
-    QCOMPARE(zoneLocalz.timeZone(), cairo);
+    QCOMPARE(zoneLocalz.namedTimeZone(), cairo);
     QVERIFY(zoneLocalz == KADateTime(QDate(2005, 6, 6), cairo));
     QVERIFY(zoneLocalz != localzd);
 
     zoneUtc = utcd.toTimeSpec(cairoSpec);
     QVERIFY(zoneUtc.isDateOnly());
-    QCOMPARE(zoneUtc.timeZone(), cairo);
+    QCOMPARE(zoneUtc.namedTimeZone(), cairo);
     QVERIFY(zoneUtc == KADateTime(QDate(2005, 6, 6), cairo));
     QVERIFY(zoneUtc != utcd);
 
@@ -1633,7 +1718,7 @@ void KADateTimeTest::set()
     QCOMPARE(zone.date(), QDate(2003, 6, 10));
     QCOMPARE(zone.time(), QTime(5, 6, 7));
     zone.setTimeSpec(london);
-    QCOMPARE(zone.timeZone(), london);
+    QCOMPARE(zone.namedTimeZone(), london);
     QCOMPARE(zone.utcOffset(), 3600);
     QCOMPARE(zone.toUtc().date(), QDate(2003, 6, 10));
     QCOMPARE(zone.toUtc().time(), QTime(4, 6, 7));
@@ -2018,19 +2103,19 @@ void KADateTimeTest::addSubtract()
     // Zone
     KADateTime zone1(QDate(2005, 7, 6), QTime(3, 40, 0), london);
     KADateTime zone2 = zone1.addSecs(184 * 86400);
-    QCOMPARE(zone2.timeZone(), london);
+    QCOMPARE(zone2.namedTimeZone(), london);
     QCOMPARE(zone2.date(), QDate(2006, 1, 6));
     QCOMPARE(zone2.time(), QTime(2, 40, 0));
     KADateTime zone3 = zone1.addDays(184);
-    QCOMPARE(zone3.timeZone(), london);
+    QCOMPARE(zone3.namedTimeZone(), london);
     QCOMPARE(zone3.date(), QDate(2006, 1, 6));
     QCOMPARE(zone3.time(), QTime(3, 40, 0));
     KADateTime zone4 = zone1.addMonths(6);
-    QCOMPARE(zone4.timeZone(), london);
+    QCOMPARE(zone4.namedTimeZone(), london);
     QCOMPARE(zone4.date(), zone3.date());
     QCOMPARE(zone4.time(), zone3.time());
     KADateTime zone5 = zone1.addYears(4);
-    QCOMPARE(zone5.timeZone(), london);
+    QCOMPARE(zone5.namedTimeZone(), london);
     QCOMPARE(zone5.date(), QDate(2009, 7, 6));
     QCOMPARE(zone5.time(), QTime(3, 40, 0));
     QCOMPARE(zone1.secsTo(zone2), 184 * 86400);
@@ -2045,7 +2130,7 @@ void KADateTimeTest::addSubtract()
     KADateTime local1(QDate(2005, 7, 6), QTime(3, 40, 0), KADateTime::LocalZone);
     KADateTime local2 = local1.addSecs(184 * 86400);
     QVERIFY(local2.isLocalZone());
-    QCOMPARE(local2.timeZone(), losAngeles);
+    QCOMPARE(local2.namedTimeZone(), losAngeles);
     QCOMPARE(local2.date(), QDate(2006, 1, 6));
     QCOMPARE(local2.time(), QTime(2, 40, 0));
     KADateTime local3 = local1.addDays(184);
@@ -2196,20 +2281,20 @@ void KADateTimeTest::addMSecs()
     // Zone
     KADateTime zone1(QDate(2002, 3, 31), QTime(0, 40, 0, 100), london); // time changes at 01:00 UTC
     KADateTime zone2 = zone1.addMSecs(3600 * 1000 + 899);
-    QCOMPARE(zone2.timeZone(), london);
+    QCOMPARE(zone2.namedTimeZone(), london);
     QCOMPARE(zone2.date(), QDate(2002, 3, 31));
     QCOMPARE(zone2.time(), QTime(2, 40, 0, 999));
     zone2 = zone1.addMSecs(3600 * 1000 + 900);
-    QCOMPARE(zone2.timeZone(), london);
+    QCOMPARE(zone2.namedTimeZone(), london);
     QCOMPARE(zone2.date(), QDate(2002, 3, 31));
     QCOMPARE(zone2.time(), QTime(2, 40, 1, 0));
     KADateTime zone1a(QDate(2002, 3, 31), QTime(2, 40, 0, 100), london); // time changes at 01:00 UTC
     zone2 = zone1a.addMSecs(-(3600 * 1000 + 100));
-    QCOMPARE(zone2.timeZone(), london);
+    QCOMPARE(zone2.namedTimeZone(), london);
     QCOMPARE(zone2.date(), QDate(2002, 3, 31));
     QCOMPARE(zone2.time(), QTime(0, 40, 0, 0));
     zone2 = zone1a.addMSecs(-(3600 * 1000 + 101));
-    QCOMPARE(zone2.timeZone(), london);
+    QCOMPARE(zone2.namedTimeZone(), london);
     QCOMPARE(zone2.date(), QDate(2002, 3, 31));
     QCOMPARE(zone2.time(), QTime(0, 39, 59, 999));
 
@@ -2217,23 +2302,23 @@ void KADateTimeTest::addMSecs()
     KADateTime local1(QDate(2002, 4, 7), QTime(1, 59, 0, 100), KADateTime::LocalZone); // time changes at 02:00 local
     KADateTime local2 = local1.addMSecs(59899);
     QVERIFY(local2.isLocalZone());
-    QCOMPARE(local2.timeZone(), losAngeles);
+    QCOMPARE(local2.namedTimeZone(), losAngeles);
     QCOMPARE(local2.date(), QDate(2002, 4, 7));
     QCOMPARE(local2.time(), QTime(1, 59, 59, 999));
     local2 = local1.addMSecs(59900);
     QVERIFY(local2.isLocalZone());
-    QCOMPARE(local2.timeZone(), losAngeles);
+    QCOMPARE(local2.namedTimeZone(), losAngeles);
     QCOMPARE(local2.date(), QDate(2002, 4, 7));
     QCOMPARE(local2.time(), QTime(3, 0, 0, 0));
     KADateTime local1a(QDate(2002, 4, 7), QTime(3, 0, 0, 100), KADateTime::LocalZone); // time changes at 02:00 local
     local2 = local1a.addMSecs(-100);
     QVERIFY(local2.isLocalZone());
-    QCOMPARE(local2.timeZone(), losAngeles);
+    QCOMPARE(local2.namedTimeZone(), losAngeles);
     QCOMPARE(local2.date(), QDate(2002, 4, 7));
     QCOMPARE(local2.time(), QTime(3, 0, 0, 0));
     local2 = local1a.addMSecs(-101);
     QVERIFY(local2.isLocalZone());
-    QCOMPARE(local2.timeZone(), losAngeles);
+    QCOMPARE(local2.namedTimeZone(), losAngeles);
     QCOMPARE(local2.date(), QDate(2002, 4, 7));
     QCOMPARE(local2.time(), QTime(1, 59, 59, 999));
 
@@ -2322,22 +2407,22 @@ void KADateTimeTest::addSubtractDate()
     KADateTime zone1(QDate(2005, 7, 6), london);
     KADateTime zone2 = zone1.addSecs(184 * 86400);
     QVERIFY(zone2.isDateOnly());
-    QCOMPARE(zone2.timeZone(), london);
+    QCOMPARE(zone2.namedTimeZone(), london);
     QCOMPARE(zone2.date(), QDate(2006, 1, 6));
     QCOMPARE(zone2.time(), QTime(0, 0, 0));
     KADateTime zone3 = zone1.addDays(184);
     QVERIFY(zone3.isDateOnly());
-    QCOMPARE(zone3.timeZone(), london);
+    QCOMPARE(zone3.namedTimeZone(), london);
     QCOMPARE(zone3.date(), QDate(2006, 1, 6));
     QCOMPARE(zone3.time(), QTime(0, 0, 0));
     KADateTime zone4 = zone1.addMonths(6);
     QVERIFY(zone4.isDateOnly());
-    QCOMPARE(zone4.timeZone(), london);
+    QCOMPARE(zone4.namedTimeZone(), london);
     QCOMPARE(zone4.date(), zone3.date());
     QCOMPARE(zone4.time(), zone3.time());
     KADateTime zone5 = zone1.addYears(4);
     QVERIFY(zone5.isDateOnly());
-    QCOMPARE(zone5.timeZone(), london);
+    QCOMPARE(zone5.namedTimeZone(), london);
     QCOMPARE(zone5.date(), QDate(2009, 7, 6));
     QCOMPARE(zone5.time(), QTime(0, 0, 0));
     QCOMPARE(zone1.secsTo(zone2), 184 * 86400);
@@ -2353,7 +2438,7 @@ void KADateTimeTest::addSubtractDate()
     KADateTime local2 = local1.addSecs(184 * 86400);
     QVERIFY(local2.isDateOnly());
     QVERIFY(local2.isLocalZone());
-    QCOMPARE(local2.timeZone(), losAngeles);
+    QCOMPARE(local2.namedTimeZone(), losAngeles);
     QCOMPARE(local2.date(), QDate(2006, 1, 6));
     QCOMPARE(local2.time(), QTime(0, 0, 0));
     KADateTime local3 = local1.addDays(184);
@@ -2570,33 +2655,33 @@ void KADateTimeTest::dstShifts()
     ::tzset();
 
     // Shift from DST to standard time for the UK in 2005 was at 2005-10-30 01:00 UTC.
-    QDateTime qdt(QDate(2005, 10, 29), QTime(23, 59, 59), Qt::UTC);
+    QDateTime qdt(QDate(2005, 10, 29), QTime(23, 59, 59), QTimeZone(QTimeZone::UTC));
     KADateTime dt(qdt, london);
     QVERIFY(!dt.isSecondOccurrence());
     QVERIFY(dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(0, 59, 59));
-    dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(0, 0, 0), Qt::UTC), london);
+    dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(0, 0, 0), QTimeZone(QTimeZone::UTC)), london);
     QVERIFY(!dt.isSecondOccurrence());
     QVERIFY(dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(1, 0, 0));
-    dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(0, 59, 59), Qt::UTC), london);
+    dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(0, 59, 59), QTimeZone(QTimeZone::UTC)), london);
     QVERIFY(!dt.isSecondOccurrence());
     QVERIFY(dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(1, 59, 59));
-    dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(1, 0, 0), Qt::UTC), london);
+    dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(1, 0, 0), QTimeZone(QTimeZone::UTC)), london);
     QVERIFY(dt.isSecondOccurrence());
     QVERIFY(!dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(1, 0, 0));
-    dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(1, 59, 59), Qt::UTC), london);
+    dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(1, 59, 59), QTimeZone(QTimeZone::UTC)), london);
     QVERIFY(dt.isSecondOccurrence());
     QVERIFY(!dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(1, 59, 59));
-    dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(2, 0, 0), Qt::UTC), london);
+    dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(2, 0, 0), QTimeZone(QTimeZone::UTC)), london);
     QVERIFY(!dt.isSecondOccurrence());
     QVERIFY(!dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
@@ -2685,22 +2770,22 @@ void KADateTimeTest::dstShifts()
     // Shift from DST to standard time for the UK in 2022 was at 2022-10-30 01:00 UTC.
     qputenv("TZ", ":Europe/London");
     ::tzset();
-    qdt = QDateTime(QDate(2022, 10, 30), QTime(0, 59, 59), Qt::LocalTime);
+    qdt = QDateTime(QDate(2022, 10, 30), QTime(0, 59, 59), QTimeZone(QTimeZone::LocalTime));
     dst = qdt.isDaylightTime();
     dt = KADateTime(qdt);
     QVERIFY(!dt.isSecondOccurrence());
     QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
-    qdt = QDateTime(QDate(2022, 10, 30), QTime(1, 0, 0), Qt::LocalTime);
+    qdt = QDateTime(QDate(2022, 10, 30), QTime(1, 0, 0), QTimeZone(QTimeZone::LocalTime));
     dst = qdt.isDaylightTime();
     dt = KADateTime(qdt);
     QCOMPARE(dt.isSecondOccurrence(), !dst);
     QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
-    qdt = QDateTime(QDate(2022, 10, 30), QTime(1, 59, 59), Qt::LocalTime);
+    qdt = QDateTime(QDate(2022, 10, 30), QTime(1, 59, 59), QTimeZone(QTimeZone::LocalTime));
     dst = qdt.isDaylightTime();
     dt = KADateTime(qdt);
     QCOMPARE(dt.isSecondOccurrence(), !dst);
     QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
-    qdt = QDateTime(QDate(2022, 10, 30), QTime(2, 0, 0), Qt::LocalTime);
+    qdt = QDateTime(QDate(2022, 10, 30), QTime(2, 0, 0), QTimeZone(QTimeZone::LocalTime));
     dst = qdt.isDaylightTime();
     dt = KADateTime(qdt);
     QVERIFY(!dt.isSecondOccurrence());
@@ -3540,7 +3625,7 @@ void KADateTimeTest::strings_format()
     QCOMPARE(dt.time(), QTime(14, 3, 20));
     QCOMPARE(dt.timeType(), KADateTime::OffsetFromUTC);
     QCOMPARE(dt.utcOffset(), 3 * 3600);
-    QVERIFY(!dt.timeZone().isValid());
+    QVERIFY(!dt.namedTimeZone().isValid());
     dt = KADateTime::fromString(QStringLiteral("pm2005aboCtt/03sunday/20:2,03+03:00"), QStringLiteral("%p%Yab%Bt/%d%A/%S:%l,%M %:z"), &zones);
     QVERIFY(!dt.isValid());    // wrong day-of-week
 
@@ -3559,7 +3644,7 @@ void KADateTimeTest::strings_format()
     QCOMPARE(dt.date(), QDate(2005, 10, 3));
     QCOMPARE(dt.time(), QTime(14, 30, 01, 300));
     QCOMPARE(dt.timeType(), KADateTime::TimeZone);
-    QCOMPARE(dt.timeZone(), london);
+    QCOMPARE(dt.namedTimeZone(), london);
     QCOMPARE(dt.utcOffset(), 3600);
 
     dt = KADateTime::fromString(QStringLiteral("200510031430:01.3+0500"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"), &zones, false);
@@ -3599,14 +3684,14 @@ void KADateTimeTest::strings_format()
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(1, 30, 0));
     QCOMPARE(dt.timeType(), KADateTime::TimeZone);
-    QCOMPARE(dt.timeZone(), london);
+    QCOMPARE(dt.namedTimeZone(), london);
     QCOMPARE(dt.utcOffset(), 0);
 #if 0
     dt = KADateTime::fromString(QStringLiteral("30 October 2005 1:30 BST"), QStringLiteral("%d %:B %Y %k:%M %Z"));
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(1, 30, 0));
     QCOMPARE(dt.timeType(), KADateTime::TimeZone);
-    QCOMPARE(dt.timeZone(), london);
+    QCOMPARE(dt.namedTimeZone(), london);
     QCOMPARE(dt.utcOffset(), 1 * 3600);
 #endif
 
@@ -3615,13 +3700,13 @@ void KADateTimeTest::strings_format()
     QCOMPARE(dt.time(), QTime(12, 3, 20));
     QCOMPARE(dt.timeType(), KADateTime::TimeZone);
     QCOMPARE(dt.utcOffset(), 3600);
-    QCOMPARE(dt.timeZone(), london);
+    QCOMPARE(dt.namedTimeZone(), london);
 
     dt = KADateTime::fromString(QStringLiteral("2005aboCtt/022sun/20.0123456:12Am,3Africa/Cairo%"), QStringLiteral("%Yab%bt/%e2%a/%S%:s:%I%P,%:M %:Z%%"), &zones);
     QCOMPARE(dt.date(), QDate(2005, 10, 2));
     QCOMPARE(dt.time(), QTime(0, 3, 20, 12));
     QCOMPARE(dt.timeType(), KADateTime::TimeZone);
-    QCOMPARE(dt.timeZone(), cairo);
+    QCOMPARE(dt.namedTimeZone(), cairo);
     QCOMPARE(dt.utcOffset(), 2 * 3600);
 
     // Test large and minimum date values
