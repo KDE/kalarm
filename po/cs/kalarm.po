@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-27 00:40+0000\n"
-"PO-Revision-Date: 2024-08-06 11:16+0200\n"
+"PO-Revision-Date: 2024-09-19 07:53+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -999,13 +999,15 @@ msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
+"<p>Automaticky spustit KAlarm, jakmile spustíte KDE.</p><p>Tato volba by "
+"měla být vždy nastavena na true pokud RunMode=Auto, jinak false.</p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
 #, kde-format
 msgctxt "@label"
 msgid "Run mode"
-msgstr ""
+msgstr "Režim spouštění"
 
 #. i18n: ectx: whatsthis, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:138
@@ -1020,21 +1022,21 @@ msgstr ""
 #, kde-format
 msgctxt "@option"
 msgid "Run automatically"
-msgstr ""
+msgstr "Spustit automaticky"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:141
 #, kde-format
 msgctxt "@option"
 msgid "Run manually only"
-msgstr ""
+msgstr "Spustit pouze ručně"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:142
 #, kde-format
 msgctxt "@option"
 msgid "Do not run"
-msgstr ""
+msgstr "Nespouštět"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:147
@@ -5062,7 +5064,7 @@ msgstr "Režim spouštění"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run automatically"
-msgstr ""
+msgstr "Spustit automaticky"
 
 #: prefdlg.cpp:459
 #, kde-format
@@ -5076,7 +5078,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run manually only"
-msgstr ""
+msgstr "Spustit pouze ručně"
 
 #: prefdlg.cpp:465
 #, kde-format
@@ -5090,7 +5092,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Do not run"
-msgstr ""
+msgstr "Nespouštět"
 
 #: prefdlg.cpp:471
 #, kde-format
@@ -5104,7 +5106,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr ""
+msgstr "Pro normální spuštění aplikace <application>KAlarm</application>"
 
 #: prefdlg.cpp:481
 #, kde-format
@@ -5259,6 +5261,8 @@ msgid ""
 "You should not check this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
+"Pokud si přejete <application>KAlarm</application> nadále používat, neměli "
+"byste tuto volbu aktivovat."
 
 #: prefdlg.cpp:713
 #, kde-kuit-format
