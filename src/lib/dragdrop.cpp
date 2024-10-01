@@ -81,7 +81,7 @@ KAlarmCal::AlarmText kMimeEmailToAlarmText(KMime::Content& content, KAlarmCal::K
 {
     QString body;
     if (content.textContent())
-        body = content.textContent()->decodedText(true, true);    // strip trailing newlines & spaces
+        body = content.textContent()->decodedText(KMime::Content::TrimSpaces);    // strip trailing newlines & spaces
     KAlarmCal::AlarmText alarmText;
     alarmText.setEmail(getMailHeader("To", content),
                        getMailHeader("From", content),
