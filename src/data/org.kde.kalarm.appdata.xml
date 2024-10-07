@@ -451,7 +451,17 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
-    <release version="3.9.2" date="2024-10-10"/>
+    <release version="3.9.2" date="2024-10-10">
+      <description>
+        <p>Release description</p>
+        <ul>
+          <li>Fix crash if kernel alarm timers are supported.</li>
+          <li>Fix Wake from Suspend not working when using RTC wake.</li>
+          <li>Display any audio error message immediately when using Try button while editing an alarm.</li>
+          <li>Fix failure to play sound files using VLC on some systems.</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.9.1" date="2024-09-12">
       <description>
         <p>Release description</p>
