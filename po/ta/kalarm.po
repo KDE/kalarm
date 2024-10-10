@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-26 02:30+0000\n"
-"PO-Revision-Date: 2024-09-08 13:16+0200\n"
+"PO-Revision-Date: 2024-10-09 20:38+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.0\n"
+"X-Generator: Lokalize 24.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1005,13 +1005,12 @@ msgstr "இயல்பாக ஒத்திவைக்கும் இடை�
 
 #. i18n: ectx: whatsthis, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:142
-#, fuzzy, kde-format
-#| msgid "Enter the default sound file to use in the alarm edit dialog."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter the default time interval (in minutes) to defer alarms, used by the "
 "Defer Alarm dialog."
-msgstr "அலார தொகுப்பு உரையாடலில் முன்னிருப்பு ஒலி கோப்பினை பயன்படுத்த உள்ளிடவும்."
+msgstr "அலார ஒத்திவைப்பு சாளரத்திற்கான இயல்பிருப்பு ஒத்திவைப்பு இடைவெளி, நிமிடங்களில்."
 
 #. i18n: ectx: label, entry (AskResource), group (General)
 #: data/kalarmconfig.kcfg:146
@@ -1730,7 +1729,7 @@ msgstr "The default units for the reminder in the alarm edit dialog."
 #, kde-format
 msgctxt "@option"
 msgid "Hours/Minutes"
-msgstr "மணிகள்/நிமிடங்கள்"
+msgstr "மணி/நிமிடம்"
 
 #. i18n: ectx: label, entry (DefaultPreAction), group (Defaults)
 #: data/kalarmconfig.kcfg:405
@@ -3540,7 +3539,7 @@ msgctxt "@info"
 msgid "1 Minute"
 msgid_plural "%1 Minutes"
 msgstr[0] "1 நிமிடம்"
-msgstr[1] "%1 நிமிடங்கள்"
+msgstr[1] "%1 நிமிடம்"
 
 #: kalarmcalendar/kaevent.cpp:3092 kalarmcalendar/kaevent.cpp:3179
 #: kalarmcalendar/kaeventformatter.cpp:444
@@ -4295,13 +4294,13 @@ msgstr "கட்டளை வெளியேறும்போது தந்�
 #, kde-format
 msgctxt "@item:inlistbox Time units"
 msgid "minutes"
-msgstr "நிமிடங்கள்"
+msgstr "நிமிடம்"
 
 #: lib/timeperiod.cpp:25
 #, kde-format
 msgctxt "@item:inlistbox Time units"
 msgid "hours/minutes"
-msgstr "மணிகள்/நிமிடங்கள்"
+msgstr "மணி/நிமிடம்"
 
 #: lib/timeperiod.cpp:26
 #, kde-format
@@ -4322,7 +4321,7 @@ msgid ""
 "Press the Shift key while clicking the spin buttons to adjust the time by a "
 "larger step (6 hours / 5 minutes)."
 msgstr ""
-"நேரத்தை பெரிய படிகளில் (6 மணிநேரம் / 5 நிமிடங்கள்) மாற்ற, பட்டன்களை க்ளிக் செய்யும்போது "
+"நேரத்தை பெரிய படிகளில் (6 மணிநேரம் / 5 நிமிடம்) மாற்ற, பட்டன்களை க்ளிக் செய்யும்போது "
 "ஷிப்ட் விசையை சேர்த்து அழுத்துங்கள்."
 
 #: lib/timezonecombo.cpp:18
@@ -4953,11 +4952,10 @@ msgid "Alarm Defaults"
 msgstr "அலாரங்களுக்கான இயல்பிருப்புகள்"
 
 #: prefdlg.cpp:164
-#, fuzzy, kde-format
-#| msgid "Default Alarm Edit Settings"
+#, kde-format
 msgctxt "@title"
 msgid "Default Alarm Edit Settings"
-msgstr "இயல்பிருப்பு அலார அமைப்புகளைத் திருத்து"
+msgstr "அலார திருத்திக்கான இயல்பிருப்பு அமைப்புகள்"
 
 #: prefdlg.cpp:169
 #, kde-format
@@ -5216,28 +5214,23 @@ msgid "Wake from suspend before alarm:"
 msgstr "அலாரத்திற்கு இவ்வளவு நேரம் முன்னதாக உறக்கத்திலிருந்து கணினியை எழுப்பு:"
 
 #: prefdlg.cpp:773
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enter how many minutes before the alarm trigger time to wake the system "
-#| "from suspend. This can be used to ensure that the system is fully "
-#| "restored by the time the alarm triggers."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many minutes before the alarm trigger time to wake the system, for "
 "alarms set to wake from suspend. This can be used to ensure that the system "
 "is fully restored by the time the alarm triggers."
 msgstr ""
-"அலாரம் தூண்டப்பட வேண்டியதற்கு எவ்வளவு நேரம் முன்னதாக கணினி உறக்கத்திலிருந்து எழ "
-"வேண்டுமென்பதை இங்கு உள்ளிடுங்கள்.அலாரம் தூண்டப்படும் நேரத்தில் கணினி முழுதாக செயல்படும் "
-"நிலையில் இருப்பதை உறுதி செய்ய இத்தேர்வை பயன்படுத்தலாம்."
+"கணினியை எழுப்புமாறு அமைக்கப்பட்டுள்ள அலாரங்கள் தூண்டப்பட வேண்டியதற்கு எவ்வளவு நேரம் "
+"முன்னதாக கணினி உறக்கத்திலிருந்து எழ வேண்டுமென்பதை இங்கு உள்ளிடவும். அலாரம் தூண்டப்படும் "
+"நேரத்தில் கணினி முழுதாக செயல்படும் நிலையில் இருப்பதை உறுதி செய்ய இத்தேர்வை "
+"பயன்படுத்தலாம்."
 
 #: prefdlg.cpp:774
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "minutes"
+#, kde-format
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
-msgstr "நிமிடங்கள்"
+msgstr "நிமிடம்"
 
 #: prefdlg.cpp:788
 #, kde-format
@@ -5746,13 +5739,13 @@ msgstr "நினைவூட்டும் நேரத்திற்கா�
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Minutes"
-msgstr "நிமிடங்கள்"
+msgstr "நிமிடம்"
 
 #: prefdlg.cpp:1465
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
-msgstr "மணிகள்/நிமிடங்கள்"
+msgstr "மணி/நிமிடம்"
 
 #: prefdlg.cpp:1468
 #, kde-format
