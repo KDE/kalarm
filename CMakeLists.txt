@@ -60,18 +60,18 @@ endif()
 
 
 set(KDEPIM_VERSION "${PIM_VERSION}${KDEPIM_DEV_VERSION} (${RELEASE_SERVICE_VERSION})")
-set(AKONADI_VERSION "6.2.2")
-set(AKONADI_MIMELIB_VERSION "6.2.2")
-set(AKONADI_CONTACT_VERSION "6.2.2")
-set(KMAILTRANSPORT_LIB_VERSION "6.2.2")
-set(IDENTITYMANAGEMENT_LIB_VERSION "6.2.2")
-set(KMIME_LIB_VERSION "6.2.2")
+set(AKONADI_VERSION "6.2.3")
+set(AKONADI_MIMELIB_VERSION "6.2.3")
+set(AKONADI_CONTACT_VERSION "6.2.3")
+set(KMAILTRANSPORT_LIB_VERSION "6.2.3")
+set(IDENTITYMANAGEMENT_LIB_VERSION "6.2.3")
+set(KMIME_LIB_VERSION "6.2.3")
 
 set(KDEPIM_LIB_VERSION "${PIM_VERSION}")
 set(KDEPIM_LIB_SOVERSION "6")
 
 find_package(Qt6 ${QT_REQUIRED_VERSION} CONFIG REQUIRED DBus Gui Network Widgets)
-set(CALENDARUTILS_LIB_VERSION "6.2.2")
+set(CALENDARUTILS_LIB_VERSION "6.2.3")
 
 
 option(ENABLE_AKONADI_PLUGIN "Build the Akonadi plugin" ON)
@@ -167,7 +167,7 @@ include_directories(${kalarm_SOURCE_DIR} ${kalarm_BINARY_DIR})
 
 add_definitions(-DQT_MESSAGELOGCONTEXT)
 add_definitions(-DQT_NO_CONTEXTLESS_CONNECT)
-ecm_set_disabled_deprecation_versions(QT 6.2.2  KF 6.4.0)
+ecm_set_disabled_deprecation_versions(QT 6.2.3  KF 6.4.0)
 
 option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
 
