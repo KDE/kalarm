@@ -966,25 +966,18 @@ msgstr "登录时运行"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-#| "should always be checked unless you intend to discontinue use of KAlarm.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
-"<p>KDE 启动时自动启动 KAlarm。</p><p>除非您不想再使用 KAlarm，否则应保持勾选"
-"此项。</p>"
+"<p>启动 KDE 时自动启动 KAlarm。</p><p>如果运行模式设置为“自动”，应该始终启用"
+"此选项，其他情况下应该禁用它。</p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Run Mode"
+#, kde-format
 msgctxt "@label"
 msgid "Run mode"
 msgstr "运行模式"
@@ -995,30 +988,28 @@ msgstr "运行模式"
 msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
-msgstr ""
+msgstr "选择在登录时自动运行、仅手动运行、或者不运行 KAlarm"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:140
 #, kde-format
 msgctxt "@option"
 msgid "Run automatically"
-msgstr ""
+msgstr "自动运行"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:141
 #, kde-format
 msgctxt "@option"
 msgid "Run manually only"
-msgstr ""
+msgstr "仅手动运行"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:142
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option"
 msgid "Do not run"
-msgstr "不重复"
+msgstr "不运行"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:147
@@ -4898,7 +4889,7 @@ msgstr "运行模式"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run automatically"
-msgstr ""
+msgstr "自动运行"
 
 #: prefdlg.cpp:459
 #, kde-format
@@ -4906,13 +4897,13 @@ msgctxt "@info:tooltip"
 msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
-msgstr ""
+msgstr "登录时自动启动 KAlarm 。必须选中此项才能使 KAlarm 正常工作。"
 
 #: prefdlg.cpp:462
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run manually only"
-msgstr ""
+msgstr "仅手动运行"
 
 #: prefdlg.cpp:465
 #, kde-format
@@ -4921,14 +4912,13 @@ msgid ""
 "Only run KAlarm manually, never automatically. KAlarm will only function "
 "when you manually start it."
 msgstr ""
+"仅手动运行 KAlarm，而不自动运行。KAlarm 只能在您手动启动它之后才能工作。"
 
 #: prefdlg.cpp:468
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Do not run"
-msgstr "不重复"
+msgstr "不运行"
 
 #: prefdlg.cpp:471
 #, kde-format
@@ -4936,15 +4926,13 @@ msgctxt "@info:tooltip"
 msgid ""
 "Stop using KAlarm. If you later run it again, it will then resume normal "
 "functioning."
-msgstr ""
+msgstr "停止使用 KAlarm。如果您稍后再次运行它，它将恢复正常功能。"
 
 #: prefdlg.cpp:474
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Activate <application>KAlarm</application>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr "激活 <application>KAlarm</application>"
+msgstr "要正常运行 <application>KAlarm</application>"
 
 #: prefdlg.cpp:481
 #, kde-format
@@ -5087,17 +5075,13 @@ msgid "Command to invoke terminal window not found: <command>%1</command>"
 msgstr "未找到调用终端窗口的命令：<command>%1</command>"
 
 #: prefdlg.cpp:702
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "You should not uncheck this option unless you intend to discontinue use "
-#| "of <application>KAlarm</application>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "You should not check this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
-"除非您不想再使用 <application>KAlarm</application>，否则应保持勾选此项。"
+"除非您打算不再使用 <application>KAlarm</application>，否则请不要选中此选项。"
 
 #: prefdlg.cpp:713
 #, kde-kuit-format
@@ -5105,7 +5089,7 @@ msgctxt "@info"
 msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
-msgstr ""
+msgstr "这将阻止 <application>KAlarm</application> 工作<nl/>除非您手动启动它。"
 
 #: prefdlg.cpp:758
 #, kde-kuit-format
@@ -8304,15 +8288,7 @@ msgid "Cannot schedule wakeup time for a date-only alarm"
 msgstr "无法为仅日期闹钟安排唤醒时间"
 
 #: wakedlg.cpp:150
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>This wakeup will cancel any existing wakeup which has been set by "
-#| "KAlarm or any other application, because your computer can only schedule "
-#| "a single wakeup time.</para><para><b>Note:</b> Wake From Suspend is not "
-#| "supported at all on some computers, especially older ones, and some "
-#| "computers only support setting a wakeup time up to 24 hours ahead. You "
-#| "may wish to set up a test alarm to check your system's capability.</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>This wakeup will cancel any existing wakeup which has been set by "
@@ -8323,9 +8299,9 @@ msgid ""
 "test alarm to check your system's capability.</note></para>"
 msgstr ""
 "<para>因为您的计算机只能有一个计划唤醒，所以此唤醒会取消 KAlarm 及其他程序设"
-"置的所有唤醒。</para><para><b>注意：</b>“从睡眠中唤醒”可能完全无法支持某些计"
-"算机 (特别是老计算机)，而部分计算机最多设置为 24 小时前。您可先设置一个闹钟来"
-"测试系统功能。</para>"
+"置的所有唤醒。</para><para><note>“从睡眠中唤醒”可能完全无法支持某些计算机 (特"
+"别是老计算机)，而部分计算机最多设置为 24 小时前。您可先设置一个闹钟来测试系统"
+"功能。</note></para>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: wakedlg.ui:21
@@ -8413,29 +8389,3 @@ msgstr "输入闹钟响铃前唤醒系统的分钟数，此项可确保系统在
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "闹钟唤醒睡眠前的分钟数"
-
-#~ msgctxt "@label"
-#~ msgid "Suppress autostart at login"
-#~ msgstr "禁止在登录时自动运行"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "Do you want to start KAlarm at login?<nl/>(Note that alarms will be "
-#~ "disabled if KAlarm is not started.)"
-#~ msgstr ""
-#~ "您确定要在登录时启动 KAlarm 吗？<nl/>(请注意，如果 KAlarm 未启动的话，将会"
-#~ "禁用所有闹钟。)"
-
-#~ msgctxt "@option:check"
-#~ msgid "Start at login"
-#~ msgstr "登录时运行"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid ""
-#~ "<para>Automatically start <application>KAlarm</application> whenever you "
-#~ "start KDE.</para><para>This option should always be checked unless you "
-#~ "intend to discontinue use of <application>KAlarm</application>.</para>"
-#~ msgstr ""
-#~ "<para>当您启动 KDE 时自动启动 <application>KAlarm</application>。</"
-#~ "para><para>除非您不想再使用 <application>KAlarm</application>，否则应保持"
-#~ "勾选此项。 </para>"
