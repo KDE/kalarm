@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-27 00:40+0000\n"
-"PO-Revision-Date: 2024-09-02 08:17+0300\n"
+"PO-Revision-Date: 2024-10-11 13:45+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -2542,10 +2542,10 @@ msgid "Do not show error message if the command fails."
 msgstr "הגדרת ברירת המחדל של תדירות החזרה בדו-שיח עריכת התזכורת."
 
 #: editdlgtypes.cpp:862
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
-msgstr "&פקודה"
+msgstr "פלט פקודה"
 
 #: editdlgtypes.cpp:870
 #, kde-format
@@ -6064,7 +6064,7 @@ msgid "Enter the total number of times to trigger the alarm"
 msgstr "נא למלא את מספר הפעמים להזנקת התזכורת"
 
 #: recurrenceedit.cpp:222
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "occurrence(s)"
 msgstr "חזרות"
@@ -6397,7 +6397,7 @@ msgid "Select the day of the week on which to repeat the alarm"
 msgstr "נא לבחור את היום בשבוע בו התזכורת תחזור על עצמה"
 
 #: recurrenceedit.cpp:1485
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "month(s)"
 msgstr "חודשים"
@@ -6409,7 +6409,7 @@ msgid "Enter the number of months between repetitions of the alarm"
 msgstr "נא למלא את מספר החודשים בין חזרות של התזכורת"
 
 #: recurrenceedit.cpp:1497
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "year(s)"
 msgstr "שנים"
@@ -6860,17 +6860,17 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:109
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the name used to identify this resource in displays."
-msgstr "הזן את השם של קובץ הטקסט או הכתובת שיש להציג."
+msgstr "נא למלא את השם שישמש לזהות את המשאב הזה בחגים."
 
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:112
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name used to identify this resource in displays."
-msgstr "הזן את השם של קובץ הטקסט או הכתובת שיש להציג."
+msgstr "נא למלא את השם שישמש לזהות את המשאב הזה בחגים."
 
 #. i18n: ectx: property (text), widget (QRadioButton, noRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:137
