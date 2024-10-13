@@ -130,9 +130,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2024-3-2</date>
+>2024-9-12</date>
 <releaseinfo
->3.7.1 (KDE Gear 24.02.1)</releaseinfo>
+>3.10.0 (KDE Gear 24.12)</releaseinfo>
 
 <abstract>
 <para
@@ -1595,27 +1595,20 @@
 > e regola il cursore di controllo se vuoi regolare il volume di riproduzione dell'audio.</para>
 </listitem>
 
-<!--
 <listitem>
 <para
->If the &phonon; audio backend currently in use supports it, you
-can fade the volume. Fading means to start
-playing the audio file at one volume and gradually change to the final
-volume, over a specified time interval. The final volume is that
-entered in <guilabel
+>Se il motore audio attualmente in uso lo supporta, puoi sfumare il volume. <quote
+>Sfumare</quote
+> vuol dire iniziare a riprodurre il file audio a un volume e cambiarlo gradualmente al volume finale entro un tempo predeterminato. Il volume finale è quello inserito nella casella <guilabel
 >Volume</guilabel
-> above. To enable fade, check
-<guilabel
->Fade</guilabel
->, and then enter the fade period in seconds
-in the <guilabel
->Fade time</guilabel
-> field, and adjust the
-<guilabel
->Initial volume</guilabel
-> slider.</para>
+>. Per abilitare la sfumatura, seleziona <guilabel
+>Sfuma</guilabel
+>, inserisci il periodo di sfumatura in secondi nel campo <guilabel
+>Durata della sfumatura</guilabel
+>, e regola il cursore del <guilabel
+>Volume iniziale</guilabel
+>.</para>
 </listitem>
--->
 </itemizedlist>
 
 <tip
@@ -1941,27 +1934,20 @@ in the <guilabel
 > e regola il cursore di controllo se vuoi regolare il volume di riproduzione dell'audio.</para>
 </listitem>
 
-<!--
 <listitem>
 <para
->If the &phonon; audio backend currently in use supports it, you
-can fade the volume. Fading means to start
-playing the audio file at one volume and gradually change to the final
-volume, over a specified time interval. The final volume is that
-entered in <guilabel
+>Se il motore audio attualmente in uso lo supporta, puoi sfumare il volume. <quote
+>Sfumare</quote
+> vuol dire iniziare a riprodurre il file audio a un volume e cambiarlo gradualmente al volume finale entro un tempo predeterminato. Il volume finale è quello inserito nella casella <guilabel
 >Volume</guilabel
-> above. To enable fade, check
-<guilabel
->Fade</guilabel
->, and then enter the fade period in seconds
-in the <guilabel
->Fade time</guilabel
-> field, and adjust the
-<guilabel
->Initial volume</guilabel
-> slider.</para>
+>. Per abilitare la sfumatura, seleziona <guilabel
+>Sfuma</guilabel
+>, inserisci il periodo di sfumatura in secondi nel campo <guilabel
+>Durata della sfumatura</guilabel
+>, e regola il cursore del <guilabel
+>Volume iniziale</guilabel
+>.</para>
 </listitem>
--->
 </itemizedlist>
 </sect3>
 </sect2>
@@ -3154,29 +3140,47 @@ in the <guilabel
 <listitem>
 <para
 ><guilabel
->Avvia all'accesso</guilabel
->: &kalarm; sarà avviato automaticamente all'accesso della sessione, assicurando così che &kalarm; sia sempre in esecuzione, a meno di chiuderlo a mano.</para>
+>Modalità di esecuzione</guilabel
+>: permette di selezionare se vuoi che &kalarm; debba essere eseguito automaticamente, manualmente o per niente.</para>
 
-<warning
-><para
->Questa opzione dovrebbe sempre essere attiva a meno che tu non voglia smettere di usare &kalarm;.</para
-></warning>
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Esegui automaticamente</guilabel
+>: selezionala per far sì che &kalarm; sia eseguito automaticamente all'accesso per assicurarsi che sia sempre eseguito. È necessario selezionare questa opzione perché &kalarm; funzioni normalmente e per attivare sempre gli avvisi.</para>
+</listitem>
 
-<note
-><para
->Questa opzione viene riselezionata automaticamente ogni volta che &kalarm; viene eseguito. Se hai deselezionato questa opzione e vuoi continuare ad evitare che sia eseguito all'avvio, devi disattivarla ogni &kalarm;volta che esegui &kalarm;.</para
-></note>
+<listitem>
+<para
+><guilabel
+>Esegui solo manualmente</guilabel
+>: selezionala solo se vuoi usare &kalarm; occasionalmente. Non sarà eseguito automaticamente, e dovrai eseguirlo manualmente quando serve. Una volta che termina (o dopo la disconnessione), non funzionerà più, né attiverà gli avvisi finché non sarà eseguito nuovamente.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Non eseguire</guilabel
+>: selezionale se vuoi smettere di usare &kalarm;. Non sarà più avviato all'accesso e dopo che termina o dopo la disconnessione non attiverà più gli avvisi.</para>
+
+<para
+>Nota che se esegui &kalarm; nuovamente dopo aver selezionato questa opzione, &kalarm; riprenderà il suo funzionamento normale e sarà eseguito automaticamente all'accesso. Se non vuoi ancora usare &kalarm; dopo questo, dovrai selezionare nuovamente l'opzione <guilabel
+>Non eseguire</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
 </listitem>
 
 <listitem>
 <para
 ><guilabel
 >Avverti prima di uscire</guilabel
->: quando gli avvisi sono disabilitati perché &kalarm; non è in esecuzione, selezionare questa opzione fa chiedere conferma se si cerca di chiudere &kalarm; usando l'opzione <menuchoice
+>: &kalarm; deve essere in esecuzione perché l'avviso sia attivato. Selezionare questa opzione in modo che se si cerca di chiudere &kalarm; usando l'opzione <menuchoice
 ><guimenu
 >Esci</guimenu
 ></menuchoice
-> dell'icona nel vassoio di sistema. Ciò evita la disabilitazione accidentale degli avvisi. Per sicurezza, questa opzione viene riabilitata automaticamente ogni volta che cambi modalità di esecuzione.</para>
+>, si verrà avvisati che gli avvisi saranno disabilitati e sarà chiesta una conferma.  Ciò evita la disabilitazione accidentale degli avvisi. Per sicurezza, questa opzione viene riabilitata automaticamente ogni volta che si cambia modalità di esecuzione.</para>
 </listitem>
 
 <listitem
