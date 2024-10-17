@@ -57,7 +57,7 @@ void PluginManager::loadPlugins()
             auto plugin = KPluginFactory::instantiatePlugin<PluginBase>(metaData, this).plugin;
             if (plugin)
             {
-                if (metaData.pluginId() == QStringLiteral("akonadi"))
+                if (metaData.pluginId() == QLatin1StringView("akonadi"))
                     mAkonadiPlugin = (AkonadiPlugin*)plugin;
             }
         }
