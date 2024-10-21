@@ -6059,13 +6059,13 @@ msgstr "Επανεμφάνιση:"
 #, kde-format
 msgctxt "@option:radio"
 msgid "February 28th"
-msgstr "28η φεβρουαρίου"
+msgstr "28η Φεβρουαρίου"
 
 #: prefdlg.cpp:1474
 #, kde-format
 msgctxt "@option:radio"
 msgid "March 1st"
-msgstr "1η μαρτίου"
+msgstr "1η Μαρτίου"
 
 #: prefdlg.cpp:1478
 #, kde-format
