@@ -22,9 +22,10 @@
 #include "kalarmcalendar/alarmtext.h"
 #include "kalarm_debug.h"
 
+#include <KAboutData>
 #include <KLocalizedString>
 #include <KStandardAction>
-#include <KAboutData>
+#include <KStandardActions>
 
 #include <QList>
 #include <QTimer>
@@ -79,7 +80,8 @@ TrayWindow::TrayWindow(MainWindow* parent)
     a = KAlarm::createSpreadWindowsAction(this);
     contextMenu()->addAction(a);
     contextMenu()->addSeparator();
-    contextMenu()->addAction(KStandardAction::preferences(this, &TrayWindow::slotPreferences, this));
+    contextMenu()->addAction(KStandardActions::preferences(
+        this, &TrayWindow::slotPreferences, this));
 
     // Disable standard quit behaviour. We have to intercept the quit event
     // (which triggers KStatusNotifierItem to quit unconditionally).

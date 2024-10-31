@@ -8,18 +8,19 @@
 
 #include "birthdaydlg.h"
 
+#include "akonadiplugin/akonadiplugin.h"
 #include "editdlgtypes.h"
 #include "fontcolourbutton.h"
 #include "latecancel.h"
+#include "lib/checkbox.h"
+#include "lib/shellprocess.h"
 #include "preferences.h"
 #include "reminder.h"
 #include "repetitionbutton.h"
 #include "resourcescalendar.h"
 #include "soundpicker.h"
 #include "specialactions.h"
-#include "lib/checkbox.h"
-#include "lib/shellprocess.h"
-#include "akonadiplugin/akonadiplugin.h"
+#include <KStandardActions>
 
 #include <KLocalizedString>
 #include <KConfigGroup>
@@ -231,8 +232,8 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
 
     KActionCollection* actions = new KActionCollection(this);
-    KStandardAction::selectAll(mListView, &QTreeView::selectAll, actions);
-    KStandardAction::deselect(mListView, &QTreeView::clearSelection, actions);
+    KStandardActions::selectAll(mListView, &QTreeView::selectAll, actions);
+    KStandardActions::deselect(mListView, &QTreeView::clearSelection, actions);
     actions->addAssociatedWidget(mListView);
     const auto lstActions = actions->actions();
     for (QAction* action : lstActions)

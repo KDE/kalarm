@@ -590,19 +590,25 @@ void MainWindow::initActions()
     actions->setDefaultShortcuts(mActionRedo, redoShortcut);
     connect(mActionRedo, &KToolBarPopupAction::triggered, this, &MainWindow::slotRedo);
 
-    KStandardAction::find(mListView, &EventListView::slotFind, actions);
-    mActionFindNext = KStandardAction::findNext(mListView, &EventListView::slotFindNext, actions);
-    mActionFindPrev = KStandardAction::findPrev(mListView, &EventListView::slotFindPrev, actions);
-    KStandardAction::selectAll(mListView, &QTreeView::selectAll, actions);
-    KStandardAction::deselect(mListView, &QAbstractItemView::clearSelection, actions);
+    KStandardActions::find(mListView, &EventListView::slotFind, actions);
+    mActionFindNext = KStandardActions::findNext(
+        mListView, &EventListView::slotFindNext, actions);
+    mActionFindPrev = KStandardActions::findPrev(
+        mListView, &EventListView::slotFindPrev, actions);
+    KStandardActions::selectAll(mListView, &QTreeView::selectAll, actions);
+    KStandardActions::deselect(mListView, &QAbstractItemView::clearSelection,
+                               actions);
     // Quit only once the event loop is called; otherwise, the parent window will
     // be deleted while still processing the action, resulting in a crash.
     QAction* act = KStandardAction::quit(nullptr, nullptr, actions);
     connect(act, &QAction::triggered, this, &MainWindow::slotQuit, Qt::QueuedConnection);
-    KStandardAction::keyBindings(this, &MainWindow::slotConfigureKeys, actions);
-    KStandardAction::configureNotifications(this, &MainWindow::slotConfigureNotifications, actions);
-    KStandardAction::configureToolbars(this, &MainWindow::slotConfigureToolbar, actions);
-    KStandardAction::preferences(this, &MainWindow::slotPreferences, actions);
+    KStandardActions::keyBindings(this, &MainWindow::slotConfigureKeys,
+                                  actions);
+    KStandardActions::configureNotifications(
+        this, &MainWindow::slotConfigureNotifications, actions);
+    KStandardActions::configureToolbars(this, &MainWindow::slotConfigureToolbar,
+                                        actions);
+    KStandardActions::preferences(this, &MainWindow::slotPreferences, actions);
     mActionShowMenuBar = KStandardAction::showMenubar(this, &MainWindow::slotToggleMenubar, actions);
     mHamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actions);
     mHamburgerMenu->setShowMenuBarAction(mActionShowMenuBar);
@@ -677,7 +683,8 @@ void MainWindow::slotInitHamburgerMenu()
     menu->addAction(actions->action(QStringLiteral("showArchivedAlarms")));
     menu->addAction(actions->action(QStringLiteral("showDateSelector")));
     menu->addSeparator();
-    menu->addAction(actions->action(KStandardAction::name(KStandardAction::Quit)));
+    menu->addAction(
+        actions->action(KStandardActions::name(KStandardActions::Quit)));
     mHamburgerMenu->setMenu(menu);
 }
 
