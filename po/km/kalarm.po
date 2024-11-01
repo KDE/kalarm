@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-27 00:40+0000\n"
+"POT-Creation-Date: 2024-11-01 00:40+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -397,20 +397,20 @@ msgstr "កម្មវិធី​ដែល​ត្រូវ​ចាប់ផ
 msgid "Command line arguments to pass to application"
 msgstr "អាគុយម៉ង់​បន្ទាត់​ពាក្យ​បញ្ជា"
 
-#: birthdaydlg.cpp:50
+#: birthdaydlg.cpp:51
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "នាំចូល​ថ្ងៃ​កំណើត​ពី KAddressBook"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:245
+#: birthdaydlg.cpp:65 editdlg.cpp:245
 #, fuzzy, kde-format
 #| msgid "Alarm types."
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "ប្រភេទ​សំឡេង​រោទ៍​"
 
-#: birthdaydlg.cpp:69 editdlg.cpp:253
+#: birthdaydlg.cpp:70 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -418,7 +418,7 @@ msgid ""
 "be unique."
 msgstr ""
 
-#: birthdaydlg.cpp:76
+#: birthdaydlg.cpp:77
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Birthday: "
@@ -426,19 +426,19 @@ msgctxt "@info"
 msgid "Birthday: "
 msgstr "ថ្ងៃ​កំណើត ៖ "
 
-#: birthdaydlg.cpp:79
+#: birthdaydlg.cpp:80
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "អត្ថបទ​ការ​ជូនដំណឹង"
 
-#: birthdaydlg.cpp:82 prefdlg.cpp:1958
+#: birthdaydlg.cpp:83 prefdlg.cpp:1958
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "បុព្វបទ ៖"
 
-#: birthdaydlg.cpp:89
+#: birthdaydlg.cpp:90
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -448,13 +448,13 @@ msgstr ""
 "បញ្ចូល​អត្ថបទ​ដែលត្រូវលេចឡើង​នៅ​មុន​ឈ្មោះ​របស់​នរណាម្នាក់​ក្នុង​សារ​ការ​ជូនដំណឹង ដោយ​រួម​មាន​ដកឃ្លា​នៅពីក្រោយ​"
 "ចាំបាច់ ។"
 
-#: birthdaydlg.cpp:93
+#: birthdaydlg.cpp:94
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "បច្ច័យ ៖"
 
-#: birthdaydlg.cpp:100
+#: birthdaydlg.cpp:101
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -464,13 +464,13 @@ msgstr ""
 "បញ្ចូល​អត្ថបទ​ដែលត្រូវ​លេចឡើង​បន្ទាប់​ពី​ឈ្មោះ​នរណាម្នាក់​ក្នុង​សារ​ការ​ជូនដំណឹង ដោយ​រួមមាន​ចន្លោះ​នាំមុខ​"
 "ចាំបាច់ ។"
 
-#: birthdaydlg.cpp:104
+#: birthdaydlg.cpp:105
 #, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "ជ្រើស​ថ្ងៃ​កំណើត"
 
-#: birthdaydlg.cpp:134
+#: birthdaydlg.cpp:135
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -485,19 +485,19 @@ msgstr ""
 "ស្រាប់ ។</para><para>អ្នក​អាច​ជ្រើស​ថ្ងៃ​កំណើត​ម្ដង​បាន​ច្រើន ដោយ​អូស​កណ្ដុរ​លើ​បញ្ជី ឬ​ដោយ​ចុច​កណ្ដុរ​នៅ​ខណៈ​"
 "ពេល​ចុច បញ្ជា​(Ctrl) ឬ​ប្ដូរ​(Shift) ។</para>"
 
-#: birthdaydlg.cpp:140
+#: birthdaydlg.cpp:141
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "ការ​កំណត់​រចនា​សម្ព័ន្ធ​ការ​ជូនដំណឹង"
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr "ធីក ដើម្បី​បង្ហាញ​កម្មវិធី​រំលឹក​មុន ឬ​ក្រោយ​ថ្ងៃខួប​កំណើត ។"
 
-#: birthdaydlg.cpp:161
+#: birthdaydlg.cpp:162
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -508,20 +508,20 @@ msgstr ""
 "បញ្ចូល​ចំនួន​ថ្ងៃ​មុន ឬ​ក្រោយ​​ថ្ងៃខួប​​កំណើត​នីមួយៗ​ ដើម្បី​បង្ហាញ​កម្មវិធី​រំលឹក ។ វា​បន្ថែម​ពី​លើ​ម៉ោង​រោទ៍ ដែល​"
 "ត្រូវបាន​បង្ហាញ​នៅថ្ងៃ​ខួប​កំណើត ។"
 
-#: birthdaydlg.cpp:163
+#: birthdaydlg.cpp:164
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
 msgstr "ជ្រើស​ថា​តើ​គួរឲ្យ​កម្មវិធី​រំលឹក​ចាប់ផ្ដើម​មុន ឬ​ក្រោយ​ថ្ងៃ​ខួប​កំណើត​ដែរ​ឬ​ទេ ។"
 
-#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:197 recurrenceedit.cpp:142
 #, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "ការ​ធ្វើ​ឡើងវិញ​រង"
 
-#: birthdaydlg.cpp:198
+#: birthdaydlg.cpp:199
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
@@ -4833,99 +4833,99 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "ធ្វើ​ឲ្យ​ការជូនដំណឹង​ស្រស់"
 
-#: mainwindow.cpp:807
+#: mainwindow.cpp:808
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "តើ​អ្នក​ពិត​ជា​ចង់​លុប​ការ​ជូនដំណឹង​​ដែល​បាន​ជ្រើស %1 ​ឬ ?"
 
-#: mainwindow.cpp:809
+#: mainwindow.cpp:810
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
 msgstr[0] "លុប​កា​រជូន​ដំណឹង"
 
-#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "លុប"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "លាក់​ការ​ជូនដំណឹង​ដែល​ដាក់​ក្នុង​ប័ណ្ណសារ"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:906
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "បង្ហាញ​ការ​ជូនដំណឹង​ដែល​ដាក់​ក្នុង​ប័ណ្ណសារ"
 
-#: mainwindow.cpp:981
+#: mainwindow.cpp:982
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "នាំចូល​ថ្ងៃ​កំណើត"
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1235
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2 ៖ %3"
 
-#: mainwindow.cpp:1300
+#: mainwindow.cpp:1301
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1302
+#: mainwindow.cpp:1303
 #, kde-format
 msgid "Hide menu bar"
 msgstr ""
 
-#: mainwindow.cpp:1542
+#: mainwindow.cpp:1543
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "បង្ហាញ​ការ​ជូនដំណឹង"
 
-#: mainwindow.cpp:1544
+#: mainwindow.cpp:1545
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "ការ​ជូនដំណឹង​អ៊ីមែល"
 
-#: mainwindow.cpp:1546
+#: mainwindow.cpp:1547
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "ការ​ជូនដំណឹង​ពាក្យ​បញ្ជា"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "ប្រភេទ​ការ​ជូនដំណឹង"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1550
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "ជ្រើស​ប្រភេទ​ការ​ជូនដំណឹង​ដែលត្រូវ​បង្កើត ៖"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Enable"
@@ -4933,7 +4933,7 @@ msgctxt "@action"
 msgid "Enable"
 msgstr "បើក"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@action"
@@ -8996,7 +8996,7 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "ជ្រើស​ពុម្ព​ដើម្បី​ជាមូលដ្ឋាន​សម្រាប់​ដាក់​ការ​ជូនដំណឹង​ថ្មី ។"
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&New Alarm"
@@ -9004,18 +9004,18 @@ msgctxt "@action"
 msgid "New Alarm"
 msgstr "ការជូនដំណឹង​ថ្មី"
 
-#: traywindow.cpp:293
+#: traywindow.cpp:294
 #, kde-format
 msgid "Disabled"
 msgstr "បិទ​"
 
-#: traywindow.cpp:298
+#: traywindow.cpp:299
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(ម៉ោង​រោទ៍​ខ្លះ​ត្រូវ​បាន​បិទ)"
 
-#: traywindow.cpp:358
+#: traywindow.cpp:359
 #, fuzzy, kde-format
 #| msgctxt "@info/plain prefix + hours:minutes"
 #| msgid "(%1%2:%3)"
@@ -9023,7 +9023,7 @@ msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2 ៖%3)"
 
-#: traywindow.cpp:360
+#: traywindow.cpp:361
 #, fuzzy, kde-format
 #| msgctxt "@info/plain prefix + hours:minutes"
 #| msgid "%1%2:%3"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-27 00:40+0000\n"
+"POT-Creation-Date: 2024-11-01 00:40+0000\n"
 "PO-Revision-Date: 2006-12-17 13:25+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -387,21 +387,21 @@ msgstr ""
 msgid "Command line arguments to pass to application"
 msgstr "Buyruq orqali ogohlantirishlar"
 
-#: birthdaydlg.cpp:50
+#: birthdaydlg.cpp:51
 #, fuzzy, kde-format
 #| msgid "Import Birthdays From KAddressBook"
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Manzillar daftaridan tugʻilgan kunlarni import qilish"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:245
+#: birthdaydlg.cpp:65 editdlg.cpp:245
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Ogohlantirish turi"
 
-#: birthdaydlg.cpp:69 editdlg.cpp:253
+#: birthdaydlg.cpp:70 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -409,28 +409,28 @@ msgid ""
 "be unique."
 msgstr ""
 
-#: birthdaydlg.cpp:76
+#: birthdaydlg.cpp:77
 #, fuzzy, kde-format
 #| msgid "Birthday: "
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "Tugʻilgan kun: "
 
-#: birthdaydlg.cpp:79
+#: birthdaydlg.cpp:80
 #, fuzzy, kde-format
 #| msgid "Alarm Text"
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Ogohlantirish matni"
 
-#: birthdaydlg.cpp:82 prefdlg.cpp:1958
+#: birthdaydlg.cpp:83 prefdlg.cpp:1958
 #, fuzzy, kde-format
 #| msgid "Pre&fix:"
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "&Prefiks:"
 
-#: birthdaydlg.cpp:89
+#: birthdaydlg.cpp:90
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -438,14 +438,14 @@ msgid ""
 "including any necessary trailing spaces."
 msgstr ""
 
-#: birthdaydlg.cpp:93
+#: birthdaydlg.cpp:94
 #, fuzzy, kde-format
 #| msgid "S&uffix:"
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "S&uffiks:"
 
-#: birthdaydlg.cpp:100
+#: birthdaydlg.cpp:101
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -453,14 +453,14 @@ msgid ""
 "any necessary leading spaces."
 msgstr ""
 
-#: birthdaydlg.cpp:104
+#: birthdaydlg.cpp:105
 #, fuzzy, kde-format
 #| msgid "Select Birthdays"
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "Tugʻilgan kunlarni tanlash"
 
-#: birthdaydlg.cpp:134
+#: birthdaydlg.cpp:135
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -471,21 +471,21 @@ msgid ""
 "Ctrl or Shift.</para>"
 msgstr ""
 
-#: birthdaydlg.cpp:140
+#: birthdaydlg.cpp:141
 #, fuzzy, kde-format
 #| msgid "Alarm Configuration"
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "Ogohlantirish moslamasi"
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, fuzzy, kde-format
 #| msgid "Check to display a reminder in advance of the birthday."
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr "Tugʻilgan kundan oldin eslatish uchun shu yerni belgilang."
 
-#: birthdaydlg.cpp:161
+#: birthdaydlg.cpp:162
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -494,21 +494,21 @@ msgid ""
 "birthday."
 msgstr ""
 
-#: birthdaydlg.cpp:163
+#: birthdaydlg.cpp:164
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
 msgstr ""
 
-#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:197 recurrenceedit.cpp:142
 #, fuzzy, kde-format
 #| msgid "&Number of repetitions:"
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "&Takrorlanish soni:"
 
-#: birthdaydlg.cpp:198
+#: birthdaydlg.cpp:199
 #, fuzzy, kde-format
 #| msgid "Interval between alarm repetitions"
 msgctxt "@info:whatsthis"
@@ -4740,14 +4740,14 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Ogohlantirishlarni &yangilash"
 
-#: mainwindow.cpp:807
+#: mainwindow.cpp:808
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "Rostdan ham ushbu ogohlantirishni tasdiqlaysizmi?"
 
-#: mainwindow.cpp:809
+#: mainwindow.cpp:810
 #, fuzzy, kde-format
 #| msgid "Delete Alarm"
 #| msgid_plural "Delete Alarms"
@@ -4756,31 +4756,31 @@ msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
 msgstr[0] "Ogohlantirishni oʻchirish"
 
-#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Ogohlantirishni oʻchirish"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Muddati oʻtgan ogohlantirishlarni bekitish"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:906
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Muddati oʻtgan ogohlantirishlarni koʻrsatish"
 
-#: mainwindow.cpp:981
+#: mainwindow.cpp:982
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "&Tugʻilgan kunlarni import qilish..."
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, fuzzy, kde-format
 #| msgctxt "Undo-action: message"
 #| msgid "%1: %2"
@@ -4788,68 +4788,68 @@ msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1: %2"
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1235
 #, fuzzy, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1%2:%3"
 
-#: mainwindow.cpp:1300
+#: mainwindow.cpp:1301
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1302
+#: mainwindow.cpp:1303
 #, fuzzy, kde-format
 #| msgid "Hide Time t&o Alarms"
 msgid "Hide menu bar"
 msgstr "Ogohlantirishlar u&chun vaqtni bekitish"
 
-#: mainwindow.cpp:1542
+#: mainwindow.cpp:1543
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Ogohlantirishlarni koʻrsatish"
 
-#: mainwindow.cpp:1544
+#: mainwindow.cpp:1545
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Elektron pochta orqali ogohlantirishlar"
 
-#: mainwindow.cpp:1546
+#: mainwindow.cpp:1547
 #, fuzzy, kde-format
 #| msgid "Command Alarms"
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Buyruq orqali ogohlantirishlar"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Ogohlantirish turi"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1550
 #, fuzzy, kde-format
 #| msgid "Choose Alarm Font & Color"
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Ogohlantirish shrifti va rangini tanlash"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 #| msgid "Enable"
 msgctxt "@action"
 msgid "Enable"
 msgstr "Yoqish"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -8751,31 +8751,31 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Ogohlantirishni rejalashtirish uchun vaqtni koʻrsating."
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, fuzzy, kde-format
 #| msgid "New Alarm"
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "Yangi ogohlantirish"
 
-#: traywindow.cpp:293
+#: traywindow.cpp:294
 #, fuzzy, kde-format
 msgid "Disabled"
 msgstr "Oʻ&chirish"
 
-#: traywindow.cpp:298
+#: traywindow.cpp:299
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr ""
 
-#: traywindow.cpp:358
+#: traywindow.cpp:359
 #, fuzzy, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:360
+#: traywindow.cpp:361
 #, fuzzy, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"

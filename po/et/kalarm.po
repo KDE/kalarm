@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-27 00:40+0000\n"
+"POT-Creation-Date: 2024-11-01 00:40+0000\n"
 "PO-Revision-Date: 2020-05-15 08:19+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -391,13 +391,13 @@ msgstr "Käivitatav rakendus"
 msgid "Command line arguments to pass to application"
 msgstr "Rakendusele edastatavad käsurea argumendid"
 
-#: birthdaydlg.cpp:50
+#: birthdaydlg.cpp:51
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Sünnipäevade import KDE aadressiraamatust"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:245
+#: birthdaydlg.cpp:65 editdlg.cpp:245
 #, fuzzy, kde-format
 #| msgctxt "@label:textbox"
 #| msgid "Alarm type:"
@@ -405,7 +405,7 @@ msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Häire tüüp:"
 
-#: birthdaydlg.cpp:69 editdlg.cpp:253
+#: birthdaydlg.cpp:70 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -413,25 +413,25 @@ msgid ""
 "be unique."
 msgstr ""
 
-#: birthdaydlg.cpp:76
+#: birthdaydlg.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "Sünnipäev: "
 
-#: birthdaydlg.cpp:79
+#: birthdaydlg.cpp:80
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Häire tekst"
 
-#: birthdaydlg.cpp:82 prefdlg.cpp:1958
+#: birthdaydlg.cpp:83 prefdlg.cpp:1958
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "Prefiks:"
 
-#: birthdaydlg.cpp:89
+#: birthdaydlg.cpp:90
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -441,13 +441,13 @@ msgstr ""
 "Sisesta siia tekst, mis ilmub häireteates enne isiku nime, sealhulgas kõik "
 "vajalikud tühikud."
 
-#: birthdaydlg.cpp:93
+#: birthdaydlg.cpp:94
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "Sufiks:"
 
-#: birthdaydlg.cpp:100
+#: birthdaydlg.cpp:101
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -457,13 +457,13 @@ msgstr ""
 "Sisesta siia tekst, mis ilmub häireteates pärast isiku nime, sealhulgas kõik "
 "vajalikud tühikud."
 
-#: birthdaydlg.cpp:104
+#: birthdaydlg.cpp:105
 #, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "Sünnipäeva valimine"
 
-#: birthdaydlg.cpp:134
+#: birthdaydlg.cpp:135
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -479,19 +479,19 @@ msgstr ""
 "mitu sünnipäeva, lohistades hiirt üle nimekirja või hiire klõpsamise ajal "
 "klahvi Ctrl või Shift all hoides.</para>"
 
-#: birthdaydlg.cpp:140
+#: birthdaydlg.cpp:141
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "Häire seadistamine"
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr "Märgi, kui soovid näha meeldetuletust enne või pärast sünnipäeva."
 
-#: birthdaydlg.cpp:161
+#: birthdaydlg.cpp:162
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -502,20 +502,20 @@ msgstr ""
 "Sisesta päevade arv enne või pärast sünnipäeva, millal meeldetuletust "
 "näidatakse. See on lisaks häirele, mida näidatakse sünnipäeval."
 
-#: birthdaydlg.cpp:163
+#: birthdaydlg.cpp:164
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
 msgstr "Vali, kas meeldetuletus tuleks käivitada enne või pärast sünnipäeva."
 
-#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:197 recurrenceedit.cpp:142
 #, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "Alamkordus"
 
-#: birthdaydlg.cpp:198
+#: birthdaydlg.cpp:199
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
@@ -4751,7 +4751,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Uuenda häi&reid"
 
-#: mainwindow.cpp:807
+#: mainwindow.cpp:808
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4759,7 +4759,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "Kas tõesti tahad valitud häire kustutada?"
 msgstr[1] "Kas tõesti tahad kustutada valitud %1 häiret?"
 
-#: mainwindow.cpp:809
+#: mainwindow.cpp:810
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4767,85 +4767,85 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Häire kustutamine"
 msgstr[1] "Häirete kustutamine"
 
-#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Kustuta"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Peida aegunud häired"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:906
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Näita aegunud häireid"
 
-#: mainwindow.cpp:981
+#: mainwindow.cpp:982
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Sünnipäevade import"
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1235
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1300
+#: mainwindow.cpp:1301
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1302
+#: mainwindow.cpp:1303
 #, kde-format
 msgid "Hide menu bar"
 msgstr ""
 
-#: mainwindow.cpp:1542
+#: mainwindow.cpp:1543
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Nähtav häire"
 
-#: mainwindow.cpp:1544
+#: mainwindow.cpp:1545
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Kirjahäire"
 
-#: mainwindow.cpp:1546
+#: mainwindow.cpp:1547
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Käsuhäire"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Häire tüüp"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1550
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Loodava häire tüüp:"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Enable"
@@ -4853,7 +4853,7 @@ msgctxt "@action"
 msgid "Enable"
 msgstr "Luba"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@action"
@@ -8818,7 +8818,7 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Vali mall, mille alusel uus häire luua."
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&New Alarm"
@@ -8826,24 +8826,24 @@ msgctxt "@action"
 msgid "New Alarm"
 msgstr "&Uus häire"
 
-#: traywindow.cpp:293
+#: traywindow.cpp:294
 #, kde-format
 msgid "Disabled"
 msgstr "Keelatud"
 
-#: traywindow.cpp:298
+#: traywindow.cpp:299
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(mõned häired on keelatud)"
 
-#: traywindow.cpp:358
+#: traywindow.cpp:359
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:360
+#: traywindow.cpp:361
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"

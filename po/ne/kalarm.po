@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-27 00:40+0000\n"
+"POT-Creation-Date: 2024-11-01 00:40+0000\n"
 "PO-Revision-Date: 2007-09-07 11:50+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -414,21 +414,21 @@ msgstr ""
 msgid "Command line arguments to pass to application"
 msgstr "आदेश संसूचक"
 
-#: birthdaydlg.cpp:50
+#: birthdaydlg.cpp:51
 #, fuzzy, kde-format
 #| msgid "Import Birthdays From KAddressBook"
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "केडीई ठेगाना पुस्तकबाट जन्मदिन आयात गर्नुहोस्"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:245
+#: birthdaydlg.cpp:65 editdlg.cpp:245
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "संसूचक प्रकार"
 
-#: birthdaydlg.cpp:69 editdlg.cpp:253
+#: birthdaydlg.cpp:70 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -436,28 +436,28 @@ msgid ""
 "be unique."
 msgstr ""
 
-#: birthdaydlg.cpp:76
+#: birthdaydlg.cpp:77
 #, fuzzy, kde-format
 #| msgid "Birthday: "
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "जन्म दिन: "
 
-#: birthdaydlg.cpp:79
+#: birthdaydlg.cpp:80
 #, fuzzy, kde-format
 #| msgid "Alarm Text"
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "संसूचक पाठ"
 
-#: birthdaydlg.cpp:82 prefdlg.cpp:1958
+#: birthdaydlg.cpp:83 prefdlg.cpp:1958
 #, fuzzy, kde-format
 #| msgid "Prefix:"
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "उपसर्ग:"
 
-#: birthdaydlg.cpp:89
+#: birthdaydlg.cpp:90
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter text to appear before the person's name in the alarm message, "
@@ -470,14 +470,14 @@ msgstr ""
 "संसूचक सन्देशमा, कुनै पनि आवश्यक पछ्याउने खाली स्थान समाविष्ट, व्यक्तिको नाम अगाडि देखिने "
 "पाठ प्रविष्ट गर्नुहोस् ।"
 
-#: birthdaydlg.cpp:93
+#: birthdaydlg.cpp:94
 #, fuzzy, kde-format
 #| msgid "Suffix:"
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "प्रत्यय:"
 
-#: birthdaydlg.cpp:100
+#: birthdaydlg.cpp:101
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter text to appear after the person's name in the alarm message, "
@@ -490,14 +490,14 @@ msgstr ""
 "संसूचक सन्देशमा कुनै पनि आवश्यक अगुवा खाली स्थान समावेश गरेर, व्यक्तिको नाम पछाडि देखिने "
 "पाठ प्रविष्ट गर्नुहोस् ।"
 
-#: birthdaydlg.cpp:104
+#: birthdaydlg.cpp:105
 #, fuzzy, kde-format
 #| msgid "Select Birthdays"
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "जन्मदिन चयन गर्नुहोस्"
 
-#: birthdaydlg.cpp:134
+#: birthdaydlg.cpp:135
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Select birthdays to set alarms for.\n"
@@ -520,21 +520,21 @@ msgstr ""
 "तपाईँले सूचीको माथि माउस तानेर वा Ctrl वा Shift थिच्दा माउस क्लिक गरेर धेरै जन्मदिन "
 "चयन गर्न सक्नुहुन्छ ।"
 
-#: birthdaydlg.cpp:140
+#: birthdaydlg.cpp:141
 #, fuzzy, kde-format
 #| msgid "Alarm Configuration"
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "संसूचक कन्फिगरेसन"
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, fuzzy, kde-format
 #| msgid "Check to display a reminder in advance of the birthday."
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr "जन्म दिनको पहिला सचेतक प्रदर्शन गर्न चिनो लगाउनुहोस् ।"
 
-#: birthdaydlg.cpp:161
+#: birthdaydlg.cpp:162
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter the number of days before each birthday to display a reminder. This "
@@ -548,21 +548,21 @@ msgstr ""
 "सचेतक प्रदर्शन गर्न प्रत्येक जन्मदिनका अगाडि दिनका सङ्ख्या प्रविष्ट गर्नुहोस् । जन्मदिनमा "
 "संसूचकको अतिरिक्त संसूचन गर्न यो प्रदर्शन गरिन्छ ।"
 
-#: birthdaydlg.cpp:163
+#: birthdaydlg.cpp:164
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
 msgstr ""
 
-#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:197 recurrenceedit.cpp:142
 #, fuzzy, kde-format
 #| msgid "Simple Repetition"
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "साधारण पुनरावृत्ति"
 
-#: birthdaydlg.cpp:198
+#: birthdaydlg.cpp:199
 #, fuzzy, kde-format
 #| msgid "Set up an additional alarm repetition"
 msgctxt "@info:whatsthis"
@@ -5242,7 +5242,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "संसूचक ताजा पार्नुहोस्"
 
-#: mainwindow.cpp:807
+#: mainwindow.cpp:808
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the selected alarm?"
 #| msgid_plural "Do you really want to delete the %1 selected alarms?"
@@ -5252,7 +5252,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "तपाईँ वास्तवमै चयन गरिएको संसूचक मेट्न चाहनुहुन्छ ?"
 msgstr[1] "तपाईँ वास्तवमै चयन गरिएका संसूचक %1 मेट्न चाहनुहुन्छ ?"
 
-#: mainwindow.cpp:809
+#: mainwindow.cpp:810
 #, fuzzy, kde-format
 #| msgid "Delete Alarm"
 #| msgid_plural "Delete Alarms"
@@ -5262,35 +5262,35 @@ msgid_plural "Delete Alarms"
 msgstr[0] "संसूचक मेट्नुहोस्"
 msgstr[1] "संसूचक मेट्नुहोस्"
 
-#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "मेट्नुहोस्"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, fuzzy, kde-format
 #| msgid "Hide Archived Alarms"
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "सङ्ग्रहित संसूचक लुकाउनुहोस्"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:906
 #, fuzzy, kde-format
 #| msgid "Show Archived Alarms"
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "सङ्ग्रहित संसूचक देखाउनुहोस्"
 
-#: mainwindow.cpp:981
+#: mainwindow.cpp:982
 #, fuzzy, kde-format
 #| msgid "Import birthdays"
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "जन्मदिन आयात गर्नुहोस्"
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, fuzzy, kde-format
 #| msgctxt "Undo-action: message"
 #| msgid "%1: %2"
@@ -5298,7 +5298,7 @@ msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1: %2"
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1235
 #, fuzzy, kde-format
 #| msgctxt "Undo [action]: message"
 #| msgid "%1 %2: %3"
@@ -5306,61 +5306,61 @@ msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1300
+#: mainwindow.cpp:1301
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1302
+#: mainwindow.cpp:1303
 #, kde-format
 msgid "Hide menu bar"
 msgstr ""
 
-#: mainwindow.cpp:1542
+#: mainwindow.cpp:1543
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "संसूचक प्रदर्शन गर्नुहोस्"
 
-#: mainwindow.cpp:1544
+#: mainwindow.cpp:1545
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "इमेल संसूचक"
 
-#: mainwindow.cpp:1546
+#: mainwindow.cpp:1547
 #, fuzzy, kde-format
 #| msgid "Command Alarms"
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "आदेश संसूचक"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "संसूचक प्रकार"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1550
 #, fuzzy, kde-format
 #| msgid "Choose Alarm Template"
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "संसूचक टेम्प्लेट रोज्नुहोस्"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 #| msgid "Enable"
 msgctxt "@action"
 msgid "Enable"
 msgstr "सक्षम पार्नुहोस्"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@action"
@@ -9689,26 +9689,26 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "नयाँ संसूचकमा आधारलाई टेम्प्लेट चयन गर्नुहोस् ।"
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, fuzzy, kde-format
 #| msgid "New Alarm"
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "नयाँ संसूचक"
 
-#: traywindow.cpp:293
+#: traywindow.cpp:294
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgid "Disabled"
 msgstr "अक्षम"
 
-#: traywindow.cpp:298
+#: traywindow.cpp:299
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr ""
 
-#: traywindow.cpp:358
+#: traywindow.cpp:359
 #, fuzzy, kde-format
 #| msgctxt "prefix + hours:minutes"
 #| msgid "(%1%2:%3)"
@@ -9716,7 +9716,7 @@ msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:360
+#: traywindow.cpp:361
 #, fuzzy, kde-format
 #| msgctxt "prefix + hours:minutes"
 #| msgid "%1%2:%3"

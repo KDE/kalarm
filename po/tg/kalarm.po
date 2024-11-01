@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-27 00:40+0000\n"
+"POT-Creation-Date: 2024-11-01 00:40+0000\n"
 "PO-Revision-Date: 2019-09-29 12:31+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
@@ -418,20 +418,20 @@ msgstr ""
 msgid "Command line arguments to pass to application"
 msgstr "&Дастур"
 
-#: birthdaydlg.cpp:50
+#: birthdaydlg.cpp:51
 #, fuzzy, kde-format
 #| msgid "Import Birthdays From KAddressBook"
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Воридоти рӯзҳои таваллуд аз китоби адресии KDE"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:245
+#: birthdaydlg.cpp:65 editdlg.cpp:245
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Навъи хотиррасонӣ"
 
-#: birthdaydlg.cpp:69 editdlg.cpp:253
+#: birthdaydlg.cpp:70 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -439,28 +439,28 @@ msgid ""
 "be unique."
 msgstr ""
 
-#: birthdaydlg.cpp:76
+#: birthdaydlg.cpp:77
 #, fuzzy, kde-format
 #| msgid "Birthday: "
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "Рӯзи таваллуд:"
 
-#: birthdaydlg.cpp:79
+#: birthdaydlg.cpp:80
 #, fuzzy, kde-format
 #| msgid "Alarm Text"
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Матни хотиррасонӣ"
 
-#: birthdaydlg.cpp:82 prefdlg.cpp:1958
+#: birthdaydlg.cpp:83 prefdlg.cpp:1958
 #, fuzzy, kde-format
 #| msgid "Pre&fix:"
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "&Префикс:"
 
-#: birthdaydlg.cpp:89
+#: birthdaydlg.cpp:90
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter text to appear before the person's name in the alarm message, "
@@ -473,14 +473,14 @@ msgstr ""
 "Матнро ворид кунед, ки пеш аз номи одам дар хотиррасонӣ ва ҳамчунин "
 "фосилотҳои лозимиро барои ҷудо кардани ном низ намоиш хоҳад шавад."
 
-#: birthdaydlg.cpp:93
+#: birthdaydlg.cpp:94
 #, fuzzy, kde-format
 #| msgid "S&uffix:"
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "&Суффикс:"
 
-#: birthdaydlg.cpp:100
+#: birthdaydlg.cpp:101
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter text to appear after the person's name in the alarm message, "
@@ -493,14 +493,14 @@ msgstr ""
 "Матнро ворид кунед, ки баъд аз номи одам дар хотиррасонӣ ва ҳамчунин "
 "фосилотҳои лозимиро барои ҷудо кардани ном низ намоиш хоҳад шавад."
 
-#: birthdaydlg.cpp:104
+#: birthdaydlg.cpp:105
 #, fuzzy, kde-format
 #| msgid "Select Birthdays"
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "Интихоби рӯзҳои таваллуд"
 
-#: birthdaydlg.cpp:134
+#: birthdaydlg.cpp:135
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Select birthdays to set alarms for.\n"
@@ -525,21 +525,21 @@ msgstr ""
 "инки метавон рӯзҳои таваллудро бо муш ва бо якҷоя пахш намудани тугмаҳои "
 "Ctrl ё Shift интихоб намоед."
 
-#: birthdaydlg.cpp:140
+#: birthdaydlg.cpp:141
 #, fuzzy, kde-format
 #| msgid "Alarm Configuration"
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "Танзимоти хотиррасонӣ"
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, fuzzy, kde-format
 #| msgid "Check to display a reminder in advance of the birthday."
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr "Нишон додани пешнамоишотҳои хотиррасон дар бораи рӯзҳои таваллуд."
 
-#: birthdaydlg.cpp:161
+#: birthdaydlg.cpp:162
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter the number of days before each birthday to display a reminder. This "
@@ -554,20 +554,20 @@ msgstr ""
 "лозим аст. Ин хотиррасонӣ иловагӣ ба хотиррасонии худи рӯзи таваллуд сабт "
 "карда мешавад."
 
-#: birthdaydlg.cpp:163
+#: birthdaydlg.cpp:164
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
 msgstr ""
 
-#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:197 recurrenceedit.cpp:142
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "Танзимоти хотиррасонӣ"
 
-#: birthdaydlg.cpp:198
+#: birthdaydlg.cpp:199
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
@@ -4960,7 +4960,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "&Бозсозӣ"
 
-#: mainwindow.cpp:807
+#: mainwindow.cpp:808
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the selected alarm?"
 #| msgid_plural "Do you really want to delete the %1 selected alarms?"
@@ -4970,7 +4970,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "Оё ҳақиқатан мехоҳед %1 -и хотиррасонии интихобшударо ҳузф кунед?"
 msgstr[1] "Оё ҳақиқатан мехоҳед %1 -и хотиррасонии интихобшударо ҳузф кунед?"
 
-#: mainwindow.cpp:809
+#: mainwindow.cpp:810
 #, fuzzy, kde-format
 #| msgid "Delete Alarm"
 #| msgid_plural "Delete Alarms"
@@ -4980,31 +4980,31 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Ҳузфи хотиррасонӣ"
 msgstr[1] "Ҳузфи хотиррасониҳо"
 
-#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Ҳузфи хотиррасонӣ"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Пинҳони хотиррасонии &кӯҳнашуда"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:906
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Намоиши хотиррасонии &кӯҳнашуда"
 
-#: mainwindow.cpp:981
+#: mainwindow.cpp:982
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "&Воридоти рӯзи таваллуд..."
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, fuzzy, kde-format
 #| msgctxt "Hours and Minutes"
 #| msgid "%1H %2M"
@@ -5014,7 +5014,7 @@ msgstr ""
 "Соатҳо ва дақиқаҳо\n"
 "%1С %2Д"
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1235
 #, fuzzy, kde-format
 #| msgctxt "prefix + hours:minutes"
 #| msgid "%1%2:%3"
@@ -5022,57 +5022,57 @@ msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1%2:%3"
 
-#: mainwindow.cpp:1300
+#: mainwindow.cpp:1301
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1302
+#: mainwindow.cpp:1303
 #, fuzzy, kde-format
 #| msgid "Hide Time t&o Alarms"
 msgid "Hide menu bar"
 msgstr "Пинҳони муддат &то хотиррасонӣ"
 
-#: mainwindow.cpp:1542
+#: mainwindow.cpp:1543
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Амали махсуси намоиши хотиррасонӣ"
 
-#: mainwindow.cpp:1544
+#: mainwindow.cpp:1545
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Фаъол сохтани &хотиррасонӣ"
 
-#: mainwindow.cpp:1546
+#: mainwindow.cpp:1547
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "&Дастур"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Навъи хотиррасонӣ"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1550
 #, fuzzy, kde-format
 #| msgid "Choose Alarm Template"
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Қолиби хотиррасонӣ интихоб кунед"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "&Фаъол сохтан"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -9175,25 +9175,25 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Қолиб барои хотиррасонии нав интихоб кунед."
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, fuzzy, kde-format
 #| msgid "New Alarm"
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "Хотиррасонии нав"
 
-#: traywindow.cpp:293
+#: traywindow.cpp:294
 #, fuzzy, kde-format
 msgid "Disabled"
 msgstr "Ғайри&фаъол сохтан"
 
-#: traywindow.cpp:298
+#: traywindow.cpp:299
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr ""
 
-#: traywindow.cpp:358
+#: traywindow.cpp:359
 #, fuzzy, kde-format
 #| msgctxt "prefix + hours:minutes"
 #| msgid "(%1%2:%3)"
@@ -9201,7 +9201,7 @@ msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:360
+#: traywindow.cpp:361
 #, fuzzy, kde-format
 #| msgctxt "prefix + hours:minutes"
 #| msgid "%1%2:%3"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-27 00:40+0000\n"
+"POT-Creation-Date: 2024-11-01 00:40+0000\n"
 "PO-Revision-Date: 2024-09-23 21:24+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -347,19 +347,19 @@ msgstr "要執行的應用程式"
 msgid "Command line arguments to pass to application"
 msgstr "要傳送到應用程式的命令列參數"
 
-#: birthdaydlg.cpp:50
+#: birthdaydlg.cpp:51
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "從 KAddressBook 匯入生日設定"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:245
+#: birthdaydlg.cpp:65 editdlg.cpp:245
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "鬧鐘名稱："
 
-#: birthdaydlg.cpp:69 editdlg.cpp:253
+#: birthdaydlg.cpp:70 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -367,25 +367,25 @@ msgid ""
 "be unique."
 msgstr "輸入名稱讓您能辨識這個鬧鐘。這是可選的，而且名稱也不需要是獨特的。"
 
-#: birthdaydlg.cpp:76
+#: birthdaydlg.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "生日："
 
-#: birthdaydlg.cpp:79
+#: birthdaydlg.cpp:80
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "鬧鐘文字"
 
-#: birthdaydlg.cpp:82 prefdlg.cpp:1958
+#: birthdaydlg.cpp:83 prefdlg.cpp:1958
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "前置字串："
 
-#: birthdaydlg.cpp:89
+#: birthdaydlg.cpp:90
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -393,13 +393,13 @@ msgid ""
 "including any necessary trailing spaces."
 msgstr "輸入在鬧鐘訊息中，要顯示人名之前的字串，包含需要的空格。"
 
-#: birthdaydlg.cpp:93
+#: birthdaydlg.cpp:94
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "後置字串："
 
-#: birthdaydlg.cpp:100
+#: birthdaydlg.cpp:101
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -407,13 +407,13 @@ msgid ""
 "any necessary leading spaces."
 msgstr "輸入在鬧鐘訊息中，要顯示人名之後的字串，包含需要的空格。"
 
-#: birthdaydlg.cpp:104
+#: birthdaydlg.cpp:105
 #, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "選擇生日"
 
-#: birthdaydlg.cpp:134
+#: birthdaydlg.cpp:135
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -428,19 +428,19 @@ msgstr ""
 "外。</para><para>您可以拖曳的方式，或是用 Ctrl 或 Shift 鍵來一次選擇多個生"
 "日。</para>"
 
-#: birthdaydlg.cpp:140
+#: birthdaydlg.cpp:141
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "鬧鐘設定"
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr "開啟選項以便在生日之前或之後提醒。"
 
-#: birthdaydlg.cpp:161
+#: birthdaydlg.cpp:162
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -449,20 +449,20 @@ msgid ""
 "birthday."
 msgstr "輸入您希望在生日之前或之後多久顯示提醒訊息。"
 
-#: birthdaydlg.cpp:163
+#: birthdaydlg.cpp:164
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
 msgstr "選擇是否在生日前後觸發提醒。"
 
-#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:197 recurrenceedit.cpp:142
 #, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "子重複"
 
-#: birthdaydlg.cpp:198
+#: birthdaydlg.cpp:199
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
@@ -4378,105 +4378,105 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "重新整理鬧鐘"
 
-#: mainwindow.cpp:807
+#: mainwindow.cpp:808
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "您真的要刪除這 %1 個鬧鐘嗎？"
 
-#: mainwindow.cpp:809
+#: mainwindow.cpp:810
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
 msgstr[0] "刪除鬧鐘"
 
-#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "刪除"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "隱藏已封存的鬧鐘"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:906
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "顯示已封存的鬧鐘"
 
-#: mainwindow.cpp:981
+#: mainwindow.cpp:982
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "匯入生日..."
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1235
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1300
+#: mainwindow.cpp:1301
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr "<qt>這會完全隱藏選單列。您可以按下 %1 重新顯示選單列。</qt>"
 
-#: mainwindow.cpp:1302
+#: mainwindow.cpp:1303
 #, kde-format
 msgid "Hide menu bar"
 msgstr "隱藏選單列"
 
-#: mainwindow.cpp:1542
+#: mainwindow.cpp:1543
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "顯示鬧鐘"
 
-#: mainwindow.cpp:1544
+#: mainwindow.cpp:1545
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "電子郵件型鬧鐘"
 
-#: mainwindow.cpp:1546
+#: mainwindow.cpp:1547
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "指令型鬧鐘"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "鬧鐘類型"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1550
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "選擇鬧鐘樣本"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "開啟"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -8166,30 +8166,30 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "選擇樣本以產生新的鬧鐘。"
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "新鬧鐘"
 
-#: traywindow.cpp:293
+#: traywindow.cpp:294
 #, kde-format
 msgid "Disabled"
 msgstr "已關閉"
 
-#: traywindow.cpp:298
+#: traywindow.cpp:299
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "（有些鬧鐘已關閉）"
 
-#: traywindow.cpp:358
+#: traywindow.cpp:359
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:360
+#: traywindow.cpp:361
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"

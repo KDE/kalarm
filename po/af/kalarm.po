@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-27 00:40+0000\n"
+"POT-Creation-Date: 2024-11-01 00:40+0000\n"
 "PO-Revision-Date: 2002-11-07 11:37+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -356,19 +356,19 @@ msgstr ""
 msgid "Command line arguments to pass to application"
 msgstr "Opdrag"
 
-#: birthdaydlg.cpp:50
+#: birthdaydlg.cpp:51
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr ""
 
-#: birthdaydlg.cpp:64 editdlg.cpp:245
+#: birthdaydlg.cpp:65 editdlg.cpp:245
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Alarm Verstek"
 
-#: birthdaydlg.cpp:69 editdlg.cpp:253
+#: birthdaydlg.cpp:70 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -376,25 +376,25 @@ msgid ""
 "be unique."
 msgstr ""
 
-#: birthdaydlg.cpp:76
+#: birthdaydlg.cpp:77
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "vandag"
 
-#: birthdaydlg.cpp:79
+#: birthdaydlg.cpp:80
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Alarm Verstek"
 
-#: birthdaydlg.cpp:82 prefdlg.cpp:1958
+#: birthdaydlg.cpp:83 prefdlg.cpp:1958
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr ""
 
-#: birthdaydlg.cpp:89
+#: birthdaydlg.cpp:90
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -402,13 +402,13 @@ msgid ""
 "including any necessary trailing spaces."
 msgstr ""
 
-#: birthdaydlg.cpp:93
+#: birthdaydlg.cpp:94
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr ""
 
-#: birthdaydlg.cpp:100
+#: birthdaydlg.cpp:101
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -416,13 +416,13 @@ msgid ""
 "any necessary leading spaces."
 msgstr ""
 
-#: birthdaydlg.cpp:104
+#: birthdaydlg.cpp:105
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "vandag"
 
-#: birthdaydlg.cpp:134
+#: birthdaydlg.cpp:135
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -433,19 +433,19 @@ msgid ""
 "Ctrl or Shift.</para>"
 msgstr ""
 
-#: birthdaydlg.cpp:140
+#: birthdaydlg.cpp:141
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "Alarm Bediener nie gevind"
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr ""
 
-#: birthdaydlg.cpp:161
+#: birthdaydlg.cpp:162
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -454,20 +454,20 @@ msgid ""
 "birthday."
 msgstr "Invoer die nommer van dae tussen repitisies van die alarm"
 
-#: birthdaydlg.cpp:163
+#: birthdaydlg.cpp:164
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
 msgstr ""
 
-#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:197 recurrenceedit.cpp:142
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "Herhaling"
 
-#: birthdaydlg.cpp:198
+#: birthdaydlg.cpp:199
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
@@ -4469,7 +4469,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Verfris Alarms"
 
-#: mainwindow.cpp:807
+#: mainwindow.cpp:808
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4477,7 +4477,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "Doen jy rerig wil hê na uitvee die gekose alarm?"
 msgstr[1] "Doen jy rerig wil hê na uitvee die %1 gekose alarms?"
 
-#: mainwindow.cpp:809
+#: mainwindow.cpp:810
 #, fuzzy, kde-format
 #| msgid "Delete Alarm"
 #| msgid_plural "Delete Alarms"
@@ -4487,31 +4487,31 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Uitvee Alarm"
 msgstr[1] "Uitvee Alarms"
 
-#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Uitvee Alarm"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Redigeer Alarm"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:906
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Redigeer Alarm"
 
-#: mainwindow.cpp:981
+#: mainwindow.cpp:982
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr ""
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, fuzzy, kde-format
 #| msgctxt "Hours and Minutes"
 #| msgid "%1H %2M"
@@ -4519,61 +4519,61 @@ msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1H %2M"
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1235
 #, fuzzy, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1H %2M"
 
-#: mainwindow.cpp:1300
+#: mainwindow.cpp:1301
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1302
+#: mainwindow.cpp:1303
 #, fuzzy, kde-format
 msgid "Hide menu bar"
 msgstr "Redigeer Alarm"
 
-#: mainwindow.cpp:1542
+#: mainwindow.cpp:1543
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Aktiveer Alarms"
 
-#: mainwindow.cpp:1544
+#: mainwindow.cpp:1545
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Aktiveer Alarms"
 
-#: mainwindow.cpp:1546
+#: mainwindow.cpp:1547
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Opdrag"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Alarm Verstek"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1550
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Nuwe Alarm"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Aktiveer Alarms"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -8270,31 +8270,31 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Invoer die datum na skeduleer die alarm."
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, fuzzy, kde-format
 #| msgid "New Alarm"
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "Nuwe Alarm"
 
-#: traywindow.cpp:293
+#: traywindow.cpp:294
 #, fuzzy, kde-format
 msgid "Disabled"
 msgstr "Aktiveer Alarms"
 
-#: traywindow.cpp:298
+#: traywindow.cpp:299
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr ""
 
-#: traywindow.cpp:358
+#: traywindow.cpp:359
 #, fuzzy, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "%1H %2M"
 
-#: traywindow.cpp:360
+#: traywindow.cpp:361
 #, fuzzy, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"

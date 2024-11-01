@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-27 00:40+0000\n"
+"POT-Creation-Date: 2024-11-01 00:40+0000\n"
 "PO-Revision-Date: 2024-10-09 20:38+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -363,19 +363,19 @@ msgstr "இயக்க வேண்டிய நிரல்"
 msgid "Command line arguments to pass to application"
 msgstr "செயலிக்கு அனுப்ப வேண்டிய முனைய தருமதிப்புகள் (arguments)"
 
-#: birthdaydlg.cpp:50
+#: birthdaydlg.cpp:51
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "KAddressBook-இலிருந்து பிறந்தநாட்களை இறக்குமதி செய்வது"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:245
+#: birthdaydlg.cpp:65 editdlg.cpp:245
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "அலாரத்தின் பெயர்:"
 
-#: birthdaydlg.cpp:69 editdlg.cpp:253
+#: birthdaydlg.cpp:70 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -385,25 +385,25 @@ msgstr ""
 "இவ்வலாரத்தை அடையாளப்படுத்தும் பெயரை உள்ளிடுங்கள். விரும்பினால் இதை காலியாக விடலாம். பல "
 "அலாரங்களுக்கு ஒரே பெயரை பயன்படுத்தலாம்."
 
-#: birthdaydlg.cpp:76
+#: birthdaydlg.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "பிறந்தநாள்:"
 
-#: birthdaydlg.cpp:79
+#: birthdaydlg.cpp:80
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "அலாரத்திற்கான உரை"
 
-#: birthdaydlg.cpp:82 prefdlg.cpp:1958
+#: birthdaydlg.cpp:83 prefdlg.cpp:1958
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "முன்னொட்டு:"
 
-#: birthdaydlg.cpp:89
+#: birthdaydlg.cpp:90
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -413,13 +413,13 @@ msgstr ""
 "நபரின் பெயருக்கு முன் அலார தகவல்சாளரத்தில் இருக்க வேண்டிய உரையை உள்ளிடுங்கள். "
 "தேவைப்பட்டால் உரைக்கு பின்னால் இருக்க வேண்டிய இடைவெளிகளையும் உள்ளிடுங்கள்."
 
-#: birthdaydlg.cpp:93
+#: birthdaydlg.cpp:94
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "பின்னொட்டு:"
 
-#: birthdaydlg.cpp:100
+#: birthdaydlg.cpp:101
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -429,13 +429,13 @@ msgstr ""
 "நபரின் பெயருக்கு பிறகு அலார தகவல்சாளரத்தில் இருக்க வேண்டிய உரையை உள்ளிடுங்கள். "
 "தேவைப்பட்டால் உரைக்கு முன்னால் இருக்க வேண்டிய இடைவெளிகளையும் உள்ளிடுங்கள்."
 
-#: birthdaydlg.cpp:104
+#: birthdaydlg.cpp:105
 #, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "பிறந்தநாட்களை தேர்ந்தெடு"
 
-#: birthdaydlg.cpp:134
+#: birthdaydlg.cpp:135
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -451,19 +451,19 @@ msgstr ""
 "செய்துகொண்டே சுட்டியை பட்டியலின்மீது இழுத்தோ, Ctrl அல்லது Shift விசைகளை அழுத்தியபடி "
 "கிளிக் செய்தோ, ஒரே நேரத்தில் பல பிறந்தநாட்ளை நீங்கள் தேர்ந்தெடுக்கலாம்.</para>"
 
-#: birthdaydlg.cpp:140
+#: birthdaydlg.cpp:141
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "அலார அமைப்பு"
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr "பிறந்தநாளுக்கு முன்னோ பின்னோ நினைவூட்டலை காட்ட இதை குறியுங்கள்."
 
-#: birthdaydlg.cpp:161
+#: birthdaydlg.cpp:162
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -474,7 +474,7 @@ msgstr ""
 "எத்தனை நாட்களுக்கு முன்னோ பின்னோ ஒவ்வொரு பிறந்தநாளுக்கும் நினைவூட்டலை காட்ட வேண்டுமென்பதை "
 "இங்கு உள்ளிடுங்கள். இதைத் தவிர, ஒவ்வொரு பிறந்தநாளன்றும் ஓர் அலாரம் தூண்டப்படும்."
 
-#: birthdaydlg.cpp:163
+#: birthdaydlg.cpp:164
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -483,13 +483,13 @@ msgstr ""
 "பிறந்தநாளுக்கு முன்பு நினைவூட்டல் காட்டப்பட வேண்டுமா, அல்லது பின்பு காட்டப்பட வேண்டுமா "
 "என்பதை தேர்ந்தெடுங்கள்."
 
-#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:197 recurrenceedit.cpp:142
 #, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "சார்-தூண்டல்"
 
-#: birthdaydlg.cpp:198
+#: birthdaydlg.cpp:199
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
@@ -4498,7 +4498,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "அலாரங்களை புதுப்பி"
 
-#: mainwindow.cpp:807
+#: mainwindow.cpp:808
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4506,7 +4506,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "தேர்ந்தெடுக்கப்பட்ட அலாரத்தை உறுதியாக நீக்க வேண்டுமா?"
 msgstr[1] "தேர்ந்தெடுக்கப்பட்ட %1 அலாரங்களை உறுதியாக நீக்க வேண்டுமா?"
 
-#: mainwindow.cpp:809
+#: mainwindow.cpp:810
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4514,43 +4514,43 @@ msgid_plural "Delete Alarms"
 msgstr[0] "அலாரத்தை நீக்குதல்"
 msgstr[1] "அலாரங்களை நீக்குதல்"
 
-#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "நீக்கு"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "காப்பகப்படுத்தப்பட்ட அலாரங்களை மறை"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:906
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "காப்பகப்படுத்தப்பட்ட அலாரங்களை காட்டு"
 
-#: mainwindow.cpp:981
+#: mainwindow.cpp:982
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "பிறந்தநாட்களை இறக்குமதி செய்"
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%2 %1"
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1235
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%2 %1: %3"
 
-#: mainwindow.cpp:1300
+#: mainwindow.cpp:1301
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4558,48 +4558,48 @@ msgid ""
 msgstr ""
 "<qt>இது பட்டிப்பட்டையை மறைக்கும். அதை மறுபடியும் காட்ட %1 என்பதை அழுத்துங்கள்.</qt>"
 
-#: mainwindow.cpp:1302
+#: mainwindow.cpp:1303
 #, kde-format
 msgid "Hide menu bar"
 msgstr "பட்டிப்பட்டையை மறை"
 
-#: mainwindow.cpp:1542
+#: mainwindow.cpp:1543
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "காட்சி அலாரம்"
 
-#: mainwindow.cpp:1544
+#: mainwindow.cpp:1545
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "மின்னஞ்சல் அலாரம்"
 
-#: mainwindow.cpp:1546
+#: mainwindow.cpp:1547
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "கட்டளை அலாரம்"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "அலாரத்தின் வகை"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1550
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "உருவாக்க வேண்டிய அலாரத்தின் வகையை தேர்ந்தெடுங்கள்:"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "இயக்கு"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -8419,30 +8419,30 @@ msgid "Select a template to base the new alarm on."
 msgstr ""
 "புதிய அலாரத்தை எந்த வார்ப்புருவின் அடிப்படையில் உருவாக்க வேண்டுமென்பதை தேர்ந்தெடுங்கள்."
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "புதிய அலாரம்"
 
-#: traywindow.cpp:293
+#: traywindow.cpp:294
 #, kde-format
 msgid "Disabled"
 msgstr "முடக்கப்பட்டுள்ளது"
 
-#: traywindow.cpp:298
+#: traywindow.cpp:299
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(சில அலாரங்கள் முடக்கப்பட்டுள்ளன)"
 
-#: traywindow.cpp:358
+#: traywindow.cpp:359
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:360
+#: traywindow.cpp:361
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"

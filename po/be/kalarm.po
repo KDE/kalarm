@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-27 00:40+0000\n"
+"POT-Creation-Date: 2024-11-01 00:40+0000\n"
 "PO-Revision-Date: 2007-10-28 14:03+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -369,19 +369,19 @@ msgstr ""
 msgid "Command line arguments to pass to application"
 msgstr "Напамінкі, якія запускаюць каманды"
 
-#: birthdaydlg.cpp:50
+#: birthdaydlg.cpp:51
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Імпарт дзён нараджэння з адраснай кнігі KDE"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:245
+#: birthdaydlg.cpp:65 editdlg.cpp:245
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Тып напамінку"
 
-#: birthdaydlg.cpp:69 editdlg.cpp:253
+#: birthdaydlg.cpp:70 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -389,25 +389,25 @@ msgid ""
 "be unique."
 msgstr ""
 
-#: birthdaydlg.cpp:76
+#: birthdaydlg.cpp:77
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "Дзень нараджэнні:"
 
-#: birthdaydlg.cpp:79
+#: birthdaydlg.cpp:80
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Тэкст напамінку"
 
-#: birthdaydlg.cpp:82 prefdlg.cpp:1958
+#: birthdaydlg.cpp:83 prefdlg.cpp:1958
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "Прэфікс:"
 
-#: birthdaydlg.cpp:89
+#: birthdaydlg.cpp:90
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -417,13 +417,13 @@ msgstr ""
 "Увядзіце тэкст, які будзе паказаны перад імем чалавека ў напамінку, "
 "уключаючы неабходныя прабелы для таго, каб аддзяліць імя."
 
-#: birthdaydlg.cpp:93
+#: birthdaydlg.cpp:94
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "Суфікс:"
 
-#: birthdaydlg.cpp:100
+#: birthdaydlg.cpp:101
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -433,13 +433,13 @@ msgstr ""
 "Увядзіце тэкст, які будзе паказаны пасля імя чалавека ў напамінку, уключаючы "
 "неабходныя прабелы для таго, каб аддзяліць імя."
 
-#: birthdaydlg.cpp:104
+#: birthdaydlg.cpp:105
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "Выбар дзён нараджэння"
 
-#: birthdaydlg.cpp:134
+#: birthdaydlg.cpp:135
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -458,19 +458,19 @@ msgstr ""
 "паказальнікам мышы па спісе пры націснутай левай клавішы або выбіраючы дні "
 "нараджэння мышшу з адначасовым націскам клавіш Ctrl або Shift."
 
-#: birthdaydlg.cpp:140
+#: birthdaydlg.cpp:141
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "Налада напамінку"
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr "Паказваць папярэднія напамінкі аб днях нараджэння."
 
-#: birthdaydlg.cpp:161
+#: birthdaydlg.cpp:162
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -481,20 +481,20 @@ msgstr ""
 "Увядзіце перыяд у днях, за які неабходна папярэдзіць аб дні нараджэння. Гэты "
 "напамінак будзе зроблена дадаткова да напамінку ў сам дзень нараджэнні."
 
-#: birthdaydlg.cpp:163
+#: birthdaydlg.cpp:164
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
 msgstr ""
 
-#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:197 recurrenceedit.cpp:142
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "Прастою паўтор"
 
-#: birthdaydlg.cpp:198
+#: birthdaydlg.cpp:199
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
@@ -4580,7 +4580,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Абнавіць"
 
-#: mainwindow.cpp:807
+#: mainwindow.cpp:808
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4589,7 +4589,7 @@ msgstr[0] "Вы жадаеце пацвердзіць чытанне гэтаг�
 msgstr[1] "Вы жадаеце пацвердзіць чытанне гэтага напамінку?"
 msgstr[2] "Вы жадаеце пацвердзіць чытанне гэтага напамінку?"
 
-#: mainwindow.cpp:809
+#: mainwindow.cpp:810
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4598,91 +4598,91 @@ msgstr[0] "Адкласці напамінак"
 msgstr[1] "Адкласці напамінак"
 msgstr[2] "Адкласці напамінак"
 
-#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Выдаліць"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Схаваць састарэлыя напамінкі"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:906
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Паказваць састарэлыя напамінкі"
 
-#: mainwindow.cpp:981
+#: mainwindow.cpp:982
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Імпарт дзён нараджэння..."
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr ""
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1235
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr ""
 
-#: mainwindow.cpp:1300
+#: mainwindow.cpp:1301
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1302
+#: mainwindow.cpp:1303
 #, fuzzy, kde-format
 msgid "Hide menu bar"
 msgstr "Схаваць час да напамінку"
 
-#: mainwindow.cpp:1542
+#: mainwindow.cpp:1543
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Паказ напамінкаў"
 
-#: mainwindow.cpp:1544
+#: mainwindow.cpp:1545
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Напамінкі па электроннай пошце"
 
-#: mainwindow.cpp:1546
+#: mainwindow.cpp:1547
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Напамінкі, якія запускаюць каманды"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Тып напамінку"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1550
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Вылучыце шаблон напамінку"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Уключаны"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -8539,30 +8539,30 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Вылучыце шаблон для новага напамінку."
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "Новы напамінак"
 
-#: traywindow.cpp:293
+#: traywindow.cpp:294
 #, fuzzy, kde-format
 msgid "Disabled"
 msgstr "Выключана"
 
-#: traywindow.cpp:298
+#: traywindow.cpp:299
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr ""
 
-#: traywindow.cpp:358
+#: traywindow.cpp:359
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr ""
 
-#: traywindow.cpp:360
+#: traywindow.cpp:361
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"

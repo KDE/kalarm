@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-27 00:40+0000\n"
+"POT-Creation-Date: 2024-11-01 00:40+0000\n"
 "PO-Revision-Date: 2005-10-06 11:21+0800\n"
 "Last-Translator: junetazawawi <junetazawawi@yahoo.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -404,21 +404,21 @@ msgstr ""
 msgid "Command line arguments to pass to application"
 msgstr "Penggera Arahan"
 
-#: birthdaydlg.cpp:50
+#: birthdaydlg.cpp:51
 #, fuzzy, kde-format
 #| msgid "Import Birthdays From KAddressBook"
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Import Tarikh Lahir dari KAddressBook"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:245
+#: birthdaydlg.cpp:65 editdlg.cpp:245
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Jenis penggera"
 
-#: birthdaydlg.cpp:69 editdlg.cpp:253
+#: birthdaydlg.cpp:70 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -426,28 +426,28 @@ msgid ""
 "be unique."
 msgstr ""
 
-#: birthdaydlg.cpp:76
+#: birthdaydlg.cpp:77
 #, fuzzy, kde-format
 #| msgid "Birthday: "
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "Tarikh Lahir:"
 
-#: birthdaydlg.cpp:79
+#: birthdaydlg.cpp:80
 #, fuzzy, kde-format
 #| msgid "Alarm Text"
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Teks Penggera"
 
-#: birthdaydlg.cpp:82 prefdlg.cpp:1958
+#: birthdaydlg.cpp:83 prefdlg.cpp:1958
 #, fuzzy, kde-format
 #| msgid "Pre&fix:"
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "&Awalan"
 
-#: birthdaydlg.cpp:89
+#: birthdaydlg.cpp:90
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter text to appear before the person's name in the alarm message, "
@@ -460,14 +460,14 @@ msgstr ""
 "Masukkan teks untuk muncul sebelum nama orang dalam mesej penggera, termasuk "
 "sebarang ruang mengekor yang perlu"
 
-#: birthdaydlg.cpp:93
+#: birthdaydlg.cpp:94
 #, fuzzy, kde-format
 #| msgid "S&uffix:"
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "&Akhiran:"
 
-#: birthdaydlg.cpp:100
+#: birthdaydlg.cpp:101
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter text to appear after the person's name in the alarm message, "
@@ -480,14 +480,14 @@ msgstr ""
 "Masukkan teks untuk muncul selepas nama orang dalam mesej penggera, termasuk "
 "sebarang ruang pendahulu yang perlu."
 
-#: birthdaydlg.cpp:104
+#: birthdaydlg.cpp:105
 #, fuzzy, kde-format
 #| msgid "Select Birthdays"
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "Pilih Tarikh Lahir"
 
-#: birthdaydlg.cpp:134
+#: birthdaydlg.cpp:135
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Select birthdays to set alarms for.\n"
@@ -511,21 +511,21 @@ msgstr ""
 "Anda boleh memilih berbilang tarikh lahir dalam satu masa dengan menyeret "
 "tetikus pada senarai, atau mengklik tetikus sambil menekan Ctrl atau Shift."
 
-#: birthdaydlg.cpp:140
+#: birthdaydlg.cpp:141
 #, fuzzy, kde-format
 #| msgid "Alarm Configuration"
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "Konfigurasi penggera"
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, fuzzy, kde-format
 #| msgid "Check to display a reminder in advance of the birthday."
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr "Semak untuk paparan peringatan sebelum tarikh lahir"
 
-#: birthdaydlg.cpp:161
+#: birthdaydlg.cpp:162
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter the number of days before each birthday to display a reminder. This "
@@ -540,21 +540,21 @@ msgstr ""
 "peringatan.  Ini adalah tambahan kepada penggera yang dipaparkan pada hari "
 "lahir tersebut."
 
-#: birthdaydlg.cpp:163
+#: birthdaydlg.cpp:164
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
 msgstr ""
 
-#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:197 recurrenceedit.cpp:142
 #, fuzzy, kde-format
 #| msgid "Simple Repetition"
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "Pengulangan Ringkas"
 
-#: birthdaydlg.cpp:198
+#: birthdaydlg.cpp:199
 #, fuzzy, kde-format
 #| msgid "Set up an additional alarm repetition"
 msgctxt "@info:whatsthis"
@@ -4999,7 +4999,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "&Muat Semula Penggera"
 
-#: mainwindow.cpp:807
+#: mainwindow.cpp:808
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -5007,7 +5007,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "_n: Anda pasti ingin menghapuskan penggera yang dipilih?"
 msgstr[1] "Anda pasti ingin menghapuskan %1 penggera yang dipilih?"
 
-#: mainwindow.cpp:809
+#: mainwindow.cpp:810
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -5015,31 +5015,31 @@ msgid_plural "Delete Alarms"
 msgstr[0] "_n: Hapuskan penggera"
 msgstr[1] "Hapuskan penggera"
 
-#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "_n: Hapuskan penggera"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Sembunyikan Penggera Luput"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:906
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Papar Penggera luput"
 
-#: mainwindow.cpp:981
+#: mainwindow.cpp:982
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Import &Tarikh Lahir..."
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, fuzzy, kde-format
 #| msgctxt "Undo-action: message"
 #| msgid "%1: %2"
@@ -5047,7 +5047,7 @@ msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1: %2"
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1235
 #, fuzzy, kde-format
 #| msgctxt "Undo [action]: message"
 #| msgid "%1 %2: %3"
@@ -5055,61 +5055,61 @@ msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1300
+#: mainwindow.cpp:1301
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1302
+#: mainwindow.cpp:1303
 #, fuzzy, kde-format
 #| msgid "Hide Time t&o Alarms"
 msgid "Hide menu bar"
 msgstr "Sembunyikan Waktu &untuk Menggera"
 
-#: mainwindow.cpp:1542
+#: mainwindow.cpp:1543
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Paparkan penggera"
 
-#: mainwindow.cpp:1544
+#: mainwindow.cpp:1545
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Penggera E-mel"
 
-#: mainwindow.cpp:1546
+#: mainwindow.cpp:1547
 #, fuzzy, kde-format
 #| msgid "Command Alarms"
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Penggera Arahan"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Jenis penggera"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1550
 #, fuzzy, kde-format
 #| msgid "Choose Alarm Template"
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Pilih Templat Penggera"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "&Aktifkan"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -9233,25 +9233,25 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Pilih templat untuk mendasari penggera baru."
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, fuzzy, kde-format
 #| msgid "New Alarm"
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "Penggera baru"
 
-#: traywindow.cpp:293
+#: traywindow.cpp:294
 #, fuzzy, kde-format
 msgid "Disabled"
 msgstr "&Nyahaktifkan"
 
-#: traywindow.cpp:298
+#: traywindow.cpp:299
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr ""
 
-#: traywindow.cpp:358
+#: traywindow.cpp:359
 #, fuzzy, kde-format
 #| msgctxt "prefix + hours:minutes"
 #| msgid "(%1%2:%3)"
@@ -9259,7 +9259,7 @@ msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:360
+#: traywindow.cpp:361
 #, fuzzy, kde-format
 #| msgctxt "prefix + hours:minutes"
 #| msgid "%1%2:%3"

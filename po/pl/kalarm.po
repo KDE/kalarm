@@ -1,6 +1,6 @@
 # translation of kalarm.po to
 # translation of alarmdaemonctrl.po to
-# Version: $Revision: 1691713 $
+# Version: $Revision: 1694100 $
 #
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2004, 2005, 2006.
@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-27 00:40+0000\n"
+"POT-Creation-Date: 2024-11-01 00:40+0000\n"
 "PO-Revision-Date: 2024-09-29 10:00+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -370,19 +370,19 @@ msgstr "Aplikacja do uruchomienia"
 msgid "Command line arguments to pass to application"
 msgstr "Argumenty wiersza poleceń do przekazania aplikacji"
 
-#: birthdaydlg.cpp:50
+#: birthdaydlg.cpp:51
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Zaimportuj daty urodzin z KAddressBook"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:245
+#: birthdaydlg.cpp:65 editdlg.cpp:245
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Nazwa alarmu:"
 
-#: birthdaydlg.cpp:69 editdlg.cpp:253
+#: birthdaydlg.cpp:70 editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -392,25 +392,25 @@ msgstr ""
 "Wpisz nazwę, która pomoże ci rozpoznać ten alarm. Nie jest ona wymagana i "
 "nie musi być niepowtarzalna."
 
-#: birthdaydlg.cpp:76
+#: birthdaydlg.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "Data urodzin: "
 
-#: birthdaydlg.cpp:79
+#: birthdaydlg.cpp:80
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Tekst alarmu"
 
-#: birthdaydlg.cpp:82 prefdlg.cpp:1958
+#: birthdaydlg.cpp:83 prefdlg.cpp:1958
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "Przedrostek:"
 
-#: birthdaydlg.cpp:89
+#: birthdaydlg.cpp:90
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -420,13 +420,13 @@ msgstr ""
 "Wpisz tekst  wyświetlany przed imieniem i nazwiskiem osoby w wiadomości "
 "alarmowej, włączając w to potrzebne odstępy."
 
-#: birthdaydlg.cpp:93
+#: birthdaydlg.cpp:94
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "Przyrostek:"
 
-#: birthdaydlg.cpp:100
+#: birthdaydlg.cpp:101
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -436,13 +436,13 @@ msgstr ""
 "Wpisz tekst wyświetlany po imieniu osoby w wiadomości alarmowej poprzedzony "
 "niezbędnymi odstępami."
 
-#: birthdaydlg.cpp:104
+#: birthdaydlg.cpp:105
 #, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "Wybierz daty urodzin"
 
-#: birthdaydlg.cpp:134
+#: birthdaydlg.cpp:135
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -458,19 +458,19 @@ msgstr ""
 "urodzin, przeciągając myszą na liście, lub klikając z wciśniętym klawiszem "
 "Ctrl lub Shift.</para>"
 
-#: birthdaydlg.cpp:140
+#: birthdaydlg.cpp:141
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "Ustawienia alarmu"
 
-#: birthdaydlg.cpp:160
+#: birthdaydlg.cpp:161
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr "Odhacz,,, aby wyświetlić przypomnienie przed lub po urodzinach."
 
-#: birthdaydlg.cpp:161
+#: birthdaydlg.cpp:162
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -482,20 +482,20 @@ msgstr ""
 "wyświetlone przypomnienie. Jest to dodatek do alarmu wyświetlanego w dniu "
 "urodzin."
 
-#: birthdaydlg.cpp:163
+#: birthdaydlg.cpp:164
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
 msgstr "Wybierz czy przypomnienie ma być wyzwolone przed czy po urodzinach."
 
-#: birthdaydlg.cpp:196 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:197 recurrenceedit.cpp:142
 #, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "Powtórzenie podrzędne"
 
-#: birthdaydlg.cpp:198
+#: birthdaydlg.cpp:199
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
@@ -4582,7 +4582,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Odśwież alarmy"
 
-#: mainwindow.cpp:807
+#: mainwindow.cpp:808
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4591,7 +4591,7 @@ msgstr[0] "Czy na pewno usunąć ten %1 wybrany alarm?"
 msgstr[1] "Czy na pewno usunąć te %1 wybrane alarmy?"
 msgstr[2] "Czy na pewno usunąć tych %1 wybranych alarmów?"
 
-#: mainwindow.cpp:809
+#: mainwindow.cpp:810
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4600,43 +4600,43 @@ msgstr[0] "Usuń alarm"
 msgstr[1] "Usuń alarmy"
 msgstr[2] "Usuń alarmy"
 
-#: mainwindow.cpp:810 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Usuń"
 
-#: mainwindow.cpp:904
+#: mainwindow.cpp:905
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Ukryj zarchiwizowane alarmy"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:906
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Wyświetlaj zarchiwizowane alarmy"
 
-#: mainwindow.cpp:981
+#: mainwindow.cpp:982
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Zaimportuj urodziny"
 
-#: mainwindow.cpp:1233
+#: mainwindow.cpp:1234
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1235
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1300
+#: mainwindow.cpp:1301
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4645,48 +4645,48 @@ msgstr ""
 "<qt>To spowoduje całkowite ukrycie paska menu. Można go przywrócić "
 "naciskając %1.</qt>"
 
-#: mainwindow.cpp:1302
+#: mainwindow.cpp:1303
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Ukryj pasek menu"
 
-#: mainwindow.cpp:1542
+#: mainwindow.cpp:1543
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Alarm wizualny"
 
-#: mainwindow.cpp:1544
+#: mainwindow.cpp:1545
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Alarm pocztowy"
 
-#: mainwindow.cpp:1546
+#: mainwindow.cpp:1547
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Alarm w postaci polecenia"
 
-#: mainwindow.cpp:1548
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Rodzaj alarmu"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1550
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Wybierz typ wzorzec alarmu:"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Włącz"
 
-#: mainwindow.cpp:1682
+#: mainwindow.cpp:1683
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -8531,30 +8531,30 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Wybierz wzorzec bazowy dla nowego alarmu."
 
-#: traywindow.cpp:68
+#: traywindow.cpp:69
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "Nowy alarm"
 
-#: traywindow.cpp:293
+#: traywindow.cpp:294
 #, kde-format
 msgid "Disabled"
 msgstr "Wyłączone"
 
-#: traywindow.cpp:298
+#: traywindow.cpp:299
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(Niektóre alarmy są wyłączone)"
 
-#: traywindow.cpp:358
+#: traywindow.cpp:359
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:360
+#: traywindow.cpp:361
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"
