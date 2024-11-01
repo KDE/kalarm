@@ -107,11 +107,9 @@ TemplateDlg::TemplateDlg(QWidget* parent)
     topLayout->addWidget(buttonBox);
 
     KActionCollection* actions = new KActionCollection(this);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
-    QAction *act =
-        KStandardActions::selectAll(mListView, &QTreeView::selectAll, actions);
+    QAction* act = KStandardActions::selectAll(mListView, &QTreeView::selectAll, actions);
     topLevelWidget()->addAction(act);
-    act = KStandardActions::deselect(
-        mListView, &QAbstractItemView::clearSelection, actions);
+    act = KStandardActions::deselect(mListView, &QAbstractItemView::clearSelection, actions);
     topLevelWidget()->addAction(act);
     slotSelectionChanged();          // enable/disable buttons as appropriate
 

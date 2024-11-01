@@ -591,10 +591,8 @@ void MainWindow::initActions()
     connect(mActionRedo, &KToolBarPopupAction::triggered, this, &MainWindow::slotRedo);
 
     KStandardActions::find(mListView, &EventListView::slotFind, actions);
-    mActionFindNext = KStandardActions::findNext(
-        mListView, &EventListView::slotFindNext, actions);
-    mActionFindPrev = KStandardActions::findPrev(
-        mListView, &EventListView::slotFindPrev, actions);
+    mActionFindNext = KStandardActions::findNext(mListView, &EventListView::slotFindNext, actions);
+    mActionFindPrev = KStandardActions::findPrev(mListView, &EventListView::slotFindPrev, actions);
     KStandardActions::selectAll(mListView, &QTreeView::selectAll, actions);
     KStandardActions::deselect(mListView, &QAbstractItemView::clearSelection,
                                actions);
@@ -602,12 +600,9 @@ void MainWindow::initActions()
     // be deleted while still processing the action, resulting in a crash.
     QAction* act = KStandardAction::quit(nullptr, nullptr, actions);
     connect(act, &QAction::triggered, this, &MainWindow::slotQuit, Qt::QueuedConnection);
-    KStandardActions::keyBindings(this, &MainWindow::slotConfigureKeys,
-                                  actions);
-    KStandardActions::configureNotifications(
-        this, &MainWindow::slotConfigureNotifications, actions);
-    KStandardActions::configureToolbars(this, &MainWindow::slotConfigureToolbar,
-                                        actions);
+    KStandardActions::keyBindings(this, &MainWindow::slotConfigureKeys, actions);
+    KStandardActions::configureNotifications(this, &MainWindow::slotConfigureNotifications, actions);
+    KStandardActions::configureToolbars(this, &MainWindow::slotConfigureToolbar, actions);
     KStandardActions::preferences(this, &MainWindow::slotPreferences, actions);
     mActionShowMenuBar = KStandardAction::showMenubar(this, &MainWindow::slotToggleMenubar, actions);
     mHamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actions);
@@ -683,8 +678,7 @@ void MainWindow::slotInitHamburgerMenu()
     menu->addAction(actions->action(QStringLiteral("showArchivedAlarms")));
     menu->addAction(actions->action(QStringLiteral("showDateSelector")));
     menu->addSeparator();
-    menu->addAction(
-        actions->action(KStandardActions::name(KStandardActions::Quit)));
+    menu->addAction(actions->action(KStandardActions::name(KStandardActions::Quit)));
     mHamburgerMenu->setMenu(menu);
 }
 
