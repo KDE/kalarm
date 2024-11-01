@@ -8,23 +8,23 @@
 
 #include "birthdaydlg.h"
 
-#include "akonadiplugin/akonadiplugin.h"
 #include "editdlgtypes.h"
 #include "fontcolourbutton.h"
 #include "latecancel.h"
-#include "lib/checkbox.h"
-#include "lib/shellprocess.h"
 #include "preferences.h"
 #include "reminder.h"
 #include "repetitionbutton.h"
 #include "resourcescalendar.h"
 #include "soundpicker.h"
 #include "specialactions.h"
-#include <KStandardActions>
+#include "lib/checkbox.h"
+#include "lib/shellprocess.h"
+#include "akonadiplugin/akonadiplugin.h"
 
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KStandardAction>
+#include <KStandardActions>
 #include <KActionCollection>
 #include <KSharedConfig>
 
