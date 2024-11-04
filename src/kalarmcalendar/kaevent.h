@@ -1180,11 +1180,11 @@ public:
     QString recurrenceText(bool brief = false) const;
 
     /** Initialise the event's sub-repetition.
-    *  The repetition length is adjusted if necessary to fit the recurrence interval.
-    *  If the event doesn't recur, the sub-repetition is cleared.
-    *  @return @c false if a non-daily interval was specified for a date-only recurrence.
-    *  @see repetition()
-    */
+     *  The repetition length is adjusted if necessary to fit the recurrence interval.
+     *  If the event doesn't recur, the sub-repetition is cleared.
+     *  @return @c false if a non-daily interval was specified for a date-only recurrence.
+     *  @see repetition()
+     */
     bool setRepetition(const Repetition& r);
 
     /** Return the event's sub-repetition data.
