@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-26 02:30+0000\n"
-"PO-Revision-Date: 2024-09-29 14:37+0200\n"
+"PO-Revision-Date: 2024-11-06 23:58+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.07.70\n"
+"X-Generator: Lokalize 24.11.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4088,7 +4088,7 @@ msgstr "При влизане в системата до %1"
 #, kde-format
 msgctxt "@info"
 msgid "%1"
-msgstr "Наистина ли искате да изпълните \"%1\"?"
+msgstr "Наистина ли искате да изпълните „%1“?"
 
 #: kalarmcalendar/kaeventformatter.cpp:349
 #, kde-format
