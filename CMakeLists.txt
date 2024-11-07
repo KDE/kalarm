@@ -96,7 +96,7 @@ find_package(KF6ConfigWidgets ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6Contacts ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6Crash ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6DBusAddons ${KF_MIN_VERSION} CONFIG REQUIRED)
-find_package(KF6GlobalAccel ${KF_MIN_VERSION} REQUIRED)
+find_package(KF6GlobalAccel ${KF_MIN_VERSION})
 find_package(KF6GuiAddons ${KF_MIN_VERSION} REQUIRED)
 find_package(KF6Holidays ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6I18n ${KF_MIN_VERSION} CONFIG REQUIRED)
@@ -118,6 +118,10 @@ set_package_properties(KF6DocTools PROPERTIES DESCRIPTION
     "Tools to generate documentation"
     TYPE OPTIONAL
 )
+
+if(TARGET KF6::GlobalAccel)
+    add_definitions(-DHAVE_GLOBAL_ACCEL_SUPPORT)
+endif()
 
 # Find KDE PIM packages
 find_package(KPim6CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)

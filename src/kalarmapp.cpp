@@ -39,7 +39,6 @@
 #include <KSharedConfig>
 #include <KStandardGuiItem>
 #include <KWindowSystem>
-#include <netwm.h>
 #include <KShell>
 
 #include <QObject>

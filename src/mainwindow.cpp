@@ -42,7 +42,9 @@ using namespace KCalUtils;
 #include <KAboutData>
 #include <KToolBar>
 #include <KActionCollection>
+#ifdef HAVE_GLOBAL_ACCEL_SUPPORT
 #include <KGlobalAccel>
+#endif
 #include <KStandardAction>
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -515,7 +517,9 @@ void MainWindow::initActions()
 
     QAction* action = KAlarm::createStopPlayAction(this);
     actions->addAction(QStringLiteral("stopAudio"), action);
+#ifdef HAVE_GLOBAL_ACCEL_SUPPORT
     KGlobalAccel::setGlobalShortcut(action, QList<QKeySequence>());  // allow user to set a global shortcut
+#endif
 
     mActionShowArchived = new KToggleAction(i18nc("@action", "Show Archived Alarms"), this);
     actions->addAction(QStringLiteral("showArchivedAlarms"), mActionShowArchived);
@@ -538,7 +542,9 @@ void MainWindow::initActions()
     {
         mActionSpreadWindows = KAlarm::createSpreadWindowsAction(this);
         actions->addAction(QStringLiteral("spread"), mActionSpreadWindows);
+#ifdef HAVE_GLOBAL_ACCEL_SUPPORT
         KGlobalAccel::setGlobalShortcut(mActionSpreadWindows, QList<QKeySequence>());  // allow user to set a global shortcut
+#endif
     }
 
     mActionImportAlarms = new QAction(i18nc("@action", "Import Alarms..."), this);

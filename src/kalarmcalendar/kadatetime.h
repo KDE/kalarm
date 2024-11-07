@@ -178,7 +178,7 @@ public:
      * should be interpreted, i.e. which time zone (if any) the date/time is
      * expressed in.
      */
-    class Spec
+    class KALARMCAL_EXPORT Spec
     {
     public:
         /**

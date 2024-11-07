@@ -15,7 +15,9 @@
 #include "lib/shellprocess.h"
 
 #include <KActionCollection>
+#ifdef HAVE_GLOBAL_ACCEL_SUPPORT
 #include <KGlobalAccel>
+#endif
 #include <KLocalizedString>
 #include <KStandardShortcut>
 
@@ -88,19 +90,27 @@ void NewAlarmAction::setActionNames(const QString& displayName, const QString& c
     {
         mActionCollection->addAction(displayName, mDisplayAction);
         mActionCollection->setDefaultShortcut(mDisplayAction, DISP_KEY);
+#ifdef HAVE_GLOBAL_ACCEL_SUPPORT
         KGlobalAccel::setGlobalShortcut(mDisplayAction, QList<QKeySequence>());  // allow user to set a global shortcut
+#endif
 
         mActionCollection->addAction(commandName, mCommandAction);
         mActionCollection->setDefaultShortcut(mCommandAction, CMD_KEY);
+#ifdef HAVE_GLOBAL_ACCEL_SUPPORT
         KGlobalAccel::setGlobalShortcut(mCommandAction, QList<QKeySequence>());  // allow user to set a global shortcut
+#endif
 
         mActionCollection->addAction(emailName, mEmailAction);
         mActionCollection->setDefaultShortcut(mEmailAction, MAIL_KEY);
+#ifdef HAVE_GLOBAL_ACCEL_SUPPORT
         KGlobalAccel::setGlobalShortcut(mEmailAction, QList<QKeySequence>());  // allow user to set a global shortcut
+#endif
 
         mActionCollection->addAction(audioName, mAudioAction);
         mActionCollection->setDefaultShortcut(mAudioAction, AUDIO_KEY);
+#ifdef HAVE_GLOBAL_ACCEL_SUPPORT
         KGlobalAccel::setGlobalShortcut(mAudioAction, QList<QKeySequence>());  // allow user to set a global shortcut
+#endif
 
         if (mTemplateAction)
         {

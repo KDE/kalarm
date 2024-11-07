@@ -173,6 +173,8 @@ const QByteArray& ShellProcess::shellPath()
         QByteArray envshell = qgetenv("SHELL").trimmed();
         if (!envshell.isEmpty())
         {
+            // TODO Disable for windows. Perhaps all class must be disabled
+#if !defined(Q_OS_WIN)
             QT_STATBUF fileinfo;
             if (QT_STAT(envshell.data(), &fileinfo) != -1  // ensure file exists
             &&  !S_ISDIR(fileinfo.st_mode)              // and it's not a directory
@@ -184,6 +186,7 @@ const QByteArray& ShellProcess::shellPath()
             &&  !S_ISFIFO(fileinfo.st_mode)             // and it's not a fifo
             &&  !access(envshell.data(), X_OK))         // and it's executable
                 mShellPath = envshell;
+#endif
         }
 
         // Get the shell filename with the path stripped off

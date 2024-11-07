@@ -326,7 +326,6 @@ target_link_libraries(kalarm_bin
     KF6::ConfigCore
     KF6::Completion
     KF6::DBusAddons
-    KF6::GlobalAccel
     KF6::GuiAddons
     KF6::Holidays
     KF6::ItemModels
@@ -346,6 +345,11 @@ target_link_libraries(kalarm_bin
     KPim6::Mime
 )
 
+if(TARGET KF6::GlobalAccel)
+    target_link_libraries(kalarm_bin
+        KF6::GlobalAccel
+    )
+endif()
 
 if(ENABLE_LIBVLC)
     target_link_libraries(kalarm_bin LibVLC::LibVLC)

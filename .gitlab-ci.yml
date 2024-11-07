@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2020-2023 Laurent Montel <montel@kde.org>
+# SPDX-FileCopyrightText: 2020-2024 Laurent Montel <montel@kde.org>
 # SPDX-License-Identifier: CC0-1.0
 
 include:
@@ -8,3 +8,4 @@ include:
       - /gitlab-templates/json-validation.yml
       - /gitlab-templates/freebsd-qt6.yml
       - /gitlab-templates/cppcheck.yml
+      - /gitlab-templates/windows-qt6.yml
