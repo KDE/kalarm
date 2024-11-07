@@ -2980,6 +2980,15 @@ bool KAEventPrivate::setRecur(KCalendarCore::RecurrenceRule::PeriodType recurTyp
     return false;
 }
 
+/******************************************************************************
+* Set dates to exclude from the recurrence.
+*/
+void KAEvent::setExceptionDates(const QList<QDate>& dates)
+{
+    if (d->mRecurrence)
+        d->mRecurrence->setExDates(dates);
+}
+
 bool KAEvent::recurs() const
 {
     return d->checkRecur() != KARecurrence::NO_RECUR;
@@ -2990,9 +2999,10 @@ KARecurrence::Type KAEvent::recurType() const
     return d->checkRecur();
 }
 
-KARecurrence* KAEvent::recurrence() const
+const KARecurrence& KAEvent::recurrence() const
 {
-    return d->mRecurrence;
+    static const Recurrence emptyRecurrence;
+    return d->mRecurrence ? *d->mRecurrence : emptyRecurrence;
 }
 
 /******************************************************************************

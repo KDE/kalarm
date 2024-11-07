@@ -767,10 +767,10 @@ void RecurrenceEdit::set(const KAEvent& event)
         return;
     }
     mNoneButton->setChecked(true);
-    KARecurrence* recurrence = event.recurrence();
-    if (!recurrence)
+    const KARecurrence& recurrence = event.recurrence();
+    if (!recurrence.recurs())
         return;
-    const KARecurrence::Type rtype = recurrence->type();
+    const KARecurrence::Type rtype = recurrence.type();
     switch (rtype)
     {
         case KARecurrence::MINUTELY:
@@ -780,7 +780,7 @@ void RecurrenceEdit::set(const KAEvent& event)
         case KARecurrence::DAILY:
         {
             mDailyButton->setChecked(true);
-            const QBitArray rDays = recurrence->days();
+            const QBitArray rDays = recurrence.days();
             if (rDays.count(true))
                 mDailyRule->setDays(rDays);
             else
@@ -790,20 +790,20 @@ void RecurrenceEdit::set(const KAEvent& event)
         case KARecurrence::WEEKLY:
         {
             mWeeklyButton->setChecked(true);
-            const QBitArray rDays = recurrence->days();
+            const QBitArray rDays = recurrence.days();
             mWeeklyRule->setDays(rDays);
             break;
         }
         case KARecurrence::MONTHLY_POS:    // on nth (Tuesday) of the month
         {
-            const QList<RecurrenceRule::WDayPos> posns = recurrence->monthPositions();
+            const QList<RecurrenceRule::WDayPos> posns = recurrence.monthPositions();
             int i = posns.first().pos();
             if (!i)
             {
                 // It's every (Tuesday) of the month. Convert to a weekly recurrence
                 // (but ignoring any non-every xxxDay positions).
                 mWeeklyButton->setChecked(true);
-                mWeeklyRule->setFrequency(recurrence->frequency());
+                mWeeklyRule->setFrequency(recurrence.frequency());
                 QBitArray rDays(7);
                 for (const RecurrenceRule::WDayPos& posn : posns)
                 {
@@ -820,7 +820,7 @@ void RecurrenceEdit::set(const KAEvent& event)
         case KARecurrence::MONTHLY_DAY:     // on nth day of the month
         {
             mMonthlyButton->setChecked(true);
-            const QList<int> rmd = recurrence->monthDays();
+            const QList<int> rmd = recurrence.monthDays();
             const int day = (rmd.isEmpty()) ? event.mainDateTime().date().day() : rmd.first();
             mMonthlyRule->setDate(day);
             break;
@@ -831,29 +831,29 @@ void RecurrenceEdit::set(const KAEvent& event)
             if (rtype == KARecurrence::ANNUAL_DATE)
             {
                 mYearlyButton->setChecked(true);
-                const QList<int> rmd = recurrence->monthDays();
+                const QList<int> rmd = recurrence.monthDays();
                 const int day = (rmd.isEmpty()) ? event.mainDateTime().date().day() : rmd.first();
                 mYearlyRule->setDate(day);
-                mYearlyRule->setFeb29Type(recurrence->feb29Type());
+                mYearlyRule->setFeb29Type(recurrence.feb29Type());
             }
             else if (rtype == KARecurrence::ANNUAL_POS)
             {
                 mYearlyButton->setChecked(true);
-                const QList<RecurrenceRule::WDayPos> posns = recurrence->yearPositions();
+                const QList<RecurrenceRule::WDayPos> posns = recurrence.yearPositions();
                 mYearlyRule->setPosition(posns.first().pos(), posns.first().day());
             }
-            mYearlyRule->setMonths(recurrence->yearMonths());
+            mYearlyRule->setMonths(recurrence.yearMonths());
             break;
         }
         default:
             return;
     }
 
-    mRule->setFrequency(recurrence->frequency());
+    mRule->setFrequency(recurrence.frequency());
 
     // Get range information
     KADateTime endtime = mCurrStartDateTime;
-    const int duration = recurrence->duration();
+    const int duration = recurrence.duration();
     if (duration == -1)
         mNoEndDateButton->setChecked(true);
     else if (duration)
@@ -864,13 +864,13 @@ void RecurrenceEdit::set(const KAEvent& event)
     else
     {
         mEndDateButton->setChecked(true);
-        endtime = recurrence->endDateTime();
+        endtime = recurrence.endDateTime();
         mEndTimeEdit->setValue(endtime.time());
     }
     mEndDateEdit->setDate(endtime.date());
 
     // Get exception information
-    mExceptionDates = event.recurrence()->exDates();
+    mExceptionDates = event.recurrence().exDates();
     std::sort(mExceptionDates.begin(), mExceptionDates.end());
     mExceptionDateList->clear();
     for (const QDate& exceptionDate : std::as_const(mExceptionDates))
@@ -986,7 +986,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
     event.setRepetition((mRuleButtonType < SUBDAILY) ? Repetition() : mSubRepetition->repetition());
 
     // Set up exceptions
-    event.recurrence()->setExDates(mExceptionDates);
+    event.setExceptionDates(mExceptionDates);
     event.setWorkTimeOnly(mWorkTimeOnly->isChecked());
     event.setExcludeHolidays(mExcludeHolidays->isChecked());
 

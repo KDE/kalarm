@@ -3,7 +3,7 @@
  *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -1138,6 +1138,11 @@ public:
      */
     bool setRecurAnnualByPos(int freq, const QList<MonthPos>& pos, const QList<int>& months, int count, QDate end);
 
+    /** Set dates to exclude from the recurrence.
+     *  These dates replace any previous exception dates.
+     */
+    void setExceptionDates(const QList<QDate>& dates);
+
     /** Return whether the event recurs.
      *  @see recurType()
      */
@@ -1153,7 +1158,7 @@ public:
      *  @return recurrence data, or null if none.
      *  @see recurrenceText()
      */
-    KARecurrence* recurrence() const;
+    const KARecurrence& recurrence() const;
 
     /** Return the recurrence interval in units of the recurrence period type
      *  (minutes, days, etc).
