@@ -111,7 +111,7 @@ protected:
     void            showMainPage();
     bool            isTemplate() const         { return mTemplate; }
     bool            isNewAlarm() const         { return mNewAlarm; }
-    bool            dateOnly() const;
+    bool            isDateOnly() const;
     bool            isTimedRecurrence() const;
     bool            showingMore() const        { return mShowingMore; }
     Reminder*       reminder() const           { return mReminder; }

@@ -785,8 +785,8 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
             dt = KADateTime(QDate(2000,1,1), mTemplateTime->time());
     }
 
-    const int lateCancel = (trial || !mLateCancel->isEnabled()) ? 0 : mLateCancel->minutes();
-    type_setEvent(event, dt, (mName ? mName->text() : QString()), text, lateCancel, trial);
+    const int lateCancelTime = (trial || !mLateCancel->isEnabled()) ? 0 : mLateCancel->minutes();
+    type_setEvent(event, dt, (mName ? mName->text() : QString()), text, lateCancelTime, trial);
 
     if (!trial)
     {
@@ -807,10 +807,10 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
             {
                 bool deferral = true;
                 bool deferReminder = false;
-                const int reminder = mReminder ? mReminder->minutes() : 0;
-                if (reminder)
+                const int reminderTime = mReminder ? mReminder->minutes() : 0;
+                if (reminderTime)
                 {
-                    DateTime remindTime = mAlarmDateTime.addMins(-reminder);
+                    DateTime remindTime = mAlarmDateTime.addMins(-reminderTime);
                     if (mDeferDateTime >= remindTime)
                     {
                         if (remindTime > KADateTime::currentUtcDateTime())
@@ -1116,12 +1116,12 @@ bool EditAlarmDlg::validate()
     {
         KAEvent recurEvent;
         int longestRecurMinutes = -1;
-        int reminder = mReminder ? mReminder->minutes() : 0;
-        if (reminder  &&  !mReminder->isOnceOnly())
+        int reminderTime = mReminder ? mReminder->minutes() : 0;
+        if (reminderTime  &&  !mReminder->isOnceOnly())
         {
             mRecurrenceEdit->updateEvent(recurEvent, false);
             longestRecurMinutes = recurEvent.longestRecurrenceInterval().asSeconds() / 60;
-            if (longestRecurMinutes  &&  reminder >= longestRecurMinutes)
+            if (longestRecurMinutes  &&  reminderTime >= longestRecurMinutes)
             {
                 mTabs->setCurrentIndex(mMainPageIndex);
                 mReminder->setFocusOnCount();
@@ -1138,7 +1138,7 @@ bool EditAlarmDlg::validate()
                 longestRecurMinutes = recurEvent.longestRecurrenceInterval().asSeconds() / 60;
             }
             if (longestRecurMinutes > 0
-            &&  recurEvent.repetition().intervalMinutes() * recurEvent.repetition().count() >= longestRecurMinutes - reminder)
+            &&  recurEvent.repetition().intervalMinutes() * recurEvent.repetition().count() >= longestRecurMinutes - reminderTime)
             {
                 KAMessageBox::error(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
                 mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
@@ -1321,10 +1321,10 @@ void EditAlarmDlg::slotEditDeferral()
     if (limit)
     {
         // Don't allow deferral past the next recurrence
-        int reminder = mReminder ? mReminder->minutes() : 0;
-        if (reminder)
+        int reminderTime = mReminder ? mReminder->minutes() : 0;
+        if (reminderTime)
         {
-            DateTime remindTime = start.addMins(-reminder);
+            DateTime remindTime = start.addMins(-reminderTime);
             if (KADateTime::currentUtcDateTime() < remindTime)
                 start = remindTime;
         }
@@ -1488,7 +1488,7 @@ void EditAlarmDlg::setWakeFromSuspendEnabledStatus()
     }
 }
 
-bool EditAlarmDlg::dateOnly() const
+bool EditAlarmDlg::isDateOnly() const
 {
     return mTimeWidget ? mTimeWidget->anyTime() : mTemplateAnyTime->isChecked();
 }

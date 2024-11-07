@@ -324,7 +324,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent& event)
                 mReminderArchived = true;
             }
         }
-        reminder()->setMinutes(reminderMins, dateOnly());
+        reminder()->setMinutes(reminderMins, isDateOnly());
         reminder()->setOnceOnly(event.reminderOnceOnly());
         reminder()->enableOnceOnly(recurs);
         if (mSpecialActionsButton)
@@ -483,7 +483,7 @@ void EditDisplayAlarmDlg::setAudio(Preferences::SoundType type, const QString& f
 }
 void EditDisplayAlarmDlg::setReminder(int minutes, bool onceOnly)
 {
-    reminder()->setMinutes(minutes, dateOnly());
+    reminder()->setMinutes(minutes, isDateOnly());
     reminder()->setOnceOnly(onceOnly);
     reminder()->enableOnceOnly(isTimedRecurrence());
 }
@@ -1885,13 +1885,13 @@ bool CommandEdit::isScript() const
 */
 void CommandEdit::setText(const AlarmText& alarmText)
 {
-    const QString text = alarmText.displayText();
+    const QString newText = alarmText.displayText();
     const bool script = alarmText.isScript();
     mTypeScript->setChecked(script);
     if (script)
-        mScriptEdit->setPlainText(text);
+        mScriptEdit->setPlainText(newText);
     else
-        mCommandEdit->setText(File::pathOrUrl(text));
+        mCommandEdit->setText(File::pathOrUrl(newText));
 }
 
 /******************************************************************************

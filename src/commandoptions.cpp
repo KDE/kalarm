@@ -438,7 +438,7 @@ void CommandOptions::process()
             mEditType      = EditAlarmDlg::DISPLAY;
             mEditAction    = KAEvent::SubAction::Message;
             mEditActionSet = true;
-            mText          = arg(0);
+            mText          = argument(0);
         }
     }
     if (mEditActionSet  &&  mEditAction == KAEvent::SubAction::Email)
@@ -807,7 +807,7 @@ void CommandOptions::printError(const QString& errmsg)
 }
 
 // Fetch one of the arguments (i.e. not belonging to any option).
-QString CommandOptions::arg(int n)
+QString CommandOptions::argument(int n)
 {
     const QStringList args = mParser->positionalArguments();
     return (n < args.size()) ? args[n] : QString();

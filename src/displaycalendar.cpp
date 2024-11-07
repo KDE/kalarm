@@ -257,15 +257,15 @@ bool DisplayCalendar::addEvent(KAEvent& evnt)
     if (type != CalEvent::DISPLAYING)
         return false;
 
-    KCalendarCore::Event::Ptr kcalEvent(new KCalendarCore::Event);
+    KCalendarCore::Event::Ptr kcalcEvent(new KCalendarCore::Event);
     auto event = new KAEvent(evnt);
     QString id = event->id();
     if (id.isEmpty())
-        id = kcalEvent->uid();
+        id = kcalcEvent->uid();
     id = CalEvent::uid(id, type);   // include the alarm type tag in the ID
-    kcalEvent->setUid(id);
+    kcalcEvent->setUid(id);
     event->setEventId(id);
-    event->updateKCalEvent(kcalEvent, KAEvent::UidAction::Ignore);
+    event->updateKCalEvent(kcalcEvent, KAEvent::UidAction::Ignore);
 
     bool ok = false;
     bool remove = false;
@@ -273,7 +273,7 @@ bool DisplayCalendar::addEvent(KAEvent& evnt)
     {
         mEventList += event;
         mEventMap[event->id()] = event;
-        ok = mCalendarStorage->calendar()->addEvent(kcalEvent);
+        ok = mCalendarStorage->calendar()->addEvent(kcalcEvent);
         remove = !ok;
     }
     if (!ok)
@@ -303,9 +303,9 @@ bool DisplayCalendar::deleteEvent(const QString& eventID, bool saveit)
 {
     if (mOpen)
     {
-        KCalendarCore::Event::Ptr kcalEvent;
+        KCalendarCore::Event::Ptr kcalcEvent;
         if (mCalendarStorage)
-            kcalEvent = mCalendarStorage->calendar()->event(eventID);   // display calendar
+            kcalcEvent = mCalendarStorage->calendar()->event(eventID);   // display calendar
 
         // Make a copy of the ID QString, since the supplied reference might be
         // destructed when the event is deleted below.
@@ -323,10 +323,10 @@ bool DisplayCalendar::deleteEvent(const QString& eventID, bool saveit)
         }
 
         CalEvent::Type status = CalEvent::EMPTY;
-        if (kcalEvent)
+        if (kcalcEvent)
         {
-            status = CalEvent::status(kcalEvent);
-            mCalendarStorage->calendar()->deleteEvent(kcalEvent);
+            status = CalEvent::status(kcalcEvent);
+            mCalendarStorage->calendar()->deleteEvent(kcalcEvent);
         }
 
         if (status != CalEvent::EMPTY)

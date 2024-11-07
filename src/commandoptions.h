@@ -77,7 +77,8 @@ private:
     class Private;
     friend class Private;
     Private* const d;
-    QString     arg(int n);
+
+    QString argument(int n);
 
     static CommandOptions* mFirstInstance;       // the first instance
     QCommandLineParser* mParser {nullptr};

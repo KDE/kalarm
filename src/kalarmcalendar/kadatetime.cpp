@@ -840,11 +840,11 @@ int KADateTimePrivate::timeZoneOffset(QTimeZone& local) const
 {
     if (specType != KADateTime::TimeZone && specType != KADateTime::LocalZone)
         return InvalidOffset;
-    QDateTime dt = updatedDt(local);   // update the cache if it's LocalZone
+    QDateTime qdt = updatedDt(local);   // update the cache if it's LocalZone
     if (utcCached)
     {
-        dt.setTimeZone(QTimeZone::utc());
-        return cachedUtc().secsTo(dt);
+        qdt.setTimeZone(QTimeZone::utc());
+        return cachedUtc().secsTo(qdt);
     }
     int secondOffset;
     int offset = offsetAtZoneTime(mDt.timeZone(), mDt, &secondOffset);
@@ -920,9 +920,9 @@ QDateTime KADateTimePrivate::toUtc(QTimeZone& local) const
         {
             if (!mDt.isValid())
                 break;
-            const QDateTime dt = utcDt();
-//            qDebug() << "toUtc(): calculated -> " << dt << endl,
-            return dt;
+            const QDateTime qdt = utcDt();
+//            qDebug() << "toUtc(): calculated -> " << qdt << endl,
+            return qdt;
         }
         case KADateTime::LocalZone:   // mDt is set to the system time zone
         case KADateTime::TimeZone:
@@ -2113,7 +2113,6 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
                 // Check for the obsolete form "Wdy Mon DD HH:MM:SS YYYY"
                 static const QRegularExpression rx2(QStringLiteral(R"(^([A-Z][a-z]+)\s+(\S+)\s+(\d\d)\s+(\d\d):(\d\d):(\d\d)\s+(\d\d\d\d)$)"));
                 const QRegularExpressionMatch match2 = rx2.match(str);
-                QStringList parts_;
                 if (!match2.hasMatch())
                     break;
                 nyear  = 7;
@@ -2540,11 +2539,11 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
 KADateTime KADateTime::fromString(const QString& string, const QString& format,
                                   const QList<QTimeZone>* zones, bool offsetIfAmbiguous)
 {
-    int     utcOffset = 0;    // UTC offset in seconds
+    int     utcOfset = 0;    // UTC offset in seconds
     bool    dateOnly = false;
     QString zoneName;
     QString zoneAbbrev;
-    QDateTime qdt = fromStr(string, format, utcOffset, zoneName, zoneAbbrev, dateOnly);
+    QDateTime qdt = fromStr(string, format, utcOfset, zoneName, zoneAbbrev, dateOnly);
     if (!qdt.isValid())
         return {};
     if (zones)
@@ -2597,14 +2596,14 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
                         if (zoneFound.isValid())
                         {
                             // Abbreviation is used by more than one time zone
-                            if (!offsetIfAmbiguous || offset != utcOffset)
+                            if (!offsetIfAmbiguous || offset != utcOfset)
                                 return {};
                             useUtcOffset = true;
                         }
                         else
                         {
                             zoneFound = tz;
-                            utcOffset = offset;
+                            utcOfset = offset;
                         }
                     }
                 }
@@ -2612,7 +2611,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             if (useUtcOffset)
             {
                 zoneFound = QTimeZone();
-                if (!utcOffset)
+                if (!utcOfset)
                     qdt.setTimeZone(QTimeZone::utc());
             }
             else if (zoneFound.isValid())
@@ -2624,27 +2623,27 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             else
                 return {};   // an unknown zone name or abbreviation was found
         }
-        else if (utcOffset  ||  qTimeSpec(qdt) == Qt::UTC)
+        else if (utcOfset  ||  qTimeSpec(qdt) == Qt::UTC)
         {
             // A UTC offset has been found.
             // Use the time zone which contains it, if any.
             // For a date-only value, use the start of the day.
             QDateTime dtUTC = qdt;
             dtUTC.setTimeZone(QTimeZone::utc());
-            dtUTC = dtUTC.addSecs(-utcOffset);
+            dtUTC = dtUTC.addSecs(-utcOfset);
             for (const QTimeZone& tz : zoneList)
             {
-                if (tz.offsetFromUtc(dtUTC) == utcOffset)
+                if (tz.offsetFromUtc(dtUTC) == utcOfset)
                 {
                     // Found a time zone which uses this offset at the specified time
-                    if (zoneFound.isValid()  ||  !utcOffset)
+                    if (zoneFound.isValid()  ||  !utcOfset)
                     {
                         // UTC offset is used by more than one time zone
                         if (!offsetIfAmbiguous)
                             return {};
                         if (dateOnly)
-                            return KADateTime(qdt.date(), Spec(OffsetFromUTC, utcOffset));
-                        return KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, utcOffset));
+                            return KADateTime(qdt.date(), Spec(OffsetFromUTC, utcOfset));
+                        return KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, utcOfset));
                     }
                     zoneFound = tz;
                 }
@@ -2702,14 +2701,14 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
                         if (zoneFound.isValid())
                         {
                             // Abbreviation is used by more than one time zone
-                            if (!offsetIfAmbiguous || offset != utcOffset)
+                            if (!offsetIfAmbiguous || offset != utcOfset)
                                 return {};
                             useUtcOffset = true;
                         }
                         else
                         {
                             zoneFound = tz;
-                            utcOffset = offset;
+                            utcOfset = offset;
                         }
                     }
                 }
@@ -2717,7 +2716,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             if (useUtcOffset)
             {
                 zoneFound = QTimeZone();
-                if (!utcOffset)
+                if (!utcOfset)
                     qdt.setTimeZone(QTimeZone::utc());
             }
             else if (zoneFound.isValid())
@@ -2729,29 +2728,29 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             else
                 return {};   // an unknown zone name or abbreviation was found
         }
-        else if (utcOffset  ||  qTimeSpec(qdt) == Qt::UTC)
+        else if (utcOfset  ||  qTimeSpec(qdt) == Qt::UTC)
         {
             // A UTC offset has been found.
             // Use the time zone which contains it, if any.
             // For a date-only value, use the start of the day.
             QDateTime dtUTC = qdt;
             dtUTC.setTimeZone(QTimeZone::utc());
-            dtUTC = dtUTC.addSecs(-utcOffset);
+            dtUTC = dtUTC.addSecs(-utcOfset);
             const QList<QByteArray> zoneIds = QTimeZone::availableTimeZoneIds();
             for (const QByteArray& zoneId : zoneIds)
             {
                 const QTimeZone z(zoneId);
-                if (z.offsetFromUtc(dtUTC) == utcOffset)
+                if (z.offsetFromUtc(dtUTC) == utcOfset)
                 {
                     // Found a time zone which uses this offset at the specified time
-                    if (zoneFound.isValid()  ||  !utcOffset)
+                    if (zoneFound.isValid()  ||  !utcOfset)
                     {
                         // UTC offset is used by more than one time zone
                         if (!offsetIfAmbiguous)
                             return {};
                         if (dateOnly)
-                            return KADateTime(qdt.date(), Spec(OffsetFromUTC, utcOffset));
-                        return KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, utcOffset));
+                            return KADateTime(qdt.date(), Spec(OffsetFromUTC, utcOfset));
+                        return KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, utcOfset));
                     }
                     zoneFound = z;
                 }
@@ -2769,8 +2768,8 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
 
     // No time zone match was found
     KADateTime result;
-    if (utcOffset)
-        result = KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, utcOffset));
+    if (utcOfset)
+        result = KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, utcOfset));
     else if (qTimeSpec(qdt) == Qt::UTC)
         result = KADateTime(qdt.date(), qdt.time(), UTC);
     else

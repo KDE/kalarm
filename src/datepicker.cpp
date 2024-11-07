@@ -305,8 +305,8 @@ void DatePicker::newMonthShown()
 */
 void DatePicker::slotNewAlarm(EditAlarmDlg::Type type)
 {
-    const QList<QDate> selectedDates = mDayMatrix->selectedDates();
-    const QDate startDate = selectedDates.isEmpty() ? QDate() : selectedDates[0];
+    const QList<QDate> selDates = mDayMatrix->selectedDates();
+    const QDate startDate = selDates.isEmpty() ? QDate() : selDates[0];
     KAlarm::editNewAlarm(type, startDate);
 }
 
@@ -316,8 +316,8 @@ void DatePicker::slotNewAlarm(EditAlarmDlg::Type type)
 */
 void DatePicker::slotNewAlarmFromTemplate(const KAEvent& event)
 {
-    const QList<QDate> selectedDates = mDayMatrix->selectedDates();
-    const QDate startDate = selectedDates.isEmpty() ? QDate() : selectedDates[0];
+    const QList<QDate> selDates = mDayMatrix->selectedDates();
+    const QDate startDate = selDates.isEmpty() ? QDate() : selDates[0];
     KAlarm::editNewAlarm(event, startDate);
 }
 

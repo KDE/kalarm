@@ -155,10 +155,10 @@ void AlarmText::setTodo(const KCalendarCore::Todo::Ptr& todo)
     d->mTo      = todo->location();
     if (todo->hasDueDate())
     {
-        QDateTime due = todo->dtDue(false);   // fetch the next due date
-        if (todo->hasStartDate()  &&  todo->dtStart(true) != due)
-            d->mTime = todo->allDay() ? QLocale().toString(due.date(), QLocale::ShortFormat)
-                                      : QLocale().toString(due, QLocale::ShortFormat);
+        const QDateTime dueTime = todo->dtDue(false);   // fetch the next due date
+        if (todo->hasStartDate()  &&  todo->dtStart(true) != dueTime)
+            d->mTime = todo->allDay() ? QLocale().toString(dueTime.date(), QLocale::ShortFormat)
+                                      : QLocale().toString(dueTime, QLocale::ShortFormat);
     }
 }
 
@@ -333,23 +333,23 @@ QString AlarmText::summary(const KAEvent& event, int maxLines, bool* truncated)
         {
             text = event.cleanText();
             // If the message is the text of an email, return its headers or just subject line
-            QString subject = emailHeaders(text, (maxLines <= 1));
-            if (!subject.isNull())
+            const QString headers = emailHeaders(text, (maxLines <= 1));
+            if (!headers.isNull())
             {
                 if (truncated)
                     *truncated = true;
-                return subject;
+                return headers;
             }
             if (maxLines == 1)
             {
                 // If the message is the text of a todo, return either the
                 // title/description or the whole text.
-                subject = Private::todoTitle(text);
-                if (!subject.isEmpty())
+                const QString title = Private::todoTitle(text);
+                if (!title.isEmpty())
                 {
                     if (truncated)
                         *truncated = true;
-                    return subject;
+                    return title;
                 }
             }
             break;

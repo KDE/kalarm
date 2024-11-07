@@ -239,22 +239,22 @@ void DayMatrix::updateEvents(const Resource& resource, const KADateTime& before,
     mResourceEventDates[id].clear();
     const QList<KAEvent> events = resource.events();
     const CalEvent::Types types = resource.enabledTypes() & CalEvent::ACTIVE;
-    for (const KAEvent& event : events)
+    for (const KAEvent& evnt : events)
     {
-        if (event.enabled()  &&  (event.category() & types))
+        if (evnt.enabled()  &&  (evnt.category() & types))
         {
             // The event has an enabled alarm type.
             // Find all its recurrences/repetitions within the time period.
             DateTime nextDt;
             for (KADateTime from = before;  ;  )
             {
-                event.nextOccurrence(from, nextDt, KAEvent::Repeats::Return);
+                evnt.nextOccurrence(from, nextDt, KAEvent::Repeats::Return);
                 if (!nextDt.isValid())
                     break;
                 from = nextDt.effectiveKDateTime().toTimeSpec(timeSpec);
                 if (from > to)
                     break;
-                if (!event.excludedByWorkTimeOrHoliday(from))
+                if (!evnt.excludedByWorkTimeOrHoliday(from))
                 {
                     mResourceEventDates[id] += from.date();
                     if (mResourceEventDates[id].count() >= NUMDAYS)
