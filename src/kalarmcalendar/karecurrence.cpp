@@ -1001,18 +1001,18 @@ Duration KARecurrence::longestInterval() const
 
         case DAILY:
         {
-            const QList<RecurrenceRule::WDayPos> days = d->mRecurrence.defaultRRuleConst()->byDays();
-            if (days.isEmpty())
+            const QList<RecurrenceRule::WDayPos> dayps = d->mRecurrence.defaultRRuleConst()->byDays();
+            if (dayps.isEmpty())
                 return {freq, Duration::Days};
 
             // After applying the frequency, the specified days of the week
             // further restrict when the recurrence occurs.
             // So the maximum interval may be greater than the frequency.
             bool ds[7] = { false, false, false, false, false, false, false };
-            for (const RecurrenceRule::WDayPos& day : days)
+            for (const RecurrenceRule::WDayPos& dayp : dayps)
             {
-                if (day.pos() == 0)
-                    ds[day.day() - 1] = true;
+                if (dayp.pos() == 0)
+                    ds[dayp.day() - 1] = true;
             }
             if (freq % 7)
             {
@@ -1135,17 +1135,17 @@ Duration KARecurrence::regularInterval() const
             return {freq * 60, Duration::Seconds};
         case DAILY:
         {
-            const QList<RecurrenceRule::WDayPos> days = d->mRecurrence.defaultRRuleConst()->byDays();
-            if (days.isEmpty())
+            const QList<RecurrenceRule::WDayPos> dayps = d->mRecurrence.defaultRRuleConst()->byDays();
+            if (dayps.isEmpty())
                 return {freq, Duration::Days};
             // After applying the frequency, the specified days of the week
             // further restrict when the recurrence occurs.
             // Find which days occur, and count the number of days which occur.
             bool ds[7] = { false, false, false, false, false, false, false };
-            for (const RecurrenceRule::WDayPos& day : days)
+            for (const RecurrenceRule::WDayPos& dayp : dayps)
             {
-                if (day.pos() == 0)
-                    ds[day.day() - 1] = true;
+                if (dayp.pos() == 0)
+                    ds[dayp.day() - 1] = true;
             }
             if (!(freq % 7))
             {
@@ -1169,17 +1169,17 @@ Duration KARecurrence::regularInterval() const
         }
         case WEEKLY:
         {
-            const QList<RecurrenceRule::WDayPos> days = d->mRecurrence.defaultRRuleConst()->byDays();
-            if (days.isEmpty())
+            const QList<RecurrenceRule::WDayPos> dayps = d->mRecurrence.defaultRRuleConst()->byDays();
+            if (dayps.isEmpty())
                 return {freq * 7, Duration::Days};
             // The specified days of the week occur every week in which the
             // recurrence occurs.
             // Find which days occur, and count the number of days which occur.
             bool ds[7] = { false, false, false, false, false, false, false };
-            for (const RecurrenceRule::WDayPos& day : days)
+            for (const RecurrenceRule::WDayPos& dayp : dayps)
             {
-                if (day.pos() == 0)
-                    ds[day.day() - 1] = true;
+                if (dayp.pos() == 0)
+                    ds[dayp.day() - 1] = true;
             }
             int n = 0;   // number of days which occur
             for (int i = 0; i < 7; ++i)
@@ -1289,14 +1289,14 @@ bool KARecurrence::dailyType(const RecurrenceRule* rrule)
     ||  !rrule->bySetPos().isEmpty()
     ||  !rrule->byYearDays().isEmpty())
         return false;
-    const QList<RecurrenceRule::WDayPos> days = rrule->byDays();
-    if (days.isEmpty())
+    const QList<RecurrenceRule::WDayPos> dayps = rrule->byDays();
+    if (dayps.isEmpty())
         return true;
     // Check that all the positions are zero (i.e. every time)
     bool found = false;
-    for (const RecurrenceRule::WDayPos& day : days)
+    for (const RecurrenceRule::WDayPos& dayp : dayps)
     {
-        if (day.pos() != 0)
+        if (dayp.pos() != 0)
             return false;
         found = true;
     }

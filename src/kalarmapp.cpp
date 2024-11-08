@@ -396,7 +396,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
     KAboutData::applicationData().setupCommandLine(&parser);
     parser.setApplicationDescription(QApplication::applicationDisplayName());
     auto options = new CommandOptions;
-    const QStringList nonexecArgs = options->setOptions(&parser, fixedArgs);
+    options->setOptions(&parser, fixedArgs);
     options->parse();
     KAboutData::applicationData().processCommandLine(&parser);
 
@@ -1183,9 +1183,9 @@ void KAlarmApp::removeWindow(TrayWindow*)
 bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 {
     qCDebug(KALARM_LOG) << "KAlarmApp::displayTrayIcon";
-    static bool creating = false;
     if (show)
     {
+        static bool creating = false;
         if (!mTrayWindow  &&  !creating)
         {
             if (!QSystemTrayIcon::isSystemTrayAvailable())
@@ -1452,7 +1452,7 @@ void KAlarmApp::checkArchivedCalendar()
 void KAlarmApp::slotEditAlarmById()
 {
     qCDebug(KALARM_LOG) << "KAlarmApp::slotEditAlarmById";
-    ActionQEntry& entry = mActionQueue.head();
+    const ActionQEntry& entry = mActionQueue.head();
     if (!KAlarm::editAlarmById(entry.eventId))
     {
         CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", mCommandOption, entry.eventId.eventId()));
@@ -2822,7 +2822,7 @@ void KAlarmApp::stopAudio()
 */
 void KAlarmApp::setEventCommandError(const KAEvent& event, KAEvent::CmdErr err) const
 {
-    ProcData* pd = findCommandProcess(event.id());
+    const ProcData* pd = findCommandProcess(event.id());
     if (pd && pd->eventDeleted)
         return;   // the alarm has been deleted, so can't set error status
 
@@ -2844,7 +2844,7 @@ void KAlarmApp::setEventCommandError(const KAEvent& event, KAEvent::CmdErr err) 
 */
 void KAlarmApp::clearEventCommandError(const KAEvent& event, KAEvent::CmdErr err) const
 {
-    ProcData* pd = findCommandProcess(event.id());
+    const ProcData* pd = findCommandProcess(event.id());
     if (pd && pd->eventDeleted)
         return;   // the alarm has been deleted, so can't set error status
 

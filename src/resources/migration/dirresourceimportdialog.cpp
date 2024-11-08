@@ -125,9 +125,9 @@ void DirResourceImportDialog::pageChanged(KPageWidgetItem* current, KPageWidgetI
     {
         auto page = static_cast<DirResourceImportWidgetBase*>(current->widget());
         page->setTextSizes();
-        auto typePage = qobject_cast<DirResourceImportTypeWidget*>(page);
-        if (typePage)
-            typePage->validate();
+        auto pageTypeWid = qobject_cast<DirResourceImportTypeWidget*>(page);
+        if (pageTypeWid)
+            pageTypeWid->validate();
     }
 }
 

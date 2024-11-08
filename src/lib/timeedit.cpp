@@ -135,7 +135,7 @@ void TimeEdit::slotValueChanged(int value)
 {
     if (mAmPm)
     {
-        bool pm = (mAmPm->currentIndex() == mPmIndex);
+        const bool pm = (mAmPm->currentIndex() == mPmIndex);
         if (pm  &&  value < 720)
             mAmPm->setCurrentIndex(mAmIndex);
         else if (!pm  &&  value >= 720)
@@ -152,11 +152,11 @@ void TimeEdit::slotAmPmChanged(int item)
 {
     if (mAmPm)
     {
-        int value = mSpinBox->value();
-        if (item == mPmIndex  &&  value < 720)
-            mSpinBox->setValue(value + 720);
-        else if (item != mPmIndex  &&  value >= 720)
-            mSpinBox->setValue(value - 720);
+        const int val = mSpinBox->value();
+        if (item == mPmIndex  &&  val < 720)
+            mSpinBox->setValue(val + 720);
+        else if (item != mPmIndex  &&  val >= 720)
+            mSpinBox->setValue(val - 720);
     }
 }
 

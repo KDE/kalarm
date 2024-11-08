@@ -294,7 +294,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
         vlayout->setContentsMargins(0, 0, 0, 0);
         hlayout->addLayout(vlayout);
         mExceptionDateEdit = new KDateComboBox(mExceptionGroup);
-        mExceptionDateEdit->setOptions(mReadOnly ? KDateComboBox::Options{} : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
+        mExceptionDateEdit->setOptions(KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
         mExceptionDateEdit->setDate(KADateTime::currentLocalDate());
         mExceptionDateEdit->setWhatsThis(i18nc("@info:whatsthis",
               "Enter a date to insert in the exceptions list. "
@@ -461,7 +461,7 @@ void RecurrenceEdit::periodClicked(QAbstractButton*, QAbstractButton* button)
 
 void RecurrenceEdit::slotAnyTimeToggled(bool on)
 {
-    QAbstractButton* button = mRuleButtonGroup->checkedButton();
+    const QAbstractButton* button = mRuleButtonGroup->checkedButton();
     mEndTimeEdit->setEnabled((button == mAtLoginButton && !on)
                          ||  (button == mSubDailyButton && mEndDateButton->isChecked()));
 }
@@ -911,13 +911,13 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 
     // Set up the recurrence according to the type selected
     event.startChanges();
-    QAbstractButton* button = mRuleButtonGroup->checkedButton();
+    const QAbstractButton* button = mRuleButtonGroup->checkedButton();
     event.setRepeatAtLogin(button == mAtLoginButton);
     const int frequency = mRule ? mRule->frequency() : 0;
     if (button == mSubDailyButton)
     {
-        const KADateTime endDateTime(endDate, endTime, mCurrStartDateTime.timeSpec());
-        event.setRecurMinutely(frequency, repeatCount, endDateTime);
+        const KADateTime endDt(endDate, endTime, mCurrStartDateTime.timeSpec());
+        event.setRecurMinutely(frequency, repeatCount, endDt);
     }
     else if (button == mDailyButton)
     {
@@ -1421,10 +1421,10 @@ void MonthYearRule::setPosition(int week, int dayOfWeek)
 
 void MonthYearRule::enableSelection(DayPosType type)
 {
-    const bool date = (type == DATE);
-    mDayCombo->setEnabled(date);
-    mWeekCombo->setEnabled(!date);
-    mDayOfWeekCombo->setEnabled(!date);
+    const bool dateType = (type == DATE);
+    mDayCombo->setEnabled(dateType);
+    mWeekCombo->setEnabled(!dateType);
+    mDayOfWeekCombo->setEnabled(!dateType);
 }
 
 void MonthYearRule::clicked(QAbstractButton*, QAbstractButton* button)

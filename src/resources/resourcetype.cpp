@@ -145,10 +145,10 @@ bool ResourceType::containsEvent(const QString& eventId) const
 */
 void ResourceType::adjustStartOfDay()
 {
-    KAEvent::List events;
+    KAEvent::List eventsCopy;
     for (auto it = mEvents.begin();  it != mEvents.end();  ++it)
-        events += &it.value();
-    KAEvent::adjustStartOfDay(events);
+        eventsCopy += &it.value();
+    KAEvent::adjustStartOfDay(eventsCopy);
 }
 
 void ResourceType::notifyDeletion()
@@ -194,33 +194,33 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
     QList<KAEvent> eventsToNotifyNewlyEnabled;   // only if mNewlyEnabled is true
     for (auto it = mEvents.begin();  it != mEvents.end();  ++it)
     {
-        const QString& id = it.key();
-        auto newit = newEvents.find(id);
+        const QString& evId = it.key();
+        auto newit = newEvents.find(evId);
         if (newit == newEvents.end())
         {
-            eventsToDelete << id;
+            eventsToDelete << evId;
             if (it.value().category() & types)
                 eventsToNotifyDelete << it.value();   // this event no longer exists
         }
         else
         {
-            KAEvent& event = it.value();
-            bool changed = !event.compare(newit.value(), KAEvent::Compare::Id | KAEvent::Compare::CurrentState);
-            event = newit.value();   // update existing event
-            event.setResourceId(mId);
+            KAEvent& evnt = it.value();
+            bool changed = !evnt.compare(newit.value(), KAEvent::Compare::Id | KAEvent::Compare::CurrentState);
+            evnt = newit.value();   // update existing event
+            evnt.setResourceId(mId);
             newEvents.erase(newit);
             if (mNewlyEnabled)
-                eventsToNotifyNewlyEnabled << event;
-            if (changed  &&  (event.category() & types))
-                Resources::notifyEventUpdated(this, event);
+                eventsToNotifyNewlyEnabled << evnt;
+            if (changed  &&  (evnt.category() & types))
+                Resources::notifyEventUpdated(this, evnt);
         }
     }
 
     // Delete events which no longer exist.
     if (!eventsToNotifyDelete.isEmpty())
         Resources::notifyEventsToBeRemoved(this, eventsToNotifyDelete);
-    for (const QString& id : std::as_const(eventsToDelete))
-        mEvents.remove(id);
+    for (const QString& evId : std::as_const(eventsToDelete))
+        mEvents.remove(evId);
     if (!eventsToNotifyDelete.isEmpty())
         Resources::notifyEventsRemoved(this, eventsToNotifyDelete);
 
@@ -251,29 +251,29 @@ void ResourceType::setUpdatedEvents(const QList<KAEvent>& events, bool notify)
     const CalEvent::Types types = enabledTypes();
     mEventsAdded.clear();
     mEventsUpdated.clear();
-    for (const KAEvent& event : events)
+    for (const KAEvent& evnt : events)
     {
-        auto it = mEvents.find(event.id());
+        auto it = mEvents.find(evnt.id());
         if (it == mEvents.end())
         {
-            KAEvent& ev = mEvents[event.id()];
-            ev = event;
+            KAEvent& ev = mEvents[evnt.id()];
+            ev = evnt;
             ev.setResourceId(mId);
-            if (event.category() & types)
+            if (evnt.category() & types)
                 mEventsAdded += ev;
         }
         else
         {
             KAEvent& ev = it.value();
-            bool changed = !ev.compare(event, KAEvent::Compare::Id | KAEvent::Compare::CurrentState);
-            ev = event;   // update existing event
+            bool changed = !ev.compare(evnt, KAEvent::Compare::Id | KAEvent::Compare::CurrentState);
+            ev = evnt;   // update existing event
             ev.setResourceId(mId);
-            if (changed  &&  (event.category() & types))
+            if (changed  &&  (evnt.category() & types))
             {
                 if (notify)
-                    Resources::notifyEventUpdated(this, event);
+                    Resources::notifyEventUpdated(this, evnt);
                 else
-                    mEventsUpdated += event;
+                    mEventsUpdated += evnt;
             }
         }
     }
@@ -287,8 +287,8 @@ void ResourceType::setUpdatedEvents(const QList<KAEvent>& events, bool notify)
 */
 void ResourceType::notifyUpdatedEvents()
 {
-    for (const KAEvent& event : std::as_const(mEventsUpdated))
-        Resources::notifyEventUpdated(this, event);
+    for (const KAEvent& evnt : std::as_const(mEventsUpdated))
+        Resources::notifyEventUpdated(this, evnt);
     mEventsUpdated.clear();
 
     if (!mEventsAdded.isEmpty())
@@ -305,19 +305,19 @@ void ResourceType::setDeletedEvents(const QList<KAEvent>& events)
     const CalEvent::Types types = enabledTypes();
     QStringList eventsToDelete;
     QList<KAEvent> eventsToNotify;
-    for (const KAEvent& event : events)
+    for (const KAEvent& evnt : events)
     {
-        if (mEvents.constFind(event.id()) != mEvents.constEnd())
+        if (mEvents.constFind(evnt.id()) != mEvents.constEnd())
         {
-            eventsToDelete += event.id();
-            if (event.category() & types)
-                eventsToNotify += event;
+            eventsToDelete += evnt.id();
+            if (evnt.category() & types)
+                eventsToNotify += evnt;
         }
     }
     if (!eventsToNotify.isEmpty())
         Resources::notifyEventsToBeRemoved(this, eventsToNotify);
-    for (const QString& id : std::as_const(eventsToDelete))
-        mEvents.remove(id);
+    for (const QString& evId : std::as_const(eventsToDelete))
+        mEvents.remove(evId);
     if (!eventsToNotify.isEmpty())
         Resources::notifyEventsRemoved(this, eventsToNotify);
 }

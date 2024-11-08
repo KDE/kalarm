@@ -332,7 +332,7 @@ QString TrayWindow::tooltipAlarmText() const
     QList<KAEvent> events = KAlarm::getSortedActiveEvents(const_cast<TrayWindow*>(this), &mAlarmsModel);
     for (i = 0, iend = events.count();  i < iend;  ++i)
     {
-        KAEvent* event = &events[i];
+        const KAEvent* event = &events[i];
         if (event->actionSubType() == KAEvent::SubAction::Message)
         {
             TipItem item;

@@ -96,12 +96,12 @@ void ResourcesCalendar::removeKAEvents(ResourceId key, bool closing, CalEvent::T
         QSet<QString>& eventIds = rit.value();
         for (auto it = eventIds.constBegin();  it != eventIds.constEnd();  ++it)
         {
-            const KAEvent event = resource.event(*it, true);
-            bool remove = (event.resourceId() != key);
+            const KAEvent evnt = resource.event(*it, true);
+            bool remove = (evnt.resourceId() != key);
             if (remove)
-                qCCritical(KALARM_LOG) << "ResourcesCalendar::removeKAEvents: Event" << event.id() << ", resource" << event.resourceId() << "Indexed under resource" << key;
+                qCCritical(KALARM_LOG) << "ResourcesCalendar::removeKAEvents: Event" << evnt.id() << ", resource" << evnt.resourceId() << "Indexed under resource" << key;
             else
-                remove = event.category() & types;
+                remove = evnt.category() & types;
             if (remove)
                 removed = true;
             else
@@ -178,8 +178,8 @@ void ResourcesCalendar::slotResourceAdded(Resource& resource)
 */
 void ResourcesCalendar::slotEventsAdded(Resource& resource, const QList<KAEvent>& events)
 {
-    for (const KAEvent& event : events)
-        slotEventUpdated(resource, event);
+    for (const KAEvent& evnt : events)
+        slotEventUpdated(resource, evnt);
 }
 
 /******************************************************************************
@@ -253,10 +253,10 @@ void ResourcesCalendar::slotEventUpdated(Resource& resource, const KAEvent& even
 void ResourcesCalendar::slotEventsToBeRemoved(Resource& resource, const QList<KAEvent>& events)
 {
     const ResourceId key = resource.id();
-    for (const KAEvent& event : events)
+    for (const KAEvent& evnt : events)
     {
-        if (mResourceMap.value(key).contains(event.id()))
-            deleteEventInternal(event, resource, false);
+        if (mResourceMap.value(key).contains(evnt.id()))
+            deleteEventInternal(evnt, resource, false);
     }
 }
 
@@ -309,11 +309,11 @@ void ResourcesCalendar::slotWakeFromSuspendAdvanceChanged(unsigned advance)
 */
 void ResourcesCalendar::purgeEvents(const QList<KAEvent>& events)
 {
-    for (const KAEvent& event : events)
+    for (const KAEvent& evnt : events)
     {
-        Resource resource = Resources::resource(event.resourceId());
+        Resource resource = Resources::resource(evnt.resourceId());
         if (resource.isValid())
-            deleteEventInternal(event.id(), event, resource, true);
+            deleteEventInternal(evnt.id(), evnt, resource, true);
     }
     if (mHaveDisabledAlarms)
         mInstance->checkForDisabledAlarms();
@@ -351,8 +351,8 @@ bool ResourcesCalendar::addEvent(KAEvent& evnt, Resource& resource, QWidget* pro
             return false;
     }
 
-    KAEvent event = evnt;
-    QString id = event.id();
+    KAEvent event_ = evnt;
+    QString id = event_.id();
     if (type == CalEvent::ACTIVE)
     {
         if (id.isEmpty())
@@ -366,7 +366,7 @@ bool ResourcesCalendar::addEvent(KAEvent& evnt, Resource& resource, QWidget* pro
         id = KCalendarCore::CalFormat::createUniqueId();
     if (useEventID)
         id = CalEvent::uid(id, type);   // include the alarm type tag in the ID
-    event.setEventId(id);
+    event_.setEventId(id);
 
     bool ok = false;
     if (!resource.isEnabled(type))
@@ -383,13 +383,13 @@ bool ResourcesCalendar::addEvent(KAEvent& evnt, Resource& resource, QWidget* pro
         // Don't add event to mResourceMap yet - its ID is not yet known.
         // It will be added after it is inserted into the data model, when
         // the resource signals eventsAdded().
-        ok = resource.addEvent(event);
-        if (ok  &&  type == CalEvent::ACTIVE  &&  !event.enabled())
+        ok = resource.addEvent(event_);
+        if (ok  &&  type == CalEvent::ACTIVE  &&  !event_.enabled())
             mInstance->checkForDisabledAlarms(true, false);
-        event.setResourceId(resource.id());
+        event_.setResourceId(resource.id());
     }
     if (ok)
-        evnt = event;
+        evnt = event_;
     return ok;
 }
 
@@ -571,10 +571,10 @@ KAEvent ResourcesCalendar::templateEvent(const QString& templateName)
     if (templateName.isEmpty())
         return {};
     const QList<KAEvent> eventlist = events(CalEvent::TEMPLATE);
-    for (const KAEvent& event : eventlist)
+    for (const KAEvent& evnt : eventlist)
     {
-        if (event.name() == templateName)
-            return event;
+        if (evnt.name() == templateName)
+            return evnt;
     }
     return {};
 }
@@ -613,26 +613,26 @@ QList<KAEvent> ResourcesCalendar::events(CalEvent::Types type, const Resource& r
         ResourceMap::ConstIterator rit = mResourceMap.constFind(key);
         if (rit == mResourceMap.constEnd())
             return list;
-        const QList<KAEvent> events = eventsForResource(resource, rit.value());
+        const QList<KAEvent> evnts = eventsForResource(resource, rit.value());
         if (type == CalEvent::EMPTY)
-            return events;
-        for (const KAEvent& event : events)
-            if (type & event.category())
-                list += event;
+            return evnts;
+        for (const KAEvent& evnt : evnts)
+            if (type & evnt.category())
+                list += evnt;
     }
     else
     {
         for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
         {
             const Resource res = Resources::resource(rit.key());
-            const QList<KAEvent> events = eventsForResource(res, rit.value());
+            const QList<KAEvent> evnts = eventsForResource(res, rit.value());
             if (type == CalEvent::EMPTY)
-                list += events;
+                list += evnts;
             else
             {
-                for (const KAEvent& event : events)
-                    if (type & event.category())
-                        list += event;
+                for (const KAEvent& evnt : evnts)
+                    if (type & evnt.category())
+                        list += evnt;
             }
         }
     }
@@ -676,9 +676,9 @@ void ResourcesCalendar::checkForDisabledAlarms()
 {
     bool disabled = false;
     const QList<KAEvent> eventlist = events(CalEvent::ACTIVE);
-    for (const KAEvent& event : eventlist)
+    for (const KAEvent& evnt : eventlist)
     {
-        if (!event.enabled())
+        if (!evnt.enabled())
         {
             disabled = true;
             break;
@@ -703,8 +703,8 @@ void ResourcesCalendar::setKernelWakeSuspend()
         auto& resourceHash = itr.value();
         for (auto it = resourceHash.begin(), end = resourceHash.end();  it != end;  ++it)
         {
-            const KAEvent event = resource.event(it.key());
-            checkKernelWakeSuspend(resourceId, event);
+            const KAEvent evnt = resource.event(it.key());
+            checkKernelWakeSuspend(resourceId, evnt);
         }
     }
 }
@@ -756,28 +756,28 @@ void ResourcesCalendar::findEarliestAlarm(const Resource& resource)
     ResourceMap::ConstIterator rit = mResourceMap.constFind(key);
     if (rit == mResourceMap.constEnd())
         return;
-    const QList<KAEvent> events = eventsForResource(resource, rit.value());
+    const QList<KAEvent> evnts = eventsForResource(resource, rit.value());
     KAEvent earliest, earliestNonDisp;
     KADateTime earliestTime, earliestNonDispTime;
-    for (const KAEvent& event : events)
+    for (const KAEvent& evnt : evnts)
     {
-        if (event.category() != CalEvent::ACTIVE
-        ||  mPendingAlarms.contains(event.id()))
+        if (evnt.category() != CalEvent::ACTIVE
+        ||  mPendingAlarms.contains(evnt.id()))
             continue;
-        const KADateTime dt = event.nextTrigger(KAEvent::Trigger::All).effectiveKDateTime();
+        const KADateTime dt = evnt.nextTrigger(KAEvent::Trigger::All).effectiveKDateTime();
         if (dt.isValid())
         {
             if (!earliest.isValid() || dt < earliestTime)
             {
                 earliestTime = dt;
-                earliest = event;
+                earliest = evnt;
             }
-            if (!(event.actionTypes() & KAEvent::Action::Display))
+            if (!(evnt.actionTypes() & KAEvent::Action::Display))
             {
                 if (!earliestNonDisp.isValid() || dt < earliestNonDispTime)
                 {
                     earliestNonDispTime = dt;
-                    earliestNonDisp = event;
+                    earliestNonDisp = evnt;
                 }
             }
         }
@@ -802,8 +802,8 @@ KAEvent ResourcesCalendar::earliestAlarm(KADateTime& nextTriggerTime, bool exclu
         if (id.isEmpty())
             continue;
         Resource res = Resources::resource(eit.key());
-        const KAEvent event = res.event(id);
-        if (!event.isValid())
+        const KAEvent evnt = res.event(id);
+        if (!evnt.isValid())
         {
             // Something went wrong: mEarliestAlarm wasn't updated when it should have been!!
             qCCritical(KALARM_LOG) << "ResourcesCalendar::earliestAlarm: resource" << eit.key() << "does not contain" << id;
@@ -811,11 +811,11 @@ KAEvent ResourcesCalendar::earliestAlarm(KADateTime& nextTriggerTime, bool exclu
             return earliestAlarm(nextTriggerTime, excludeDisplayAlarms);
         }
 //TODO: use next trigger calculated in findEarliestAlarm() (allowing for it being out of date)?
-        const KADateTime dt = event.nextTrigger(KAEvent::Trigger::All).effectiveKDateTime();
+        const KADateTime dt = evnt.nextTrigger(KAEvent::Trigger::All).effectiveKDateTime();
         if (dt.isValid()  &&  (!earliest.isValid() || dt < earliestTime))
         {
             earliestTime = dt;
-            earliest = event;
+            earliest = evnt;
         }
     }
     nextTriggerTime = earliestTime;
@@ -852,11 +852,11 @@ void ResourcesCalendar::setAlarmPending(const KAEvent& event, bool pending)
 */
 QList<KAEvent> ResourcesCalendar::eventsForResource(const Resource& resource, const QSet<QString>& eventIds)
 {
-    QList<KAEvent> events;
-    events.reserve(eventIds.count());
+    QList<KAEvent> evnts;
+    evnts.reserve(eventIds.count());
     for (const QString& eventId : eventIds)
-        events += resource.event(eventId);
-    return events;
+        evnts += resource.event(eventId);
+    return evnts;
 }
 
 #include "moc_resourcescalendar.cpp"

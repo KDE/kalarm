@@ -127,23 +127,23 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
     }
     if (set)
     {
-        const int count = items.count();
+        const int itemCount = items.count();
         if (mAlignment == Qt::AlignLeft)
         {
             // Left aligned: no position adjustment needed
             // Set the positions of all the layout items
-            for (int i = 0;  i < count;  ++i)
+            for (int i = 0;  i < itemCount;  ++i)
                 items[i]->setGeometry(alignRect(rect, posn[i]));
         }
         else
         {
             // Set the positions of all the layout items
-            for (int i = 0;  i < count; )
+            for (int i = 0;  i < itemCount; )
             {
                 // Adjust item positions a row at a time
                 y = posn[i].y();
                 int last;   // after last item in this row
-                for (last = i + 1;  last < count && posn[last].y() == y;  ++last) {}
+                for (last = i + 1;  last < itemCount && posn[last].y() == y;  ++last) {}
                 const int n = last - i;   // number of items in this row
                 int free = rect.right() - posn[last - 1].right();
                 switch (mAlignment)

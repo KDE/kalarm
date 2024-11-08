@@ -280,18 +280,18 @@ Resource ResourceCheckListModel::resource(const QModelIndex& index) const
 */
 QVariant ResourceCheckListModel::data(const QModelIndex& index, int role) const
 {
-    const Resource resource = mModel->resource(mapToSource(index));
-    if (resource.isValid())
+    const Resource res = mModel->resource(mapToSource(index));
+    if (res.isValid())
     {
         // This is a Resource row
         switch (role)
         {
             case Qt::ForegroundRole:
-                if (resource.alarmTypes() & mAlarmType)
-                    return resource.foregroundColour(mAlarmType);
+                if (res.alarmTypes() & mAlarmType)
+                    return res.foregroundColour(mAlarmType);
                 break;
             case Qt::FontRole:
-                if (Resources::isStandard(resource, mAlarmType))
+                if (Resources::isStandard(res, mAlarmType))
                 {
                     // It's the standard resource for an alarm type
                     QFont font = qvariant_cast<QFont>(KCheckableProxyModel::data(index, role));
@@ -316,12 +316,12 @@ bool ResourceCheckListModel::setData(const QModelIndex& index, const QVariant& v
     if (role == Qt::CheckStateRole  &&  static_cast<Qt::CheckState>(value.toInt()) != Qt::Checked)
     {
         // A resource is to be disabled.
-        const Resource resource = mModel->resource(mapToSource(index));
-        if (resource.isEnabled(mAlarmType))
+        const Resource res = mModel->resource(mapToSource(index));
+        if (res.isEnabled(mAlarmType))
         {
             QString errmsg;
             QWidget* messageParent = qobject_cast<QWidget*>(QObject::parent());
-            if (Resources::isStandard(resource, mAlarmType))
+            if (Resources::isStandard(res, mAlarmType))
             {
                 // It's the standard resource for some alarm type.
                 if (mAlarmType == CalEvent::ACTIVE)
@@ -363,8 +363,8 @@ void ResourceCheckListModel::slotRowsInsertedRemoved()
     for (int row = 0;  row <= count;  ++row)
     {
         const QModelIndex ix = mModel->index(row, 0);
-        const Resource resource = mModel->resource(ix);
-        if (resource.isEnabled(mAlarmType))
+        const Resource res = mModel->resource(ix);
+        if (res.isEnabled(mAlarmType))
             mSelectionModel->select(ix, QItemSelectionModel::Select);
     }
     mResetting = false;
@@ -382,9 +382,9 @@ void ResourceCheckListModel::selectionChanged(const QItemSelection& selected, co
     for (const QModelIndex& ix : sel)
     {
         // Try to enable the resource, but untick it if not possible
-        Resource resource = mModel->resource(ix);
-        resource.setEnabled(mAlarmType, true);
-        if (!resource.isEnabled(mAlarmType))
+        Resource res = mModel->resource(ix);
+        res.setEnabled(mAlarmType, true);
+        if (!res.isEnabled(mAlarmType))
             mSelectionModel->select(ix, QItemSelectionModel::Deselect);
     }
     const QModelIndexList desel = deselected.indexes();       //clazy:exclude=inefficient-qlist
@@ -556,8 +556,8 @@ bool ResourceFilterCheckListModel::filterAcceptsRow(int sourceRow, const QModelI
     if (mAlarmType == CalEvent::EMPTY)
         return true;
     const ResourceCheckListModel* model = static_cast<ResourceCheckListModel*>(sourceModel());
-    const Resource resource = model->resource(model->index(sourceRow, 0, sourceParent));
-    return resource.alarmTypes() & mAlarmType;
+    const Resource res = model->resource(model->index(sourceRow, 0, sourceParent));
+    return res.alarmTypes() & mAlarmType;
 }
 
 /******************************************************************************

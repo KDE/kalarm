@@ -854,7 +854,7 @@ int KADateTimePrivate::timeZoneOffset(QTimeZone& local) const
         m2ndOccurrence = (secondOffset != offset);   // cancel "second occurrence" flag if not applicable
         offset = secondOffset;
     }
-    if (m2ndOccurrence)
+    if (m2ndOccurrence)                                 //cppcheck-suppress[duplicateCondition]  m2ndOccurrence can change after previous conditional
         offset = secondOffset;
     if (offset == InvalidOffset)
     {
@@ -3167,6 +3167,7 @@ QDateTime fromStr(const QString& string, const QString& format, int& utcOffset,
             day = 1 + dayOfWeek - QDate(year, month, 1).dayOfWeek();
             if (day <= 0)
                 day += 7;
+            d = QDate(year, month, day);
         }
         else
         {

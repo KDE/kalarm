@@ -70,8 +70,8 @@ void AkonadiCollectionSearch::collectionFetchResult(KJob* j)
         qCCritical(AKONADIPLUGIN_LOG) << "AkonadiCollectionSearch::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
     else
     {
-        const Collection::List collections = job->collections();
-        for (const Collection& c : collections)
+        const Collection::List collects = job->collections();
+        for (const Collection& c : collects)
         {
             if (c.contentMimeTypes().contains(mMimeType))
             {
@@ -127,8 +127,8 @@ void AkonadiCollectionSearch::itemFetchResult(KJob* j)
     {
         if (mDelete)
         {
-            const Item::List items = job->items();
-            for (const Item& item : items)
+            const Item::List jobItems = job->items();
+            for (const Item& item : jobItems)
             {
                 if (!mUid.isEmpty())
                 {

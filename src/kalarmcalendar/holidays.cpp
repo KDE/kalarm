@@ -102,7 +102,7 @@ Holidays::Type Holidays::holidayType(const QDate& date) const
         return mTypes[offset*2] ? NonWorking : mTypes[offset*2 + 1] ? Working : None;
     // The date is past the end of the cache. Fill the cache.
     extendCache(QDate(date.year(), 12, 31));
-    if (date < mNoCacheDate)
+    if (date < mNoCacheDate)                            //cppcheck-suppress[knownConditionTrueFalse] extendCache() modifies mNoCacheDate
         return mTypes[offset*2] ? NonWorking : mTypes[offset*2 + 1] ? Working : None;
 
     // The date is past the maximum cache limit.
@@ -124,7 +124,7 @@ QStringList Holidays::holidayNames(const QDate& date) const
         return mNames[mCacheStartDate.daysTo(date)];
     // The date is past the end of the cache. Fill the cache.
     extendCache(QDate(date.year(), 12, 31));
-    if (date < mNoCacheDate)
+    if (date < mNoCacheDate)                            //cppcheck-suppress[knownConditionTrueFalse] extendCache() modifies mNoCacheDate
         return mNames[mCacheStartDate.daysTo(date)];
 
     // The date is past the maximum cache limit.

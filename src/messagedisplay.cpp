@@ -108,8 +108,8 @@ void MessageDisplay::redisplayAlarms()
         const Event::List kcalEvents = DisplayCalendar::kcalEvents();
         for (const Event::Ptr& kcalEvent : kcalEvents)
         {
-            bool showDefer, showEdit;
-            if (!reinstateFromDisplaying(kcalEvent, event, resource, showEdit, showDefer))
+            bool showDeferBtn, showEditBtn;
+            if (!reinstateFromDisplaying(kcalEvent, event, resource, showEditBtn, showDeferBtn))
                 continue;
             const EventId eventId(event);
             if (findEvent(eventId))
@@ -130,8 +130,8 @@ void MessageDisplay::redisplayAlarms()
                 MessageDisplayHelper* h = d->mHelper;
                 h->mResource = resource;
                 const bool rw = resource.isWritable(event.category());
-                h->mShowEdit = rw ? showEdit : false;
-                h->mNoDefer  = (rw && !login) ? !showDefer : true;
+                h->mShowEdit = rw ? showEditBtn : false;
+                h->mNoDefer  = (rw && !login) ? !showDeferBtn : true;
                 d->setUpDisplay();
                 d->showDisplay();
             }
@@ -262,8 +262,8 @@ void MessageDisplay::processDeferDlg(DeferDlgData* data, int result)
             // Try to retrieve the event from the displaying or archive calendars
             Resource resource;   // receives the event's original resource, if known
             KAEvent event2;
-            bool showEdit, showDefer;
-            if (!retrieveEvent(data->eventId, event2, resource, showEdit, showDefer))
+            bool showEditBtn, showDeferBtn;
+            if (!retrieveEvent(data->eventId, event2, resource, showEditBtn, showDeferBtn))
             {
                 // The event doesn't exist any more !?!, so recurrence data,
                 // flags, and more, have been lost.

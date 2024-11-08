@@ -138,12 +138,12 @@ bool EventListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePa
         return false;   // invalidly configured resource
 
     // Get the event.
-    const KAEvent event = resource.event(eventId);
-    if (!event.isValid())
+    const KAEvent evnt = resource.event(eventId);
+    if (!evnt.isValid())
         return false;
-    if (!(event.category() & mAlarmTypes))
+    if (!(evnt.category() & mAlarmTypes))
         return false;   // the event has the wrong alarm type
-    if (!resource.isEnabled(event.category()))
+    if (!resource.isEnabled(evnt.category()))
         return false;   // the resource is disabled for this alarm type
     return true;
 }

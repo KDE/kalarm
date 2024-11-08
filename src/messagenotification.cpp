@@ -556,7 +556,7 @@ void MessageNotification::enableEditButton(bool enable)
 * Save settings to the session managed config file, for restoration
 * when the program is restored.
 */
-void MessageNotification::saveProperties(KConfigGroup& config)
+void MessageNotification::saveProperties(KConfigGroup& config)     //cppcheck-suppress[constParameterReference]  config is changed
 {
     Q_UNUSED(config)
 #ifdef RESTORE_NOTIFICATIONS

@@ -53,7 +53,6 @@ public:
     void                display();
 
     QSize               sizeHint() const override;
-    static void         redisplayAlarms();
     static int          windowCount(bool excludeAlwaysHidden = false);
     static bool         spread(bool scatter);
 
@@ -88,7 +87,6 @@ private Q_SLOTS:
     void                slotEdit();
     void                slotDefer();
     void                activeWindowChanged(WId);
-    void                displayMainWindow();
     void                slotShowKMailMessage();
     void                enableButtons();
     void                commandCompleted(bool success);

@@ -284,7 +284,7 @@ MainWindow* MainWindow::mainMainWindow()
 */
 bool MainWindow::isTrayParent() const
 {
-    TrayWindow* tray = theApp()->trayWindow();
+    const TrayWindow* tray = theApp()->trayWindow();
     if (!tray  ||  !QSystemTrayIcon::isSystemTrayAvailable())
         return false;
     if (tray->assocMainWindow() == this)
@@ -626,7 +626,7 @@ void MainWindow::initActions()
     applyMainWindowSettings(KSharedConfig::openConfig()->group(WINDOW_NAME));
 
     mContextMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("listContext"), this));
-    QMenu* actionsMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("actions"), this));
+    const QMenu* actionsMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("actions"), this));
     mMenuError = (!mContextMenu  ||  !actionsMenu  ||  !resourceContextMenu());
     connect(mActionUndo->popupMenu(), &QMenu::aboutToShow, this, &MainWindow::slotInitUndoMenu);
     connect(mActionUndo->popupMenu(), &QMenu::triggered, this, &MainWindow::slotUndoItem);
@@ -1592,8 +1592,8 @@ void MainWindow::slotSelection()
 {
     // Find which events have been selected
     QList<KAEvent> events = mListView->selectedEvents();
-    int count = events.count();
-    if (!count)
+    const int evCount = events.count();
+    if (!evCount)
     {
         selectionCleared();    // disable actions
         Q_EMIT selectionChanged();
@@ -1610,7 +1610,7 @@ void MainWindow::slotSelection()
     bool enableEnable = false;
     bool enableDisable = false;
     const KADateTime now = KADateTime::currentUtcDateTime();
-    for (int i = 0;  i < count;  ++i)
+    for (int i = 0;  i < evCount;  ++i)
     {
         const KAEvent ev = ResourcesCalendar::event(EventId(events.at(i)));   // get up-to-date status
         const KAEvent& event = ev.isValid() ? ev : events[i];
@@ -1637,11 +1637,11 @@ void MainWindow::slotSelection()
     }
 
     qCDebug(KALARM_LOG) << "MainWindow::slotSelection: true";
-    mActionCreateTemplate->setEnabled((count == 1) && !Resources::enabledResources(CalEvent::TEMPLATE, true).isEmpty());
+    mActionCreateTemplate->setEnabled((evCount == 1) && !Resources::enabledResources(CalEvent::TEMPLATE, true).isEmpty());
     mActionExportAlarms->setEnabled(true);
     mActionExport->setEnabled(true);
-    mActionCopy->setEnabled(active && count == 1);
-    mActionModify->setEnabled(count == 1);
+    mActionCopy->setEnabled(active && evCount == 1);
+    mActionModify->setEnabled(evCount == 1);
     mActionDelete->setEnabled(!readOnly && (active || allArchived));
     mActionReactivate->setEnabled(active && enableReactivate);
     mActionEnable->setEnabled(active && !readOnly && (enableEnable || enableDisable));

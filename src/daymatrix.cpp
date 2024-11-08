@@ -41,9 +41,9 @@ const int    TODAY_MARGIN_WIDTH(2);
 
 struct TextColours
 {
-    QColor disabled;
     QColor thisMonth;
     QColor otherMonth;
+    QColor disabled;
     QColor thisMonthHoliday {HOLIDAY_BACKGROUND_COLOUR};
     QColor otherMonthHoliday;
 
@@ -652,11 +652,11 @@ QColor DayMatrix::textColour(const TextColours& textColours, const QPalette& pal
 /*===========================================================================*/
 
 TextColours::TextColours(const QPalette& palette)
+    : thisMonth(palette.color(QPalette::Text))
+    , otherMonth(getShadedColour(thisMonth, true))
+    , disabled(getShadedColour(thisMonth, false))
 {
-    thisMonth         = palette.color(QPalette::Text);
-    disabled          = getShadedColour(thisMonth, false);
-    otherMonth        = getShadedColour(thisMonth, true);
-    thisMonthHoliday  = thisMonth;
+    thisMonthHoliday = thisMonth;
     thisMonthHoliday.setRed((thisMonthHoliday.red() + 255) / 2);
     otherMonthHoliday = getShadedColour(thisMonthHoliday, true);
 }

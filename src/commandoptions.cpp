@@ -295,12 +295,12 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
     mNonExecArguments.clear();
     for (int i = 0;  i < args.size();  ++i)
     {
-        const QString arg = args[i];
-        if (arg == "--nofork"_L1)
+        const QString arg_ = args[i];
+        if (arg_ == "--nofork"_L1)
             continue;     // Ignore debugging option
-        mNonExecArguments << arg;
-        if (arg == d->optionName(EXEC)  ||  arg == d->optionName(EXEC, true)
-        ||  arg == d->optionName(EXEC_DISPLAY)  ||  arg == d->optionName(EXEC_DISPLAY, true))
+        mNonExecArguments << arg_;
+        if (arg_ == d->optionName(EXEC)  ||  arg_ == d->optionName(EXEC, true)
+        ||  arg_ == d->optionName(EXEC_DISPLAY)  ||  arg_ == d->optionName(EXEC_DISPLAY, true))
         {
             // All following arguments (including ones beginning with '-')
             // belong to this option. QCommandLineParser can't handle this, so
