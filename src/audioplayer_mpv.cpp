@@ -63,7 +63,7 @@ AudioPlayerMpv::AudioPlayerMpv(Type type, const QUrl& audioFile, float volume, f
     mpv_set_wakeup_callback(mAudioInstance, AudioPlayerMpv::wakeup_callback, this);
 
     if (mVolume > 0)
-        internalSetVolume();
+        AudioPlayerMpv::internalSetVolume();
 
     setOkStatus(Ready);
 }

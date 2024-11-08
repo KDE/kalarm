@@ -60,7 +60,7 @@ AudioPlayerVlc::~AudioPlayerVlc()
     if (status() == Playing)
     {
         mNoFinishedSignal = true;
-        stop();
+        AudioPlayerMpv::stop();
     }
     if (mAudioPlayer)
     {

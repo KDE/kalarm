@@ -30,7 +30,7 @@ class DPToolButton : public QToolButton
 {
     Q_OBJECT
 public:
-    DPToolButton(QWidget* parent) : QToolButton(parent) {}
+    explicit DPToolButton(QWidget* parent) : QToolButton(parent) {}
     QSize sizeHint() const override
     {
         QSize s = QToolButton::sizeHint();
