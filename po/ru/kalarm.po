@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 00:40+0000\n"
+"POT-Creation-Date: 2024-11-08 00:41+0000\n"
 "PO-Revision-Date: 2024-01-27 18:05+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -3497,7 +3497,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Ошибка сохранения шаблона напоминания"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:809
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3506,25 +3506,25 @@ msgstr ""
 "После выхода из программы напоминания не будут показываться (если все окна "
 "напоминаний также закрыты)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:819
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Выход из программы отменит запланированный сигнал «разбудить систему»."
 
-#: kalarmapp.cpp:1037
+#: kalarmapp.cpp:1036
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Не удалось создать напоминание: не указан календарь по умолчанию"
 
-#: kalarmapp.cpp:1051
+#: kalarmapp.cpp:1050
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Ошибка создания напоминания"
 
-#: kalarmapp.cpp:1107
+#: kalarmapp.cpp:1106
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
@@ -3532,7 +3532,7 @@ msgstr ""
 "<icode>%1</icode>: Событие <resource>%2</resource> не найдено или не "
 "является уникальным"
 
-#: kalarmapp.cpp:1419
+#: kalarmapp.cpp:1418
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3545,7 +3545,7 @@ msgstr ""
 "в меню <interface>Вид | Показать календари</interface> и проверьте/измените "
 "состояние календарей."
 
-#: kalarmapp.cpp:1459
+#: kalarmapp.cpp:1458
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
@@ -3553,7 +3553,7 @@ msgstr ""
 "<icode>%1</icode>: Событие <resource>%2</resource> не найдено или не "
 "доступно для правки"
 
-#: kalarmapp.cpp:1487
+#: kalarmapp.cpp:1486
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3567,7 +3567,7 @@ msgstr ""
 ">Для исправления ситуации выберите в меню <interface>Вид | Показать "
 "календари</interface> и проверьте или измените состояние календарей."
 
-#: kalarmapp.cpp:1495
+#: kalarmapp.cpp:1494
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3584,7 +3584,7 @@ msgstr ""
 "установите флажок <interface>Использовать по умолчанию для устаревших "
 "напоминаний</interface>."
 
-#: kalarmapp.cpp:2472
+#: kalarmapp.cpp:2471
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3594,19 +3594,19 @@ msgstr ""
 "Не удалось выполнить команду\n"
 "(не указан терминал для командных напоминаний)"
 
-#: kalarmapp.cpp:2625
+#: kalarmapp.cpp:2624
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Ошибка создания временного файла сценария"
 
-#: kalarmapp.cpp:2721
+#: kalarmapp.cpp:2720
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Предварительное действие:"
 
-#: kalarmapp.cpp:2727
+#: kalarmapp.cpp:2726
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3665,19 +3665,19 @@ msgstr "Срок:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3081
+#: kalarmcalendar/kaevent.cpp:3091
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "При входе"
 
-#: kalarmcalendar/kaevent.cpp:3081
+#: kalarmcalendar/kaevent.cpp:3091
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "При входе в систему"
 
-#: kalarmcalendar/kaevent.cpp:3090 kalarmcalendar/kaevent.cpp:3177
+#: kalarmcalendar/kaevent.cpp:3100 kalarmcalendar/kaevent.cpp:3187
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3689,7 +3689,7 @@ msgstr[1] "%1 минуты"
 msgstr[2] "%1 минут"
 msgstr[3] "1 минута"
 
-#: kalarmcalendar/kaevent.cpp:3092 kalarmcalendar/kaevent.cpp:3179
+#: kalarmcalendar/kaevent.cpp:3102 kalarmcalendar/kaevent.cpp:3189
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3700,13 +3700,13 @@ msgstr[1] "%1 часа"
 msgstr[2] "%1 часов"
 msgstr[3] "1 час"
 
-#: kalarmcalendar/kaevent.cpp:3094 kalarmcalendar/kaevent.cpp:3180
+#: kalarmcalendar/kaevent.cpp:3104 kalarmcalendar/kaevent.cpp:3190
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1ч %2м"
 
-#: kalarmcalendar/kaevent.cpp:3097 kalarmcalendar/kaevent.cpp:3184
+#: kalarmcalendar/kaevent.cpp:3107 kalarmcalendar/kaevent.cpp:3194
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3717,7 +3717,7 @@ msgstr[1] "%1 дня"
 msgstr[2] "%1 дней"
 msgstr[3] "1 день"
 
-#: kalarmcalendar/kaevent.cpp:3099 kalarmcalendar/kaevent.cpp:3185
+#: kalarmcalendar/kaevent.cpp:3109 kalarmcalendar/kaevent.cpp:3195
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3727,7 +3727,7 @@ msgstr[1] "%1 недели"
 msgstr[2] "%1 недель"
 msgstr[3] "1 неделя"
 
-#: kalarmcalendar/kaevent.cpp:3101
+#: kalarmcalendar/kaevent.cpp:3111
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3737,7 +3737,7 @@ msgstr[1] "%1 месяца"
 msgstr[2] "%1 месяцев"
 msgstr[3] "1 месяц"
 
-#: kalarmcalendar/kaevent.cpp:3103
+#: kalarmcalendar/kaevent.cpp:3113
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3747,13 +3747,13 @@ msgstr[1] "%1 года"
 msgstr[2] "%1 лет"
 msgstr[3] "1 год"
 
-#: kalarmcalendar/kaevent.cpp:3109
+#: kalarmcalendar/kaevent.cpp:3119
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Нет"
 
-#: kalarmcalendar/kaevent.cpp:3187
+#: kalarmcalendar/kaevent.cpp:3197
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"
@@ -4509,7 +4509,7 @@ msgstr "Персональные напоминания, выполнение к
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "© 2001-%1, David Jarvie"
 
-#: mainwindow.cpp:441
+#: mainwindow.cpp:443
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4519,115 +4519,115 @@ msgstr ""
 "Ошибка создания меню (возможно, <filename>%1</filename> отсутствует или "
 "повреждён)."
 
-#: mainwindow.cpp:461
+#: mainwindow.cpp:463
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
 msgstr "Шаблоны..."
 
-#: mainwindow.cpp:465 templatedlg.cpp:74
+#: mainwindow.cpp:467 templatedlg.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Создать"
 
-#: mainwindow.cpp:471
+#: mainwindow.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "Создать шаблон…"
 
-#: mainwindow.cpp:475
+#: mainwindow.cpp:477
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
 msgstr "Копировать…"
 
-#: mainwindow.cpp:480 resourceselector.cpp:301
+#: mainwindow.cpp:482 resourceselector.cpp:301
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Изменить…"
 
-#: mainwindow.cpp:485
+#: mainwindow.cpp:487
 #, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Удалить"
 
-#: mainwindow.cpp:491
+#: mainwindow.cpp:493
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Удалить без подтверждения"
 
-#: mainwindow.cpp:496
+#: mainwindow.cpp:498
 #, kde-format
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Активизировать"
 
-#: mainwindow.cpp:510
+#: mainwindow.cpp:512
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Разбудить систему…"
 
-#: mainwindow.cpp:520
+#: mainwindow.cpp:524
 #, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Показывать устаревшие напоминания"
 
-#: mainwindow.cpp:525
+#: mainwindow.cpp:529
 #, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Показывать в системном лотке"
 
-#: mainwindow.cpp:529
+#: mainwindow.cpp:533
 #, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Показать календари"
 
-#: mainwindow.cpp:533
+#: mainwindow.cpp:537
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr "Показать поле выбора даты"
 
-#: mainwindow.cpp:544
+#: mainwindow.cpp:550
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Импорт напоминаний…"
 
-#: mainwindow.cpp:550
+#: mainwindow.cpp:556
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Импорт дней рождения…"
 
-#: mainwindow.cpp:555
+#: mainwindow.cpp:561
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "Экспорт выбранных напоминаний…"
 
-#: mainwindow.cpp:559 resourceselector.cpp:319
+#: mainwindow.cpp:565 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "Экспорт…"
 
-#: mainwindow.cpp:563
+#: mainwindow.cpp:569
 #, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Обновить"
 
-#: mainwindow.cpp:808
+#: mainwindow.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4637,7 +4637,7 @@ msgstr[1] "Удалить %1 выбранных напоминания?"
 msgstr[2] "Удалить %1 выбранных напоминаний?"
 msgstr[3] "Удалить выбранное напоминание?"
 
-#: mainwindow.cpp:810
+#: mainwindow.cpp:816
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4647,43 +4647,43 @@ msgstr[1] "Удаление напоминаний"
 msgstr[2] "Удаление напоминаний"
 msgstr[3] "Удаление напоминания"
 
-#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Удалить"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:911
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Скрыть устаревшие напоминания"
 
-#: mainwindow.cpp:906
+#: mainwindow.cpp:912
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Показывать устаревшие напоминания"
 
-#: mainwindow.cpp:982
+#: mainwindow.cpp:988
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Импорт дней рождения"
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1240
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1235
+#: mainwindow.cpp:1241
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1301
+#: mainwindow.cpp:1307
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4692,48 +4692,48 @@ msgstr ""
 "<qt>Это действие полностью скроет меню. Чтобы снова вывести его, нажмите %1."
 "</qt>"
 
-#: mainwindow.cpp:1303
+#: mainwindow.cpp:1309
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Скрыть строку меню"
 
-#: mainwindow.cpp:1543
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Визуальное напоминание"
 
-#: mainwindow.cpp:1545
+#: mainwindow.cpp:1551
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Почтовое напоминание"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1553
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Командное напоминание"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1555
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Тип напоминания"
 
-#: mainwindow.cpp:1550
+#: mainwindow.cpp:1556
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Выберите тип создаваемого напоминания:"
 
-#: mainwindow.cpp:1683
+#: mainwindow.cpp:1689
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Включить"
 
-#: mainwindow.cpp:1683
+#: mainwindow.cpp:1689
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -5025,55 +5025,55 @@ msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
 msgstr "Невозможно найти это письмо в <application>KMail</application>"
 
-#: newalarmaction.cpp:45
+#: newalarmaction.cpp:47
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Display Alarm Template"
 msgstr "Шаблон визуального напоминания"
 
-#: newalarmaction.cpp:45
+#: newalarmaction.cpp:47
 #, kde-format
 msgctxt "@action"
 msgid "New Display Alarm"
 msgstr "Визуальное напоминание"
 
-#: newalarmaction.cpp:48
+#: newalarmaction.cpp:50
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Command Alarm Template"
 msgstr "Шаблон командного напоминания"
 
-#: newalarmaction.cpp:48
+#: newalarmaction.cpp:50
 #, kde-format
 msgctxt "@action"
 msgid "New Command Alarm"
 msgstr "Командное напоминание"
 
-#: newalarmaction.cpp:51
+#: newalarmaction.cpp:53
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Email Alarm Template"
 msgstr "Шаблон почтового напоминания"
 
-#: newalarmaction.cpp:51
+#: newalarmaction.cpp:53
 #, kde-format
 msgctxt "@action"
 msgid "New Email Alarm"
 msgstr "Почтовое напоминание"
 
-#: newalarmaction.cpp:54
+#: newalarmaction.cpp:56
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Audio Alarm Template"
 msgstr "Шаблон звукового напоминания"
 
-#: newalarmaction.cpp:54
+#: newalarmaction.cpp:56
 #, kde-format
 msgctxt "@action"
 msgid "New Audio Alarm"
 msgstr "Звуковое напоминание"
 
-#: newalarmaction.cpp:69
+#: newalarmaction.cpp:71
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm From Template"

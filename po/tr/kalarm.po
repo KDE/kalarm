@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 00:40+0000\n"
+"POT-Creation-Date: 2024-11-08 00:41+0000\n"
 "PO-Revision-Date: 2024-09-15 18:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -3454,7 +3454,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Alarm şablonu kaydetme hatası"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:809
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3463,31 +3463,31 @@ msgstr ""
 "Uygulamadan çıkmak uyarıları geçersiz kılacak (herhangi bir uyarı penceresi "
 "ilk kapandığında)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:819
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Çıkmak, planlanan Askıdan Uyandır işlemini iptal eder."
 
-#: kalarmapp.cpp:1037
+#: kalarmapp.cpp:1036
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Alarm oluşturulamıyor: Bir öntanımlı takvim tanımlanmamış"
 
-#: kalarmapp.cpp:1051
+#: kalarmapp.cpp:1050
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Alarm oluşturulurken hata"
 
-#: kalarmapp.cpp:1107
+#: kalarmapp.cpp:1106
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: Olay <resource>%2</resource> bulunamadı veya benzersiz değil"
 
-#: kalarmapp.cpp:1419
+#: kalarmapp.cpp:1418
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3499,13 +3499,13 @@ msgstr ""
 "alarm yok.<nl/><nl/>Bunu düzeltmek için, takvim durumunu değiştirmek ya da "
 "kontrol etmek için <interface>Görünüm | Takvimleri Göster</interface> kullan."
 
-#: kalarmapp.cpp:1459
+#: kalarmapp.cpp:1458
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: Olay <resource>%2</resource> bulunamadı veya düzenlenebilir değil"
 
-#: kalarmapp.cpp:1487
+#: kalarmapp.cpp:1486
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3518,7 +3518,7 @@ msgstr ""
 "alarm yok.<nl/><nl/>Bunu düzeltmek için, takvim durumunu değiştirmek ya da "
 "kontrol etmek için <interface>Görünüm | Takvimleri Göster</interface> kullan."
 
-#: kalarmapp.cpp:1495
+#: kalarmapp.cpp:1494
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3534,7 +3534,7 @@ msgstr ""
 "bir arşivlenmiş alarm takvimi seçin ve <interface>Arşivlenmiş Alarmlar için "
 "Öntanımlı Olarak Kullan</interface>'ı imleyin."
 
-#: kalarmapp.cpp:2472
+#: kalarmapp.cpp:2471
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3544,19 +3544,19 @@ msgstr ""
 "Komut yürütülemedi\n"
 "(komut alarmları için seçili uçbirim yok)"
 
-#: kalarmapp.cpp:2625
+#: kalarmapp.cpp:2624
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Geçici betik dosyası oluşturulamadı"
 
-#: kalarmapp.cpp:2721
+#: kalarmapp.cpp:2720
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Alarm uyarısından önce yapılacak eylem:"
 
-#: kalarmapp.cpp:2727
+#: kalarmapp.cpp:2726
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3615,19 +3615,19 @@ msgstr "Süre bitimi:"
 msgid "KAlarm"
 msgstr "K Alarm"
 
-#: kalarmcalendar/kaevent.cpp:3081
+#: kalarmcalendar/kaevent.cpp:3091
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Oturum aç"
 
-#: kalarmcalendar/kaevent.cpp:3081
+#: kalarmcalendar/kaevent.cpp:3091
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "Oturum açılışında"
 
-#: kalarmcalendar/kaevent.cpp:3090 kalarmcalendar/kaevent.cpp:3177
+#: kalarmcalendar/kaevent.cpp:3100 kalarmcalendar/kaevent.cpp:3187
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3637,7 +3637,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 Dakika"
 msgstr[1] "%1 Dakika"
 
-#: kalarmcalendar/kaevent.cpp:3092 kalarmcalendar/kaevent.cpp:3179
+#: kalarmcalendar/kaevent.cpp:3102 kalarmcalendar/kaevent.cpp:3189
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3646,13 +3646,13 @@ msgid_plural "%1 Hours"
 msgstr[0] "1 Saat"
 msgstr[1] "%1 Saat"
 
-#: kalarmcalendar/kaevent.cpp:3094 kalarmcalendar/kaevent.cpp:3180
+#: kalarmcalendar/kaevent.cpp:3104 kalarmcalendar/kaevent.cpp:3190
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1sa %2dk"
 
-#: kalarmcalendar/kaevent.cpp:3097 kalarmcalendar/kaevent.cpp:3184
+#: kalarmcalendar/kaevent.cpp:3107 kalarmcalendar/kaevent.cpp:3194
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3661,7 +3661,7 @@ msgid_plural "%1 Days"
 msgstr[0] "1 Gün"
 msgstr[1] "%1 Gün"
 
-#: kalarmcalendar/kaevent.cpp:3099 kalarmcalendar/kaevent.cpp:3185
+#: kalarmcalendar/kaevent.cpp:3109 kalarmcalendar/kaevent.cpp:3195
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3669,7 +3669,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 Hafta"
 msgstr[1] "%1 Hafta"
 
-#: kalarmcalendar/kaevent.cpp:3101
+#: kalarmcalendar/kaevent.cpp:3111
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3677,7 +3677,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 Ay"
 msgstr[1] "%1 Ay"
 
-#: kalarmcalendar/kaevent.cpp:3103
+#: kalarmcalendar/kaevent.cpp:3113
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3685,13 +3685,13 @@ msgid_plural "%1 Years"
 msgstr[0] "1 Yıl"
 msgstr[1] "%1 Yıl"
 
-#: kalarmcalendar/kaevent.cpp:3109
+#: kalarmcalendar/kaevent.cpp:3119
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: kalarmcalendar/kaevent.cpp:3187
+#: kalarmcalendar/kaevent.cpp:3197
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"
@@ -4445,7 +4445,7 @@ msgstr ""
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "© 2001–%1, David Jarvie"
 
-#: mainwindow.cpp:441
+#: mainwindow.cpp:443
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4454,115 +4454,115 @@ msgid ""
 msgstr ""
 "Menü oluşturmada hata (Belki <filename>%1</filename> kayıp ya da bozuk)"
 
-#: mainwindow.cpp:461
+#: mainwindow.cpp:463
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
 msgstr "Şablonlar…"
 
-#: mainwindow.cpp:465 templatedlg.cpp:74
+#: mainwindow.cpp:467 templatedlg.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Yeni"
 
-#: mainwindow.cpp:471
+#: mainwindow.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "Şablon Oluştur…"
 
-#: mainwindow.cpp:475
+#: mainwindow.cpp:477
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
 msgstr "Kopyala…"
 
-#: mainwindow.cpp:480 resourceselector.cpp:301
+#: mainwindow.cpp:482 resourceselector.cpp:301
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Düzenle…"
 
-#: mainwindow.cpp:485
+#: mainwindow.cpp:487
 #, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Sil"
 
-#: mainwindow.cpp:491
+#: mainwindow.cpp:493
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Onaylama Olmaksızın Sil"
 
-#: mainwindow.cpp:496
+#: mainwindow.cpp:498
 #, kde-format
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Yeniden Etkinleştir"
 
-#: mainwindow.cpp:510
+#: mainwindow.cpp:512
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Askıdan Uyandır…"
 
-#: mainwindow.cpp:520
+#: mainwindow.cpp:524
 #, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Arşivlenen Alarmları Göster"
 
-#: mainwindow.cpp:525
+#: mainwindow.cpp:529
 #, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Sistem Tepsisinde Göster"
 
-#: mainwindow.cpp:529
+#: mainwindow.cpp:533
 #, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Takvimleri Göster"
 
-#: mainwindow.cpp:533
+#: mainwindow.cpp:537
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr "Tarih Seçicisini Göster"
 
-#: mainwindow.cpp:544
+#: mainwindow.cpp:550
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Alarmlar İçe Aktar…"
 
-#: mainwindow.cpp:550
+#: mainwindow.cpp:556
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Doğum Günleri İçe Aktar…"
 
-#: mainwindow.cpp:555
+#: mainwindow.cpp:561
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "Seçili Alarmları Dışa Aktar…"
 
-#: mainwindow.cpp:559 resourceselector.cpp:319
+#: mainwindow.cpp:565 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "Dışa Aktar…"
 
-#: mainwindow.cpp:563
+#: mainwindow.cpp:569
 #, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Alarmları Yenile"
 
-#: mainwindow.cpp:808
+#: mainwindow.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4570,7 +4570,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "Seçili alarmı silmeyi gerçekten istiyor musunuz?"
 msgstr[1] "%1 seçili alarmı silmeyi gerçekten istiyor musunuz?"
 
-#: mainwindow.cpp:810
+#: mainwindow.cpp:816
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4578,43 +4578,43 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Alarmı Sil"
 msgstr[1] "Alarmları Sil"
 
-#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Sil"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:911
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Arşivlenmiş Alarmları Gizle"
 
-#: mainwindow.cpp:906
+#: mainwindow.cpp:912
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Arşivlenmiş Alarmları Göster"
 
-#: mainwindow.cpp:982
+#: mainwindow.cpp:988
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Doğum günlerini içe aktar"
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1240
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1235
+#: mainwindow.cpp:1241
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1301
+#: mainwindow.cpp:1307
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4623,48 +4623,48 @@ msgstr ""
 "<qt>Bu, menü çubuğunu tümüyle gizleyecektir. %1 ile yeniden "
 "gösterebilirsiniz.</qt>"
 
-#: mainwindow.cpp:1303
+#: mainwindow.cpp:1309
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Menü çubuğunu gizle"
 
-#: mainwindow.cpp:1543
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Alarmı Görüntüle"
 
-#: mainwindow.cpp:1545
+#: mainwindow.cpp:1551
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "E-posta Alarmı"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1553
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Komut Alarmı"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1555
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Alarm Türü"
 
-#: mainwindow.cpp:1550
+#: mainwindow.cpp:1556
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Oluşturulacak alarm türünü seçin:"
 
-#: mainwindow.cpp:1683
+#: mainwindow.cpp:1689
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Etkinleştir"
 
-#: mainwindow.cpp:1683
+#: mainwindow.cpp:1689
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -4942,55 +4942,55 @@ msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
 msgstr "Bu e-posta <application>K Posta</application> içerisinde bulunamadı"
 
-#: newalarmaction.cpp:45
+#: newalarmaction.cpp:47
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Display Alarm Template"
 msgstr "Alarm Şablonunu Görüntüle"
 
-#: newalarmaction.cpp:45
+#: newalarmaction.cpp:47
 #, kde-format
 msgctxt "@action"
 msgid "New Display Alarm"
 msgstr "Yeni Görüntü Alarmı"
 
-#: newalarmaction.cpp:48
+#: newalarmaction.cpp:50
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Command Alarm Template"
 msgstr "Komut Alarmı Şablonu"
 
-#: newalarmaction.cpp:48
+#: newalarmaction.cpp:50
 #, kde-format
 msgctxt "@action"
 msgid "New Command Alarm"
 msgstr "Yeni Komut Alarmı"
 
-#: newalarmaction.cpp:51
+#: newalarmaction.cpp:53
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Email Alarm Template"
 msgstr "E-posta Alarmı Şablonu"
 
-#: newalarmaction.cpp:51
+#: newalarmaction.cpp:53
 #, kde-format
 msgctxt "@action"
 msgid "New Email Alarm"
 msgstr "Yeni E-posta Alarmı"
 
-#: newalarmaction.cpp:54
+#: newalarmaction.cpp:56
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Audio Alarm Template"
 msgstr "Ses Alarmı Şablonu"
 
-#: newalarmaction.cpp:54
+#: newalarmaction.cpp:56
 #, kde-format
 msgctxt "@action"
 msgid "New Audio Alarm"
 msgstr "Yeni Ses Alarmı"
 
-#: newalarmaction.cpp:69
+#: newalarmaction.cpp:71
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm From Template"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 00:40+0000\n"
+"POT-Creation-Date: 2024-11-08 00:41+0000\n"
 "PO-Revision-Date: 2017-09-28 18:00+0200\n"
 "Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
@@ -3560,7 +3560,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Greška pri upisivanju šablona alarma"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:809
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3569,19 +3569,19 @@ msgstr ""
 "Napuštanje će deaktivirati alarme (pošto se zatvore svi prozori alarmnih "
 "poruka)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:819
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Napuštanje će otkazati zakazano buđenje iz suspendovanosti."
 
-#: kalarmapp.cpp:1037
+#: kalarmapp.cpp:1036
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1051
+#: kalarmapp.cpp:1050
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error recreating alarm"
@@ -3589,13 +3589,13 @@ msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Greška pri ponovnom stvaranju alarma."
 
-#: kalarmapp.cpp:1107
+#: kalarmapp.cpp:1106
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: Događaj <resource>%2</resource> nije nađen ili nije jedinstven."
 
-#: kalarmapp.cpp:1419
+#: kalarmapp.cpp:1418
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3607,13 +3607,13 @@ msgstr ""
 "upisivi kalendar alarma.</p><p>Idite pod <interface>Prikaz->Prikaži "
 "kalendare</interface> da proverite ili izmenite stanja kalendara.</p>"
 
-#: kalarmapp.cpp:1459
+#: kalarmapp.cpp:1458
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: Događaj <resource>%2</resource> nije nađen ili nije urediv."
 
-#: kalarmapp.cpp:1487
+#: kalarmapp.cpp:1486
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3631,7 +3631,7 @@ msgstr ""
 "upisivi kalendar alarma.</p><p>Idite pod <interface>Prikaz->Prikaži "
 "kalendare</interface> da proverite ili izmenite stanja kalendara.</p>"
 
-#: kalarmapp.cpp:1495
+#: kalarmapp.cpp:1494
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3650,7 +3650,7 @@ msgstr ""
 "upisivi kalendar alarma.</p><p>Idite pod <interface>Prikaz->Prikaži "
 "kalendare</interface> da proverite ili izmenite stanja kalendara.</p>"
 
-#: kalarmapp.cpp:2472
+#: kalarmapp.cpp:2471
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3660,19 +3660,19 @@ msgstr ""
 "Ne mogu da izvršim naredbu\n"
 "(nije izabran terminal za naredbene alarme)."
 
-#: kalarmapp.cpp:2625
+#: kalarmapp.cpp:2624
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Greška pri stvaranju privremenog fajla skripte."
 
-#: kalarmapp.cpp:2721
+#: kalarmapp.cpp:2720
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Radnja pre alarma:"
 
-#: kalarmapp.cpp:2727
+#: kalarmapp.cpp:2726
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3737,7 +3737,7 @@ msgstr ""
 msgid "KAlarm"
 msgstr "Alarm"
 
-#: kalarmcalendar/kaevent.cpp:3081
+#: kalarmcalendar/kaevent.cpp:3091
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "At Login"
@@ -3745,7 +3745,7 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "po prijavljivanju"
 
-#: kalarmcalendar/kaevent.cpp:3081
+#: kalarmcalendar/kaevent.cpp:3091
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "At login"
@@ -3753,7 +3753,7 @@ msgctxt "@info"
 msgid "At login"
 msgstr "na prijavljivanju"
 
-#: kalarmcalendar/kaevent.cpp:3090 kalarmcalendar/kaevent.cpp:3177
+#: kalarmcalendar/kaevent.cpp:3100 kalarmcalendar/kaevent.cpp:3187
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3767,7 +3767,7 @@ msgstr[1] "minuti"
 msgstr[2] "minuti"
 msgstr[3] "minuti"
 
-#: kalarmcalendar/kaevent.cpp:3092 kalarmcalendar/kaevent.cpp:3179
+#: kalarmcalendar/kaevent.cpp:3102 kalarmcalendar/kaevent.cpp:3189
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3778,13 +3778,13 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: kalarmcalendar/kaevent.cpp:3094 kalarmcalendar/kaevent.cpp:3180
+#: kalarmcalendar/kaevent.cpp:3104 kalarmcalendar/kaevent.cpp:3190
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr ""
 
-#: kalarmcalendar/kaevent.cpp:3097 kalarmcalendar/kaevent.cpp:3184
+#: kalarmcalendar/kaevent.cpp:3107 kalarmcalendar/kaevent.cpp:3194
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3795,7 +3795,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: kalarmcalendar/kaevent.cpp:3099 kalarmcalendar/kaevent.cpp:3185
+#: kalarmcalendar/kaevent.cpp:3109 kalarmcalendar/kaevent.cpp:3195
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Weekly"
@@ -3807,7 +3807,7 @@ msgstr[1] "sedmično"
 msgstr[2] "sedmično"
 msgstr[3] "sedmično"
 
-#: kalarmcalendar/kaevent.cpp:3101
+#: kalarmcalendar/kaevent.cpp:3111
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Monthly"
@@ -3819,7 +3819,7 @@ msgstr[1] "mesečno"
 msgstr[2] "mesečno"
 msgstr[3] "mesečno"
 
-#: kalarmcalendar/kaevent.cpp:3103
+#: kalarmcalendar/kaevent.cpp:3113
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Yearly"
@@ -3831,7 +3831,7 @@ msgstr[1] "godišnje"
 msgstr[2] "godišnje"
 msgstr[3] "godišnje"
 
-#: kalarmcalendar/kaevent.cpp:3109
+#: kalarmcalendar/kaevent.cpp:3119
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -3839,7 +3839,7 @@ msgctxt "@info No recurrence"
 msgid "None"
 msgstr "ništa"
 
-#: kalarmcalendar/kaevent.cpp:3187
+#: kalarmcalendar/kaevent.cpp:3197
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -4732,7 +4732,7 @@ msgstr "Lični raspoređivač alarmnih poruka, naredbi i e‑pošte iz KDE‑a"
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "© 2001–%1, Dejvid Džarvi"
 
-#: mainwindow.cpp:441
+#: mainwindow.cpp:443
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4742,7 +4742,7 @@ msgstr ""
 "Neuspeh u stvaranju menija (možda <filename>%1</filename> nedostaje ili je "
 "iskvaren)."
 
-#: mainwindow.cpp:461
+#: mainwindow.cpp:463
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Templates..."
@@ -4750,13 +4750,13 @@ msgctxt "@action"
 msgid "Templates..."
 msgstr "&Šabloni..."
 
-#: mainwindow.cpp:465 templatedlg.cpp:74
+#: mainwindow.cpp:467 templatedlg.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Novi"
 
-#: mainwindow.cpp:471
+#: mainwindow.cpp:473
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Create Tem&plate..."
@@ -4764,7 +4764,7 @@ msgctxt "@action"
 msgid "Create Template..."
 msgstr "Napravi šab&lon..."
 
-#: mainwindow.cpp:475
+#: mainwindow.cpp:477
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Copy..."
@@ -4772,7 +4772,7 @@ msgctxt "@action"
 msgid "Copy..."
 msgstr "&Kopiraj..."
 
-#: mainwindow.cpp:480 resourceselector.cpp:301
+#: mainwindow.cpp:482 resourceselector.cpp:301
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Edit..."
@@ -4780,7 +4780,7 @@ msgctxt "@action"
 msgid "Edit..."
 msgstr "Uredi..."
 
-#: mainwindow.cpp:485
+#: mainwindow.cpp:487
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Delete"
@@ -4788,13 +4788,13 @@ msgctxt "@action"
 msgid "Delete"
 msgstr "Obriši"
 
-#: mainwindow.cpp:491
+#: mainwindow.cpp:493
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Obriši bez potvrde"
 
-#: mainwindow.cpp:496
+#: mainwindow.cpp:498
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Reac&tivate"
@@ -4802,13 +4802,13 @@ msgctxt "@action"
 msgid "Reactivate"
 msgstr "&Aktiviraj ponovo"
 
-#: mainwindow.cpp:510
+#: mainwindow.cpp:512
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Probudi iz suspendovanosti..."
 
-#: mainwindow.cpp:520
+#: mainwindow.cpp:524
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Show Archived Alarms"
@@ -4816,7 +4816,7 @@ msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Prikaži arhivirane alarme"
 
-#: mainwindow.cpp:525
+#: mainwindow.cpp:529
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show in System &Tray"
@@ -4824,7 +4824,7 @@ msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Prikaži u &sistemskoj kaseti"
 
-#: mainwindow.cpp:529
+#: mainwindow.cpp:533
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show &Calendars"
@@ -4832,13 +4832,13 @@ msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Prikaži &kalendare"
 
-#: mainwindow.cpp:533
+#: mainwindow.cpp:537
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr ""
 
-#: mainwindow.cpp:544
+#: mainwindow.cpp:550
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Import &Alarms..."
@@ -4846,7 +4846,7 @@ msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Uvezi &alarme..."
 
-#: mainwindow.cpp:550
+#: mainwindow.cpp:556
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Import &Birthdays..."
@@ -4854,7 +4854,7 @@ msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Uvezi &rođendane..."
 
-#: mainwindow.cpp:555
+#: mainwindow.cpp:561
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "E&xport Selected Alarms..."
@@ -4862,7 +4862,7 @@ msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "&Izvezi izabrane alarme..."
 
-#: mainwindow.cpp:559 resourceselector.cpp:319
+#: mainwindow.cpp:565 resourceselector.cpp:319
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "E&xport..."
@@ -4870,7 +4870,7 @@ msgctxt "@action"
 msgid "Export..."
 msgstr "Iz&vezi..."
 
-#: mainwindow.cpp:563
+#: mainwindow.cpp:569
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Refresh Alarms"
@@ -4878,7 +4878,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Osv&eži alarme"
 
-#: mainwindow.cpp:808
+#: mainwindow.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4888,7 +4888,7 @@ msgstr[1] "Želite li zaista da obrišete %1 izabrana alarma?"
 msgstr[2] "Želite li zaista da obrišete %1 izabranih alarma?"
 msgstr[3] "Želite li zaista da obrišete izabrani alarm?"
 
-#: mainwindow.cpp:810
+#: mainwindow.cpp:816
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4898,85 +4898,85 @@ msgstr[1] "Brisanje alarma"
 msgstr[2] "Brisanje alarma"
 msgstr[3] "Brisanje alarma"
 
-#: mainwindow.cpp:811 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Obriši"
 
-#: mainwindow.cpp:905
+#: mainwindow.cpp:911
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Sakrij arhivirane alarme"
 
-#: mainwindow.cpp:906
+#: mainwindow.cpp:912
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Prikaži arhivirane alarme"
 
-#: mainwindow.cpp:982
+#: mainwindow.cpp:988
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Uvezi rođendane"
 
-#: mainwindow.cpp:1234
+#: mainwindow.cpp:1240
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2|/|%1 $[aku %2]"
 
-#: mainwindow.cpp:1235
+#: mainwindow.cpp:1241
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3|/|%1 $[aku %2]: %3"
 
-#: mainwindow.cpp:1301
+#: mainwindow.cpp:1307
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1303
+#: mainwindow.cpp:1309
 #, kde-format
 msgid "Hide menu bar"
 msgstr ""
 
-#: mainwindow.cpp:1543
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "prikazni alarm"
 
-#: mainwindow.cpp:1545
+#: mainwindow.cpp:1551
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "e‑poštanski alarm"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1553
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "naredbeni alarm"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1555
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Tip alarma"
 
-#: mainwindow.cpp:1550
+#: mainwindow.cpp:1556
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Izaberite željeni tip alarma:"
 
-#: mainwindow.cpp:1683
+#: mainwindow.cpp:1689
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Enable"
@@ -4984,7 +4984,7 @@ msgctxt "@action"
 msgid "Enable"
 msgstr "Aktiviraj"
 
-#: mainwindow.cpp:1683
+#: mainwindow.cpp:1689
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@action"
@@ -5288,7 +5288,7 @@ msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
 msgstr "Ne mogu da nađem ovu poruku u <application>K‑pošti</application>."
 
-#: newalarmaction.cpp:45
+#: newalarmaction.cpp:47
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu"
 #| msgid "&Display Alarm Template"
@@ -5296,13 +5296,13 @@ msgctxt "@item:inmenu"
 msgid "Display Alarm Template"
 msgstr "Šablon &prikaznog alarma"
 
-#: newalarmaction.cpp:45
+#: newalarmaction.cpp:47
 #, kde-format
 msgctxt "@action"
 msgid "New Display Alarm"
 msgstr "Novi prikazni alarm"
 
-#: newalarmaction.cpp:48
+#: newalarmaction.cpp:50
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu"
 #| msgid "&Command Alarm Template"
@@ -5310,13 +5310,13 @@ msgctxt "@item:inmenu"
 msgid "Command Alarm Template"
 msgstr "Šablon &naredbenog alarma"
 
-#: newalarmaction.cpp:48
+#: newalarmaction.cpp:50
 #, kde-format
 msgctxt "@action"
 msgid "New Command Alarm"
 msgstr "Novi naredbeni alarm"
 
-#: newalarmaction.cpp:51
+#: newalarmaction.cpp:53
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu"
 #| msgid "&Email Alarm Template"
@@ -5324,13 +5324,13 @@ msgctxt "@item:inmenu"
 msgid "Email Alarm Template"
 msgstr "Šablon &e‑poštanskog alarma"
 
-#: newalarmaction.cpp:51
+#: newalarmaction.cpp:53
 #, kde-format
 msgctxt "@action"
 msgid "New Email Alarm"
 msgstr "Novi e‑poštanski alarm"
 
-#: newalarmaction.cpp:54
+#: newalarmaction.cpp:56
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu"
 #| msgid "&Audio Alarm Template"
@@ -5338,13 +5338,13 @@ msgctxt "@item:inmenu"
 msgid "Audio Alarm Template"
 msgstr "Šablon &audio alarma"
 
-#: newalarmaction.cpp:54
+#: newalarmaction.cpp:56
 #, kde-format
 msgctxt "@action"
 msgid "New Audio Alarm"
 msgstr "Novi audio alarm"
 
-#: newalarmaction.cpp:69
+#: newalarmaction.cpp:71
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "New Alarm From &Template"
