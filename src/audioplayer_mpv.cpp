@@ -77,7 +77,7 @@ AudioPlayerMpv::~AudioPlayerMpv()
     if (status() == Playing)
     {
         mNoFinishedSignal = true;
-        stop();
+        AudioPlayerMpv::stop();
     }
     if (mAudioInstance)
     {
