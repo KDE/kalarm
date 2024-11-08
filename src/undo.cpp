@@ -478,8 +478,8 @@ QString Undo::actionText(Undo::Type type)
 */
 QString Undo::actionText(Undo::Type type, int id)
 {
-    const UndoItem* undo = getItem(id, type);
-    return undo ? undo->actionText() : QString();
+    const UndoItem* undo_ = getItem(id, type);
+    return undo_ ? undo_->actionText() : QString();
 }
 
 /******************************************************************************
@@ -487,8 +487,8 @@ QString Undo::actionText(Undo::Type type, int id)
 */
 QString Undo::description(Undo::Type type, int id)
 {
-    const UndoItem* undo = getItem(id, type);
-    return undo ? undo->description() : QString();
+    const UndoItem* undo_ = getItem(id, type);
+    return undo_ ? undo_->description() : QString();
 }
 
 /******************************************************************************
@@ -515,9 +515,9 @@ QList<int> Undo::ids(Undo::Type type)
             // If any item in a multi-undo is disqualified, omit the whole multi-undo
             QStringList newIDs;
             const Undo::List* undos = ((UndoMultiBase*)item)->undos();
-            for (const UndoItem* undo : *undos)
+            for (const UndoItem* undo_ : *undos)
             {
-                const QString evid = undo->eventID();
+                const QString evid = undo_->eventID();
                 if (ignoreIDs.contains(evid))
                     omit = true;
                 else if (omit)
@@ -873,8 +873,8 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
             break;
         case CalEvent::ARCHIVED:    // redoing the deletion of an archived alarm
         {
-            Resource resource;
-            KAlarm::deleteEvent(event, resource);
+            Resource res;
+            KAlarm::deleteEvent(event, res);
             break;
         }
         default:

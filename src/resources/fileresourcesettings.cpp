@@ -100,10 +100,10 @@ bool FileResourceSettings::readConfig()
     mStandard          = readAlarmTypes(KEY_STANDARD);
 
     // Read storage type and validate against location.
-    const QString storageType = mConfigGroup->readEntry(KEY_TYPE, QString());
-    if (storageType == STORAGE_FILE)
+    const QString storeType = mConfigGroup->readEntry(KEY_TYPE, QString());
+    if (storeType == STORAGE_FILE)
         mStorageType = File;
-    else if (storageType == STORAGE_DIR)
+    else if (storeType == STORAGE_DIR)
         mStorageType = Directory;
     else
     {
@@ -509,18 +509,18 @@ bool FileResourceSettings::validate()
 
 CalEvent::Types FileResourceSettings::readAlarmTypes(const char* key) const
 {
-    CalEvent::Types alarmTypes {CalEvent::EMPTY};
+    CalEvent::Types alrmTypes {CalEvent::EMPTY};
     const QStringList types = mConfigGroup->readEntry(key, QStringList());
     for (const QString& type : types)
     {
         if (type == ALARM_ACTIVE)
-            alarmTypes |= CalEvent::ACTIVE;
+            alrmTypes |= CalEvent::ACTIVE;
         else if (type == ALARM_ARCHIVED)
-            alarmTypes |= CalEvent::ARCHIVED;
+            alrmTypes |= CalEvent::ARCHIVED;
         else if (type == ALARM_TEMPLATE)
-            alarmTypes |= CalEvent::TEMPLATE;
+            alrmTypes |= CalEvent::TEMPLATE;
     }
-    return alarmTypes;
+    return alrmTypes;
 }
 
 QString FileResourceSettings::alarmTypesString(CalEvent::Types alarmTypes)

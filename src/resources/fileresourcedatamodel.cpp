@@ -76,9 +76,9 @@ FileResourceDataModel::FileResourceDataModel(QObject* parent)
     const QList<ResourceId> resourceIds = FileResourceConfigManager::resourceIds();
     for (ResourceId id : resourceIds)
     {
-        Resource resource = Resources::resource(id);
-        if (!mResourceNodes.contains(resource))
-            addResource(resource);
+        Resource res = Resources::resource(id);
+        if (!mResourceNodes.contains(res))
+            addResource(res);
     }
 
     Resources* resources = Resources::instance();
@@ -250,10 +250,10 @@ QModelIndex FileResourceDataModel::eventIndex(const QString& eventId) const
     Node* node = mEventNodes.value(eventId, nullptr);
     if (node)
     {
-        Resource resource = node->parent();
-        if (resource.isValid())
+        Resource res = node->parent();
+        if (res.isValid())
         {
-            const QList<Node*> nodes = mResourceNodes.value(resource);
+            const QList<Node*> nodes = mResourceNodes.value(res);
             int row = nodes.indexOf(node);
             if (row >= 0)
                 return createIndex(row, 0, node);
@@ -291,15 +291,15 @@ void FileResourceDataModel::signalDataChanged(bool (*checkFunc)(const KAEvent*),
     int end   = -1;
     for (int row = 0, count = rowCount(parent);  row < count;  ++row)
     {
-        KAEvent* event = nullptr;
+        KAEvent* evnt = nullptr;
         const QModelIndex ix = index(row, 0, parent);
         const Node* node = reinterpret_cast<Node*>(ix.internalPointer());
         if (node)
         {
-            event = node->event();
-            if (event)
+            evnt = node->event();
+            if (evnt)
             {
-                if ((*checkFunc)(event))
+                if ((*checkFunc)(evnt))
                 {
                     // For efficiency, emit a single signal for each group of
                     // consecutive events, rather than a separate signal for each event.
@@ -313,7 +313,7 @@ void FileResourceDataModel::signalDataChanged(bool (*checkFunc)(const KAEvent*),
         if (start >= 0)
             Q_EMIT dataChanged(index(start, startColumn, parent), index(end, endColumn, parent));
         start = -1;
-        if (!event)
+        if (!evnt)
             signalDataChanged(checkFunc, startColumn, endColumn, ix);
     }
 
@@ -466,8 +466,8 @@ void FileResourceDataModel::slotEventsAdded(Resource& resource, const QList<KAEv
             QList<KAEvent> eventsToDelete;
             for (int i = eventsToAdd.count();  --i >= 0;  )
             {
-                const KAEvent& event = eventsToAdd.at(i);
-                const Node* dnode = mEventNodes.value(event.id(), nullptr);
+                const KAEvent& evnt = eventsToAdd.at(i);
+                const Node* dnode = mEventNodes.value(evnt.id(), nullptr);
                 if (dnode)
                 {
                     if (dnode->parent() != resource)
@@ -490,9 +490,9 @@ void FileResourceDataModel::slotEventsAdded(Resource& resource, const QList<KAEv
             resourceEventNodes.reserve(row + eventsToAdd.count());
             const QModelIndex resourceIx = resourceIndex(resource);
             beginInsertRows(resourceIx, row, row + eventsToAdd.count() - 1);
-            for (const KAEvent& event : std::as_const(eventsToAdd))
+            for (const KAEvent& evnt : std::as_const(eventsToAdd))
             {
-                auto ev = new KAEvent(event);
+                auto ev = new KAEvent(evnt);
                 ev->setResourceId(resource.id());
                 Node* node = new Node(ev, resource);
                 resourceEventNodes += node;
@@ -550,9 +550,9 @@ bool FileResourceDataModel::deleteEvents(Resource& resource, const QList<KAEvent
     // Find the row numbers of the events to delete.
     QList<int> rowsToDelete;
     rowsToDelete.reserve(events.count());
-    for (const KAEvent& event : events)
+    for (const KAEvent& evnt : events)
     {
-        Node* node = mEventNodes.value(event.id(), nullptr);
+        const Node* node = mEventNodes.value(evnt.id(), nullptr);
         if (node  &&  node->parent() == resource)
         {
             int row = eventNodes.indexOf(node);
@@ -620,11 +620,11 @@ void FileResourceDataModel::addResource(Resource& resource)
     {
         QList<Node*>& resourceEventNodes = mResourceNodes[resource];
         resourceEventNodes.reserve(resourceEventNodes.count() + events.count());
-        for (const KAEvent& event : events)
+        for (const KAEvent& evnt : events)
         {
-            Node* node = new Node(new KAEvent(event), resource);
+            Node* node = new Node(new KAEvent(evnt), resource);
             resourceEventNodes += node;
-            mEventNodes[event.id()] = node;
+            mEventNodes[evnt.id()] = node;
         }
     }
     endInsertRows();
@@ -708,10 +708,10 @@ int FileResourceDataModel::removeResourceEvents(QList<Node*>& eventNodes)
     int count = 0;
     for (Node* node : eventNodes)
     {
-        KAEvent* event = node->event();
-        if (event)
+        KAEvent* evnt = node->event();
+        if (evnt)
         {
-            const QString eventId = event->id();
+            const QString eventId = evnt->id();
             mEventNodes.remove(eventId);
             ++count;
         }
@@ -846,10 +846,10 @@ QModelIndex FileResourceDataModel::index(int row, int column, const QModelIndex&
                 const Node* node = reinterpret_cast<Node*>(parent.internalPointer());
                 if (node)
                 {
-                    Resource resource = node->resource();
-                    if (resource.isValid())
+                    Resource res = node->resource();
+                    if (res.isValid())
                     {
-                        const QList<Node*>& nodes = mResourceNodes.value(resource);
+                        const QList<Node*>& nodes = mResourceNodes.value(res);
                         if (row < nodes.count())
                             return createIndex(row, column, nodes[row]);
                     }
@@ -868,10 +868,10 @@ QModelIndex FileResourceDataModel::parent(const QModelIndex& ix) const
     const Node* node = reinterpret_cast<Node*>(ix.internalPointer());
     if (node)
     {
-        Resource resource = node->parent();
-        if (resource.isValid())
+        Resource res = node->parent();
+        if (res.isValid())
         {
-            int row = mResources.indexOf(resource);
+            int row = mResources.indexOf(res);
             if (row >= 0)
                 return createIndex(row, 0, mResourceNodes.value(Resource()).at(row));
         }
@@ -939,15 +939,15 @@ QVariant FileResourceDataModel::data(const QModelIndex& ix, int role) const
         }
         else
         {
-            KAEvent* event = node->event();
-            if (event)
+            KAEvent* evnt = node->event();
+            if (evnt)
             {
                 // This is an Event row
                 if (role == ParentResourceIdRole)
                     return node->parent().id();
                 const Resource resp = node->parent();
                 bool handled;
-                const QVariant value = eventData(role, ix.column(), *event, resp, handled);
+                const QVariant value = eventData(role, ix.column(), *evnt, resp, handled);
                 if (handled)
                     return value;
             }
@@ -978,12 +978,12 @@ bool FileResourceDataModel::setData(const QModelIndex& ix, const QVariant& value
     const Node* node = reinterpret_cast<Node*>(ix.internalPointer());
     if (!node)
         return false;
-    Resource resource = node->resource();
-    if (resource.isNull())
+    Resource res = node->resource();
+    if (res.isNull())
     {
         // This is an Event row
-        KAEvent* event = node->event();
-        if (event  &&  event->isValid())
+        KAEvent* evnt = node->event();
+        if (evnt  &&  evnt->isValid())
         {
             switch (role)
             {

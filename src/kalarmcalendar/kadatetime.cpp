@@ -3167,6 +3167,7 @@ QDateTime fromStr(const QString& string, const QString& format, int& utcOffset,
             day = 1 + dayOfWeek - QDate(year, month, 1).dayOfWeek();
             if (day <= 0)
                 day += 7;
+            d = QDate(year, month, day);
         }
         else
         {

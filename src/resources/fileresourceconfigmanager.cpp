@@ -185,7 +185,7 @@ Resource FileResourceConfigManager::addResource(FileResourceSettings::Ptr& setti
 /******************************************************************************
 * Delete a calendar resource and its settings.
 */
-bool FileResourceConfigManager::removeResource(Resource& resource)
+bool FileResourceConfigManager::removeResource(Resource& resource)    //cppcheck-suppress[constParameterReference]  'resource' is changed
 {
     if (resource.isValid())
     {

@@ -85,7 +85,7 @@ const Qt::WidgetAttribute WidgetFlags = Qt::WA_DeleteOnClose;
 class MessageText : public KTextEdit
 {
 public:
-    MessageText(QWidget* parent = nullptr)
+    explicit MessageText(QWidget* parent = nullptr)
         : KTextEdit(parent)
     {
         setReadOnly(true);
@@ -478,7 +478,7 @@ void MessageWindow::setUpDisplay()
     // KAlarm button
     mKAlarmButton = new PushButton(topWidget);
     mKAlarmButton->setIcon(QIcon::fromTheme(KAboutData::applicationData().componentName()));
-    connect(mKAlarmButton, &QAbstractButton::clicked, this, &MessageWindow::displayMainWindow);
+    connect(mKAlarmButton, &QAbstractButton::clicked, this, [this]() { MessageWindow::displayMainWindow(); });
     grid->addWidget(mKAlarmButton, 0, gridIndex++, Qt::AlignHCenter);
     mKAlarmButton->setToolTip(xi18nc("@info:tooltip", "Activate <application>KAlarm</application>"));
     mKAlarmButton->setWhatsThis(xi18nc("@info:whatsthis", "Activate <application>KAlarm</application>"));
@@ -532,7 +532,7 @@ int MessageWindow::windowCount(bool excludeAlwaysHidden)
     int count = mWindowList.count();
     if (excludeAlwaysHidden)
     {
-        for (MessageWindow* win : std::as_const(mWindowList))
+        for (const MessageWindow* win : std::as_const(mWindowList))
         {
             if (win->mAlwaysHidden())
                 --count;
@@ -1230,15 +1230,6 @@ void MessageWindow::enableEditButton(bool enable)
 {
     if (mEditButton)
         mEditButton->setEnabled(enable);
-}
-
-/******************************************************************************
-* Called when the KAlarm icon button in the message window is clicked.
-* Displays the main window, with the appropriate alarm selected.
-*/
-void MessageWindow::displayMainWindow()
-{
-    MessageDisplay::displayMainWindow();
 }
 
 /******************************************************************************

@@ -415,11 +415,11 @@ void SoundWidget::showEvent(QShowEvent* se)
 */
 void SoundWidget::slotPickFile()
 {
-    QString file;
-    if (SoundPicker::browseFile(file, mDefaultDir, mFileEdit->text()))
+    QString soundFile;
+    if (SoundPicker::browseFile(soundFile, mDefaultDir, mFileEdit->text()))
     {
-        if (!file.isEmpty())
-            mFileEdit->setText(File::pathOrUrl(file));
+        if (!soundFile.isEmpty())
+            mFileEdit->setText(File::pathOrUrl(soundFile));
     }
 }
 
@@ -467,21 +467,21 @@ void SoundWidget::playFinished()
 */
 bool SoundWidget::validate(bool showErrorMessage) const
 {
-    QString file = mFileEdit->text();
-    if (file == mValidatedFile  &&  !file.isEmpty())
+    QString file_ = mFileEdit->text();
+    if (file_ == mValidatedFile  &&  !file_.isEmpty())
         return true;
-    mValidatedFile = file;
-    if (file.isEmpty()  &&  mEmptyFileAllowed)
+    mValidatedFile = file_;
+    if (file_.isEmpty()  &&  mEmptyFileAllowed)
     {
         mUrl.clear();
         return true;
     }
-    File::Error err = File::checkFileExists(file, mUrl, MainWindow::mainMainWindow());
+    File::Error err = File::checkFileExists(file_, mUrl, MainWindow::mainMainWindow());
     if (err == File::Error::None)
         return true;
     if (err == File::Error::Nonexistent)
     {
-        if (mUrl.isLocalFile()  &&  !file.startsWith('/'_L1))
+        if (mUrl.isLocalFile()  &&  !file_.startsWith('/'_L1))
         {
             // It's a relative path.
             // Find the first sound resource that contains files.
@@ -495,13 +495,13 @@ bool SoundWidget::validate(bool showErrorMessage) const
                     dir.setPath(soundDirs[i]);
                     if (dir.isReadable() && dir.count() > 2)
                     {
-                        QString f = soundDirs[i] + '/'_L1 + file;
+                        QString f = soundDirs[i] + '/'_L1 + file_;
                         err = File::checkFileExists(f, mUrl, MainWindow::mainMainWindow());
                         if (err == File::Error::None)
                             return true;
                         if (err != File::Error::Nonexistent)
                         {
-                            file = f;   // for inclusion in error message
+                            file_ = f;   // for inclusion in error message
                             break;
                         }
                     }
@@ -509,18 +509,18 @@ bool SoundWidget::validate(bool showErrorMessage) const
             }
             if (err == File::Error::Nonexistent)
             {
-                QString f = QDir::homePath() + '/'_L1 + file;
+                QString f = QDir::homePath() + '/'_L1 + file_;
                 err = File::checkFileExists(f, mUrl, MainWindow::mainMainWindow());
                 if (err == File::Error::None)
                     return true;
                 if (err != File::Error::Nonexistent)
-                    file = f;   // for inclusion in error message
+                    file_ = f;   // for inclusion in error message
             }
         }
     }
     mFileEdit->setFocus();
     if (showErrorMessage
-    &&  File::showFileErrMessage(file, err, File::Error::BlankPlay, const_cast<SoundWidget*>(this)))
+    &&  File::showFileErrMessage(file_, err, File::Error::BlankPlay, const_cast<SoundWidget*>(this)))
         return true;
     mValidatedFile.clear();
     mUrl.clear();

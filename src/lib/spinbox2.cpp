@@ -496,10 +496,10 @@ void SpinBox2p::getMetrics() const
     {
         // Check whether both mSpinbox spin buttons are on the same side of the control,
         // and if not, show only the normal spinbox without extra spin buttons.
-        const QRect upRect   = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp);
-        const QRect downRect = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
-        bool showUpdown2 = ((upRect.left() > editRect.left())  &&  (downRect.left() > editRect.left()))
-                       ||  ((upRect.right() < editRect.right())  &&  (downRect.right() < editRect.right()));
+        const QRect upRect_   = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp);
+        const QRect downRect_ = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
+        bool showUpdown2 = ((upRect_.left() > editRect.left())  &&  (downRect_.left() > editRect.left()))
+                       ||  ((upRect_.right() < editRect.right())  &&  (downRect_.right() < editRect.right()));
         setShowUpdown2(showUpdown2);
         if (!mShowUpdown2)
             return;
@@ -779,7 +779,7 @@ void SpinMirror::mouseEvent(QMouseEvent* e)
     if (mReadOnly)
         return;
     QPointF pt = e->pos();
-    QGraphicsItem* item = scene()->itemAt(pt, QTransform());
+    const QGraphicsItem* item = scene()->itemAt(pt, QTransform());
     if (item == mButtons)
         pt = spinboxPoint(pt);
     else
@@ -796,7 +796,7 @@ void SpinMirror::wheelEvent(QWheelEvent* e)
     if (mReadOnly)
         return;
     QPointF pt = e->position();
-    QGraphicsItem* item = scene()->itemAt(pt, QTransform());
+    const QGraphicsItem* item = scene()->itemAt(pt, QTransform());
     if (item == mButtons)
     {
         pt = spinboxPoint(pt);

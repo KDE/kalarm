@@ -187,7 +187,7 @@ bool browseFile(QString& file, const QString& caption, QString& defaultDir,
         return true;
     const QUrl& url = urls[0];
     defaultDir = url.isLocalFile() ? KIO::upUrl(url).toLocalFile() : url.adjusted(QUrl::RemoveFilename).path();
-    bool localOnly = true;
+    bool localOnly = true;   // QFileDialog only handles local files
     file = localOnly ? url.toDisplayString(QUrl::PreferLocalFile) : url.toDisplayString();
     return true;
 }

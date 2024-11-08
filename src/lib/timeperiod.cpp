@@ -288,7 +288,7 @@ TimePeriod::Units TimePeriod::setDateOnly(const Duration& perod, bool dateOnly, 
     if (signal)
         oldinterval = period();
     int index = mUnitsCombo->currentIndex();
-    auto units = static_cast<Units>(index + mDateOnlyOffset);
+    auto unit = static_cast<Units>(index + mDateOnlyOffset);
     if (!mNoHourMinute)
     {
         if (!dateOnly  &&  mDateOnlyOffset)
@@ -313,10 +313,10 @@ TimePeriod::Units TimePeriod::setDateOnly(const Duration& perod, bool dateOnly, 
             adjustDayWeekShown();
             mUnitShown = Days;
             mUnitsCombo->setCurrentIndex(index);
-            if (units == HoursMinutes  ||  units == Minutes)
+            if (unit == HoursMinutes  ||  unit == Minutes)
             {
                 // Set units to days and round up the warning period
-                units = Days;
+                unit = Days;
                 mUnitsCombo->setCurrentIndex(Days - mDateOnlyOffset);
                 mSpinBox->setValue(perod.asDays());
             }
@@ -330,7 +330,7 @@ TimePeriod::Units TimePeriod::setDateOnly(const Duration& perod, bool dateOnly, 
         if (newinterval != oldinterval)
             Q_EMIT valueChanged(newinterval);
     }
-    return units;
+    return unit;
 }
 
 /******************************************************************************

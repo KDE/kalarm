@@ -1,7 +1,7 @@
 /*
  *  messagedisplay.h  -  base class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -145,8 +145,10 @@ protected:
     /** Set up the alarm message display. */
     virtual void setUpDisplay() = 0;
 
+protected Q_SLOTS:
     void displayMainWindow();
 
+protected:
     virtual bool isDeferButtonEnabled() const = 0;
     virtual void enableDeferButton(bool enable) = 0;
     virtual void enableEditButton(bool enable) = 0;

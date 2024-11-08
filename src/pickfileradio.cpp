@@ -126,8 +126,8 @@ bool PickFileRadio::pickFileIfNone()
         mFile = mEdit->text();
     if (!mFile.isEmpty())
         return true;
-    QString file;
-    if (!doPickFile(file))
+    QString pickFile;
+    if (!doPickFile(pickFile))
        return false;
     return !mFile.isEmpty();
 }
@@ -137,8 +137,8 @@ bool PickFileRadio::pickFileIfNone()
 */
 void PickFileRadio::slotPickFile()
 {
-    QString file;
-    doPickFile(file);
+    QString pickFile;
+    doPickFile(pickFile);
 }
 
 /******************************************************************************

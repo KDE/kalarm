@@ -136,7 +136,7 @@ void SoundPicker::showSpeak(bool show)
     if (show != mSpeakShowing)
     {
         // Note that 'Speak' is always the last option.
-        if (show)
+        if (show)                                  //cppcheck-suppress[knownConditionTrueFalse]  may be true if text to speech support
             mTypeCombo->addItem(i18n_combo_Speak(), Preferences::Sound_Speak);
         else
         {
@@ -261,15 +261,15 @@ void SoundPicker::slotPickFile()
         return;
     if (accepted)
     {
-        float volume, fadeVolume;
+        float vol, fadeVol;
         int   fadeTime;
-        dlg->getVolume(volume, fadeVolume, fadeTime);
-        QUrl file    = dlg->getFile();
-        if (!file.isEmpty())
-            mFile    = file;
+        dlg->getVolume(vol, fadeVol, fadeTime);
+        QUrl file_   = dlg->getFile();
+        if (!file_.isEmpty())
+            mFile    = file_;
         mRepeatPause = dlg->repeatPause();
-        mVolume      = volume;
-        mFadeVolume  = fadeVolume;
+        mVolume      = vol;
+        mFadeVolume  = fadeVol;
         mFadeSeconds = fadeTime;
     }
     if (mFile.isEmpty())
