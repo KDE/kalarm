@@ -866,7 +866,7 @@ QList<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model)
 * Reply = true if all alarms in the calendar were successfully imported
 *       = false if any alarms failed to be imported.
 */
-bool importAlarms(Resource& resource, QWidget* parent)
+bool importAlarms(Resource& resource, QWidget* parent)    //cppcheck-suppress[constParameterReference]  alarms are being added to 'resource'
 {
     qCDebug(KALARM_LOG) << "KAlarm::importAlarms" << resource.displayId();
     // Use KFileCustomDialog to allow files' mime types to be determined by
@@ -1769,6 +1769,7 @@ bool convertTimeString(const QByteArray& timeString, KADateTime& dateTime, const
     else
     {
         noTime = false;
+        // Get the minute value
         *s++ = 0;
         dt[4] = strtoul(s, &end, 10);
         if (end == s  ||  *end  ||  dt[4] >= 60)
@@ -1837,8 +1838,8 @@ bool convertTimeString(const QByteArray& timeString, KADateTime& dateTime, const
             {
                 dt[0] = defaultDt.date().year();
                 date.setDate(dt[0],
-                            (dt[1] < 0 ? defaultDt.date().month() : dt[1]),
-                            (dt[2] < 0 ? defaultDt.date().day() : dt[2]));
+                            (dt[1] < 0 ? defaultDt.date().month() : dt[1]),    //cppcheck-suppress[invalidFunctionArg] dt[1] was tested for non zero
+                            (dt[2] < 0 ? defaultDt.date().day() : dt[2]));     //cppcheck-suppress[invalidFunctionArg] dt[2] was tested for non zero
             }
             else
                 date.setDate(2000, 1, 1);  // temporary substitute for date
@@ -1853,8 +1854,8 @@ bool convertTimeString(const QByteArray& timeString, KADateTime& dateTime, const
             const KADateTime now = KADateTime::currentDateTime(dateTime.timeSpec());
             date = dateTime.date();
             date.setDate(now.date().year(),
-                        (dt[1] < 0 ? now.date().month() : dt[1]),
-                        (dt[2] < 0 ? now.date().day() : dt[2]));
+                        (dt[1] < 0 ? now.date().month() : dt[1]),    //cppcheck-suppress[invalidFunctionArg] dt[1] was tested for non zero
+                        (dt[2] < 0 ? now.date().day() : dt[2]));     //cppcheck-suppress[invalidFunctionArg] dt[2] was tested for non zero
             if (!date.isValid())
                 return false;
             if (noDate  &&  time < now.time())
@@ -1981,9 +1982,9 @@ namespace
 */
 void displayUpdateError(QWidget* parent, KAlarm::UpdateError code, const UpdateStatusData& status, bool showKOrgError)
 {
-    QString errmsg;
     if (status.status.status > KAlarm::UPDATE_KORG_ERR)
     {
+        QString errmsg;
         switch (code)
         {
             case KAlarm::ERR_ADD:

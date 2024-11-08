@@ -854,7 +854,7 @@ int KADateTimePrivate::timeZoneOffset(QTimeZone& local) const
         m2ndOccurrence = (secondOffset != offset);   // cancel "second occurrence" flag if not applicable
         offset = secondOffset;
     }
-    if (m2ndOccurrence)
+    if (m2ndOccurrence)                                 //cppcheck-suppress[duplicateCondition]  m2ndOccurrence can change after previous conditional
         offset = secondOffset;
     if (offset == InvalidOffset)
     {
