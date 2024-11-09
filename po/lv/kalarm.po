@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 00:41+0000\n"
+"POT-Creation-Date: 2024-11-09 00:40+0000\n"
 "PO-Revision-Date: 2012-07-05 12:56+0300\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian\n"
@@ -3626,49 +3626,49 @@ msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Atstāt atslēgtus"
 
-#: functions.cpp:1991
+#: functions.cpp:1992
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Kļūda saglabājot atgādinājumus"
 
-#: functions.cpp:1992
+#: functions.cpp:1993
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Kļūda saglabājot atgādinājumu"
 
-#: functions.cpp:1995
+#: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Kļūda dzēšot atgādinājumus"
 
-#: functions.cpp:1996
+#: functions.cpp:1997
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Kļūda dzēšot atgādinājumu"
 
-#: functions.cpp:1999
+#: functions.cpp:2000
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Kļūda saglabājot atkārtoti aktivizētus atgādinājumus"
 
-#: functions.cpp:2000
+#: functions.cpp:2001
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Kļūda saglabājot atkārtoti aktivizētu atgādinājumu"
 
-#: functions.cpp:2003
+#: functions.cpp:2004
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Kļūda saglabājot atgādinājumu sagataves"
 
-#: functions.cpp:2004
+#: functions.cpp:2005
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -3842,7 +3842,7 @@ msgstr ""
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3091
+#: kalarmcalendar/kaevent.cpp:3092
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "At Login"
@@ -3850,7 +3850,7 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Piesakoties"
 
-#: kalarmcalendar/kaevent.cpp:3091
+#: kalarmcalendar/kaevent.cpp:3092
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "At login"
@@ -3858,7 +3858,7 @@ msgctxt "@info"
 msgid "At login"
 msgstr "Piesakoties"
 
-#: kalarmcalendar/kaevent.cpp:3100 kalarmcalendar/kaevent.cpp:3187
+#: kalarmcalendar/kaevent.cpp:3101 kalarmcalendar/kaevent.cpp:3188
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3871,7 +3871,7 @@ msgstr[0] "Minūtes"
 msgstr[1] "Minūtes"
 msgstr[2] "Minūtes"
 
-#: kalarmcalendar/kaevent.cpp:3102 kalarmcalendar/kaevent.cpp:3189
+#: kalarmcalendar/kaevent.cpp:3103 kalarmcalendar/kaevent.cpp:3190
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3881,13 +3881,13 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: kalarmcalendar/kaevent.cpp:3104 kalarmcalendar/kaevent.cpp:3190
+#: kalarmcalendar/kaevent.cpp:3105 kalarmcalendar/kaevent.cpp:3191
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr ""
 
-#: kalarmcalendar/kaevent.cpp:3107 kalarmcalendar/kaevent.cpp:3194
+#: kalarmcalendar/kaevent.cpp:3108 kalarmcalendar/kaevent.cpp:3195
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3897,7 +3897,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: kalarmcalendar/kaevent.cpp:3109 kalarmcalendar/kaevent.cpp:3195
+#: kalarmcalendar/kaevent.cpp:3110 kalarmcalendar/kaevent.cpp:3196
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Weekly"
@@ -3908,7 +3908,7 @@ msgstr[0] "Katru nedēļu"
 msgstr[1] "Katru nedēļu"
 msgstr[2] "Katru nedēļu"
 
-#: kalarmcalendar/kaevent.cpp:3111
+#: kalarmcalendar/kaevent.cpp:3112
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Monthly"
@@ -3919,7 +3919,7 @@ msgstr[0] "Katru mēnesi"
 msgstr[1] "Katru mēnesi"
 msgstr[2] "Katru mēnesi"
 
-#: kalarmcalendar/kaevent.cpp:3113
+#: kalarmcalendar/kaevent.cpp:3114
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Yearly"
@@ -3930,7 +3930,7 @@ msgstr[0] "Katru gadu"
 msgstr[1] "Katru gadu"
 msgstr[2] "Katru gadu"
 
-#: kalarmcalendar/kaevent.cpp:3119
+#: kalarmcalendar/kaevent.cpp:3120
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -3938,7 +3938,7 @@ msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Nav"
 
-#: kalarmcalendar/kaevent.cpp:3197
+#: kalarmcalendar/kaevent.cpp:3198
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 00:41+0000\n"
+"POT-Creation-Date: 2024-11-09 00:40+0000\n"
 "PO-Revision-Date: 2016-08-15 16:35+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -3502,49 +3502,49 @@ msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Behold deaktiverede"
 
-#: functions.cpp:1991
+#: functions.cpp:1992
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Fejl under gemning af alarmer"
 
-#: functions.cpp:1992
+#: functions.cpp:1993
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Fejl under gemning af alarm"
 
-#: functions.cpp:1995
+#: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Fejl ved sletning af alarmer"
 
-#: functions.cpp:1996
+#: functions.cpp:1997
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Fejl ved sletning af alarm"
 
-#: functions.cpp:1999
+#: functions.cpp:2000
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Fejl under gemning af reaktiverede alarmer"
 
-#: functions.cpp:2000
+#: functions.cpp:2001
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Fejl under gemning af reaktiveret alarm"
 
-#: functions.cpp:2003
+#: functions.cpp:2004
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Fejl under gemning af alarmskabeloner"
 
-#: functions.cpp:2004
+#: functions.cpp:2005
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -3737,7 +3737,7 @@ msgstr "Forfalder:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3091
+#: kalarmcalendar/kaevent.cpp:3092
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Brief form of 'At Login'"
 #| msgid "Login"
@@ -3745,7 +3745,7 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Login"
 
-#: kalarmcalendar/kaevent.cpp:3091
+#: kalarmcalendar/kaevent.cpp:3092
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "At login"
@@ -3753,7 +3753,7 @@ msgctxt "@info"
 msgid "At login"
 msgstr "Ved login"
 
-#: kalarmcalendar/kaevent.cpp:3100 kalarmcalendar/kaevent.cpp:3187
+#: kalarmcalendar/kaevent.cpp:3101 kalarmcalendar/kaevent.cpp:3188
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3766,7 +3766,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 minut"
 msgstr[1] "%1 minutter"
 
-#: kalarmcalendar/kaevent.cpp:3102 kalarmcalendar/kaevent.cpp:3189
+#: kalarmcalendar/kaevent.cpp:3103 kalarmcalendar/kaevent.cpp:3190
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
@@ -3778,7 +3778,7 @@ msgid_plural "%1 Hours"
 msgstr[0] "1 time"
 msgstr[1] "%1 timer"
 
-#: kalarmcalendar/kaevent.cpp:3104 kalarmcalendar/kaevent.cpp:3190
+#: kalarmcalendar/kaevent.cpp:3105 kalarmcalendar/kaevent.cpp:3191
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Hours and minutes"
 #| msgid "%1h %2m"
@@ -3786,7 +3786,7 @@ msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1: %2"
 
-#: kalarmcalendar/kaevent.cpp:3107 kalarmcalendar/kaevent.cpp:3194
+#: kalarmcalendar/kaevent.cpp:3108 kalarmcalendar/kaevent.cpp:3195
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
@@ -3798,7 +3798,7 @@ msgid_plural "%1 Days"
 msgstr[0] "1 dag"
 msgstr[1] "%1 dage"
 
-#: kalarmcalendar/kaevent.cpp:3109 kalarmcalendar/kaevent.cpp:3195
+#: kalarmcalendar/kaevent.cpp:3110 kalarmcalendar/kaevent.cpp:3196
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Week"
@@ -3809,7 +3809,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 uge"
 msgstr[1] "%1 uger"
 
-#: kalarmcalendar/kaevent.cpp:3111
+#: kalarmcalendar/kaevent.cpp:3112
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Month"
@@ -3820,7 +3820,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 måned"
 msgstr[1] "%1 måneder"
 
-#: kalarmcalendar/kaevent.cpp:3113
+#: kalarmcalendar/kaevent.cpp:3114
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Year"
@@ -3831,7 +3831,7 @@ msgid_plural "%1 Years"
 msgstr[0] "1 år"
 msgstr[1] "%1 år"
 
-#: kalarmcalendar/kaevent.cpp:3119
+#: kalarmcalendar/kaevent.cpp:3120
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -3839,7 +3839,7 @@ msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Ingen"
 
-#: kalarmcalendar/kaevent.cpp:3197
+#: kalarmcalendar/kaevent.cpp:3198
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
