@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 00:41+0000\n"
+"POT-Creation-Date: 2024-11-09 02:31+0000\n"
 "PO-Revision-Date: 2024-09-15 18:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -3406,49 +3406,49 @@ msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Devre Dışı Bırak"
 
-#: functions.cpp:1991
+#: functions.cpp:1992
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Alarmlar kaydedilirken hata oluştu"
 
-#: functions.cpp:1992
+#: functions.cpp:1993
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Alarm kaydetme hatası"
 
-#: functions.cpp:1995
+#: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Alarmlar silinirken hata oluştu"
 
-#: functions.cpp:1996
+#: functions.cpp:1997
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Alarm silme hatası"
 
-#: functions.cpp:1999
+#: functions.cpp:2000
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Yeniden etkinleştirilen alarmlar kaydedilirken hata oluştu"
 
-#: functions.cpp:2000
+#: functions.cpp:2001
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Yeniden etkinleştirilen alarm kaydetme hatası"
 
-#: functions.cpp:2003
+#: functions.cpp:2004
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Alarm şablonları kaydedilirken hata oluştu"
 
-#: functions.cpp:2004
+#: functions.cpp:2005
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -3615,19 +3615,19 @@ msgstr "Süre bitimi:"
 msgid "KAlarm"
 msgstr "K Alarm"
 
-#: kalarmcalendar/kaevent.cpp:3091
+#: kalarmcalendar/kaevent.cpp:3092
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Oturum aç"
 
-#: kalarmcalendar/kaevent.cpp:3091
+#: kalarmcalendar/kaevent.cpp:3092
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "Oturum açılışında"
 
-#: kalarmcalendar/kaevent.cpp:3100 kalarmcalendar/kaevent.cpp:3187
+#: kalarmcalendar/kaevent.cpp:3101 kalarmcalendar/kaevent.cpp:3188
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3637,7 +3637,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 Dakika"
 msgstr[1] "%1 Dakika"
 
-#: kalarmcalendar/kaevent.cpp:3102 kalarmcalendar/kaevent.cpp:3189
+#: kalarmcalendar/kaevent.cpp:3103 kalarmcalendar/kaevent.cpp:3190
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3646,13 +3646,13 @@ msgid_plural "%1 Hours"
 msgstr[0] "1 Saat"
 msgstr[1] "%1 Saat"
 
-#: kalarmcalendar/kaevent.cpp:3104 kalarmcalendar/kaevent.cpp:3190
+#: kalarmcalendar/kaevent.cpp:3105 kalarmcalendar/kaevent.cpp:3191
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1sa %2dk"
 
-#: kalarmcalendar/kaevent.cpp:3107 kalarmcalendar/kaevent.cpp:3194
+#: kalarmcalendar/kaevent.cpp:3108 kalarmcalendar/kaevent.cpp:3195
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3661,7 +3661,7 @@ msgid_plural "%1 Days"
 msgstr[0] "1 Gün"
 msgstr[1] "%1 Gün"
 
-#: kalarmcalendar/kaevent.cpp:3109 kalarmcalendar/kaevent.cpp:3195
+#: kalarmcalendar/kaevent.cpp:3110 kalarmcalendar/kaevent.cpp:3196
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3669,7 +3669,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 Hafta"
 msgstr[1] "%1 Hafta"
 
-#: kalarmcalendar/kaevent.cpp:3111
+#: kalarmcalendar/kaevent.cpp:3112
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3677,7 +3677,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 Ay"
 msgstr[1] "%1 Ay"
 
-#: kalarmcalendar/kaevent.cpp:3113
+#: kalarmcalendar/kaevent.cpp:3114
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3685,13 +3685,13 @@ msgid_plural "%1 Years"
 msgstr[0] "1 Yıl"
 msgstr[1] "%1 Yıl"
 
-#: kalarmcalendar/kaevent.cpp:3119
+#: kalarmcalendar/kaevent.cpp:3120
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: kalarmcalendar/kaevent.cpp:3197
+#: kalarmcalendar/kaevent.cpp:3198
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"
