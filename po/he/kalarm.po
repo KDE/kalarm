@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-09 02:31+0000\n"
-"PO-Revision-Date: 2024-10-11 13:45+0300\n"
+"PO-Revision-Date: 2024-11-10 21:20+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1494,10 +1494,10 @@ msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת ה
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
 #: data/kalarmconfig.kcfg:326
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label Label for audio options"
 msgid "Sound"
-msgstr "&צליל"
+msgstr "צליל"
 
 #. i18n: ectx: whatsthis, entry (Base_DefaultSoundType), group (Defaults)
 #: data/kalarmconfig.kcfg:327
@@ -2131,16 +2131,16 @@ msgid ""
 msgstr "הזן את השעה האחרונה שבה יש לחזור על התזכורת"
 
 #: editdlg.cpp:305
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
-msgstr "שעה"
+msgstr "שעה:"
 
 #: editdlg.cpp:307
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
-msgstr "הזן את השעה האחרונה שבה יש לחזור על התזכורת"
+msgstr "הגדרת זמן התחלה לתזכורות על בסיס התבנית הזאת."
 
 #: editdlg.cpp:313
 #, fuzzy, kde-kuit-format
