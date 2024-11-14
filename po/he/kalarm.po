@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-09 00:40+0000\n"
-"PO-Revision-Date: 2024-11-10 21:20+0200\n"
+"PO-Revision-Date: 2024-11-13 08:25+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -2586,10 +2586,10 @@ msgid "Discard"
 msgstr "התעלמות"
 
 #: editdlgtypes.cpp:904
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
-msgstr "&פקודה"
+msgstr "יש לסמן כדי להתעלם מפלט הפקודה."
 
 #: editdlgtypes.cpp:1066
 #, kde-format
@@ -2615,34 +2615,34 @@ msgstr ""
 "%1"
 
 #: editdlgtypes.cpp:1130
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
-msgstr "שליחת עותק מהדוא\"ל לעצמך"
+msgstr "עותק של ההודעה לעצמי"
 
 #: editdlgtypes.cpp:1167
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
-msgstr "תזכורת חדשה"
+msgstr "תבנית תזכורת דוא״ל חדשה"
 
 #: editdlgtypes.cpp:1167
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
-msgstr "עריכת תזכורת"
+msgstr "עריכת תבנית תזכורת דוא״ל"
 
 #: editdlgtypes.cpp:1168
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
-msgstr "אפשר &תזכורות"
+msgstr "התראת דוא״ל חדשה"
 
 #: editdlgtypes.cpp:1168
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
-msgstr "אפשר &תזכורות"
+msgstr "עריכת תזכורת דוא״ל"
 
 #: editdlgtypes.cpp:1176
 #, fuzzy, kde-format
@@ -2651,10 +2651,10 @@ msgid "Send the email to the specified addressees now"
 msgstr "שליחת הדוא\"ל אל הכתובות המצויינות עכשיו"
 
 #: editdlgtypes.cpp:1177
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
-msgstr "&Sendmail"
+msgstr "שליחת הדוא״ל עכשיו"
 
 #: editdlgtypes.cpp:1188
 #, kde-format
@@ -2705,16 +2705,16 @@ msgid "Subject:"
 msgstr "נושא:"
 
 #: editdlgtypes.cpp:1230
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
-msgstr "הזן את נושא הדוא\"ל."
+msgstr "נא למלא את נושא הודעת הדוא״ל."
 
 #: editdlgtypes.cpp:1236
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
-msgstr "הזן את הודעת הדוא\"ל."
+msgstr "נא למלא את הודעת הדוא״ל."
 
 #: editdlgtypes.cpp:1244
 #, kde-format
@@ -2723,10 +2723,10 @@ msgid "Attachments:"
 msgstr "קבצים מצורפים:"
 
 #: editdlgtypes.cpp:1253
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
-msgstr "קבצים שיישלחו כמצורפים לדוא\"ל."
+msgstr "קבצים שיישלחו בצירוף להודעת הדוא״ל."
 
 #: editdlgtypes.cpp:1257 resourceselector.cpp:76
 #, kde-format
@@ -2797,12 +2797,10 @@ msgid "Send"
 msgstr "שליחה"
 
 #: editdlgtypes.cpp:1506
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
-msgstr ""
-"הדוא\"ל נשלח אל:\n"
-"%1"
+msgstr "הודעת הדוא״ל נשלחה אל:<nl/>%1<nl/>עותק סמוי: <email>%2</email>"
 
 #: editdlgtypes.cpp:1509
 #, kde-kuit-format
