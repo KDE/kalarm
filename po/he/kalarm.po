@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-09 00:40+0000\n"
-"PO-Revision-Date: 2024-11-13 08:25+0200\n"
+"PO-Revision-Date: 2024-11-18 08:27+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.08.1\n"
+"X-Generator: Lokalize 24.08.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -39,12 +39,10 @@ msgid "Your emails"
 msgstr "kde-l10n-he@kde.org"
 
 #: akonadiplugin/sendakonadimail.cpp:54
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "No mail transport configured for email identity <resource>%1</resource>"
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "לא מוגדרת תעבורת דוא״ל לזהות הדוא״ל <resource>%1</resource>"
 
 #: akonadiplugin/sendakonadimail.cpp:105
 #, kde-format
@@ -164,10 +162,10 @@ msgid "Schedule the alarm after the specified time interval from now."
 msgstr "קביעה של מועד התזכורת למשך הזמן המצויין מרגע זה."
 
 #: alarmtimewidget.cpp:149 editdlg.cpp:340
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr "<para>%1</para><para>%2</para>"
 
 #: alarmtimewidget.cpp:155
 #, kde-format
@@ -214,10 +212,10 @@ msgid "Select time delay from a list of preset values"
 msgstr "הזן את התאריך בו יש לקבוע את מועד התזכורת."
 
 #: alarmtimewidget.cpp:177
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 
 #: alarmtimewidget.cpp:209
 #, kde-format
@@ -277,53 +275,42 @@ msgid "Alarm time has already expired"
 msgstr "שעת התזכורת כבר חלפה"
 
 #: audioplayer_mpv.cpp:41 audioplayer_vlc.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
-msgstr "לא ניתן להפעיל את נגן השמע: %1"
+msgstr "לא ניתן לאתחל את מערכת השמע"
 
 #: audioplayer_mpv.cpp:49 audioplayer_mpv.cpp:57
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
-msgstr "לא ניתן להפעיל את נגן השמע: %1"
+msgstr "לא ניתן לאתחל את מערכת השמע: %1"
 
 #: audioplayer_mpv.cpp:106 audioplayer_mpv.cpp:171
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
 msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+"<para>שגיאה בניגון קובץ השמע <filename>%1</filename></para><para>%2</para>"
 
 #: audioplayer_mpv.cpp:133
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot set audio player properties: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot set the audio volume: %1"
-msgstr "לא ניתן להגדיר את מאפייני נגן השמע: %1"
+msgstr "לא ניתן להגדיר את עוצמת השמע: %1"
 
 #: audioplayer_vlc.cpp:46
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "<para>שגיאה בפתיחת קובץ שמע: <filename>%1</filename></para>"
 
 #: audioplayer_vlc.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
-msgstr "לא ניתן להפעיל את נגן השמע: %1"
+msgstr "לא ניתן להפעיל את נגן השמע"
 
 #: audioplayer_vlc.cpp:127 audioplayer_vlc.cpp:195
 #, fuzzy, kde-kuit-format
@@ -517,9 +504,9 @@ msgid "Message background color (name or hex 0xRRGGBB)"
 msgstr "צבע רקע הודעה (שם או בהקסדצימלי 0xRRGGBB)"
 
 #: commandoptions.cpp:147
-#, fuzzy, kde-format
+#, kde-format
 msgid "Message foreground color (name or hex 0xRRGGBB)"
-msgstr "      (0xRRGGBB צבע הרקע של ההודעה (שם או ערך הקס"
+msgstr "צבע חזית של ההודעה (שם או ערך הקס 0xRRGGBB)"
 
 #: commandoptions.cpp:151
 #, kde-format
@@ -532,9 +519,9 @@ msgid "Disable the alarm"
 msgstr "השבתת התזכורת"
 
 #: commandoptions.cpp:158
-#, fuzzy, kde-format
+#, kde-format
 msgid "Disable monitoring of all alarms"
-msgstr "א&ל תאפשר תזכורות כאשר התוכנית לא פועלת"
+msgstr "השבתת מעקב אחר כל התזכורות"
 
 #: commandoptions.cpp:161
 #, kde-format
@@ -2201,7 +2188,7 @@ msgstr "הזן את הטקסט של ההודעה של התזכורת. היא י�
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
-msgstr ""
+msgstr "שם התבנית כבר בשימוש"
 
 #: editdlg.cpp:1036
 #, kde-kuit-format
@@ -2219,6 +2206,8 @@ msgid ""
 "The start date does not match the alarm's recurrence pattern, so it will be "
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
+"תאריך ההתחלה לא תואם לתבנית החזרה של התזכורת, לכן הוא יותאם לתאריך של המופע "
+"הבא (%1)."
 
 #: editdlg.cpp:1072
 #, kde-format
@@ -2274,25 +2263,25 @@ msgstr "נא לבחור לוח שנה בו לשמור את התזכורת"
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
-msgstr ""
+msgstr "פחות אפשרויות <<"
 
 #: editdlg.cpp:1263
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
-msgstr ""
+msgstr "להציג פחות אפשרויות"
 
 #: editdlg.cpp:1268
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
-msgstr ""
+msgstr "אפשרויות נוספות >>"
 
 #: editdlg.cpp:1269
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
-msgstr ""
+msgstr "הצגת אפשרויות נוספות"
 
 #: editdlgtypes.cpp:75
 #, kde-format
@@ -2316,7 +2305,7 @@ msgstr "חלון"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Notification"
-msgstr ""
+msgstr "התראה"
 
 #: editdlgtypes.cpp:91
 #, fuzzy, kde-format
@@ -2364,7 +2353,7 @@ msgstr "הודעת טקסט"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
-msgstr ""
+msgstr "תוכן הקובץ"
 
 #: editdlgtypes.cpp:147
 #, kde-format
@@ -2479,19 +2468,19 @@ msgstr "בחירת קובץ טקסט להצגה"
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
-msgstr ""
+msgstr "נא למלא סקריפט"
 
 #: editdlgtypes.cpp:807
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
-msgstr ""
+msgstr "הפעלה בחלון מסוף"
 
 #: editdlgtypes.cpp:808
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
-msgstr ""
+msgstr "הפעלה בחלון מסוף"
 
 #: editdlgtypes.cpp:838
 #, fuzzy, kde-format
@@ -2533,7 +2522,7 @@ msgstr "הפעלת הפקודה המצויינת עכשיו"
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
-msgstr ""
+msgstr "לא להודיע על שגיאות"
 
 #: editdlgtypes.cpp:856
 #, fuzzy, kde-format
@@ -2551,7 +2540,7 @@ msgstr "פלט פקודה"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
-msgstr ""
+msgstr "יש לסמן כדי להפעיל את הפקודה בחלון מסוף"
 
 #: editdlgtypes.cpp:883
 #, fuzzy, kde-format
