@@ -5373,7 +5373,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
                     types += KAEventPrivate::TIME_DEFERRAL_TYPE;
                 if (lateCancell)
                     addLateCancel = true;
-                if (types.count() > 0)
+                if (!types.isEmpty())
                     alarm_->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY, types.join(QLatin1Char(',')));
 
                 if (pre_0_7  &&  alarm_->repeatCount() > 0  &&  alarm_->snoozeTime().value() > 0)
