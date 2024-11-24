@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-09 02:31+0000\n"
-"PO-Revision-Date: 2024-11-18 08:27+0200\n"
+"PO-Revision-Date: 2024-11-23 14:35+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -6015,10 +6015,10 @@ msgid ""
 msgstr "סוג החזרה של התזכורת או תדירות החזרה שלה."
 
 #: recurrenceedit.cpp:193
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Recurrence End"
-msgstr "סוף החזרה"
+msgstr "סוף החזרות"
 
 #: recurrenceedit.cpp:200
 #, kde-format
@@ -6185,22 +6185,22 @@ msgid ""
 msgstr ""
 
 #: recurrenceedit.cpp:380
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "End date is earlier than start date"
-msgstr "תאריך הסיום מוקדם יותר מתאריך ההתחלה"
+msgstr "תאריך הסיום קודם לתאריך ההתחלה"
 
 #: recurrenceedit.cpp:381
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "End date/time is earlier than start date/time"
-msgstr "תאריך\\שעת הסיום מוקדמים יותר מתאריך\\שעת ההתחלה"
+msgstr "תאריך/שעת הסיום קודמים לתאריך/שעת ההתחלה"
 
 #: recurrenceedit.cpp:653
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Date cannot be earlier than start date"
-msgstr "התאריך לא יכול להיות לפני %1"
+msgstr "התאריך לא יכול להיות לפני תאריך ההתחלה"
 
 #: recurrenceedit.cpp:1066
 #, kde-format
@@ -6991,16 +6991,16 @@ msgid "Command execution failed"
 msgstr "הפעלת הפקודה נכשלה"
 
 #: resources/resourcedatamodelbase.cpp:453
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
-msgstr "אפשר &תזכורות"
+msgstr "פעולת טרום הריצה נכשלה"
 
 #: resources/resourcedatamodelbase.cpp:455
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
-msgstr "אפשר &תזכורות"
+msgstr "הפעולה שלאחר ההרצה נכשלה"
 
 #: resources/resourcedatamodelbase.cpp:457
 #, kde-format
@@ -7015,26 +7015,22 @@ msgid "Disabled"
 msgstr "מושבת"
 
 #: resources/resourcedatamodelbase.cpp:491
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename><nl/>%4"
-msgstr ""
-"%1\n"
-"אינו קריא."
+msgstr "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 
 #: resources/resourcedatamodelbase.cpp:496
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename>"
-msgstr ""
-"%1\n"
-"אינו קריא."
+msgstr "%1<nl/>%2: <filename>%3</filename>"
 
 #: resources/resourcedatamodelbase.cpp:557
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
-msgstr "התאריך והשעה המתוכננים הבאים של התזכורת"
+msgstr "התאריך והשעה המתוזמנים הבאים לתזכורת"
 
 #: resources/resourcedatamodelbase.cpp:559
 #, fuzzy, kde-format
