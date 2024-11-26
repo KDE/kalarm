@@ -22,35 +22,21 @@
 #include <iostream>
 #include <stdlib.h>
 
-#define HAVE_KICONTHEME __has_include(<KIconTheme>)
-#if HAVE_KICONTHEME
 #include <KIconTheme>
-#endif
 
-#define HAVE_STYLE_MANAGER __has_include(<KStyleManager>)
-#if HAVE_STYLE_MANAGER
 #include <KStyleManager>
-#endif
 
 #define PROGRAM_NAME "kalarm"
 
 int main(int argc, char* argv[])
 {
-#if HAVE_KICONTHEME
     KIconTheme::initTheme();
-#endif
     // Use QScopedPointer to ensure the QCoreApplication instance is deleted
     // before libraries unload, to avoid crashes during clean-up.
     QScopedPointer<KAlarmApp> app(KAlarmApp::create(argc, argv));
 
     const QStringList args = app->arguments();
-#if HAVE_STYLE_MANAGER
     KStyleManager::initStyle();
-#else // !HAVE_STYLE_MANAGER
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
-    QApplication::setStyle(QStringLiteral("breeze"));
-#endif
-#endif
     KLocalizedString::setApplicationDomain(QByteArrayLiteral("kalarm"));
     KAboutData aboutData(QStringLiteral(PROGRAM_NAME), i18n(KALARM_NAME),
                          QStringLiteral(KALARM_VERSION " (KDE Gear " RELEASE_SERVICE_VERSION ")"),
