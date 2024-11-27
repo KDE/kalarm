@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 00:40+0000\n"
+"POT-Creation-Date: 2024-11-27 00:40+0000\n"
 "PO-Revision-Date: 2002-10-12 14:57+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -341,13 +341,13 @@ msgstr "Isiqalo esizenzekelayo ngexesha l&okufaka igama elithile"
 msgid "Copyright 2001-%1, David Jarvie"
 msgstr ""
 
-#: autostart/autostart.cpp:53 main.cpp:60
+#: autostart/autostart.cpp:53 main.cpp:46
 #, kde-format
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr ""
 
-#: autostart/autostart.cpp:53 main.cpp:60
+#: autostart/autostart.cpp:53 main.cpp:46
 #, kde-format
 msgid "Author"
 msgstr ""
@@ -4395,12 +4395,12 @@ msgstr ""
 msgid "System time zone"
 msgstr "Ixesha"
 
-#: main.cpp:57
+#: main.cpp:43
 #, kde-format
 msgid "Personal alarm message, command and email scheduler by KDE"
 msgstr ""
 
-#: main.cpp:59
+#: main.cpp:45
 #, kde-format
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr ""

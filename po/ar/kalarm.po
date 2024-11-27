@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 00:40+0000\n"
+"POT-Creation-Date: 2024-11-27 00:40+0000\n"
 "PO-Revision-Date: 2022-09-15 23:00+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -352,14 +352,14 @@ msgstr "بدء «منبّهك» الآلي عند الولوج"
 msgid "Copyright 2001-%1, David Jarvie"
 msgstr "الحقوق محفوظة 2001-%1، لِ‍ David Jarvie"
 
-#: autostart/autostart.cpp:53 main.cpp:60
+#: autostart/autostart.cpp:53 main.cpp:46
 #, fuzzy, kde-format
 #| msgid "David Jarvie"
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
 
-#: autostart/autostart.cpp:53 main.cpp:60
+#: autostart/autostart.cpp:53 main.cpp:46
 #, kde-format
 msgid "Author"
 msgstr "المؤلف"
@@ -4352,13 +4352,13 @@ msgstr "اضغط مفتاح Shift أثناء نقر زرّيّ ال"
 msgid "System time zone"
 msgstr "منطقة النظام الزمنية"
 
-#: main.cpp:57
+#: main.cpp:43
 #, fuzzy, kde-format
 #| msgid "Personal alarm message, command and email scheduler for KDE"
 msgid "Personal alarm message, command and email scheduler by KDE"
 msgstr "مجدوِل رسائل وأوامر وبُرد إلكترونيّة شخصيّ."
 
-#: main.cpp:59
+#: main.cpp:45
 #, kde-format
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "الحقوق محفوظة © 2001-%1، لِ‍ ديفيد جارفي"
