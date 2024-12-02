@@ -8,7 +8,7 @@
 # Ilpo Kantonen <ilpo@iki.fi>, 2005, 2006.
 # Mikko Piippo <piippo@cc.helsinki.fi>, 2007, 2008.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2010, 2012, 2013, 2014, 2015, 2016.
-# Tommi Nieminen <translator@legisign.org>, 2011, 2012, 2013, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Tommi Nieminen <translator@legisign.org>
 # Niklas Laxström <niklas.laxstrom+kdetrans@gmail.com>, 2012.
 # Jiri Grönroos <jiri.gronroos+kde@iki.fi>, 2012.
 #
@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-27 00:40+0000\n"
-"PO-Revision-Date: 2024-04-18 16:04+0300\n"
+"PO-Revision-Date: 2024-10-20 21:08+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -31,13 +31,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-POT-Import-Date: 2012-12-01 22:24:56+0000\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Tommi Nieminen,Kim Enkovaara,Tapio Mattila,Ilpo Kantonen,Mikko Piippo"
+msgstr ""
+"Tommi Nieminen, Kim Enkovaara, Tapio Mattila, Ilpo Kantonen, Mikko Piippo"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -291,27 +291,19 @@ msgid "Alarm time has already expired"
 msgstr "Hälytyksen aika on jo mennyt"
 
 #: audioplayer_mpv.cpp:41 audioplayer_vlc.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
-msgstr "Äänisoitinta ei saada valmisteltua: %1"
+msgstr "Äänijärjestelmää ei saatu alustetuksi"
 
 #: audioplayer_mpv.cpp:49 audioplayer_mpv.cpp:57
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
-msgstr "Äänisoitinta ei saada valmisteltua: %1"
+msgstr "Äänijärjestelmää ei saatu alustetuksi: %1"
 
 #: audioplayer_mpv.cpp:106 audioplayer_mpv.cpp:171
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
@@ -320,44 +312,29 @@ msgstr ""
 "%2</para>"
 
 #: audioplayer_mpv.cpp:133
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot set audio player properties: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot set the audio volume: %1"
-msgstr "Äänisoittimen ominaisuuksia ei saada asetettua: %1"
+msgstr "Äänenvoimakkuutta ei saada asetettua: %1"
 
 #: audioplayer_vlc.cpp:46
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
-msgstr ""
-"<para>Virhe toistettaessa äänitiedostoa: <filename>%1</filename></para><para>"
-"%2</para>"
+msgstr "<para>Virhe avattaessa äänitiedostoa: <filename>%1</filename></para>"
 
 #: audioplayer_vlc.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
-msgstr "Äänisoitinta ei saada valmisteltua: %1"
+msgstr "Äänisoitinta ei saada alustettua"
 
 #: audioplayer_vlc.cpp:127 audioplayer_vlc.cpp:195
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
 msgstr ""
-"<para>Virhe toistettaessa äänitiedostoa: <filename>%1</filename></para><para>"
-"%2</para>"
+"<para>Virhe toistettaessa äänitiedostoa: <filename>%1</filename></para>"
 
 #: autostart/autostart.cpp:49
 #, kde-format
@@ -375,8 +352,7 @@ msgid "Copyright 2001-%1, David Jarvie"
 msgstr "Tekijänoikeus 2001–%1 David Jarvie"
 
 #: autostart/autostart.cpp:53 main.cpp:46
-#, fuzzy, kde-format
-#| msgid "David Jarvie"
+#, kde-format
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
@@ -1042,28 +1018,21 @@ msgstr "Käynnistä kirjauduttaessa"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-#| "should always be checked unless you intend to discontinue use of KAlarm.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
-"<p>Käynnistä KAlarm automaattisesti aina KDE:n käynnistyessä.</p><p>Tulisi "
-"aina olla valittuna, ellet aio lopettaa KAlarmin käyttämistä.</p>"
+"<p>Käynnistä KAlarm automaattisesti KDE:ta käynnistettäessä.</p><p>Tämän "
+"tulisi aina olla valittuna, jos RunMode=Auto, muuten ei.</p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Run Mode"
+#, kde-format
 msgctxt "@label"
 msgid "Run mode"
-msgstr "Ajotila"
+msgstr "Suoritustapa"
 
 #. i18n: ectx: whatsthis, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:138
@@ -1072,29 +1041,29 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
 msgstr ""
+"Suoritetaanko KAlarm automaattisesti kirjauduttaessa, käyttäjän pyynnöstä "
+"vai ei lainkaan."
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:140
 #, kde-format
 msgctxt "@option"
 msgid "Run automatically"
-msgstr ""
+msgstr "Suorita automaattisesti"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:141
 #, kde-format
 msgctxt "@option"
 msgid "Run manually only"
-msgstr ""
+msgstr "Suorita vain käyttäjän pyynnöstä"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:142
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option"
 msgid "Do not run"
-msgstr "Älä toista"
+msgstr "Älä suorita"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:147
@@ -4370,15 +4339,13 @@ msgid "Append to existing file"
 msgstr "Lisää olemassa olevaan tiedostoon"
 
 #: lib/messagebox.h:105 lib/messagebox.h:114 lib/messagebox.h:151
-#, fuzzy, kde-format
-#| msgid "Yes"
+#, kde-format
 msgctxt "@action:button"
 msgid "Yes"
 msgstr "Kyllä"
 
 #: lib/messagebox.h:106 lib/messagebox.h:115 lib/messagebox.h:152
-#, fuzzy, kde-format
-#| msgid "No"
+#, kde-format
 msgctxt "@action:button"
 msgid "No"
 msgstr "Ei"
@@ -5123,7 +5090,7 @@ msgstr "Ajotila"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run automatically"
-msgstr ""
+msgstr "Suorita automaattisesti"
 
 #: prefdlg.cpp:459
 #, kde-format
@@ -5132,12 +5099,14 @@ msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
 msgstr ""
+"Käynnistä KAlarm automaattisesti kirjauduttaessa. Valinta tulee valita, "
+"jotta KAlarm toimisi normaalisti."
 
 #: prefdlg.cpp:462
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run manually only"
-msgstr ""
+msgstr "Suorita vain käyttäjän pyynnöstä"
 
 #: prefdlg.cpp:465
 #, kde-format
@@ -5146,14 +5115,14 @@ msgid ""
 "Only run KAlarm manually, never automatically. KAlarm will only function "
 "when you manually start it."
 msgstr ""
+"Suorita KAlarm vain käyttäjän pyynnöstä. KAlarm toimii vain käynnistettyäsi "
+"sen itse."
 
 #: prefdlg.cpp:468
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Do not run"
-msgstr "Älä toista"
+msgstr "Älä suorita"
 
 #: prefdlg.cpp:471
 #, kde-format
@@ -5162,14 +5131,14 @@ msgid ""
 "Stop using KAlarm. If you later run it again, it will then resume normal "
 "functioning."
 msgstr ""
+"Lakkaa käyttämästä KAlarmia. Jos suoritat sen myöhemmin, se jatkaa normaalia "
+"toimintaa."
 
 #: prefdlg.cpp:474
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Activate <application>KAlarm</application>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr "Aktivoi <application>KAlarm</application>"
+msgstr "Suorita <application>KAlarm</application> normaalisti"
 
 #: prefdlg.cpp:481
 #, kde-format
@@ -5324,18 +5293,14 @@ msgid "Command to invoke terminal window not found: <command>%1</command>"
 msgstr "Pääteikkunan avaavaa komentoa ei löydy: <command>%1</command>"
 
 #: prefdlg.cpp:702
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "You should not uncheck this option unless you intend to discontinue use "
-#| "of <application>KAlarm</application>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "You should not check this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
-"Älä poista valintaa, ellet aio lopettaa <application>KAlarmin</application> "
-"käyttöä"
+"Tätä ei tulisi valita, ellet aio lakata käyttämästä <application>KAlarm</"
+"application>ia."
 
 #: prefdlg.cpp:713
 #, kde-kuit-format
@@ -5344,6 +5309,8 @@ msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
 msgstr ""
+"Tämä estää <application>KAlarm</application>ia toimimasta, paitsi<nl/>kun "
+"käyttäjä itse käynnistää sen."
 
 #: prefdlg.cpp:758
 #, kde-kuit-format
@@ -8653,15 +8620,7 @@ msgid "Cannot schedule wakeup time for a date-only alarm"
 msgstr "Herätysaikaa ei voi ajastaa vain päivämäärän asettavasta hälytyksesta"
 
 #: wakedlg.cpp:150
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>This wakeup will cancel any existing wakeup which has been set by "
-#| "KAlarm or any other application, because your computer can only schedule "
-#| "a single wakeup time.</para><para><b>Note:</b> Wake From Suspend is not "
-#| "supported at all on some computers, especially older ones, and some "
-#| "computers only support setting a wakeup time up to 24 hours ahead. You "
-#| "may wish to set up a test alarm to check your system's capability.</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>This wakeup will cancel any existing wakeup which has been set by "
@@ -8673,10 +8632,10 @@ msgid ""
 msgstr ""
 "<para>Tämä herätys peruu mahdollisen olemassa olevan herätyksen, joka on "
 "voitu asettaa KAlarmilla tai toisella sovelluksella, koska tietokoneesi voi "
-"asettaa vain yhden herätysajan.</para><para><b>Huomaa:</b> Kaikki koneet, "
-"vallankaan vanhemmat, eivät tue lepotilasta heräämistä, ja jotkin tukevat "
-"herätystä vain 24 tuntia eteenpäin. Testihälytyksellä voi kokeilla "
-"järjestelmän kykyjä.</para>"
+"asettaa vain yhden herätysajan.</para><para><note>Kaikki koneet, vallankaan "
+"vanhemmat, eivät tue lepotilasta heräämistä, ja jotkin tukevat herätystä "
+"vain 24 tuntia eteenpäin. Testihälytyksellä voi kokeilla järjestelmän kykyjä."
+"</note></para>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: wakedlg.ui:21
