@@ -600,7 +600,7 @@ bool Resources::addResource(ResourceType* instance, Resource& resource)
 
 void Resources::removeResource(ResourceId id)
 {
-    if (mResources.remove(id) > 0)
+    if (mResources.remove(id))
         Q_EMIT instance()->resourceRemoved(id);
 }
 
