@@ -451,7 +451,16 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
-    <release version="3.10.0" date="2024-12-12"/>
+    <release version="3.10.0" date="2024-12-12">
+      <description>
+        <p>Release description</p>
+        <ul>
+          <li>Show all Run Mode options in Preferences dialog. </li>
+          <li>Provide build option to use VLC or MPV to play sounds.</li>
+          <li>Convert to Qt 6.5 QDateTime/QTimeZone changes.</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.9.2.1" date="2024-11-07"/>
     <release version="3.9.2" date="2024-10-10">
       <description>
