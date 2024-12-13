@@ -1234,10 +1234,6 @@ void MessageWindow::enableEditButton(bool enable)
 
 /******************************************************************************
 * Check whether the message window should be modal, i.e. with title bar etc.
-* Normally this follows the Preferences setting, but if there is a full screen
-* window displayed, on X11 the message window has to bypass the window manager
-* in order to display on top of it (which has the side effect that it will have
-* no window decoration).
 *
 * Also find the usable area of the desktop (excluding panel etc.), on the
 * appropriate screen if there are multiple screens.
@@ -1320,18 +1316,6 @@ bool MessageWindow::getWorkAreaAndModal()
             }
         }
         return false;  // can't logically get here, since there can only be one active window...
-    }
-    if (modal)
-    {
-#if ENABLE_X11
-        if (KWindowSystem::isPlatformX11())
-        {
-            const WId activeId = KX11Extras::activeWindow();
-            const KWindowInfo wi = KWindowInfo(activeId, NET::WMState);
-            if (wi.valid()  &&  wi.hasState(NET::FullScreen))
-                return false;    // the active window is full screen.
-        }
-#endif
     }
     return modal;
 }
