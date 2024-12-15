@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-09 02:31+0000\n"
-"PO-Revision-Date: 2024-12-13 22:10+0100\n"
+"PO-Revision-Date: 2024-12-14 10:48+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -1033,6 +1033,7 @@ msgctxt "@label"
 msgid "Start at login"
 msgstr "Iniciar ao acceder"
 
+# skip-rule: trasno-disable_reverse
 #. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
 #, kde-format
@@ -1143,7 +1144,7 @@ msgid ""
 msgstr ""
 "<p>Indique as características da xanela de alarma de mensaxe:<ul><li>Se se "
 "marca, a xanela é unha xanela normal cunha barra de título que captura a "
-"entrada polo teclado cando aparece.</li><li>Se se desactiva, a xanela non "
+"entrada polo teclado cando aparece.</li><li>Se se desmarca, a xanela non "
 "interfire co que estea a teclear cando apareza, pero non ten unha barra de "
 "título nin se pode mover nin redimensionar.</li></ul></p>"
 
@@ -4040,7 +4041,7 @@ msgstr "Asunto da mensaxe"
 #, kde-format
 msgctxt "@label Email address"
 msgid "Email sender ID"
-msgstr "Identificador do remite"
+msgstr "Identificador de remitente"
 
 #: kalarmcalendar/kaeventformatter.cpp:149
 #, kde-format
@@ -5606,7 +5607,7 @@ msgid ""
 "Uncheck to store archived alarms indefinitely. Check to enter how long "
 "archived alarms should be stored."
 msgstr ""
-"Desactíveo para almacenar as alarmas arquivadas indefinidamente. Márqueo "
+"Desmárqueo para almacenar as alarmas arquivadas indefinidamente. Márqueo "
 "para inserir o tempo que se deberán almacenar as alarmas caducadas."
 
 #: prefdlg.cpp:1033
@@ -6182,7 +6183,7 @@ msgid ""
 "Uncheck to display all of the next 24 hours' alarms in the system tray "
 "tooltip. Check to enter an upper limit on the number to be displayed."
 msgstr ""
-"Desactive isto para amosar todas as alarmas das vindeiras 24 horas na "
+"Desmarque isto para amosar todas as alarmas das vindeiras 24 horas na "
 "información da área de notificación. Márqueo para inserir un límite máximo "
 "do número de alarmas a amosar."
 
@@ -6299,7 +6300,7 @@ msgstr ""
 "<para>Especifique as características da xanela de alarma de mensaxe:"
 "<list><item>Se se marca, a xanela é unha xanela normal cunha barra de título "
 "que captura a entrada polo teclado cando aparece.</item><item>Se se "
-"desactiva, a xanela non interfire co que estea a teclear cando apareza, pero "
+"desmarca, a xanela non interfire co que estea a teclear cando apareza, pero "
 "non ten unha barra de título nin se pode mover ou redimensionar.</item></"
 "list></para>"
 
