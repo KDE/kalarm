@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-27 00:40+0000\n"
-"PO-Revision-Date: 2024-12-14 10:48+0100\n"
+"PO-Revision-Date: 2024-12-15 23:47+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2419,6 +2419,7 @@ msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "A repetición xa pasou"
 
+# skip-rule: trasno-enable_reverse
 #: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
@@ -3143,7 +3144,7 @@ msgid ""
 "available if archived alarms are currently being displayed."
 msgstr ""
 "Marque isto para incluír as alarmas arquivadas na busca. Esta opción está só "
-"dispoñíbel se se están a amosar actualmente as alarmas activadas."
+"dispoñíbel se se están a amosar actualmente as alarmas arquivadas."
 
 #: find.cpp:122
 #, kde-format
@@ -5973,6 +5974,7 @@ msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
 msgstr "Horas/Minutos"
 
+# skip-rule: trasno-enable_reverse
 #: prefdlg.cpp:1514
 #, kde-format
 msgctxt "@info:whatsthis"
