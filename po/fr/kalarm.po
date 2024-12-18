@@ -1004,7 +1004,7 @@ msgid ""
 "Choose whether to be able to give alarms a name. This is a convenience to "
 "help you to identify alarms."
 msgstr ""
-"Sélectionner si vous être capable ou non de donner un nom à des alarmes. "
+"Sélectionner si vous êtes capable ou non de donner un nom à des alarmes. "
 "Ceci est une facilité vous aidant à identifier les alarmes."
 
 #. i18n: ectx: label, entry (MessageFont), group (General)
