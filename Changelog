@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.10.1 (KDE Gear 24.12.1) --- 20 December 2024 ===
+* Show normal decorated alarm windows over full screen applications on X11.
+
 === Version 3.10.0 (KDE Gear 24.12) --- 30 September 2024 ===
 * Provide build option to use VLC or MPV to play sounds.
 * Show all Run Mode options in Preferences dialogue. 

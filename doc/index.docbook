@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2024-9-12</date>
-<releaseinfo>3.10.0 (KDE Gear 24.12)</releaseinfo>
+<date>2024-12-20</date>
+<releaseinfo>3.10.1 (KDE Gear 24.12.1)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -2107,11 +2107,6 @@ interfere with your typing. However in this mode the window has no
 titlebar or frame, so you cannot move it or resize it.</para>
 </listitem>
 </itemizedlist>
-
-<note><para>When an alarm is displayed on top of a full screen
-application, it is shown as a non-modal window regardless of this
-configuration setting. This is due to a limitation of the window
-system.</para></note>
 
 <para>You can choose in the
 <link linkend="preferences-view">Configuration dialog</link> which of
