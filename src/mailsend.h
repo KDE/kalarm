@@ -17,7 +17,7 @@ namespace MailSend
 // Some data is required by KAMail, while other data is used by the caller.
 struct JobData
 {
-    JobData() = default;
+    JobData() = default;       //cppcheck-suppress[uninitMemberVar]  user must initialise struct
     JobData(KAlarmCal::KAEvent& e, const KAlarmCal::KAAlarm& a, bool resched, bool notify)
           : event(e), alarm(a), reschedule(resched), allowNotify(notify), queued(false) {}
     KAlarmCal::KAEvent  event;

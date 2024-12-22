@@ -121,7 +121,7 @@ public:
         KAAlarm::Type     alarmType;
         KAEvent::CmdErr   commandError;
 
-        DeferDlgData(MessageDisplay* m, DeferAlarmDlg* d) : dlg(d), display(m) {}
+        DeferDlgData(MessageDisplay* m, DeferAlarmDlg* d) : dlg(d), display(m) {}     //cppcheck-suppress[uninitMemberVar]  user must initialise struct
         ~DeferDlgData();
     };
 

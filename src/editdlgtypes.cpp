@@ -1088,7 +1088,7 @@ bool EditCommandAlarmDlg::type_validate(bool trial)
 */
 void EditCommandAlarmDlg::type_executedTry(const QString& text, void* result)
 {
-    auto* proc = (ShellProcess*)result;
+    auto* proc = static_cast<ShellProcess*>(result);
     if (proc  &&  proc != (void*)-1
     &&  mCmdOutputGroup->checkedButton() != mCmdExecInTerm)
     {

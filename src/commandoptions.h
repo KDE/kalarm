@@ -45,11 +45,15 @@ public:
     void                process();
     Command             command() const           { return mCommand; }
     QString             commandName() const;
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString             eventId() const           { return mEventId; }
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString             resourceId() const        { return mResourceId; }
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString             name() const              { return mName; }
     EditAlarmDlg::Type  editType() const          { return mEditType; }
     KAEvent::SubAction  editAction() const        { return mEditAction; }
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString             text() const              { return mText; }
     KADateTime          alarmTime() const         { return mAlarmTime; }
     KARecurrence*       recurrence() const        { return mRecurrence; }
@@ -59,14 +63,18 @@ public:
     QColor              bgColour() const          { return mBgColour; }
     QColor              fgColour() const          { return mFgColour; }
     int                 reminderMinutes() const   { return mReminderMinutes; }
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString             audioFile() const         { return mAudioFile; }
     float               audioVolume() const       { return mAudioVolume; }
     KCalendarCore::Person::List addressees() const     { return mAddressees; }
+                             //cppcheck-suppress[returnByReference]  QStringList implicitly shared
     QStringList         attachments() const       { return mAttachments; }
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString             subject() const           { return mSubject; }
     uint                fromID() const            { return mFromID; }
     KAEvent::Flags      flags() const             { return mFlags; }
     bool                disableAll() const        { return mDisableAll; }
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString             outputText() const        { return mError; }
 #ifndef NDEBUG
     KADateTime          simulationTime() const    { return mSimulationTime; }

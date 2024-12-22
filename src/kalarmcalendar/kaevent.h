@@ -449,6 +449,7 @@ public:
     /** Return the event's unique identifier. Note that the UID is guaranteed to be unique
      *  only within the calendar containing the event.
      */
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString id() const;
 
     /** Increment the revision number of the event (SEQUENCE property in iCalendar). */
@@ -470,6 +471,7 @@ public:
     KACalendar::Compat compatibility() const;
 
     /** Return the original KCalendarCore::Event's custom properties in the source calendar. */
+                             //cppcheck-suppress[returnByReference]  QMap implicitly shared
     QMap<QByteArray, QString> customProperties() const;
 
     /** Return the action sub-type of the event's main alarm. For display alarms,
@@ -544,12 +546,14 @@ public:
     void setName(const QString& newName);
 
     /** Return the alarm's name. */
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString name() const;
 
     /** Return the alarm's text. Its significance depends on the type of alarm;
      *  alternatively, use message(), displayMessage(), fileName() or command(),
      *  which incorporate checks on alarm type.
      */
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString cleanText() const;
 
     /** Return the message text for a display alarm, or the email body for
@@ -609,6 +613,7 @@ public:
     void setLogFile(const QString& logfile);
     /** Return the log file which command alarm output should be written to.
      *  @return log file path, or empty if no log file. */
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString logFile() const;
 
     /** Return whether alarm acknowledgement must be confirmed by the user, for a display alarm. */
@@ -656,9 +661,11 @@ public:
     QString emailPureAddresses(const QString& sep) const;
 
     /** Return the email subject line, for an email alarm. */
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString emailSubject() const;
 
     /** Return the list of file paths of the attachments, for an email alarm. */
+                             //cppcheck-suppress[returnByReference]  QStringList implicitly shared
     QStringList emailAttachments() const;
 
     /** Return the file paths of the attachments, as a string, for an email alarm.
@@ -684,6 +691,7 @@ public:
     /** Return the audio file path.
      *  @see setAudioFile()
      */
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString audioFile() const;
 
     /** Return the sound volume (the final volume if fade is specified).
@@ -754,11 +762,13 @@ public:
     void setActions(const QString& pre, const QString& post, ExtraActionOptions preOptions);
 
     /** Return the shell command to execute before the alarm is displayed. */
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString preAction() const;
 
     /** Return the shell command to execute after the display alarm is acknowledged.
      *  @see setActions()
      */
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString postAction() const;
 
     /** Return the pre-alarm action options.

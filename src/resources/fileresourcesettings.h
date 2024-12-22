@@ -82,12 +82,14 @@ public:
     QUrl url() const;
 
     /** Return the resource's storage location, as a displayable string. */
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString displayLocation() const;
 
     /** Return the resource's storage type. */
     Storage storageType() const;
 
     /** Return the resource's display name. */
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString displayName() const;
 
     /** Set the resource's display name.
@@ -254,6 +256,7 @@ public:
     ResourceType::Changes setUpdateFormat(bool update, bool save = true);
 
     /** Return the saved hash of the calendar file contents. */
+                             //cppcheck-suppress[returnByReference]  QByteArray implicitly shared
     QByteArray hash() const;
 
     /** Set the saved hash of the calendar file contents.

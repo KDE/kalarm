@@ -54,6 +54,7 @@ public:
 
     ResourceId resourceId() const            { return mResourceId; }
     ResourceId resourceDisplayId() const;
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString    eventId() const               { return mEventId; }
     void       setResourceId(ResourceId id)  { mResourceId = id; }
 

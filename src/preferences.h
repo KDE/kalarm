@@ -55,6 +55,7 @@ public:
     static void             setAutoHideSystemTray(int timeout);
 
     // Access to settings
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     static QString          previousVersion()                { return mPreviousVersion; }
     static Backend          previousBackend()                { return mPreviousBackend; }
     static RunMode          runMode()                        { return self()->base_RunMode(); }

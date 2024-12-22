@@ -31,6 +31,7 @@ public:
     explicit PluginBase(QObject* parent = nullptr, const QList<QVariant>& = {});
     ~PluginBase() override;
 
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString name() const  { return mName; }
 
     /** Create birthday model instances. */

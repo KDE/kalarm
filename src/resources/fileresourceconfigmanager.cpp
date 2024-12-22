@@ -238,7 +238,7 @@ QString FileResourceConfigManager::groupName(int groupIndex)
 /******************************************************************************
 * Create a new resource with the given settings.
 */
-Resource FileResourceConfigManager::createResource(FileResourceSettings::Ptr& settings)
+Resource FileResourceConfigManager::createResource(const FileResourceSettings::Ptr& settings)
 {
     switch (settings->storageType())
     {

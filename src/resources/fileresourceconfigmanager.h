@@ -70,7 +70,7 @@ private:
     FileResourceConfigManager();
     int findResourceGroup(ResourceId id) const;
     static QString groupName(int groupIndex);
-    static Resource createResource(FileResourceSettings::Ptr&);
+    static Resource createResource(const FileResourceSettings::Ptr&);
 
     struct ResourceData
     {

@@ -40,6 +40,7 @@ public:
     bool           file(QUrl&, bool showErrorMessage = true) const;
     void           getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const;
     int            repeatPause() const;   // -1 if none, else seconds between repeats
+                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString        defaultDir() const    { return mDefaultDir; }
     bool           validate(bool showErrorMessage) const;
 
