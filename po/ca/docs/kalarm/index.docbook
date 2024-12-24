@@ -94,9 +94,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->12 de setembre de 2024</date>
+>20 de desembre de 2024</date>
 <releaseinfo
->3.10.0 (KDE Gear 24.12)</releaseinfo>
+>3.10.1 (KDE Gear 24.12.1)</releaseinfo>
 
 <abstract>
 <para
@@ -2481,11 +2481,6 @@
 >Com una finestra no modal. En aquest mode, el focus del teclat no es veurà afectat quan aparegui la finestra del missatge d'alarma, de manera que no interferirà amb la vostra escriptura. Tanmateix, en aquest mode la finestra no tindrà barra de títol o marc, per la qual cosa no la podreu moure o canviar de mida.</para>
 </listitem>
 </itemizedlist>
-
-<note
-><para
->Quan es mostra una alarma al davant d'una aplicació a pantalla completa, es mostrarà com una finestra no modal, independentment d'aquesta configuració. Això es deu a una limitació del sistema de finestres.</para
-></note>
 
 <para
 >Podeu escollir en el <link linkend="preferences-view"
