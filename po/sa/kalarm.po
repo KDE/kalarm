@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-27 00:40+0000\n"
-"PO-Revision-Date: 2024-12-24 20:39+0530\n"
+"PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -1245,7 +1245,7 @@ msgstr "केमेल"
 #, kde-format
 msgctxt "@label"
 msgid "Whether to copy sent emails into KMail's Sent folder."
-msgstr "प्रेषितानि ईमेलपत्राणि KMail इत्यस्य Sent फोल्डर् मध्ये प्रतिलिखितव्यानि वा।"
+msgstr "प्रेषितानि ईमेलपत्राणि KMail इत्यस्य Sent समुच्चय मध्ये प्रतिलिखितव्यानि वा।"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailCopyToKMail), group (General)
 #: data/kalarmconfig.kcfg:212
@@ -1933,7 +1933,7 @@ msgstr ""
 #: data/kalarmui.rc:19
 #, kde-format
 msgid "File"
-msgstr "संचिका"
+msgstr "सञ्चिका"
 
 #. i18n: ectx: Menu (edit)
 #: data/kalarmui.rc:31
@@ -3039,7 +3039,7 @@ msgstr "अन्वेषणे पाठसन्देश-अलार्म-
 #, kde-format
 msgctxt "@option:check Alarm action = file display"
 msgid "File"
-msgstr "संचिका"
+msgstr "सञ्चिका"
 
 #: find.cpp:127
 #, kde-format
@@ -7422,7 +7422,7 @@ msgstr "KAlarm कैलेण्डर निर्देशिका"
 #, kde-format
 msgctxt "@item:intext What a resource is stored in"
 msgid "File"
-msgstr "संचिका"
+msgstr "सञ्चिका"
 
 #: resources/resourcetype.cpp:361
 #, kde-format
