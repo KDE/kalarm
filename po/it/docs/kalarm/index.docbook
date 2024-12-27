@@ -130,9 +130,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2024-9-12</date>
+>2024-12-20</date>
 <releaseinfo
->3.10.0 (KDE Gear 24.12)</releaseinfo>
+>3.10.1 (KDE Gear 24.12.1)</releaseinfo>
 
 <abstract>
 <para
@@ -2519,11 +2519,6 @@
 >Come finestra non modale: in questa modalità, il fuoco della tastiera non verrà influenzato dalla comparsa della finestra del messaggio di avviso, quindi non interferirà con la battitura. Però la finestra non ha né barra del titolo né bordo in questa modalità, quindi non può essere spostata o ridimensionata.</para>
 </listitem>
 </itemizedlist>
-
-<note
-><para
->Quando un avviso viene visualizzato sopra una applicazione a tutto schermo, viene mostrato come una finestra non modale indipendentemente da questa impostazione. Ciò a causa di una limitazione del sistema delle finestre.</para
-></note>
 
 <para
 >Puoi scegliere quale schema tra due usare per posizionare le finestre degli avvisi testuali nella <link linkend="preferences-view"
