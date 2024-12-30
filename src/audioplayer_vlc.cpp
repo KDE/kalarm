@@ -174,7 +174,7 @@ void AudioPlayerVlc::finish_callback(const libvlc_event_t* event, void* userdata
 void AudioPlayerVlc::playFinished(uint32_t event)
 {
     setOkStatus(Ready);
-    mFadeStart = 0;
+    resetFade();
     if (mCheckPlayTimer)
         mCheckPlayTimer->stop();
     bool result;

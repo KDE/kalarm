@@ -101,6 +101,17 @@ AudioPlayer::Status AudioPlayer::status() const
     return mError.isEmpty() ? mStatus : Error;
 }
 
+/******************************************************************************
+* Reset fade to its initial status and value.
+*/
+void AudioPlayer::resetFade()
+{
+    if (mFadeTimer)
+    {
+        mFadeStart = 0;
+        mCurrentVolume = mFadeVolume;
+    }
+}
 
 /******************************************************************************
 * Called every second to fade the volume.
