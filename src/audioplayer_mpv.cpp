@@ -162,7 +162,7 @@ void AudioPlayerMpv::onMpvEvents()
             {
                 bool result;
                 setOkStatus(Ready);
-                mFadeStart = 0;
+                resetFade();
 
                 mpv_event_end_file* evt = static_cast<mpv_event_end_file*>(event->data);
                 if (evt && evt->error != 0)

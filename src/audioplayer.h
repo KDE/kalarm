@@ -45,6 +45,7 @@ private Q_SLOTS:
 protected:
     AudioPlayer(Type, const QUrl& audioFile, QObject* parent = nullptr);
     AudioPlayer(Type, const QUrl& audioFile, float volume, float fadeVolume, int fadeSeconds, QObject* parent = nullptr);
+    void resetFade();
     virtual void internalSetVolume() = 0;
 
     /** Set the status to a non-error value. */
