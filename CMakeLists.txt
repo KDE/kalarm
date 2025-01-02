@@ -130,7 +130,11 @@ find_package(KPim6Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
 # Build support for audio backend plugins
 option(ENABLE_LIBVLC "Build support for LibVLC" ON)
 add_feature_info(ENABLE_LIBVLC ${ENABLE_LIBVLC} "Provides support for playing sound files using LibVLC")
+if(WIN32)
+option(ENABLE_LIBMPV "Build support for Libmpv" OFF)
+else()
 option(ENABLE_LIBMPV "Build support for Libmpv" ON)
+endif()
 add_feature_info(ENABLE_LIBMPV ${ENABLE_LIBMPV} "Provides support for playing sound files using Libmpv")
 
 if(ENABLE_LIBVLC)
