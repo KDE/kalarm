@@ -12,6 +12,7 @@
 #include "kalarmpluginlib_export.h"
 
 #include <QObject>
+#include <QVariant>
 
 class AudioPlayer;
 
