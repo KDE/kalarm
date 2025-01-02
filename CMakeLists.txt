@@ -27,7 +27,6 @@ endif()
 project(kalarm VERSION ${KALARM_VERSION})
 
 set(KF_MIN_VERSION "6.8.0")
-set(CMAKE_VERBOSE_MAKEFILE ON)
 
 find_package(ECM ${KF_MIN_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
@@ -135,7 +134,7 @@ option(ENABLE_LIBMPV "Build support for Libmpv" ON)
 add_feature_info(ENABLE_LIBMPV ${ENABLE_LIBMPV} "Provides support for playing sound files using Libmpv")
 
 if(ENABLE_LIBVLC)
-    find_package(LibVLC "3.0.0" REQUIRED)
+    find_package(LibVLC "3.0.0" QUIET REQUIRED)
     set_package_properties(LibVLC PROPERTIES PURPOSE "Used to play audio alarms")
 endif()
 if(ENABLE_LIBMPV)

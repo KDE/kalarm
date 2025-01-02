@@ -3,7 +3,6 @@
 
 # This builds KAlarm's audio plugins, which provide audio backends.
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
 set(audioplugin_SRCS
     audioplugin.cpp
     audioplayer.cpp
