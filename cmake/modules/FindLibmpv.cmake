@@ -77,6 +77,12 @@ if (Libmpv_FOUND AND NOT TARGET Libmpv::Libmpv)
     endif()
 endif()
 
+if(NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+    message(STATUS "Found LibMPV include-dir path: ${Libmpv_INCLUDE_DIRS}")
+    message(STATUS "Found LibMPV library path:${Libmpv_LIBRARIES}")
+    message(STATUS "Found LibMPV version: ${Libmpv_VERSION}")
+endif (NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+
 mark_as_advanced(Libmpv_LIBRARIES Libmpv_INCLUDE_DIRS)
 
 include(FeatureSummary)
