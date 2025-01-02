@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,7 +9,6 @@
 #include "editdlgtypes.h"
 #include "editdlg_p.h"
 
-#include "audioplayer.h"
 #include "emailidcombo.h"
 #include "fontcolourbutton.h"
 #include "functions.h"
@@ -34,6 +33,7 @@
 #include "lib/timespinbox.h"
 #include "kalarmcalendar/identities.h"
 #include "akonadiplugin/akonadiplugin.h"
+#include "audioplugin/audioplugin.h"
 #include "kalarm_debug.h"
 
 #include <KCalUtils/ICalDrag>
@@ -1811,9 +1811,13 @@ void EditAudioAlarmDlg::slotAudioPlaying(bool playing)
         mTryButton->setCheckable(false);
         mTryButton->setChecked(false);
         mMessageWindow = nullptr;
-        const QString errmsg = AudioPlayer::popError();
-        if (!errmsg.isEmpty())
-            KAMessageBox::error(this, errmsg);
+        AudioPlugin* audioPlugin = Preferences::audioPlugin();
+        if (audioPlugin)
+        {
+            const QString errmsg = audioPlugin->popError();
+            if (!errmsg.isEmpty())
+                KAMessageBox::error(this, errmsg);
+        }
     }
     else if (mMessageWindow)
     {

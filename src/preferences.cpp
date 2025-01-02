@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -153,6 +153,49 @@ void Preferences::setUseAkonadi(bool yes)
 {
     if (PluginManager::instance()->akonadiPlugin())
         self()->setUseAkonadiIfAvailable(yes);
+}
+
+/******************************************************************************
+* Return the Audio plugin to use, or null if none available.
+* If the plugin for the current selection is unavailable, an available plugin
+* is selected instead.
+*/
+AudioPlugin* Preferences::audioPlugin()
+{
+    AudioPlugin* pluginVlc = PluginManager::instance()->audioVlcPlugin();
+    AudioPlugin* pluginMpv = PluginManager::instance()->audioMpvPlugin();
+    if (!pluginVlc  &&  !pluginMpv)
+        return nullptr;
+    AudioBackend backend = base_AudioBackend();
+    if (backend == Audio_Vlc  &&  !pluginVlc)
+    {
+        self()->setBase_AudioBackend(Audio_Mpv);
+        self()->save();
+    }
+    if (backend == Audio_Mpv  &&  !pluginMpv)
+    {
+        self()->setBase_AudioBackend(Audio_Vlc);
+        self()->save();
+    }
+    return (base_AudioBackend() == Audio_Vlc) ? pluginVlc : pluginMpv;
+}
+
+/******************************************************************************
+* Set the Audio plugin to use.
+*/
+void Preferences::setAudioPlugin(AudioPlugin* plugin)
+{
+    if (plugin)
+    {
+        AudioBackend backend;
+        if (plugin == PluginManager::instance()->audioVlcPlugin())
+            backend = Audio_Vlc;
+        else if (plugin == PluginManager::instance()->audioMpvPlugin())
+            backend = Audio_Mpv;
+        else
+            return;
+        self()->setBase_AudioBackend(backend);
+    }
 }
 
 /******************************************************************************

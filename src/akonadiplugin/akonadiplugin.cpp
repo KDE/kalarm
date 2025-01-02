@@ -1,7 +1,7 @@
 /*
  *  akonadiplugin.cpp  -  plugin to provide features requiring Akonadi
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2022-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -33,7 +33,7 @@ using namespace Qt::Literals::StringLiterals;
 K_PLUGIN_CLASS_WITH_JSON(AkonadiPlugin, "akonadiplugin.json")
 
 AkonadiPlugin::AkonadiPlugin(QObject* parent, const QList<QVariant>& args)
-    : PluginBase(parent, args)
+    : PluginBaseAkonadi(parent, args)
 {
     setName(QStringLiteral("Akonadi"));
 }

@@ -1,7 +1,7 @@
 /*
  *  messagedisplayhelper.cpp  -  helper class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,7 +10,6 @@
 #include "messagedisplayhelper_p.h"
 #include "messagedisplay.h"
 
-#include "audioplayer.h"
 #include "displaycalendar.h"
 #include "functions.h"
 #include "kalarm.h"
@@ -21,6 +20,8 @@
 #include "lib/messagebox.h"
 #include "lib/pushbutton.h"
 #include "lib/synchtimer.h"
+#include "audioplugin/audioplayer.h"
+#include "audioplugin/audioplugin.h"
 #include "screensaver.h" // DBUS-generated
 #include "kalarm_debug.h"
 
@@ -962,11 +963,15 @@ void MessageDisplayHelper::playFinished()
 {
     if (mSilenceButton)
         mSilenceButton->setEnabled(false);
-    const QString errmsg = AudioPlayer::popError();
-    if (!errmsg.isEmpty()  &&  !haveErrorMessage(ErrMsg_AudioFile))
+    AudioPlugin* audioPlugin = Preferences::audioPlugin();
+    if (audioPlugin)
     {
-        KAMessageBox::error(mParent->displayParent(), errmsg);
-        clearErrorMessage(ErrMsg_AudioFile);
+        const QString errmsg = audioPlugin->popError();
+        if (!errmsg.isEmpty()  &&  !haveErrorMessage(ErrMsg_AudioFile))
+        {
+            KAMessageBox::error(mParent->displayParent(), errmsg);
+            clearErrorMessage(ErrMsg_AudioFile);
+        }
     }
     delete mAudioThread.data();
     if (mAlwaysHide)
@@ -999,7 +1004,11 @@ AudioPlayerThread::~AudioPlayerThread()
     qCDebug(KALARM_LOG) << "MessageDisplayHelper::~AudioPlayerThread";
     mMutex.lock();
     mInstance = nullptr;    // enable slots to detect that their instance has been deleted
-    delete mPlayer;
+    if (mPlayer)
+    {
+        mPlayer->deletePlayer();
+        mPlayer = nullptr;
+    }
     mMutex.unlock();
     // Notify after deleting mAudioPlayer, so that isAudioPlaying() will
     // return the correct value.
@@ -1020,18 +1029,20 @@ void AudioPlayerThread::execute()
     qCDebug(KALARM_LOG) << "AudioPlayerThread::execute:" << QThread::currentThread() << mFile;
     const QUrl url = QUrl::fromUserInput(mFile);
     mFile = url.isLocalFile() ? url.toLocalFile() : url.toString();
-    mPlayer = AudioPlayer::create(AudioPlayer::Alarm, url, mVolume, mFadeVolume, mFadeSeconds, this);
-    if (!mPlayer  ||  mPlayer->status() == AudioPlayer::Error)
+    mPlayer = Preferences::audioPlugin();
+    if (mPlayer)
+    {
+        if (!mPlayer->createPlayer(AudioPlugin::Alarm, url, mVolume, mFadeVolume, mFadeSeconds, this))
+            mPlayer = nullptr;
+    }
+    if (!mPlayer  ||  mPlayer->status() == AudioPlugin::Error)
     {
         mMutex.unlock();
         deleteLater();
         return;
     }
-#ifdef USE_CANBERRA
-    connect(mPlayer, &AudioPlayer::downloaded, this, &AudioPlayerThread::checkAudioPlay);
-#endif
-    connect(mPlayer, &AudioPlayer::finished, this, &AudioPlayerThread::playFinished);
-    connect(this, &AudioPlayerThread::stopPlay, mPlayer, &AudioPlayer::stop);
+    connect(mPlayer, &AudioPlugin::finished, this, &AudioPlayerThread::playFinished);
+    connect(this, &AudioPlayerThread::stopPlay, mPlayer, &AudioPlugin::stop);
 
     mPlayedOnce = false;
     mPausing    = false;
@@ -1051,9 +1062,9 @@ void AudioPlayerThread::checkAudioPlay()
     mMutex.lock();
     switch (mPlayer->status())
     {
-        case AudioPlayer::Ready:
+        case AudioPlugin::Ready:
             break;
-        case AudioPlayer::Error:
+        case AudioPlugin::Error:
             mMutex.unlock();
             stop();
             return;
@@ -1131,8 +1142,8 @@ void AudioPlayerThread::stop()
         return;    // this instance has now been deleted
     }
     mStopping = true;
-    // Calling AudioPlayer::stop() executes it in this thread, which causes crashes,
-    // so use signal-slot mechanism to call it in AudioPlayer's own thread.
+    // Calling AudioPlugin::stop() executes it in this thread, which causes crashes,
+    // so use signal-slot mechanism to call it in AudioPlugin's own thread.
     Q_EMIT stopPlay();
     mMutex.unlock();
     if (mInstance)    // guard against this instance having already been deleted

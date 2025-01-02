@@ -1,18 +1,18 @@
 /*
  *  akonadiplugin.h  -  plugin to provide features requiring Akonadi
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2022-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #pragma once
 
-#include "pluginbase.h"
+#include "pluginbaseakonadi.h"
 
 class SendAkonadiMail;
 
-class AkonadiPlugin : public PluginBase
+class AkonadiPlugin : public PluginBaseAkonadi
 {
     Q_OBJECT
 public:

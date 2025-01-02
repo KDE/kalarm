@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -17,6 +17,7 @@
 
 namespace KAlarmCal { class Holidays; }
 class AkonadiPlugin;
+class AudioPlugin;
 
 
 // Settings configured in the Preferences dialog
@@ -24,6 +25,7 @@ class Preferences : public PreferencesBase
 {
     Q_OBJECT
 public:
+    enum class AudioType  { None, Vlc, Mpv };
     enum MailFrom   { MAIL_FROM_KMAIL, MAIL_FROM_SYS_SETTINGS, MAIL_FROM_ADDR };
 
     static Preferences*     self();
@@ -50,6 +52,14 @@ public:
      *  @see setUseAkonadiIfAvailable().
      */
     static void             setUseAkonadi(bool yes);
+
+    /** Return the Audio plugin.
+     *  @return the Audio plugin, or null if none available.
+     */
+    static AudioPlugin*     audioPlugin();
+
+    /** Set the Audio plugin. */
+    static void             setAudioPlugin(AudioPlugin*);
 
     static int              autoHideSystemTray();
     static void             setAutoHideSystemTray(int timeout);

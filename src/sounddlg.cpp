@@ -1,16 +1,17 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "sounddlg.h"
 
-#include "audioplayer.h"
 #include "mainwindow.h"
+#include "preferences.h"
 #include "soundpicker.h"
+#include "audioplugin/audioplugin.h"
 #include "lib/checkbox.h"
 #include "lib/config.h"
 #include "lib/file.h"
@@ -248,7 +249,8 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
     boxHLayout->addWidget(label);
 
     // Show fade controls only if the current audio backend supports fading.
-    if (AudioPlayer::providesFade())
+    AudioPlugin* audioPlugin = Preferences::audioPlugin();
+    if (audioPlugin  &&  audioPlugin->providesFade())
     {
         // Fade checkbox
         mFadeCheckbox = new CheckBox(i18nc("@option:check", "Fade"), group);
@@ -294,8 +296,11 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
 
 SoundWidget::~SoundWidget()
 {
-    delete mPlayer;   // this stops playing if not already stopped
-    mPlayer = nullptr;
+    if (mPlayer)
+    {
+        mPlayer->deletePlayer();
+        mPlayer = nullptr;
+    }
 }
 
 /******************************************************************************
@@ -436,10 +441,15 @@ void SoundWidget::playSound()
     }
     if (!validate(true))
         return;
-    mPlayer = AudioPlayer::create(AudioPlayer::Sample, mUrl, this);
+    mPlayer = Preferences::audioPlugin();
+    if (mPlayer)
+    {
+        if (!mPlayer->createPlayer(AudioPlugin::Sample, mUrl, this))
+            mPlayer = nullptr;
+    }
     if (!mPlayer)
         return;
-    connect(mPlayer, &AudioPlayer::finished, this, &SoundWidget::playFinished);
+    connect(mPlayer, &AudioPlugin::finished, this, &SoundWidget::playFinished);
     mFilePlay->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-stop")));   // change the play button to a stop button
     mFilePlay->setToolTip(i18nc("@info:tooltip", "Stop sound"));
     mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Stop playing the sound"));
@@ -452,11 +462,18 @@ void SoundWidget::playSound()
 */
 void SoundWidget::playFinished()
 {
-    delete mPlayer;   // this stops playing if not already stopped
-    mPlayer = nullptr;
-    const QString errmsg = AudioPlayer::popError();
-    if (!errmsg.isEmpty())
-        KAMessageBox::error(this, errmsg);
+    AudioPlugin* audioPlugin = mPlayer ? mPlayer : Preferences::audioPlugin();
+    if (mPlayer)
+    {
+        mPlayer->deletePlayer();
+        mPlayer = nullptr;
+    }
+    if (audioPlugin)
+    {
+        const QString errmsg = audioPlugin->popError();
+        if (!errmsg.isEmpty())
+            KAMessageBox::error(this, errmsg);
+    }
     mFilePlay->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
     mFilePlay->setToolTip(i18nc("@info:tooltip", "Test the sound"));
     mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Play the selected sound file."));

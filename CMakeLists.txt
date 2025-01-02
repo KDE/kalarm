@@ -9,10 +9,10 @@ set(RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_
 # Whenever KALARM_VERSION changes, set the 3 variables below it to the first
 # KDE Release Service version which will contain that KAlarm release.
 # (This must be the full release version, not an alpha or beta release.)
-set(KALARM_VERSION "3.10.1")
-set(KALARM_VERSION_RELEASE_SERVICE_MAJOR "24")
-set(KALARM_VERSION_RELEASE_SERVICE_MINOR "12")
-set(KALARM_VERSION_RELEASE_SERVICE_MICRO "1")
+set(KALARM_VERSION "3.11.0")
+set(KALARM_VERSION_RELEASE_SERVICE_MAJOR "25")
+set(KALARM_VERSION_RELEASE_SERVICE_MINOR "04")
+set(KALARM_VERSION_RELEASE_SERVICE_MICRO "0")
 
 # If KAlarm's version has not changed since the last KDE Release Service version,
 # this code sets a sub-version x.x.x.N to avoid duplicate version numbers in
@@ -127,21 +127,23 @@ find_package(KPim6CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim6IdentityManagementWidgets ${IDENTITYMANAGEMENT_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim6Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
 
+# Build support for audio backend plugins
 option(ENABLE_LIBVLC "Build support for LibVLC" ON)
 add_feature_info(ENABLE_LIBVLC ${ENABLE_LIBVLC} "Provides support for playing sound files using LibVLC")
-
-option(ENABLE_LIBMPV "Build support for Libmpv" OFF)
+option(ENABLE_LIBMPV "Build support for Libmpv" ON)
 add_feature_info(ENABLE_LIBMPV ${ENABLE_LIBMPV} "Provides support for playing sound files using Libmpv")
 
 if(ENABLE_LIBVLC)
     find_package(LibVLC "3.0.0" QUIET REQUIRED)
     set_package_properties(LibVLC PROPERTIES PURPOSE "Needed to play audio alarms")
-elseif(ENABLE_LIBMPV)
+endif()
+if(ENABLE_LIBMPV)
     # Note: libmpv < 2.2.0 has threading issues which cause hang-ups
     find_package(Libmpv "2.2.0" QUIET REQUIRED)
     set_package_properties(Libmpv PROPERTIES PURPOSE "Needed to play audio alarms")
-else()
-    message(FATAL_ERROR "Support for either ENABLE_LIBVLC or ENABLE_LIBMPV must be enabled for playing sound files")
+endif()
+if(NOT ENABLE_LIBVLC AND NOT ENABLE_LIBVLC)
+    message(FATAL_ERROR "One or more of ENABLE_LIBVLC or ENABLE_LIBMPV must be enabled for support for playing sound files")
 endif()
 
 find_package(KF6TextEditTextToSpeech ${KTEXTADDONS_MIN_VERSION} CONFIG)

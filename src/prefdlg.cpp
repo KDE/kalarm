@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -42,6 +42,7 @@
 #include "lib/tooltip.h"
 #include "kalarmcalendar/holidays.h"
 #include "kalarmcalendar/identities.h"
+#include "audioplugin/audioplugin.h"
 #include "config-kalarm.h"
 #include "kalarm_debug.h"
 
@@ -563,20 +564,39 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     radio->setWhatsThis(wt);
     mXtermCommand->setWhatsThis(wt);
 
-    if (PluginManager::instance()->akonadiPlugin())
+    const QList<AudioPlugin*> audioPlugins = PluginManager::instance()->audioPlugins();
+    if (PluginManager::instance()->akonadiPlugin()  ||  !audioPlugins.isEmpty())
     {
         // Plugins
         group = new QGroupBox(i18nc("@title:group", "Plugins"));
         topLayout()->addWidget(group);
-        vlayout = new QVBoxLayout(group);
+        hlayout = new QHBoxLayout(group);
 
-        // Akonadi plugin
-        mUseAkonadi = new QCheckBox(i18nc("@option:check", "Enable Akonadi"), group);
-        KAlarm::setToolTip(mUseAkonadi, i18nc("@info:tooltip",
-              "Enable the use of Akonadi to provide features including birthday import, some email functions, and email address book lookup."));
-        mUseAkonadi->setWhatsThis(i18nc("@info:whatsthis",
-              "Enable the use of Akonadi to provide features including birthday import, some email functions, and email address book lookup."));
-        vlayout->addWidget(mUseAkonadi, 0, Qt::AlignLeft);
+        if (!audioPlugins.isEmpty())
+        {
+            auto audioGroup = new QGroupBox(i18nc("@title:group", "Audio Backend"));
+            audioGroup->setWhatsThis(i18nc("@info:whatsthis", "Choose which audio backend to use to play sound files"));
+            hlayout->addWidget(audioGroup);
+            mAudioBackend = new ButtonGroup(audioGroup);
+            auto audioLayout = new QVBoxLayout(audioGroup);
+            int i = 0;
+            for (const auto audioPlugin : audioPlugins)
+            {
+                radio = new QRadioButton(audioPlugin->name());
+                mAudioBackend->insertButton(radio, i++);
+                audioLayout->addWidget(radio);
+            }
+        }
+        if (PluginManager::instance()->akonadiPlugin())
+        {
+            // Akonadi plugin
+            mUseAkonadi = new QCheckBox(i18nc("@option:check", "Enable Akonadi"), group);
+            KAlarm::setToolTip(mUseAkonadi, i18nc("@info:tooltip",
+                  "Enable the use of Akonadi to provide features including birthday import, some email functions, and email address book lookup."));
+            mUseAkonadi->setWhatsThis(i18nc("@info:whatsthis",
+                  "Enable the use of Akonadi to provide features including birthday import, some email functions, and email address book lookup."));
+            hlayout->addWidget(mUseAkonadi, 0, Qt::AlignHCenter | Qt::AlignTop);
+        }
     }
 
     topLayout()->addStretch();    // top adjust the widgets
@@ -608,6 +628,23 @@ void MiscPrefTab::restore(bool defaults, bool)
     mXtermType->setButton(id);
     mXtermCommand->setEnabled(id == 0);
     mXtermCommand->setText(id == 0 ? xtermCmd.second : QString());
+    if (mAudioBackend)
+    {
+        AudioPlugin* audioPlugin = Preferences::audioPlugin();
+        const QList<AudioPlugin*> audioPlugins = PluginManager::instance()->audioPlugins();
+        int i = 0;
+        for (const auto plugin : audioPlugins)
+        {
+            if (plugin == audioPlugin)
+            {
+                QAbstractButton* button = mAudioBackend->button(i);
+                if (button)
+                    button->setChecked(true);
+                break;
+            }
+            ++i;
+        }
+    }
     if (mUseAkonadi)
         mUseAkonadi->setChecked(Preferences::useAkonadi());
 }
@@ -685,6 +722,16 @@ bool MiscPrefTab::apply(bool syncToDisc)
             Preferences::setCmdXTermCommand(xtermID);
         else
             Preferences::setCmdXTermSpecialCommand(mXtermCommand->text());
+    }
+    if (mAudioBackend)
+    {
+        i = mAudioBackend->checkedId();
+        const QList<AudioPlugin*> audioPlugins = PluginManager::instance()->audioPlugins();
+        if (i >= 0  &&  i < audioPlugins.count())
+        {
+            if (audioPlugins.at(i) != Preferences::audioPlugin())
+                Preferences::setAudioPlugin(audioPlugins.at(i));
+        }
     }
     if (mUseAkonadi)
     {

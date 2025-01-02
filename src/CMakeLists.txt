@@ -7,6 +7,7 @@ add_subdirectory(kalarmcalendar)
 if(ENABLE_AKONADI_PLUGIN)
     add_subdirectory(akonadiplugin)
 endif()
+add_subdirectory(audioplugin)
 add_subdirectory(icons)
 add_subdirectory(autostart)
 add_subdirectory(kconf_update)
@@ -16,18 +17,15 @@ add_subdirectory(kconf_update)
 
 add_library(kalarmplugin)
 
-ecm_qt_declare_logging_category(kalarmplugin
-                                HEADER kalarmpluginlib_debug.h
-                                IDENTIFIER KALARMPLUGINLIB_LOG
-                                CATEGORY_NAME org.kde.pim.kalarm.pluginlib
-                                DESCRIPTION "kalarm (pluginlib)"
-                                EXPORT KALARMPLUGINLIB
-                                )
 target_sources(kalarmplugin PRIVATE
-    pluginbase.cpp
+    pluginbaseakonadi.cpp
+    pluginbaseaudio.cpp
     pluginmanager.cpp
-    pluginbase.h
+    kalarm_debug.cpp
+    pluginbaseakonadi.h
+    pluginbaseaudio.h
     pluginmanager.h
+    kalarm_debug.h
 )
 generate_export_header(kalarmplugin BASE_NAME kalarmpluginlib)
 
@@ -180,7 +178,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     kalarmapp.cpp
     mainwindowbase.cpp
     mainwindow.cpp
-    audioplayer.cpp
     messagedisplay.cpp
     messagedisplayhelper.cpp
     messagenotification.cpp
@@ -230,7 +227,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     kalarmapp.h
     mainwindowbase.h
     mainwindow.h
-    audioplayer.h
     messagedisplay.h
     messagedisplayhelper.h
     messagenotification.h
@@ -274,18 +270,6 @@ if(ENABLE_RTC_WAKE_FROM_SUSPEND)
     set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
         wakedlg.cpp
         wakedlg.h
-    )
-endif()
-
-if(ENABLE_LIBVLC)
-    set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
-        audioplayer_vlc.cpp
-        audioplayer_vlc.h
-    )
-elseif(ENABLE_LIBMPV)
-    set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
-        audioplayer_mpv.cpp
-        audioplayer_mpv.h
     )
 endif()
 

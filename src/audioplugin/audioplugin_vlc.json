@@ -1,0 +1,7 @@
+{
+    "KPlugin": {
+        "Description": "VLC audio plugin",
+        "Name": "VLC audio",
+        "Version": "1.0"
+    }
+}

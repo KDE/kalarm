@@ -1,7 +1,7 @@
 /*
  *  messagedisplayhelper_p.h  -  private declarations for MessageDisplayHelper
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2009-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,7 +12,7 @@
 #include <QMutex>
 
 class MessageDisplayHelper;
-class AudioPlayer;
+class AudioPlugin;
 
 // Class to play an audio file, optionally repeated.
 class AudioPlayerThread : public QObject
@@ -37,7 +37,7 @@ private Q_SLOTS:
 private:
     static AudioPlayerThread* mInstance;
     mutable QMutex       mMutex;
-    AudioPlayer*         mPlayer {nullptr};
+    AudioPlugin*         mPlayer {nullptr};
     QString              mFile;
     float                mVolume;        // configured end volume
     float                mFadeVolume;    // configured start volume

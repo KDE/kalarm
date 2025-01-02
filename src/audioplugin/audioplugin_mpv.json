@@ -1,0 +1,7 @@
+{
+    "KPlugin": {
+        "Description": "MPV audio plugin",
+        "Name": "MPV audio",
+        "Version": "1.0"
+    }
+}

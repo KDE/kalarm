@@ -1,7 +1,7 @@
 /*
- *  pluginbase.h  -  base class for plugin to provide features requiring Akonadi
+ *  pluginbaseakonadi.h  -  base class for plugin to provide features requiring Akonadi
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2022-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -24,14 +24,13 @@ namespace KAlarmCal { class KAEvent; }
 namespace MailSend { struct JobData; }
 class QSortFilterProxyModel;
 
-class KALARMPLUGINLIB_EXPORT PluginBase : public QObject
+class KALARMPLUGINLIB_EXPORT PluginBaseAkonadi : public QObject
 {
     Q_OBJECT
 public:
-    explicit PluginBase(QObject* parent = nullptr, const QList<QVariant>& = {});
-    ~PluginBase() override;
+    explicit PluginBaseAkonadi(QObject* parent = nullptr, const QList<QVariant>& = {});
+    ~PluginBaseAkonadi() override;
 
-                             //cppcheck-suppress[returnByReference]  QString implicitly shared
     QString name() const  { return mName; }
 
     /** Create birthday model instances. */

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-SPDX-FileCopyrightText: 2007-2024 David Jarvie <djarvie@kde.org>
+SPDX-FileCopyrightText: 2007-2025 David Jarvie <djarvie@kde.org>
 SPDX-License-Identifier: GPL-2.0-or-later
 -->
 <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
@@ -78,6 +78,15 @@ SPDX-License-Identifier: GPL-2.0-or-later
       <label context="@label">Enable Akonadi plugin</label>
       <whatsthis context="@info:whatsthis">Choose whether to enable KAlarm's Akonadi plugin, which uses Akonadi to provide features including birthday import, some email functions, email address book lookup, and Akonadi resource migration on first run.</whatsthis>
       <default>true</default>
+    </entry>
+    <entry name="Base_AudioBackend" key="AudioBackend" type="Enum">
+      <label context="@label">Audio backend</label>
+      <whatsthis context="@info:whatsthis">Which audio backend to prefer.</whatsthis>
+      <choices name="AudioBackend" prefix="Audio_">
+        <choice name="Mpv"><label context="@option">MPV</label></choice>
+        <choice name="Vlc"><label context="@option">VLC</label></choice>
+      </choices>
+      <default>Vlc</default>
     </entry>
     <entry name="Base_TimeZone" key="TimeZone" type="String">
       <label context="@label">Time zone</label>
