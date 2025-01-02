@@ -3,6 +3,7 @@
 
 # This builds KAlarm's audio plugins, which provide audio backends.
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
 set(audioplugin_SRCS
     audioplugin.cpp
     audioplayer.cpp
@@ -44,7 +45,6 @@ if(ENABLE_LIBVLC)
 endif()
 
 if(ENABLE_LIBMPV)
-set(CMAKE_VERBOSE_MAKEFILE ON)
     kcoreaddons_add_plugin(audioplugin_mpv
         SOURCES
             ${audioplugin_SRCS}
