@@ -451,7 +451,17 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
-    <release version="3.10.1" date="2025-01-09"/>
+    <release version="3.10.1" date="2025-01-09">
+      <description>
+        <p>Release description</p>
+        <ul>
+          <li>Show normal decorated alarm windows over full screen applications on X11.</li>
+          <li>Fix Akonadi functionality not working.</li>
+          <li>Make fade work each time a repeated sound alarm is played.</li>
+          <li>Fix Edit Alarm dialog error setting time if user's time zone is UTC.</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.10.0" date="2024-12-12">
       <description>
         <p>Release description</p>
