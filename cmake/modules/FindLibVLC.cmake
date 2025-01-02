@@ -40,8 +40,12 @@ PATHS
     #mingw
     c:/msys/local/include
 )
+message(STATUS "LIBVLC_INCLUDE_DIR 1: ${LIBVLC_INCLUDE_DIR}")
 find_path(LIBVLC_INCLUDE_DIR PATHS "${CMAKE_INCLUDE_PATH}/vlc" NAMES vlc.h 
         HINTS ${PC_LIBVLC_INCLUDEDIR} ${PC_LIBVLC_INCLUDE_DIRS})
+message(STATUS "LIBVLC_INCLUDE_DIR 2: ${LIBVLC_INCLUDE_DIR}")
+message(STATUS "PC_LIBVLC_INCLUDEDIR: ${PC_LIBVLC_INCLUDEDIR}")
+message(STATUS "PC_LIBVLC_INCLUDE_DIRS: ${PC_LIBVLC_INCLUDE_DIRS}")
 
 #Put here path to custom location
 #example: /home/user/vlc/lib etc..
