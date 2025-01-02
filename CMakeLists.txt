@@ -27,6 +27,7 @@ endif()
 project(kalarm VERSION ${KALARM_VERSION})
 
 set(KF_MIN_VERSION "6.8.0")
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
 find_package(ECM ${KF_MIN_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
