@@ -114,6 +114,7 @@ parts:
         - libboost-graph-dev
         - libvlc-dev
         - libvlccore-dev
+        - libmpv-dev
         - pkg-config
         - xsltproc
         - zlib1g-dev
@@ -130,6 +131,7 @@ parts:
         - gstreamer1.0-plugins-ugly
         - libvlc5
         - libvlccore9
+        - libmpv1
         - oxygen-sounds
         - kross
         - libassuan0
