@@ -5,7 +5,7 @@
  *  calendar data.
  *  It is the Qt5/Qt6 version of KDE 4 kdelibs/kdecore/date/kdatetime.cpp.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -3431,6 +3431,7 @@ int offsetAtZoneTime(const QTimeZone& tz, const QDateTime& zoneDateTime, int* se
     {
         case Qt::LocalTime:
         case Qt::TimeZone:
+        case Qt::UTC:
             break;
         default:
             if (secondOffset)
