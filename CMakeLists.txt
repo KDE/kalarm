@@ -135,7 +135,7 @@ option(ENABLE_LIBMPV "Build support for Libmpv" ON)
 add_feature_info(ENABLE_LIBMPV ${ENABLE_LIBMPV} "Provides support for playing sound files using Libmpv")
 
 if(ENABLE_LIBVLC)
-    find_package(LibVLC "3.0.0" QUIET REQUIRED)
+    find_package(LibVLC "3.0.0" REQUIRED)
     set_package_properties(LibVLC PROPERTIES PURPOSE "Used to play audio alarms")
 endif()
 if(ENABLE_LIBMPV)
