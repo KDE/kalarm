@@ -135,12 +135,12 @@ add_feature_info(ENABLE_LIBMPV ${ENABLE_LIBMPV} "Provides support for playing so
 
 if(ENABLE_LIBVLC)
     find_package(LibVLC "3.0.0" QUIET REQUIRED)
-    set_package_properties(LibVLC PROPERTIES PURPOSE "Needed to play audio alarms")
+    set_package_properties(LibVLC PROPERTIES PURPOSE "Used to play audio alarms")
 endif()
 if(ENABLE_LIBMPV)
     # Note: libmpv < 2.2.0 has threading issues which cause hang-ups
     find_package(Libmpv "2.2.0" QUIET REQUIRED)
-    set_package_properties(Libmpv PROPERTIES PURPOSE "Needed to play audio alarms")
+    set_package_properties(Libmpv PROPERTIES PURPOSE "Used to play audio alarms")
 endif()
 if(NOT ENABLE_LIBVLC AND NOT ENABLE_LIBVLC)
     message(FATAL_ERROR "One or more of ENABLE_LIBVLC or ENABLE_LIBMPV must be enabled for support for playing sound files")

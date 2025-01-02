@@ -38,7 +38,7 @@ if(ENABLE_LIBVLC)
         KF6::I18n
         LibVLC::LibVLC
     )
-    target_include_directories(kalarmcalendar
+    target_include_directories(audioplugin_vlc
         PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/audioplugin;${kalarm_BINARY_DIR}/src/audioplugin>")
     generate_export_header(audioplugin_vlc BASE_NAME audioplugin_vlc)
 endif()

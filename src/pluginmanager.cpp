@@ -81,7 +81,6 @@ void PluginManager::loadPlugins()
                     mAudioPlugins += mAudioMpvPlugin;
                 }
             }
-
         }
     }
 }

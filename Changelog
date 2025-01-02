@@ -8,6 +8,7 @@ KAlarm Change Log
 * Fix Akonadi functionality not working.
 * Make fade work each time a repeated sound alarm is played.
 * Fix Edit Alarm dialogue error setting time if user's time zone is UTC [KDE Bug 497960]
+* Fix build on FreeBSD if using MPV audio.
 
 === Version 3.10.0 (KDE Gear 24.12) --- 30 September 2024 ===
 * Provide build option to use VLC or MPV to play sounds.
