@@ -130,17 +130,16 @@ find_package(KPim6Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
 
 option(ENABLE_LIBVLC "Build support for LibVLC" ON)
 add_feature_info(ENABLE_LIBVLC ${ENABLE_LIBVLC} "Provides support for playing sound files using LibVLC")
-
 option(ENABLE_LIBMPV "Build support for Libmpv" OFF)
 add_feature_info(ENABLE_LIBMPV ${ENABLE_LIBMPV} "Provides support for playing sound files using Libmpv")
 
 if(ENABLE_LIBVLC)
     find_package(LibVLC "3.0.0" QUIET REQUIRED)
-    set_package_properties(LibVLC PROPERTIES PURPOSE "Needed to play audio alarms")
+    set_package_properties(LibVLC PROPERTIES PURPOSE "Used to play audio alarms")
 elseif(ENABLE_LIBMPV)
     # Note: libmpv < 2.2.0 has threading issues which cause hang-ups
     find_package(Libmpv "2.2.0" QUIET REQUIRED)
-    set_package_properties(Libmpv PROPERTIES PURPOSE "Needed to play audio alarms")
+    set_package_properties(Libmpv PROPERTIES PURPOSE "Used to play audio alarms")
 else()
     message(FATAL_ERROR "Support for either ENABLE_LIBVLC or ENABLE_LIBMPV must be enabled for playing sound files")
 endif()

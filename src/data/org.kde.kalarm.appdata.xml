@@ -459,6 +459,7 @@
           <li>Fix Akonadi functionality not working.</li>
           <li>Make fade work each time a repeated sound alarm is played.</li>
           <li>Fix Edit Alarm dialog error setting time if user's time zone is UTC.</li>
+	  <li>Fix build on FreeBSD if using MPV audio.</li>
         </ul>
       </description>
     </release>

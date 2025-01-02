@@ -3,6 +3,7 @@
 # SPDX-FileCopyrightText: 2019 Heiko Becker <heirecka@exherbo.org>
 # SPDX-FileCopyrightText: 2020 Elvis Angelaccio <elvis.angelaccio@kde.org>
 # SPDX-FileCopyrightText: 2021 George Florea Bănuș <georgefb899@gmail.com>
+# SPDX-FileCopyrightText: 2025 David Jarvie <djarvie@kde.org>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #
@@ -36,12 +37,9 @@ find_package(PkgConfig QUIET)
 
 pkg_search_module(PC_MPV QUIET mpv)
 
-find_path(Libmpv_INCLUDE_DIRS
-    NAMES client.h
-    PATH_SUFFIXES mpv
-    HINTS ${PC_MPV_INCLUDEDIR}
+find_path(Libmpv_INCLUDE_DIRS mpv/client.h
+    HINTS "$ENV{LIBMPV_INCLUDE_PATH}" ${PC_MPV_INCLUDEDIR} ${PC_MPV_INCLUDE_DIRS}
 )
-
 
 find_library(Libmpv_LIBRARIES
     NAMES mpv
@@ -76,6 +74,12 @@ if (Libmpv_FOUND AND NOT TARGET Libmpv::Libmpv)
         target_link_libraries(Libmpv::Libmpv INTERFACE ${PC_MPV_LINK_LIBRARIES})
     endif()
 endif()
+
+if(NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+    message(STATUS "Found LibMPV include-dir path: ${Libmpv_INCLUDE_DIRS}")
+    message(STATUS "Found LibMPV library path:${Libmpv_LIBRARIES}")
+    message(STATUS "Found LibMPV version: ${Libmpv_VERSION}")
+endif (NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
 
 mark_as_advanced(Libmpv_LIBRARIES Libmpv_INCLUDE_DIRS)
 
