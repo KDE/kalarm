@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
                          QStringLiteral(KALARM_VERSION " (KDE Gear " RELEASE_SERVICE_VERSION ")"),
                          i18n("Personal alarm message, command and email scheduler by KDE"),
                          KAboutLicense::GPL,
-                         ki18n("Copyright © 2001-%1, David Jarvie").subs(QStringLiteral("2024")).toString(), QString());
+                         ki18n("Copyright © 2001-%1, David Jarvie").subs(QStringLiteral("2025")).toString(), QString());
     aboutData.addAuthor(i18nc("@info:credit", "David Jarvie"), i18n("Author"), QStringLiteral("djarvie@kde.org"));
     aboutData.setOrganizationDomain("kde.org");
     aboutData.setDesktopFileName(QStringLiteral(KALARM_DBUS_SERVICE));
