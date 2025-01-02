@@ -36,11 +36,15 @@ find_package(PkgConfig QUIET)
 
 pkg_search_module(PC_MPV QUIET mpv)
 
+find_path(Libmpv_INCLUDE_DIRS mpv/client.h
+    HINTS "$ENV{LIBVLC_INCLUDE_PATH}" ${PC_MPV_INCLUDEDIR} ${PC_MPV_INCLUDE_DIRS})
+message(STATUS "Libmpv_INCLUDE_DIRS 1: ${Libmpv_INCLUDE_DIRS}")
 find_path(Libmpv_INCLUDE_DIRS
     NAMES client.h
     PATH_SUFFIXES mpv
     HINTS ${PC_MPV_INCLUDEDIR}
 )
+message(STATUS "Libmpv_INCLUDE_DIRS 2: ${Libmpv_INCLUDE_DIRS}")
 
 
 find_library(Libmpv_LIBRARIES
