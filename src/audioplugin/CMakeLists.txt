@@ -44,6 +44,7 @@ if(ENABLE_LIBVLC)
 endif()
 
 if(ENABLE_LIBMPV)
+set(CMAKE_VERBOSE_MAKEFILE ON)
     kcoreaddons_add_plugin(audioplugin_mpv
         SOURCES
             ${audioplugin_SRCS}
