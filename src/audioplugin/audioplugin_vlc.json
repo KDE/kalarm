@@ -1,7 +1,27 @@
 {
     "KPlugin": {
         "Description": "VLC audio plugin",
+        "Description[ca@valencia]": "Connector d'àudio VLC",
+        "Description[ca]": "Connector d'àudio VLC",
+        "Description[es]": "Complemento de sonido VLC",
+        "Description[eu]": "VLC audioa plugina",
+        "Description[ka]": "VLC აუდიოს დამატება",
+        "Description[nl]": "VLC-audioplug-in",
+        "Description[sl]": "Vtičnik VLC avdio",
+        "Description[tr]": "VLC ses eklentisi",
+        "Description[uk]": "Звуковий додаток VLC",
+        "Description[x-test]": "xxVLC audio pluginxx",
         "Name": "VLC audio",
+        "Name[ca@valencia]": "Àudio VLC",
+        "Name[ca]": "Àudio VLC",
+        "Name[es]": "Sonido VLC",
+        "Name[eu]": "VLC audioa",
+        "Name[ka]": "VLC audio",
+        "Name[nl]": "VLC-audio",
+        "Name[sl]": "VLC avdio",
+        "Name[tr]": "VLC Sesi",
+        "Name[uk]": "звук VLC",
+        "Name[x-test]": "xxVLC audioxx",
         "Version": "1.0"
     }
 }
