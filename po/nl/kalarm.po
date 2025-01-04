@@ -9,7 +9,7 @@
 # Rinse de Vries <rinsedevries@kde.nl>, 2004, 2005, 2006, 2007, 2008.
 # Marout Yasuo Borms <beijnes@xs4all.nl>, 2005.
 # Kristof Bal <kristof.bal@gmail.com>, 2008, 2009.
-# SPDX-FileCopyrightText: 2008, 2009, 2023, 2024 Freek de Kruijf <freekdekruijf@kde.nl>
+# SPDX-FileCopyrightText: 2008, 2009, 2023, 2024, 2025 Freek de Kruijf <freekdekruijf@kde.nl>
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2009, 2010, 2011, 2012.
 # Hannie Lafeber-Dumoleyn <hannie@kde.nl>, 2010, 2011.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
@@ -18,14 +18,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-03 00:42+0000\n"
-"PO-Revision-Date: 2024-09-16 12:09+0200\n"
+"PO-Revision-Date: 2025-01-03 17:54+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.1\n"
+"X-Generator: Lokalize 24.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -34,7 +34,7 @@ msgid "Your names"
 msgstr ""
 "Otto Bruggeman - 2001,Rinse de Vries - 2001 t/m 2008,Wilbert Berendsen - "
 "2003,Bram Schoenmakers - 2004 t/m 2007,Tom Albers - 2004,Marout Yasuo Borms "
-"- 2005,Kristof Bal - 2008,Freek de Kruijf - 2008 t/m 2024"
+"- 2005,Kristof Bal - 2008,Freek de Kruijf - 2008 t/m 2025"
 
 # vertaalinfo:
 # adressen van otto en marout bestaan niet meer, vervangen door komma's om de opmaak te behouden.
@@ -919,28 +919,28 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Audio backend"
-msgstr ""
+msgstr "Audio-backend"
 
 #. i18n: ectx: whatsthis, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Which audio backend to prefer."
-msgstr ""
+msgstr "Welke audio-backend heeft de voorkeur."
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:86
 #, kde-format
 msgctxt "@option"
 msgid "MPV"
-msgstr ""
+msgstr "MPV"
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:87
 #, kde-format
 msgctxt "@option"
 msgid "VLC"
-msgstr ""
+msgstr "VLC"
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:92
@@ -5554,15 +5554,14 @@ msgstr "Plug-ins"
 #, kde-format
 msgctxt "@title:group"
 msgid "Audio Backend"
-msgstr ""
+msgstr "Audio-backend"
 
 #: prefdlg.cpp:578
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Choose the volume for playing the sound file."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which audio backend to use to play sound files"
-msgstr "Kies het volume voor het geluidsbestand."
+msgstr ""
+"Kies welke audio-backend te gebruiken om geluidsbestanden af te spelen."
 
 #: prefdlg.cpp:593
 #, kde-format
