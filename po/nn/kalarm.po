@@ -1007,11 +1007,6 @@ msgstr "Start ved innlogging"
 #. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:133
 #, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-#| "should always be checked unless you intend to discontinue use of KAlarm.</"
-#| "p>"
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
@@ -1023,8 +1018,6 @@ msgstr ""
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:137
 #, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Run Mode"
 msgctxt "@label"
 msgid "Run mode"
 msgstr "Køyremodus"
@@ -1054,8 +1047,6 @@ msgstr ""
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:142
 #, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
 msgctxt "@option"
 msgid "Do not run"
 msgstr "Ikkje gjenta"
@@ -5113,8 +5104,6 @@ msgstr ""
 
 #: prefdlg.cpp:468
 #, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
 msgctxt "@option:radio"
 msgid "Do not run"
 msgstr "Ikkje gjenta"
@@ -5129,8 +5118,6 @@ msgstr ""
 
 #: prefdlg.cpp:474
 #, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Activate <application>KAlarm</application>"
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
 msgstr "Start <application>KAlarm</application>"
@@ -5282,10 +5269,6 @@ msgstr ""
 
 #: prefdlg.cpp:702
 #, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "You should not uncheck this option unless you intend to discontinue use "
-#| "of <application>KAlarm</application>"
 msgctxt "@info"
 msgid ""
 "You should not check this option unless you intend to discontinue use of "
