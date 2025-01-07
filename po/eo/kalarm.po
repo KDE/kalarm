@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-03 00:42+0000\n"
-"PO-Revision-Date: 2024-09-14 11:22+0200\n"
+"PO-Revision-Date: 2025-01-06 18:58+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -844,28 +844,28 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Audio backend"
-msgstr ""
+msgstr "Aŭd-Backend"
 
 #. i18n: ectx: whatsthis, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Which audio backend to prefer."
-msgstr ""
+msgstr "Kiun aŭd-backend preferi."
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:86
 #, kde-format
 msgctxt "@option"
 msgid "MPV"
-msgstr ""
+msgstr "MPV"
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:87
 #, kde-format
 msgctxt "@option"
 msgid "VLC"
-msgstr ""
+msgstr "VLC"
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:92
@@ -1048,7 +1048,7 @@ msgstr "Rula reĝimo"
 msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
-msgstr ""
+msgstr "Ĉu ruli KAlarm aŭtomate dum ensaluto, mane nur, aŭ tute ne."
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:149
@@ -5094,7 +5094,7 @@ msgstr "Kura Reĝimo"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run automatically"
-msgstr ""
+msgstr "Ruli aŭtomate"
 
 #: prefdlg.cpp:460
 #, kde-format
@@ -5103,6 +5103,8 @@ msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
 msgstr ""
+"Lanĉi KAlarm aŭtomate ĉe ensaluto. Ĉi elekteblo devas esti markita por "
+"ebligi normalan funkciadon de KAlarm."
 
 #: prefdlg.cpp:463
 #, kde-format
@@ -5117,6 +5119,8 @@ msgid ""
 "Only run KAlarm manually, never automatically. KAlarm will only function "
 "when you manually start it."
 msgstr ""
+"Ruli KAlarm nur permane, neniam aŭtomate. KAlarm nur ekfunkcios kiam vi mane "
+"lanĉas ĝin."
 
 #: prefdlg.cpp:469
 #, kde-format
@@ -5131,6 +5135,8 @@ msgid ""
 "Stop using KAlarm. If you later run it again, it will then resume normal "
 "functioning."
 msgstr ""
+"Ĉesu uzi KAlarm. Se vi poste rulos ĝin denove, ĝi tiam rekomencos normalan "
+"funkciadon."
 
 #: prefdlg.cpp:475
 #, kde-format
@@ -5245,15 +5251,13 @@ msgstr "Kromaĵoj"
 #, kde-format
 msgctxt "@title:group"
 msgid "Audio Backend"
-msgstr ""
+msgstr "Aŭd-Backend"
 
 #: prefdlg.cpp:578
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Choose the volume for playing the sound file."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which audio backend to use to play sound files"
-msgstr "Elektu la laŭtecon por ludi la sondosieron."
+msgstr "Elekti la aŭd-backend por ludi la sondosierojn"
 
 #: prefdlg.cpp:593
 #, kde-format
@@ -5321,6 +5325,8 @@ msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
 msgstr ""
+"Tio ĉi malhelpos <application>KAlarm</application> funkcii<nl/>krom se vi "
+"permane lanĉas ĝin."
 
 #: prefdlg.cpp:805
 #, kde-kuit-format
