@@ -3,13 +3,13 @@
 #
 # Zlatko Popov <zlatkopopov@fsa-bg.org>, 2006, 2007, 2008.
 # Krasimir Aranudov <krasi.arnaudov@gmail.com>, 2007.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Mincho Kondarev <mkondarev@yahoo.de>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Mincho Kondarev <mkondarev@yahoo.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-03 00:42+0000\n"
-"PO-Revision-Date: 2024-11-10 14:50+0100\n"
+"PO-Revision-Date: 2025-01-07 23:27+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.11.70\n"
+"X-Generator: Lokalize 25.03.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -860,28 +860,28 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Audio backend"
-msgstr ""
+msgstr "Програма за възпроизвеждане на аудио"
 
 #. i18n: ectx: whatsthis, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Which audio backend to prefer."
-msgstr ""
+msgstr "Предпочитана програма за възпроизвеждане на аудио."
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:86
 #, kde-format
 msgctxt "@option"
 msgid "MPV"
-msgstr ""
+msgstr "MPV"
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:87
 #, kde-format
 msgctxt "@option"
 msgid "VLC"
-msgstr ""
+msgstr "VLC"
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:92
@@ -5333,15 +5333,15 @@ msgstr "Приставки"
 #, kde-format
 msgctxt "@title:group"
 msgid "Audio Backend"
-msgstr ""
+msgstr "Програма за възпроизвеждане на аудио"
 
 #: prefdlg.cpp:578
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Choose the volume for playing the sound file."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which audio backend to use to play sound files"
-msgstr "Изберете сила на звука за изпълнение на аудио файла."
+msgstr ""
+"Изберете коя програма за аудио да използвате за възпроизвеждане на звукови "
+"файлове"
 
 #: prefdlg.cpp:593
 #, kde-format
