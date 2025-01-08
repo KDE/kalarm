@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "VLC audio plugin",
+        "Description[bg]": "Аудио приставка за VLC аудио",
         "Description[ca@valencia]": "Connector d'àudio VLC",
         "Description[ca]": "Connector d'àudio VLC",
         "Description[es]": "Complemento de sonido VLC",
@@ -16,6 +17,7 @@
         "Description[x-test]": "xxVLC audio pluginxx",
         "Description[zh_CN]": "VLC 音频插件",
         "Name": "VLC audio",
+        "Name[bg]": "VLC аудио",
         "Name[ca@valencia]": "Àudio VLC",
         "Name[ca]": "Àudio VLC",
         "Name[es]": "Sonido VLC",

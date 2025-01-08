@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "MPV audio plugin",
+        "Description[bg]": "Аудио приставка за MPV аудио",
         "Description[ca@valencia]": "Connector d'àudio MPV",
         "Description[ca]": "Connector d'àudio MPV",
         "Description[es]": "Complemento de sonido MPV",
@@ -16,6 +17,7 @@
         "Description[x-test]": "xxMPV audio pluginxx",
         "Description[zh_CN]": "MPV 音频插件",
         "Name": "MPV audio",
+        "Name[bg]": "MPV аудио",
         "Name[ca@valencia]": "Àudio MPV",
         "Name[ca]": "Àudio MPV",
         "Name[es]": "Sonido MPV",
