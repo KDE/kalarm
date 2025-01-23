@@ -15,20 +15,20 @@ apps:
         desktop: usr/share/applications/org.kde.kalarm.desktop
         command: usr/bin/kalarm
         plugs:
-        - desktop
-        - desktop-legacy
-        - opengl
-        - wayland
-        - x11
-        - audio-playback
-        - unity7
-        - network
-        - network-bind
-        - akonadi-svc
+            - desktop
+            - desktop-legacy
+            - opengl
+            - wayland
+            - x11
+            - audio-playback
+            - unity7
+            - network
+            - network-bind
+            - akonadi-svc
         command-chain:
-        - snap/command-chain/desktop-launch
+            - snap/command-chain/desktop-launch
 assumes:
-- snapd2.55.3
+    - snapd2.55.3
 compression: lzo
 plugs:
     desktop:
@@ -59,9 +59,9 @@ environment:
 hooks:
     configure:
         plugs:
-        - desktop
+            - desktop
         command-chain:
-        - snap/command-chain/hooks-configure-desktop
+            - snap/command-chain/hooks-configure-desktop
 layout:
     "/usr/lib/$CRAFT_ARCH_TRIPLET/alsa-lib":
         symlink: "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/alsa-lib"
@@ -75,103 +75,103 @@ slots:
         name: org.kde.kalarm.kalarm
         bus: session
 package-repositories:
--   type: apt
-    components:
+    - type: apt
+components:
     - main
-    suites:
+suites:
     - jammy
-    key-id: 444DABCF3667D0283F894EDDE6D4736255751E5D
-    url: http://origin.archive.neon.kde.org/user
-    key-server: keyserver.ubuntu.com
+key-id: 444DABCF3667D0283F894EDDE6D4736255751E5D
+url: http://origin.archive.neon.kde.org/user
+key-server: keyserver.ubuntu.com
 parts:
     kde-neon:
         source: /snap/snapcraft/current/share/snapcraft/extensions/desktop/kde-neon
         source-type: local
         plugin: make
         make-parameters:
-        - PLATFORM_PLUG=kf5-5-113-qt-5-15-11-core22
+            - PLATFORM_PLUG=kf5-5-113-qt-5-15-11-core22
         build-snaps:
-        - kf5-5-113-qt-5-15-11-core22-sdk
+            - kf5-5-113-qt-5-15-11-core22-sdk
         build-environment:
-        - &id001
-            PATH: /snap/kf5-5-113-qt-5-15-11-core22-sdk/current/usr/bin${PATH:+:$PATH}
-        - &id002
-            XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kf5-5-113-qt-5-15-11-core22-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
-        - &id003
-            XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf5-5-113-qt-5-15-11-core22-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
-        - &id004
-            CRAFT_CMAKE_ARGS: -DCMAKE_FIND_ROOT_PATH=/snap/kf5-5-113-qt-5-15-11-core22-sdk/current${CRAFT_CMAKE_ARGS:+:$CRAFT_CMAKE_ARGS}
+            - &id001
+        PATH: /snap/kf5-5-113-qt-5-15-11-core22-sdk/current/usr/bin${PATH:+:$PATH}
+            - &id002
+        XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kf5-5-113-qt-5-15-11-core22-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
+            - &id003
+        XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf5-5-113-qt-5-15-11-core22-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
+            - &id004
+        CRAFT_CMAKE_ARGS: -DCMAKE_FIND_ROOT_PATH=/snap/kf5-5-113-qt-5-15-11-core22-sdk/current${CRAFT_CMAKE_ARGS:+:$CRAFT_CMAKE_ARGS}
     kalarm:
         after:
-        - kde-neon
+            - kde-neon
         parse-info:
-        - usr/share/metainfo/org.kde.kalarm.appdata.xml
+            - usr/share/metainfo/org.kde.kalarm.appdata.xml
         plugin: cmake
         build-packages:
-        - kross-dev
-        - libassuan-dev
-        - libboost-dev
-        - libboost-graph-dev
-        - libvlc-dev
-        - libvlccore-dev
-        - libmpv-dev
-        - pkg-config
-        - xsltproc
-        - zlib1g-dev
+            - kross-dev
+            - libassuan-dev
+            - libboost-dev
+            - libboost-graph-dev
+            - libvlc-dev
+            - libvlccore-dev
+            - libmpv-dev
+            - pkg-config
+            - xsltproc
+            - zlib1g-dev
         build-snaps:
-        - akonadi-sdk/edge
+            - akonadi-sdk/edge
         stage-packages:
-        - libasound2
-        - libasound2-data
-        - libasound2-plugins
-        - gstreamer1.0-alsa
-        - gstreamer1.0-pulseaudio
-        - gstreamer1.0-plugins-good
-        - gstreamer1.0-plugins-bad
-        - gstreamer1.0-plugins-ugly
-        - libvlc5
-        - libvlccore9
-        - libmpv1
-        - oxygen-sounds
-        - kross
-        - libassuan0
-        - libboost-graph1.74.0
-        - pkg-config
-        - xsltproc
-        - zlib1g
+            - libasound2
+            - libasound2-data
+            - libasound2-plugins
+            - gstreamer1.0-alsa
+            - gstreamer1.0-pulseaudio
+            - gstreamer1.0-plugins-good
+            - gstreamer1.0-plugins-bad
+            - gstreamer1.0-plugins-ugly
+            - libvlc5
+            - libvlccore9
+            - libmpv1
+            - oxygen-sounds
+            - kross
+            - libassuan0
+            - libboost-graph1.74.0
+            - pkg-config
+            - xsltproc
+            - zlib1g
         stage-snaps:
-        - khelpcenter
-        - akonadi/edge
+            - khelpcenter
+            - akonadi/edge
         source: .
         source-type: local
         cmake-parameters:
-        - "-DKDE_INSTALL_USE_QT_SYS_PATHS=FALSE"
-        - "-DCMAKE_INSTALL_PREFIX=/usr"
-        - "-DCMAKE_BUILD_TYPE=Release"
-        - "-DENABLE_TESTING=OFF"
-        - "-DBUILD_TESTING=OFF"
-        - "-DKDE_SKIP_TEST_SETTINGS=ON"
-        - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kf5-5-113-qt-5-15-11-core22-sdk/current\\;/snap/akonadi-sdk/current"
-        - "-DKDE_INSTALL_PLUGINDIR=/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/plugins/"
+            - "-DKDE_INSTALL_USE_QT_SYS_PATHS=FALSE"
+            - "-DCMAKE_INSTALL_PREFIX=/usr"
+            - "-DCMAKE_BUILD_TYPE=Release"
+            - "-DENABLE_TESTING=OFF"
+            - "-DBUILD_TESTING=OFF"
+            - "-DKDE_SKIP_TEST_SETTINGS=ON"
+            - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kf5-5-113-qt-5-15-11-core22-sdk/current\\;/snap/akonadi-sdk/current"
+            - "-DKDE_INSTALL_PLUGINDIR=/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/plugins/"
         prime:
-        - "-usr/lib/*/cmake/*"
-        - "-usr/include/*"
-        - "-usr/share/ECM/*"
-        - "-usr/share/man/*"
-        - "-usr/share/icons/breeze-dark*"
-        - "-usr/bin/X11"
-        - "-usr/lib/gcc/$CRAFT_ARCH_TRIPLET/6.0.0"
-        - "-usr/lib/aspell/*"
-        - "-usr/share/lintian"
+            - "-usr/lib/*/cmake/*"
+            - "-usr/include/*"
+            - "-usr/share/ECM/*"
+            - "-usr/share/man/*"
+            - "-usr/share/icons/breeze-dark*"
+            - "-usr/bin/X11"
+            - "-usr/lib/gcc/$CRAFT_ARCH_TRIPLET/6.0.0"
+            - "-usr/lib/aspell/*"
+            - "-usr/share/lintian"
         build-environment:
-        - *id001
-        - *id002
-        - *id003
-        - *id004
-        - QML2_IMPORT_PATH: $CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml:/snap/kf5-5-113-qt-5-15-11-core22-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml
+            - id001
+            - id002
+            - id003
+            - id004
+            - QML2_IMPORT_PATH: $CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml:/snap/kf5-5-113-qt-5-15-11-core22-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml
     cleanup:
         after:
-        - kalarm
+            - kalarm
         plugin: nil
         override-prime: |
             set -eux

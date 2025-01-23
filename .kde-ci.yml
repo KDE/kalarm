@@ -2,17 +2,17 @@
 # SPDX-License-Identifier: CC0-1.0
 
 Dependencies:
-- 'on': ['Linux', 'FreeBSD', 'Windows']
-  'require':
+ - 'on': ['Linux', 'FreeBSD', 'Windows']
+   'require':
     'frameworks/extra-cmake-modules': '@latest-kf6'
-    'frameworks/kcalendarcore' : '@latest-kf6'
-    'frameworks/kholidays' : '@latest-kf6'
-    'frameworks/kcodecs' : '@latest-kf6'
-    'frameworks/kcompletion' : '@latest-kf6'
-    'frameworks/kconfig' : '@latest-kf6'
-    'frameworks/kconfigwidgets' : '@latest-kf6'
-    'frameworks/kcontacts' : '@latest-kf6'
-    'frameworks/kcrash' : '@latest-kf6'
+    'frameworks/kcalendarcore': '@latest-kf6'
+    'frameworks/kholidays': '@latest-kf6'
+    'frameworks/kcodecs': '@latest-kf6'
+    'frameworks/kcompletion': '@latest-kf6'
+    'frameworks/kconfig': '@latest-kf6'
+    'frameworks/kconfigwidgets': '@latest-kf6'
+    'frameworks/kcontacts': '@latest-kf6'
+    'frameworks/kcrash': '@latest-kf6'
     'frameworks/kdbusaddons': '@latest-kf6'
     'frameworks/kguiaddons': '@latest-kf6'
     'frameworks/ki18n': '@latest-kf6'
@@ -27,19 +27,19 @@ Dependencies:
     'frameworks/kxmlgui': '@latest-kf6'
     'frameworks/kstatusnotifieritem': '@latest-kf6'
     'frameworks/kiconthemes': '@latest-kf6'
-    'pim/akonadi' : '@same'
-    'pim/akonadi-contacts' : '@same'
-    'pim/akonadi-mime' : '@same'
-    'pim/kcalutils' : '@same'
-    'pim/kidentitymanagement' : '@same'
-    'pim/kmailtransport' : '@same'
-    'pim/kmime' : '@same'
+    'pim/akonadi': '@same'
+    'pim/akonadi-contacts': '@same'
+    'pim/akonadi-mime': '@same'
+    'pim/kcalutils': '@same'
+    'pim/kidentitymanagement': '@same'
+    'pim/kmailtransport': '@same'
+    'pim/kmime': '@same'
     'libraries/ktextaddons': '@latest-kf6'
 
-- 'on': ['Linux', 'FreeBSD']
-  'require':
+ - 'on': ['Linux', 'FreeBSD']
+   'require':
     'frameworks/kglobalaccel': '@latest-kf6'
 
 Options:
-    require-passing-tests-on: ['Linux', 'FreeBSD']
-    cppcheck-arguments: '--enable=warning,style,performance --inline-suppr'
+ require-passing-tests-on: ['Linux', 'FreeBSD']
+ cppcheck-arguments: '--enable=warning,style,performance --inline-suppr'
