@@ -1277,7 +1277,7 @@ qDebug()<<"dtl:"<<dtl.qDateTime();
 qDebug()<<"sysTz:"<<sysTz<<", dtl:"<<dtl.qTimeZone()<<", dtl.qdt:"<<dtl.qDateTime().timeZone();
         QCOMPARE(kcalevent->dtStart(), dtl.qDateTime());
         if (sysTz.isValid())
-            QCOMPARE(kcalevent->dtStart().toTimeZone(sysTz), QDateTime(dtl.date(), dtl.time(), sysTz);
+            QCOMPARE(kcalevent->dtStart().toTimeZone(sysTz), QDateTime(dtl.date(), dtl.time(), sysTz));
         QCOMPARE(kcalevent->created(), createdDt.qDateTime());
     }
 }
