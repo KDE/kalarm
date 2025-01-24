@@ -1271,6 +1271,7 @@ void KAEventTest::toKCalEvent()
         QVERIFY(flags.contains(QLatin1StringView("LOCAL")));
         const QTimeZone sysTz = QTimeZone::systemTimeZone();
         const QDateTime dtCurrentTz(dtl.date(), dtl.time(), sysTz);
+qDebug()<<"dtStart:"<<kcalevent->dtStart()<<", tz:"<<kcalevent->dtStart().timeZone();
 qDebug()<<"sysTz.isValid:"<<sysTz.isValid()<<", dtCurrentTz:"<<dtCurrentTz<<", dtl:"<<dtl.qDateTime();
 qDebug()<<"sysTz:"<<sysTz<<", dtl:"<<dtl.qTimeZone()<<", dtl.qdt:"<<dtl.qDateTime().timeZone();
         QCOMPARE(kcalevent->dtStart(), (sysTz.isValid() ? dtCurrentTz : dtl.qDateTime()));
