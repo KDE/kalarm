@@ -13,6 +13,7 @@ macro(macro_unit_tests)
     target_link_libraries(${_testname}
         KF6::CalendarCore
         KF6::Holidays
+        KF6::I18n
         kalarmcalendar
         Qt::DBus
         Qt::Test)

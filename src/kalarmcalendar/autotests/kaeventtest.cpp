@@ -2,7 +2,7 @@
    This file is part of kalarmcal library, which provides access to KAlarm
    calendar data.
 
-   SPDX-FileCopyrightText: 2018-2023 David Jarvie <djarvie@kde.org>
+   SPDX-FileCopyrightText: 2018-2024 David Jarvie <djarvie@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -16,6 +16,7 @@ using namespace KAlarmCal;
 #include <KCalendarCore/Event>
 #include <KCalendarCore/Alarm>
 using namespace KCalendarCore;
+#include <KLocalizedString>
 
 #include <QTest>
 
@@ -589,6 +590,8 @@ void KAEventTest::fromKCalEvent()
     // Check KCalendarCore::Event custom properties.
     const KADateTime dt(QDate(2010,5,13), QTime(3, 45, 0), QTimeZone("Europe/London"));
     const QDateTime createdDt(QDate(2009,4,13), QTime(11,14,0), QTimeZone("UTC"));
+
+    KLocalizedString::setApplicationDomain(QByteArrayLiteral("kaeventtest"));
 
     // Event category, UID, revision, start time, created time
     {
