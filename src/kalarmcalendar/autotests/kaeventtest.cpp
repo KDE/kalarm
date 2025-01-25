@@ -1260,6 +1260,7 @@ void KAEventTest::toKCalEvent()
         // Start time using LocalZone
 const QDateTime lt(QDate(2010,5,13), QTime(3, 45, 0), Qt::LocalTime);
 const QDateTime st(QDate(2010,5,13), QTime(3, 45, 0), QTimeZone::systemTimeZone());
+qDebug()<<"Local:"<<lt.toUTC()<<", System:"<<st.toUTC();
 QCOMPARE(lt.toTimeZone(QTimeZone::systemTimeZone()), st);
         const KADateTime dtl(QDate(2010,5,13), QTime(3, 45, 0), KADateTime::LocalZone);
         KAEvent event(dtl, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, KAEvent::CONFIRM_ACK);
