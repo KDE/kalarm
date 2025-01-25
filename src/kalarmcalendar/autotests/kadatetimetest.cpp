@@ -3111,9 +3111,9 @@ void KADateTimeTest::strings_iso8601()
     QVERIFY(!dt.isValid());
 
     // Check negZero
-    dt = KADateTime::fromString(QStringLiteral("1999-060T19:20:21.06-00:00"), KADateTime::ISODate, &negZero);
+    KADateTime::fromString(QStringLiteral("1999-060T19:20:21.06-00:00"), KADateTime::ISODate, &negZero);
     QVERIFY(negZero);
-    dt = KADateTime::fromString(QStringLiteral("1999-060T19:20:21.06+00:00"), KADateTime::ISODate, &negZero);
+    KADateTime::fromString(QStringLiteral("1999-060T19:20:21.06+00:00"), KADateTime::ISODate, &negZero);
     QVERIFY(!negZero);
 
     // Restore the original local time zone
