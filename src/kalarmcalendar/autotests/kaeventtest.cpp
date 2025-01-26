@@ -1225,6 +1225,11 @@ void KAEventTest::toKCalEvent()
     const QFont  font(QStringLiteral("Helvetica"), 10, QFont::Bold, true);
     const QString uid = QStringLiteral("fa74ec931");
 
+    // Ensure that a system time zone is set so that Qt::LocalTime == system time
+    const QByteArray originalZone = qgetenv("TZ");   // save the original system time zone
+    qputenv("TZ", ":Europe/Berlin");
+    ::tzset();
+
     {
         // Event category, UID, revision, start time using time zone, created time
         KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, KAEvent::CONFIRM_ACK);
@@ -1271,9 +1276,18 @@ void KAEventTest::toKCalEvent()
         QVERIFY(flags.contains(QLatin1StringView("LOCAL")));
         const QTimeZone sysTz = QTimeZone::systemTimeZone();
         const QDateTime dtCurrentTz(dtl.date(), dtl.time(), sysTz);
-        QCOMPARE(kcalevent->dtStart(), (sysTz.isValid() ? dtCurrentTz : dtl.qDateTime()));
+        QCOMPARE(kcalevent->dtStart(), dtl.qDateTime());
+        if (sysTz.isValid())
+            QCOMPARE(kcalevent->dtStart().toTimeZone(sysTz), QDateTime(dtl.date(), dtl.time(), sysTz));
         QCOMPARE(kcalevent->created(), createdDt.qDateTime());
     }
+
+    // Restore the original system time zone
+    if (originalZone.isEmpty())
+        unsetenv("TZ");
+    else
+        qputenv("TZ", originalZone);
+    ::tzset();
 }
 
 void KAEventTest::setNextOccurrence()
