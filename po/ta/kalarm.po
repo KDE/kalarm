@@ -9,13 +9,13 @@
 #
 # Ambalam <tamilpc@ambalam.com>, 2004.
 # root <root@localhost.localdomain>, 2004.
-# SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Kishore G <kishore96@gmail.com>
+# SPDX-FileCopyrightText: 2021, 2022, 2023, 2024, 2025 Kishore G <kishore96@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-03 00:42+0000\n"
-"PO-Revision-Date: 2024-10-09 20:38+0530\n"
+"PO-Revision-Date: 2025-01-26 17:20+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.1\n"
+"X-Generator: Lokalize 24.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -858,28 +858,28 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Audio backend"
-msgstr ""
+msgstr "ஒலி பின்நிரல்"
 
 #. i18n: ectx: whatsthis, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Which audio backend to prefer."
-msgstr ""
+msgstr "பயன்படுத்த வேண்டிய ஒலி பின்நிரல்"
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:86
 #, kde-format
 msgctxt "@option"
 msgid "MPV"
-msgstr ""
+msgstr "MPV"
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:87
 #, kde-format
 msgctxt "@option"
 msgid "VLC"
-msgstr ""
+msgstr "VLC"
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:92
@@ -3800,7 +3800,7 @@ msgstr "காப்பகப்படுத்து"
 #, kde-format
 msgctxt "@label"
 msgid "Revision"
-msgstr ""
+msgstr "பதிப்பு"
 
 #: kalarmcalendar/kaeventformatter.cpp:86
 #, kde-format
@@ -5107,12 +5107,10 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:475
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Activate <application>KAlarm</application>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr "<application>கேயலாரத்தை</application> காட்டு"
+msgstr "<application>கேயலாரத்தை</application> சாதாரணமாக பயன்படுத்த"
 
 #: prefdlg.cpp:482
 #, kde-format
@@ -5219,7 +5217,7 @@ msgstr "செருகுநிரல்கள்"
 #, kde-format
 msgctxt "@title:group"
 msgid "Audio Backend"
-msgstr ""
+msgstr "ஒலி பின்நிரல்"
 
 #: prefdlg.cpp:578
 #, fuzzy, kde-format
@@ -5304,7 +5302,7 @@ msgid ""
 "its default for displaying and entering dates and times."
 msgstr ""
 "தேதிகளையும் நேரங்களையும் காட்டவும் உள்ளிடவும் <application>கேயலாரம்</application> "
-"இயல்பாக பயன்படுத்த வேண்டிய கால மண்டலத்தை தேர்ந்தெடுங்கள்."
+"இயல்பாக பயன்படுத்த வேண்டிய நேர மண்டலத்தை தேர்ந்தெடுக்கவும்."
 
 #: prefdlg.cpp:819
 #, kde-format
