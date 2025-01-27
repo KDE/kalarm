@@ -30,6 +30,7 @@
   <name xml:lang="ka">KAlarm</name>
   <name xml:lang="ko">KAlarm</name>
   <name xml:lang="lt">KAlarm</name>
+  <name xml:lang="lv">KAlarm</name>
   <name xml:lang="nb">KAlarm</name>
   <name xml:lang="nds">KAlarm</name>
   <name xml:lang="nl">KAlarm</name>
@@ -77,6 +78,7 @@
   <summary xml:lang="it">Programmatore degli avvisi personali</summary>
   <summary xml:lang="ka">მაღვიძარის პირადი მგეგმავი</summary>
   <summary xml:lang="ko">개인 알람 스케줄러</summary>
+  <summary xml:lang="lv">Personīgais signālu plānotājs</summary>
   <summary xml:lang="nb">Personlig varslingsplanlegger</summary>
   <summary xml:lang="nds">Persöönlich Anstöötgever</summary>
   <summary xml:lang="nl">Persoonlijke alarmplanner</summary>
@@ -128,6 +130,7 @@
     <p xml:lang="it">KAlarm è un pianificatore personale di messaggi di avviso, di posta elettronica e per l'esecuzione di comandi sviluppato da KDE</p>
     <p xml:lang="ka">KAlarm პერსონალური განგაშის შეტყობინების, ბრძანების და ელფოსტის დამგეგმავია KDE-სგან</p>
     <p xml:lang="ko">KAlarm은 KDE의 개인 알람, 명령, 이메일 스케줄러입니다</p>
+    <p xml:lang="lv">„KAlarm“ ir KDE ziņu, komandu un e-pasta sūtīšanas plānotājs</p>
     <p xml:lang="nl">Kalarm is een persoonlijke planner voor herinneringen, opdrachten en plannen van e-mailberichten door KDE</p>
     <p xml:lang="pl">KAlarm jest osobistym programem KDE do planowania wiadomości alarmowych, poleceń i wiadomości pocztowych</p>
     <p xml:lang="pt">O KAlarm é um sistema para agendar alarmes com mensagens, comandos e e-mails do KDE</p>
@@ -170,6 +173,7 @@
     <p xml:lang="ka">თვისებები:</p>
     <p xml:lang="ko">기능:</p>
     <p xml:lang="lt">Ypatybės:</p>
+    <p xml:lang="lv">Iespējas:</p>
     <p xml:lang="nb">Egenskaper:</p>
     <p xml:lang="nds">Markmalen:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
@@ -216,6 +220,7 @@
       <li xml:lang="it">Mostra gli avvisi usando un tuo messaggio di testo, il testo generato da un comando, o un file di testo o immagine.</li>
       <li xml:lang="ka">განგაშების ჩვენება თქვენი ტექსტური შეტყობინების, ბრძანების მიერ გამოტანილი ტექსტის, ტექსტის ან გამოსახულების ფაილის გამოყენებით.</li>
       <li xml:lang="ko">텍스트 메시지, 명령에서 생성한 텍스트, 텍스트나 그림 파일로 알람 표시.</li>
+      <li xml:lang="lv">Parāda signālus ar jūsu teksta ziņojumiem, komandas radītu tekstu vai teksta vai attēla datni</li>
       <li xml:lang="nb">Viser varslinger med dine egne tekstmeldinger, tekst laget av en kommando, eller en tekst- eller bildefil.</li>
       <li xml:lang="nds">Anstööt mit Dien egen oder vun en Programm opstellt Texten oder en Text- oder Bilddatei wiesen</li>
       <li xml:lang="nl">Te tonen herinneringen met uw eigen tekstberichten, de tekst gegenereerd door een commando of een tekst of afbeeldingsbestand.</li>
@@ -260,6 +265,7 @@
       <li xml:lang="it">Avvisi acustici usando file sonori</li>
       <li xml:lang="ka">ხმოვანი განგაში ხმის ფაილით</li>
       <li xml:lang="ko">음성 파일을 사용한 알람</li>
+      <li xml:lang="lv">Skaņas signāls, izmantojot skaņas datni</li>
       <li xml:lang="nb">Hørbar varsling ved bruk av en lydfil</li>
       <li xml:lang="nds">Höörbor Anstööt mit en Klangdatei</li>
       <li xml:lang="nl">Hoorbaar alarm met een geluidsbestand</li>
@@ -303,6 +309,7 @@
       <li xml:lang="it">Avvisi ricorrenti secondi intervalli di ore/minuti, giornalieri, settimanali, mensili o annuali, o impostati per attivarsi quando accedi al sistema.</li>
       <li xml:lang="ka">განმეორებადი განგაში საათი/წუთის, დღის, კვირის, თვის თუ წლის შუალედებით, ან დააყენეთ, ყოველი შესვლისას დატრიგერდეს.</li>
       <li xml:lang="ko">시/분, 일간, 주간, 월간, 년간 및 로그인 할 때마다 반복되는 알람.</li>
+      <li xml:lang="lv">Signāli, kas atkārtojas ik pēc noteiktām stundām/minūtēm, katru dienu, reizi nedēļā, mēnesī vai gadā, vai arī signāls, katru reizi ierakstoties sistēmā</li>
       <li xml:lang="nb">Gjentatt varsling basert på time/minutt, daglig, ukentlig, månedlig eller årlig, eller la den utløses hver gang du logger inn.</li>
       <li xml:lang="nds">Wedderkamen Anstööt na Stünnen/Minuten, na Daag, Weken, Maanden oder elk Johr, oder jümmers, wenn Du Di anmellen deist.</li>
       <li xml:lang="nl">Een zich herhalend alarm op basis van uren/minuten, dagelijks, wekelijks, maandelijks of jaarlijks of instellen om het af te laten gaan elke keer dat u zich aanmeld.</li>
@@ -346,6 +353,7 @@
       <li xml:lang="it">Personalizzazione dei colori e dei caratteri usati per gli avvisi</li>
       <li xml:lang="ka">ნაჩვენები განგაშების ფერისა და ფონტების მორგება</li>
       <li xml:lang="ko">알람 색상 및 글꼴 사용자 정의</li>
+      <li xml:lang="lv">Signāla krāsas un fonta pielāgošana</li>
       <li xml:lang="nb">Skrift og farger for varslinger kan settes opp</li>
       <li xml:lang="nds">Instellbor Anstootklöör un -Schriftoort</li>
       <li xml:lang="nl">Kleuren van te tonen herinneringen en keuze uit lettertypen</li>
@@ -388,6 +396,7 @@
       <li xml:lang="it">Supporto per più calendari di avvisi, permettendoti di condividere gli allarmi tra un portatile ed un computer desktop.</li>
       <li xml:lang="ka">აქვს ერთზე მეტი განგაშის კალენდრის მხარდაჭერა, რომელიც, მაგალითად, საშუალებას გაძლევთ, განგაშების სინქრონიზაცია მოახდინოთ ლეპტოპსა და სახლის კომპიუტერს შორის.</li>
       <li xml:lang="ko">두 대 이상의 컴퓨터와 동기화할 수 있는 등의 다중 알람 달력 지원.</li>
+      <li xml:lang="lv">Vairāku signālu kalendāru atbalsts, lai varat, piemēram, kopīgot signālus starp savu portatīvu datoru un galda datoru.</li>
       <li xml:lang="nb">Støtte for flere varslingskalendere, slik kan du for eksempel dele varslinger mellom en bærbar og en skrivebordsmaskin.</li>
       <li xml:lang="nds">Ünnerstütt en Reeg Anstootkalenners, so kannst Du Anstööt twischen Klapp- un normaal Reekner uttuschen.</li>
       <li xml:lang="nl">Ondersteuning voor meerdere alarm-agenda's, die u bijvoorbeeld herinneringen laat delen tussen een laptop en desktopcomputer.</li>
@@ -439,6 +448,7 @@
       <caption xml:lang="it">Finestra di configurazione di KAlarm con un messaggio di avviso di prova</caption>
       <caption xml:lang="ka">KAlarm-ის მორგების ფანჯარა განგაშის ხმის ტესტირებით</caption>
       <caption xml:lang="ko">메시지 알람 테스트가 표시된 KAlarm 설정 창</caption>
+      <caption xml:lang="lv">„KAlarm“ konfigurācijas logs ar testa ziņojuma signālu</caption>
       <caption xml:lang="nl">KAlarm configuratievenster met een testbericht voor een herinnering</caption>
       <caption xml:lang="pl">Okno ustawień KAlarm z próbną wiadomością alarmową</caption>
       <caption xml:lang="pt">Janela de configuração do KAlarm com um alarme de teste com mensagem</caption>
