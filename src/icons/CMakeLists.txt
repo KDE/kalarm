@@ -14,5 +14,7 @@ ecm_install_icons(
     hicolor/32-apps-kalarm.png
     hicolor/48-apps-kalarm.png
     hicolor/64-apps-kalarm.png
+    hicolor/22-actions-kalarm-disabled.png
+    hicolor/22-actions-kalarm-partdisabled.png
     DESTINATION ${KDE_INSTALL_ICONDIR}
     THEME hicolor)

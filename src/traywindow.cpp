@@ -47,7 +47,7 @@ struct TipItem
 
 /*=============================================================================
 = Class: TrayWindow
-= The KDE system tray window.
+= The KAlarm system tray icon.
 =============================================================================*/
 
 TrayWindow::TrayWindow(MainWindow* parent)
@@ -58,8 +58,9 @@ TrayWindow::TrayWindow(MainWindow* parent)
     qCDebug(KALARM_LOG) << "TrayWindow:";
     setToolTipIconByName(QStringLiteral("kalarm"));
     setToolTipTitle(KAboutData::applicationData().displayName());
-    setIconByName(QStringLiteral("kalarm-symbolic"));   // falls back to "kalarm" if not available
-    setStatus(KStatusNotifierItem::Active);
+    setIconByName(QStringLiteral("kalarm"));
+    setStatus(Active);
+    setCategory(ApplicationStatus);
     // Set up the context menu
     mActionEnabled = KAlarm::createAlarmEnableAction(this);
     contextMenu()->addAction(mActionEnabled);
@@ -312,7 +313,7 @@ void TrayWindow::updateIcon()
     // fallback for all these icons is "kalarm".
     setIconByName(!theApp()->alarmsEnabled() ? QStringLiteral("kalarm-disabled")
                   : mHaveDisabledAlarms ? QStringLiteral("kalarm-partdisabled")
-                  : QStringLiteral("kalarm-symbolic"));
+                  : QStringLiteral("kalarm"));
 }
 
 /******************************************************************************

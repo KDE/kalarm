@@ -9,10 +9,10 @@ set(RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_
 # Whenever KALARM_VERSION changes, set the 3 variables below it to the first
 # KDE Release Service version which will contain that KAlarm release.
 # (This must be the full release version, not an alpha or beta release.)
-set(KALARM_VERSION "3.10.1")
+set(KALARM_VERSION "3.10.2")
 set(KALARM_VERSION_RELEASE_SERVICE_MAJOR "24")
 set(KALARM_VERSION_RELEASE_SERVICE_MINOR "12")
-set(KALARM_VERSION_RELEASE_SERVICE_MICRO "1")
+set(KALARM_VERSION_RELEASE_SERVICE_MICRO "2")
 
 # If KAlarm's version has not changed since the last KDE Release Service version,
 # this code sets a sub-version x.x.x.N to avoid duplicate version numbers in
@@ -111,7 +111,7 @@ find_package(KF6WindowSystem ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6XmlGui ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6TextWidgets ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6StatusNotifierItem ${KF_MIN_VERSION} CONFIG REQUIRED)
-find_package(KF6IconThemes ${KF_MIN_VERSION} QUIET)
+find_package(KF6IconThemes ${KF_MIN_VERSION})
 
 find_package(KF6DocTools ${KF_MIN_VERSION})
 set_package_properties(KF6DocTools PROPERTIES DESCRIPTION
