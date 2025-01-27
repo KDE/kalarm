@@ -292,7 +292,7 @@ kconfig_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC data/kalarmconfig.kcfgc)
 
 #if(UNIX)
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/icons/hicolor/*-apps-kalarm.png")
-ecm_add_app_icon(kalarm_bin_SRCS ICONS ${ICONS_SRCS})
+ecm_add_app_icon(kalarm_bin ICONS ${ICONS_SRCS})
 add_executable(kalarm_bin ${kalarm_bin_SRCS})
 
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
