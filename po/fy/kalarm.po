@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 02:31+0000\n"
+"POT-Creation-Date: 2025-01-28 02:34+0000\n"
 "PO-Revision-Date: 2007-04-24 00:52+0200\n"
 "Last-Translator: Rinse de Vries <rinsedevries@kde.nl>\n"
 "Language-Team: Frysk <kde-i18n-fry@kde.org>\n"
@@ -9739,26 +9739,26 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Selektearje in sjabloan wêrop't jo it nije alaarm basearje wolle."
 
-#: traywindow.cpp:69
+#: traywindow.cpp:70
 #, fuzzy, kde-format
 #| msgid "New Alarm"
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "Nij alaarm"
 
-#: traywindow.cpp:294
+#: traywindow.cpp:295
 #, fuzzy, kde-format
 #| msgid "Disa&ble"
 msgid "Disabled"
 msgstr "&Útskeakelje"
 
-#: traywindow.cpp:299
+#: traywindow.cpp:300
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr ""
 
-#: traywindow.cpp:359
+#: traywindow.cpp:360
 #, fuzzy, kde-format
 #| msgctxt "prefix + hours:minutes"
 #| msgid "(%1%2:%3)"
@@ -9766,7 +9766,7 @@ msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:361
+#: traywindow.cpp:362
 #, fuzzy, kde-format
 #| msgctxt "prefix + hours:minutes"
 #| msgid "%1%2:%3"

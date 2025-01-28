@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 02:31+0000\n"
+"POT-Creation-Date: 2025-01-28 02:34+0000\n"
 "PO-Revision-Date: 2024-04-22 15:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -8132,30 +8132,30 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "选择用来创建新闹钟的模板。"
 
-#: traywindow.cpp:69
+#: traywindow.cpp:70
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "新建闹钟"
 
-#: traywindow.cpp:294
+#: traywindow.cpp:295
 #, kde-format
 msgid "Disabled"
 msgstr "禁用"
 
-#: traywindow.cpp:299
+#: traywindow.cpp:300
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(部分闹钟已被禁用)"
 
-#: traywindow.cpp:359
+#: traywindow.cpp:360
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:361
+#: traywindow.cpp:362
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 02:31+0000\n"
+"POT-Creation-Date: 2025-01-28 02:34+0000\n"
 "PO-Revision-Date: 2015-01-08 09:03+0100\n"
 "Last-Translator: Samir Ribic <samir.ribic@etf.unsa.ba>\n"
 "Language-Team: bosanski <bs@li.org>\n"
@@ -8969,7 +8969,7 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Izaberite šablon na kojem će biti baziran novi alarm."
 
-#: traywindow.cpp:69
+#: traywindow.cpp:70
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&New Alarm"
@@ -8977,24 +8977,24 @@ msgctxt "@action"
 msgid "New Alarm"
 msgstr "&Novi alarm"
 
-#: traywindow.cpp:294
+#: traywindow.cpp:295
 #, kde-format
 msgid "Disabled"
 msgstr "Isključeno"
 
-#: traywindow.cpp:299
+#: traywindow.cpp:300
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(Neki alarmi isključeni)"
 
-#: traywindow.cpp:359
+#: traywindow.cpp:360
 #, fuzzy, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:361
+#: traywindow.cpp:362
 #, fuzzy, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"

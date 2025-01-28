@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 02:31+0000\n"
+"POT-Creation-Date: 2025-01-28 02:34+0000\n"
 "PO-Revision-Date: 2024-09-15 18:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -8493,30 +8493,30 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "Yeni alarmın baz alacağı bir şablon seçin."
 
-#: traywindow.cpp:69
+#: traywindow.cpp:70
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "Yeni Alarm"
 
-#: traywindow.cpp:294
+#: traywindow.cpp:295
 #, kde-format
 msgid "Disabled"
 msgstr "Devre dışı"
 
-#: traywindow.cpp:299
+#: traywindow.cpp:300
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(Bazı alarmlar kapalı)"
 
-#: traywindow.cpp:359
+#: traywindow.cpp:360
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:361
+#: traywindow.cpp:362
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"
