@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-28 00:42+0000\n"
-"PO-Revision-Date: 2025-01-24 09:27+0200\n"
+"PO-Revision-Date: 2025-02-01 10:35+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -72,6 +72,8 @@ msgid ""
 "If a recurrence is configured, the start date/time will be adjusted to the "
 "first recurrence on or after the entered date/time."
 msgstr ""
+"אם מוגדרת חזרתיות, תאריך/שעת ההתחלה יותאמו למופע הראשון בזמן או אחרי "
+"התאריך/השעה שנבחרו."
 
 #: alarmtimewidget.cpp:71
 #, kde-format
@@ -767,21 +769,21 @@ msgstr "גרסת KAlarm"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "KAlarm version which wrote this file."
-msgstr ""
+msgstr "גרסת KAlarm שכתבה את הקובץ הזה."
 
 #. i18n: ectx: label, entry (Backend), group (General)
 #: data/kalarmconfig.kcfg:69
 #, kde-format
 msgctxt "@label"
 msgid "Data storage backend"
-msgstr ""
+msgstr "מנגנון אחסון נתונים"
 
 #. i18n: ectx: whatsthis, entry (Backend), group (General)
 #: data/kalarmconfig.kcfg:70
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Data storage backend currently used by KAlarm."
-msgstr ""
+msgstr "מנגנון אחסון נתונים ש־KAlarm משתמש בו כרגע."
 
 #. i18n: ectx: label, entry (Backend), group (General)
 #: data/kalarmconfig.kcfg:72
@@ -826,28 +828,28 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Audio backend"
-msgstr ""
+msgstr "מנגנון שמע"
 
 #. i18n: ectx: whatsthis, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Which audio backend to prefer."
-msgstr ""
+msgstr "איזה מנגנון שמע עדיף."
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:86
 #, kde-format
 msgctxt "@option"
 msgid "MPV"
-msgstr ""
+msgstr "MPV"
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:87
 #, kde-format
 msgctxt "@option"
 msgid "VLC"
-msgstr ""
+msgstr "VLC"
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:92
@@ -1004,9 +1006,7 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:146
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Run Mode"
+#, kde-format
 msgctxt "@label"
 msgid "Run mode"
 msgstr "מצב הרצה"
@@ -1024,23 +1024,21 @@ msgstr ""
 #, kde-format
 msgctxt "@option"
 msgid "Run automatically"
-msgstr ""
+msgstr "להריץ אוטומטית"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:150
 #, kde-format
 msgctxt "@option"
 msgid "Run manually only"
-msgstr ""
+msgstr "להריץ ידנית בלבד"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:151
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option"
 msgid "Do not run"
-msgstr "לא לחזור"
+msgstr "לא להריץ"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:156
@@ -1063,7 +1061,7 @@ msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת ה
 #, kde-format
 msgctxt "@label"
 msgid "Prompt for which calendar to store in"
-msgstr ""
+msgstr "לשאול באיזה לוח שנה לאחסן"
 
 #. i18n: ectx: whatsthis, entry (AskResource), group (General)
 #: data/kalarmconfig.kcfg:162
@@ -2463,34 +2461,34 @@ msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr "בחר באפשרות זו כדי שתוצג בפניך בקשה לאישור כאשר תסגור את התזכורת."
 
 #: editdlgtypes.cpp:295
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "הצגת התזכורת עכשיו"
 
 #: editdlgtypes.cpp:677
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
-msgstr "הצגת התזכורת עכשיו"
+msgstr "הצגת הודעת ההתזכורת עכשיו"
 
 #: editdlgtypes.cpp:686
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
-msgstr "הצגת קובץ הטקסט עכשיו"
+msgstr "הצגת הקובץ עכשיו"
 
 #: editdlgtypes.cpp:696
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
-msgstr "הצגת התזכורת עכשיו"
+msgstr "הצגת פלט הפקודה עכשיו"
 
 #: editdlgtypes.cpp:728
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
-msgstr "בחירת קובץ טקסט להצגה"
+msgstr "בחירת קובץ טקסט או תמונה להצגה"
 
 #: editdlgtypes.cpp:806
 #, kde-format
@@ -3147,12 +3145,10 @@ msgstr ""
 "\"%1\""
 
 #: functions.cpp:1018
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "לא ניתן להעלות את לוח השנה אל:<nl/><filename>%1</filename>"
 
 #: functions.cpp:1037
 #, kde-format
@@ -3185,22 +3181,22 @@ msgid "Unable to delete alarm from KOrganizer"
 msgstr ""
 
 #: functions.cpp:1055
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr "<para>%1</para><para>(לא ניתן להפעיל את KOrganizer)</para>"
 
 #: functions.cpp:1058
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr "<para>%1</para><para>(KOrganizer לא הופעל במלואו)</para>"
 
 #: functions.cpp:1061
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr "<para>%1</para><para>(שגיאת תקשורת מול KOrganizer)</para>"
 
 #: functions.cpp:1311
 #, kde-format
@@ -3215,16 +3211,16 @@ msgid "Error obtaining authorization (%1)"
 msgstr ""
 
 #: functions.cpp:1394
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
-msgstr "הזן את התאריך בו יש לקבוע את מועד התזכורת."
+msgstr "יש להפעיל לוח שנה תבניתי כדי לשמור בו את התבנית"
 
 #: functions.cpp:1617
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr "<para>%1</para><para>נא להגדיר אותו בחלונית ההגדרות.</para>"
 
 #: functions.cpp:1621
 #, kde-kuit-format
@@ -3898,10 +3894,10 @@ msgid "Active"
 msgstr "פעילה"
 
 #: kalarmcalendar/kaeventformatter.cpp:276
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Archived"
-msgstr "הפעל את %1"
+msgstr "הועבר לארכיון"
 
 #: kalarmcalendar/kaeventformatter.cpp:278
 #, kde-format
@@ -3910,10 +3906,10 @@ msgid "Template"
 msgstr "תבנית"
 
 #: kalarmcalendar/kaeventformatter.cpp:297
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info Repeat at login"
 msgid "At login until %1"
-msgstr "בעת כניסה למערכת"
+msgstr "בעת כניסה למערכת עד %1"
 
 #: kalarmcalendar/kaeventformatter.cpp:338
 #, kde-format
@@ -4043,18 +4039,16 @@ msgid "<command>%1</command> not found"
 msgstr "<command>%1</command> לא נמצא"
 
 #: kamail.cpp:284
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "שגיאה בצירוף קובץ: <filename>%1</filename>"
 
 #: kamail.cpp:294
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
-msgstr "תהליך הרקע תזכורות לא נמצא"
+msgstr "הצרופה לא נמצאה: <filename>%1</filename>"
 
 #: kamail.cpp:375
 #, kde-format
@@ -4075,10 +4069,10 @@ msgid "Error sending email"
 msgstr "שגיאה בשליחת דוא״ל"
 
 #: latecancel.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Cancel if late"
-msgstr "בטל במקרה של איחור"
+msgstr "ביטול במקרה של איחור"
 
 #: latecancel.cpp:26
 #, kde-format
@@ -4110,10 +4104,10 @@ msgstr ""
 "וזאת מבלי להתחשב באיחור."
 
 #: latecancel.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check Cancel if late by 10 minutes"
 msgid "Cancel if late by"
-msgstr "בטל במקרה של איחור"
+msgstr "ביטול במקרה של איחור ב־"
 
 #: latecancel.cpp:60
 #, fuzzy, kde-format
@@ -4270,14 +4264,12 @@ msgid "Copyright © 2001-%1, David Jarvie"
 msgstr ""
 
 #: mainwindow.cpp:443
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Failure to create menus (perhaps <filename>%1</filename> missing or "
 "corrupted)"
-msgstr ""
-"אין אפשרות לשמור את לוח השנה אל\n"
-"\"%1\""
+msgstr "יצירת תפריטים נכשלה (אולי <filename>%1</filename> חסר או פגום)"
 
 #: mainwindow.cpp:463
 #, kde-format
@@ -4398,7 +4390,7 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: mainwindow.cpp:816
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
@@ -4498,10 +4490,10 @@ msgid "Disable"
 msgstr "השבתה"
 
 #: messagedisplay.cpp:271
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr "<para>לא ניתן לדחות תזכורת:</para><para>התזכורת לא נמצאה.</para>"
 
 #: messagedisplayhelper.cpp:205
 #, kde-format
@@ -4624,10 +4616,10 @@ msgid "Edit"
 msgstr "עריכה"
 
 #: messagenotification.cpp:527
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Defer"
-msgstr "&דחייה..."
+msgstr "דחייה"
 
 #: messagewindow.cpp:228
 #, fuzzy, kde-format
@@ -4638,10 +4630,10 @@ msgid ""
 msgstr "התאריך והשעה המתוכננים של ההודעה (בניגוד לשעת ההצגה עצמה)"
 
 #: messagewindow.cpp:245
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
-msgstr "הקובץ שתוכנו מוצג להלן"
+msgstr "הקובץ שהתוכן שלו מוצג להלן"
 
 #: messagewindow.cpp:279
 #, kde-format
@@ -7734,7 +7726,7 @@ msgstr "קובץ שמע:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
-msgstr ""
+msgstr "בדיקת הצליל"
 
 #: sounddlg.cpp:168 sounddlg.cpp:479
 #, kde-format
@@ -7794,7 +7786,7 @@ msgstr "נא לבחור את עוצמת השמע לניגון קובץ הצלי�
 #, kde-format
 msgctxt "@option:check"
 msgid "Fade"
-msgstr ""
+msgstr "עמעום"
 
 #: sounddlg.cpp:258
 #, kde-format
@@ -8169,7 +8161,7 @@ msgstr "לא ניתן להפעיל התראה מהארכיון מחדש"
 #, kde-format
 msgctxt "@info"
 msgid "Unknown error"
-msgstr ""
+msgstr "שגיאה לא ידועה"
 
 #: undo.cpp:411
 #, kde-format
@@ -8344,7 +8336,7 @@ msgstr ""
 #: wakedlg.ui:80
 #, kde-format
 msgid "Cancel wake from suspend"
-msgstr ""
+msgstr "ביטול השכמה מהשהיה"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, advanceWakeTime)
 #: wakedlg.ui:113
