@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-28 02:34+0000\n"
-"PO-Revision-Date: 2025-02-01 10:35+0200\n"
+"PO-Revision-Date: 2025-02-03 09:47+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -377,6 +377,8 @@ msgid ""
 "Enter a name to help you identify this alarm. This is optional and need not "
 "be unique."
 msgstr ""
+"נא למלא שם כדי לסייע לך לזהות את התזכורת הזאת. זה בגדר רשות וזה לא חייב "
+"להיות שם ייחודי."
 
 #: birthdaydlg.cpp:77
 #, kde-format
@@ -403,6 +405,8 @@ msgid ""
 "Enter text to appear before the person's name in the alarm message, "
 "including any necessary trailing spaces."
 msgstr ""
+"נא למלא טקסט שיופיע לפני שם האדם בהודעות התזכורת, כולל רווחים מובילים במקרה "
+"הצורך."
 
 #: birthdaydlg.cpp:94
 #, kde-format
@@ -417,6 +421,8 @@ msgid ""
 "Enter text to appear after the person's name in the alarm message, including "
 "any necessary leading spaces."
 msgstr ""
+"נא למלא טקסט שיופיע אחרי שם האדם בהודעות התזכורת, כולל רווחים סופיים במקרה "
+"הצורך."
 
 #: birthdaydlg.cpp:105
 #, kde-format
