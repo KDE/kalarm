@@ -5246,12 +5246,10 @@ msgid "Audio Backend"
 msgstr ""
 
 #: prefdlg.cpp:578
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Choose the volume for playing the sound file."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which audio backend to use to play sound files"
-msgstr "Zvolte hlasitost přehrávaného zvukového souboru."
+msgstr ""
 
 #: prefdlg.cpp:593
 #, kde-format
