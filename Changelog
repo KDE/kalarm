@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.10.3 (KDE Gear 24.12.3) --- 13 February 2025 ===
+* Fix KAlarm exiting before executing session restoration [KDE Bug 499859]
+
 === Version 3.10.2 (KDE Gear 24.12.2) --- 27 January 2025 ===
 * Fix system tray showing blank KAlarm icon under XFCE [KDE Bug 498753]
 

@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -220,7 +220,7 @@ private:
     KAlarmApp(int& argc, char** argv);
     bool               initialiseTimerResources();
     bool               initCheck(bool calendarOnly = false);
-    bool               quitIf(int exitCode, bool force = false);
+    bool               quitIf(int exitCode, bool force = false, bool restoringSession = false);
     void               showRestoredWindows();
     void               createOnlyMainWindow();
     bool               checkSystemTray();
