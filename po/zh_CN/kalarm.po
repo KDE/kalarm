@@ -6271,7 +6271,7 @@ msgstr "该日期不能早于开始日期"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Recur every"
-msgstr "重复"
+msgstr "每隔"
 
 #: recurrenceedit.cpp:1133
 #, kde-format
@@ -6289,7 +6289,7 @@ msgstr "输入闹钟各个重复之间的时间 (小时和分钟)"
 #, kde-format
 msgctxt "@label On: Tuesday"
 msgid "On:"
-msgstr "在:"
+msgstr "在："
 
 #: recurrenceedit.cpp:1237
 #, kde-format
@@ -6337,7 +6337,7 @@ msgstr "选择一周内要重复闹钟的日期"
 #, kde-format
 msgctxt "@option:radio On day number in the month"
 msgid "On day"
-msgstr "1 天"
+msgstr "在"
 
 #: recurrenceedit.cpp:1307
 #, kde-format
