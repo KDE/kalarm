@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -701,7 +701,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
     // Quit the application if this was the last/only running "instance" of the program.
     // Executing 'return' doesn't work very well since the program continues to
     // run if no windows were created.
-    if (quitIf(exitCode >= 0 ? exitCode : 0))
+    if (quitIf(exitCode >= 0 ? exitCode : 0, false, isSessionRestored()))
         return exitCode;    // exit this application instance
 
     return -1;   // continue executing the application instance
@@ -728,9 +728,13 @@ void KAlarmApp::createOnlyMainWindow()
 
 /******************************************************************************
 * Quit the program, optionally only if there are no more "instances" running.
+* Parameters:
+*    exitCode - the exit code (0 or 1) for the program, if it quits.
+*    force    - quit regardless.
+*    restoringSession - true if session restoration is pending.
 * Reply = true if program exited.
 */
-bool KAlarmApp::quitIf(int exitCode, bool force)
+bool KAlarmApp::quitIf(int exitCode, bool force, bool restoringSession)
 {
     if (force)
     {
@@ -770,6 +774,8 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
             mPendingQuitCode = exitCode;
             return false;
         }
+        if (restoringSession)
+            return false;
     }
 
     // This was the last/only running "instance" of the program, so exit completely.
