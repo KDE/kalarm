@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-28 00:42+0000\n"
+"POT-Creation-Date: 2025-02-14 00:44+0000\n"
 "PO-Revision-Date: 2005-10-06 11:21+0800\n"
 "Last-Translator: junetazawawi <junetazawawi@yahoo.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -3771,7 +3771,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Cipta templat penggera baru"
 
-#: kalarmapp.cpp:809
+#: kalarmapp.cpp:815
 #, fuzzy, kde-format
 #| msgid ""
 #| "Quitting will disable alarms\n"
@@ -3783,32 +3783,32 @@ msgstr ""
 "Keluar akan menyahaktifkan penggera\n"
 "(apabila sebarang mesej penggera tetingkap ditutup)."
 
-#: kalarmapp.cpp:819
+#: kalarmapp.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 
-#: kalarmapp.cpp:1036
+#: kalarmapp.cpp:1042
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1050
+#: kalarmapp.cpp:1056
 #, fuzzy, kde-kuit-format
 #| msgid "Error recreating alarm"
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Ralat mencipta semula penggera"
 
-#: kalarmapp.cpp:1106
+#: kalarmapp.cpp:1112
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "Paparkan Seting"
 
-#: kalarmapp.cpp:1418
+#: kalarmapp.cpp:1424
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3817,13 +3817,13 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1458
+#: kalarmapp.cpp:1464
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "Paparkan Seting"
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1492
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3833,7 +3833,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1494
+#: kalarmapp.cpp:1500
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3844,7 +3844,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2471
+#: kalarmapp.cpp:2477
 #, fuzzy, kde-format
 #| msgid "Failed to execute command (shell access not authorized):"
 msgctxt "@info"
@@ -3853,21 +3853,21 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Gagal melaksanakan arahan (akses shell tidak sah)"
 
-#: kalarmapp.cpp:2624
+#: kalarmapp.cpp:2630
 #, fuzzy, kde-format
 #| msgid "Error creating temporary script file"
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Ralat semasa mencipta fail skrip sementara"
 
-#: kalarmapp.cpp:2720
+#: kalarmapp.cpp:2726
 #, fuzzy, kde-format
 #| msgid "Pre-alarm action:"
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Tindakan prapenggera:"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2732
 #, fuzzy, kde-format
 #| msgid "Post-alarm action:"
 msgctxt "@info"

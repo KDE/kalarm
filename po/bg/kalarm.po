@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-28 00:42+0000\n"
+"POT-Creation-Date: 2025-02-14 00:44+0000\n"
 "PO-Revision-Date: 2025-01-07 23:27+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -3514,7 +3514,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Грешка при запис на шаблон на аларма"
 
-#: kalarmapp.cpp:809
+#: kalarmapp.cpp:815
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3523,32 +3523,32 @@ msgstr ""
 "Излизането от програмата ще изключи алармите.(веднага след като прозорците "
 "на съобщенията бъдат затворени)."
 
-#: kalarmapp.cpp:819
+#: kalarmapp.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 "Напускането на програмата ще отмени планираното събуждане от приспиване."
 
-#: kalarmapp.cpp:1036
+#: kalarmapp.cpp:1042
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Не може да се създаде аларма: Не е дефиниран календар по подразбиране"
 
-#: kalarmapp.cpp:1050
+#: kalarmapp.cpp:1056
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Грешка при създаване на аларма"
 
-#: kalarmapp.cpp:1106
+#: kalarmapp.cpp:1112
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: Събитие <resource>%2</resource> не е намерено или не е уникално"
 
-#: kalarmapp.cpp:1418
+#: kalarmapp.cpp:1424
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3561,7 +3561,7 @@ msgstr ""
 "<interface>Изглед | Показване на календари</interface>, за да проверите или "
 "промените състоянието на календара."
 
-#: kalarmapp.cpp:1458
+#: kalarmapp.cpp:1464
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
@@ -3569,7 +3569,7 @@ msgstr ""
 "%1: Събитие <resource>%2</resource> не е намерено или не може да бъде "
 "редактирано"
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1492
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3583,7 +3583,7 @@ msgstr ""
 "<nl/><nl/>За да коригирате това, използвайте <interface>Изглед | Показване "
 "на календари</interface>, за да проверите или промените статуса на календара."
 
-#: kalarmapp.cpp:1494
+#: kalarmapp.cpp:1500
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3599,7 +3599,7 @@ msgstr ""
 "interface>, изберете календар за архивиране на аларми и поставете отметка на "
 "<interface>Използване по подразбиране за архивиране на аларми</interface>."
 
-#: kalarmapp.cpp:2471
+#: kalarmapp.cpp:2477
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3609,19 +3609,19 @@ msgstr ""
 "Грешка при изпълнение на команда\n"
 " (не е избран терминал за алармени команди)"
 
-#: kalarmapp.cpp:2624
+#: kalarmapp.cpp:2630
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Грешка при създаване на временен файл за скрипта"
 
-#: kalarmapp.cpp:2720
+#: kalarmapp.cpp:2726
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Действие преди аларма:"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2732
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

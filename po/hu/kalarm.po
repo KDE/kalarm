@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4.3\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-28 00:42+0000\n"
+"POT-Creation-Date: 2025-02-14 00:44+0000\n"
 "PO-Revision-Date: 2024-03-21 10:32+0100\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -3577,7 +3577,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Hiba történt a figyelmeztetősablon mentésekor"
 
-#: kalarmapp.cpp:809
+#: kalarmapp.cpp:815
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3586,20 +3586,20 @@ msgstr ""
 "Kilépés esetén le lesznek tiltva a figyelmeztetők (a már megnyitott "
 "üzenetablakok bezárása után)."
 
-#: kalarmapp.cpp:819
+#: kalarmapp.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 "Kilépés esetén megszakadnak az ütemezett felfüggesztésből felébresztések."
 
-#: kalarmapp.cpp:1036
+#: kalarmapp.cpp:1042
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1050
+#: kalarmapp.cpp:1056
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error recreating alarm"
@@ -3607,13 +3607,13 @@ msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Hiba történt a figyelmeztető újralétrehozásakor"
 
-#: kalarmapp.cpp:1106
+#: kalarmapp.cpp:1112
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: a(z) <resource>%2</resource> esemény nem található vagy nem egyedi"
 
-#: kalarmapp.cpp:1418
+#: kalarmapp.cpp:1424
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3626,14 +3626,14 @@ msgstr ""
 "használja a <interface>Nézet | Naptárak megjelenítése</interface> menüpontot "
 "a naptárállapotok ellenőrzéséhez vagy megváltoztatásához."
 
-#: kalarmapp.cpp:1458
+#: kalarmapp.cpp:1464
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 "%1: a(z) <resource>%2</resource> esemény nem található vagy nem szerkeszthető"
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1492
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3652,7 +3652,7 @@ msgstr ""
 "használja a <interface>Nézet | Naptárak megjelenítése</interface> menüpontot "
 "a naptárállapotok ellenőrzéséhez vagy megváltoztatásához."
 
-#: kalarmapp.cpp:1494
+#: kalarmapp.cpp:1500
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3672,7 +3672,7 @@ msgstr ""
 "használja a <interface>Nézet | Naptárak megjelenítése</interface> menüpontot "
 "a naptárállapotok ellenőrzéséhez vagy megváltoztatásához."
 
-#: kalarmapp.cpp:2471
+#: kalarmapp.cpp:2477
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3684,19 +3684,19 @@ msgstr ""
 "Nem sikerült végrehajtani a parancsot (nincs megfelelő hozzáférés a "
 "parancsértelmezőhöz):"
 
-#: kalarmapp.cpp:2624
+#: kalarmapp.cpp:2630
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Nem sikerült létrehozni egy ideiglenes szkriptet"
 
-#: kalarmapp.cpp:2720
+#: kalarmapp.cpp:2726
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Művelet a figyelmeztető előtt:"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2732
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

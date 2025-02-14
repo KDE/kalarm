@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-28 00:42+0000\n"
+"POT-Creation-Date: 2025-02-14 00:44+0000\n"
 "PO-Revision-Date: 2024-11-15 15:23+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -3502,7 +3502,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Ошибка сохранения шаблона напоминания"
 
-#: kalarmapp.cpp:809
+#: kalarmapp.cpp:815
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3511,25 +3511,25 @@ msgstr ""
 "После выхода из программы напоминания не будут показываться (если все окна "
 "напоминаний также закрыты)."
 
-#: kalarmapp.cpp:819
+#: kalarmapp.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Выход из программы отменит запланированный сигнал «разбудить систему»."
 
-#: kalarmapp.cpp:1036
+#: kalarmapp.cpp:1042
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Не удалось создать напоминание: не указан календарь по умолчанию"
 
-#: kalarmapp.cpp:1050
+#: kalarmapp.cpp:1056
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Ошибка создания напоминания"
 
-#: kalarmapp.cpp:1106
+#: kalarmapp.cpp:1112
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
@@ -3537,7 +3537,7 @@ msgstr ""
 "<icode>%1</icode>: Событие <resource>%2</resource> не найдено или не "
 "является уникальным"
 
-#: kalarmapp.cpp:1418
+#: kalarmapp.cpp:1424
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3550,7 +3550,7 @@ msgstr ""
 "в меню <interface>Вид | Показать календари</interface> и проверьте/измените "
 "состояние календарей."
 
-#: kalarmapp.cpp:1458
+#: kalarmapp.cpp:1464
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
@@ -3558,7 +3558,7 @@ msgstr ""
 "<icode>%1</icode>: Событие <resource>%2</resource> не найдено или не "
 "доступно для правки"
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1492
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3572,7 +3572,7 @@ msgstr ""
 ">Для исправления ситуации выберите в меню <interface>Вид | Показать "
 "календари</interface> и проверьте или измените состояние календарей."
 
-#: kalarmapp.cpp:1494
+#: kalarmapp.cpp:1500
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3589,7 +3589,7 @@ msgstr ""
 "установите флажок <interface>Использовать по умолчанию для устаревших "
 "напоминаний</interface>."
 
-#: kalarmapp.cpp:2471
+#: kalarmapp.cpp:2477
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3599,19 +3599,19 @@ msgstr ""
 "Не удалось выполнить команду\n"
 "(не указан терминал для командных напоминаний)"
 
-#: kalarmapp.cpp:2624
+#: kalarmapp.cpp:2630
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Ошибка создания временного файла сценария"
 
-#: kalarmapp.cpp:2720
+#: kalarmapp.cpp:2726
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Предварительное действие:"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2732
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

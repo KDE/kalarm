@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-28 00:42+0000\n"
+"POT-Creation-Date: 2025-02-14 00:44+0000\n"
 "PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -3396,7 +3396,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "अलार्म टेम्पलेट् रक्षणे त्रुटिः"
 
-#: kalarmapp.cpp:809
+#: kalarmapp.cpp:815
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3404,31 +3404,31 @@ msgid ""
 msgstr ""
 "निर्गमनेन अलार्मः निष्क्रियः भविष्यति (एकदा कोऽपि अलार्मसन्देशविण्डो बन्दः भवति) ।"
 
-#: kalarmapp.cpp:819
+#: kalarmapp.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "त्यक्त्वा निर्धारितं Wake from Suspend रद्दं भविष्यति।"
 
-#: kalarmapp.cpp:1036
+#: kalarmapp.cpp:1042
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "अलार्म निर्मातुं न शक्यते: पूर्वनिर्धारितं पञ्चाङ्गं परिभाषितं नास्ति"
 
-#: kalarmapp.cpp:1050
+#: kalarmapp.cpp:1056
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "अलार्मस्य निर्माणे त्रुटिः"
 
-#: kalarmapp.cpp:1106
+#: kalarmapp.cpp:1112
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: घटना <resource>%2</resource> न प्राप्ता, अथवा अद्वितीया नास्ति"
 
-#: kalarmapp.cpp:1418
+#: kalarmapp.cpp:1424
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3440,13 +3440,13 @@ msgstr ""
 "सक्षमः नास्ति।<nl/><nl/>एतत् निवारयितुं <interface>View | पञ्चाङ्गस्य स्थितिं परीक्षितुं "
 "परिवर्तनं वा कर्तुं Calendars</interface> इति दर्शयतु ।"
 
-#: kalarmapp.cpp:1458
+#: kalarmapp.cpp:1464
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: घटना <resource>%2</resource> न प्राप्ता, सम्पादनीयं वा न"
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1492
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3459,7 +3459,7 @@ msgstr ""
 "अलार्म पञ्चाङ्गः सक्षमः नास्ति।<nl/><nl/>एतत् निवारयितुं <interface>View | पञ्चाङ्गस्य "
 "स्थितिं परीक्षितुं परिवर्तनं वा कर्तुं Calendars</interface> इति दर्शयतु ।"
 
-#: kalarmapp.cpp:1494
+#: kalarmapp.cpp:1500
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3474,7 +3474,7 @@ msgstr ""
 "इत्यस्य उपयोगं कुर्वन्तु पञ्चाङ्गानि</interface> दर्शयन्तु, संग्रहीत-अलार्म-पञ्चाङ्गं चिनोतु, "
 "<interface>संग्रहीत-अलार्म-कृते पूर्वनिर्धारितरूपेण उपयोगं कुर्वन्तु</interface> इति चिनोतु ।"
 
-#: kalarmapp.cpp:2471
+#: kalarmapp.cpp:2477
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3484,19 +3484,19 @@ msgstr ""
 "आदेशं निष्पादयितुं असफलम्\n"
 "(आदेश-अलार्म-कृते कोऽपि टर्मिनल् चयनितः नास्ति)"
 
-#: kalarmapp.cpp:2624
+#: kalarmapp.cpp:2630
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "अस्थायी स्क्रिप्ट् सञ्चिकां निर्मातुं त्रुटिः"
 
-#: kalarmapp.cpp:2720
+#: kalarmapp.cpp:2726
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "अलार्मपूर्वक्रिया :"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2732
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-28 00:42+0000\n"
+"POT-Creation-Date: 2025-02-14 00:44+0000\n"
 "PO-Revision-Date: 2025-01-03 20:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -3482,7 +3482,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Alarm şablonu kaydetme hatası"
 
-#: kalarmapp.cpp:809
+#: kalarmapp.cpp:815
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3491,31 +3491,31 @@ msgstr ""
 "Uygulamadan çıkmak uyarıları geçersiz kılacak (herhangi bir uyarı penceresi "
 "ilk kapandığında)."
 
-#: kalarmapp.cpp:819
+#: kalarmapp.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Çıkmak, planlanan Askıdan Uyandır işlemini iptal eder."
 
-#: kalarmapp.cpp:1036
+#: kalarmapp.cpp:1042
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Alarm oluşturulamıyor: Bir öntanımlı takvim tanımlanmamış"
 
-#: kalarmapp.cpp:1050
+#: kalarmapp.cpp:1056
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Alarm oluşturulurken hata"
 
-#: kalarmapp.cpp:1106
+#: kalarmapp.cpp:1112
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: Olay <resource>%2</resource> bulunamadı veya benzersiz değil"
 
-#: kalarmapp.cpp:1418
+#: kalarmapp.cpp:1424
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3527,13 +3527,13 @@ msgstr ""
 "alarm yok.<nl/><nl/>Bunu düzeltmek için, takvim durumunu değiştirmek ya da "
 "kontrol etmek için <interface>Görünüm | Takvimleri Göster</interface> kullan."
 
-#: kalarmapp.cpp:1458
+#: kalarmapp.cpp:1464
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: Olay <resource>%2</resource> bulunamadı veya düzenlenebilir değil"
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1492
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3546,7 +3546,7 @@ msgstr ""
 "alarm yok.<nl/><nl/>Bunu düzeltmek için, takvim durumunu değiştirmek ya da "
 "kontrol etmek için <interface>Görünüm | Takvimleri Göster</interface> kullan."
 
-#: kalarmapp.cpp:1494
+#: kalarmapp.cpp:1500
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3562,7 +3562,7 @@ msgstr ""
 "bir arşivlenmiş alarm takvimi seçin ve <interface>Arşivlenmiş Alarmlar için "
 "Öntanımlı Olarak Kullan</interface>'ı imleyin."
 
-#: kalarmapp.cpp:2471
+#: kalarmapp.cpp:2477
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3572,19 +3572,19 @@ msgstr ""
 "Komut yürütülemedi\n"
 "(komut alarmları için seçili uçbirim yok)"
 
-#: kalarmapp.cpp:2624
+#: kalarmapp.cpp:2630
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Geçici betik dosyası oluşturulamadı"
 
-#: kalarmapp.cpp:2720
+#: kalarmapp.cpp:2726
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Alarm uyarısından önce yapılacak eylem:"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2732
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
