@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-28 02:34+0000\n"
+"POT-Creation-Date: 2025-02-14 02:45+0000\n"
 "PO-Revision-Date: 2022-09-15 23:00+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -3311,26 +3311,26 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "خطأ في حفظ قالب المنبّهات"
 
-#: kalarmapp.cpp:809
+#: kalarmapp.cpp:815
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
 "Quitting will disable alarms (once any alarm message windows are closed)."
 msgstr "سيعطّل الإنهاء المنبّهات (بمجرّد إغلاق أيّة نافذة لرسا"
 
-#: kalarmapp.cpp:819
+#: kalarmapp.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "سيُلغي الإنهاء منبّه الإفاقة من التعليق المجدول."
 
-#: kalarmapp.cpp:1036
+#: kalarmapp.cpp:1042
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1050
+#: kalarmapp.cpp:1056
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error recreating alarm"
@@ -3338,13 +3338,13 @@ msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "خطأ أثناء إعادة إنشاء المنبّه"
 
-#: kalarmapp.cpp:1106
+#: kalarmapp.cpp:1112
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: لم يُعثر على الحدث <resource>%2</resource>، أو أنّه ليس فريدًا"
 
-#: kalarmapp.cpp:1418
+#: kalarmapp.cpp:1424
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3356,13 +3356,13 @@ msgstr ""
 "الكتابة فيه.<nl/><nl/>لإصلاح المشكلة استخدم <interface>منظور | اعرض "
 "التقاويم</interface> لفحص حالات التقاويم أو تغييرها."
 
-#: kalarmapp.cpp:1458
+#: kalarmapp.cpp:1464
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: لم يُعثر على الحدث <resource>%2</resource>، أو أنّه لا يمكن تحريره"
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1492
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3380,7 +3380,7 @@ msgstr ""
 "الكتابة فيه.<nl/><nl/>لإصلاح المشكلة استخدم <interface>منظور | اعرض "
 "التقاويم</interface> لفحص حالات التقاويم أو تغييرها."
 
-#: kalarmapp.cpp:1494
+#: kalarmapp.cpp:1500
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3399,7 +3399,7 @@ msgstr ""
 "الكتابة فيه.<nl/><nl/>لإصلاح المشكلة استخدم <interface>منظور | اعرض "
 "التقاويم</interface> لفحص حالات التقاويم أو تغييرها."
 
-#: kalarmapp.cpp:2471
+#: kalarmapp.cpp:2477
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3407,19 +3407,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr ""
 
-#: kalarmapp.cpp:2624
+#: kalarmapp.cpp:2630
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "خطأ في إنشاء ملف السكربت المؤقّت"
 
-#: kalarmapp.cpp:2720
+#: kalarmapp.cpp:2726
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "إجراء ما قبل التنبيه:"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2732
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

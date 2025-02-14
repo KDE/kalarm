@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-28 02:34+0000\n"
+"POT-Creation-Date: 2025-02-14 02:45+0000\n"
 "PO-Revision-Date: 2024-09-14 05:30+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -3442,7 +3442,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "განგაშის ნიმუშის შენახვის შეცდომა"
 
-#: kalarmapp.cpp:809
+#: kalarmapp.cpp:815
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3451,31 +3451,31 @@ msgstr ""
 "გასვლა განგაშებს გამორთავს (როცა ყველა განგაშის შეტყობინებს ფანჯარას "
 "დახურავთ)."
 
-#: kalarmapp.cpp:819
+#: kalarmapp.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "გასვლა დაგეგმილ ძილიდან გაღვიძებას გააუქმებს."
 
-#: kalarmapp.cpp:1036
+#: kalarmapp.cpp:1042
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "კალენდრის შექმნის შეცდომა: ნაგულისხმევი კალენდარი აღწერილი არაა"
 
-#: kalarmapp.cpp:1050
+#: kalarmapp.cpp:1056
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "განგაშის შექმნის შეცდომა"
 
-#: kalarmapp.cpp:1106
+#: kalarmapp.cpp:1112
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: მოვლენა <resource>%2</resource> ვერ ვიპოვე ან უნიკალური არაა"
 
-#: kalarmapp.cpp:1418
+#: kalarmapp.cpp:1424
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3487,13 +3487,13 @@ msgstr ""
 "კალენდარი ჩართული არაა.<nl/><nl/>ამის გასასწორებლად გამოიყენეთ "
 "<interface>ხედი|კალენდრების ჩვენება</interface>."
 
-#: kalarmapp.cpp:1458
+#: kalarmapp.cpp:1464
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: მოვლენა <resource>%2</resource> ვერ ვიპოვე ან ჩასწორებადი არაა"
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1492
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3507,7 +3507,7 @@ msgstr ""
 "გასასწორებლად გამოიყენეთ <interface>ხედი|კალენდრების ჩვენება</interface>, "
 "რომ კალენდრის სტატუსები შეცვალოთ."
 
-#: kalarmapp.cpp:1494
+#: kalarmapp.cpp:1500
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3523,7 +3523,7 @@ msgstr ""
 "interface>, აირჩიეთ დაარქივებული განგაშის კალენდარი და ჩართეთ "
 "<interface>დაარქივებული განგაშებისთვის ნაგულისხმევად გამოყენება</interface>."
 
-#: kalarmapp.cpp:2471
+#: kalarmapp.cpp:2477
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3533,19 +3533,19 @@ msgstr ""
 "ბრძანების შესრულება ჩავარდა\n"
 "(ბრძანების განგაშებისთვის ტერმინალი არჩეული არაა)"
 
-#: kalarmapp.cpp:2624
+#: kalarmapp.cpp:2630
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "დროებითი სკრიპტის ფაილის შექმნის შეცდომა"
 
-#: kalarmapp.cpp:2720
+#: kalarmapp.cpp:2726
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "განგაშისწინა ქმედება:"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2732
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

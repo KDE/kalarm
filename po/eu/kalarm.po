@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-28 02:34+0000\n"
+"POT-Creation-Date: 2025-02-14 02:45+0000\n"
 "PO-Revision-Date: 2024-09-15 21:56+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -3481,7 +3481,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Errorea alarma txantiloia gordetzean"
 
-#: kalarmapp.cpp:809
+#: kalarmapp.cpp:815
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3489,31 +3489,31 @@ msgid ""
 msgstr ""
 "Irtetea alarmak ezgaituko ditu (alarma-mezu leiho denak ixten direnean)."
 
-#: kalarmapp.cpp:819
+#: kalarmapp.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Irteteak programatutako Esnatu esekitzetik bertan behera utziko du."
 
-#: kalarmapp.cpp:1036
+#: kalarmapp.cpp:1042
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Ezin da alarmarik sortu: Ez da egutegi lehenetsirik definitu"
 
-#: kalarmapp.cpp:1050
+#: kalarmapp.cpp:1056
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Errorea alarma sortzean"
 
-#: kalarmapp.cpp:1106
+#: kalarmapp.cpp:1112
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: <resource>%2</resource> ekitaldia ez da aurkitu, edo ez da bakarra"
 
-#: kalarmapp.cpp:1418
+#: kalarmapp.cpp:1424
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3526,14 +3526,14 @@ msgstr ""
 "<interface>Ikuspegia | Erakutsi egutegiak</interface>, egutegien egoerak "
 "egiaztatu edo aldatzeko."
 
-#: kalarmapp.cpp:1458
+#: kalarmapp.cpp:1464
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 "%1: <resource>%2</resource> ekitaldia ez da aurkitu, edo ez da editagarria"
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1492
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3547,7 +3547,7 @@ msgstr ""
 "konpontzeko, erabili <interface>Ikuspegia | Erakutsi egutegiak</interface> "
 "egutegien egoerak markatu edo aldatzeko."
 
-#: kalarmapp.cpp:1494
+#: kalarmapp.cpp:1500
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3563,7 +3563,7 @@ msgstr ""
 "artxibatutako alarmen egutegi bat, eta markatu <interface>Erabili "
 "lehenetsitako gisa artxibatutako alarmetarako</interface>."
 
-#: kalarmapp.cpp:2471
+#: kalarmapp.cpp:2477
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3573,19 +3573,19 @@ msgstr ""
 "Komandoa exekutatzea huts egin du\n"
 "(ez da komando-alarmetarako terminalik hautatu)"
 
-#: kalarmapp.cpp:2624
+#: kalarmapp.cpp:2630
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Errorea behin-behineko script fitxategia sortzean"
 
-#: kalarmapp.cpp:2720
+#: kalarmapp.cpp:2726
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Alarma-aurreko ekintza:"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2732
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
