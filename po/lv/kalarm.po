@@ -11,14 +11,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2025-01-25 18:35+0200\n"
+"PO-Revision-Date: 2025-02-13 15:56+0200\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.12.1\n"
+"X-Generator: Lokalize 24.12.2\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
@@ -212,7 +212,7 @@ msgstr "1 nedēļa"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr ""
+msgstr "Atlasiet laika noildzi no piedāvātajām vērtībām"
 
 #: alarmtimewidget.cpp:177
 #, kde-kuit-format
@@ -1020,7 +1020,7 @@ msgstr ""
 "joslā, ja nav aktīvu signālu.</p><p>Lai automātiski paslēptu sistēmas joslas "
 "ikonu, kad noteiktā periodā nav ieplānotu signālu, ierakstiet laika periodu "
 "minūtēs.</p><p>Ierakstiet '0', lai sistēmas ikonu joslas ikonu rādītu "
-"vienmēr.</para>"
+"vienmēr.</p>"
 
 #. i18n: ectx: label, entry (NoAutoHideSystemTrayDesktops), group (General)
 #: data/kalarmconfig.kcfg:136
@@ -2458,7 +2458,7 @@ msgstr "Mazāk opciju <<"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
-msgstr "Rādīt mazāk opciju <<"
+msgstr "Rādīt mazāk opciju"
 
 #: editdlg.cpp:1268
 #, kde-format
@@ -2470,7 +2470,7 @@ msgstr "Vairāk opciju >>"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
-msgstr "Rādīt vairāk opciju >>"
+msgstr "Rādīt vairāk opciju"
 
 #: editdlgtypes.cpp:75
 #, kde-format
