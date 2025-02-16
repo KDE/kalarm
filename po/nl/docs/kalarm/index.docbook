@@ -94,9 +94,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2024-9-12</date>
+>2024-12-20</date>
 <releaseinfo
->3.10.0 (KDE Gear 24.12)</releaseinfo>
+>3.10.1 (KDE Gear 24.12.1)</releaseinfo>
 
 <abstract>
 <para
@@ -2489,11 +2489,6 @@
 >Als een niet-modaal venster. In deze modus is de focus van het toetsenbord niet aangetast wanneer het venster met het alarmbericht verschijnt, zodat het niet interfereert met wat u typt. In deze modus echter heeft het venster geen titelbalk of frame, zodat u het niet kunt verplaatsen of van grootte wijzigen.</para>
 </listitem>
 </itemizedlist>
-
-<note
-><para
->Wanneer een alarm wordt getoond bovenop een toepassing in de modus volledig scherm, wordt het getoond als een niet-modaal venster onafhankelijk van deze instelling. Dit is vanwege beperkingen van het venstersysteem.</para
-></note>
 
 <para
 >U kunt in het <link linkend="preferences-view"
