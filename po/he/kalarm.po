@@ -11,13 +11,13 @@
 #
 # Diego Iastrubni <elcuco@kde.org>, 2005, 2007.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2025-02-04 08:43+0200\n"
+"PO-Revision-Date: 2025-02-18 08:42+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 24.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1735,7 +1735,7 @@ msgstr "לא לחזור"
 #, kde-format
 msgctxt "@label"
 msgid "Reminder units"
-msgstr "יחידות תזכורת"
+msgstr "יחידות התראה"
 
 #. i18n: ectx: whatsthis, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:412
@@ -2445,12 +2445,14 @@ msgid ""
 msgstr ""
 
 #: editdlgtypes.cpp:275
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>Enter how long in advance of or after the main alarm to display a "
 "reminder alarm.</para><para>%1</para>"
-msgstr "הזן את התאריך האחרון שבו יש לחזור על התזכורת"
+msgstr ""
+"<para>נא למלא כמה זמן מראש לאחר התזכורת הראשית להציג תזכורת התראה.</"
+"para><para>%1</para>"
 
 #: editdlgtypes.cpp:276
 #, kde-format
@@ -3765,13 +3767,13 @@ msgstr "זמן עמעום צליל"
 #, kde-format
 msgctxt "@label Whether the alarm has a reminder"
 msgid "Reminder"
-msgstr ""
+msgstr "התראה"
 
 #: kalarmcalendar/kaeventformatter.cpp:123
 #, kde-format
 msgctxt "@label Whether reminder is on first recurrence only"
 msgid "Reminder once only"
-msgstr ""
+msgstr "התראה רק פעם אחת"
 
 #: kalarmcalendar/kaeventformatter.cpp:125
 #, kde-format
@@ -3933,7 +3935,7 @@ msgstr "ברירת מחדל"
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
-msgstr "תזכורת"
+msgstr "התראה"
 
 #: kalarmcalendar/kaeventformatter.cpp:379
 #, kde-format
@@ -4505,7 +4507,7 @@ msgstr "<para>לא ניתן לדחות תזכורת:</para><para>התזכורת 
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
-msgstr ""
+msgstr "התראה"
 
 #: messagedisplayhelper.cpp:206 messagedisplayhelper.cpp:410
 #, kde-format
@@ -5501,10 +5503,10 @@ msgid ""
 msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
 
 #: prefdlg.cpp:1253
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use <application>KMail</application> identities"
-msgstr "הפעלת %1 בעת הפעלת KDE."
+msgstr "להשתמש בזהויות <application>KMail</application>"
 
 #: prefdlg.cpp:1256
 #, kde-kuit-format
@@ -5647,7 +5649,7 @@ msgstr "הצגת התראות"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Reminder units:"
-msgstr "יחידות תזכורת:"
+msgstr "יחידות התראה:"
 
 #: prefdlg.cpp:1557
 #, kde-format
@@ -5662,12 +5664,13 @@ msgid "Hours/Minutes"
 msgstr "שעות/דקות"
 
 #: prefdlg.cpp:1561
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "The default units for the reminder in the alarm edit dialog, for alarms due "
 "soon."
-msgstr "הגדרת ברירת המחדל של תדירות החזרה בדו-שיח עריכת התזכורת."
+msgstr ""
+"יחידות ברירת המחדל להתראות בחלונית עריכת התזכורות, לתזכורות שמסתיימות בקרוב."
 
 #: prefdlg.cpp:1567
 #, kde-format
@@ -5682,14 +5685,14 @@ msgid "Repeat sound file"
 msgstr "חזרה על קובץ צליל"
 
 #: prefdlg.cpp:1589
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis sound file 'Repeat' checkbox"
 msgid ""
 "The default setting for sound file <interface>%1</interface> in the alarm "
 "edit dialog."
 msgstr ""
-"בחר באפשרות זו כדי שהגדרת ברירת המחדל של \"צליל\" בדו-שיח עריכת התזכורת תהיה "
-"צפצוף."
+"הגדרת ברירת המחדל לקובץ השמע <interface>%1</interface> בחלונית עריכת "
+"התזכורות."
 
 #: prefdlg.cpp:1595
 #, kde-format
@@ -5704,23 +5707,25 @@ msgid "Choose a sound file"
 msgstr "נא לבחור קובץ צליל"
 
 #: prefdlg.cpp:1605
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
-msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
+msgstr "נא למלא את קובץ השמע כברירת מחדל לשימוש בחלונית עריכת התזכורות."
 
 #: prefdlg.cpp:1614
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select to set the default volume for sound files in the alarm edit dialog."
-msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
+msgstr ""
+"ניתן לבחור כדי להגדיר את עוצמת השמע כברירת המחדל לקובצי שמע בחלונית עריכת "
+"התזכורת."
 
 #: prefdlg.cpp:1618
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default volume for sound files in the alarm edit dialog."
-msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
+msgstr "עוצמת השמע כברירת המחדל לקובצי שמע בחלונית עריכת התזכורת."
 
 #: prefdlg.cpp:1628
 #, kde-format
@@ -5741,14 +5746,13 @@ msgid "Message Font && Color"
 msgstr "גופן וצבע הודעה"
 
 #: prefdlg.cpp:1866
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "You must enter a sound file when <interface>%1</interface> is selected as "
 "the default sound type"
 msgstr ""
-"בחר באפשרות זו כדי שהגדרת ברירת המחדל של \"צליל\" בדו-שיח עריכת התזכורת תהיה "
-"צפצוף."
+"יש לציין קובץ שמע אם <interface>%1</interface> נבחר כסוג השמע כברירת המחדל"
 
 #: prefdlg.cpp:1893
 #, kde-format
@@ -5763,13 +5767,15 @@ msgid "Show in system tray"
 msgstr "הצגה בשורת המערכת"
 
 #: prefdlg.cpp:1898
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>Check to show <application>KAlarm</application>'s icon in the system "
 "tray. Showing it in the system tray provides easy access and a status "
 "indication.</para>"
-msgstr "הפעלת %1 בעת הפעלת KDE."
+msgstr ""
+"<para>יש לסמן כדי להציג את הסמל של <application>KAlarm</application> בשורת "
+"המערכת. הצגתו בשורת המערכת מספרת גישה קלה וחיווי על המצב.</para>"
 
 #: prefdlg.cpp:1927
 #, kde-format
@@ -6078,10 +6084,10 @@ msgid "Repeat the alarm indefinitely"
 msgstr "חזרה על התזכורת לעד"
 
 #: recurrenceedit.cpp:210
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio"
 msgid "End after:"
-msgstr "סיים אח&רי:"
+msgstr "לסיים לאחר:"
 
 #: recurrenceedit.cpp:212
 #, kde-format
@@ -6506,7 +6512,7 @@ msgstr "לא נבחר חודש"
 #, kde-format
 msgctxt "@option:check"
 msgid "Reminder for first recurrence only"
-msgstr ""
+msgstr "התראה במופע הראשון בלבד"
 
 #: reminder.cpp:31
 #, kde-format
@@ -6518,7 +6524,7 @@ msgstr "מראש"
 #, kde-format
 msgctxt "@option:check"
 msgid "Reminder:"
-msgstr "תזכורת:"
+msgstr "התראה:"
 
 #: reminder.cpp:47
 #, kde-format
@@ -7078,10 +7084,10 @@ msgid "Next scheduled date and time of the alarm"
 msgstr "התאריך והשעה המתוזמנים הבאים לתזכורת"
 
 #: resources/resourcedatamodelbase.cpp:559
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
-msgstr "התאריך והשעה המתוכננים הבאים של התזכורת"
+msgstr "כמה זמן עד להזנקה המתוזמנת הבאה של התזכורת"
 
 #: resources/resourcedatamodelbase.cpp:561
 #, kde-format
@@ -7108,14 +7114,14 @@ msgid "Alarm name, or alarm text if name is blank"
 msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:569
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Alarm message text, URL of text file to display, command to execute, or "
 "email subject line"
 msgstr ""
-"הטקסט של הודעת התזכורת, הכתובת של קובץ הטקסט שיש להציג, הפקודה שיש להפעיל או "
-"כותרת הדוא\"ל."
+"הטקסט של הודעת התזכורת, הכתובת של קובץ הטקסט להצגה, הפקודה להפעלה או כותרת "
+"הודעת הדוא״ל."
 
 #: resources/resourcedatamodelbase.cpp:571
 #, kde-format
