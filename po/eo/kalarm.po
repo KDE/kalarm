@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 02:45+0000\n"
-"PO-Revision-Date: 2024-09-14 11:22+0200\n"
+"PO-Revision-Date: 2025-01-06 18:58+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1020,7 +1020,7 @@ msgstr "Rula reĝimo"
 msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
-msgstr ""
+msgstr "Ĉu ruli KAlarm aŭtomate dum ensaluto, mane nur, aŭ tute ne."
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:140
@@ -1532,7 +1532,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Auto-close window after late-cancellation time"
-msgstr "Aŭtomate fermi fenestron post malfru-nuliga tempo"
+msgstr "Aŭtomate fermi fenestron post malfrua nuligo"
 
 #. i18n: ectx: whatsthis, entry (DefaultAutoClose), group (Defaults)
 #: data/kalarmconfig.kcfg:312
@@ -2651,7 +2651,7 @@ msgstr "Redakti Komandan Alarmon"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
-msgstr "Ruli la specifitan komandon nun"
+msgstr "Efektivigi la specifitan komandon nun"
 
 #: editdlgtypes.cpp:848
 #, kde-format
@@ -5066,7 +5066,7 @@ msgstr "Kura Reĝimo"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run automatically"
-msgstr ""
+msgstr "Ruli aŭtomate"
 
 #: prefdlg.cpp:459
 #, kde-format
@@ -5075,6 +5075,8 @@ msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
 msgstr ""
+"Lanĉi KAlarm aŭtomate ĉe ensaluto. Ĉi elekteblo devas esti markita por "
+"ebligi normalan funkciadon de KAlarm."
 
 #: prefdlg.cpp:462
 #, kde-format
@@ -5089,6 +5091,8 @@ msgid ""
 "Only run KAlarm manually, never automatically. KAlarm will only function "
 "when you manually start it."
 msgstr ""
+"Ruli KAlarm nur permane, neniam aŭtomate. KAlarm nur ekfunkcios kiam vi mane "
+"lanĉas ĝin."
 
 #: prefdlg.cpp:468
 #, kde-format
@@ -5103,6 +5107,8 @@ msgid ""
 "Stop using KAlarm. If you later run it again, it will then resume normal "
 "functioning."
 msgstr ""
+"Ĉesu uzi KAlarm. Se vi poste rulos ĝin denove, ĝi tiam rekomencos normalan "
+"funkciadon."
 
 #: prefdlg.cpp:474
 #, kde-format
@@ -5279,6 +5285,8 @@ msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
 msgstr ""
+"Tio ĉi malhelpos <application>KAlarm</application> funkcii<nl/>krom se vi "
+"permane lanĉas ĝin."
 
 #: prefdlg.cpp:758
 #, kde-kuit-format
