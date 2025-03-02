@@ -451,7 +451,14 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
-    <release version="3.10.3" date="2025-03-06"/>
+    <release version="3.10.3" date="2025-03-06">
+      <description>
+        <p>Release description</p>
+        <ul>
+          <li>Fix KAlarm exiting before executing session restoration.</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.10.2" date="2025-02-06">
       <description>
         <p>Release description</p>
