@@ -3358,7 +3358,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
-msgstr "Non é posíbel enviar o calendario novo a:<nl/><filename>%1</filename>"
+msgstr "Non é posíbel subir o calendario novo a:<nl/><filename>%1</filename>"
 
 #: functions.cpp:1037
 #, kde-format
