@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2025-02-18 08:42+0200\n"
+"PO-Revision-Date: 2025-03-04 08:29+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.12.1\n"
+"X-Generator: Lokalize 24.12.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4720,40 +4720,40 @@ msgstr ""
 "תוצג בפניך שאלה לגבי המועד בו יש להציג את התזכורת שנית."
 
 #: messagewindow.cpp:459 sounddlg.cpp:454
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
-msgstr "&צליל"
+msgstr "עצירת צליל"
 
 #: messagewindow.cpp:460 sounddlg.cpp:455
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
-msgstr "&צליל"
+msgstr "עצירת נגינת הצליל"
 
 #: messagewindow.cpp:474
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
-msgstr "הפעלת %1 בעת הפעלת KDE."
+msgstr "איתור ב־<application>KMail</application>"
 
 #: messagewindow.cpp:475
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
-msgstr "הפעלת %1 בעת הפעלת KDE."
+msgstr "איתור והדגשת ההודעה הזאת ב־<application>KMail</application>"
 
 #: messagewindow.cpp:483
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
-msgstr "הפעלת %1 בעת הפעלת KDE."
+msgstr "הפעלת <application>KAlarm</application>"
 
 #: messagewindow.cpp:484
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
-msgstr "הפעלת %1 בעת הפעלת KDE."
+msgstr "הפעלת <application>KAlarm</application>"
 
 #: messagewindow.cpp:1076
 #, kde-format
@@ -4999,10 +4999,10 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:492
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable alarm names"
-msgstr "ההודעה של התזכורת"
+msgstr "הפעלת שמות לתזכורות"
 
 #: prefdlg.cpp:494
 #, kde-format
@@ -5013,10 +5013,10 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:502
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Confirm alarm deletions"
-msgstr "&שאל לפני מחיקת תזכורות"
+msgstr "אישור מחיקת תזכורות"
 
 #: prefdlg.cpp:512
 #, fuzzy, kde-format
@@ -5082,12 +5082,10 @@ msgid "Audio Backend"
 msgstr ""
 
 #: prefdlg.cpp:578
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Choose the volume for playing the sound file."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which audio backend to use to play sound files"
-msgstr "נא לבחור את עוצמת השמע לניגון קובץ הצליל."
+msgstr "נא לבחור באיזה מנגנון שמע להשתמש כדי להשמיע קובצי צליל"
 
 #: prefdlg.cpp:593
 #, kde-format
@@ -5201,10 +5199,10 @@ msgid "minutes"
 msgstr "דקות"
 
 #: prefdlg.cpp:881
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Start of day for date-only alarms:"
-msgstr "הת&חלת היום עבור תזכורות של תאריך בלבד:"
+msgstr "תחילת היום עבור תזכורות של תאריך בלבד:"
 
 #: prefdlg.cpp:888
 #, fuzzy, kde-kuit-format
@@ -5223,10 +5221,10 @@ msgid "Working Hours"
 msgstr "שעות עבודה"
 
 #: prefdlg.cpp:908
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check the days in the week which are work days"
-msgstr "בחירת היום בשבוע בו יש לחזור על התזכורת."
+msgstr "נא לסמן את ימי העבודה מבין ימי השבוע"
 
 #: prefdlg.cpp:918
 #, kde-format
@@ -5349,24 +5347,26 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:1080
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Clear Archived Alarms"
-msgstr "תזכורת שנדחתה"
+msgstr "פינוי תזכורות מהארכיון"
 
 #: prefdlg.cpp:1083
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete all existing archived alarms."
-msgstr "עריכת תזכורת"
+msgstr "מחיקת כל התזכורות שבארכיון כרגע."
 
 #: prefdlg.cpp:1084
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Delete all existing archived alarms (from the default archived alarm "
 "calendar only)."
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr ""
+"מחיקת כל התזכורות שבארכיון כרגע (מלוח השנה של התזכורות שבארכיון כברירת מחדל "
+"בלבד)."
 
 #: prefdlg.cpp:1130
 #, kde-kuit-format
