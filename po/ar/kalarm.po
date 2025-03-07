@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2025-02-23 21:22+0400\n"
+"PO-Revision-Date: 2025-03-06 09:52+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1031,8 +1031,8 @@ msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
-"<p>بدء تشغيل منبهك آليًا عند بدء تشغيل كيدي.</p><p>يجب دائمًا تعيين هذا الخيار "
-"على true إذا كان RunMode=Auto، وإلا على false.</p>"
+"<p>بدء تشغيل «منبهك» آليًا عند بدء تشغيل كيدي.</p><p>يجب دائمًا تعيين هذا "
+"الخيار على true إذا كان RunMode=Auto، وإلا على false.</p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:146
@@ -1485,7 +1485,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Enter the event duration in minutes, for alarms which are copied to "
 "KOrganizer."
-msgstr "أدخِل مدّة الحدث (بالدقائق) للمنبّهات التي نُسخت إلى منظمك."
+msgstr "أدخِل مدّة الحدث (بالدقائق) للمنبّهات التي نُسخت إلى «منظمك»."
 
 #. i18n: ectx: label, entry (WakeFromSuspendAdvance), group (General)
 #: data/kalarmconfig.kcfg:291
@@ -1926,7 +1926,7 @@ msgstr "حذّرني قبل الإنهاء"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Whether to suppress a warning prompt before quitting KAlarm."
-msgstr "ما إذا كنت تريد منع مطالبة التحذير قبل إنهاء منظمك."
+msgstr "ما إذا كنت تريد منع مطالبة التحذير قبل إنهاء «منظمك»."
 
 #. i18n: ectx: label, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
 #: data/kalarmconfig.kcfg:451
