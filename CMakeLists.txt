@@ -26,7 +26,7 @@ endif()
 
 project(kalarm VERSION ${KALARM_VERSION})
 
-set(KF_MIN_VERSION "6.9.0")
+set(KF_MIN_VERSION "6.11.0")
 
 find_package(ECM ${KF_MIN_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
@@ -47,7 +47,7 @@ include(ECMAddAppIcon)
 include(ECMQtDeclareLoggingCategory)
 include(ECMDeprecationSettings)
 include(ECMFeatureSummary)
-set(QT_REQUIRED_VERSION "6.7.0")
+set(QT_REQUIRED_VERSION "6.8.0")
 set(KTEXTADDONS_MIN_VERSION "1.5.4")
 # Do NOT add quote
 set(KDEPIM_DEV_VERSION alpha)
