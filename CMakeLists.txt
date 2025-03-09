@@ -50,7 +50,7 @@ include(ECMFeatureSummary)
 set(QT_REQUIRED_VERSION "6.7.0")
 set(KTEXTADDONS_MIN_VERSION "1.5.4")
 # Do NOT add quote
-set(KDEPIM_DEV_VERSION alpha)
+set(KDEPIM_DEV_VERSION beta)
 
 # add an extra space
 if(DEFINED KDEPIM_DEV_VERSION)
