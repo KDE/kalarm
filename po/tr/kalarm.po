@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2025-03-13 22:20+0300\n"
+"PO-Revision-Date: 2025-03-14 20:25+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -616,7 +616,7 @@ msgstr "Alarm tetiklendiğinde 'dönemi' kadar gecikmişse iptal et"
 #: commandoptions.cpp:209
 #, kde-format
 msgid "Output list of scheduled alarms to stdout"
-msgstr "Standart çıktıya programlanmış alarmların çıktı listesi"
+msgstr "Standart çıktıya zamanlanmış alarmlar çıktısı listesi"
 
 #: commandoptions.cpp:212
 #, kde-format
@@ -1843,7 +1843,7 @@ msgid ""
 msgstr ""
 "Yıllık yinelemeler için artık yıl olmayan yıllarda 29 Şubat alarmlarının "
 "hangi tarihte uygulanacağını seçin.<i>Not</i>: Bu ayarı değiştirdiğinizde "
-"var olan planlanmış alarmların gösterimi yeniden hesaplanmayacaktır."
+"var olan zamanlanmış alarmların gösterimi yeniden hesaplanmayacaktır."
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:403
@@ -3390,7 +3390,7 @@ msgstr "<para>%1</para><para>(K Organizatör ile iletişim kurulamadı)</para>"
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
-msgstr "Planlanan Askıdan Uyandır iptal edildi."
+msgstr "Zamanlanmış askıdan uyandır iptal edildi."
 
 #: functions.cpp:1345
 #, kde-format
@@ -3495,7 +3495,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
-msgstr "Çıkmak, planlanan Askıdan Uyandır işlemini iptal eder."
+msgstr "Çıkmak, zamanlanmış askıdan uyandır işlemini iptal eder."
 
 #: kalarmapp.cpp:1042
 #, kde-kuit-format
@@ -5913,7 +5913,7 @@ msgid ""
 msgstr ""
 "Yıllık yinelemeler için artık yıl olmayan yıllarda 29 Şubat alarmlarının "
 "hangi tarihte uygulanacağını seçin.<note> Bu ayarı değiştirdiğinizde var "
-"olan planlanmış alarmların gösterimi yeniden hesaplanmayacaktır.</note>"
+"olan zamanlanmış alarmların gösterimi yeniden hesaplanmayacaktır.</note>"
 
 #: prefdlg.cpp:1536
 #, kde-format
