@@ -1,7 +1,7 @@
 /*
  *  spinbox2.cpp  -  spin box with extra pair of spin buttons
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -34,15 +34,7 @@ const char* mirrorStyles[] = {
     "QFusionStyle",
     nullptr    // list terminator
 };
-/* List of styles whose spin button background is QPalette::Base instead of
- * the standard QPalette::Button color.
- */
-const char* baseBackgroundStyles[] = {
-    "Oxygen::Style", "OxygenStyle",
-    nullptr
-};
 bool isMirrorStyle(const QStyle*);
-bool isBaseBackground(const QStyle*);
 QRect spinBoxEditFieldRect(const SpinBox*);
 QRect spinBoxButtonsRect(const SpinBox*, bool includeBorders);
 
@@ -85,6 +77,19 @@ void SpinBox2::init()
     layout->addWidget(mSpinbox2);
     connect(mSpinbox2, &SpinBox2p::valueChanged, this, &SpinBox2::valueChanged);
     setFocusProxy(mSpinbox2);
+#if 0   // for testing
+QPalette pal = palette();
+pal.setColor(QPalette::Window, Qt::blue);
+setPalette(pal);
+setAutoFillBackground(true);
+#endif
+}
+
+void SpinBox2::resizeEvent(QResizeEvent* event)
+{
+    if (!event->oldSize().isEmpty()  &&  size() != event->oldSize())
+        mSpinbox2->rearrange();
+    QWidget::resizeEvent(event);
 }
 
 /*===========================================================================*/
@@ -464,6 +469,9 @@ mSpinbox->setAutoFillBackground(true);
 pal.setColor(QPalette::Window, Qt::magenta);
 mSpinbox2->setPalette(pal);
 mSpinbox2->setAutoFillBackground(true);
+pal.setColor(QPalette::Window, Qt::red);
+mSpinMirror->setPalette(pal);
+mSpinMirror->setAutoFillBackground(true);
 #endif
     if (mShowUpdown2)
     {
@@ -475,7 +483,7 @@ mSpinbox2->setAutoFillBackground(true);
         mSpinbox->setGeometry(mRightToLeft ? 0 : spinboxOffset, 0, width() - spinboxOffset, height());
         QRect rf(0, 0, mSpinbox->width() + spinboxOffset, height());
         setGeometry(rf);
-//        qCDebug(KALARM_LOG) << "SpinBox2p::getMetrics: mirrorRect="<<mirrorRect<<", mSpinbox2="<<mSpinbox2->geometry()<<", mSpinbox="<<mSpinbox->geometry()<<", width="<<width();
+//        qCDebug(KALARM_LOG) << "SpinBox2p::getMetrics: mirrorRect="<<mirrorRect<<", mSpinbox2="<<mSpinbox2->geometry()<<", mSpinbox="<<mSpinbox->geometry()<<", hint="<<mSpinbox->sizeHint()<<", width="<<width()<<", setGeom="<<rf;
 
         mSpinMirror->resize(mirrorWidth, mSpinbox2->height());
         mSpinMirror->setGeometry(mirrorRect);
@@ -517,7 +525,7 @@ void SpinBox2p::getMetrics() const
                    : isMirrorStyle(udStyle) ? buttons2DrawRect.left() - buttons2Rect.left()
                    :                          frame2Rect.right() - buttons2DrawRect.right();
     mButtonPos = QPoint(butx, buttons2Rect.top());
-//    qCDebug(KALARM_LOG) << "SpinBox2p::getMetrics: mSpinbox2:"<<mSpinbox2->geometry()<<", buttons:"<<buttons2Rect<<", buttons draw:"<<buttons2DrawRect<<", edit:"<<spinBoxEditFieldRect(mSpinbox2)<<", frame:"<<frame2Rect<<", frame width:"<<wFrameWidth<<", border:"<<wBorderWidth<<, "wUpdown2="<<wUpdown2<<", wFrameWidth="<<wFrameWidth<<", frame right="<<mSpinbox2->width() - buttons2Rect.right() - 1<<", button Pos:"<<mButtonPos;
+//    qCDebug(KALARM_LOG) << "SpinBox2p::getMetrics: mSpinbox2:"<<mSpinbox2->geometry()<<", buttons:"<<buttons2Rect<<", buttons draw:"<<buttons2DrawRect<<", edit:"<<spinBoxEditFieldRect(mSpinbox2)<<", frame:"<<frame2Rect<<", frame width:"<<wFrameWidth<<", border:"<<wBorderWidth<<", wUpdown2="<<wUpdown2<<", wFrameWidth="<<wFrameWidth<<", frame right="<<mSpinbox2->width() - buttons2Rect.right() - 1<<", button Pos:"<<mButtonPos;
 }
 
 /******************************************************************************
@@ -671,14 +679,13 @@ void SpinMirror::setMirroredState(bool clear)
 * Copy the left hand frame of the main spinbox to use as the background for
 * this widget. The image of the spin buttons to be painted on top is set up by
 * setButtonsImage().
-* Copy the frame to the left of the edit field, plus a single pixel slice at
-* the left of the edit field. Then stretch the slice to the full width - this
-* avoids possibly grabbing text and displaying it in the spin button area.
+* Copy the frame to the left of the edit field, plus a single pixel slice to
+* the left of the spin buttons. Then stretch the slice to the full width - this
+* sets the correct background spin button color.
 */
 void SpinMirror::setFrameImage()
 {
     QGraphicsScene* c = scene();
-    const QRect r = spinBoxEditFieldRect(mMainSpinbox);
     const bool rtl = QApplication::isRightToLeft();
     QPixmap p;
     if (mMirrored)
@@ -688,24 +695,13 @@ void SpinMirror::setFrameImage()
     }
     else
     {
-        // Grab a single pixel wide vertical slice through the main spinbox, between the
-        // frame and edit field.
-        QStyle* mainStyle = mMainSpinbox->style();
-        QStyleOptionSpinBox option;
-        mMainSpinbox->initStyleOption(&option);
-        const int frameWidth = mainStyle->pixelMetric(QStyle::PM_SpinBoxFrameWidth, &option);  // offset to edit field
-        const int editOffsetY = frameWidth;
-        const int editOffsetX = 2;   // offset into edit field
-        const int blankHeight = height() - 2*editOffsetY;
-        const int x = rtl ? r.right() - editOffsetX : r.left() + editOffsetX;
+        // Grab a single pixel wide vertical slice through the main spinbox, from
+        // just to the left of the spin buttons.
+        QRect rb = spinBoxButtonsRect(mMainSpinbox, false);
+        const int x = rtl ? rb.right() + 1 : rb.left() - 1;
         p = grabWidget(mMainSpinbox, QRect(x, 0, 1, height()));
-        // Blot out edit field stuff from the middle of the slice
-        const QColor baseColour = option.palette.color(isBaseBackground(mainStyle) ? QPalette::Base : QPalette::Button);
-        QImage image = p.toImage();
-        for (int i = editOffsetY;  i < editOffsetY + blankHeight;  ++i)
-            image.setPixelColor(0, i, baseColour);
-        p = QPixmap::fromImage(image);
-        // Horizontally fill the mirror widget with the vertical slice
+        // Horizontally fill the mirror widget with the vertical slice, to set the
+        // correct background color.
         p = p.scaled(size());
 
         // Grab the left hand border of the main spinbox, and draw it into the mirror widget.
@@ -713,17 +709,23 @@ void SpinMirror::setFrameImage()
         QRect endr{0, 0, 0, height()};
         QRect editr;   // area within mMainSpinbox to get border between spin buttons and edit field
         int editx;
+        const int editOffsetX = 2;   // offset into edit field
         const QRect buttonsRect = spinBoxButtonsRect(mMainSpinbox, true);
         if (rtl)
         {
             const int mr = mMainSpinbox->width() - 1;
-            endr.setWidth(mr - r.right() + editOffsetX);
+            const QRect re = spinBoxEditFieldRect(mMainSpinbox);
+            endr.setWidth(mr - re.right() + editOffsetX);
             endr.moveRight(mr);
             editr = QRect(buttonsRect.right(), 0, 1, height());
             editx = 0;
         }
         else
         {
+        QStyle* mainStyle = mMainSpinbox->style();
+        QStyleOptionSpinBox option;
+        mMainSpinbox->initStyleOption(&option);
+        const int frameWidth = mainStyle->pixelMetric(QStyle::PM_SpinBoxFrameWidth, &option);  // offset to edit field
             endr.setWidth(frameWidth + editOffsetX);
             editr = QRect(buttonsRect.left(), 0, 1, height());
             editx = width() - 1;
@@ -743,7 +745,7 @@ void SpinMirror::setFrameImage()
 void SpinMirror::setButtonsImage()
 {
     mSpinbox->inhibitPaintSignal(2);
-    const QRect r = spinBoxButtonsRect(mSpinbox, false);
+    QRect r = spinBoxButtonsRect(mSpinbox, false);
     mSpinbox->inhibitPaintSignal(1);
     mButtons->setPixmap(grabWidget(mSpinbox, r));
     mSpinbox->inhibitPaintSignal(0);
@@ -872,18 +874,6 @@ namespace
 bool isMirrorStyle(const QStyle* style)
 {
     for (const char** s = mirrorStyles;  *s;  ++s)
-        if (style->inherits(*s))
-            return true;
-    return false;
-}
-
-/******************************************************************************
-* Determine whether the background color of the extra pair of spin buttons
-* should be QPalette::Base instead of QPalette::Button.
-*/
-bool isBaseBackground(const QStyle* style)
-{
-    for (const char** s = baseBackgroundStyles;  *s;  ++s)
         if (style->inherits(*s))
             return true;
     return false;

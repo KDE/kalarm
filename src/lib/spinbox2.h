@@ -1,7 +1,7 @@
 /*
  *  spinbox2.h  -  spin box with extra pair of spin buttons
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -263,6 +263,8 @@ Q_SIGNALS:
 protected:
     virtual QString  textFromValue(int v) const    { return mSpinbox2->textFromValue(v); }
     virtual int      valueFromText(const QString& t) const  { return mSpinbox2->valueFromText(t); }
+
+    void resizeEvent(QResizeEvent*) override;
 
 private:
     void init();

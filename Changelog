@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 3.11.0 (KDE Gear 25.04) --- 2 January 2025 ===
+=== Version 3.11.0 (KDE Gear 25.04) --- 18 March 2025 ===
 * Implement audio backends as plugins to allow user selection.
+* Clean up time spin box appearance in some styles, e.g. Oxygen.
 
 === Version 3.10.3 (KDE Gear 24.12.3) --- 13 February 2025 ===
 * Fix KAlarm exiting before executing session restoration [KDE Bug 499859]
