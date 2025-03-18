@@ -1,7 +1,7 @@
 /*
  *  spinbox2_p.h  -  private classes for SpinBox2
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -77,6 +77,7 @@ public:
     void             subtractSingle()            { addValue(-mSingleStep); }
     void             addValue(int change)        { mSpinbox->addValue(change); }
     void             stepBy(int increment)       { addValue(increment); }
+    void             rearrange();
 
 public Q_SLOTS:
     void             setValue(int val)           { mSpinbox->setValue(val); }
@@ -113,7 +114,6 @@ private Q_SLOTS:
 
 private:
     void             setShiftSteps() const;
-    void             rearrange();
     void             arrange();
     void             updateMirror();
     bool             eventFilter(QObject*, QEvent*) override;
