@@ -83,7 +83,9 @@
 ><year
 >2023</year
 ><year
->2024</year>
+>2024</year
+><year
+>2025</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -94,9 +96,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2024-12-20</date>
+>2025-03-17</date>
 <releaseinfo
->3.10.1 (KDE Gear 24.12.1)</releaseinfo>
+>3.11.0 (KDE Gear 25.04)</releaseinfo>
 
 <abstract>
 <para
@@ -3253,6 +3255,20 @@
 >Wanneer het commando-alarm wordt geactiveerd zal zijn commandotekst omgeven worden door aanhalingstekens voordat het wordt ingevoegd in het commando voor het terminalvenster.</para>
 </listitem>
 
+<listitem>
+<para
+><guilabel
+>Plug-ins</guilabel
+>: deze sectie biedt u het kiezen welke van de geïnstalleerde plug-ins van &kalarm; te gebruiken.</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Audio-backend</guilabel
+>: kies welk audiosysteem te gebruiken om geluidsbestanden af te spelen. Alleen geïnstalleerd audio-plug-ins staan in de lijst; als er geen geïnstalleerd zijn, dan wordt deze optie niet getoond.</para>
+</listitem>
+
 <listitem
 ><para
 ><guilabel
@@ -3260,6 +3276,8 @@
 >: kiese of &akonadi; wordt gebruikt om de mogelijkheden te leveren die er afhankelijk van zijn. Zie <link linkend="akonadi-plugin"
 >Akonadi plug-in</link
 > voor details. merk op dat deze optie alleen getoond wordt wanneer de Akonadi plug-in is geïnstalleerd.</para>
+</listitem>
+</itemizedlist>
 </listitem>
 
 </itemizedlist>
@@ -6980,10 +6998,10 @@
 <para
 >&kalarm; </para>
 <para
->Programma copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 &David.Jarvie; &David.Jarvie.mail; </para>
+>Programma copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Documentatie copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024 &David.Jarvie; &David.Jarvie.mail; </para>
+>Documentatie copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
 
 &meld.fouten;&vertaling.niels;&vertaling.freek; &underFDL; &underGPL; <para
 >Dank aan de auteur van de &kde; 1 KAlarm applicatie, Stefan Nikolaus <email

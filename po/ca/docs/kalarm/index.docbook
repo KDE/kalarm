@@ -83,7 +83,9 @@
 ><year
 >2023</year
 ><year
->2024</year>
+>2024</year
+><year
+>2025</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -94,9 +96,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->20 de desembre de 2024</date>
+>17 de març de 2025</date>
 <releaseinfo
->3.10.1 (KDE Gear 24.12.1)</releaseinfo>
+>3.11.0 (KDE Gear 25.04)</releaseinfo>
 
 <abstract>
 <para
@@ -3245,6 +3247,20 @@
 >Quan s'activi l'alarma d'ordre, la seva cadena d'ordre es posarà entre cometes abans d'inserir-la a la línia d'ordres de la finestra de terminal.</para>
 </listitem>
 
+<listitem>
+<para
+><guilabel
+>Connectors</guilabel
+>: Aquesta secció permet triar quins dels connectors instal·lats del &kalarm; s'ha d'utilitzar.</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Dorsal d'àudio</guilabel
+>: Trieu quin sistema d'àudio utilitzar per a reproduir fitxers de so. Només es llisten els connectors d'àudio instal·lats; si no n'hi ha cap, aquesta opció no es mostra.</para>
+</listitem>
+
 <listitem
 ><para
 ><guilabel
@@ -3252,6 +3268,8 @@
 >: Trieu si usar l'&akonadi; per a proporcionar les característiques que depenen d'ell. Vegeu el <link linkend="akonadi-plugin"
 >connector de l'Akonadi</link
 > per ales detalls. Tingueu en compte que aquesta opció només es mostra si s'ha instal·lat el connector de l'Akonadi.</para>
+</listitem>
+</itemizedlist>
 </listitem>
 
 </itemizedlist>
@@ -6943,10 +6961,10 @@
 <para
 >&kalarm; </para>
 <para
->Copyright del programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright del programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Copyright de la documentació 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright de la documentació 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
 >Traductor/Revisor de la documentació: &credits.Antoni.Bella;</para
