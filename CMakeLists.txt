@@ -146,7 +146,7 @@ if(ENABLE_LIBMPV)
     find_package(Libmpv "2.2.0" QUIET REQUIRED)
     set_package_properties(Libmpv PROPERTIES PURPOSE "Used to play audio alarms")
 endif()
-if(NOT ENABLE_LIBVLC AND NOT ENABLE_LIBVLC)
+if(NOT ENABLE_LIBVLC AND NOT ENABLE_LIBMPV)
     message(FATAL_ERROR "One or more of ENABLE_LIBVLC or ENABLE_LIBMPV must be enabled for support for playing sound files")
 endif()
 
