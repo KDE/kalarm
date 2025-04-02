@@ -13,7 +13,7 @@
 # Alexander Potashev <aspotashev@gmail.com>, 2010, 2011, 2014, 2015, 2016.
 # Julia Dronova <juliette.tux@gmail.com>, 2012.
 # Alexander Lakhin <exclusion@gmail.com>, 2013.
-# SPDX-FileCopyrightText: 2018, 2024 Olesya Gerasimenko <gammaray@basealt.ru>
+# SPDX-FileCopyrightText: 2018, 2024, 2025 Olesya Gerasimenko <gammaray@basealt.ru>
 # Мария Шикунова <translation-team@basealt.ru>, 2021, 2022.
 # SPDX-FileCopyrightText: 2023, 2024 Alexander Yavorsky <kekcuha@gmail.com>
 msgid ""
@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2024-11-15 15:23+0300\n"
+"PO-Revision-Date: 2025-04-01 12:28+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -881,28 +881,28 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Audio backend"
-msgstr ""
+msgstr "Модуль обработки звука"
 
 #. i18n: ectx: whatsthis, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Which audio backend to prefer."
-msgstr ""
+msgstr "Предпочитаемый модуль обработки звука."
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:86
 #, kde-format
 msgctxt "@option"
 msgid "MPV"
-msgstr ""
+msgstr "MPV"
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:87
 #, kde-format
 msgctxt "@option"
 msgid "VLC"
-msgstr ""
+msgstr "VLC"
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:92
@@ -1129,8 +1129,8 @@ msgid ""
 "Enter the default time interval (in minutes) to defer alarms, used by the "
 "Defer Alarm dialog."
 msgstr ""
-"Введите временной интервал по умолчанию (в минутах), чтобы отложить "
-"напоминания, используемые в диалоге Отложенное напоминание."
+"Введите временной интервал по умолчанию (в минутах) для отсрочки "
+"напоминаний, который будет использоваться в диалоге «Отсрочка напоминания»."
 
 #. i18n: ectx: label, entry (AskResource), group (General)
 #: data/kalarmconfig.kcfg:161
@@ -5289,8 +5289,8 @@ msgid ""
 "Enter the default time interval (hours & minutes) to defer alarms, used by "
 "the Defer Alarm dialog."
 msgstr ""
-"Введите временной интервал (часы и минуты) по умолчанию, чтобы отложить "
-"напоминания, используемые диалогом Отложить напоминание."
+"Введите временной интервал по умолчанию (в часах и минутах) для отсрочки "
+"напоминаний, который будет использоваться в диалоге «Отсрочка напоминания»."
 
 #: prefdlg.cpp:523
 #, kde-format
@@ -5345,15 +5345,13 @@ msgstr "Модули"
 #, kde-format
 msgctxt "@title:group"
 msgid "Audio Backend"
-msgstr ""
+msgstr "Модуль обработки звука"
 
 #: prefdlg.cpp:578
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Choose the volume for playing the sound file."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which audio backend to use to play sound files"
-msgstr "Выберите громкость воспроизведения звукового файла."
+msgstr "Выберите модуль обработки звука для воспроизведения звуковых файлов"
 
 #: prefdlg.cpp:593
 #, kde-format
