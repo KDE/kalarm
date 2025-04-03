@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2025-01-08 14:59+0100\n"
+"PO-Revision-Date: 2025-04-02 17:24+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1057,7 +1057,7 @@ msgid ""
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
 "<p>Initia automaticamente KAlarm quando tu initia KDE</p><p>Iste option "
-"deberea sempre esser fixate a true si RunMode=Auto,elteremente a false.</p>"
+"deberea sempre esser fixate a true si RunMode=Auto, alteremente a false.</p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:146
