@@ -1,4 +1,4 @@
-# Translation of kalarm to Spanish
+# Spanish translations for kalarm.po package.
 # Copyright (C) 2001-2025 Free Software Foundation, Inc.
 #
 # SPDX-FileCopyrightText: 2001 Miguel Revilla <yo@miguelrevilla.com>
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2025-03-19 14:29+0100\n"
+"PO-Revision-Date: 2025-04-05 01:53+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -229,7 +229,7 @@ msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
-msgstr "Zona horaria..."
+msgstr "Zona horaria…"
 
 #: alarmtimewidget.cpp:211
 #, kde-format
@@ -2251,7 +2251,7 @@ msgstr "Programar la alarma para la hora especificada."
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
-msgstr "Cargar plantilla..."
+msgstr "Cargar plantilla…"
 
 #: editdlg.cpp:201
 #, kde-format
@@ -2305,7 +2305,7 @@ msgstr "Diferida a"
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
-msgstr "Cambiar..."
+msgstr "Cambiar…"
 
 #: editdlg.cpp:277
 #, kde-format
@@ -2981,7 +2981,7 @@ msgstr "Archivos a enviar como adjuntos al correo."
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
-msgstr "Añadir..."
+msgstr "Añadir…"
 
 #: editdlgtypes.cpp:1259
 #, kde-format
@@ -3319,7 +3319,7 @@ msgstr "Tipo de letra solicitado"
 #, kde-format
 msgctxt "@action:button"
 msgid "Font && Color..."
-msgstr "Tipo de letra y color..."
+msgstr "Tipo de letra y color…"
 
 #: fontcolourbutton.cpp:30
 #, kde-format
@@ -4552,7 +4552,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
-msgstr "Plantillas..."
+msgstr "Plantillas…"
 
 #: mainwindow.cpp:467 templatedlg.cpp:74
 #, kde-format
@@ -4564,19 +4564,19 @@ msgstr "Nuevo"
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
-msgstr "Crear plantilla..."
+msgstr "Crear plantilla…"
 
 #: mainwindow.cpp:477
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
-msgstr "Copiar..."
+msgstr "Copiar…"
 
 #: mainwindow.cpp:482 resourceselector.cpp:301
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
-msgstr "Editar..."
+msgstr "Editar…"
 
 #: mainwindow.cpp:487
 #, kde-format
@@ -4600,7 +4600,7 @@ msgstr "Reactivar"
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
-msgstr "Despertar desde suspendido..."
+msgstr "Despertar desde suspendido…"
 
 #: mainwindow.cpp:524
 #, kde-format
@@ -4630,25 +4630,25 @@ msgstr "Mostrar el selector de fecha"
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
-msgstr "Importar alarmas..."
+msgstr "Importar alarmas…"
 
 #: mainwindow.cpp:556
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr "Importar cumpleaños..."
+msgstr "Importar cumpleaños…"
 
 #: mainwindow.cpp:561
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
-msgstr "Exportar las alarmas seleccionadas..."
+msgstr "Exportar las alarmas seleccionadas…"
 
 #: mainwindow.cpp:565 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
-msgstr "Exportar..."
+msgstr "Exportar…"
 
 #: mainwindow.cpp:569
 #, kde-format
@@ -4942,7 +4942,7 @@ msgstr "Acuse de recibo de la alarma"
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
-msgstr "Editar..."
+msgstr "Editar…"
 
 #: messagewindow.cpp:435
 #, kde-format
@@ -4960,7 +4960,7 @@ msgstr "Editar la alarma."
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
-msgstr "Retrasar..."
+msgstr "Retrasar…"
 
 #: messagewindow.cpp:444
 #, kde-format
@@ -7202,7 +7202,7 @@ msgstr "Archivos de calendario"
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
-msgstr "Comprobando información del archivo..."
+msgstr "Comprobando información del archivo…"
 
 #: resources/migration/dirresourceimportdialog.cpp:405
 #: resources/migration/dirresourceimportdialog.cpp:453
@@ -8084,7 +8084,7 @@ msgstr "Mostrar detalles"
 #, kde-format
 msgctxt "@action"
 msgid "Set Color..."
-msgstr "Definir el color..."
+msgstr "Definir el color…"
 
 #: resourceselector.cpp:298
 #, kde-format
@@ -8108,13 +8108,13 @@ msgstr "Eliminar"
 #, kde-format
 msgctxt "@action"
 msgid "Add..."
-msgstr "Añadir..."
+msgstr "Añadir…"
 
 #: resourceselector.cpp:316
 #, kde-format
 msgctxt "@action"
 msgid "Import..."
-msgstr "Importar..."
+msgstr "Importar…"
 
 #: resourceselector.cpp:372
 #, kde-format
@@ -8435,7 +8435,7 @@ msgstr "Elija un archivo de sonido"
 #, kde-format
 msgctxt "@action:button"
 msgid "Special Actions..."
-msgstr "Acciones especiales..."
+msgstr "Acciones especiales…"
 
 #: specialactions.cpp:39
 #, kde-format
