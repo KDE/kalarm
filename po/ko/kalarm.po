@@ -1,7 +1,7 @@
 # Translation of kalarm to Korean.
 # Copyright (C) 2008 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdepim package.
-# Shinjo Park <kde@peremen.name>, 2008, 2015, 2019, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2008, 2015, 2019, 2020, 2021, 2022, 2023, 2025 Shinjo Park <kde@peremen.name>
 # Jung Hee Lee <daemul72@gmail.com>, 2019.
 #
 msgid ""
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2023-07-23 23:20+0200\n"
+"PO-Revision-Date: 2025-04-21 15:19+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -74,12 +74,10 @@ msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
 msgstr "설정 대화 상자에서 설정한 KAlarm 기본 시간대를 사용합니다."
 
 #: alarmtimewidget.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr "다음으로 연기됨:"
+msgstr "다음까지 연기됨:"
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -134,15 +132,13 @@ msgid ""
 "trigger at the first opportunity on the selected date."
 msgstr ""
 "알람에 시간을 지정하지 않고 날짜만 설정하려면 선택하십시오. 선택한 날짜에 첫 "
-"활동 시 알람이 울립니다."
+"활동 시 알람이 트리거됩니다."
 
 #: alarmtimewidget.cpp:137
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "다음으로 연기됨:"
+msgstr "다음만큼 연기됨:"
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:329
 #, kde-format
@@ -172,23 +168,17 @@ msgstr "<para>%1</para><para>%2</para>"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
-msgstr ""
+msgstr "사전 설정"
 
 #: alarmtimewidget.cpp:156
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "1 Minute"
-#| msgid_plural "%1 Minutes"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
 msgstr[0] "%1분"
 
 #: alarmtimewidget.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
-#| msgid "1 hour"
-#| msgid_plural "%1 hours"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
@@ -198,23 +188,19 @@ msgstr[0] "%1시간"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr ""
+msgstr "1일"
 
 #: alarmtimewidget.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "weeks"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "주"
+msgstr "1주"
 
 #: alarmtimewidget.cpp:169
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Select an alarm template to preset the alarm"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr "알람을 사전 설정하는 알람 템플릿 선택"
+msgstr "사전 설정 값 목록에서 시간 지연 선택"
 
 #: alarmtimewidget.cpp:177
 #, kde-kuit-format
@@ -284,50 +270,46 @@ msgstr "알람 시간이 이미 만료됨"
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
-msgstr ""
+msgstr "오디오 시스템을 초기화할 수 없음"
 
 #: audioplugin/audioplayer_mpv.cpp:61 audioplugin/audioplayer_mpv.cpp:69
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
-msgstr ""
+msgstr "오디오 시스템을 초기화할 수 없음: %1"
 
 #: audioplugin/audioplayer_mpv.cpp:119 audioplugin/audioplayer_mpv.cpp:184
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Error attaching file: <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
-msgstr "파일 첨부 오류: <filename>%1</filename>"
+msgstr ""
+"<para><filename>%1</filename> 오디오 파일을 재생할 수 없음</para><para>%2</"
+"para>"
 
 #: audioplugin/audioplayer_mpv.cpp:146
 #, kde-format
 msgctxt "@info"
 msgid "Cannot set the audio volume: %1"
-msgstr ""
+msgstr "오디오 음량을 설정할 수 없음: %1"
 
 #: audioplugin/audioplayer_vlc.cpp:58
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Error attaching file: <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
-msgstr "파일 첨부 오류: <filename>%1</filename>"
+msgstr "<para>오디오 파일을 열 수 없음: <filename>%1</filename></para>"
 
 #: audioplugin/audioplayer_vlc.cpp:116
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
-msgstr ""
+msgstr "오디오 재생기를 초기화할 수 없음"
 
 #: audioplugin/audioplayer_vlc.cpp:140 audioplugin/audioplayer_vlc.cpp:208
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Error attaching file: <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
-msgstr "파일 첨부 오류: <filename>%1</filename>"
+msgstr "<para>오디오 파일을 재생할 수 없음: <filename>%1</filename></para>"
 
 #: autostart/autostart.cpp:49
 #, kde-format
@@ -345,8 +327,7 @@ msgid "Copyright 2001-%1, David Jarvie"
 msgstr "Copyright 2001-%1, David Jarvie"
 
 #: autostart/autostart.cpp:53 main.cpp:46
-#, fuzzy, kde-format
-#| msgid "David Jarvie"
+#, kde-format
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
@@ -462,7 +443,7 @@ msgstr "알람 설정"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
-msgstr "이 옵션을 선택하면 생일 이전이나 이후에 알림을 표시합니다."
+msgstr "이 옵션을 선택하면 생일 이전이나 이후에 미리 알림을 표시합니다."
 
 #: birthdaydlg.cpp:162
 #, kde-format
@@ -472,15 +453,15 @@ msgid ""
 "reminder. This is in addition to the alarm which is displayed on the "
 "birthday."
 msgstr ""
-"생일 알림을 표시할 시간 간격을 일 단위로 입력하십시오. 생일에 표시되는 알람 "
-"외에 추가로 표시됩니다."
+"생일 미리 알림을 표시할 시간 간격을 일 단위로 입력하십시오. 생일에 표시되는 "
+"알람 외에 추가로 표시됩니다."
 
 #: birthdaydlg.cpp:164
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
-msgstr "알림을 생일 이전이나 이후에 표시할지 여부입니다."
+msgstr "미리 알림을 생일 이전이나 이후에 트리거할지 여부입니다."
 
 #: birthdaydlg.cpp:197 recurrenceedit.cpp:142
 #, kde-format
@@ -652,12 +633,12 @@ msgstr "iCalendar 문법으로 알람 반복 지정"
 #: commandoptions.cpp:238
 #, kde-format
 msgid "Display reminder before or after alarm"
-msgstr "알람 시간 이전이나 이후에 알림 표시"
+msgstr "알람 시간 이전이나 이후에 미리 알림 표시"
 
 #: commandoptions.cpp:242
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
-msgstr "첫 알람 반복 이전이나 이후에 알림 한 번 표시"
+msgstr "첫 알람 반복 이전이나 이후에 미리 알림 한 번 표시"
 
 #: commandoptions.cpp:246
 #, kde-format
@@ -854,28 +835,28 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Audio backend"
-msgstr ""
+msgstr "오디오 백엔드"
 
 #. i18n: ectx: whatsthis, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Which audio backend to prefer."
-msgstr ""
+msgstr "선호하는 오디오 백엔드입니다."
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:86
 #, kde-format
 msgctxt "@option"
 msgid "MPV"
-msgstr ""
+msgstr "MPV"
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:87
 #, kde-format
 msgctxt "@option"
 msgid "VLC"
-msgstr ""
+msgstr "VLC"
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:92
@@ -1032,26 +1013,22 @@ msgstr "로그인할 때 시작"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:142
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
-#| "should always be checked unless you intend to discontinue use of KAlarm.</"
-#| "p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be set true if RunMode=Auto, else false.</p>"
 msgstr ""
-"<p>KDE를 시작할 때 KAlarm을 자동으로 시작합니다.</p><p>KAlarm 사용을 중단하"
-"고 싶지 않다면 이 옵션을 항상 선택하십시오.</p>"
+"<p>KDE를 시작할 때 KAlarm을 자동으로 시작합니다.</p><p>RunMode=Auto로 설정되"
+"어 있다면 이 옵션은 true로 설정되어야 하며, 그렇지 않으면 false로 설정할 수 "
+"있습니다.</p>"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:146
 #, kde-format
 msgctxt "@label"
 msgid "Run mode"
-msgstr ""
+msgstr "실행 모드"
 
 #. i18n: ectx: whatsthis, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:147
@@ -1060,29 +1037,29 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
 msgstr ""
+"KAlarm을 로그인 시 자동으로 실행할지, 수동으로만 실행할지, 아예 실행하지 않을"
+"지 여부입니다."
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:149
 #, kde-format
 msgctxt "@option"
 msgid "Run automatically"
-msgstr ""
+msgstr "자동으로 실행"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:150
 #, kde-format
 msgctxt "@option"
 msgid "Run manually only"
-msgstr ""
+msgstr "수동으로만 실행"
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:151
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option"
 msgid "Do not run"
-msgstr "반복하지 않음"
+msgstr "실행하지 않음"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:156
@@ -1392,35 +1369,35 @@ msgstr "날짜만 있는 알람이 트리거될 그 날의 최초 시간입니�
 #, kde-format
 msgctxt "@label"
 msgid "Start time of working day"
-msgstr "영업일의 시작 시간"
+msgstr "업무일의 시작 시간"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayStart), group (General)
 #: data/kalarmconfig.kcfg:246
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The start time of the working day."
-msgstr "영업일의 시작 시간입니다."
+msgstr "업무일의 시작 시간입니다."
 
 #. i18n: ectx: label, entry (Base_WorkDayEnd), group (General)
 #: data/kalarmconfig.kcfg:251
 #, kde-format
 msgctxt "@label"
 msgid "End time of working day"
-msgstr "영업일의 종료 시간"
+msgstr "업무일의 종료 시간"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayEnd), group (General)
 #: data/kalarmconfig.kcfg:252
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The end time of the working day."
-msgstr "영업일의 종료 시간입니다."
+msgstr "업무일의 종료 시간입니다."
 
 #. i18n: ectx: label, entry (Base_WorkDays), group (General)
 #: data/kalarmconfig.kcfg:257
 #, kde-format
 msgctxt "@label"
 msgid "Working days"
-msgstr "영업일"
+msgstr "업무일"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDays), group (General)
 #: data/kalarmconfig.kcfg:258
@@ -1430,7 +1407,7 @@ msgid ""
 "OR'ed bits indicating which days of the week are work days, 1 = Monday ... "
 "64 = Sunday."
 msgstr ""
-"일주일 중 영업일을 나타내는 요일의 비트 논리합입니다. 1 = 월요일 ... 64 = 일"
+"일주일 중 업무일을 나타내는 요일의 비트 논리합입니다. 1 = 월요일 ... 64 = 일"
 "요일."
 
 #. i18n: ectx: label, entry (DisabledColour), group (General)
@@ -1835,14 +1812,14 @@ msgstr "반복하지 않음"
 #, kde-format
 msgctxt "@label"
 msgid "Reminder units"
-msgstr "반복 단위"
+msgstr "미리 알림 단위"
 
 #. i18n: ectx: whatsthis, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:412
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default reminder time units in the alarm edit dialog."
-msgstr "알람 편집 대화 상자의 기본 반복 시간 단위입니다."
+msgstr "알람 편집 대화 상자의 기본 미리 알림 시간 단위입니다."
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:415
@@ -1870,7 +1847,7 @@ msgstr "알람을 표시하기 전에 실행할 기본 명령입니다."
 #, kde-format
 msgctxt "@label"
 msgid "Execute pre-alarm action for deferred alarms"
-msgstr "지연된 알람에 대한 알람 이전 동작 실행"
+msgstr "연기된 알람에 대한 알람 이전 동작 실행"
 
 #. i18n: ectx: whatsthis, entry (DefaultExecPreActionOnDeferral), group (Defaults)
 #: data/kalarmconfig.kcfg:425
@@ -1880,7 +1857,7 @@ msgid ""
 "Default setting for whether to execute the pre-alarm action before deferred "
 "alarms trigger."
 msgstr ""
-"지연된 알람이 트리거되기 전에 알람 이전 동작을 실행할지 여부에 대한 기본 설정"
+"연기된 알람이 트리거되기 전에 알람 이전 동작을 실행할지 여부에 대한 기본 설정"
 "입니다."
 
 #. i18n: ectx: label, entry (DefaultCancelOnPreActionError), group (Defaults)
@@ -1984,40 +1961,33 @@ msgstr ""
 
 #. i18n: ectx: Menu (file)
 #: data/kalarmui.rc:19
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action = file display"
-#| msgid "File"
+#, kde-format
 msgid "File"
 msgstr "파일"
 
 #. i18n: ectx: Menu (edit)
 #: data/kalarmui.rc:31
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Edit"
-msgstr "편집(&E)"
+msgstr "편집"
 
 #. i18n: ectx: Menu (view)
 #: data/kalarmui.rc:46
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "View"
+#, kde-format
 msgid "View"
 msgstr "보기"
 
 #. i18n: ectx: Menu (actions)
 #: data/kalarmui.rc:56
-#, fuzzy, kde-format
-#| msgid "&Actions"
+#, kde-format
 msgid "Actions"
-msgstr "동작(&A)"
+msgstr "동작"
 
 #. i18n: ectx: Menu (settings)
 #: data/kalarmui.rc:68
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings"
-msgstr "설정(&S)"
+msgstr "설정"
 
 #: datepicker.cpp:50
 #, kde-format
@@ -2062,7 +2032,7 @@ msgstr "다음 달 표시"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show today"
-msgstr ""
+msgstr "오늘 표시"
 
 #: daymatrix.cpp:200
 #, kde-format
@@ -2110,13 +2080,13 @@ msgstr "알람의 다음 반복 이후(현재 %1)로 연기할 수 없음"
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next reminder (currently %1)"
-msgstr "알람의 다음 알림 이후(현재 %1)로 연기할 수 없음"
+msgstr "알람의 다음 미리 알림 이후(현재 %1)로 연기할 수 없음"
 
 #: deferdlg.cpp:107
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer reminder past the main alarm time (%1)"
-msgstr "현재 알람 시간(%1) 이후로 알림을 연기할 수 없음"
+msgstr "현재 알람 시간(%1) 이후로 미리 알림을 연기할 수 없음"
 
 #: displaycalendar.cpp:128
 #, kde-kuit-format
@@ -2307,9 +2277,7 @@ msgstr ""
 "도록 합니다."
 
 #: editdlg.cpp:388
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Wake From Suspend"
+#, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "절전 모드에서 깨우기"
@@ -2319,7 +2287,7 @@ msgstr "절전 모드에서 깨우기"
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
-msgstr ""
+msgstr "선택하면 시스템이 절전 모드에 있을 때 알람 발생 시 트리거됩니다"
 
 #: editdlg.cpp:407
 #, kde-format
@@ -2347,6 +2315,8 @@ msgid ""
 "will trigger at the minute boundary before the specified time from now.</"
 "para>"
 msgstr ""
+"<para>KAlarm은 고정밀 알람을 제공하지 않습니다.</para><para>알람은 지금부터 "
+"지정한 시간까지의 분 단위 시간 이내에 트리거됩니다.</para>"
 
 #: editdlg.cpp:1068
 #, kde-format
@@ -2387,8 +2357,8 @@ msgid ""
 "Reminder period must be less than the recurrence interval, unless <interface>"
 "%1</interface> is checked."
 msgstr ""
-"<interface>%1</interface> 옵션을 선택하지 않는 한 알림 주기는 반복 간격보다 "
-"짧아야 합니다."
+"<interface>%1</interface> 옵션을 선택하지 않는 한 미리 알림 주기는 반복 간격"
+"보다 짧아야 합니다."
 
 #: editdlg.cpp:1143
 #, kde-format
@@ -2397,7 +2367,8 @@ msgid ""
 "The duration of a repetition within the recurrence must be less than the "
 "recurrence interval minus any reminder period"
 msgstr ""
-"중첩된 반복 기간은 반복 기간에서 모든 남은 기간을 제외한 값보다 작아야 함"
+"중첩된 반복 기간은 반복 기간에서 모든 남은 미리 알림 기간을 제외한 값보다 작"
+"아야 함"
 
 #: editdlg.cpp:1150
 #, kde-format
@@ -2569,7 +2540,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to additionally display a reminder in advance of or after the main "
 "alarm time(s)."
-msgstr "선택하면 주 알람 시간 이전이나 이후에 추가 알림을 표시합니다."
+msgstr "선택하면 주 알람 시간 이전이나 이후에 추가 미리 알림을 표시합니다."
 
 #: editdlgtypes.cpp:275
 #, kde-kuit-format
@@ -2578,8 +2549,8 @@ msgid ""
 "<para>Enter how long in advance of or after the main alarm to display a "
 "reminder alarm.</para><para>%1</para>"
 msgstr ""
-"<para>주 알람 이전에 표시할 알람에 대한 알림의 시간 간격을 설정하십시오.</"
-"para><para>%1</para>"
+"<para>주 알람 이전에 표시할 미리 알림 알람에 대한 알림의 시간 간격을 설정하십"
+"시오.</para><para>%1</para>"
 
 #: editdlgtypes.cpp:276
 #, kde-format
@@ -2587,7 +2558,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the main "
 "alarm"
-msgstr "알림을 주 알람 이전이나 이후에 트리거할지 여부"
+msgstr "미리 알림을 주 알람 이전이나 이후에 트리거할지 여부"
 
 #: editdlgtypes.cpp:286
 #, kde-format
@@ -3034,6 +3005,8 @@ msgid ""
 "<para>The command cannot set environment variables:</para><para><icode>%1</"
 "icode></para>"
 msgstr ""
+"<para>명령에서는 환경 변수를 설정할 수 없습니다.</para><para><icode>%1</"
+"icode></para>"
 
 #: editdlgtypes.cpp:1927
 #, kde-format
@@ -3243,12 +3216,10 @@ msgid "Stop Play"
 msgstr "재생 정지"
 
 #: functions.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Enable &Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Enable Alarms"
-msgstr "알람 활성화(&A)"
+msgstr "알람 활성화"
 
 #: functions.cpp:223
 #, kde-format
@@ -3894,13 +3865,13 @@ msgstr "소리 페이드 시간"
 #, kde-format
 msgctxt "@label Whether the alarm has a reminder"
 msgid "Reminder"
-msgstr "알림"
+msgstr "미리 알림"
 
 #: kalarmcalendar/kaeventformatter.cpp:123
 #, kde-format
 msgctxt "@label Whether reminder is on first recurrence only"
 msgid "Reminder once only"
-msgstr "한 번만 알림"
+msgstr "한 번만 미리 알림"
 
 #: kalarmcalendar/kaeventformatter.cpp:125
 #, kde-format
@@ -4062,7 +4033,7 @@ msgstr "기본값"
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
-msgstr "알림"
+msgstr "미리 알림"
 
 #: kalarmcalendar/kaeventformatter.cpp:379
 #, kde-format
@@ -4317,17 +4288,13 @@ msgid "Append to existing file"
 msgstr "기존 파일에 덧붙이기"
 
 #: lib/messagebox.h:105 lib/messagebox.h:114 lib/messagebox.h:151
-#, fuzzy, kde-format
-#| msgctxt "@info General purpose status indication: yes or no"
-#| msgid "Yes"
+#, kde-format
 msgctxt "@action:button"
 msgid "Yes"
 msgstr "예"
 
 #: lib/messagebox.h:106 lib/messagebox.h:115 lib/messagebox.h:152
-#, fuzzy, kde-format
-#| msgctxt "@info General purpose status indication: yes or no"
-#| msgid "No"
+#, kde-format
 msgctxt "@action:button"
 msgid "No"
 msgstr "아니요"
@@ -4404,12 +4371,12 @@ msgstr "시스템 시간대"
 #: main.cpp:43
 #, kde-format
 msgid "Personal alarm message, command and email scheduler by KDE"
-msgstr ""
+msgstr "KDE의 개인 알람 메시지, 명령, 이메일 스케줄러"
 
 #: main.cpp:45
 #, kde-format
 msgid "Copyright © 2001-%1, David Jarvie"
-msgstr ""
+msgstr "Copyright © 2001-%1, David Jarvie"
 
 #: mainwindow.cpp:443
 #, kde-kuit-format
@@ -4418,49 +4385,41 @@ msgid ""
 "Failure to create menus (perhaps <filename>%1</filename> missing or "
 "corrupted)"
 msgstr ""
+"메뉴를 생성할 수 없음(<filename>%1</filename>이(가) 빠졌거나 잘못되었을 수 있"
+"음)"
 
 #: mainwindow.cpp:463
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Templates..."
+#, kde-format
 msgctxt "@action"
 msgid "Templates..."
-msgstr "템플릿(&T)..."
+msgstr "템플릿..."
 
 #: mainwindow.cpp:467 templatedlg.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "New"
-msgstr ""
+msgstr "새로 만들기"
 
 #: mainwindow.cpp:473
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Load Template..."
+#, kde-format
 msgctxt "@action"
 msgid "Create Template..."
-msgstr "템플릿 불러오기..."
+msgstr "템플릿 만들기..."
 
 #: mainwindow.cpp:477
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Copy"
+#, kde-format
 msgctxt "@action"
 msgid "Copy..."
-msgstr "복사"
+msgstr "복사..."
 
 #: mainwindow.cpp:482 resourceselector.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Edit..."
+#, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "편집..."
 
 #: mainwindow.cpp:487
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Delete"
+#, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "삭제"
@@ -4469,15 +4428,13 @@ msgstr "삭제"
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
-msgstr ""
+msgstr "확인하지 않고 삭제"
 
 #: mainwindow.cpp:498
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Reactivate alarm"
+#, kde-format
 msgctxt "@action"
 msgid "Reactivate"
-msgstr "알람 재활성화"
+msgstr "재활성화"
 
 #: mainwindow.cpp:512
 #, kde-format
@@ -4486,88 +4443,72 @@ msgid "Wake From Suspend..."
 msgstr "절전 모드에서 깨우기..."
 
 #: mainwindow.cpp:524
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show Archi&ved Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
-msgstr "보관된 알람 표시(&V)"
+msgstr "보관된 알람 표시"
 
 #: mainwindow.cpp:529
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Show in system tray"
+#, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "시스템 트레이에 표시"
 
 #: mainwindow.cpp:533
-#, fuzzy, kde-format
-#| msgctxt "@title:column"
-#| msgid "Calendars"
+#, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
-msgstr "달력"
+msgstr "달력 표시"
 
 #: mainwindow.cpp:537
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
-msgstr ""
+msgstr "날짜 선택기 표시"
 
 #: mainwindow.cpp:550
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
-msgstr "활성 알람"
+msgstr "알람 가져오기..."
 
 #: mainwindow.cpp:556
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Im&port..."
+#, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr "가져오기(&P)..."
+msgstr "생일 가져오기..."
 
 #: mainwindow.cpp:561
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
-msgstr "활성 알람"
+msgstr "선택한 알람 내보내기..."
 
 #: mainwindow.cpp:565 resourceselector.cpp:319
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "E&xport..."
+#, kde-format
 msgctxt "@action"
 msgid "Export..."
-msgstr "내보내기(&X)..."
+msgstr "내보내기..."
 
 #: mainwindow.cpp:569
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Defer Alarm"
+#, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
-msgstr "알람 연기"
+msgstr "알람 새로 고침"
 
 #: mainwindow.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
-msgstr[0] ""
+msgstr[0] "선택한 알람 %1개를 삭제하시겠습니까?"
 
 #: mainwindow.cpp:816
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
-msgstr[0] ""
+msgstr[0] "알람 삭제"
 
 #: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
@@ -4579,31 +4520,31 @@ msgstr "삭제"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
-msgstr ""
+msgstr "보관된 알람 삭제"
 
 #: mainwindow.cpp:912
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
-msgstr ""
+msgstr "보관된 알람 표시"
 
 #: mainwindow.cpp:988
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
-msgstr ""
+msgstr "생일 가져오기"
 
 #: mainwindow.cpp:1240
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
-msgstr ""
+msgstr "%2 %1"
 
 #: mainwindow.cpp:1241
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
-msgstr ""
+msgstr "%2 %1: %3"
 
 #: mainwindow.cpp:1307
 #, kde-format
@@ -4622,19 +4563,19 @@ msgstr "메뉴 표시줄 숨기기"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
-msgstr ""
+msgstr "표시 알람"
 
 #: mainwindow.cpp:1551
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
-msgstr ""
+msgstr "이메일 알람"
 
 #: mainwindow.cpp:1553
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
-msgstr ""
+msgstr "명령 알람"
 
 #: mainwindow.cpp:1555
 #, kde-format
@@ -4646,35 +4587,32 @@ msgstr "알람 형식"
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
-msgstr ""
+msgstr "생성할 알람 형식 선택:"
 
 #: mainwindow.cpp:1689
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Enable"
+#, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "활성화"
 
 #: mainwindow.cpp:1689
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Keep Disabled"
+#, kde-format
 msgctxt "@action"
 msgid "Disable"
-msgstr "비활성화 유지"
+msgstr "비활성화"
 
 #: messagedisplay.cpp:271
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"
 msgstr ""
+"<para>알람을 연기할 수 없음:</para><para>알람을 찾을 수 없습니다.</para>"
 
 #: messagedisplayhelper.cpp:205
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
-msgstr "알림"
+msgstr "미리 알림"
 
 #: messagedisplayhelper.cpp:206 messagedisplayhelper.cpp:410
 #, kde-format
@@ -4686,7 +4624,7 @@ msgstr "메시지"
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
-msgstr ""
+msgstr "파일이 폴더임"
 
 #: messagedisplayhelper.cpp:297
 #, kde-format
@@ -4764,20 +4702,19 @@ msgstr "메시지를 말할 수 없음"
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
-msgstr ""
+msgstr "텍스트 음성 변환 하위 시스템을 사용할 수 없음"
 
 #: messagenotification.cpp:518
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgctxt "@action:button"
 msgid "Edit"
-msgstr "편집(&E)"
+msgstr "편집"
 
 #: messagenotification.cpp:527
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer"
-msgstr "선호 안함"
+msgstr "미루기"
 
 #: messagewindow.cpp:228
 #, kde-format
@@ -4785,13 +4722,13 @@ msgctxt "@info:whatsthis"
 msgid ""
 "The scheduled date/time for the message (as opposed to the actual time of "
 "display)."
-msgstr ""
+msgstr "메시지의 예정된 날짜/시간입니다(실제 표시된 시간과는 다름)."
 
 #: messagewindow.cpp:245
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
-msgstr "표시할 파일"
+msgstr "아래에 내용을 표시할 파일"
 
 #: messagewindow.cpp:279
 #, kde-format
@@ -4827,7 +4764,7 @@ msgstr "이 알람에 대해서 이 메시지 다시 보이지 않기"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
-msgstr ""
+msgstr "알람 수락"
 
 #: messagewindow.cpp:431 resourceselector.cpp:77 templatedlg.cpp:81
 #, kde-format
@@ -4836,9 +4773,7 @@ msgid "Edit..."
 msgstr "편집..."
 
 #: messagewindow.cpp:435
-#, fuzzy, kde-format
-#| msgctxt "@info Action to edit an alarm"
-#| msgid "Edit alarm"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "알람 편집"
@@ -4847,24 +4782,19 @@ msgstr "알람 편집"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
-msgstr ""
+msgstr "알람을 편집합니다."
 
 #: messagewindow.cpp:440
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Defer"
+#, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
-msgstr "선호 안함"
+msgstr "연기..."
 
 #: messagewindow.cpp:444
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Delete Alarm Template"
-#| msgid_plural "Delete Alarm Templates"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
-msgstr "알람 템플릿 삭제"
+msgstr "나중으로 알람 연기"
 
 #: messagewindow.cpp:445
 #, kde-kuit-format
@@ -4873,130 +4803,122 @@ msgid ""
 "<para>Defer the alarm until later.</para><para>You will be prompted to "
 "specify when the alarm should be redisplayed.</para>"
 msgstr ""
+"<para>나중으로 알람을 연기합니다.</para><para>언제 알람을 다시 표시할지를 묻"
+"는 대화 상자가 표시됩니다.</para>"
 
 #: messagewindow.cpp:459 sounddlg.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
-msgstr ""
+msgstr "소리 끄기"
 
 #: messagewindow.cpp:460 sounddlg.cpp:455
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
-msgstr ""
+msgstr "소리 재생 정지"
 
 #: messagewindow.cpp:474
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
-msgstr ""
+msgstr "<application>KMail</application>에서 표시"
 
 #: messagewindow.cpp:475
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
-msgstr ""
+msgstr "이 이메일을 <application>KMail</application>에서 찾아서 강조 표시"
 
 #: messagewindow.cpp:483
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
-msgstr ""
+msgstr "<application>KAlarm</application> 활성화"
 
 #: messagewindow.cpp:484
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
-msgstr ""
+msgstr "<application>KAlarm</application> 활성화"
 
 #: messagewindow.cpp:1076
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
-msgstr ""
+msgstr "이 알람을 수락하시겠습니까?"
 
 #: messagewindow.cpp:1077
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
-msgstr ""
+msgstr "알람 수락"
 
 #: messagewindow.cpp:1077
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
-msgstr ""
+msgstr "수락"
 
 #: messagewindow.cpp:1132
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
-msgstr ""
+msgstr "<application>KMail</application>에서 이 이메일을 찾을 수 없습니다."
 
 #: newalarmaction.cpp:47
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "New Display Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Display Alarm Template"
-msgstr "새 표시 알람 템플릿"
+msgstr "알람 템플릿 표시"
 
 #: newalarmaction.cpp:47
 #, kde-format
 msgctxt "@action"
 msgid "New Display Alarm"
-msgstr "새로운 디스플레이 알람"
+msgstr "새 표시 알람"
 
 #: newalarmaction.cpp:50
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "New Command Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Command Alarm Template"
-msgstr "새 명령 알람 템플릿"
+msgstr "명령 알람 템플릿"
 
 #: newalarmaction.cpp:50
 #, kde-format
 msgctxt "@action"
 msgid "New Command Alarm"
-msgstr "새로운 명령 알람"
+msgstr "새 명령 알람"
 
 #: newalarmaction.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "New Email Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Email Alarm Template"
-msgstr "새 이메일 알람 템플릿"
+msgstr "이메일 알람 템플릿"
 
 #: newalarmaction.cpp:53
 #, kde-format
 msgctxt "@action"
 msgid "New Email Alarm"
-msgstr "새로운 이메일 알람"
+msgstr "새 이메일 알람"
 
 #: newalarmaction.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Audio Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Audio Alarm Template"
-msgstr "오디오 알람 템플릿(&A)"
+msgstr "오디오 알람 템플릿"
 
 #: newalarmaction.cpp:56
 #, kde-format
 msgctxt "@action"
 msgid "New Audio Alarm"
-msgstr "새로운 오디오 알람"
+msgstr "새 오디오 알람"
 
 #: newalarmaction.cpp:71
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "New Audio Alarm Template"
+#, kde-format
 msgctxt "@action"
 msgid "New Alarm From Template"
-msgstr "새 오디오 알람 템플릿"
+msgstr "템플릿에서 새 알람 만들기"
 
 #: prefdlg.cpp:131
 #, kde-format
@@ -5020,7 +4942,7 @@ msgstr "일반"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Time & Date"
-msgstr ""
+msgstr "날짜와 시간"
 
 #: prefdlg.cpp:148
 #, kde-format
@@ -5038,33 +4960,31 @@ msgstr "저장소"
 #, kde-format
 msgctxt "@title"
 msgid "Alarm Storage"
-msgstr ""
+msgstr "알람 저장소"
 
 #: prefdlg.cpp:159
 #, kde-format
 msgctxt "@title:tab Email preferences"
 msgid "Email"
-msgstr ""
+msgstr "이메일"
 
 #: prefdlg.cpp:160
 #, kde-format
 msgctxt "@title"
 msgid "Email Alarm Settings"
-msgstr ""
+msgstr "이메일 알람 설정"
 
 #: prefdlg.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Alarm templates"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Defaults"
-msgstr "알람 템플릿"
+msgstr "알람 기본값"
 
 #: prefdlg.cpp:166
 #, kde-format
 msgctxt "@title"
 msgid "Default Alarm Edit Settings"
-msgstr ""
+msgstr "기본 알람 편집 설정"
 
 #: prefdlg.cpp:171
 #, kde-format
@@ -5083,32 +5003,31 @@ msgstr "보기 설정"
 msgctxt "@info"
 msgid "Reset all tabs to their default values, or only reset the current tab?"
 msgstr ""
+"모든 탭을 기본값으로 초기화하시겠습니까, 아니면 현재 탭만 초기화하시겠습니까?"
 
 #: prefdlg.cpp:265
-#, fuzzy, kde-format
-#| msgctxt "@action:button Reset ALL tabs"
-#| msgid "&All"
+#, kde-format
 msgctxt "@action:button Reset ALL tabs"
 msgid "All"
-msgstr "모두(&A)"
+msgstr "모든 탭"
 
 #: prefdlg.cpp:266
 #, kde-format
 msgctxt "@action:button Reset the CURRENT tab"
 msgid "Current"
-msgstr ""
+msgstr "현재 탭"
 
 #: prefdlg.cpp:447
 #, kde-format
 msgctxt "@title:group"
 msgid "Run Mode"
-msgstr ""
+msgstr "실행 모드"
 
 #: prefdlg.cpp:457
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run automatically"
-msgstr ""
+msgstr "자동으로 실행"
 
 #: prefdlg.cpp:460
 #, kde-format
@@ -5117,12 +5036,14 @@ msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
 msgstr ""
+"로그인할 때 KAlarm을 자동으로 시작합니다. KAlarm의 기능을 올바르게 사용하려"
+"면 이 옵션을 활성화해야 합니다."
 
 #: prefdlg.cpp:463
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run manually only"
-msgstr ""
+msgstr "수동으로만 실행"
 
 #: prefdlg.cpp:466
 #, kde-format
@@ -5131,14 +5052,14 @@ msgid ""
 "Only run KAlarm manually, never automatically. KAlarm will only function "
 "when you manually start it."
 msgstr ""
+"KAlarm을 수동으로만 실행하며, 자동으로 실행하지 않습니다. KAlarm을 직접 시작"
+"할 때에만 기능이 작동합니다."
 
 #: prefdlg.cpp:469
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Do not run"
-msgstr "반복하지 않음"
+msgstr "실행하지 않음"
 
 #: prefdlg.cpp:472
 #, kde-format
@@ -5146,13 +5067,13 @@ msgctxt "@info:tooltip"
 msgid ""
 "Stop using KAlarm. If you later run it again, it will then resume normal "
 "functioning."
-msgstr ""
+msgstr "KAlarm 사용을 중단합니다. 나중에 다시 실행하면 기능이 다시 시작됩니다."
 
 #: prefdlg.cpp:475
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr ""
+msgstr "<application>KAlarm</application>을 올바르게 실행하려면"
 
 #: prefdlg.cpp:482
 #, kde-format
@@ -5167,6 +5088,7 @@ msgid ""
 "Check to display a warning prompt before quitting <application>KAlarm</"
 "application>."
 msgstr ""
+"<application>KAlarm</application>을 끝내기 전에 경고 프롬프트를 표시합니다."
 
 #: prefdlg.cpp:492
 #, kde-format
@@ -5181,6 +5103,8 @@ msgid ""
 "Check to have the option to give alarms a name. This is a convenience to "
 "help you to identify alarms."
 msgstr ""
+"이 옵션을 사용하면 알람에 이름을 부여합니다. 알람을 편리하게 식별할 수 있습니"
+"다."
 
 #: prefdlg.cpp:502
 #, kde-format
@@ -5192,7 +5116,7 @@ msgstr "알람 삭제 확인"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Default defer time interval:"
-msgstr ""
+msgstr "기본 연기 시간 간격:"
 
 #: prefdlg.cpp:518
 #, kde-format
@@ -5201,12 +5125,14 @@ msgid ""
 "Enter the default time interval (hours & minutes) to defer alarms, used by "
 "the Defer Alarm dialog."
 msgstr ""
+"알람 연기 대화 상자에서 사용할 기본 시간 간격을 시간과 분 단위로 설정하십시"
+"오."
 
 #: prefdlg.cpp:523
 #, kde-format
 msgctxt "@title:group"
 msgid "Terminal for Command Alarms"
-msgstr ""
+msgstr "명령 알람에 사용할 터미널"
 
 #: prefdlg.cpp:524
 #, kde-format
@@ -5214,7 +5140,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Choose which application to use when a command alarm is executed in a "
 "terminal window"
-msgstr ""
+msgstr "명령 알람이 터미널 창에서 실행되었을 때 사용할 앱을 선택하십시오"
 
 #: prefdlg.cpp:545
 #, kde-kuit-format
@@ -5222,6 +5148,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to execute command alarms in a terminal window by <icode>%1</icode>"
 msgstr ""
+"이 옵션을 사용하면 <icode>%1</icode>의 터미널 창에서 명령 알람을 실행합니다"
 
 #: prefdlg.cpp:552
 #, kde-format
@@ -5238,6 +5165,10 @@ msgid ""
 "what you enter here. See the <application>KAlarm</application> Handbook for "
 "details of special codes to tailor the command line."
 msgstr ""
+"선택한 터미널 창에서 명령을 실행할 때 필요한 전체 명령행을 입력하십시오. 기본"
+"값으로 알람의 명령행 문자열을 여기에 입력한 것에 덧붙입니다. 명령행 구성에 사"
+"용할 수 있는 특수 코드는 <application>KAlarm</application> 도움말을 참조하십"
+"시오."
 
 #: prefdlg.cpp:571
 #, kde-format
@@ -5249,21 +5180,19 @@ msgstr "플러그인"
 #, kde-format
 msgctxt "@title:group"
 msgid "Audio Backend"
-msgstr ""
+msgstr "오디오 백엔드"
 
 #: prefdlg.cpp:578
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which audio backend to use to play sound files"
-msgstr ""
+msgstr "소리 파일을 재생할 때 사용할 오디오 백엔드 선택"
 
 #: prefdlg.cpp:593
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Akonadi"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable Akonadi"
-msgstr "Akonadi"
+msgstr "Akonadi 활성화"
 
 #: prefdlg.cpp:595
 #, kde-format
@@ -5272,6 +5201,8 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
+"Akonadi 사용을 활성화하면 생일 가져오기, 이메일 기능, 이메일 주소록 검색 등 "
+"기능을 제공합니다."
 
 #: prefdlg.cpp:597
 #, kde-format
@@ -5280,6 +5211,8 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
+"Akonadi 사용을 활성화하면 생일 가져오기, 이메일 기능, 이메일 주소록 검색 등 "
+"기능을 제공합니다."
 
 #: prefdlg.cpp:670
 #, kde-kuit-format
@@ -5288,18 +5221,20 @@ msgid ""
 "<para>No command is specified to invoke a terminal window.</para><para>The "
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
+"<para>터미널 창을 실행하는 명령을 지정하지 않았습니다.</para><para>기본 명령"
+"(<command>%1</command>)을 사용합니다.</para>"
 
 #: prefdlg.cpp:678
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
-msgstr ""
+msgstr "터미널 창을 실행하는 명령을 지정하지 않았음"
 
 #: prefdlg.cpp:691
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command to invoke terminal window not found: <command>%1</command>"
-msgstr ""
+msgstr "터미널 창을 실행하는 명령을 찾을 수 없음: <command>%1</command>"
 
 #: prefdlg.cpp:749
 #, kde-kuit-format
@@ -5308,6 +5243,8 @@ msgid ""
 "You should not check this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
+"<application>KAlarm</application> 사용을 중단할 것이 아니라면 이 옵션을 선택"
+"하지 마십시오"
 
 #: prefdlg.cpp:760
 #, kde-kuit-format
@@ -5316,6 +5253,8 @@ msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
 msgstr ""
+"<application>KAlarm</application>을 수동으로 시작하지 않는 한<nl/>올바르게 작"
+"동하지 못하게 합니다."
 
 #: prefdlg.cpp:805
 #, kde-kuit-format
@@ -5324,24 +5263,26 @@ msgid ""
 "Select the time zone which <application>KAlarm</application> should use as "
 "its default for displaying and entering dates and times."
 msgstr ""
+"<application>KAlarm</application>에서 날짜와 시간을 표시하고 입력할 때 사용"
+"할 시간대를 선택하십시오."
 
 #: prefdlg.cpp:819
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Holiday region:"
-msgstr ""
+msgstr "공휴일 지역:"
 
 #: prefdlg.cpp:828
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which holiday region to use"
-msgstr ""
+msgstr "사용할 공휴일 지역 선택"
 
 #: prefdlg.cpp:836
 #, kde-format
 msgctxt "Holiday region, region language"
 msgid "%1 (%2)"
-msgstr "%1 (%2)"
+msgstr "%1(%2)"
 
 #: prefdlg.cpp:840
 #, kde-format
@@ -5350,19 +5291,13 @@ msgid "None"
 msgstr "없음"
 
 #: prefdlg.cpp:858
-#, fuzzy, kde-format
-#| msgid "Wake From Suspend Alarm"
+#, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
-msgstr "절전 모드 알람에서 깨우기"
+msgstr "알람 이전에 절전 모드에서 깨우기:"
 
 #: prefdlg.cpp:866
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how many minutes before the alarm trigger time to wake the system "
-#| "from suspend. This can be used to ensure that the system is fully "
-#| "restored by the time the alarm triggers."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many minutes before the alarm trigger time to wake the system, for "
@@ -5374,9 +5309,7 @@ msgstr ""
 "수 있습니다."
 
 #: prefdlg.cpp:867
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "minutes"
+#, kde-format
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
 msgstr "분"
@@ -5385,7 +5318,7 @@ msgstr "분"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Start of day for date-only alarms:"
-msgstr ""
+msgstr "날짜만 있는 알람의 일과 시작 시간:"
 
 #: prefdlg.cpp:888
 #, kde-kuit-format
@@ -5394,42 +5327,44 @@ msgid ""
 "<para>The earliest time of day at which a date-only alarm will be triggered."
 "</para><para>%1</para>"
 msgstr ""
+"<para>날짜만 있는 알람이 트리거될 수 있는 그 날의 가장 빠른 시간입니다.</"
+"para><para>%1</para>"
 
 #: prefdlg.cpp:893
 #, kde-format
 msgctxt "@title:group"
 msgid "Working Hours"
-msgstr ""
+msgstr "업무 시간"
 
 #: prefdlg.cpp:908
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check the days in the week which are work days"
-msgstr ""
+msgstr "일주일 중 업무일을 선택하십시오"
 
 #: prefdlg.cpp:918
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily start time:"
-msgstr ""
+msgstr "일과 시작 시간:"
 
 #: prefdlg.cpp:925
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the start time of the working day.</para><para>%1</para>"
-msgstr ""
+msgstr "<para>업무일의 일과 시작 시간을 입력하십시오.</para><para>%1</para>"
 
 #: prefdlg.cpp:937
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily end time:"
-msgstr ""
+msgstr "일과 종료 시간:"
 
 #: prefdlg.cpp:944
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the end time of the working day.</para><para>%1</para>"
-msgstr ""
+msgstr "<para>업무일의 일과 종료 시간을 입력하십시오.</para><para>%1</para>"
 
 #: prefdlg.cpp:949
 #, kde-format
@@ -5441,7 +5376,7 @@ msgstr "KOrganizer"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "KOrganizer event duration:"
-msgstr ""
+msgstr "KOrganizer 이벤트 기간:"
 
 #: prefdlg.cpp:964
 #, kde-kuit-format
@@ -5450,18 +5385,20 @@ msgid ""
 "<para>Enter the event duration in hours and minutes, for alarms which are "
 "copied to KOrganizer.</para><para>%1</para>"
 msgstr ""
+"<para>KOrganizer로 복사할 알람에 사용할 이벤트 기간을 시간과 분 단위로 입력하"
+"십시오.</para><para>%1</para>"
 
 #: prefdlg.cpp:1033
 #, kde-format
 msgctxt "@title:group"
 msgid "New Alarms && Templates"
-msgstr ""
+msgstr "새 알람과 템플릿"
 
 #: prefdlg.cpp:1038
 #, kde-format
 msgctxt "@option:radio"
 msgid "Store in default calendar"
-msgstr ""
+msgstr "기본 캘린더에 저장"
 
 #: prefdlg.cpp:1040
 #, kde-format
@@ -5469,7 +5406,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Add all new alarms and alarm templates to the default calendars, without "
 "prompting."
-msgstr ""
+msgstr "모든 새 알람과 알람 템플릿을 묻지 않고 기본 캘린더에 추가합니다."
 
 #: prefdlg.cpp:1042
 #, kde-format
@@ -5486,6 +5423,9 @@ msgid ""
 "that archived alarms are always stored in the default archived alarm "
 "calendar.</para>"
 msgstr ""
+"<para>새 알람이나 알람 템플릿을 저장할 때 활성 캘린더가 두 개 이상 있으면 저"
+"장할 캘린더를 물어 봅니다.</para><para>보관된 알람은 항상 기본 보관된 알람 캘"
+"린더에 저장됩니다.</para>"
 
 #: prefdlg.cpp:1050
 #, kde-format
@@ -5497,7 +5437,7 @@ msgstr "보관된 알람"
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep alarms after expiry"
-msgstr ""
+msgstr "알람 만료 후에도 유지"
 
 #: prefdlg.cpp:1058
 #, kde-format
@@ -5506,12 +5446,14 @@ msgid ""
 "Check to archive alarms after expiry or deletion (except deleted alarms "
 "which were never triggered)."
 msgstr ""
+"이 옵션을 사용하면 알람 만료나 삭제 이후에도 유지합니다(삭제된 알람 중 트리거"
+"되지 않은 알람 제외)."
 
 #: prefdlg.cpp:1064
 #, kde-format
 msgctxt "@option:check"
 msgid "Discard archived alarms after:"
-msgstr ""
+msgstr "다음 시간 이후에 보관된 알람 삭제:"
 
 #: prefdlg.cpp:1073
 #, kde-format
@@ -5526,18 +5468,20 @@ msgid ""
 "Uncheck to store archived alarms indefinitely. Check to enter how long "
 "archived alarms should be stored."
 msgstr ""
+"이 옵션을 사용하지 않으면 보관된 알람을 영구 저장합니다. 이 옵션을 사용하면 "
+"지정한 날짜 이후 보관된 알람을 삭제합니다."
 
 #: prefdlg.cpp:1080
 #, kde-format
 msgctxt "@action:button"
 msgid "Clear Archived Alarms"
-msgstr ""
+msgstr "보관된 알람 비우기"
 
 #: prefdlg.cpp:1083
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete all existing archived alarms."
-msgstr ""
+msgstr "모든 보관된 알람을 삭제합니다."
 
 #: prefdlg.cpp:1084
 #, kde-format
@@ -5545,7 +5489,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Delete all existing archived alarms (from the default archived alarm "
 "calendar only)."
-msgstr ""
+msgstr "모든 보관된 알람을 삭제합니다(기본 보관된 알람 캘린더에서만)."
 
 #: prefdlg.cpp:1130
 #, kde-kuit-format
@@ -5556,12 +5500,15 @@ msgid ""
 "first use the calendars view to select a default archived alarms calendar.</"
 "para>"
 msgstr ""
+"<para>알람을 보관하려면 기본 캘린더를 지정해야 하지만 현재 활성화된 캘린더가 "
+"없습니다.</para><para>만료된 알람을 보관하려면 캘린더 보기에서 기본 보관된 알"
+"람 캘린더를 선택하십시오.</para>"
 
 #: prefdlg.cpp:1147
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete all archived alarms?"
-msgstr ""
+msgstr "모든 보관된 알람을 삭제하시겠습니까?"
 
 #: prefdlg.cpp:1148
 #, kde-format
@@ -5569,7 +5516,7 @@ msgctxt "@info"
 msgid ""
 "Do you really want to delete all alarms in the default archived alarm "
 "calendar?"
-msgstr "기본 보관된 알람 일정에서 모든 알람을 삭제하시겠습니까?"
+msgstr "기본 보관된 알람 캘린더에서 모든 알람을 삭제하시겠습니까?"
 
 #: prefdlg.cpp:1166
 #, kde-format
@@ -5593,7 +5540,7 @@ msgstr "Sendmail"
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
-msgstr ""
+msgstr "이메일 알람이 트리거되었을 때 이메일을 전송할 방법을 선택하십시오."
 
 #: prefdlg.cpp:1186
 #, kde-kuit-format
@@ -5605,6 +5552,11 @@ msgid ""
 "if your system is configured to use <application>sendmail</application> or a "
 "sendmail compatible mail transport agent.</item></list></para>"
 msgstr ""
+"<para>%1<list><item><interface>%2</interface>: <application>KMail</"
+"application>을 통해서 자동으로 이메일을 전송합니다.</item><item><interface>"
+"%3</interface>: 이메일을 자동으로 전송합니다. 시스템에서 "
+"<application>sendmail</application>이나 sendmail 호환 이메일 전송 에이전트를 "
+"사용하도록 설정되었을 때만 동작합니다.</item></list></para>"
 
 #: prefdlg.cpp:1194
 #, kde-kuit-format
@@ -5615,6 +5567,9 @@ msgid ""
 "use <application>sendmail</application> or a sendmail compatible mail "
 "transport agent.</item></list></para>"
 msgstr ""
+"<para>%1<list><item><interface>%2</interface>: 이메일을 자동으로 전송합니다. "
+"시스템에서 <application>sendmail</application>이나 sendmail 호환 이메일 전송 "
+"에이전트를 사용하도록 설정되었을 때만 동작합니다.</item></list></para>"
 
 #: prefdlg.cpp:1204
 #, kde-kuit-format
@@ -5623,6 +5578,8 @@ msgid ""
 "Copy sent emails into <application>KMail</application>'s <resource>%1</"
 "resource> folder"
 msgstr ""
+"보낸 이메일을 <application>KMail</application>의 <resource>%1</resource> 폴더"
+"에 복사"
 
 #: prefdlg.cpp:1205
 #, kde-kuit-format
@@ -5631,6 +5588,8 @@ msgid ""
 "After sending an email, store a copy in <application>KMail</application>'s "
 "<resource>%1</resource> folder"
 msgstr ""
+"이메일을 전송한 후 복사본을 <application>KMail</application>의 <resource>%1</"
+"resource> 폴더에 저장"
 
 #: prefdlg.cpp:1213
 #, kde-format
@@ -5642,13 +5601,13 @@ msgstr "원격 이메일이 대기열에 추가되었을 때 알림"
 #, kde-format
 msgctxt "@title:group"
 msgid "Your Email Address"
-msgstr ""
+msgstr "내 이메일 주소"
 
 #: prefdlg.cpp:1227
 #, kde-format
 msgctxt "@label 'From' email address"
 msgid "From:"
-msgstr ""
+msgstr "보내는 사람:"
 
 #: prefdlg.cpp:1239
 #, kde-format
@@ -5656,13 +5615,13 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Your email address, used to identify you as the sender when sending email "
 "alarms."
-msgstr ""
+msgstr "이메일 알람을 보낼 때 보내는 사람을 식별할 내 이메일 주소입니다."
 
 #: prefdlg.cpp:1246 prefdlg.cpp:1282
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
-msgstr ""
+msgstr "기본 <application>KMail</application> 프로필 사용"
 
 #: prefdlg.cpp:1249
 #, kde-kuit-format
@@ -5671,12 +5630,14 @@ msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, to identify you as the sender when sending email alarms."
 msgstr ""
+"이 옵션을 사용하면 이메일 알람을 보낼 때 보내는 사람 주소로 "
+"<application>KMail</application>에서 설정한 기본 이메일 주소를 사용합니다."
 
 #: prefdlg.cpp:1253
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use <application>KMail</application> identities"
-msgstr ""
+msgstr "<application>KMail</application> 프로필 사용"
 
 #: prefdlg.cpp:1256
 #, kde-kuit-format
@@ -5688,6 +5649,11 @@ msgid ""
 "email alarms, you will be able to pick which of <application>KMail</"
 "application>'s identities to use."
 msgstr ""
+"이 옵션을 사용하면 이메일 알람을 보낼 때 <application>KMail</application>의 "
+"이메일 프로필에 등록된 보내는 사람 주소를 사용합니다. 기존 이메일 알람에는 "
+"<application>KMail</application>의 기본 프로필을 사용합니다. 새 이메일 알람에"
+"는 <application>KMail</application>의 프로필 중 사용할 것을 선택할 수 있습니"
+"다."
 
 #: prefdlg.cpp:1263
 #, kde-format
@@ -5704,6 +5670,9 @@ msgid ""
 "<application>KAlarm</application> runs on, you can simply enter your user "
 "login name."
 msgstr ""
+"이메일 알람의 사본을 내게 보낼 때 숨은 참조 주소로 사용할 이메일 주소입니다. "
+"<application>KAlarm</application>이 실행 중인 컴퓨터의 계정으로 숨은 복사본"
+"을 전송하려면 계정 이름을 입력하십시오."
 
 #: prefdlg.cpp:1285
 #, kde-kuit-format
@@ -5712,22 +5681,20 @@ msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, for blind copying email alarms to yourself."
 msgstr ""
+"이 옵션을 사용하면 이메일 알람의 사본을 숨은 참조로 내게 보낼 때 "
+"<application>KMail</application>에서 설정한 기본 이메일 주소를 사용합니다."
 
 #: prefdlg.cpp:1387
 #, kde-format
 msgctxt "@info"
 msgid "No valid 'Bcc' email address is specified."
-msgstr ""
+msgstr "올바른 숨은 참조 이메일 주소를 지정하지 않았습니다."
 
 #: prefdlg.cpp:1394
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Do you really want to disable your default calendar?"
+#, kde-format
 msgctxt "@info"
 msgid "Are you sure you want to save your changes?"
-msgstr ""
-"기본 달력을 사용하지 않도록 설정하시겠습니까?을 사용하지 않도록 설정하시겠습"
-"니까?"
+msgstr "변경 사항을 저장하시겠습니까?"
 
 #: prefdlg.cpp:1400
 #, kde-kuit-format
@@ -5736,6 +5703,8 @@ msgid ""
 "<para>No default email address is currently set in <application>KMail</"
 "application>.</para><para>%1</para><para>%2</para>"
 msgstr ""
+"<para><application>KMail</application>에 기본 이메일 주소를 설정하지 않았습니"
+"다.</para><para>%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1405
 #, kde-kuit-format
@@ -5744,6 +5713,8 @@ msgid ""
 "<para>No <application>KMail</application> identities currently exist.</"
 "para><para>%1</para><para>%2</para>"
 msgstr ""
+"<para><application>KMail</application> 프로필을 설정하지 않았습니다.</"
+"para><para>%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1423
 #, kde-kuit-format
@@ -5751,6 +5722,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "The default setting for <interface>%1</interface> in the alarm edit dialog."
 msgstr ""
+"알람 편집 대화 상자에서 사용할 <interface>%1</interface>의 기본 설정입니다."
 
 #: prefdlg.cpp:1432 prefdlg.cpp:1887
 #, kde-format
@@ -5762,13 +5734,13 @@ msgstr "일반"
 #, kde-format
 msgctxt "@title:tab Settings specific to alarm type"
 msgid "Type Specific"
-msgstr ""
+msgstr "형식별"
 
 #: prefdlg.cpp:1444
 #, kde-format
 msgctxt "@title:tab"
 msgid "Font && Color"
-msgstr ""
+msgstr "글꼴과 색상"
 
 #: prefdlg.cpp:1460
 #, kde-format
@@ -5777,6 +5749,7 @@ msgid ""
 "The default setting for the alarm message display method in the alarm edit "
 "dialog."
 msgstr ""
+"알람 편집 대화 상자에서 사용할 알람 메시지 표시 방식의 기본 설정입니다."
 
 #: prefdlg.cpp:1484
 #, kde-format
@@ -5785,17 +5758,13 @@ msgid "Recurrence:"
 msgstr "반복:"
 
 #: prefdlg.cpp:1517
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "February 28th"
+#, kde-format
 msgctxt "@option:radio"
 msgid "February 28th"
 msgstr "2월 28일"
 
 #: prefdlg.cpp:1521
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "March 1st"
+#, kde-format
 msgctxt "@option:radio"
 msgid "March 1st"
 msgstr "3월 1일"
@@ -5814,18 +5783,21 @@ msgid ""
 "29th should occur in non-leap years.<note>The next scheduled occurrence of "
 "existing alarms is not re-evaluated when you change this setting.</note>"
 msgstr ""
+"윤년이 아닌 해에 2월 29일에 트리거될 예정인 알람을 언제 트리거할지 설정하십시"
+"오. <note>이 설정을 변경하더라도 기존 알람이 다음에 트리거될 날짜에는 영향을 "
+"주지 않습니다.</note>"
 
 #: prefdlg.cpp:1536
 #, kde-format
 msgctxt "@title:group"
 msgid "Display Alarms"
-msgstr ""
+msgstr "표시 알람"
 
 #: prefdlg.cpp:1554
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Reminder units:"
-msgstr ""
+msgstr "미리 알림 단위:"
 
 #: prefdlg.cpp:1557
 #, kde-format
@@ -5845,7 +5817,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "The default units for the reminder in the alarm edit dialog, for alarms due "
 "soon."
-msgstr ""
+msgstr "곧 다가올 알람의 알람 편집 대화 상자에서의 미리 알림 기본 단위입니다."
 
 #: prefdlg.cpp:1567
 #, kde-format
@@ -5866,55 +5838,57 @@ msgid ""
 "The default setting for sound file <interface>%1</interface> in the alarm "
 "edit dialog."
 msgstr ""
+"알람 편집 대화 상자에서 사용할 소리 파일 <interface>%1</interface>의 기본 설"
+"정입니다."
 
 #: prefdlg.cpp:1595
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Sound file:"
-msgstr "사운드 파일:"
+msgstr "소리 파일:"
 
 #: prefdlg.cpp:1603
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a sound file"
-msgstr ""
+msgstr "소리 파일 선택"
 
 #: prefdlg.cpp:1605
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
-msgstr ""
+msgstr "알람 편집 대화 상자에 사용할 기본 소리 파일을 입력하십시오."
 
 #: prefdlg.cpp:1614
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select to set the default volume for sound files in the alarm edit dialog."
-msgstr ""
+msgstr "알람 편집 대화 상자에 사용할 소리 파일의 기본 음량을 선택하십시오."
 
 #: prefdlg.cpp:1618
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default volume for sound files in the alarm edit dialog."
-msgstr ""
+msgstr "알람 편집 대화 상자에 사용할 소리 파일의 기본 음량입니다."
 
 #: prefdlg.cpp:1628
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Alarms"
-msgstr ""
+msgstr "명령 알람"
 
 #: prefdlg.cpp:1647
 #, kde-format
 msgctxt "@title:group"
 msgid "Email Alarms"
-msgstr ""
+msgstr "이메일 알람"
 
 #: prefdlg.cpp:1660
 #, kde-format
 msgctxt "@title:group"
 msgid "Message Font && Color"
-msgstr ""
+msgstr "메시지 글꼴과 색상"
 
 #: prefdlg.cpp:1866
 #, kde-kuit-format
@@ -5923,12 +5897,14 @@ msgid ""
 "You must enter a sound file when <interface>%1</interface> is selected as "
 "the default sound type"
 msgstr ""
+"<interface>%1</interface>을(를) 기본 소리 형식으로 선택했다면 소리 파일을 입"
+"력해야 함"
 
 #: prefdlg.cpp:1893
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Windows"
-msgstr ""
+msgstr "알람 창"
 
 #: prefdlg.cpp:1896
 #, kde-format
@@ -5944,6 +5920,9 @@ msgid ""
 "tray. Showing it in the system tray provides easy access and a status "
 "indication.</para>"
 msgstr ""
+"<para>이 옵션을 사용하면 <application>KAlarm</application> 아이콘을 시스템 트"
+"레이에 표시합니다. 시스템 트레이에서 쉽게 접근할 수 있으며 상태 표시가 가능합"
+"니다.</para>"
 
 #: prefdlg.cpp:1927
 #, kde-format
@@ -5958,12 +5937,14 @@ msgid ""
 "Check to show <application>KAlarm</application>'s icon in the system tray "
 "regardless of whether alarms are due."
 msgstr ""
+"이 옵션을 사용하면 알람 대기 중 여부와 관계 없이 <application>KAlarm</"
+"application> 아이콘을 시스템 트레이에 표시합니다."
 
 #: prefdlg.cpp:1935
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
-msgstr ""
+msgstr "활성 알람이 없을 때 자동 숨기기"
 
 #: prefdlg.cpp:1939
 #, kde-kuit-format
@@ -5973,6 +5954,9 @@ msgid ""
 "system tray if there are no active alarms. When hidden, the icon can always "
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
+"이 옵션을 사용하면 활성 알람이 없을 때 시스템 트레이의 <application>KAlarm</"
+"application> 아이콘을 자동으로 숨깁니다. 아이콘이 숨겨졌을 때에도 시스템 트레"
+"이의 숨김 아이콘 표시 옵션을 통해서 표시할 수 있습니다."
 
 #: prefdlg.cpp:1945
 #, kde-kuit-format
@@ -5983,24 +5967,27 @@ msgid ""
 "hidden, the icon can always be made visible by use of the system tray option "
 "to show hidden icons."
 msgstr ""
+"이 옵션을 사용하면 지정한 시간 내에 다가오는 알람이 없을 때 시스템 트레이의 "
+"<application>KAlarm</application> 아이콘을 자동으로 숨깁니다. 아이콘이 숨겨졌"
+"을 때에도 시스템 트레이의 숨김 아이콘 표시 옵션을 통해서 표시할 수 있습니다."
 
 #: prefdlg.cpp:1948
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
-msgstr ""
+msgstr "다음 시간 내 다가오는 알람이 없을 때 자동 숨기기:"
 
 #: prefdlg.cpp:1960
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
-msgstr ""
+msgstr "시스템 트레이 풍선 도움말"
 
 #: prefdlg.cpp:1967
 #, kde-format
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
-msgstr ""
+msgstr "다음 24시간 내에 다가오는 알람 표시"
 
 #: prefdlg.cpp:1971
 #, kde-format
@@ -6009,12 +5996,14 @@ msgid ""
 "Specify whether to include in the system tray tooltip, a summary of alarms "
 "due in the next 24 hours."
 msgstr ""
+"시스템 트레이 풍선 도움말에 다음 24시간 내에 다가오는 알람 요약을 표시할지를 "
+"선택합니다."
 
 #: prefdlg.cpp:1977
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
-msgstr ""
+msgstr "표시할 최대 알람 개수:"
 
 #: prefdlg.cpp:1986
 #, kde-format
@@ -6023,42 +6012,45 @@ msgid ""
 "Uncheck to display all of the next 24 hours' alarms in the system tray "
 "tooltip. Check to enter an upper limit on the number to be displayed."
 msgstr ""
+"이 옵션을 사용하지 않으면 시스템 트레이 풍선 도움말에 다음 24시간 내에 다가오"
+"는 모든 알람을 표시합니다. 이 옵션을 사용하면 표시할 최대 제한 개수를 설정할 "
+"수 있습니다."
 
 #: prefdlg.cpp:1990
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
-msgstr ""
+msgstr "알람 시간 표시"
 
 #: prefdlg.cpp:1996
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
-msgstr ""
+msgstr "알람까지 남은 시간 표시"
 
 #: prefdlg.cpp:2014
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm List"
-msgstr ""
+msgstr "알람 목록"
 
 #: prefdlg.cpp:2026
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
-msgstr ""
+msgstr "비활성화된 알람 색상:"
 
 #: prefdlg.cpp:2039
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
-msgstr ""
+msgstr "보관된 알람 색상:"
 
 #: prefdlg.cpp:2052
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
-msgstr ""
+msgstr "알람 메시지 창"
 
 #: prefdlg.cpp:2064
 #, kde-kuit-format
@@ -6070,24 +6062,28 @@ msgid ""
 "message windows in the center of the screen, but disable buttons for a short "
 "time after the window is displayed.</item></list></para>"
 msgstr ""
+"<para>알람 메시지를 실수로 수락하는 것을 최소화할 방법을 선택하십시오."
+"<list><item>현재 마우스 커서 위치에서 최대한 먼 곳에 알람 메시지 창 표시</"
+"item><item>알람 메시지 창을 화면 한가운데에 표시하지만 창을 표시한 후 단추를 "
+"일정 시간 동안 비활성화</item></list></para>"
 
 #: prefdlg.cpp:2067
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
-msgstr ""
+msgstr "마우스 커서에서 최대한 멀리 창 배치"
 
 #: prefdlg.cpp:2071
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
-msgstr ""
+msgstr "창을 화면 한가운데에 배치, 창 단추 활성화 지연"
 
 #: prefdlg.cpp:2080
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
-msgstr ""
+msgstr "단추 지연 시간(초):"
 
 #: prefdlg.cpp:2088
 #, kde-format
@@ -6097,6 +6093,8 @@ msgid ""
 "window is shown, to reduce the chance of alarm messages being accidentally "
 "acknowledged."
 msgstr ""
+"알람 메시지 창을 표시한 후 창의 단추를 비활성화할 시간을 초 단위로 설정하십시"
+"오. 알람 메시지를 실수로 수락하는 것을 방지합니다."
 
 #: prefdlg.cpp:2092
 #, kde-format
@@ -6105,6 +6103,8 @@ msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
 "window is shown."
 msgstr ""
+"알람 메시지 창을 표시한 후 창의 단추를 비활성화할 시간을 초 단위로 설정하십시"
+"오."
 
 #: prefdlg.cpp:2100
 #, kde-format
@@ -6122,60 +6122,65 @@ msgid ""
 "does not interfere with your typing when it is displayed, but it has no "
 "title bar and cannot be moved or resized.</item></list></para>"
 msgstr ""
+"<para>알람 메시지 창의 특성을 지정합니다.<list><item>이 옵션을 사용하면 제목 "
+"표시줄이 있는 일반 창으로 표시하며 표시될 때 키보드 입력을 받습니다.</"
+"item><item>이 옵션을 사용하지 않으면 창이 표시되어도 키보드 입력을 받지 않으"
+"며, 제목 표시줄이 없고 이동이나 크기를 조정할 수 없습니다.</item></list></"
+"para>"
 
 #: recurrenceedit.cpp:56
 #, kde-format
 msgctxt "@item:inlistbox Recurrence type"
 msgid "No Recurrence"
-msgstr ""
+msgstr "반복 없음"
 
 #: recurrenceedit.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox Recurrence type"
 msgid "At Login"
-msgstr ""
+msgstr "로그인 시"
 
 #: recurrenceedit.cpp:58
 #, kde-format
 msgctxt "@item:inlistbox Recurrence type"
 msgid "Hourly/Minutely"
-msgstr ""
+msgstr "매 시간/매 분"
 
 #: recurrenceedit.cpp:59
 #, kde-format
 msgctxt "@item:inlistbox Recurrence type"
 msgid "Daily"
-msgstr ""
+msgstr "매일"
 
 #: recurrenceedit.cpp:60
 #, kde-format
 msgctxt "@item:inlistbox Recurrence type"
 msgid "Weekly"
-msgstr ""
+msgstr "매주"
 
 #: recurrenceedit.cpp:61
 #, kde-format
 msgctxt "@item:inlistbox Recurrence type"
 msgid "Monthly"
-msgstr ""
+msgstr "매월"
 
 #: recurrenceedit.cpp:62
 #, kde-format
 msgctxt "@item:inlistbox Recurrence type"
 msgid "Yearly"
-msgstr ""
+msgstr "매년"
 
 #: recurrenceedit.cpp:80
 #, kde-format
 msgctxt "@title:group"
 msgid "Recurrence Rule"
-msgstr ""
+msgstr "반복 규칙"
 
 #: recurrenceedit.cpp:98
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not repeat the alarm"
-msgstr ""
+msgstr "알람을 반복하지 않음"
 
 #: recurrenceedit.cpp:105
 #, kde-kuit-format
@@ -6185,36 +6190,39 @@ msgid ""
 "then.</para><para>Note that it will also be triggered any time "
 "<application>KAlarm</application> is restarted.</para>"
 msgstr ""
+"<para>지정한 날짜와 시간 및 매 로그인할 때마다 알람을 트리거합니다. 해당 날짜"
+"까지 반복합니다.</para><para><application>KAlarm</application>을 다시 시작할 "
+"때에도 알람이 트리거됩니다.</para>"
 
 #: recurrenceedit.cpp:112
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at hourly/minutely intervals"
-msgstr ""
+msgstr "알람을 매 시간/분 간격으로 반복"
 
 #: recurrenceedit.cpp:118
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at daily intervals"
-msgstr ""
+msgstr "알람을 매일 반복"
 
 #: recurrenceedit.cpp:124
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at weekly intervals"
-msgstr ""
+msgstr "알람을 매주 반복"
 
 #: recurrenceedit.cpp:130
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at monthly intervals"
-msgstr ""
+msgstr "알람을 매월 반복"
 
 #: recurrenceedit.cpp:136
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at annual intervals"
-msgstr ""
+msgstr "알람을 매년 반복"
 
 #: recurrenceedit.cpp:145
 #, kde-format
@@ -6222,43 +6230,43 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Set up a repetition within the recurrence, to trigger the alarm multiple "
 "times each time the recurrence is due."
-msgstr ""
+msgstr "알람 반복 기간 내에서 알람을 계속 트리거할 주기를 설정하십시오."
 
 #: recurrenceedit.cpp:193
 #, kde-format
 msgctxt "@title:group"
 msgid "Recurrence End"
-msgstr ""
+msgstr "반복 종료"
 
 #: recurrenceedit.cpp:200
 #, kde-format
 msgctxt "@option:radio"
 msgid "No end"
-msgstr ""
+msgstr "종료 없음"
 
 #: recurrenceedit.cpp:202
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm indefinitely"
-msgstr ""
+msgstr "알람을 무한히 계속 반복"
 
 #: recurrenceedit.cpp:210
 #, kde-format
 msgctxt "@option:radio"
 msgid "End after:"
-msgstr ""
+msgstr "다음 이후 종료:"
 
 #: recurrenceedit.cpp:212
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm for the number of times specified"
-msgstr ""
+msgstr "지정한 횟수만큼 알람 반복"
 
 #: recurrenceedit.cpp:218
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the total number of times to trigger the alarm"
-msgstr ""
+msgstr "알람을 트리거할 총 횟수 입력"
 
 #: recurrenceedit.cpp:222
 #, kde-format
@@ -6270,7 +6278,7 @@ msgstr "회"
 #, kde-format
 msgctxt "@option:radio"
 msgid "End by:"
-msgstr ""
+msgstr "다음 기간 이후 종료:"
 
 #: recurrenceedit.cpp:236
 #, kde-kuit-format
@@ -6280,18 +6288,21 @@ msgid ""
 "applies to the main recurrence only. It does not limit any sub-repetition "
 "which will occur regardless after the last main recurrence.</note></para>"
 msgstr ""
+"<para>지정한 날짜/시간까지 알람을 반복합니다.</para><para><note>주 반복에만 "
+"적용됩니다. 마지막 주 반복 이후에도 계속 발생하는 하위 반복에는 제한이 적용되"
+"지 않습니다.</note></para>"
 
 #: recurrenceedit.cpp:241
 #, kde-format
 msgctxt "@info"
 msgid "This uses the same time zone as the start time."
-msgstr ""
+msgstr "시작 시간과 같은 시간대를 사용합니다."
 
 #: recurrenceedit.cpp:243
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the last date to repeat the alarm.</para><para>%1</para>"
-msgstr ""
+msgstr "<para>알람 반복의 마지막 날짜를 입력하십시오.</para><para>%1</para>"
 
 #: recurrenceedit.cpp:249
 #, kde-kuit-format
@@ -6300,6 +6311,8 @@ msgid ""
 "<para>Enter the last time to repeat the alarm.</para><para>%1</para><para>"
 "%2</para>"
 msgstr ""
+"<para>알람 반복의 마지막 시간을 입력하십시오.</para><para>%1</para><para>%2</"
+"para>"
 
 #: recurrenceedit.cpp:253
 #, kde-format
@@ -6307,7 +6320,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Stop repeating the alarm after your first login on or after the specified "
 "end date"
-msgstr ""
+msgstr "지정한 종료 날짜나 그 이후의 첫 로그인 시 알람 반복 정지"
 
 #: recurrenceedit.cpp:272
 #, kde-format
@@ -6319,7 +6332,7 @@ msgstr "예외"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of exceptions, i.e. dates/times excluded from the recurrence"
-msgstr ""
+msgstr "반복에서 제외할 날짜/시간 등의 예외 목록"
 
 #: recurrenceedit.cpp:300
 #, kde-format
@@ -6328,6 +6341,8 @@ msgid ""
 "Enter a date to insert in the exceptions list. Use in conjunction with the "
 "Add or Change button below."
 msgstr ""
+"예외 목록에 추가할 날짜를 입력하십시오. 아래에 있는 추가나 변경 단추와 함께 "
+"사용합니다."
 
 #: recurrenceedit.cpp:307
 #, kde-format
@@ -6339,13 +6354,13 @@ msgstr "추가"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add the date entered above to the exceptions list"
-msgstr ""
+msgstr "예외 목록에 위에 입력한 날짜 추가"
 
 #: recurrenceedit.cpp:312
 #, kde-format
 msgctxt "@action:button"
 msgid "Change"
-msgstr ""
+msgstr "변경"
 
 #: recurrenceedit.cpp:314
 #, kde-format
@@ -6353,13 +6368,13 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Replace the currently highlighted item in the exceptions list with the date "
 "entered above"
-msgstr ""
+msgstr "예외 목록에서 현재 선택한 항목을 위에 입력한 날짜로 변경"
 
 #: recurrenceedit.cpp:319
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the currently highlighted item from the exceptions list"
-msgstr ""
+msgstr "예외 목록에서 현재 선택한 항목 삭제"
 
 #: recurrenceedit.cpp:326
 #, kde-format
@@ -6374,12 +6389,14 @@ msgid ""
 "<para>Do not trigger the alarm on holidays.</para><para>You can specify your "
 "holiday region in the Configuration dialog.</para>"
 msgstr ""
+"<para>공휴일에 알람을 트리거하지 않습니다.</para><para>설정 대화 상자에서 공"
+"휴일 지역을 지정할 수 있습니다.</para>"
 
 #: recurrenceedit.cpp:334
 #, kde-format
 msgctxt "@option:check"
 msgid "Only during working time"
-msgstr ""
+msgstr "일과 시간에만"
 
 #: recurrenceedit.cpp:337
 #, kde-kuit-format
@@ -6389,56 +6406,56 @@ msgid ""
 "para><para>You can specify working days and hours in the Configuration "
 "dialog.</para>"
 msgstr ""
+"<para>업무일의 일과 시간에만 알람을 실행합니다.</para><para>설정 대화 상자에"
+"서 업무일과 일과 시간을 지정할 수 있습니다.</para>"
 
 #: recurrenceedit.cpp:380
 #, kde-format
 msgctxt "@info"
 msgid "End date is earlier than start date"
-msgstr ""
+msgstr "종료 날짜가 시작 날짜보다 빠름"
 
 #: recurrenceedit.cpp:381
 #, kde-format
 msgctxt "@info"
 msgid "End date/time is earlier than start date/time"
-msgstr ""
+msgstr "종료 날짜/시간이 시작 날짜/시간보다 빠름"
 
 #: recurrenceedit.cpp:653
 #, kde-format
 msgctxt "@info"
 msgid "Date cannot be earlier than start date"
-msgstr "날짜가 시작일 보다 빠를 수 없습니다"
+msgstr "날짜가 시작 날짜보다 빠를 수 없음"
 
 #: recurrenceedit.cpp:1066
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Recurrence"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Recur every"
-msgstr "반복"
+msgstr "반복 주기"
 
 #: recurrenceedit.cpp:1133
 #, kde-format
 msgctxt "@label Time units for user-entered numbers"
 msgid "hours:minutes"
-msgstr ""
+msgstr "시간:분"
 
 #: recurrenceedit.cpp:1134
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of hours and minutes between repetitions of the alarm"
-msgstr ""
+msgstr "알람을 반복할 시간 간격의 시간과 분 입력"
 
 #: recurrenceedit.cpp:1154
 #, kde-format
 msgctxt "@label On: Tuesday"
 msgid "On:"
-msgstr ""
+msgstr "시점:"
 
 #: recurrenceedit.cpp:1237
 #, kde-format
 msgctxt "@info"
 msgid "No day selected"
-msgstr ""
+msgstr "선택한 날짜 없음"
 
 #: recurrenceedit.cpp:1266
 #, kde-format
@@ -6450,13 +6467,13 @@ msgstr "일"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of days between repetitions of the alarm"
-msgstr ""
+msgstr "알람을 반복할 시간 간격의 일 수 입력"
 
 #: recurrenceedit.cpp:1268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which the alarm is allowed to occur"
-msgstr ""
+msgstr "일주일 중 알람이 발생할 수 있는 요일 선택"
 
 #: recurrenceedit.cpp:1279
 #, kde-format
@@ -6468,140 +6485,140 @@ msgstr "주"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of weeks between repetitions of the alarm"
-msgstr ""
+msgstr "알람을 반복할 시간 간격의 주 수 입력"
 
 #: recurrenceedit.cpp:1281
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which to repeat the alarm"
-msgstr ""
+msgstr "일주일 중 알람을 반복할 요일 선택"
 
 #: recurrenceedit.cpp:1303
 #, kde-format
 msgctxt "@option:radio On day number in the month"
 msgid "On day"
-msgstr ""
+msgstr "다음 날짜에"
 
 #: recurrenceedit.cpp:1307
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm on the selected day of the month"
-msgstr ""
+msgstr "알람을 달의 선택한 날짜에 반복"
 
 #: recurrenceedit.cpp:1316
 #, kde-format
 msgctxt "@item:inlistbox Last day of month"
 msgid "Last"
-msgstr ""
+msgstr "마지막"
 
 #: recurrenceedit.cpp:1318
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the month on which to repeat the alarm"
-msgstr ""
+msgstr "알람을 반복할 달의 마지막 날짜 선택"
 
 #: recurrenceedit.cpp:1325
 #, kde-format
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
-msgstr ""
+msgstr "다음 요일에"
 
 #: recurrenceedit.cpp:1329
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Repeat the alarm on one day of the week, in the selected week of the month"
-msgstr ""
+msgstr "알람을 매 달의 선택한 주의 특정일에 반복"
 
 #: recurrenceedit.cpp:1334
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1st"
-msgstr "1일"
+msgstr "첫 번째"
 
 #: recurrenceedit.cpp:1335
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "2nd"
-msgstr "2일"
+msgstr "두 번째"
 
 #: recurrenceedit.cpp:1336
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "3rd"
-msgstr "3일"
+msgstr "세 번째"
 
 #: recurrenceedit.cpp:1337
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "4th"
-msgstr "4일"
+msgstr "네 번째"
 
 #: recurrenceedit.cpp:1338
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th"
-msgstr "5일"
+msgstr "다섯 번째"
 
 #: recurrenceedit.cpp:1339
 #, kde-format
 msgctxt "@item:inlistbox Last Monday in March"
 msgid "Last"
-msgstr ""
+msgstr "마지막"
 
 #: recurrenceedit.cpp:1340
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "2nd Last"
-msgstr "마지막 날 2일 전"
+msgstr "마지막 2주 전"
 
 #: recurrenceedit.cpp:1341
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "3rd Last"
-msgstr "마지막 날 3일 전"
+msgstr "마지막 3주 전"
 
 #: recurrenceedit.cpp:1342
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "4th Last"
-msgstr "마지막 날 4일 전"
+msgstr "마지막 4주 전"
 
 #: recurrenceedit.cpp:1343
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th Last"
-msgstr "마지막 날 5일 전"
+msgstr "마지막 5주 전"
 
 #: recurrenceedit.cpp:1346
 #, kde-format
 msgctxt "@item:inlistbox Every (Monday...) in month"
 msgid "Every"
-msgstr ""
+msgstr "매"
 
 #: recurrenceedit.cpp:1349
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the week of the month in which to repeat the alarm"
-msgstr ""
+msgstr "알람을 반복할 달의 주 선택"
 
 #: recurrenceedit.cpp:1363
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the week on which to repeat the alarm"
-msgstr ""
+msgstr "알람을 반복할 주의 요일 선택"
 
 #: recurrenceedit.cpp:1485
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "month(s)"
-msgstr ""
+msgstr "개월"
 
 #: recurrenceedit.cpp:1486
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of months between repetitions of the alarm"
-msgstr ""
+msgstr "알람을 반복할 시간 간격의 개월 수 입력"
 
 #: recurrenceedit.cpp:1497
 #, kde-format
@@ -6613,25 +6630,25 @@ msgstr "년"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of years between repetitions of the alarm"
-msgstr ""
+msgstr "알람을 반복할 시간 간격의 년 수 입력"
 
 #: recurrenceedit.cpp:1505
 #, kde-format
 msgctxt "@label List of months to select"
 msgid "Months:"
-msgstr ""
+msgstr "월:"
 
 #: recurrenceedit.cpp:1523
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the months of the year in which to repeat the alarm"
-msgstr ""
+msgstr "알람을 반복할 년도의 달 선택"
 
 #: recurrenceedit.cpp:1532
 #, kde-format
 msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
-msgstr ""
+msgstr "윤년이 아닌 해의 2월 29일 알람:"
 
 #: recurrenceedit.cpp:1536
 #, kde-format
@@ -6643,13 +6660,13 @@ msgstr "없음"
 #, kde-format
 msgctxt "@item:inlistbox 1st March (short form)"
 msgid "1 Mar"
-msgstr ""
+msgstr "3월 1일"
 
 #: recurrenceedit.cpp:1538
 #, kde-format
 msgctxt "@item:inlistbox 28th February (short form)"
 msgid "28 Feb"
-msgstr ""
+msgstr "2월 28일"
 
 #: recurrenceedit.cpp:1544
 #, kde-format
@@ -6658,54 +6675,55 @@ msgid ""
 "Select which date, if any, the February 29th alarm should trigger in non-"
 "leap years"
 msgstr ""
+"2월 29일에 설정된 알람을 윤년이 아닌 해의 언제 트리거할지를 선택하십시오"
 
 #: recurrenceedit.cpp:1626
 #, kde-format
 msgctxt "@info"
 msgid "No month selected"
-msgstr ""
+msgstr "선택한 달 없음"
 
 #: reminder.cpp:29
 #, kde-format
 msgctxt "@option:check"
 msgid "Reminder for first recurrence only"
-msgstr ""
+msgstr "첫 반복만 미리 알림"
 
 #: reminder.cpp:31
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "in advance"
-msgstr ""
+msgstr "미리"
 
 #: reminder.cpp:43
 #, kde-format
 msgctxt "@option:check"
 msgid "Reminder:"
-msgstr ""
+msgstr "미리 알림:"
 
 #: reminder.cpp:47
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "afterwards"
-msgstr ""
+msgstr "나중에"
 
 #: reminder.cpp:67
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the reminder only for the first time the alarm is scheduled"
-msgstr ""
+msgstr "첫 번째 예정된 알람에만 미리 알림 표시"
 
 #: repetitionbutton.cpp:66
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Sub-Repetition"
-msgstr ""
+msgstr "알람 하위 반복"
 
 #: repetitionbutton.cpp:139
 #, kde-format
 msgctxt "@option:check Repeat every 10 minutes"
 msgid "Repeat every"
-msgstr ""
+msgstr "다음마다 반복"
 
 #: repetitionbutton.cpp:140
 #, kde-format
@@ -6714,12 +6732,14 @@ msgid ""
 "Instead of the alarm triggering just once at each recurrence, checking this "
 "option makes the alarm trigger multiple times at each recurrence."
 msgstr ""
+"이 옵션을 사용하면 알람을 매 반복마다 한 번씩만 트리거하지 않고 여러 번 트리"
+"거될 수 있도록 합니다."
 
 #: repetitionbutton.cpp:142
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the time between repetitions of the alarm"
-msgstr ""
+msgstr "알람을 반복할 시간 간격 입력"
 
 #: repetitionbutton.cpp:157
 #, kde-format
@@ -6733,14 +6753,14 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to specify the number of times the alarm should repeat after each "
 "recurrence"
-msgstr ""
+msgstr "이 옵션을 사용하면 알람의 매 반복 이후 반복할 횟수를 지정함"
 
 #: repetitionbutton.cpp:165
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter the number of times to trigger the alarm after its initial occurrence"
-msgstr ""
+msgstr "알람의 최초 트리거 후 트리거될 총 횟수 입력"
 
 #: repetitionbutton.cpp:173
 #, kde-format
@@ -6752,25 +6772,25 @@ msgstr "시간:"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to specify how long the alarm is to be repeated"
-msgstr ""
+msgstr "알람을 반복할 시간 간격 입력"
 
 #: repetitionbutton.cpp:179
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the length of time to repeat the alarm"
-msgstr ""
+msgstr "알람을 반복할 시간 길이 입력"
 
 #: resources/calendarfunctions.cpp:53 resources/calendarfunctions.cpp:84
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load calendar <filename>%1</filename>."
-msgstr ""
+msgstr "<filename>%1</filename> 캘린더를 불러올 수 없음"
 
 #: resources/calendarfunctions.cpp:64
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
-msgstr ""
+msgstr "캘린더를 다운로드할 수 없음: <filename>%1</filename>"
 
 #: resources/calendarupdater.cpp:85
 #, kde-kuit-format
@@ -6780,6 +6800,9 @@ msgid ""
 "application> version %2), and will be read-only unless you choose to update "
 "it to the current format."
 msgstr ""
+"<resource>%1</resource> 캘린더가 오래된 형식입니다(<application>KAlarm</"
+"application> 버전 %2). 현재 형식으로 업데이트하지 않으면 읽기 전용으로만 사용"
+"할 수 있습니다."
 
 #: resources/calendarupdater.cpp:88
 #, kde-kuit-format
@@ -6789,6 +6812,9 @@ msgid ""
 "<application>KAlarm</application> format, and will be read-only unless you "
 "choose to update them to the current format."
 msgstr ""
+"<resource>%1</resource> 캘린더의 일부 혹은 전체 알람이 오래된 "
+"<application>KAlarm</application> 형식입니다. 현재 형식으로 업데이트하지 않으"
+"면 읽기 전용으로만 사용할 수 있습니다."
 
 #: resources/calendarupdater.cpp:91
 #, kde-kuit-format
@@ -6799,66 +6825,59 @@ msgid ""
 "computer). If you do so, the calendar may become unusable there.</warning></"
 "para><para>Do you wish to update the calendar?</para>"
 msgstr ""
+"<para>%1</para><para><warning>오래된 버전의 <application>KAlarm</application>"
+"과 이 캘린더를 공유한다면(예: 다른 컴퓨터에서 사용) 캘린더를 업데이트하지 마"
+"십시오. 업데이트하면 해당 버전에서는 사용할 수 없습니다.</warning></"
+"para><para>캘린더를 업데이트하시겠습니까?</para>"
 
 #: resources/fileresource.cpp:325 resources/fileresource.cpp:455
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is not configured."
-msgstr "일정 파일"
+msgstr "캘린더가 설정되지 않았습니다."
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to remove calendar <resource>%1</resource>."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar <resource>%1</resource>."
-msgstr "<resource>%1</resource> 일정을 제거하지 못했습니다."
+msgstr "<resource>%1</resource> 캘린더를 불러올 수 없습니다."
 
 #: resources/fileresource.cpp:432 resources/fileresource.cpp:472
 #: resources/fileresource.cpp:482
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to remove calendar <resource>%1</resource>."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Error saving calendar <resource>%1</resource>."
-msgstr "<resource>%1</resource> 일정을 제거하지 못했습니다."
+msgstr "<resource>%1</resource> 캘린더를 저장할 수 없습니다."
 
 #: resources/fileresource.cpp:462
-#, fuzzy, kde-format
-#| msgid "Path to KAlarm directory."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is read-only."
-msgstr "KAlarm 디렉터리 경로입니다."
+msgstr "캘린더가 읽기 전용입니다."
 
 #: resources/fileresource.cpp:467
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to save calendar to <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Calendar file is in wrong format: <filename>%1</filename>."
-msgstr "일정을 <filename>%1</filename>에 저장하지 못함"
+msgstr "캘린더 파일의 형식이 잘못됨: <filename>%1</filename>."
 
 #: resources/fileresourcecalendarupdater.cpp:113
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info/plain"
-#| msgid "Failed to update format of calendar <resource>%1</resource>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to update format of calendar <resource>%1</resource>"
-msgstr "<resource>%1</resource> 달력의 형식을 업데이트하지 못했습니다"
+msgstr "<resource>%1</resource> 캘린더의 형식을 업데이트할 수 없음"
 
 #: resources/fileresourcecreator.cpp:54
 #, kde-format
 msgctxt "@title:window"
 msgid "Calendar Configuration"
-msgstr ""
+msgstr "캘린더 설정"
 
 #: resources/fileresourcecreator.cpp:55
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Select storage type of new calendar:"
-msgstr ""
+msgstr "새 캘린더의 저장소 형식 선택:"
 
 #: resources/fileresourcecreator.cpp:137
 #, kde-kuit-format
@@ -6867,52 +6886,43 @@ msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
 msgstr ""
+"오류! <filename>%1</filename> 파일은 이미 기존 캘린더에서 사용하고 있습니다."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import Directory Resource"
-msgstr "일정 파일"
+msgstr "디렉터리 리소스 가져오기"
 
 #: resources/migration/dirresourceimportdialog.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Import Calendar Directory Resource"
-msgstr "일정 파일"
+msgstr "캘린더 디렉터리 리소스 가져오기"
 
 #: resources/migration/dirresourceimportdialog.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Import Active Alarms"
-msgstr "활성 알람"
+msgstr "활성 알람 가져오기"
 
 #: resources/migration/dirresourceimportdialog.cpp:55
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Archived Alarms"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Import Archived Alarms"
-msgstr "보관된 알람"
+msgstr "보관된 알람 가져오기"
 
 #: resources/migration/dirresourceimportdialog.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Import Alarm Templates"
-msgstr "알람 템플릿"
+msgstr "알람 템플릿 가져오기"
 
 #: resources/migration/dirresourceimportdialog.cpp:191
 #, kde-format
 msgctxt "@item:intext"
 msgid "Active alarms"
-msgstr "알람 활성화"
+msgstr "활성 알람"
 
 #: resources/migration/dirresourceimportdialog.cpp:193
 #, kde-format
@@ -6928,12 +6938,10 @@ msgstr "알람 템플릿"
 
 #: resources/migration/dirresourceimportdialog.cpp:251
 #: resources/singlefileresourceconfigdialog.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar files"
-msgstr "일정 파일"
+msgstr "캘린더 파일"
 
 #: resources/migration/dirresourceimportdialog.cpp:397
 #: resources/singlefileresourceconfigdialog.cpp:213
@@ -6947,33 +6955,33 @@ msgstr "파일 정보 검사 중..."
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! File already exists."
-msgstr ""
+msgstr "오류! 파일이 이미 존재합니다."
 
 #: resources/migration/dirresourceimportdialog.cpp:411
 #: resources/migration/dirresourceimportdialog.cpp:462
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory does not exist)."
-msgstr ""
+msgstr "오류! 파일을 생성할 수 없습니다(디렉터리가 없음)."
 
 #: resources/migration/dirresourceimportdialog.cpp:416
 #: resources/migration/dirresourceimportdialog.cpp:464
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory is not writable)."
-msgstr ""
+msgstr "오류! 파일을 생성할 수 없습니다(디렉터리에 쓸 수 없음)."
 
 #: resources/migration/dirresourceimportdialog.cpp:470
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory does not exist)."
-msgstr ""
+msgstr "오류! 파일을 생성할 수 없습니다(디렉터리가 없음)."
 
 #: resources/migration/dirresourceimportdialog.cpp:472
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory is not writable)."
-msgstr ""
+msgstr "오류! 파일을 생성할 수 없습니다(디렉터리에 쓸 수 없음)."
 
 #. i18n: ectx: property (text), widget (QLabel, warning1)
 #: resources/migration/dirresourceimportdialog_intro.ui:16
@@ -6984,6 +6992,9 @@ msgid ""
 "using the contents of the directory resource below, you must import it into "
 "a KAlarm calendar file resource."
 msgstr ""
+"KAlarm에서는 더 이상 캘린더 디렉터리 리소스를 지원하지 않습니다. 아래에 있는 "
+"디렉터리 리소스의 내용을 계속 사용하려면 KAlarm 캘린더 파일 리소스로 가져와"
+"야 합니다."
 
 #. i18n: ectx: property (text), widget (QLabel, warning2)
 #: resources/migration/dirresourceimportdialog_intro.ui:26
@@ -6994,33 +7005,32 @@ msgid ""
 "using the contents of the directory resource below, you must import each of "
 "its alarm types into separate KAlarm calendar file resources."
 msgstr ""
+"KAlarm에서는 더 이상 캘린더 디렉터리 리소스를 지원하지 않습니다. 아래에 있는 "
+"디렉터리 리소스의 내용을 계속 사용하려면 각각 알람 형식을 별개의 KAlarm 캘린"
+"더 파일 리소스로 가져와야 합니다."
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
 #: resources/migration/dirresourceimportdialog_intro.ui:33
 #: resources/migration/dirresourceimportdialog_type.ui:99
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Action to create a new alarm"
-#| msgid "New alarm"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Display name:"
-msgstr "새 알람"
+msgstr "표시 이름:"
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
 #: resources/migration/dirresourceimportdialog_intro.ui:47
-#, fuzzy, kde-format
-#| msgid "Path to KAlarm directory."
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Calendar directory:"
-msgstr "KAlarm 디렉터리 경로입니다."
+msgstr "캘린더 디렉터리:"
 
 #. i18n: ectx: property (text), widget (QLabel, label3)
 #: resources/migration/dirresourceimportdialog_intro.ui:61
-#, fuzzy, kde-format
-#| msgid "Alarm types."
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm types:"
-msgstr "알람 종류."
+msgstr "알람 형식:"
 
 #. i18n: ectx: property (text), widget (QLabel, note)
 #: resources/migration/dirresourceimportdialog_intro.ui:78
@@ -7031,31 +7041,29 @@ msgid ""
 "using the Import Alarms menu option to import the calendar files contained "
 "within it."
 msgstr ""
+"필요하다면 알람 가져오기 메뉴 옵션을 통해서 해당 디렉터리에 포함된 캘린더 파"
+"일을 가져오는 것으로 이 캘린더 디렉터리 리소스를 나중에 가져올 수도 있습니다."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mergeRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:13
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Failed to create new calendar resource"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Import into existing calendar file resource"
-msgstr "새 일정 리소스를 생성하지 못했습니다"
+msgstr "기존 캘린더 파일 리소스로 가져오기"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, mergeResource)
 #: resources/migration/dirresourceimportdialog_type.ui:26
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the resource to import the directory resource's alarms into."
-msgstr ""
+msgstr "디렉터리 리소스의 알람을 가져올 대상 리소스를 선택하십시오."
 
 #. i18n: ectx: property (text), widget (QRadioButton, newRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Failed to create new calendar resource"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Import into new calendar file resource"
-msgstr "새 일정 리소스를 생성하지 못했습니다"
+msgstr "새 캘린더 파일 리소스로 가져오기"
 
 #. i18n: ectx: property (text), widget (QLabel, pathLabel)
 #: resources/migration/dirresourceimportdialog_type.ui:64
@@ -7072,6 +7080,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Select the file to contain this resource. The file must not already exist."
 msgstr ""
+"이 리소스를 포함할 파일을 선택하십시오. 파일은 기존에 존재하지 않아야 합니다."
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, pathRequester)
 #: resources/migration/dirresourceimportdialog_type.ui:79
@@ -7083,31 +7092,30 @@ msgid ""
 "Note that if the URL of a remote file is specified, monitoring for file "
 "changes will not work."
 msgstr ""
+"이 리소스를 포함할 파일을 선택하십시오.\n"
+"파일은 기존에 존재하지 않아야 합니다.\n"
+"원격 파일의 URL을 지정했다면 해당 파일의 변경 사항 감시를 사용할 수 없습니다."
 
 #. i18n: ectx: property (toolTip), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:109
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Enter the name or URL of a text or image file to display."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the name used to identify this resource in displays."
-msgstr "표시할 텍스트나 그림의 URL을 입력하십시오."
+msgstr "이 리소스를 표시할 때 식별할 이름을 입력하십시오."
 
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:112
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Enter the name or URL of a text or image file to display."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name used to identify this resource in displays."
-msgstr "표시할 텍스트나 그림의 URL을 입력하십시오."
+msgstr "이 리소스를 표시할 때 식별할 이름을 입력하십시오."
 
 #. i18n: ectx: property (text), widget (QRadioButton, noRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:137
 #, kde-format
 msgctxt "@option:radio"
 msgid "Do not import"
-msgstr ""
+msgstr "가져오지 않기"
 
 #: resources/migration/fileresourcemigrator.cpp:256
 #, kde-format
@@ -7128,14 +7136,14 @@ msgid "Alarm Templates"
 msgstr "알람 템플릿"
 
 #: resources/migration/fileresourcemigrator.cpp:280
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info/plain"
-#| msgid "Failed to create default calendar <resource>%1</resource>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Failed to create default calendar <resource>%1</resource></"
 "para><para>Location: <filename>%2</filename></para>"
-msgstr "기본 달력 <resource>%1</resource>을 (를) 생성하는 데 실패했습니다"
+msgstr ""
+"<para>기본 캘린더 <resource>%1</resource>을(를) 생성할 수 없음</para><para>위"
+"치: <filename>%2</filename></para>"
 
 #: resources/resourcedatamodelbase.cpp:66
 #, kde-format
@@ -7165,13 +7173,13 @@ msgstr "읽기 전용"
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (old format)"
-msgstr ""
+msgstr "읽기 전용(이전 형식)"
 
 #: resources/resourcedatamodelbase.cpp:92
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (other format)"
-msgstr ""
+msgstr "읽기 전용(기타 형식)"
 
 #: resources/resourcedatamodelbase.cpp:114
 #, kde-format
@@ -7183,7 +7191,7 @@ msgstr "시간"
 #, kde-format
 msgctxt "@title:column"
 msgid "Time To"
-msgstr ""
+msgstr "남은 시간"
 
 #: resources/resourcedatamodelbase.cpp:118
 #, kde-format
@@ -7195,13 +7203,13 @@ msgstr "반복"
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
-msgstr ""
+msgstr "색상"
 
 #: resources/resourcedatamodelbase.cpp:122
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
-msgstr ""
+msgstr "형식"
 
 #: resources/resourcedatamodelbase.cpp:124
 #, kde-format
@@ -7213,7 +7221,7 @@ msgstr "이름"
 #, kde-format
 msgctxt "@title:column"
 msgid "Message, File or Command"
-msgstr ""
+msgstr "메시지, 파일, 명령"
 
 #: resources/resourcedatamodelbase.cpp:128
 #, kde-format
@@ -7225,85 +7233,85 @@ msgstr "이름"
 #, kde-format
 msgctxt "@title:column"
 msgid "Calendars"
-msgstr "달력"
+msgstr "캘린더"
 
 #: resources/resourcedatamodelbase.cpp:451
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
-msgstr "명령 실행에 실패했습니다"
+msgstr "명령 실행에 실패함"
 
 #: resources/resourcedatamodelbase.cpp:453
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
-msgstr "알람 울리기 전 동작을 실행하지 못했습니다"
+msgstr "알람 울리기 전 동작에 실패함"
 
 #: resources/resourcedatamodelbase.cpp:455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
-msgstr "알람 울린 후 동작을 실행하지 못했습니다"
+msgstr "알람 울린 후 동작에 실패함"
 
 #: resources/resourcedatamodelbase.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
-msgstr ""
+msgstr "알람 울리기 전과 울린 후 동작에 실패함"
 
 #: resources/resourcedatamodelbase.cpp:488
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
-msgstr ""
+msgstr "비활성화됨"
 
 #: resources/resourcedatamodelbase.cpp:491
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename><nl/>%4"
-msgstr ""
+msgstr "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 
 #: resources/resourcedatamodelbase.cpp:496
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename>"
-msgstr ""
+msgstr "%1<nl/>%2: <filename>%3</filename>"
 
 #: resources/resourcedatamodelbase.cpp:557
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
-msgstr ""
+msgstr "알람의 다음 예정된 날짜와 시간"
 
 #: resources/resourcedatamodelbase.cpp:559
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
-msgstr ""
+msgstr "알람의 다음 예정된 트리거까지 남은 시간"
 
 #: resources/resourcedatamodelbase.cpp:561
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
-msgstr ""
+msgstr "알람이 얼마나 자주 반복되는지 여부"
 
 #: resources/resourcedatamodelbase.cpp:563
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Background color of alarm message"
-msgstr ""
+msgstr "알람 메시지의 배경색"
 
 #: resources/resourcedatamodelbase.cpp:565
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm type (message, file, command or email)"
-msgstr ""
+msgstr "알람 형식(메시지, 파일, 명령, 이메일)"
 
 #: resources/resourcedatamodelbase.cpp:567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
-msgstr ""
+msgstr "알람 이름, 이름이 비어 있는 경우 텍스트"
 
 #: resources/resourcedatamodelbase.cpp:569
 #, kde-format
@@ -7312,19 +7320,20 @@ msgid ""
 "Alarm message text, URL of text file to display, command to execute, or "
 "email subject line"
 msgstr ""
+"알람 메시지 텍스트, 표시할 텍스트 파일의 URL, 실행할 명령, 이메일 제목 줄"
 
 #: resources/resourcedatamodelbase.cpp:571
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
-msgstr ""
+msgstr "알람 템플릿 이름"
 
 #: resources/resourcedatamodelbase.cpp:663
 #: resources/resourcedatamodelbase.cpp:763
 #, kde-format
 msgctxt "@info Alarm never occurs"
 msgid "Never"
-msgstr ""
+msgstr "하지 않음"
 
 #: resources/resourcedatamodelbase.cpp:769
 #, no-c-format, kde-format
@@ -7336,19 +7345,19 @@ msgstr "%1일"
 #, kde-format
 msgctxt "@info hours:minutes"
 msgid "%1:%2"
-msgstr ""
+msgstr "%1:%2"
 
 #: resources/resourcedatamodelbase.cpp:786
 #, kde-format
 msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
-msgstr ""
+msgstr "%1일 %2:%3"
 
 #: resources/resourcemodel.cpp:329
 #, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
-msgstr ""
+msgstr "활성 기본 알람 캘린더를 비활성화할 수 없습니다."
 
 #: resources/resourcemodel.cpp:335
 #, kde-format
@@ -7357,20 +7366,20 @@ msgid ""
 "You cannot disable your default archived alarm calendar while expired alarms "
 "are configured to be kept."
 msgstr ""
+"만료된 알람을 보관하기로 설정했다면 기본 보관된 알람 캘린더를 비활성화할 수 "
+"없습니다."
 
 #: resources/resourcemodel.cpp:339
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"
-msgstr ""
-"기본 달력을 사용하지 않도록 설정하시겠습니까?을 사용하지 않도록 설정하시겠습"
-"니까?"
+msgstr "기본 캘린더를 비활성화하시겠습니까?"
 
 #: resources/resources.cpp:289
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Calendar"
-msgstr "일정 선택"
+msgstr "캘린더 선택"
 
 #: resources/resources.cpp:490
 #, kde-kuit-format
@@ -7379,6 +7388,8 @@ msgid ""
 "The calendar <resource>%1</resource> has been made read-only. This was the "
 "default calendar for active alarms."
 msgstr ""
+"<resource>%1</resource> 캘린더가 읽기 전용으로 변경되었습니다. 활성 알람에 사"
+"용할 기본 캘린더였습니다."
 
 #: resources/resources.cpp:495
 #, kde-kuit-format
@@ -7387,6 +7398,8 @@ msgid ""
 "The calendar <resource>%1</resource> has been made read-only. This was the "
 "default calendar for archived alarms."
 msgstr ""
+"<resource>%1</resource> 캘린더가 읽기 전용으로 변경되었습니다. 보관된 알람에 "
+"사용할 기본 캘린더였습니다."
 
 #: resources/resources.cpp:500
 #, kde-kuit-format
@@ -7395,6 +7408,8 @@ msgid ""
 "The calendar <resource>%1</resource> has been made read-only. This was the "
 "default calendar for alarm templates."
 msgstr ""
+"<resource>%1</resource> 캘린더가 읽기 전용으로 변경되었습니다. 알람 템플릿에 "
+"사용할 기본 캘린더였습니다."
 
 #: resources/resources.cpp:505
 #, kde-kuit-format
@@ -7404,31 +7419,33 @@ msgid ""
 "the default calendar for:%2</para><para>Please select new default calendars."
 "</para>"
 msgstr ""
+"<para><resource>%1</resource> 캘린더가 읽기 전용으로 변경되었습니다. 다음 알"
+"람에 사용할 기본 캘린더였습니다: %2</para><para>새 기본 캘린더를 선택하십시"
+"오.</para>"
 
 #: resources/resources.cpp:513
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>Please select a new default calendar.</para>"
-msgstr ""
+msgstr "<para>%1</para><para>새 기본 캘린더를 선택하십시오.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
 msgctxt "@info A prompt for user to enter what to search for"
 msgid "Search"
-msgstr ""
+msgstr "검색"
 
 #: resources/resourcetype.cpp:359
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "KAlarm Calendar File"
-msgstr "KAlarm 달력 파일"
+msgstr "KAlarm 캘린더 파일"
 
 #: resources/resourcetype.cpp:359
-#, fuzzy, kde-format
-#| msgid "Path to KAlarm directory."
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "KAlarm Calendar Directory"
-msgstr "KAlarm 디렉터리 경로입니다."
+msgstr "KAlarm 캘린더 디렉터리"
 
 #: resources/resourcetype.cpp:360
 #, kde-format
@@ -7443,9 +7460,7 @@ msgid "URL"
 msgstr "URL"
 
 #: resources/resourcetype.cpp:362
-#, fuzzy, kde-format
-#| msgctxt "@info Directory in filesystem"
-#| msgid "Directory"
+#, kde-format
 msgctxt "@item:intext What a resource is stored in (directory in filesystem)"
 msgid "Directory"
 msgstr "디렉터리"
@@ -7454,84 +7469,68 @@ msgstr "디렉터리"
 #, kde-format
 msgctxt "@info"
 msgid "A previous load is still in progress."
-msgstr ""
+msgstr "이전 불러오기 작업이 진행 중입니다."
 
 #: resources/singlefileresource.cpp:183 resources/singlefileresource.cpp:357
 #, kde-format
 msgctxt "@info"
 msgid "A previous save is still in progress."
-msgstr ""
+msgstr "이전 저장 작업이 진행 중입니다."
 
 #: resources/singlefileresource.cpp:232
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to save calendar to <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create calendar file <filename>%1</filename>."
-msgstr "일정을 <filename>%1</filename>에 저장하지 못함"
+msgstr "<filename>%1</filename> 캘린더 파일을 생성할 수 없습니다."
 
 #: resources/singlefileresource.cpp:247
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to save calendar to <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create writable calendar file <filename>%1</filename>."
-msgstr "일정을 <filename>%1</filename>에 저장하지 못함"
+msgstr "<filename>%1</filename> 쓰기 가능한 캘린더 파일을 생성할 수 없습니다."
 
 #: resources/singlefileresource.cpp:602
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to save calendar to <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
-msgstr "일정을 <filename>%1</filename>에 저장하지 못함"
+msgstr "<filename>%1</filename> 파일을 불러올 수 없습니다."
 
 #: resources/singlefileresource.cpp:634
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
-msgstr "일정 파일"
+msgstr "캘린더를 열지 않았습니다."
 
 #: resources/singlefileresource.cpp:647
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to save calendar to <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
-msgstr "일정을 <filename>%1</filename>에 저장하지 못함"
+msgstr "<filename>%1</filename> 파일을 저장할 수 없습니다."
 
 #: resources/singlefileresource.cpp:739
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to save calendar to <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr "일정을 <filename>%1</filename>에 저장하지 못함"
+msgstr "<filename>%1</filename> 파일을 불러올 수 없습니다.(%2)"
 
 #: resources/singlefileresource.cpp:776
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to save calendar to <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"
-msgstr "일정을 <filename>%1</filename>에 저장하지 못함"
+msgstr "<filename>%1</filename> 파일을 저장할 수 없습니다.(%2)"
 
 #: resources/singlefileresourceconfigdialog.cpp:33
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Calendar"
-msgstr "달력 설정"
+msgstr "캘린더 설정"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:21
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@title:group"
 msgid "Calendar File"
-msgstr "일정 파일"
+msgstr "캘린더 파일"
 
 #. i18n: ectx: property (html), widget (KTextEdit, pathDescription)
 #: resources/singlefileresourceconfigdialog.ui:68
@@ -7541,12 +7540,12 @@ msgid ""
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
+"이 캘린더를 포함할 파일을 선택하십시오. 파일이 없으면 새로 만듭니다. 원격 파"
+"일의 URL을 지정했다면 해당 파일의 변경 사항 감시를 사용할 수 없습니다."
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Name of a calendar"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Active Alarms"
 msgstr "활성 알람"
@@ -7560,27 +7559,23 @@ msgstr "보관된 알람"
 
 #. i18n: ectx: property (text), widget (QRadioButton, templateRadio)
 #: resources/singlefileresourceconfigdialog.ui:112
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Name of a calendar"
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Alarm Templates"
 msgstr "알람 템플릿"
 
 #. i18n: ectx: property (html), widget (KTextEdit, alarmTypeDescription)
 #: resources/singlefileresourceconfigdialog.ui:133
-#, fuzzy, kde-format
-#| msgid "Select which alarm type this resource should contain."
+#, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr "이 리소스에 포함될 알람 종류를 선택하십시오."
+msgstr "이 캘린더에 포함할 알람 형식을 선택하십시오."
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
-#, fuzzy, kde-format
-#| msgid "Alarm types."
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm type:"
-msgstr "알람 종류."
+msgstr "알람 형식:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, activeAlarmsText)
 #: resources/singlefileresourceconfigdialog.ui:155
@@ -7612,20 +7607,16 @@ msgstr "표시 이름"
 
 #. i18n: ectx: property (text), widget (QLabel, label_1)
 #: resources/singlefileresourceconfigdialog.ui:201
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "&Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr "이름(&N):"
+msgstr "이름:"
 
 #. i18n: ectx: property (html), widget (KTextEdit, nameDescription)
 #: resources/singlefileresourceconfigdialog.ui:222
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Enter the name or URL of a text or image file to display."
+#, kde-format
 msgid "Enter the display name used to identify this calendar."
-msgstr "표시할 텍스트나 그림의 URL을 입력하십시오."
+msgstr "이 캘린더를 표시할 때 식별할 이름을 입력하십시오."
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:232
@@ -7643,27 +7634,22 @@ msgstr "읽기 전용"
 
 #. i18n: ectx: property (html), widget (KTextEdit, readOnlyDescription)
 #: resources/singlefileresourceconfigdialog.ui:254
-#, fuzzy, kde-format
-#| msgid ""
-#| "If read-only mode is enabled, no changes will be written to the file "
-#| "selected above. Read-only mode will be automatically enabled if you do "
-#| "not have write access to the file or the file is on a remote server that "
-#| "does not support write access."
+#, kde-format
 msgid ""
 "If read-only mode is enabled, no changes will be written to the file. Read-"
 "only mode will be automatically enabled if you do not have write access to "
 "the file or the file is on a remote server that does not support write "
 "access."
 msgstr ""
-"읽기 전용 모드에서는 선택한 파일에 변경 사항을 저장하지 않습니다. 파일에 쓰"
-"기 권한이 없거나, 원격 서버가 쓰기 권한을 제공하지 않으면 읽기 전용 모드로 전"
-"환됩니다."
+"읽기 전용 모드에서는 파일에 변경 사항을 저장하지 않습니다. 파일에 쓰기 권한"
+"이 없거나, 원격 서버가 쓰기 권한을 제공하지 않으면 읽기 전용 모드로 전환됩니"
+"다."
 
 #: resourceselector.cpp:50
 #, kde-format
 msgctxt "@title:group"
 msgid "Calendars"
-msgstr "달력"
+msgstr "캘린더"
 
 #: resourceselector.cpp:54
 #, kde-format
@@ -7687,7 +7673,7 @@ msgstr "알람 템플릿"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which type of data to show alarm calendars for"
-msgstr ""
+msgstr "다음 형식에 대한 알람 캘린더 표시"
 
 #: resourceselector.cpp:68
 #, kde-format
@@ -7697,26 +7683,27 @@ msgid ""
 "whether a calendar is enabled (checked) or disabled (unchecked). The default "
 "calendar is shown in bold."
 msgstr ""
+"선택한 형식에 사용할 수 있는 캘린더 목록입니다. 선택한 상태는 해당 캘린더가 "
+"활성화되었거나 비활성화되었음을 의미합니다. 기본 캘린더는 굵은 글씨로 표시됩"
+"니다."
 
 #: resourceselector.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Choose Calendar"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reconfigure the selected calendar"
-msgstr "일정 선택"
+msgstr "선택한 캘린더 다시 설정"
 
 #: resourceselector.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the highlighted calendar's configuration"
-msgstr ""
+msgstr "강조된 캘린더의 설정 편집"
 
 #: resourceselector.cpp:84
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected calendar from the list"
-msgstr ""
+msgstr "선택한 캘린더를 목록에서 삭제"
 
 #: resourceselector.cpp:85
 #, kde-kuit-format
@@ -7726,30 +7713,32 @@ msgid ""
 "calendar itself is left intact, and may subsequently be reinstated in the "
 "list if desired.</para>"
 msgstr ""
+"<para>선택한 캘린더를 목록에서 삭제합니다.</para><para>캘린더 그 자체는 유지"
+"되며, 필요한 경우 나중에 다시 추가할 수 있습니다.</para>"
 
 #: resourceselector.cpp:111
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new active alarm calendar"
-msgstr ""
+msgstr "새 활성 알람 캘린더 추가"
 
 #: resourceselector.cpp:115
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new archived alarm calendar"
-msgstr ""
+msgstr "새 보관된 알람 캘린더 추가"
 
 #: resourceselector.cpp:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new alarm template calendar"
-msgstr ""
+msgstr "새 알람 템플릿 캘린더 추가"
 
 #: resourceselector.cpp:231
 #, kde-format
 msgctxt "@info"
 msgid "You cannot remove your default active alarm calendar."
-msgstr ""
+msgstr "활성 기본 알람 캘린더를 삭제할 수 없습니다."
 
 #: resourceselector.cpp:238
 #, kde-format
@@ -7758,12 +7747,14 @@ msgid ""
 "You cannot remove your default archived alarm calendar while expired alarms "
 "are configured to be kept."
 msgstr ""
+"만료된 알람을 보관하기로 설정했다면 기본 보관된 알람 캘린더를 삭제할 수 없습"
+"니다."
 
 #: resourceselector.cpp:253
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>It also contains:%1</para>"
-msgstr ""
+msgstr "<para>다음을 포함함: %1</para>"
 
 #: resourceselector.cpp:254
 #, kde-kuit-format
@@ -7772,17 +7763,16 @@ msgid ""
 "<para><resource>%1</resource> is the default calendar for:%2</para>"
 "%3<para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
+"<para><resource>%1</resource>이(가) 다음의 기본 캘린더입니다: %2</para>"
+"%3<para>모든 캘린더 목록에서 삭제하시겠습니까?</para>"
 
 #: resourceselector.cpp:258
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Do you really want to delete the selected alarm template?"
-#| msgid_plural "Do you really want to delete the %1 selected alarm templates?"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Do you really want to remove your default calendar (<resource>%1</resource>) "
 "from the list?"
-msgstr "선택한 %1개의 알람 템플릿을 삭제하시겠습니까?"
+msgstr "목록에서 기본 캘린더(<resource>%1</resource>)를 삭제하시겠습니까?"
 
 #: resourceselector.cpp:261
 #, kde-kuit-format
@@ -7791,109 +7781,88 @@ msgid ""
 "<para><resource>%1</resource> contains:%2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
+"<para><resource>%1</resource>에서 다음을 포함함: %2</para><para>모든 캘린더 "
+"목록에서 삭제하시겠습니까?</para>"
 
 #: resourceselector.cpp:264
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Do you really want to delete the selected alarm template?"
-#| msgid_plural "Do you really want to delete the %1 selected alarm templates?"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Do you really want to remove the calendar <resource>%1</resource> from the "
 "list?"
-msgstr "선택한 %1개의 알람 템플릿을 삭제하시겠습니까?"
+msgstr "<resource>%1</resource> 캘린더를 목록에서 삭제하시겠습니까?"
 
 #: resourceselector.cpp:289
-#, fuzzy, kde-format
-#| msgctxt "@action Reload calendar"
-#| msgid "Re&load"
+#, kde-format
 msgctxt "@action Reload calendar"
 msgid "Reload"
-msgstr "새로 고침(&L)"
+msgstr "새로 고침"
 
 #: resourceselector.cpp:292
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Show more options"
+#, kde-format
 msgctxt "@action"
 msgid "Show Details"
-msgstr "옵션 더 보기"
+msgstr "자세한 정보 표시"
 
 #: resourceselector.cpp:295
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Font && Color..."
+#, kde-format
 msgctxt "@action"
 msgid "Set Color..."
-msgstr "글꼴과 색상..."
+msgstr "색상 설정..."
 
 #: resourceselector.cpp:298
 #, kde-format
 msgctxt "@action"
 msgid "Clear Color"
-msgstr ""
+msgstr "색상 지우기"
 
 #: resourceselector.cpp:304
-#, fuzzy, kde-format
-#| msgid "Update backend storage format."
+#, kde-format
 msgctxt "@action"
 msgid "Update Calendar Format"
-msgstr "백엔드 저장소 형식을 업데이트합니다."
+msgstr "캘린더 형식 업데이트"
 
 #: resourceselector.cpp:307
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action"
 msgid "Remove"
 msgstr "삭제"
 
 #: resourceselector.cpp:313
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Add..."
+#, kde-format
 msgctxt "@action"
 msgid "Add..."
 msgstr "추가..."
 
 #: resourceselector.cpp:316
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Im&port..."
+#, kde-format
 msgctxt "@action"
 msgid "Import..."
-msgstr "가져오기(&P)..."
+msgstr "가져오기..."
 
 #: resourceselector.cpp:372
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Active Alarms"
-msgstr "활성 알람"
+msgstr "활성 알람의 기본값으로 사용"
 
 #: resourceselector.cpp:373
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Archived Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
-msgstr "보관된 알람"
+msgstr "보관된 알람의 기본값으로 사용"
 
 #: resourceselector.cpp:374
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Delete Alarm Template"
-#| msgid_plural "Delete Alarm Templates"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Alarm Templates"
-msgstr "알람 템플릿 삭제"
+msgstr "알람 템플릿의 기본값으로 사용"
 
 #: resourceselector.cpp:503
 #, kde-format
 msgctxt "@info"
 msgid "Active alarms"
-msgstr "알람 활성화"
+msgstr "활성 알람"
 
 #: resourceselector.cpp:505
 #, kde-format
@@ -7911,37 +7880,37 @@ msgstr "알람 템플릿"
 #, kde-format
 msgctxt "@info List separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: resourceselector.cpp:511
 #, kde-format
 msgctxt "@info"
 msgid "Read-write"
-msgstr ""
+msgstr "읽기/쓰기"
 
 #: resourceselector.cpp:513
 #, kde-format
 msgctxt "@info"
 msgid "Enabled"
-msgstr ""
+msgstr "활성화됨"
 
 #: resourceselector.cpp:514
 #, kde-format
 msgctxt "@info"
 msgid "Disabled"
-msgstr ""
+msgstr "비활성화됨"
 
 #: resourceselector.cpp:516
 #, kde-format
 msgctxt "@info Parameter in 'Default calendar: Yes/No'"
 msgid "Yes"
-msgstr ""
+msgstr "예"
 
 #: resourceselector.cpp:517
 #, kde-format
 msgctxt "@info Parameter in 'Default calendar: Yes/No'"
 msgid "No"
-msgstr ""
+msgstr "아니요"
 
 #: resourceselector.cpp:519
 #, kde-kuit-format
@@ -7951,14 +7920,16 @@ msgid ""
 "<filename>%6</filename><nl/>Permissions: %7<nl/>Status: %8<nl/>Default "
 "calendar: %9</para>"
 msgstr ""
+"<title>%1</title><para>ID: %2<nl/>캘린더 형식: %3<nl/>내용: %4<nl/>%5: "
+"<filename>%6</filename><nl/>권한: %7<nl/>상태: %8<nl/>기본 캘린더: %9</para>"
 
 #: rtcwakeaction.cpp:88
 #, kde-kuit-format
 msgctxt "@text/plain"
 msgid "Could not run <command>%1</command> to set wake from suspend"
 msgstr ""
-"절전 모드에서 깨우기를 설정하기 위해 <command>%1</command>을(를) 실행할 수 없"
-"습니다"
+"절전 모드에서 깨우기를 설정하기 위해 <command>%1</command> 명령을 실행할 수 "
+"없음"
 
 #: rtcwakeaction.cpp:91
 #, kde-kuit-format
@@ -7967,8 +7938,8 @@ msgid ""
 "Error setting wake from suspend.<nl/>Command was: <command>%1 %2</"
 "command><nl/>Error code: %3."
 msgstr ""
-"절전 모드에서 깨우기 설정 오류.<nl/>명령은: <command>%1 %2</command><nl/> 오"
-"류 코드: %3."
+"절전 모드에서 깨우기 설정 오류.<nl/>명령: <command>%1 %2</command><nl/>오류 "
+"코드: %3."
 
 #: sounddlg.cpp:43
 #, kde-format
@@ -7980,7 +7951,7 @@ msgstr "반복"
 #, kde-format
 msgctxt "@option:check"
 msgid "Set volume"
-msgstr ""
+msgstr "음량 설정"
 
 #: sounddlg.cpp:54
 #, kde-format
@@ -7988,37 +7959,37 @@ msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly for as long as the "
 "message is displayed."
-msgstr ""
+msgstr "이 옵션을 사용하면 메시지를 표시할 때까지 소리 파일을 반복 재생합니다."
 
 #: sounddlg.cpp:150
 #, kde-format
 msgctxt "@label"
 msgid "Sound file:"
-msgstr "사운드 파일:"
+msgstr "소리 파일:"
 
 #: sounddlg.cpp:167 sounddlg.cpp:478
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
-msgstr ""
+msgstr "소리 테스트"
 
 #: sounddlg.cpp:168 sounddlg.cpp:479
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
-msgstr ""
+msgstr "선택한 소리 파일을 재생합니다."
 
 #: sounddlg.cpp:175
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
-msgstr ""
+msgstr "재생할 소리 파일 이름이나 URL을 입력하십시오."
 
 #: sounddlg.cpp:186
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
-msgstr ""
+msgstr "재생할 소리 파일을 선택하십시오."
 
 #: sounddlg.cpp:208
 #, kde-format
@@ -8036,25 +8007,25 @@ msgstr "초"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how many seconds to pause between repetitions."
-msgstr ""
+msgstr "반복 재생 사이에 일시 정지할 시간을 초 단위로 입력하십시오."
 
 #: sounddlg.cpp:220
 #, kde-format
 msgctxt "@title:group Sound volume"
 msgid "Volume"
-msgstr ""
+msgstr "음량"
 
 #: sounddlg.cpp:236
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
-msgstr ""
+msgstr "소리 파일을 재생할 때 사용할 음량을 지정하려면 선택하십시오."
 
 #: sounddlg.cpp:244
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the volume for playing the sound file."
-msgstr ""
+msgstr "소리 파일을 재생할 때 사용할 음량을 지정하십시오."
 
 #: sounddlg.cpp:256
 #, kde-format
@@ -8067,12 +8038,13 @@ msgstr "페이드"
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
 msgstr ""
+"소리 파일을 처음으로 재생 시작할 때 음량 페이드를 사용하려면 선택하십시오."
 
 #: sounddlg.cpp:266
 #, kde-format
 msgctxt "@label:spinbox Time period over which to fade the sound"
 msgid "Fade time:"
-msgstr ""
+msgstr "페이드 시간:"
 
 #: sounddlg.cpp:275
 #, kde-format
@@ -8080,18 +8052,19 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many seconds to fade the sound before reaching the set volume."
 msgstr ""
+"지정한 음량에 도달할 때까지 소리를 페이드할 시간을 초 단위로 입력하십시오."
 
 #: sounddlg.cpp:282
 #, kde-format
 msgctxt "@label:slider"
 msgid "Initial volume:"
-msgstr ""
+msgstr "초기 음량:"
 
 #: sounddlg.cpp:291
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the initial volume for playing the sound file."
-msgstr ""
+msgstr "소리 파일을 재생할 때 사용할 초기 음량을 지정하십시오."
 
 #: soundpicker.cpp:41
 #, kde-format
@@ -8136,24 +8109,31 @@ msgid ""
 "is spoken. (Option requires working Qt text-to-speech installation.)</item></"
 "list></para>"
 msgstr ""
+"<para>메시지를 표시할 때 재생할 소리를 선택하십시오.<list><item><interface>"
+"%1</interface>: 메시지를 조용히 표시합니다.</item><item><interface>%2</"
+"interface>: 간단한 삑 소리를 재생합니다.</item><item><interface>%3</"
+"interface>: 오디오 파일을 재생합니다. 파일과 재생 옵션을 설정할 수 있습니다"
+"(알림을 사용하는 경우 이 옵션을 사용할 수 없음).</item><item><interface>%4</"
+"interface>: 메시지 텍스트를 말합니다(Qt 텍스트 음성 합성이 설치되어 있어야 "
+"함).</item></list></para>"
 
 #: soundpicker.cpp:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure sound file"
-msgstr ""
+msgstr "소리 파일 설정"
 
 #: soundpicker.cpp:88
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
-msgstr ""
+msgstr "알람을 표시할 때 재생할 소리 파일을 설정합니다."
 
 #: soundpicker.cpp:257
 #, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
-msgstr ""
+msgstr "소리 파일"
 
 #: soundpicker.cpp:316
 #, kde-format
@@ -8165,39 +8145,37 @@ msgstr "오디오 파일"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"
-msgstr ""
+msgstr "소리 파일 선택"
 
 #: specialactions.cpp:32
 #, kde-format
 msgctxt "@action:button"
 msgid "Special Actions..."
-msgstr ""
+msgstr "특수 동작..."
 
 #: specialactions.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Command execution error"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Set commands to execute"
-msgstr "명령 실행 오류"
+msgstr "실행할 명령 설정"
 
 #: specialactions.cpp:40
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify actions to execute before and after the alarm is displayed."
-msgstr ""
+msgstr "알람을 표시하기 전과 표시한 후에 실행할 동작을 지정합니다."
 
 #: specialactions.cpp:91
 #, kde-format
 msgctxt "@title:window"
 msgid "Special Alarm Actions"
-msgstr ""
+msgstr "특수 알람 동작"
 
 #: specialactions.cpp:152
 #, kde-format
 msgctxt "@title:group"
 msgid "Pre-Alarm Action"
-msgstr ""
+msgstr "알람 이전 동작"
 
 #: specialactions.cpp:160 specialactions.cpp:195
 #, kde-format
@@ -8215,12 +8193,16 @@ msgid ""
 "will wait for the command to complete before displaying the alarm.</note></"
 "para>"
 msgstr ""
+"<para>알람을 표시하기 전에 실행할 셸 명령을 입력하십시오.</para><para>본 알람"
+"이 표시될 때에만 명령이 실행되며, 미리 알림이나 지연된 알람이 표시될 때에는 "
+"실행되지 않습니다.</para><para><note>KAlarm에서는 명령 실행이 끝나기를 기다"
+"린 후 알람을 표시합니다.</note></para>"
 
 #: specialactions.cpp:173
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute for deferred alarms"
-msgstr ""
+msgstr "연기된 알람에 대해서 실행"
 
 #: specialactions.cpp:174
 #, kde-kuit-format
@@ -8230,12 +8212,15 @@ msgid ""
 "displayed.</para><para>If checked, the pre-alarm command is also executed "
 "before a deferred alarm is displayed.</para>"
 msgstr ""
+"<para>이 옵션을 사용하지 않으면 본 알람이 표시되기 전에만 명령을 실행합니다."
+"</para><para>이 옵션을 사용하면 연기된 알람이 표시되기 전에도 알람 실행 전 명"
+"령을 실행합니다.</para>"
 
 #: specialactions.cpp:178
 #, kde-format
 msgctxt "@option:check"
 msgid "Cancel alarm on error"
-msgstr ""
+msgstr "오류 발생 시 알람 취소"
 
 #: specialactions.cpp:179
 #, kde-format
@@ -8244,6 +8229,8 @@ msgid ""
 "Cancel the alarm if the pre-alarm command fails, i.e. do not display the "
 "alarm or execute any post-alarm action command."
 msgstr ""
+"알람 이전 동작 명령이 실패했을 때 알람을 취소합니다. 이때는 알람을 표시하지 "
+"않으며, 알람 이후 동작 명령을 실행하지 않습니다."
 
 #: specialactions.cpp:183
 #, kde-format
@@ -8251,12 +8238,13 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Do not show error status or error message if the pre-alarm command fails."
 msgstr ""
+"알람 이전 명령이 실패했을 때 오류 상태나 오류 메시지를 표시하지 않습니다."
 
 #: specialactions.cpp:187
 #, kde-format
 msgctxt "@title:group"
 msgid "Post-Alarm Action"
-msgstr ""
+msgstr "알람 이후 동작"
 
 #: specialactions.cpp:201
 #, kde-kuit-format
@@ -8267,6 +8255,9 @@ msgid ""
 "you defer the alarm, it is not executed until the alarm is finally "
 "acknowledged or closed.</para>"
 msgstr ""
+"<para>알람 창을 닫은 이후에 실행할 셸 명령을 입력하십시오.</para><para>이 명"
+"령은 미리 알림 창을 닫을 때에는 실행되지 않습니다. 알람을 지연시키면 알람을 "
+"최종적으로 수락하거나 닫을 때까지는 명령이 실행되지 않습니다.</para>"
 
 #: templatedlg.cpp:49
 #, kde-format
@@ -8278,42 +8269,37 @@ msgstr "알람 템플릿"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of alarm templates"
-msgstr ""
+msgstr "알람 템플릿 목록"
 
 #: templatedlg.cpp:73
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
-msgstr ""
+msgstr "새로 만들기"
 
 #: templatedlg.cpp:77
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Error recreating alarm template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
-msgstr "알람 템플릿을 만드는 중 오류 발생"
+msgstr "새 알람 템플릿 만들기"
 
 #: templatedlg.cpp:78
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Create a new alarm template"
-msgstr ""
+msgstr "새 알람 템플릿 만들기"
 
 #: templatedlg.cpp:83
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Delete Alarm Template"
-#| msgid_plural "Delete Alarm Templates"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
-msgstr "알람 템플릿 삭제"
+msgstr "선택한 알람 템플릿 편집"
 
 #: templatedlg.cpp:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the currently highlighted alarm template"
-msgstr ""
+msgstr "현재 강조된 알람 템플릿 편집"
 
 #: templatedlg.cpp:87
 #, kde-format
@@ -8325,7 +8311,7 @@ msgstr "복사"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template based on the selected template"
-msgstr ""
+msgstr "현재 선택한 템플릿을 기반으로 새 알람 템플릿 만들기"
 
 #: templatedlg.cpp:90
 #, kde-format
@@ -8333,23 +8319,19 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Create a new alarm template based on a copy of the currently highlighted "
 "template"
-msgstr ""
+msgstr "현재 강조된 템플릿의 복사본을 기반으로 새 알람 템플릿 만들기"
 
 #: templatedlg.cpp:95
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Delete the currently highlighted alarm template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
-msgstr "현재 선택한 알람 템플릿 삭제"
+msgstr "선택한 알람 템플릿 삭제"
 
 #: templatedlg.cpp:96
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Delete the currently highlighted alarm template"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
-msgstr "현재 선택한 알람 템플릿 삭제"
+msgstr "현재 강조된 알람 템플릿 삭제"
 
 #: templatedlg.cpp:178
 #, kde-format
@@ -8375,18 +8357,16 @@ msgstr "삭제(&D)"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Alarm Template"
-msgstr ""
+msgstr "알람 템플릿 선택"
 
 #: templatepickdlg.cpp:60
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
-msgstr ""
+msgstr "새 알람을 만들 때 사용할 템플릿을 선택합니다."
 
 #: traywindow.cpp:70
-#, fuzzy, kde-format
-#| msgctxt "@info Action to create a new alarm"
-#| msgid "New alarm"
+#, kde-format
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "새 알람"
@@ -8394,25 +8374,25 @@ msgstr "새 알람"
 #: traywindow.cpp:295
 #, kde-format
 msgid "Disabled"
-msgstr ""
+msgstr "비활성화됨"
 
 #: traywindow.cpp:300
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
-msgstr ""
+msgstr "(일부 알람 비활성화됨)"
 
 #: traywindow.cpp:360
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
-msgstr ""
+msgstr "(%1%2:%3)"
 
 #: traywindow.cpp:362
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"
-msgstr ""
+msgstr "%1%2:%3"
 
 #: undo.cpp:404
 #, kde-format
@@ -8538,18 +8518,10 @@ msgstr "절전 모드에서 깨우기"
 #, kde-format
 msgctxt "@info"
 msgid "Cannot schedule wakeup time for a date-only alarm"
-msgstr "날짜 전용 알람의 절전 모드 해제 시간을 예약할 수 없습니다"
+msgstr "날짜만 있는 알람의 절전 모드에서 깨우기 시간을 예약할 수 없음"
 
 #: wakedlg.cpp:150
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>This wakeup will cancel any existing wakeup which has been set by "
-#| "KAlarm or any other application, because your computer can only schedule "
-#| "a single wakeup time.</para><para><b>Note:</b> Wake From Suspend is not "
-#| "supported at all on some computers, especially older ones, and some "
-#| "computers only support setting a wakeup time up to 24 hours ahead. You "
-#| "may wish to set up a test alarm to check your system's capability.</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>This wakeup will cancel any existing wakeup which has been set by "
@@ -8559,18 +8531,18 @@ msgid ""
 "support setting a wakeup time up to 24 hours ahead. You may wish to set up a "
 "test alarm to check your system's capability.</note></para>"
 msgstr ""
-"<para>이 절전 모드 해제는 컴퓨터가 단일 절전 모드 해제 시간만 예약할 수 있기 "
-"때문에 KAlarm 또는 다른 앱에서 설정한 기존 절전 모드 해제를 취소하십시오.</"
-"para><para><b>참고:</b> 절전 모드에서 깨우기 기능은 일부 컴퓨터, 특히 오래된 "
-"컴퓨터에서는 전혀 지원되지 않으며 일부 컴퓨터에서는 최대 24시간 전에 깨우기 "
-"시간 설정만 지원하십시오. 테스트 알람을 설정하여 시스템의 기능을 확인할 수 있"
-"습니다.</para>"
+"<para>컴퓨터에서는 한 번에 하나의 절전 모드 깨우기 시간만 지정할 수 있기 때문"
+"에, 이 깨우기 동작은 KAlarm이나 다른 앱에서 설정한 깨우기 동작을 취소합니다."
+"</para><para><note>일부 컴퓨터(특히 구형 기종)에서는 절전 모드에서 깨우기를 "
+"지원하지 않으며, 또 다른 일부 컴퓨터에서는 최대 24시간 내의 깨우기 시간만 지"
+"원할 수도 있습니다. 테스트 알람을 설정하여 시스템에서 지원하는 기능을 확인할 "
+"수 있습니다.</note></para>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: wakedlg.ui:21
 #, kde-format
 msgid "Wake From Suspend Alarm"
-msgstr "절전 모드 알람에서 깨우기"
+msgstr "절전 모드에서 깨우기 알람"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, showWakeButton)
 #: wakedlg.ui:42
@@ -8585,8 +8557,8 @@ msgid ""
 "Highlight the current wake-from-suspend alarm in the alarm list. This button "
 "is disabled if no wake-from-suspend alarm is configured."
 msgstr ""
-"알람 목록에서 현재 절전 모드에서 깨우기 알람을 강조화면표시하십시오. 절전 모"
-"드에서 깨우기에서 시작 알람이 구성되어 있지 않으면 이 버튼이 비활성화됩니다."
+"알람 목록에서 현재의 절전 모드에서 깨우기 알람을 강조합니다. 절전 모드에서 깨"
+"우기 알람이 설정되지 않았으면 이 단추가 비활성화됩니다."
 
 #. i18n: ectx: property (text), widget (QPushButton, showWakeButton)
 #: wakedlg.ui:48
@@ -8598,7 +8570,7 @@ msgstr "현재 알람 표시"
 #: wakedlg.ui:55
 #, kde-format
 msgid "Set highlighted alarm as the wake-from-suspend alarm"
-msgstr "강조표시된 알람을 절전 모드에서 깨우기 알람으로 설정"
+msgstr "강조된 알람을 절전 모드에서 깨우기 알람으로 설정"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, useWakeButton)
 #: wakedlg.ui:58
@@ -8607,20 +8579,20 @@ msgid ""
 "Set the alarm highlighted in the alarm list to wake-from-suspend. This "
 "replaces any existing wake-from-suspend alarm."
 msgstr ""
-"알람 목록에서 강조 표시된 알람을 절전 모드에서 깨우기로 설정하십시오. 이렇게 "
-"하면 기존의 모든 절전 모드에서 깨우기 알람이 대체됩니다."
+"알람 목록에서 강조된 알람을 절전 모드에서 깨우기 알람으로 설정합니다. 기존의 "
+"절전 모드에서 깨우기 알람을 비활성화합니다."
 
 #. i18n: ectx: property (text), widget (QPushButton, useWakeButton)
 #: wakedlg.ui:61
 #, kde-format
 msgid "Use highlighted alarm"
-msgstr "강조 표시된 알람 사용"
+msgstr "강조된 알람 사용"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cancelWakeButton)
 #: wakedlg.ui:74
 #, kde-format
 msgid "Cancel the current wake-from-suspend"
-msgstr "절전 모드에서 깨우기 취소"
+msgstr "현재 절전 모드에서 깨우기 취소"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, cancelWakeButton)
 #: wakedlg.ui:77
@@ -8630,9 +8602,9 @@ msgid ""
 "cancel the alarm itself, which will still trigger in the normal way. This "
 "button is disabled if no wake-from-suspend alarm is configured."
 msgstr ""
-"현재 구성된 절전 모드에서 깨우기를 취소하십시오. 이렇게 해도 알람 자체는 취소"
-"되지 않으며 정상적인 방식으로 트리거됩니다. 절전 모드에서 깨우기 알람이 구성"
-"되지 않으면 이 버튼이 비활성화됩니다."
+"현재 설정된 절전 모드에서 깨우기를 취소합니다. 알람 그 자체는 취소되지 않으"
+"며, 일반적인 방식으로 트리거됩니다. 절전 모드에서 깨우기 알람이 설정되어 있"
+"지 않으면 이 단추가 비활성화됩니다."
 
 #. i18n: ectx: property (text), widget (QPushButton, cancelWakeButton)
 #: wakedlg.ui:80
@@ -8648,15 +8620,15 @@ msgid ""
 "suspend. This can be used to ensure that the system is fully restored by the "
 "time the alarm triggers."
 msgstr ""
-"알람 트리거 시간(분)을 입력하여 시스템 절전 모드로부터 절전 모드 해제하십시"
-"오. 알람이 트리거 될 때까지 시스템이 완전히 복원되도록하는 데 사용할 수 있습"
-"니다."
+"알람이 트리거되기 전에 시스템을 절전 모드에서 깨울 시간 간격을 분 단위로 입력"
+"하십시오. 알람이 트리거될 시간에 시스템이 완전히 복원되도록 하는 데 사용할 "
+"수 있습니다."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: wakedlg.ui:123
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
-msgstr "알람이 절전 모드에서 깨우기 전까지의 시간(분)"
+msgstr "알람이 트리거되기 전에 절전 모드에서 깨어날 분 단위 시간 간격"
 
 #~ msgctxt "@label"
 #~ msgid "Suppress autostart at login"
