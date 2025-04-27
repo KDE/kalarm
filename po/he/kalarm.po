@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2025-03-04 08:29+0200\n"
+"PO-Revision-Date: 2025-04-26 09:59+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.12.2\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3040,10 +3040,10 @@ msgid "Foreground color:"
 msgstr "צבע חזית:"
 
 #: fontcolour.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the alarm message foreground color"
-msgstr "הצגת התזכורת עכשיו"
+msgstr "נא לבחור את צבע חזית הודעת התזכורת"
 
 #: fontcolour.cpp:68
 #, kde-format
@@ -3052,10 +3052,10 @@ msgid "Background color:"
 msgstr "צבע רקע:"
 
 #: fontcolour.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the alarm message background color"
-msgstr "הצגת התזכורת עכשיו"
+msgstr "נא לבחור את צבע רקע הודעת הזתכורת"
 
 #: fontcolour.cpp:83
 #, kde-format
@@ -3064,13 +3064,11 @@ msgid "Use default font"
 msgstr "להשתמש בגופן ברירת המחדל"
 
 #: fontcolour.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to use the default font current at the time the alarm is displayed."
-msgstr ""
-"בחר באפשרות זו כדי שהגדרת ברירת המחדל של \"צליל\" בדו-שיח עריכת התזכורת תהיה "
-"צפצוף."
+msgstr "נא לסמן כדי להשתמש בגופן ברירת המחדל הנוכחי בזמן שהתזכורת מופיעה."
 
 #: fontcolour.h:26
 #, kde-format
@@ -3084,17 +3082,17 @@ msgid "Font && Color..."
 msgstr "גופן וצבע…"
 
 #: fontcolourbutton.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Set alarm message font and color"
-msgstr "הצגת התזכורת עכשיו"
+msgstr "הגדרת גופן וצבע הודעת תזכורת"
 
 #: fontcolourbutton.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Choose the font, and foreground and background color, for the alarm message."
-msgstr "בחר את צבע הטקסט והרקע של ההודעה של התזכורת."
+msgstr "נא לבחור את הגופן, ואת צבע החזית והרקע להודעת התזכורת."
 
 #: fontcolourbutton.cpp:50
 #, kde-format
@@ -3145,12 +3143,10 @@ msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
 msgstr "שגיאה בטעינת לוח שנה להוסיף אליו:<nl/><filename>%1</filename>"
 
 #: functions.cpp:1005
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
-msgstr ""
-"אין אפשרות לשמור את לוח השנה אל\n"
-"\"%1\""
+msgstr "נכשלה שמירת לוח השנה החדש אל:<nl/><filename>%1</filename>"
 
 #: functions.cpp:1018
 #, kde-kuit-format
@@ -5327,10 +5323,10 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:1064
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Discard archived alarms after:"
-msgstr "א&ל תאפשר תזכורות כאשר התוכנית לא פועלת"
+msgstr "להתעלם מהתראות בארכיון לאחר:"
 
 #: prefdlg.cpp:1073
 #, kde-format
@@ -5385,12 +5381,12 @@ msgid "Do you really want to delete all archived alarms?"
 msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
 
 #: prefdlg.cpp:1148
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid ""
 "Do you really want to delete all alarms in the default archived alarm "
 "calendar?"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr "למחוק את כל התזכורות בלוח השנה של התזכורות כברירת מחדל שעבר לארכיון?"
 
 #: prefdlg.cpp:1166
 #, kde-format
@@ -5544,24 +5540,26 @@ msgid ""
 msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
 
 #: prefdlg.cpp:1387
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "No valid 'Bcc' email address is specified."
-msgstr "לא צויינה כתובת דוא\"ל סמויה."
+msgstr "לא צוינה כתובת ‚עותק סמוי’ תקפה."
 
 #: prefdlg.cpp:1394
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Are you sure you want to save your changes?"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr "לשמור את השינויים שלך?"
 
 #: prefdlg.cpp:1400
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No default email address is currently set in <application>KMail</"
 "application>.</para><para>%1</para><para>%2</para>"
-msgstr "הזן את השעה האחרונה שבה יש לחזור על התזכורת"
+msgstr ""
+"<para>לא מוגדרת כרגע כתובת דוא״ל כברירת מחדל ב־<application>KMail</"
+"application>.</para><para>%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1405
 #, kde-kuit-format
