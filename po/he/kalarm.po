@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2025-04-26 09:59+0300\n"
+"PO-Revision-Date: 2025-05-07 09:05+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2794,12 +2794,10 @@ msgid "No email address specified"
 msgstr "לא צוינה כתובת דוא״ל"
 
 #: editdlgtypes.cpp:1475
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
-msgstr ""
-"קובץ לא תקף מצורף לדוא\"ל:\n"
-"%1"
+msgstr "צרופת דוא״ל שגויה: <filename>%1</filename>"
 
 #: editdlgtypes.cpp:1479
 #, fuzzy, kde-format
