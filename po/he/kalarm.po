@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2025-05-07 09:05+0300\n"
+"PO-Revision-Date: 2025-05-16 13:56+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.04.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1592,26 +1592,26 @@ msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת ה
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:367
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Command output"
-msgstr "&פקודה"
+msgstr "פלט פקודה"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:368
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Default setting in the alarm edit dialog for where to send command alarm "
 "output."
-msgstr "הצגת התזכורת עכשיו"
+msgstr "הגדרת ברירת מחדל בחלונית עריכת התזכורת לאן לשלוח את פלט תזכורת הפקודה."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:370
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "Discard Output"
-msgstr "&פקודה"
+msgstr "התעלמות מהפלט"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:371
@@ -1643,10 +1643,10 @@ msgstr "הגדרת ברירת המחדל של תדירות החזרה בדו-ש�
 
 #. i18n: ectx: label, entry (DefaultEmailBcc), group (Defaults)
 #: data/kalarmconfig.kcfg:381
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Copy email to self"
-msgstr "שליחת עותק מהדוא\"ל לעצמך"
+msgstr "עותק מהדוא״ל אליי"
 
 #. i18n: ectx: whatsthis, entry (DefaultEmailBcc), group (Defaults)
 #: data/kalarmconfig.kcfg:382
