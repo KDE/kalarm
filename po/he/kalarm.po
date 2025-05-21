@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2025-05-16 13:56+0300\n"
+"PO-Revision-Date: 2025-05-20 07:53+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1658,10 +1658,10 @@ msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת ה
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:386
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Recurrence period"
-msgstr "סוף החזרה"
+msgstr "תקופת מחזוריות"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:387 prefdlg.cpp:1497
