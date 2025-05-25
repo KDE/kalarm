@@ -231,7 +231,7 @@ msgstr "Zona horària…"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
-msgstr "Escolliu una zona horària per a esta alarma"
+msgstr "Trieu una zona horària per a esta alarma"
 
 #: alarmtimewidget.cpp:213
 #, kde-format
@@ -451,7 +451,7 @@ msgstr ""
 "<application>KAddressBook</application>, a excepció d'aquelles per a les que "
 "ja hi ha una alarma.</para><para>Podeu seleccionar múltiples dates de "
 "naixement d'una sola vegada arrossegant el ratolí sobre la llista o clicant "
-"el ratolí mentre premeu «Ctrl» o «Majúscules».</para>"
+"amb el ratolí mentre premeu «Ctrl» o «Majúscules».</para>"
 
 #: birthdaydlg.cpp:141
 #, kde-format
@@ -663,7 +663,7 @@ msgstr "Fitxer de so que s'ha de reproduir repetidament"
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr ""
-"Especifica la recurrència de l'alarma utilitzant la sintaxi de l'iCalendar"
+"Especifica la recurrència de l'alarma utilitzant la sintaxi d'iCalendar"
 
 #: commandoptions.cpp:238
 #, kde-format
@@ -1877,7 +1877,7 @@ msgid ""
 "occurrence of existing alarms is not re-evaluated when you change this "
 "setting."
 msgstr ""
-"Per a les recurrències anuals, escolliu quina data, si n'hi ha, en què el "
+"Per a les recurrències anuals, trieu quina data, si n'hi ha, en què el "
 "venciment de les alarmes del 29 de febrer han d'ocórrer en anys que no "
 "siguen de traspàs. <i>Nota</i>: L'ocurrència següent programada de les "
 "alarmes existents no serà tornada a avaluar quan canvieu esta opció."
@@ -2264,7 +2264,7 @@ msgstr "Carrega una plantilla…"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
-msgstr "Escolliu una plantilla d'alarma per a predefinir l'alarma"
+msgstr "Trieu una plantilla d'alarma per a predefinir l'alarma"
 
 #: editdlg.cpp:205
 #, kde-format
@@ -2533,7 +2533,7 @@ msgstr "Mostra més opcions"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
-msgstr "Escolliu un fitxer de registre"
+msgstr "Trieu un fitxer de registre"
 
 #: editdlgtypes.cpp:88
 #, kde-format
@@ -2640,7 +2640,7 @@ msgstr "Introduïu el nom o l'URL del fitxer de text/d'imatge que es mostrarà."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
-msgstr "Escolliu un fitxer"
+msgstr "Trieu un fitxer"
 
 #: editdlgtypes.cpp:203
 #, kde-format
@@ -3065,7 +3065,7 @@ msgstr "S'ha enviat un correu electrònic a:<nl/>%1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
-msgstr "Escolliu el fitxer que s'ha d'adjuntar"
+msgstr "Trieu el fitxer que s'ha d'adjuntar"
 
 #: editdlgtypes.cpp:1621
 #, kde-format
@@ -3109,8 +3109,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
 msgstr ""
-"Si està marcada, el fitxer de so es reproduirà repetidament fins que es faça "
-"clic en %1."
+"Si està marcada, el fitxer de so es reproduirà repetidament fins que es "
+"clique damunt %1."
 
 #: editdlgtypes.cpp:1849
 #, kde-format
@@ -3337,14 +3337,13 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Choose the font, and foreground and background color, for the alarm message."
 msgstr ""
-"Escolliu la lletra i el color de fons i primer pla per al missatge de "
-"l'alarma."
+"Trieu la lletra i el color de fons i primer pla per al missatge de l'alarma."
 
 #: fontcolourbutton.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
-msgstr "Escolliu la lletra i el color de l'alarma"
+msgstr "Trieu la lletra i el color de l'alarma"
 
 #: functions.cpp:147
 #, kde-format
@@ -4527,8 +4526,8 @@ msgid ""
 "Press the Shift key while clicking the spin buttons to adjust the time by a "
 "larger step (6 hours / 5 minutes)."
 msgstr ""
-"Premeu la tecla Majúscules en clicar damunt dels botons selectors per a "
-"ajustar l'hora a un pas més gran (6 hores / 5 minuts)."
+"Premeu la tecla «Majúscules» quan es clique damunt dels botons selectors per "
+"a ajustar l'hora a un pas més gran (6 hores / 5 minuts)."
 
 #: lib/timezonecombo.cpp:19
 #, kde-format
@@ -4759,7 +4758,7 @@ msgstr "Tipus d'alarma"
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
-msgstr "Escolliu el tipus d'alarma que s'ha de crear:"
+msgstr "Trieu el tipus d'alarma que s'ha de crear:"
 
 #: mainwindow.cpp:1689
 #, kde-format
@@ -5325,7 +5324,7 @@ msgid ""
 "Choose which application to use when a command alarm is executed in a "
 "terminal window"
 msgstr ""
-"Escolliu quina aplicació utilitzar quan s'execute una alarma d'ordre a una "
+"Trieu quina aplicació utilitzar quan s'execute una alarma d'ordre a una "
 "finestra de terminal"
 
 #: prefdlg.cpp:545
@@ -6001,7 +6000,7 @@ msgid ""
 "29th should occur in non-leap years.<note>The next scheduled occurrence of "
 "existing alarms is not re-evaluated when you change this setting.</note>"
 msgstr ""
-"Per a les recurrències anuals, escolliu quina data, si n'hi ha, en què el "
+"Per a les recurrències anuals, trieu quina data, si n'hi ha, en què el "
 "venciment de les alarmes del 29 de febrer han d'ocórrer en anys que no "
 "siguen de traspàs.<note>L'ocurrència següent programada de les alarmes "
 "existents no serà tornada a avaluar quan canvieu esta opció.</note>"
@@ -6072,7 +6071,7 @@ msgstr "Fitxer de so:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a sound file"
-msgstr "Escolliu un fitxer de so"
+msgstr "Trieu un fitxer de so"
 
 #: prefdlg.cpp:1605
 #, kde-format
@@ -7059,7 +7058,7 @@ msgid ""
 msgstr ""
 "El calendari <resource>%1</resource> es troba en un format antic "
 "(<application>KAlarm</application> versió %2), i només es podrà llegir, "
-"excepte si escolliu actualitzar-lo al format actual."
+"excepte si trieu actualitzar-lo al format actual."
 
 #: resources/calendarupdater.cpp:88
 #, kde-kuit-format
@@ -7071,7 +7070,7 @@ msgid ""
 msgstr ""
 "Alguna o totes les alarmes del calendari <resource>%1</resource> estan en un "
 "format antic de <application>KAlarm</application>, i només es podran llegir, "
-"excepte si escolliu actualitzar-les al format actual."
+"excepte si trieu actualitzar-les al format actual."
 
 #: resources/calendarupdater.cpp:91
 #, kde-kuit-format
@@ -7653,7 +7652,7 @@ msgstr "Segur que voleu desactivar el calendari predeterminat?"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Calendar"
-msgstr "Escolliu un calendari"
+msgstr "Trieu un calendari"
 
 #: resources/resources.cpp:490
 #, kde-kuit-format
@@ -8437,7 +8436,7 @@ msgstr "Fitxers d'àudio"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"
-msgstr "Escolliu un fitxer de so"
+msgstr "Trieu un fitxer de so"
 
 #: specialactions.cpp:32
 #, kde-format
@@ -8663,7 +8662,7 @@ msgstr "Seleccioneu una plantilla d'alarma"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
-msgstr "Escolliu una plantilla en la qual basar l'alarma nova."
+msgstr "Trieu una plantilla en la qual basar l'alarma nova."
 
 #: traywindow.cpp:70
 #, kde-format
