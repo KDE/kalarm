@@ -11,7 +11,7 @@
 
 <bookinfo id="kalarminfo">
 <title
->El manual de &kalarm;</title>
+>Manual de &kalarm;</title>
 
 <authorgroup>
 <author
@@ -97,7 +97,21 @@
 ><year
 >2013</year
 ><year
->2016</year>
+>2016</year
+><year
+>2018</year
+><year
+>2019</year
+><year
+>2020</year
+><year
+>2021</year
+><year
+>2022</year
+><year
+>2023</year
+><year
+>2024</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -108,9 +122,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2016-12-06</date>
+>2024-12-20</date>
 <releaseinfo
->2.11.11 (Aplicaciones 16.12)</releaseinfo>
+>3.10.1 (KDE Gear 24.12.1)</releaseinfo>
 
 <abstract>
 <para
@@ -144,7 +158,7 @@
 >&kalarm; le permite planificar la visualización de mensajes personales de alarma, la reproducción de archivos de sonido, la ejecución de órdenes y el envío de correos electrónicos.</para>
 
 <para
->En su modo gráfico predeterminado, &kalarm; muestra la lista de alarmas pendientes, mostrando sus horas y detalles. Puede crear alarmas nuevas o puede seleccionar las alarmas existentes para modificarlas o borrarlas. Opcionalmente, también puede ver las alarmas cumplidas.</para>
+>&kalarm; muestra la lista de alarmas pendientes, mostrando sus horas y detalles. Puede crear alarmas nuevas o puede seleccionar las alarmas existentes para modificarlas o borrarlas. Opcionalmente, también puede ver las alarmas cumplidas.</para>
 
 <para
 >Al configurar una alarma, puede elegir si debe repetirse y si la alarma debería cancelarse si no puede dispararse en el momento planificado. Para alarmas de visualización, puede teclear en un mensaje de texto, indicar un archivo de texto o de imagen para mostrar o indicar una orden cuya salida se visualizará. También puede seleccionar el color del mensaje de alarma, si se debe reproducir un sonido o leer el mensaje.</para>
@@ -153,7 +167,7 @@
 >Las alarmas también se pueden planificar desde la línea de órdenes o vía llamadas &DBus; desde programas.</para>
 
 <para
->Cuando un mensaje de alarma vence, se muestra en cada escritorio para asegurarse que no se le pasa. La ventana del mensaje muestra la hora a la que se ha planificado la alarma. Normalmente tiene una opción para pedir que la alarma se repita más tarde. Un ejemplo de un mensaje de alarma:</para>
+>Cuando un mensaje de alarma vence, si el sistema de ventanas lo permite, se muestra en cada escritorio para asegurarse que no se le pasa. La ventana del mensaje muestra la hora a la que se ha planificado la alarma. Normalmente tiene una opción de aplazamiento para pedir que la alarma se vuelva a mostrar más tarde. Un ejemplo de un mensaje de alarma:</para>
 
 <screenshot>
 <screeninfo
@@ -168,6 +182,9 @@
 </textobject>
 </mediaobject>
 </screenshot>
+
+<para
+>Opcionalmente, un mensaje de alarma se puede mostrar como una notificación en lugar de en una ventana.</para>
 
 <para
 >Cuando la alarma especifica una orden a ejecutar o el envío de un correo, &kalarm; no muestra nada.</para>
@@ -205,7 +222,7 @@
 <itemizedlist>
 <listitem>
 <para
->Mostrar las alarmas como un mensaje de texto que usted teclea, o el contenido de un archivo de texto o imagen, o la salida textual de una orden que se ejecuta cuando la alarma se desencadena. Además de mostrar cualquiera de estos elementos, puede reproducir archivos de audio, que su texto sea leído, o emitir un sencillo pitido. También se pueden especificar órdenes para que sean ejecutadas antes y después de que se muestre el mensaje de alarma.</para>
+>Mostrar las alarmas como un mensaje de texto que escriba, o el contenido de un archivo de texto o imagen, o la salida textual de una orden que se ejecuta cuando la alarma se desencadena. Además de mostrar cualquiera de estos elementos, puede reproducir archivos de audio, que su texto sea leído, o emitir un sencillo pitido. También se pueden especificar órdenes para que sean ejecutadas antes y después de que se muestre el mensaje de alarma.</para>
 </listitem>
 
 <listitem>
@@ -229,7 +246,7 @@
 >Manejo de errores</title>
 
 <para
->Si aparece un error cuando una alarma se desencadena, se mostrará un mensaje de error (salvo que usted haya especificado previamente no mostrar mensajes de error para ese tipo de mensaje de nuevo).</para>
+>Si aparece un error cuando una alarma se desencadena, se mostrará un mensaje de error (salvo que haya especificado previamente no mostrar mensajes de error para ese tipo de mensaje de nuevo).</para>
 
 <para
 >Si ocurrió un error de ejecución la última vez que se disparó una alarma de orden, se muestra una exclamación blanca sobre rojo en la columna de mensajes. Los detalles del error se visualizan en un consejo emergente si sitúa el cursor sobre esa línea en la lista de alarmas. Se muestran las mismas indicaciones de error para las alarmas de visualización si sucede un error de ejecución en una orden de pre o postalarma especificada en el diálogo de acciones especiales, excepto que el color del fondo de la columna no se cambia a rojo.</para>
@@ -242,7 +259,14 @@
 >Lista de alarmas</title>
 
 <para
->La ventana principal de &kalarm; muestra la lista actual de alarmas pendientes, mostrando sus horas, intervalos de repetición, colores y textos de mensaje, nombres de archivos para mostrar o reproducir, órdenes para ejecutar o asuntos de correos. (Para una alarma que se repite la hora que se muestra es la de la próxima activación. Para una alarma con un recordatorio, la hora que se muestra es la de la propia alarma, no la del recordatorio). Un icono a la izquierda de cada texto de alarma/archivo/orden/asunto de correo indica el tipo de alarma.</para>
+>La ventana principal de &kalarm; muestra la lista actual de alarmas pendientes, mostrando sus horas, intervalos de repetición, colores, nombres y textos de mensaje, nombres de archivos para mostrar o reproducir, órdenes para ejecutar o asuntos de correos. (Para una alarma que se repite la hora que se muestra es la de la próxima activación. Para una alarma con un recordatorio, la hora que se muestra es la de la propia alarma, no la del recordatorio). Un icono a la izquierda de cada texto de alarma/archivo/orden/asunto de correo indica el tipo de alarma.</para>
+
+<para
+>Tenga en cuenta que la columna <guilabel
+>Nombre</guilabel
+> solo existe si el uso de nombres de alarmas está activado en la pestaña <link linkend="preferences-general"
+>General</link
+> del diálogo de configuración.</para>
 
 <screenshot>
 <screeninfo
@@ -277,25 +301,26 @@
 >Cambiando la apariencia de la lista de alarmas</title>
 
 <para
->Las alarmas se pueden ordenar por fecha/hora, intervalo de repetición, color, tipo o texto pulsando sobre la barra de título de la columna adecuada. Para invertir el orden, vuelva a pulsar sobre la barra de título.</para>
+>Las alarmas se pueden ordenar por fecha/hora, intervalo de repetición, color, tipo, nombre o texto pulsando sobre la barra de título de la columna adecuada. Para invertir el orden, vuelva a pulsar sobre la barra de título.</para>
 
 <para
->De forma opcional, puede mostrar el tiempo que falta para que cumpla cada alarma, junto con, o en lugar de, la hora planificada de la alarma. Para mostrar u ocultar la columna de hora de la alarma, seleccione <menuchoice
-><guimenu
->Ver</guimenu
-><guimenuitem
->Mostrar horas de alarmas</guimenuitem
-></menuchoice
->. Para mostrar u ocultar la columna de hora de la alarma, seleccione <menuchoice
-><guimenu
->Ver</guimenu
-><guimenuitem
->Mostrar hora para las alarmas</guimenuitem
-></menuchoice
->. Siempre se muestra al menos una columna.</para>
+>De forma opcional, puede mostrar el tiempo restante hasta que venza cada alarma junto (o en lugar de) la hora programada de la alarma.</para>
 
 <para
->Si usted utiliza varios calendarios de alarma, puede colorear los códigos de alarma de acuerdo al calendario al que pertenecen, seleccionando un color de fondo distinto para cada calendario (consulte <link linkend="using-calendars"
+>Puede seleccionar las columnas a mostrar o a ocultar haciendo clic con el botón <mousebutton
+>derecho</mousebutton
+> en las cabeceras de las columnas y usar el menú de contexto para definir las columnas a mostrar. Pero debe tener en cuenta que al menos una de las columnas <guilabel
+>Nombre</guilabel
+> o <guilabel
+>Mensaje, archivo u orden</guilabel
+>, y al menos otra de las columnas <guilabel
+>Hora</guilabel
+> o <guilabel
+>Tiempo hasta</guilabel
+> se muestran siempre.</para>
+
+<para
+>Si utiliza varios calendarios de alarma, puede colorear los códigos de alarma de acuerdo al calendario al que pertenecen, seleccionando un color de fondo distinto para cada calendario (consulte <link linkend="using-calendars"
 >Uso de calendarios</link
 >).</para>
 
@@ -306,7 +331,7 @@
 >Alarmas archivadas</title>
 
 <para
->Por omisión, &kalarm; archiva las alarmas durante un periodo de tiempo una vez que se han cumplido o se han borrado (pero tenga en cuenta que las alarmas que usted elimina se archivan únicamente si se han producido al menos una vez). Usted puede controlar si &kalarm; debe almacenar o no las alarmas cumplidas y durante cuánto tiempo, en el <link linkend="preferences-storage"
+>Por omisión, &kalarm; archiva las alarmas durante un periodo de tiempo una vez que se han cumplido o se han borrado (pero tenga en cuenta que las alarmas que elimina se archivan únicamente si se han producido al menos una vez). Puede controlar si &kalarm; debe almacenar o no las alarmas cumplidas y durante cuánto tiempo, en el <link linkend="preferences-storage"
 >Diálogo de configuración</link
 >.</para>
 
@@ -327,9 +352,24 @@
 
 </sect2>
 
+<sect2 id="datepicker">
+<title
+>Filtrar la lista de alarmas por fecha</title>
+
+<para
+>Puede restringir la lista de alarmas para que muestre únicamente las alarmas programadas para una determinada fecha. Para ello, use el selector de fecha de alarmas, que se puede mostrar u ocultar mediante <menuchoice
+><guimenu
+>Ver</guimenu
+> <guimenuitem
+>Mostrar selector de fecha</guimenuitem
+> </menuchoice
+>. Seleccione una fecha haciendo clic en ella en el selector de fecha o anule la selección haciendo clic en ella nuevamente. El selector de fecha solo muestra un mes. Para mostrar un mes diferente, use los controles de flecha del selector de fecha o la rueda del ratón.</para>
+
+</sect2>
+
 <sect2 id="search">
 <title
->Buscando en la lista de alarmas</title>
+>Buscar en la lista de alarmas</title>
 
 <para
 >Puede buscar a través de la lista de alarmas para encontrar las que contengan un texto en concreto. Para ello, seleccione <menuchoice
@@ -438,9 +478,20 @@
 </itemizedlist>
 
 <para
->Usted también puede crear alarmas nuevas preconfiguradas desde varias fuentes:</para>
+>También puede crear alarmas nuevas preconfiguradas desde varias fuentes:</para>
 
 <itemizedlist>
+<listitem>
+<para
+>Para preajustar la fecha de la alarma en el diálogo <link linkend="alarm-edit-dlg"
+>Editar alarma</link
+>, pulse con el botón <mousebutton
+>derecho</mousebutton
+> en una fecha del selector de fecha de la alarma (consulte <link linkend="datepicker"
+>Filtrar la lista de alarmas por fecha</link
+>) y seleccione el tipo de alarma apropiado en el menú de contexto.</para>
+</listitem>
+
 <listitem>
 <para
 >Para basar su alarma nueva en una plantilla de alarma, siga las instrucciones de la sección <link linkend="templates"
@@ -463,16 +514,16 @@
 
 <listitem>
 <para
->Para crear una alarma nueva que muestre un mensaje de correo existente, arrastre el correo desde &kmail; a la ventana principal de &kalarm; o al icono de la bandeja del sistema. A continuación, seleccione la opción <guilabel
+>Para crear una alarma nueva que muestre un mensaje de correo existente, arrastre el correo desde &kmail; a la ventana principal de &kalarm;. A continuación, seleccione la opción <guilabel
 >Mostrar alarma</guilabel
 >. Esto abre el <link linkend="alarm-edit-dlg"
 >Diálogo de edición de alarmas</link
-> con el texto completo del correo electrónico (incluyendo remitente, destinatario, &etc;) como texto de la alarma.</para>
+> con el texto completo del correo electrónico (incluyendo remitente, destinatario, etc.) como texto de la alarma.</para>
 </listitem>
 
 <listitem>
 <para
->Para crear una alarma de correo nueva para enviar una copia de un mensaje de correo existente, arrastre el correo desde &kmail; a la ventana principal de &kalarm; o al icono de la bandeja del sistema. Luego, seleccione la opción <guilabel
+>Para crear una alarma de correo nueva para enviar una copia de un mensaje de correo existente, arrastre el correo desde &kmail; a la ventana principal de &kalarm;. Luego, seleccione la opción <guilabel
 >Alarma de correo</guilabel
 >. El <link linkend="alarm-edit-dlg"
 >Diálogo de edición de alarma</link
@@ -481,7 +532,7 @@
 
 <listitem>
 <para
->Para crear una alarma nueva que muestre un resumen o una tarea pendiente existente, arrastre la tarea pendiente desde &korganizer; u otra aplicación a la ventana principal de &kalarm; o al icono de la bandeja del sistema. Se abre el <link linkend="alarm-edit-dlg"
+>Para crear una alarma nueva que muestre un resumen o una tarea pendiente existente, arrastre la tarea pendiente desde &korganizer; u otra aplicación a la ventana principal de &kalarm;. Se abre el <link linkend="alarm-edit-dlg"
 >Diálogo de edición de alarmas</link
 > con el contenido de la tarea pendiente y el texto de la alarma.</para>
 </listitem>
@@ -490,7 +541,7 @@
 <para
 >Para crear una nueva alarma de orden, arrastre el texto de un guion que comience por <quote
 >#!</quote
-> en la ventana principal &kalarm; o al icono de la bandeja del sistema. Luego, seleccione la opción <guilabel
+> en la ventana principal &kalarm;. Luego, seleccione la opción <guilabel
 >Alarma de orden</guilabel
 >. Esto abre la predefinición <link linkend="alarm-edit-dlg"
 >Diálogo de edición de alarma</link
@@ -499,21 +550,21 @@
 
 <listitem>
 <para
->Para crear una alarma que muestre archivos, arrastre una &URL; de archivo de texto o imagen a la ventana principal de &kalarm; o al icono de la bandeja del sistema. Esto abre el <link linkend="alarm-edit-dlg"
+>Para crear una alarma que muestre archivos, arrastre una &URL; de archivo de texto o imagen a la ventana principal de &kalarm;. Esto abre el <link linkend="alarm-edit-dlg"
 >diálogo de edición de alarmas</link
 > y pone allí el nombre del archivo.</para>
 </listitem>
 
 <listitem>
 <para
->Para crear una alarma de audio, arrastre una &URL; de archivo de audio a la ventana principal de &kalarm; o al icono de la bandeja del sistema. Esto abre el <link linkend="alarm-edit-dlg"
+>Para crear una alarma de audio, arrastre una &URL; de archivo de audio a la ventana principal de &kalarm;. Esto abre el <link linkend="alarm-edit-dlg"
 >diálogo de edición de alarmas</link
 > y pone allí el nombre del archivo.</para>
 </listitem>
 
 <listitem>
 <para
->Para crear un texto de mensaje de alarma, arrastre cualquier fragmento de texto en la ventana principal de &kalarm; o sobre el icono de la bandeja del sistema. Si se le pregunta, seleccione la opción <guilabel
+>Para crear un texto de mensaje de alarma, arrastre cualquier fragmento de texto en la ventana principal de &kalarm;. Si se le pregunta, seleccione la opción <guilabel
 >Mostrar alarma</guilabel
 >. Esto abre la predefinición <link linkend="alarm-edit-dlg"
 >Diálogo de edición de alarmas</link
@@ -611,7 +662,7 @@
 </itemizedlist>
 
 <para
->Cuando usted borra una alarma activa, se archiva, supuesto que se haya disparado al menos una vez antes de ser borrada y supuesto que se archivan todas las alarmas cumplidas (use el <link linkend="preferences-storage"
+>Cuando borra una alarma activa, se archiva, supuesto que se haya disparado al menos una vez antes de ser borrada y supuesto que se archivan todas las alarmas cumplidas (use el <link linkend="preferences-storage"
 >Diálogo configuración</link
 > para controlar si se deben archivar las alarmas y durante cuánto tiempo se almacenan). Cuando borre una alarma archivada o una alarma activa que no se haya disparado todavía, se elimina permanentemente.</para>
 
@@ -672,9 +723,9 @@
 >Confirmar una alarma</title>
 
 <para
->Vea <link linkend="message-window"
->Ventana de mensaje de alarma</link
-> para saber cómo aceptar alarmas.</para>
+>Consulte <link linkend="message-window"
+>Mostrar de mensaje de alarma</link
+> para saber cómo reconocer las alarmas.</para>
 
 </sect2>
 
@@ -727,7 +778,7 @@
 >Abra el <link linkend="alarm-edit-dlg"
 >Diálogo de edición de alarma</link
 > de la forma habitual y pulse en el botón <guibutton
->Cargar plantilla...</guibutton
+>Cargar plantilla…</guibutton
 > para seleccionar una plantilla con algunas opciones predeterminadas para el diálogo.</para>
 </listitem>
 </itemizedlist>
@@ -737,7 +788,7 @@
 >Configurando plantillas</title>
 
 <para
->Usted puede crear, modificar o borrar plantillas usando el diálogo de plantillas de alarma, o puede crear una plantilla de alarma nueva basada en una alarma existente.</para>
+>Puede crear, modificar o borrar plantillas usando el diálogo de plantillas de alarma, o puede crear una plantilla de alarma nueva basada en una alarma existente.</para>
 
 <para
 >Para crear un plantilla de alarma nueva, haga una de las siguientes acciones:</para>
@@ -749,7 +800,7 @@
 > <guimenu
 >Archivo</guimenu
 ><guimenuitem
->Plantillas...</guimenuitem
+>Plantillas…</guimenuitem
 > </menuchoice
 > del menú y pulse sobre <guibutton
 >Nuevo</guibutton
@@ -762,7 +813,7 @@
 > <guimenu
 >Archivo</guimenu
 ><guimenuitem
->Plantillas...</guimenuitem
+>Plantillas…</guimenuitem
 > </menuchoice
 > del menú, seleccione una plantilla de la lista y pulse sobre <guibutton
 >Copiar</guibutton
@@ -775,7 +826,7 @@
 > <guimenu
 >Archivo</guimenu
 ><guimenuitem
->Crear plantilla...</guimenuitem
+>Crear plantilla…</guimenuitem
 > </menuchoice
 >. Se abrirá el cuadro de diálogo de edición de plantillas ya relleno con una copia de los detalles de la alarma seleccionada.</para>
 </listitem>
@@ -786,7 +837,7 @@
 > <guimenu
 >Archivo</guimenu
 ><guimenuitem
->Plantillas...</guimenuitem
+>Plantillas…</guimenuitem
 > </menuchoice
 > del menú y pulse sobre <guibutton
 >Editar</guibutton
@@ -797,7 +848,7 @@
 > <guimenu
 >Archivo</guimenu
 ><guimenuitem
->Plantillas...</guimenuitem
+>Plantillas…</guimenuitem
 > </menuchoice
 > del menú, seleccione una o más plantillas y pulse sobre <guibutton
 >Eliminar</guibutton
@@ -833,7 +884,7 @@
 <para
 ><guilabel
 >Hora predeterminada</guilabel
-> si usted no quiere indicar ninguna hora de activación. Las alarmas que se basan en esta plantilla usarán inicialmente la hora de activación normal predeterminada para las alarmas nuevas.</para>
+> si no quiere indicar ninguna hora de activación. Las alarmas que se basan en esta plantilla usarán inicialmente la hora de activación normal predeterminada para las alarmas nuevas.</para>
 </listitem>
 
 <listitem>
@@ -939,39 +990,27 @@
 
 <listitem
 ><para
->Directorio local: Las alarmas se almacenan en una carpeta local, cada alarma se almacena en un archivo iCalendar distinto de la carpeta. El método de almacenamiento tiene la ventaja de que en caso de corrupción de un archivo, solo pierde una alarma, no el calendario completo.</para>
-</listitem>
-<!--FIXME not in kf5?
-<listitem
-><para
->Remote file: Alarms are stored in a single remote
-file in iCalendar format. This storage method allows you to access
-your alarm data remotely no matter where you are, or enables alarm
-calendars to be viewed by other people. When using remote files,
-&kalarm; works with a local cache of the data.</para>
+>Archivo remoto: Las alarmas se almacenan en un único archivo remoto en formato iCalendar. Este método de almacenamiento le permite acceder a los datos de alarmas de forma remota sin importar dónde se encuentre y también que otras personas vean los calendarios de las alarmas. Cuando usa archivos remotos, &kalarm; trabaja con una copia local de los datos.</para>
 
 <warning
 ><para
->If a remote alarm calendar is shared between users,
-changes made by one person may not be automatically made available to
-another user, or there could be a time delay before the other user
-sees it. So one user could make a change which is then overwritten by
-another user without either person noticing what has happened. The
-technical reason for this is that a change made by person A will only
-be available to person B after person A's cached copy has first been
-saved to the remote file, and then person B's cached copy
-of the remote file has been reloaded. When and if the calendar is
-saved and reloaded depends on the calendar configuration parameters
-which each user has set for that alarm calendar.</para>
-
+>&kalarm; no supervisa los calendarios de alarmas remotos para detectar cambios, por lo que si alguien más realiza cambios, &kalarm; podría sobrescribirlos. Para evitar esta situación, se recomienda adoptar una de las siguientes políticas:</para>
+<itemizedlist>
+<listitem
+><para
+>Garantizar que solo una persona o aplicación acceda al calendario a la vez.</para
+></listitem>
+<listitem
+><para
+>Todos los usuarios excepto el propietario del calendario deben configurar el calendario como de solo lectura.</para
+></listitem>
+</itemizedlist>
 <para
->Ways to avoid this problem include adjusting the calendar save
-and reload configuration parameters, or adopting a policy that users
-other than the alarm calendar's owner should open it in read-only
-mode.</para
+>En caso contrario, como mínimo, debería volver a cargar el calendario antes de modificarlo o fiarse de su contenido usando el método que se describe en <link linkend="using-calendars"
+>Uso de calendarios</link
+>. Tenga en cuenta también que si el calendario está configurado como de solo lectura, &kalarm; lo sobrescribirá cuando se genere una alarma. </para
 ></warning>
 </listitem>
--->
 </itemizedlist>
 </listitem>
 </varlistentry>
@@ -990,7 +1029,7 @@ mode.</para
 >Estado de solo lectura</term>
 <listitem>
 <para
->Los calendarios de alarmas de solo lectura no se pueden modificar ni añadir. No puede editar sus alarmas ni guardar alarmas nuevas. Tampoco puede retrasar las alarmas, porque se necesitaría actualizar la alarma con el tiempo nuevo. Cuando se desencadena la alarma, no se elimina del recurso y se archiva hasta que usted o algún otro usuario acceda al recurso en modo de lectura-escritura.</para>
+>Las alarmas de un calendario de solo lectura no se pueden modificar ni añadir. Por lo tanto, no se pueden editar ni guardar nuevas alarmas. Tampoco se pueden aplazar las alarmas, ya que para ello sería necesario guardar el tiempo de aplazamiento en la alarma. Una vez que se activan las alarmas, no se eliminan del calendario ni se archivan hasta que se acceda al calendario en modo de lectura y escritura.</para>
 
 <para
 >Puede definir el estado de solo lectura de un calendario en el diálogo de configuración del calendario. Sin embargo, algunos calendarios no se pueden escribir, por varios motivos:</para>
@@ -1020,7 +1059,7 @@ mode.</para
 <para
 >Si necesita permiso de escritura para los datos de la alarma en un calendario que no puede escribir, puede copiar sus alarmas importándolas en un calendario en el que tenga permiso de escritura, usando la opción <menuchoice
 ><guimenuitem
->Importar...</guimenuitem
+>Importar…</guimenuitem
 ></menuchoice
 > del menú contextual del calendario (más información en <link linkend="import"
 >Importar alarmas de calendarios externos</link
@@ -1062,7 +1101,7 @@ mode.</para
 <term
 ><menuchoice
 ><guimenuitem
->Añadir...</guimenuitem
+>Añadir…</guimenuitem
 ></menuchoice
 ></term>
 <listitem>
@@ -1088,7 +1127,7 @@ mode.</para
 <term
 ><menuchoice
 ><guimenuitem
->Editar...</guimenuitem
+>Editar…</guimenuitem
 ></menuchoice
 ></term>
 <listitem>
@@ -1119,12 +1158,12 @@ mode.</para
 <term
 ><menuchoice
 ><guimenuitem
->Importar...</guimenuitem
+>Importar…</guimenuitem
 ></menuchoice
 ></term>
 <listitem>
 <para
->Importa las alarmas de un archivo de calendario externo en el calendario seleccionado. Se describe en <link linkend="import"
+>Importa las alarmas de archivos de calendario externos en el calendario seleccionado. Se describe en <link linkend="import"
 >Importar alarmas de calendarios externos</link
 >. Esta opción no está disponible para los recursos desactivados o de solo lectura.</para>
 </listitem>
@@ -1134,7 +1173,7 @@ mode.</para
 <term
 ><menuchoice
 ><guimenuitem
->Exportar...</guimenuitem
+>Exportar…</guimenuitem
 ></menuchoice
 ></term>
 <listitem>
@@ -1175,7 +1214,7 @@ mode.</para
 <term
 ><menuchoice
 ><guimenuitem
->Establecer el color...</guimenuitem
+>Establecer el color…</guimenuitem
 ></menuchoice
 ></term>
 <listitem>
@@ -1210,7 +1249,7 @@ mode.</para
 >Importar alarmas de calendarios externos</title>
 
 <para
->Puede importar alarmas de otros archivos de calendario en &kalarm;. La función de importación explora el archivo de calendario seleccionado eventos que contengan alarmas y copiarlos (con los id. únicos nuevos) en el calendario de &kalarm;. Los eventos sin alarmas y otros tipos de entradas de calendario se ignoran. Hay dos modos de importar alarmas:</para>
+>Puede importar alarmas de otros archivos de calendario en &kalarm;. La función de importación explora los archivos de calendario seleccionados buscando eventos que contengan alarmas y copiarlos (con los id. únicos nuevos) en el calendario de &kalarm;. Los eventos sin alarmas y otros tipos de entradas de calendario se ignoran. Hay dos modos de importar alarmas:</para>
 
 <itemizedlist>
 <listitem>
@@ -1219,9 +1258,9 @@ mode.</para
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Importar alarmas...</guimenuitem
+>Importar alarmas…</guimenuitem
 ></menuchoice
-> para importar las alarmas de todos los tipos (alarmas activas, alarmas archivadas y plantillas de alarmas) en el calendario.</para>
+> para importar las alarmas de todos los tipos (alarmas activas, alarmas archivadas y plantillas de alarmas) de los archivos de calendario.</para>
 
 <para
 >Si ha configurado <link linkend="calendars"
@@ -1237,7 +1276,7 @@ mode.</para
 >Derecho</mousebutton
 > sobre un calendario en la lista de calendarios y elija <menuchoice
 ><guimenuitem
->Importar...</guimenuitem
+>Importar…</guimenuitem
 ></menuchoice
 > desde el menú de contexto. Esto importa alarmas del tipo seleccionado actualmente en ese calendario. Por ejemplo, si el tipo de calendario seleccionado es de plantillas de alarmas, se importarán plantillas de alarmas (y no alarmas activas o archivadas).</para>
 </listitem>
@@ -1255,7 +1294,7 @@ mode.</para
 >Exportar alarmas a calendarios externos</title>
 
 <para
->Usted puede exportar alarmas de &kalarm; a otros archivos de calendarios, bien las alarmas seleccionadas actualmente en la lista de alarmas, o todas las alarmas de un calendario de alarmas. Los métodos para hacerlo se muestran más abajo. Cualquiera que sea el método que se utilice, usted puede bien crear un nuevo archivo de calendario o añadir las alarmas exportadas a uno existente. Para añadir las alarmas, marque <guilabel
+>Puede exportar alarmas de &kalarm; a otros archivos de calendarios, bien las alarmas seleccionadas actualmente en la lista de alarmas, o todas las alarmas de un calendario de alarmas. Los métodos para hacerlo se muestran más abajo. Cualquiera que sea el método que se utilice, puede bien crear un nuevo archivo de calendario o añadir las alarmas exportadas a uno existente. Para añadir las alarmas, marque <guilabel
 >Añadir a archivo existente</guilabel
 > en el diálogo de selección de archivos: de otro modo, se sobrescribe cualquier archivo que ya exista.</para>
 
@@ -1266,13 +1305,13 @@ mode.</para
 >Derecho</mousebutton
 > sobre la selección y elija <menuchoice
 ><guimenuitem
->Exportar...</guimenuitem
+>Exportar…</guimenuitem
 ></menuchoice
 > del menú de contexto, o utilice <menuchoice
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Exportar las alarmas seleccionadas...</guimenuitem
+>Exportar las alarmas seleccionadas…</guimenuitem
 ></menuchoice
 > en el menú principal.</para>
 </listitem>
@@ -1283,7 +1322,7 @@ mode.</para
 >Derecho</mousebutton
 > sobre un calendario en la lista de calendarios y elija <menuchoice
 ><guimenuitem
->Exportar...</guimenuitem
+>Exportar…</guimenuitem
 ></menuchoice
 > del menú de contexto.</para>
 </listitem>
@@ -1295,12 +1334,19 @@ mode.</para
 <title
 >Importar cumpleaños desde &kaddressbook;</title>
 
+<note
+><para
+>Esta función solo está disponible si está instalado y activado el <link linkend="akonadi-plugin"
+>complemento Akonadi</link
+> de &kalarm;.</para>
+</note>
+
 <para
 >Puede configurar alarmas para cumpleaños guardados en &kaddressbook;, usando <menuchoice
 ><guimenu
 >Archivo</guimenu
 > <guimenuitem
->Importar cumpleaños...</guimenuitem
+>Importar cumpleaños…</guimenuitem
 ></menuchoice
 >. Esto muestra un diálogo que le permita seleccionar para qué cumpleaños crear alarmas.</para>
 
@@ -1350,7 +1396,6 @@ mode.</para
 >, las alarmas de cada tipo se añadirán al calendario predeterminado adecuado, o se le pedirá el recurso específico si ha elegido la opción para que se le pida esta información para las alarmas y para las plantillas nuevas en el <link linkend="preferences-storage"
 >Diálogo configuración</link
 >.</para>
-
 </sect2>
 
 <sect2 id="undo">
@@ -1358,7 +1403,7 @@ mode.</para
 >Deshacer / rehacer</title>
 
 <para
->Usted puede deshacer y rehacer los cambios más recientes que haya hecho durante la sesión actual de &kalarm;. La mayor parte de las acciones se pueden deshacer, incluyendo la creación, edición y borrado de alarmas y de plantillas de alarmas y la reactivación de alarmas. Para evitar que se usen demasiados recursos en el histórico de deshacer, el número de cambios que se almacenan está limitado a los últimos 12.</para>
+>Puede deshacer y rehacer los cambios más recientes que haya hecho durante la sesión actual de &kalarm;. La mayor parte de las acciones se pueden deshacer, incluyendo la creación, edición y borrado de alarmas y de plantillas de alarmas y la reactivación de alarmas. Para evitar que se usen demasiados recursos en el histórico de deshacer, el número de cambios que se almacenan está limitado a los últimos 12.</para>
 
 <para
 >Para deshacer el último cambio, seleccione <menuchoice
@@ -1400,7 +1445,7 @@ mode.</para
 >. &kalarm; siempre recuerda su última elección cada vez que se vuelve a mostrar el diálogo de edición de alarmas.</para>
 
 <para
->Usted puede configurar los valores predeterminados de muchas de las preferencias en el diálogo de edición de alarmas utilizando la <link linkend="preferences-edit"
+>Puede configurar los valores predeterminados de muchas de las preferencias en el diálogo de edición de alarmas utilizando la <link linkend="preferences-edit"
 >pestaña editar del diálogo de configuración</link
 >.</para>
 
@@ -1439,6 +1484,22 @@ mode.</para
 ></caption>
 </mediaobject>
 </screenshot>
+
+<sect2>
+<title
+>Nombre de la alarma</title>
+
+<para
+>Puede asignar un nombre a la alarma en el campo <guilabel
+>Nombre de la alarma</guilabel
+>. Esta es una forma práctica de identificar la alarma con mayor facilidad. No es obligatorio que introduzca un nombre y tampoco es necesario que sea único.</para>
+
+<para
+>Tenga en cuenta que este campo solo se muestra si está activado el uso de nombres de alarmas en la pestaña <link linkend="preferences-general"
+>General</link
+> del diálogo de configuración.</para>
+
+</sect2>
 
 <sect2>
 <title
@@ -1507,20 +1568,14 @@ mode.</para
 >Pitido</guilabel
 > para que suene un «pitido».</para>
 </listitem>
-<!--FIXME not in kf5?
+
 <listitem>
 <para
 ><guilabel
->Speak</guilabel
-> to have the alarm message spoken as
-well as being displayed. This option is only available if you have
-&jovie; (from the kdeaccessibility package) installed and configured,
-together with a compatible speech synthesizer, &eg;
-<application
->Festival</application
->.</para>
+>Leer</guilabel
+> para que el mensaje de alarma se lea cuando se muestre en pantalla. Esta opción solo está disponible si &kalarm; se compiló con la función de voz activada y tiene instalado y en funcionamiento el módulo de voz de &Qt;.</para>
 </listitem>
--->
+
 <listitem>
 <para
 ><guilabel
@@ -1533,7 +1588,7 @@ together with a compatible speech synthesizer, &eg;
 <itemizedlist>
 <listitem>
 <para
->Indique la ruta del archivo de sonido, o use el botón que hay junto a la casilla de edición para mostrar un diálogo de selección de archivo. Usted puede escuchar el archivo seleccionado pulsando el botón reproducir a la izquierda del campo de edición. Ese botón entonces cambia su función para permitirle detener la reproducción cuando haya oído bastante.</para>
+>Indique la ruta del archivo de sonido, o use el botón que hay junto a la casilla de edición para mostrar un diálogo de selección de archivo. Puede escuchar el archivo seleccionado pulsando el botón reproducir a la izquierda del campo de edición. Ese botón entonces cambia su función para permitirle detener la reproducción cuando haya oído bastante.</para>
 </listitem>
 
 <listitem>
@@ -1547,16 +1602,16 @@ together with a compatible speech synthesizer, &eg;
 <para
 >Marque <guilabel
 >Volumen</guilabel
-> y ajuste el deslizador si usted quiere ajustar el volumen al que se reproduce el archivo de audio.</para>
+> y ajuste el deslizador si quiere ajustar el volumen al que se reproduce el archivo de audio.</para>
 </listitem>
 
 <listitem>
 <para
->Si lo desea, usted puede graduar el volumen. Atenuación significa que se comience a reproducir el archivo de audio con un volumen y que se vaya cambiando gradualmente hasta el volumen final, a lo largo de un intervalo de tiempo especificado. El volumen final es el que se introdujo en <guilabel
+>Si lo permite el motor de sonido que esté usando, puede atenuar el volumen. Es decir, que se comience a reproducir el archivo de sonido con un volumen y que se vaya cambiando gradualmente hasta el volumen final a lo largo de un intervalo de tiempo especificado. El volumen final es el que se introdujo en <guilabel
 >Volumen</guilabel
-> arriba. Para activar la atenuación, marque <guilabel
+>. Para activar la atenuación, marque <guilabel
 >Atenuar</guilabel
-> y luego introduzca el período en segundos en el campo <guilabel
+>, introduzca el período en segundos en el campo <guilabel
 >Tiempo de atenuación</guilabel
 > y ajuste con el deslizador el <guilabel
 >Volumen inicial</guilabel
@@ -1577,7 +1632,7 @@ together with a compatible speech synthesizer, &eg;
 <listitem>
 <para
 >Use el botón <guibutton
->Tipo de letra y color...</guibutton
+>Tipo de letra y color…</guibutton
 > para seleccionar un tipo de letra y colores de primer plano y fondo para el mensaje de alarma. En el diálogo <guilabel
 >Seleccionar tipo de letra y color</guilabel
 >, marque <guilabel
@@ -1594,8 +1649,36 @@ together with a compatible speech synthesizer, &eg;
 
 <listitem>
 <para
+>La opción <guilabel
+>Método de visualización</guilabel
+> le permite seleccionar cómo se visualiza la alarma. Puede elegir entre:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Ventana</guilabel
+> para mostrar la alarma en una ventana. Esta opción permite usar un amplio abanico de opciones para configurar la alarma.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Notificación</guilabel
+> para usar el sistema estándar de notificaciones para mostrar el mensaje de alarma. Debido a las limitaciones del sistema de notificaciones, no se pueden usar las siguientes opciones de configuración de alarmas en las notificaciones: definir del tipo de letra y de color; definir de un archivo de sonido para que se reproduzca cuando se muestra la alarma; confirmación del reconocimiento de la alarma; cierre automático del visor al expirar el tiempo de cancelación tardía.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Consulte la sección <link linkend="message-window"
+>Visualización del mensaje de la alarma</link
+> para más detalle sobre cómo se muestran los mensajes de las alarmas.</para>
+</listitem>
+
+<listitem>
+<para
 >Use el botón <guibutton
->Acciones especiales...</guibutton
+>Acciones especiales…</guibutton
 > para indicar qué órdenes de la shell se deben ejecutar antes o después de mostrar la alarma. En el diálogo <guilabel
 >Acciones especiales de alarma</guilabel
 >:</para>
@@ -1619,17 +1702,17 @@ together with a compatible speech synthesizer, &eg;
 ></listitem>
 <listitem
 ><para
->Cuando el mensaje es vuelto a mostrar tras retrasar la alarma, salvo que <guilabel
->Ejecutar para alarma diferida</guilabel
+>Cuando se vuelve a mostrar el mensaje tras aplazar la alarma, salvo que <guilabel
+>Ejecutar para alarmas aplazadas</guilabel
 > esté marcado.</para
 ></listitem>
 <listitem
 ><para
->Cuando el mensaje se mostró cuando usted cerró la sesión y se restaura cuando vuelve a acceder.</para
+>Cuando el mensaje se mostró cuando cerró la sesión y se restaura cuando vuelve a acceder.</para
 ></listitem>
 <listitem
 ><para
->Cuando una alarma de repetición se activa, pero el mensaje de alarma (o un mensaje de alarma diferida) de una aparición previa de la alarma es todavía visible; en otras palabras; cuando la aparición previa de la alarma todavía no ha sido reconocida.</para
+>Cuando se activa una alarma recurrente pero el mensaje de alarma (o un mensaje de alarma aplazado) de una ocurrencia anterior de la alarma aún está visible; en otras palabras, cuando la ocurrencia anterior de la alarma aún no ha sido reconocida.</para
 ></listitem>
 </itemizedlist>
 
@@ -1670,7 +1753,7 @@ together with a compatible speech synthesizer, &eg;
 ></listitem>
 <listitem
 ><para
->Cuando usted retrasa la alarma, excepto cuando la alarma retrasada es, finalmente aceptada.</para
+>Cuando se aplaza la alarma, excepto cuando la alarma aplazada es finalmente reconocida.</para
 ></listitem>
 <listitem
 ><para
@@ -1726,16 +1809,23 @@ together with a compatible speech synthesizer, &eg;
 >) y puede incluir cualquier opción, parámetros, órdenes con tuberías, &etc; que se pueda incluir en una sola línea de orden.</para>
 
 <para
->Si esta opción está marcada, usted puede introducir el texto de un guion para que se ejecute. Recuerde incluir una primera línea del tipo <literal
+>Si esta opción está marcada, puede introducir el texto de un guion para que se ejecute. Recuerde incluir una primera línea del tipo <literal
 >#!/bin/bash</literal
 > para asegurar que se invoca el intérprete de órdenes adecuado.</para>
 </listitem>
+
+<listitem
+><para
+>Si la orden devuelve un error, normalmente se muestra un mensaje y se añade una indicación de error en la lista de alarmas. El mensaje de notificación del error se puede evitar marcando la casilla <guilabel
+>No notificar errores</guilabel
+>.</para
+></listitem>
 
 <listitem>
 <para
 >Use el grupo <guilabel
 >Salida de la orden</guilabel
-> para indicar lo qué usted quiere que se haga con cualquier salida del terminal que produzca la orden cuando se ejecute.</para>
+> para indicar lo que quiere que se haga con cualquier salida del terminal que produzca la orden cuando se ejecute.</para>
 
 <itemizedlist>
 <listitem>
@@ -1773,8 +1863,10 @@ together with a compatible speech synthesizer, &eg;
 >Las alarmas de correo envían un correo sin mostrar ningún mensaje de alarma.</para>
 
 <para
->Cumplimente las direcciones de los destinatarios, la línea del asunto y el cuerpo del mensaje en los tres campos de edición. Use el botón que está junto al cuadro de edición de la dirección para mostrar la libreta de direcciones de &kde;, desde la que puede seleccionar los destinatarios del correo. Se pueden añadir adjuntos usando el botón <guibutton
->Añadir...</guibutton
+>Cumplimente las direcciones de los destinatarios, la línea del asunto y el cuerpo del mensaje en los tres campos de edición. Use el botón que está junto al cuadro de edición de la dirección para mostrar la libreta de direcciones de &kde;, desde la que puede seleccionar los destinatarios del correo. (Tenga en cuenta que este botón solo se muestra si el <link linkend="akonadi-plugin"
+>complemento de Akonadi</link
+> está instalado y activado). Se pueden añadir adjuntos usando el botón <guibutton
+>Añadir…</guibutton
 >. Tenga en cuenta que los archivos adjuntos deben existir cuando se produzca la alarma; no se almacena ninguna copia de los archivos cuando se configura la alarma. Para eliminar un adjunto, resáltelo en la lista desplegable y haga pulse sobre el botón <guibutton
 >Borrar</guibutton
 >.</para>
@@ -1804,7 +1896,7 @@ together with a compatible speech synthesizer, &eg;
 >Copia del correo a sí mismo</guilabel
 > para enviarse una copia oculta del correo cuando se lance la alarma. La dirección del correo que recibirá la copia se puede configurar en el <link linkend="preferences-email"
 >Diálogo configuración</link
->, por omisión será su dirección de correo establecida en &kmail; o en &systemsettings;.</para>
+>, por omisión será su dirección de correo establecida en &kmail;.</para>
 </listitem>
 </itemizedlist>
 
@@ -1844,23 +1936,23 @@ together with a compatible speech synthesizer, &eg;
 ><guimenuitem
 >Detener reproducción</guimenuitem
 ></menuchoice
-> del menú de contexto. Si lo desea, usted puede configurar un acceso rápido de teclado global para esta acción.</para>
+> del menú de contexto. Si lo desea, puede configurar un atajo de teclado global para esta acción.</para>
 </listitem>
 
 <listitem>
 <para
 >Marque <guilabel
 >Volumen</guilabel
-> y ajuste el deslizador si usted quiere ajustar el volumen al que se reproduce el archivo de audio.</para>
+> y ajuste el deslizador si quiere ajustar el volumen al que se reproduce el archivo de audio.</para>
 </listitem>
 
 <listitem>
 <para
->Si lo desea, usted puede graduar el volumen. Atenuación significa que se comience a reproducir el archivo de audio con un volumen y que se vaya cambiando gradualmente hasta el volumen final, a lo largo de un intervalo de tiempo especificado. El volumen final es el que se introdujo en <guilabel
+>Si lo permite el motor de sonido que esté usando, puede atenuar el volumen. Es decir, que se comience a reproducir el archivo de sonido con un volumen y que se vaya cambiando gradualmente hasta el volumen final a lo largo de un intervalo de tiempo especificado. El volumen final es el que se introdujo en <guilabel
 >Volumen</guilabel
-> arriba. Para activar la atenuación, marque <guilabel
+>. Para activar la atenuación, marque <guilabel
 >Atenuar</guilabel
-> y luego introduzca el período en segundos en el campo <guilabel
+>, introduzca el período en segundos en el campo <guilabel
 >Tiempo de atenuación</guilabel
 > y ajuste con el deslizador el <guilabel
 >Volumen inicial</guilabel
@@ -1872,14 +1964,14 @@ together with a compatible speech synthesizer, &eg;
 
 <sect2>
 <title
->Posponer</title>
+>Aplazar</title>
 
 <para
->Si la alarma se repite y se retrasó la última vez que fue mostrada, el grupo de opciones <guilabel
->Alarma retrasada</guilabel
-> muestra la hora a la que se retrasó la alarma. <guibutton
->Cambiar...</guibutton
-> muestra un diálogo que le permite cambiar la hora de la alarma retrasada o cancelarla.</para>
+>Si la alarma se repite y se aplazó la última vez que fue mostrada, el grupo de opciones <guilabel
+>Alarma aplazada</guilabel
+> muestra la hora a la que se aplazó la alarma. <guibutton
+>Cambiar…</guibutton
+> muestra un diálogo que le permite cambiar la hora de la alarma aplazada o cancelar el aplazamiento.</para>
 
 </sect2>
 
@@ -1899,7 +1991,7 @@ together with a compatible speech synthesizer, &eg;
 >En fecha/hora</guilabel
 > para introducir la fecha y hora en la que se debe producir la alarma. Marque <guilabel
 >A cualquier hora</guilabel
-> si usted quiere especificar solo una fecha para la alarma: en este caso, la alarma se mostrará en la primera ocasión que se tenga de hacerlo tras la hora de comienzo del día planificado de la alarma. (<link linkend="preferences-general"
+> si quiere especificar solo una fecha para la alarma: en este caso, la alarma se mostrará en la primera ocasión que se tenga de hacerlo tras la hora de comienzo del día planificado de la alarma. (<link linkend="preferences-general"
 >Configurar &kalarm;</link
 > describe cómo configurar la hora de comienzo del día).</para>
 
@@ -1916,13 +2008,13 @@ together with a compatible speech synthesizer, &eg;
 </itemizedlist>
 
 <para
->Si lo desea, elija una zona horaria a aplicar a la alarma. Esta zona horaria se utiliza para todas las fechas y horas relacionadas con esta alarma, incluyendo repetición y fechas y horas excepcionales. Normalmente, usted debería dejar los controles de zona horaria sin cambiar, salvo que tenga una buena razón para cambiarlos.</para>
+>Si lo desea, elija una zona horaria a aplicar a la alarma. Esta zona horaria se utiliza para todas las fechas y horas relacionadas con esta alarma, incluyendo repetición y fechas y horas excepcionales. Normalmente, debería dejar los controles de zona horaria sin cambiar, salvo que tenga una buena razón para cambiarlos.</para>
 
 <para
 >Los controles de zona horaria se muestran solo cuando la zona horaria seleccionada es distinta de la zona horaria predeterminada en <link linkend="preferences-time"
 >Diálogo de configuración</link
 >, o si pulsa sobre el botón <guibutton
->Zona horaria...</guibutton
+>Zona horaria…</guibutton
 >.</para>
 
 <itemizedlist>
@@ -1935,14 +2027,9 @@ together with a compatible speech synthesizer, &eg;
 
 <listitem>
 <para
->Marque <guilabel
->Ignorar zona horaria</guilabel
-> si quiere utilizar la hora local de su equipo (en cualquier equipo en el que &kalarm; se encuentre ejecutando en ese momento) ignorando zonas horarias.</para>
-
-<warning
-><para
->Se recomienda no seleccionar esta opción si la alarma tiene una repetición especificada en horas y minutos; si lo hace, la alarma puede aparecer en horas no esperadas después de que cambie el horario de verano.</para
-></warning>
+>Seleccione <guilabel
+>Zona horaria del sistema</guilabel
+> si quiere utilizar la hora local de su equipo (en cualquier equipo en el que &kalarm; se encuentre ejecutando en ese momento).</para>
 </listitem>
 </itemizedlist>
 
@@ -1965,7 +2052,7 @@ together with a compatible speech synthesizer, &eg;
 <para
 >Si la alarma se repite, marque <guilabel
 >Recordatorio solo para la primera repetición</guilabel
-> si usted solo quiere un recordatorio para la primera repetición de la alarma. Si está marcado y es un avance de recordatorio, el período del recordatorio no está sujeto al límite normal de ser menor que el intervalo de repetición o subrepetición.</para>
+> si solo quiere un recordatorio para la primera repetición de la alarma. Si está marcado y es un avance de recordatorio, el período del recordatorio no está sujeto al límite normal de ser menor que el intervalo de repetición o subrepetición.</para>
 
 
 </sect2>
@@ -1999,7 +2086,7 @@ together with a compatible speech synthesizer, &eg;
 
 <note
 ><para
->Una alarma solo se puede lanzar mientras usted esté en sesión y tanto X como &kalarm; estén ejecutándose.</para
+>Una alarma solo se puede lanzar mientras esté en sesión y tanto X como &kalarm; estén ejecutándose.</para
 ></note>
 </listitem>
 
@@ -2007,7 +2094,7 @@ together with a compatible speech synthesizer, &eg;
 <para
 >Marque <guilabel
 >Cerrar la ventana automáticamente tras esta hora</guilabel
-> si usted quiere que la ventana de alarma se cierre automáticamente si aún se está mostrando cuando es la hora de cancelación tardía de la alarma.</para>
+> si quiere que la ventana de alarma se cierre automáticamente si aún se está mostrando cuando es la hora de cancelación tardía de la alarma.</para>
 </listitem>
 </itemizedlist>
 
@@ -2048,7 +2135,7 @@ together with a compatible speech synthesizer, &eg;
 ><para
 >Seleccione <guilabel
 >Al iniciar sesión</guilabel
-> para desencadenar la alarma cuando usted inicie sesión hasta la hora de finalización planificada. Tras la hora de finalización planificada, la alarma se disparará una última vez. (Tenga en cuenta que una alarma que se repite al iniciar sesión también se desencadena cada vez que active las alarmas o reinicie &kalarm;).</para
+> para desencadenar la alarma cuando inicie sesión hasta la hora de finalización planificada. Tras la hora de finalización planificada, la alarma se disparará una última vez. (Tenga en cuenta que una alarma que se repite al iniciar sesión también se desencadena cada vez que active las alarmas o reinicie &kalarm;).</para
 ></listitem>
 
 <listitem>
@@ -2064,7 +2151,7 @@ together with a compatible speech synthesizer, &eg;
 <itemizedlist>
 <listitem>
 <para
->Para una repetición diaria, marque cada día de la semana en el que usted desee que se desencadene la alarma.</para>
+>Para una repetición diaria, marque cada día de la semana en el que desee que se desencadene la alarma.</para>
 </listitem>
 
 <listitem>
@@ -2077,7 +2164,7 @@ together with a compatible speech synthesizer, &eg;
 >Para una repetición anual, puede seleccionar una fecha fija del año o una posición del mes (&eg; el último sábado de mayo). Marque cada mes del año en el que quiera que se desencadene la alarma.</para>
 
 <para
->Si usted configura repeticiones anuales para el 29 de febrero, especifique cómo se deben gestionar estas repeticiones en los años que no sean bisiestos seleccionando la opción apropiada en<guilabel
+>Si configura repeticiones anuales para el 29 de febrero, especifique cómo se deben gestionar estas repeticiones en los años que no sean bisiestos seleccionando la opción apropiada en<guilabel
 >Alarma del 29 de febrero en años no bisiestos</guilabel
 >:</para>
 
@@ -2168,16 +2255,16 @@ together with a compatible speech synthesizer, &eg;
 
 <listitem>
 <para
->Usted puede restringir que una alarma no aparezca en vacaciones marcando <guilabel
+>Puede restringir que una alarma no aparezca en vacaciones marcando <guilabel
 >Excluir vacaciones</guilabel
->. Esto no cambia el modo en que se planifica la alarma; simplemente la suprime cuando se activa en vacaciones. Usted puede seleccionar su región o país de vacaciones en <link linkend="preferences-time"
+>. Esto no cambia el modo en que se planifica la alarma; simplemente la suprime cuando se activa en vacaciones. Puede seleccionar su región o país de vacaciones en <link linkend="preferences-time"
 >Diálogo de configuración</link
 >.</para>
 </listitem>
 
 <listitem>
 <para
->Usted puede restringir una alarma para que aparezca solo durante el horario de trabajo marcando <guilabel
+>Puede restringir una alarma para que aparezca solo durante el horario de trabajo marcando <guilabel
 >Solo durante horas de trabajo</guilabel
 >. Esto no cambia el modo en que se planifica la alarma; simplemente suprime la alarma cuando se activa fuera del horario de trabajo. Los días y horas de trabajo se configuran en el <link linkend="preferences-time"
 >Diálogo de configuración</link
@@ -2190,12 +2277,12 @@ together with a compatible speech synthesizer, &eg;
 >Subrepetición</title>
 
 <para
->Usted puede usar el botón <guibutton
+>Puede usar el botón <guibutton
 >Subrepetición</guibutton
 > para configurar una repetición dentro de una repetición. En este caso, cada vez a la que deba suceder la alarma como se especifica en la ocurrencia principal, en lugar de desencadenarse solo una vez, se activa repetidamente, según indicara en su especificación de la subrepetición. Por ejemplo, para configurar una alarma que se repite cada hora desde el mediodía hasta las 6 de la tarde en los jueves, debería configurar una repetición semanal, los jueves a las 12:00 y utilizar el diálogo de subrepetición para indicar un intervalo de 1 hora y, además, un contador de 6 o una duración de 6 horas.</para>
 
 <para
->En el diálogo de subrepetición que se muestra cuando usted pulsa el botón <guibutton
+>En el diálogo de subrepetición que se muestra cuando pulsa el botón <guibutton
 >Subrepetición</guibutton
 >, marque <guilabel
 >Repetir cada</guilabel
@@ -2250,6 +2337,13 @@ together with a compatible speech synthesizer, &eg;
 >Otros controles</title>
 
 <para
+>Si la configuración del sistema permite que varias alarmas activen el sistema desde una suspensión, puede seleccionar <guilabel
+>Despertar de suspensión</guilabel
+> para activar el sistema si se encuentra suspendido cuando se active la alarma. Esta función no está disponible para alarmas que solo tienen fecha porque su hora no está definida. Consulte <link linkend="wake-suspend"
+>Despertar de suspensión</link
+> para obtener más información.</para>
+
+<para
 >Para mostrar las alarmas, la casilla de verificación <guilabel
 >Confirmar asentimiento</guilabel
 > le permite especificar si se le ha de pedir confirmación cuando cierre la ventana de mensaje de alarma. Esto se puede usar como salvaguarda en caso de reconocimiento accidental de alarmas.</para>
@@ -2261,7 +2355,7 @@ together with a compatible speech synthesizer, &eg;
 
 <note
 ><para
->Si usted modifica o borra la alarma posteriormente en &kalarm;, el evento de &korganizer; se modificará o se borrará también. Pero si cambia el evento en &korganizer;, la alarma de &kalarm; no se verá afectada.</para
+>Si modifica o borra la alarma posteriormente en &kalarm;, el evento de &korganizer; se modificará o se borrará también. Pero si cambia el evento en &korganizer;, la alarma de &kalarm; no se verá afectada.</para
 ></note>
 
 <para
@@ -2288,14 +2382,27 @@ together with a compatible speech synthesizer, &eg;
 </sect2>
 </sect1>
 
-<sect1 id="message-window">
+<sect1 id="message-display">
+<title
+>Mostrar mensajes de alarma</title>
+
+<para
+>Los mensajes de alarma se pueden mostrar en ventanas o como notificaciones, según la opción elegida en el diálogo <link linkend="alarm-edit-dlg"
+>Editar alarma</link
+>. Estas dos opciones de visualización se describen a continuación.</para>
+
+<para
+>Si inhibe las notificaciones para el escritorio, la ejecución de las alarmas visibles se suspenderá hasta que se vuelvan a activar las notificaciones. Tenga en cuenta que esto se aplica a todas las alarmas en pantalla, independientemente de si se muestran en ventanas o como notificaciones.</para>
+
+<sect2 id="message-window">
 <title
 >Ventana del mensaje de alarma</title>
 
 <para
->Cuando un mensaje de alarma cumple, se muestra en cada escritorio y no puede cubrirse por ventanas normales, para asegurarse que usted lo ve. La ventana del mensaje muestra la hora para la que se planificó la alarma, porque puede ver cuándo surgió si estaba lejos del equipo a esa hora. Si la hora de planificación de la alarma está en hora diferente de la configuración de su equipo local, demostrará también su propia zona horaria.(Para mensajes de recordatorios, sin embargo, la fecha/hora mostrada es aquella prevista para la alarma principal o su repetición, no la hora del mensaje del recordatorio y el título de la ventana es <quote
->Recordatorio</quote
->).</para>
+>Los mensajes de alarma que se muestran en ventanas proporcionan la funcionalidad más completa.</para>
+
+<para
+>Cuando una alarma vence, se muestra en todos los escritorios, si es posible, y no se puede cubrir con ventanas comunes para garantizar que la vea. (Tenga en cuenta que actualmente solo el sistema de ventanas X11 ofrece esta función). La ventana del mensaje muestra la hora a la que se programó la alarma, de modo que pueda ver cuándo se mostró si no estaba frente a su equipo en ese momento. Si la hora programada de la alarma está en una zona horaria diferente a la definida localmente en su equipo, también se mostrará su zona horaria. (Para los mensajes de recordatorio, la fecha y hora que se muestran son las de la alarma principal o las de su repetición, no las del mensaje de recordatorio, y el título de la ventana es «Recordatorio»).</para>
 
 <para
 >Las ventanas del mensaje de alarma permanecen visibles hasta que se asienten, a no ser que se haya marcado <guilabel
@@ -2320,7 +2427,7 @@ together with a compatible speech synthesizer, &eg;
 <listitem>
 <para
 >Edite la alarma pulsando el botón <guibutton
->Editar...</guibutton
+>Editar…</guibutton
 >. Esto muestra el <link linkend="alarm-edit-dlg"
 >Diálogo de edición de alarmas</link
 >.</para>
@@ -2328,35 +2435,37 @@ together with a compatible speech synthesizer, &eg;
 
 <listitem>
 <para
->Mostrar las opciones para retrasar la alarma pulsando sobre el botón <guibutton
->Retrasar...</guibutton
->. Luego elija <guilabel
->Retrasar a fecha/hora</guilabel
-> para introducir la fecha y hora a la que se debe volver a mostrar el mensaje, o seleccione <guilabel
->Retrasar un intervalo de tiempo</guilabel
-> para introducir el retraso a partir de ese momento (en horas y minutos) con el que se debe volver a mostrar el mensaje. Luego pulse sobre <guibutton
+>Muestre las opciones para aplazar la alarma hasta más tarde pulsando el botón <guibutton
+>Aplazar…</guibutton
+>. A continuación, seleccione <guilabel
+>Aplazar durante</guilabel
+> para introducir el tiempo transcurrido desde el cual se debe volver a mostrar el mensaje (el botón <guilabel
+>Preajuste</guilabel
+> le permite seleccionar de una lista de intervalos de tiempo comunes), o seleccione <guilabel
+>Aplazar hasta</guilabel
+> para introducir la fecha y la hora en que se debe volver a mostrar el mensaje. A continuación, pulse <guibutton
 >Aceptar</guibutton
-> para retrasar el mensaje de alarma para cerrar la ventana.</para>
+> para aplazar el mensaje de alarma y cerrar su ventana.</para>
 
 <note
 ><para
->La hora a la que se retrase la alarma debe ser anterior a la próxima aparición o avance de recordatorio planificados. Por este motivo, el botón <guibutton
->Retrasar...</guibutton
+>La hora a la que se aplace la alarma debe ser anterior a la próxima aparición o avance de recordatorio planificados. Por este motivo, el botón <guibutton
+>Aplazar…</guibutton
 > de la ventana de mensaje de alarma y el botón <guibutton
 >Aceptar</guibutton
-> del diálogo de retraso se desactivan un minuto antes de que se produzca la próxima ocurrencia o avance de recordatorio.</para>
+> del diálogo de aplazamiento se desactivan un minuto antes de que se produzca la próxima ocurrencia o avance de recordatorio.</para>
 <para
 >Tenga en cuenta que si un recordatorio se configura <emphasis
 >después</emphasis
-> de la alarma, usted <emphasis
+> de la alarma, <emphasis
 >puede</emphasis
-> retrasar la alarma pasada su hora de recordatorio. En este caso, el recordatorio se suprimirá.</para
+> aplazar la alarma pasada su hora de recordatorio. En este caso, el recordatorio se suprimirá.</para
 ></note>
 
 <note
 ><para
 >El botón <guibutton
->Retrasar...</guibutton
+>Aplazar…</guibutton
 > no está disponible para alarmas que se muestran al iniciar sesión porque se ha seleccionado la opción <guilabel
 >Repetir al iniciar sesión</guilabel
 >.</para
@@ -2372,7 +2481,7 @@ together with a compatible speech synthesizer, &eg;
 
 <listitem>
 <para
->Si el mensaje de alarma se creó arrastrando el correo desde &kmail;, puede acceder directamente al correo en &kmail; pulsando en el botón que muestra el icono de &kmail;. Con ello, conseguirá seleccionar y resaltar el correo en la lista de carpetas de &kmail;.</para>
+>Si el mensaje de alarma se creó arrastrando un mensaje de correo de &kmail;, puede acceder directamente a dicho mensaje en &kmail; haciendo clic en el botón que muestra el icono de &kmail;. Esto mostrará el mensaje de correo y seleccionará la carpeta que lo contiene en la lista de carpetas de &kmail;.</para>
 
 <warning
 ><para
@@ -2384,12 +2493,22 @@ together with a compatible speech synthesizer, &eg;
 <para
 >El botón que muestra el icono <guiicon
 >&kalarm;</guiicon
-> proporciona una forma correcta de activar &kalarm;.</para>
+> proporciona una forma correcta de activar la ventana principal de &kalarm;, con dicha alarma resaltada.</para>
 </listitem>
 </itemizedlist>
 
 <para
->Usted puede elegir en <link linkend="preferences-view"
+>La forma de mostrar las ventanas de los mensajes de alarma depende del sistema de ventanas que se use.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><application
+>Sistema de ventanas X11</application
+></para>
+
+<para
+>Puede elegir en <link linkend="preferences-view"
 >Diálogo de configuración</link
 > cual de los dos modos diferentes deben usarse para mostrar ventanas con mensajes de alarma:</para>
 
@@ -2405,17 +2524,8 @@ together with a compatible speech synthesizer, &eg;
 </listitem>
 </itemizedlist>
 
-<note
-><para
->Cuando se muestra una alarma sobre una aplicación a pantalla completa, se muestra como una ventana no modal con independencia de su configuración. Esto es debido a una limitación del sistema de ventanas.</para
-></note>
-
-<sect2>
-<title
->Posicionado de las ventanas de mensajes</title>
-
 <para
->Usted puede elegir en <link linkend="preferences-view"
+>Puede elegir en <link linkend="preferences-view"
 >Diálogo de configuración</link
 > cual de los dos esquemas deberían utilizarse para posicionar las ventanas de mensajes de alarma:</para>
 
@@ -2432,13 +2542,82 @@ together with a compatible speech synthesizer, &eg;
 </itemizedlist>
 
 <para
->Si usted tiene varias ventanas de mensaje de alarma, o mensajes de error, puede expandir las ventanas sobre la pantalla para hacerlas visibles, o agruparlas todas juntas de nuevo en la esquina superior izquierda de la pantalla, por medio de la opción de menú <menuchoice
+>Si tiene varias ventanas de mensaje de alarma, o mensajes de error, puede expandir las ventanas sobre la pantalla para hacerlas visibles, o agruparlas todas juntas de nuevo en la esquina superior izquierda de la pantalla, por medio de la opción de menú <menuchoice
 > <guimenu
 >Ver</guimenu
 ><guimenuitem
 >Expandir ventanas</guimenuitem
 > </menuchoice
->. Si lo desea, puede configurar un acceso rápido de teclado para esta acción.</para>
+>. Si lo desea, puede configurar un atajo de teclado para esta acción.</para>
+
+</listitem>
+
+<listitem>
+<para
+><application
+>Sistema de ventanas Wayland</application
+></para>
+
+<para
+>El sistema de ventanas Wayland no permite que las aplicaciones controlen la posición ni la decoración de sus ventanas, por lo que las opciones de visualización están mucho más limitadas.</para>
+
+<para
+>Para reducir el riesgo de aceptar la alarma accidentalmente, los botones de la ventana están desactivados inicialmente, activándose solo tras un retardo que se puede configurar.</para>
+
+</listitem>
+
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>Notificaciones de mensajes de alarma</title>
+
+<para
+>Los mensajes de alarma que se muestran como notificaciones proporcionan menos funcionalidad que los que se muestran en ventanas.</para>
+
+<para
+>Cuando se lanza un mensaje de alarma, se muestra como una notificación. Esta notificación muestra la hora a la que se programó. Si la hora de la alarma está en una zona horaria diferente a la configurada en su equipo, también se mostrará dicha zona. (Para los mensajes de recordatorio, la fecha y hora que se muestran son las de la alarma principal o las de su repetición, no la hora del mensaje, y se muestra el encabezado «Recordatorio»).</para>
+
+<para
+>La notificación se cierra automáticamente tras un breve periodo de tiempo. (Tenga en cuenta que este periodo es común para todas las aplicaciones; se puede modificar en las &systemsettings;). Una vez transcurrido este periodo de tiempo, una notificación puede seguir viéndose en el historial de notificaciones hasta que se elimine o se cierre la sesión. Como las aplicaciones no pueden acceder al historial de notificaciones, &kalarm; no puede eliminar ni sustituir notificaciones en el historial como sí lo haría con las ventanas de alarma. Por lo tanto, el historial puede contener varias notificaciones para la misma alarma, incluyendo recordatorios y repeticiones.</para>
+
+<para
+>La notificación de mensajes de alarma ofrece las siguientes opciones. Tenga en cuenta que al seleccionar cualquier opción, se cerrará inmediatamente la notificación y no se mostrará en el historial de notificaciones. Tenga en cuenta también que estas opciones solo están disponibles mientras la notificación está activa, antes de que se agote el tiempo de espera. Si posteriormente accede a la notificación en el historial de notificaciones, debido a las limitaciones del sistema de notificaciones, la única interacción disponible es eliminarla del historial.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Reconocer la alarma pulsando el botón <guibutton
+>Cerrar</guibutton
+>. Esto cerrará la notificación.</para>
+</listitem>
+
+<listitem>
+<para
+>Edite la alarma pulsando el botón <guibutton
+>Editar</guibutton
+>. Esto muestra el <link linkend="alarm-edit-dlg"
+>Diálogo de edición de alarmas</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Muestre las opciones para aplazar la alarma hasta más tarde pulsando el botón <guibutton
+>Aplazar</guibutton
+>. Este botón solo se muestra si se puede aplazar la alarma. Consulte la descripción de la opción de aplazamiento en la sección <link linkend="message-window"
+>Ventana de mensajes de alarma</link
+> para obtener más detalles.</para>
+</listitem>
+
+<listitem>
+<para
+>Si se pulsa sobre la notificación en cualquier lugar que no sea un botón, se activará la ventana principal de &kalarm;, con dicha alarma resaltada.</para>
+</listitem>
+
+</itemizedlist>
 
 </sect2>
 </sect1>
@@ -2448,10 +2627,10 @@ together with a compatible speech synthesizer, &eg;
 >Operación de la bandeja del sistema</title>
 
 <para
->&kalarm; muestra por omisión un icono en la bandeja del sistema. El icono proporciona tanto control como indicación de estado de la monitorización de alarmas. Un icono normal de &kalarm; indica qué las alarmas están siendo monitorizadas, mientras que un icono gris indica que no lo están. Si algunas alarmas individuales están desactivadas, se superpone al icono una pequeña cruz.</para>
+>&kalarm; muestra un icono en la bandeja del sistema de forma predeterminada. Este icono proporciona tanto control como indicación del estado de supervisión de las alarmas. Un icono normal de &kalarm; indica que se están supervisando todas las alarmas, mientras que dos iconos modificados indican que no se están supervisando algunas alarmas o ninguna de ellas. Las modificaciones de los iconos dependen del tema de iconos que se use.</para>
 
 <para
->El icono de la bandeja del sistema de &kalarm; se oculta automáticamente por omisión siempre que no hay alarmas que venzan en las próximas 24 horas. Usted puede cambiar el tiempo límite de autocultación o mostrar siempre el icono de la bandeja del sistema, usando el <link linkend="preferences-view"
+>El icono de la bandeja del sistema de &kalarm; se oculta automáticamente por omisión siempre que no hay alarmas que venzan en las próximas 24 horas. Puede cambiar el tiempo límite de autocultación o mostrar siempre el icono de la bandeja del sistema, usando el <link linkend="preferences-view"
 >Diálogo de configuración</link
 >. Para mostrar el icono cuando se ha ocultado automáticamente, pulse en la flecha de la bandeja del sistema para mostrar iconos ocultos.</para>
 
@@ -2539,7 +2718,7 @@ together with a compatible speech synthesizer, &eg;
 <term
 ><menuchoice
 ><guimenuitem
->Configurar &kalarm;...</guimenuitem
+>Configurar &kalarm;…</guimenuitem
 ></menuchoice
 ></term>
 <listitem
@@ -2592,7 +2771,7 @@ together with a compatible speech synthesizer, &eg;
 >Mostrando &kalarm; en la bandeja del sistema</title>
 
 <para
->Usted debe estar ejecutando el escritorio &plasma; u otro gestor de ventanas adecuado para poder mostrar &kalarm; en la bandeja del sistema.</para>
+>Debe estar ejecutando el escritorio &plasma; u otro gestor de ventanas adecuado para poder mostrar &kalarm; en la bandeja del sistema.</para>
 
 <para
 >Seleccione <menuchoice
@@ -2635,7 +2814,7 @@ together with a compatible speech synthesizer, &eg;
 >. Esto causa que &kalarm; vuelva a cargar todos los calendarios de alarma.</para>
 
 <para
->Usted puede volver a cargar un calendario individual y refrescar sus alarmas en la lista de alarmas pulsando con el botón <mousebutton
+>Puede volver a cargar un calendario individual y refrescar sus alarmas en la lista de alarmas pulsando con el botón <mousebutton
 >Derecho</mousebutton
 > sobre el calendario en la lista de calendarios y seleccionando la opción de menú <menuchoice
 ><guimenuitem
@@ -2687,7 +2866,7 @@ together with a compatible speech synthesizer, &eg;
 >Activando la monitorización de alarmas</title>
 
 <para
->Para que suceda la monitorización de una alarma, se debe estar ejecutando &kalarm;. Una vez que usted ejecute &kalarm; este se iniciará automáticamente cada vez que inicie sesión, salvo que lo desactive más tarde en la pestaña <link linkend="preferences-general"
+>Para que suceda la monitorización de una alarma, se debe estar ejecutando &kalarm;. Una vez que ejecute &kalarm; este se iniciará automáticamente cada vez que inicie sesión, salvo que lo desactive más tarde en la pestaña <link linkend="preferences-general"
 >General</link
 > del diálogo de configuración.</para>
 
@@ -2725,7 +2904,7 @@ together with a compatible speech synthesizer, &eg;
 >Desactivando la monitorización de alarmas</title>
 
 <para
->Usted puede desactivar temporalmente la monitorización de alarmas, que evita que &kalarm; vuelva a mostrar más alarmas hasta que vuelva a activar las alarmas, o &ndash; asumir que &kalarm; se configure para que comience al iniciar sesión &ndash; hasta la próxima vez que inicie sesión.</para>
+>Puede desactivar temporalmente la monitorización de alarmas, que evita que &kalarm; vuelva a mostrar más alarmas hasta que vuelva a activar las alarmas, o &ndash; asumir que &kalarm; se configure para que comience al iniciar sesión &ndash; hasta la próxima vez que inicie sesión.</para>
 
 <itemizedlist>
 <listitem>
@@ -2838,25 +3017,56 @@ together with a compatible speech synthesizer, &eg;
 >Despertar de suspendido</title>
 
 <para
->Es posible configurar una alarma seleccionada para despertar su equipo desde hibernación o suspensión cuando la alarma se desencadena, de modo que la acción de alarma pueda aparecer incluso cuando el sistema estuviera apagado. Esta función se controla por un diálogo al que se accede seleccionando <menuchoice
+>Puede configurar alarmas para despertar el equipo de la hibernación o de la suspensión cuando se activen, de modo que la acción de la alarma se pueda llevar a cabo incluso con el sistema apagado. El mecanismo que usa &kalarm; para reactivar el sistema, y la interfaz de usuario para controlarlo, depende del tipo de sistema y de los permisos del usuario. Existen dos posibilidades:</para>
+
+<sect2>
+<title
+>Despertar de suspensión del temporizador del kernel de Linux</title>
+
+<para
+>En los sistemas Linux, si el usuario dispone de la capacidad de temporizador de alarmas del kernel (<literal
+>cap_wake_alarm</literal
+>), puede definir cualquier número de alarmas para salir del modo de suspensión. En este caso, se puede configurar la reactivación del equipo para cada alarma individual en el <link linkend="alarm-edit-dlg"
+>diálogo de edición de la alarma</link
+> usando la opción <guilabel
+>Despertar de suspensión</guilabel
+>.</para>
+
+<para
+>En el <link linkend="preferences-time"
+>diálogo de configuración</link
+> puede configurar el tiempo que debe transcurrir antes de que la alarma se active para salir de la suspensión, con el objeto de garantizar que el sistema tenga tiempo de restaurarse completamente antes de que se active la alarma.</para>
+
+</sect2>
+
+<sect2>
+<title
+>Despertar de suspensión del reloj de tiempo real</title>
+
+<para
+>En los sistemas que no sean Linux, o en los sistemas Linux en los que el usuario no disponga de la capacidad <literal
+>cap_wake_alarm</literal
+>, se usa la alarma del reloj de tiempo ral (<acronym
+>RTC</acronym
+>), que solo se puede configurar para una alarma a la vez. En este caso se usa un diálogo especial para salir del modo de suspensión, que permite definir, cancelar o mostrar la reactivación del equipo. Para acceder al este diálogo, seleccione la opción del menú <menuchoice
 ><guimenu
 >Acciones</guimenu
 > <guimenuitem
->Despertar desde suspendido</guimenuitem
+>Despertar del modo de suspensión</guimenuitem
 ></menuchoice
->. El diálogo permite establecer, cancelar o mostrar la alarma de despertar desde suspendido.</para>
+>.</para>
 
 <para
->El uso la función despertar desde suspendido necesita de privilegios administrativos. Se le pedirá la contraseña de root cuando usted establezca o suspenda una alarma de despertar desde suspendido.</para>
+>El uso la función despertar desde suspendido necesita de privilegios administrativos. Se le pedirá la contraseña de root cuando establezca o suspenda una alarma de despertar desde suspendido.</para>
 
 <note
 ><para
->Esperar desde suspendido no está implementado en algunos equipos, especialmente los más viejos, y algunos solo admiten establecer una alarma de despertar en las próximas 24 horas. Puede haber también restricciones sobre en que modo de suspensión la función despertará el equipo. Usted debería considerar configurar alarmas de prueba para comprobar las capacidades de su sistema antes de confiar en esta característica.</para
+>Esperar desde suspendido no está implementado en algunos equipos, especialmente los más viejos, y algunos solo admiten establecer una alarma de despertar en las próximas 24 horas. Puede haber también restricciones sobre en que modo de suspensión la función despertará el equipo. Debería considerar configurar alarmas de prueba para comprobar las capacidades de su sistema antes de confiar en esta característica.</para
 ></note>
 
 <warning
 ><para
->Su equipo solo puede programar una sola alarma de despertar desde suspendido a la vez. Si usted usa esta función con &kalarm;, debe asegurarse que no entra en conflicto con ninguna otra aplicación que también use despertar desde suspendido. Siempre que una aplicación planifica o borra despertar desde suspendido, esto cancela cualquier despertar desde suspendido establecido previamente, sin importar si se estableció por &kalarm; o por cualquier otra aplicación.</para
+>Su equipo solo puede programar una sola alarma de despertar desde suspendido a la vez. Si usa esta función con &kalarm;, debe asegurarse que no entra en conflicto con ninguna otra aplicación que también use despertar desde suspendido. Siempre que una aplicación planifica o borra despertar desde suspendido, esto cancela cualquier despertar desde suspendido establecido previamente, sin importar si se estableció por &kalarm; o por cualquier otra aplicación.</para
 ></warning>
 
 <para
@@ -2892,6 +3102,7 @@ together with a compatible speech synthesizer, &eg;
 </listitem>
 </itemizedlist>
 
+</sect2>
 </sect1>
 
 <sect1 id="quitting">
@@ -2923,7 +3134,7 @@ together with a compatible speech synthesizer, &eg;
 ><guimenu
 >Preferencias</guimenu
 ><guimenuitem
->Configurar &kalarm;...</guimenuitem
+>Configurar &kalarm;…</guimenuitem
 ></menuchoice
 >. Esto muestra el diálogo de configuración.</para>
 
@@ -2940,43 +3151,76 @@ together with a compatible speech synthesizer, &eg;
 <listitem>
 <para
 ><guilabel
->Iniciar automáticamente al iniciar sesión</guilabel
->: &kalarm; se iniciará automáticamente al iniciar la sesión, asegurando que &kalarm; se ejecute siempre hasta que usted lo abandone manualmente.</para>
+>Modo de ejecución</guilabel
+>: Esto le permite seleccionar si &kalarm; debe ejecutarse automáticamente, de forma manual o no ejecutarse.</para>
 
-<warning
-><para
->Esta opción siempre debería estar marcada, a no ser que usted pretenda dejar de usar &kalarm;.</para
-></warning>
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Ejecutar automáticamente</guilabel
+>: Seleccione esta opción para ejecutar &kalarm; de forma automática durante el inicio de la sesión para asegurarse de que siempre se ejecute. Debe seleccionar esta opción para que &kalarm; funcione de forma normal y muestre alarmas.</para>
+</listitem>
 
-<note
-><para
->Esta opción se vuelve a seleccionar automáticamente si se ejecuta &kalarm;. Por tanto, si ha desmarcado esta opción y quiere seguir evitando que &kalarm; se lance al inicio, tiene que volver a desmarcar esta opción cada vez que haga funcionar &kalarm;.</para
-></note>
+<listitem>
+<para
+><guilabel
+>Ejecutar solo manualmente</guilabel
+>: Selecciones esta opción si solo necesita ejecutar &kalarm; de forma ocasional. No se arrancará de forma automática y tendrá que ejecutarlo a mano cuando sea necesario. Cuando salga del programa (o cuando cierre la sesión), dejará de funcionar y no se mostrará ninguna alarma hasta que vuelva a ejecutarlo.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>No ejecutar</guilabel
+>: Seleccione esta opción si quiere dejar de usar &kalarm;. No se volverá a arrancar durante el inicio de sesión y, cuando salga de la aplicación o cierre la sesión, se dejarán de mostrar alarmas.</para>
+
+<para
+>Tenga presente que si vuelve a ejecutar &kalarm; posteriormente tras haber seleccionado esta opción, &kalarm; continuará funcionando de forma normal y se arrancará automáticamente durante el inicio de sesión. Si sigue queriendo dejar de usar &kalarm; tras esto, tendrá que volver a seleccionar la opción <guilabel
+>No ejecutar</guilabel
+> una vez más.</para>
+</listitem>
+</itemizedlist>
 </listitem>
 
 <listitem>
 <para
 ><guilabel
 >Avisar antes de salir</guilabel
->: Cuando las alarmas están desactivadas mientras &kalarm; no se esté ejecutando, al marcar esta opción se le pide confirmación si intenta terminar &kalarm; usando la opción <menuchoice
+>: &kalarm; debe estar ejecutándose para que se activen las alarmas. Seleccione esta opción para que, si intenta cerrar &kalarm; con la opción <menuchoice
 ><guimenu
 >Salir</guimenu
 ></menuchoice
-> del icono de la bandeja del sistema. Esto evita la desactivación adicional de las alarmas. Por seguridad, esta opción se activa automáticamente por omisión si cambia el modo de ejecución.</para>
+>, se le advierta de que las alarmas se desactivarán y se le solicite confirmación. Esto evita la desactivación accidental de las alarmas. Por seguridad, esta opción se reactiva automáticamente de forma predeterminada al cambiar el modo de ejecución.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Activar nombres de alarma</guilabel
+>: Indicar si se puede asignar un nombre a cada alarma para facilitar su identificación. Esto determina si la columna <guilabel
+>Nombre</guilabel
+> se muestra en la <link linkend="alarm-list"
+>lista de alarmas</link
+> y si el campo <guilabel
+>Nombre de alarma</guilabel
+> aparecerá en el <link linkend="alarm-edit-dlg"
+>Diálogo de edición de alarmas</link
+>.</para>
 </listitem>
 
 <listitem
 ><para
 ><guilabel
 >Confirmar borrados de alarma</guilabel
->: Especifique si se debe pedir confirmación cada vez que usted borre una alarma.</para>
+>: Especifique si se debe pedir confirmación cada vez que borre una alarma.</para>
 </listitem>
 
 <listitem
 ><para
 ><guilabel
->Intervalo de retraso predeterminado</guilabel
->: Introduzca el intervalo de tiempo predeterminado, en horas y minutos para mostrar inicialmente cuando se visualiza el diálogo de alarma retrasada. Tenga en cuenta que si se ha retrasado previamente una alarma, el intervalo que se muestra inicialmente en el diálogo de alarma retrasada será igual al intervalo retrasado utilizado la última vez que se retrasó la alarma.</para>
+>Intervalo de aplazamiento predeterminado</guilabel
+>: Introduzca el intervalo de tiempo predeterminado, en horas y minutos para mostrar inicialmente cuando se visualiza el diálogo de alarma aplazada. Tenga en cuenta que si se ha aplazado previamente una alarma, el intervalo que se muestra inicialmente en el diálogo de alarma aplazada será igual al intervalo de aplazamiento usado la última vez que se aplazó la alarma.</para>
 </listitem>
 
 <listitem
@@ -3043,6 +3287,15 @@ together with a compatible speech synthesizer, &eg;
 >Cuando se produzca la alarma de órdenes, la cadena con la orden se pondrá entrecomillada antes de que se inserte en la línea de órdenes de la ventana del terminal.</para>
 </listitem>
 
+<listitem
+><para
+><guilabel
+>Activar Akonadi</guilabel
+>: Seleccione si desea usar &akonadi; para proporcionar funciones que dependen de él. Consulte <link linkend="akonadi-plugin"
+>Complemento de Akonadi</link
+> para obtener más información. Tenga en cuenta que esta opción solo se muestra si el complemento de Akonadi está instalado.</para>
+</listitem>
+
 </itemizedlist>
 </sect1>
 
@@ -3068,6 +3321,15 @@ together with a compatible speech synthesizer, &eg;
 ><guilabel
 >Región de vacaciones</guilabel
 >: Elija que país o región de vacaciones utilizar. Esto afecta a las alarmas de repetición para las que esté activa la opción de excluir vacaciones.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Salir de la suspensión antes de la alarma</guilabel
+>: Introduzca el número de minutos anteriores a la hora de activación de la alarma para reactivar el sistema, en el caso de las alarmas configuradas para activarse desde suspensión. Esto le permite garantizar que el sistema tenga tiempo de restaurarse completamente antes de que se active la alarma, de modo que esta se active en el momento correcto. Esta opción solo se muestra si la configuración del sistema permite que múltiples alarmas activen el sistema desde la suspensión. Consulte <link linkend="wake-suspend"
+>Salir de la suspensión</link
+> para obtener más información.</para>
 </listitem>
 
 <listitem
@@ -3099,14 +3361,14 @@ together with a compatible speech synthesizer, &eg;
 ><para
 ><guilabel
 >Hora de entrada diaria</guilabel
->: introduzca la hora a la que usted comienza a trabajar cada día.</para>
+>: introduzca la hora a la que comienza a trabajar cada día.</para>
 </listitem>
 
 <listitem
 ><para
 ><guilabel
 >Hora de salida diaria</guilabel
->: introduzca la hora a la que usted termina de trabajar cada día.</para>
+>: introduzca la hora a la que termina de trabajar cada día.</para>
 </listitem>
 </itemizedlist>
 </listitem>
@@ -3165,7 +3427,7 @@ together with a compatible speech synthesizer, &eg;
 ><para
 ><guilabel
 >Mantener las alarmas tras expirar</guilabel
->: Marque esta opción para archivar las alarmas expiradas y borradas. Quite la marca para no guardar el registro de las alarmas que dejan de estar activas. Tenga en cuenta que las alarmas eliminadas solo se archivan si se han activado previamente. Si usted elimina una alarma antes de que se active, esta se descarta.</para>
+>: Marque esta opción para archivar las alarmas expiradas y borradas. Quite la marca para no guardar el registro de las alarmas que dejan de estar activas. Tenga en cuenta que las alarmas eliminadas solo se archivan si se han activado previamente. Si elimina una alarma antes de que se active, esta se descarta.</para>
 </listitem>
 
 <listitem
@@ -3196,6 +3458,13 @@ together with a compatible speech synthesizer, &eg;
 >Correo</guilabel
 > le permite elegir opciones para el envío y el direccionamiento de las alarmas de correo:</para>
 
+<note
+><para
+>Las funciones que dependen de &kmail; solo están disponibles si está instalado y activado el <link linkend="akonadi-plugin"
+>complemento Akonadi</link
+> de &kalarm;.</para>
+</note>
+
 <itemizedlist>
 <listitem>
 <para
@@ -3208,7 +3477,7 @@ together with a compatible speech synthesizer, &eg;
 ><para
 ><guilabel
 >KMail</guilabel
->: Cuando se produce una alarma de correo, el mensaje se envía automáticamente usando &kmail; (que se inicia primero si es necesario).</para>
+>: Cuando se produce una alarma de correo, el mensaje se envía automáticamente usando &kmail;.</para>
 </listitem>
 
 <listitem
@@ -3262,8 +3531,8 @@ together with a compatible speech synthesizer, &eg;
 <listitem
 ><para
 >Seleccione <guilabel
->Usar la dirección predeterminada desde KMail o Preferencias del sistema</guilabel
-> para usar la dirección de correo configurada en &kmail; o &systemsettings;.</para>
+>Usar la identidad predeterminada de KMail</guilabel
+> para usar la dirección de correo predeterminada que tenga configurada en &kmail;.</para>
 </listitem>
 
 <listitem
@@ -3292,8 +3561,8 @@ together with a compatible speech synthesizer, &eg;
 <listitem
 ><para
 >Seleccione <guilabel
->Usar la dirección predeterminada desde KMail o Preferencias del sistema</guilabel
-> para usar la dirección de correo configurada en &kmail; o &systemsettings;.</para>
+>Usar la identidad predeterminada de KMail</guilabel
+> para usar la dirección de correo predeterminada que tenga configurada en &kmail;.</para>
 </listitem>
 </itemizedlist>
 </listitem>
@@ -3342,7 +3611,7 @@ together with a compatible speech synthesizer, &eg;
 </itemizedlist>
 
 <para
->Cuando el icono de la bandeja del sistema se oculta automáticamente, usted puede hacerlo visible por medio de la opción de la bandeja del sistema que muestra los iconos ocultos.</para>
+>Cuando el icono de la bandeja del sistema se oculta automáticamente, puede hacerlo visible por medio de la opción de la bandeja del sistema que muestra los iconos ocultos.</para>
 
 <para
 >Cuando <guilabel
@@ -3407,7 +3676,14 @@ together with a compatible speech synthesizer, &eg;
 <para
 >La pestaña <guilabel
 >Ventanas de alarma</guilabel
-> contiene opciones para controlar el aspecto de las ventanas de mensajes de alarma.</para>
+> contiene opciones para controlar el aspecto de las ventanas de mensajes de alarma. Las opciones disponibles dependen del sistema de ventanas que se use.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><application
+>Sistema de ventanas X11</application
+></para>
 
 <itemizedlist>
 <listitem>
@@ -3430,11 +3706,30 @@ together with a compatible speech synthesizer, &eg;
 <para
 ><guilabel
 >Las ventanas de mensaje tienen una barra de título y retienen el foco del teclado</guilabel
->: Esta opción controla si las ventanas de los mensajes de alarma son modales o no, &ie; si capturan el foco del teclado cuando aparecen. Vea la sección <link linkend="message-window"
->Ventana de mensaje de alarma</link
+>: Esta opción controla si las ventanas de los mensajes de alarma son modales o no, &ie; si capturan el foco del teclado cuando aparecen. Vea la sección <link linkend="message-display"
+>Visor del mensaje de alarma</link
 > para más detalles.</para>
 </listitem>
 </itemizedlist>
+</listitem>
+
+<listitem>
+<para
+><application
+>Sistema de ventanas Wayland</application
+></para>
+
+<itemizedlist>
+<listitem>
+<para
+>Para reducir la posibilidad de aceptar accidentalmente la alarma, los botones están desactivados inicialmente. El retardo en segundos antes de que se activen se especifica en <guilabel
+>Retardo en la activación de los botones (segundos)</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
 </sect1>
 
 <sect1 id="preferences-edit">
@@ -3456,6 +3751,11 @@ together with a compatible speech synthesizer, &eg;
 > contiene opciones que se aplican a todos los tipos de alarmas.</para>
 
 <itemizedlist>
+<listitem
+><para
+>Definir el método predeterminado para mostrar mensajes de alarma.</para>
+</listitem>
+
 <listitem
 ><para
 >Define los estados predeterminados para las casillas de verificación<guilabel
@@ -3716,7 +4016,7 @@ together with a compatible speech synthesizer, &eg;
 >--disable-all</option
 ></entry>
   <entry
->Desactivar la monitorización de alarmas. Esto evita que cualquier alarma se lance hasta que usted reactive las alarmas o reinicie &kalarm;, p. ej. en el próximo inicio de sesión. <option
+>Desactivar la monitorización de alarmas. Esto evita que cualquier alarma se lance hasta que reactive las alarmas o reinicie &kalarm;, p. ej. en el próximo inicio de sesión. <option
 >--triggerEvent</option
 > no se puede especificar con esta opción.</entry>
 </row>
@@ -3870,7 +4170,7 @@ together with a compatible speech synthesizer, &eg;
 >--login</option
 ></entry>
   <entry
->Activa la alarma cada vez que usted inicie sesión. Ni <option
+>Activa la alarma cada vez que inicie sesión. Ni <option
 >--interval</option
 > ni <option
 >--repeat</option
@@ -3903,6 +4203,38 @@ together with a compatible speech synthesizer, &eg;
 > y <option
 >--colorfg</option
 > se ignoran con esta opción.</entry>
+</row>
+<row>
+  <entry
+><option
+>-n</option
+>, <option
+>--name <replaceable
+>nombre</replaceable
+></option
+></entry>
+  <entry
+>Indicar un nombre para ayudarle a identificar la alarma.</entry>
+</row>
+<row>
+  <entry
+><option
+>-N</option
+>, <option
+>--notify</option
+></entry>
+  <entry
+>Mostrar la alarma como una notificación en lugar de en una ventana. Las opciones <option
+>--color</option
+>, <option
+>--colorfg</option
+>, <option
+>--play</option
+>, <option
+>--ack-confirm</option
+> y <option
+>--auto-close</option
+> son incompatibles con esta opción.</entry>
 </row>
 <row>
   <entry
@@ -4034,13 +4366,13 @@ together with a compatible speech synthesizer, &eg;
 >--speak</option
 ></entry>
   <entry
->Lee el mensaje que se muestra. Esta opción necesita que esté instalado y configurado &jovie;, además de un sintetizador de habla. Ni <option
+>Leer el mensaje cuando se muestra. Esta opción requiere que &kalarm; se haya compilado con el uso de voz activado y que el módulo de voz de &Qt; esté instalado y en funcionamiento. No se pueden especificar <option
 >--beep</option
-> ni <option
+>, <option
 >--play</option
 > ni <option
 >--play-repeat</option
-> se pueden indicar con esta opción.</entry>
+> con esta opción.</entry>
 </row>
 <row>
   <entry
@@ -4068,28 +4400,16 @@ together with a compatible speech synthesizer, &eg;
 ></entry>
   <entry
 >Disparar la alarma en la fecha o la fecha/hora especificada. Especifique una fecha sin una hora en formato <replaceable
->yyyy-mm-dd [TZ]</replaceable
+>yyyy-mm-dd[ TZ]</replaceable
 >; especifique una fecha y hora como <replaceable
->[[[yyyy-]mm-]dd-]hh:mm [TZ]</replaceable
+>[[[yyyy-]mm-]dd-]hh:mm[ TZ]</replaceable
 > (cuando se omiten, los campos de fecha son por omisión los valores de hoy). Si no se especifica zona horaria, se supone la hora local del sistema. Si está presente un especificador de zona horaria <replaceable
 >TZ</replaceable
 >, debe ser el nombre de una zona horaria del sistema (&eg; <userinput
 >Europe/London</userinput
 >), <userinput
 >UTC</userinput
-> representando la zona horaria UTC, o <userinput
->Clock</userinput
-> para usar la zona local del equipo e ignorar zonas horarias.</entry>
-</row>
-<row>
-  <entry
-><option
->--triggerEvent <replaceable
->eventID</replaceable
-></option
-></entry>
-  <entry
->Desencadena la alarma con el ID de evento especificado.</entry>
+> representando la zona horaria UTC.</entry>
 </row>
 <row>
   <entry
@@ -4233,7 +4553,9 @@ together with a compatible speech synthesizer, &eg;
 ></option
 ></entry>
   <entry
->Muestra el diálogo de edición de alarma para editar la alarma con el id. de evento indicado.</entry>
+>Abra el diálogo «Editar alarma» para modificar la alarma con el ID de evento especificado. El ID de evento es el ID único del evento, precedido opcionalmente por el nombre de la configuración o el ID numérico del recurso que lo contiene, en el formato <replaceable
+>[ID_de_recurso:]UID_de_evento</replaceable
+>.</entry>
 </row>
 <row>
   <entry
@@ -4285,7 +4607,7 @@ together with a compatible speech synthesizer, &eg;
   <entry
 >Obtiene una lista de alarmas programadas a <filename
 >stdout</filename
->. la lista muestra detalles concisos de cada alarma pendiente: su identificador de recurso (si usa Akonadi), UID, siguiente periodo planificado y texto del mensaje o archivo.</entry>
+>. la lista muestra detalles concisos de cada alarma pendiente: su identificador de recurso, UID, siguiente periodo programado y texto del mensaje o archivo.</entry>
 </row>
 <row>
   <entry
@@ -4311,9 +4633,9 @@ together with a compatible speech synthesizer, &eg;
 >Consulte también:</para>
 <simplelist>
 <member
->kf5options(7)</member>
+>kf6options(7)</member>
 <member
->qt5options(7)</member>
+>qt6options(7)</member>
 </simplelist>
 
 </sect1>
@@ -4395,7 +4717,9 @@ together with a compatible speech synthesizer, &eg;
 ></term>
 <listitem>
 <para
->Indica el identificador único del evento que se va a cancelar.</para>
+>Especifica el ID único del evento que se va a cancelar, opcionalmente precedido por el nombre de configuración o el ID numérico del recurso que contiene el evento, en el formato <replaceable
+>[ID_de_recurso:]UID_de_evento</replaceable
+>.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -4443,7 +4767,9 @@ together with a compatible speech synthesizer, &eg;
 ></term>
 <listitem>
 <para
->Indica el id. único del evento que se va a disparar.</para>
+>Especifica el ID único del evento que se activará, opcionalmente precedido por el nombre de configuración o el ID numérico del recurso que contiene el evento, en el formato <replaceable
+>[ID_de_recurso:]UID_de_evento</replaceable
+>.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -4479,116 +4805,125 @@ together with a compatible speech synthesizer, &eg;
 <refsynopsisdiv>
 <synopsis
 >bool scheduleMessage(const QString&amp; <replaceable
->message</replaceable
+>nombre</replaceable
 >,
                      const QString&amp; <replaceable
->startDateTime</replaceable
+>mensaje</replaceable
+>,
+                     const QString&amp; <replaceable
+>fechaHoraDeInicio</replaceable
 >,
                      int <replaceable
->lateCancel</replaceable
+>cancelaciónPosterior</replaceable
 >,
                      unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >, 
                      const QString&amp; <replaceable
->bgColor</replaceable
+>colorDelFondo</replaceable
 >, 
                      const QString&amp; <replaceable
->fgColor</replaceable
+>colorDelTexto</replaceable
 >, 
                      const QString&amp; <replaceable
->font</replaceable
+>tipoDeLetra</replaceable
 >, 
                      const QString&amp; <replaceable
->audioURL</replaceable
+>urlDeSonido</replaceable
 >, 
                      int <replaceable
->reminderMins</replaceable
+>minsRestantes</replaceable
 >, 
                      const QString&amp; <replaceable
->recurrence</replaceable
+>repetición</replaceable
 >,
                      int <replaceable
->subRepeatInterval</replaceable
+>intervaloDeSubRepetición</replaceable
 >, 
                      int <replaceable
->subRepeatCount</replaceable
+>contadorDeSubRepeticiones</replaceable
 >)
 </synopsis>
 <synopsis
 >bool scheduleMessage(const QString&amp; <replaceable
->message</replaceable
->, 
+>nombre</replaceable
+>,
                      const QString&amp; <replaceable
->startDateTime</replaceable
+>mensaje</replaceable
+>,
+                     const QString&amp; <replaceable
+>fechaHoraDeInicio</replaceable
 >, 
                      int <replaceable
->lateCancel</replaceable
+>cancelaciónPosterior</replaceable
 >,
                      unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >, 
                      const QString&amp; <replaceable
->bgColor</replaceable
+>colorDelFondo</replaceable
 >, 
                      const QString&amp; <replaceable
->fgColor</replaceable
+>colorDelTexto</replaceable
 >, 
                      const QString&amp; <replaceable
->font</replaceable
+>tipoDeLetra</replaceable
 >, 
                      const QString&amp; <replaceable
->audioURL</replaceable
+>urlDeSonido</replaceable
 >, 
                      int <replaceable
->reminderMins</replaceable
+>minsRestantes</replaceable
 >, 
                      int <replaceable
->recurType</replaceable
+>tipoDeRepetición</replaceable
 >, 
                      int <replaceable
->recurInterval</replaceable
+>intervaloDeRepetición</replaceable
 >, 
                      int <replaceable
->recurCount</replaceable
+>contadorDeRepeticiones</replaceable
 >)
 </synopsis>
 <synopsis
 >bool scheduleMessage(const QString&amp; <replaceable
->message</replaceable
+>nombre</replaceable
+>,
+                     const QString&amp; <replaceable
+>mensaje</replaceable
 >, 
                      const QString&amp; <replaceable
->startDateTime</replaceable
+>fechaHoraDeInicio</replaceable
 >, 
                      int <replaceable
->lateCancel</replaceable
+>cancelaciónTardía</replaceable
 >, 
                      unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >, 
                      const QString&amp; <replaceable
->bgColor</replaceable
+>colorDelFondo</replaceable
 >, 
                      const QString&amp; <replaceable
->fgColor</replaceable
+>colorDelTexto</replaceable
 >, 
                      const QString&amp; <replaceable
->font</replaceable
+>tipoDeLetra</replaceable
 >, 
                      const QString&amp; <replaceable
->audioURL</replaceable
+>urlDeSonido</replaceable
 >, 
                      int <replaceable
->reminderMins</replaceable
+>minutosRecordatorio</replaceable
 >, 
                      int <replaceable
->recurType</replaceable
+>tipoDeRepetición</replaceable
 >, 
                      int <replaceable
->recurInterval</replaceable
+>intervaloDeRepetición</replaceable
 >, 
                      const QString&amp; <replaceable
->endDateTime</replaceable
+>fechaHoraDeFinalización</replaceable
 >)
 </synopsis>
 
@@ -4596,6 +4931,17 @@ together with a compatible speech synthesizer, &eg;
 <title
 >Parámetros</title>
 <variablelist>
+<varlistentry>
+<term
+><parameter
+>nombre</parameter
+></term>
+<listitem>
+<para
+>Especifica un nombre opcional para la alarma.</para>
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term
 ><parameter
@@ -4614,20 +4960,20 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->startDateTime</parameter
+>fechaHoraDeInicio</parameter
 ></term>
 <listitem>
 <para
 >Especifica la fecha planificada, o la fecha y la hora, en la que se deba mostrar el mensaje. Para una alarma de solo fecha, la cadena debería tener el formato <replaceable
->AAAA-MM-DD [TZ]</replaceable
+>AAAA-MM-DD[ TZ]</replaceable
 > (tal y como lo devuelve el método <methodname
 >QDate::toString(Qt::ISODate)</methodname
 >). Para una alarma con fecha y hora, la cadena debería tener el formato <replaceable
->AAAA-MM-DDTHH:MM[:SS] [TZ]</replaceable
+>AAAA-MM-DDTHH:MM[:SS][ TZ]</replaceable
 > (tal y como lo devuelve el método <methodname
 >QDateTime::toString(Qt::ISODate)</methodname
 >) o <replaceable
->HH:MM[:SS] [Reloj]</replaceable
+>HH:MM[:SS]</replaceable
 >(tal y como lo devuelve el método <methodname
 >QTime::toString(Qt::ISODate)</methodname
 >). Si no se indica ninguna fecha, se usa la fecha del día actual. Tenga en cuenta que el valor de los segundos se ignora.</para>
@@ -4639,16 +4985,14 @@ together with a compatible speech synthesizer, &eg;
 >Europe/London</userinput
 >), <userinput
 >UTC</userinput
-> representando la zona horaria UTC o <userinput
->Clock</userinput
-> para usar la hora local del equipo e ignorar las zonas horarias.</para>
+> representando la zona horaria UTC.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term
 ><parameter
->lateCancel</parameter
+>cancelaciónPosterior</parameter
 ></term>
 <listitem>
 <para
@@ -4674,7 +5018,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->bgColor</parameter
+>colorDelFondo</parameter
 ></term>
 <listitem>
 <para
@@ -4695,7 +5039,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->fgColor</parameter
+>colorDelTexto</parameter
 ></term>
 <listitem>
 <para
@@ -4708,7 +5052,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->tipo de letra</parameter
+>tipoDeLetra</parameter
 ></term>
 <listitem>
 <para
@@ -4721,18 +5065,18 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->audioURL</parameter
+>urlDeSonido</parameter
 ></term>
 <listitem>
 <para
->Especifica un archivo de audio que se va a reproducir cuando se muestre el mensaje. Defina el valor como nulo si no quiere que se reproduzca ningún archivo de audio.</para>
+>Especifica el archivo de sonido que se va a reproducir cuando se muestre el mensaje. Defina el valor como nulo si no quiere que se reproduzca ningún archivo de sonido.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term
 ><parameter
->reminderMins</parameter
+>minsRestantes</parameter
 ></term>
 <listitem>
 <para
@@ -4758,7 +5102,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurType</parameter
+>tipoDeRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -4775,7 +5119,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurInterval</parameter
+>intervaloDeRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -4788,7 +5132,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurCount</parameter
+>contadorDeRepeticiones</parameter
 ></term>
 <listitem>
 <para
@@ -4799,7 +5143,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->endDateTime</parameter
+>fechaHoraDeFin</parameter
 ></term>
 <listitem>
 <para
@@ -4816,7 +5160,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->subRepeatInterval</parameter
+>intervaloDeSubRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -4827,7 +5171,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->subRepeatCount</parameter
+>contadorDeSubRepeticiones</parameter
 ></term>
 <listitem>
 <para
@@ -4867,98 +5211,107 @@ together with a compatible speech synthesizer, &eg;
 <refsynopsisdiv>
 <synopsis
 >bool scheduleFile(const QString&amp; <replaceable
+>nombre</replaceable
+>,
+                  const QString&amp; <replaceable
 >URL</replaceable
 >,
                   const QString&amp; <replaceable
->startDateTime</replaceable
+>fechaHoraDeInicio</replaceable
 >,
                   int <replaceable
->lateCancel</replaceable
+>cancelaciónTardía</replaceable
 >,
                   unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >,
                   const QString&amp; <replaceable
->bgColor</replaceable
+>colorDelFondo</replaceable
 >,
                   const QString&amp; <replaceable
->audioURL</replaceable
+>urlSonido</replaceable
 >,
                   int <replaceable
->reminderMins</replaceable
+>minutosDelRecordatorio</replaceable
 >,
                   const QString&amp; <replaceable
->recurrence</replaceable
+>repetición</replaceable
 >,
                   int <replaceable
->subRepeatInterval</replaceable
+>intervaloDeSubRepetición</replaceable
 >, 
                   int <replaceable
->subRepeatCount</replaceable
+>contadorDeSubRepetición</replaceable
 >)
 </synopsis>
 <synopsis
 >bool scheduleFile(const QString&amp; <replaceable
->URL</replaceable
+>nombre</replaceable
 >,
                   const QString&amp; <replaceable
->startDateTime</replaceable
+>url</replaceable
+>,
+                  const QString&amp; <replaceable
+>fechaHoraDeInicio</replaceable
 >,
                   int <replaceable
->lateCancel</replaceable
+>cancelaciónTardía</replaceable
 >,
                   unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >,
                   const QString&amp; <replaceable
->bgColor</replaceable
+>colorDeFondo</replaceable
 >,
                   const QString&amp; <replaceable
->audioURL</replaceable
+>urlDeSonido</replaceable
 >,
                   int <replaceable
->reminderMins</replaceable
+>minutosRecordatorio</replaceable
 >,
                   int <replaceable
->recurType</replaceable
+>tipoRepetición</replaceable
 >,
                   int <replaceable
->recurInterval</replaceable
+>intervaloRepetición</replaceable
 >,
                   int <replaceable
->recurCount</replaceable
+>contadorRepetición</replaceable
 >)
 </synopsis>
 <synopsis
 >bool scheduleFile(const QString&amp; <replaceable
->URL</replaceable
+>nombre</replaceable
 >,
                   const QString&amp; <replaceable
->startDateTime</replaceable
+>url</replaceable
+>,
+                  const QString&amp; <replaceable
+>fechaHoraDeInicio</replaceable
 >,
                   int <replaceable
->lateCancel</replaceable
+>cancelaciónTardía</replaceable
 >,
                   unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >,
                   const QString&amp; <replaceable
->bgColor</replaceable
+>colorDeFondo</replaceable
 >,
                   const QString&amp; <replaceable
->audioURL</replaceable
+>urlDeSonido</replaceable
 >,
                   int <replaceable
->reminderMins</replaceable
+>ninutosRecordatorio</replaceable
 >,
                   int <replaceable
->recurType</replaceable
+>tipoRepetición</replaceable
 >,
                   int <replaceable
->recurInterval</replaceable
+>intervaloRepetición</replaceable
 >,
                   const QString&amp; <replaceable
->endDateTime</replaceable
+>fechaHoraFinal</replaceable
 >)
 </synopsis>
 
@@ -4969,7 +5322,18 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->URL</parameter
+>nombre</parameter
+></term>
+<listitem>
+<para
+>Especifica un nombre opcional para la alarma.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>url</parameter
 ></term>
 <listitem>
 <para
@@ -4980,20 +5344,20 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->startDateTime</parameter
+>fechaHoraDeInicio</parameter
 ></term>
 <listitem>
 <para
 >Especifica la fecha planificada, o la fecha y la hora, en la que se deba mostrar el mensaje. Para una alarma de solo fecha, la cadena debería tener el formato <replaceable
->AAAA-MM-DD [TZ]</replaceable
+>AAAA-MM-DD[ TZ]</replaceable
 > (tal y como lo devuelve el método <methodname
 >QDate::toString(Qt::ISODate)</methodname
 >). Para una alarma con fecha y hora, la cadena debería tener el formato <replaceable
->AAAA-MM-DDTHH:MM[:SS] [TZ]</replaceable
+>AAAA-MM-DDTHH:MM[:SS][ TZ]</replaceable
 > (tal y como lo devuelve el método <methodname
 >QDateTime::toString(Qt::ISODate)</methodname
 >) o <replaceable
->HH:MM[:SS] [Reloj]</replaceable
+>HH:MM[:SS]</replaceable
 >(tal y como lo devuelve el método <methodname
 >QTime::toString(Qt::ISODate)</methodname
 >). Si no se indica ninguna fecha, se usa la fecha del día actual. Tenga en cuenta que el valor de los segundos se ignora.</para>
@@ -5005,16 +5369,14 @@ together with a compatible speech synthesizer, &eg;
 >Europe/London</userinput
 >), <userinput
 >UTC</userinput
-> representando la zona horaria UTC o <userinput
->Clock</userinput
-> para usar la hora local del equipo e ignorar las zonas horarias.</para>
+> representando la zona horaria UTC.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term
 ><parameter
->lateCancel</parameter
+>cancelaciónPosterior</parameter
 ></term>
 <listitem>
 <para
@@ -5040,7 +5402,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->bgColor</parameter
+>colorDelFondo</parameter
 ></term>
 <listitem>
 <para
@@ -5061,18 +5423,18 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->audioURL</parameter
+>urlDeSonido</parameter
 ></term>
 <listitem>
 <para
->Especifica un archivo de audio que se va a reproducir cuando se muestre el mensaje. Defina el valor como nulo si no quiere que se reproduzca ningún archivo de audio.</para>
+>Especifica el archivo de sonido que se va a reproducir cuando se muestre el mensaje. Defina el valor como nulo si no quiere que se reproduzca ningún archivo de sonido.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term
 ><parameter
->reminderMins</parameter
+>minsRestantes</parameter
 ></term>
 <listitem>
 <para
@@ -5098,7 +5460,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurType</parameter
+>tipoDeRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -5115,7 +5477,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurInterval</parameter
+>intervaloDeRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -5128,7 +5490,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurCount</parameter
+>contadorDeRepeticiones</parameter
 ></term>
 <listitem>
 <para
@@ -5139,7 +5501,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->endDateTime</parameter
+>fechaHoraDeFin</parameter
 ></term>
 <listitem>
 <para
@@ -5156,7 +5518,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->subRepeatInterval</parameter
+>intervaloDeSubRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -5167,7 +5529,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->subRepeatCount</parameter
+>contadorDeSubRepeticiones</parameter
 ></term>
 <listitem>
 <para
@@ -5207,71 +5569,80 @@ together with a compatible speech synthesizer, &eg;
 <refsynopsisdiv>
 <synopsis
 >bool scheduleCommand(const QString&amp; <replaceable
->commandLine</replaceable
+>nombre</replaceable
 >,
                      const QString&amp; <replaceable
->startDateTime</replaceable
+>orden</replaceable
+>,
+                     const QString&amp; <replaceable
+>fechaHoraDeInicio</replaceable
 >,
                      int <replaceable
->lateCancel</replaceable
+>cancelaciónTardía</replaceable
 >,
                      unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >,
                      const QString&amp; <replaceable
->recurrence</replaceable
+>recurrencia</replaceable
 >,
                      int <replaceable
->subRepeatInterval</replaceable
+>intervaloSubRepetición</replaceable
 >, 
                      int <replaceable
->subRepeatCount</replaceable
+>contadorSubRepetición</replaceable
 >)
 </synopsis>
 <synopsis
 >bool scheduleCommand(const QString&amp; <replaceable
->commandLine</replaceable
+>nombre</replaceable
 >,
                      const QString&amp; <replaceable
->startDateTime</replaceable
+>orden</replaceable
+>,
+                     const QString&amp; <replaceable
+>fechaHoraDeInicio</replaceable
 >,
                      int <replaceable
->lateCancel</replaceable
+>cancelaciónTardía</replaceable
 >,
                      unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >,
                      int <replaceable
->recurType</replaceable
+>tipoRepetición</replaceable
 >,
                      int <replaceable
->recurInterval</replaceable
+>intervaloRepetición</replaceable
 >,
                      int <replaceable
->recurCount</replaceable
+>contadorRepetición</replaceable
 >)
 </synopsis>
 <synopsis
 >bool scheduleCommand(const QString&amp; <replaceable
->commandLine</replaceable
+>nombre</replaceable
 >,
                      const QString&amp; <replaceable
->startDateTime</replaceable
+>orden</replaceable
+>,
+                     const QString&amp; <replaceable
+>fechaHoraDeInicio</replaceable
 >,
                      int <replaceable
->lateCancel</replaceable
+>cancelaciónTardía</replaceable
 >,
                      unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >,
                      int <replaceable
->recurType</replaceable
+>tipoRepetición</replaceable
 >,
                      int <replaceable
->recurInterval</replaceable
+>intervaloRepetición</replaceable
 >,
                      const QString&amp; <replaceable
->endDateTime</replaceable
+>fechaHoraFinal</replaceable
 >)
 </synopsis>
 
@@ -5282,12 +5653,23 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->commandLine</parameter
+>nombre</parameter
+></term>
+<listitem>
+<para
+>Especifica un nombre opcional para la alarma.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>orden</parameter
 ></term>
 <listitem>
 <para
 >Indica la orden cuya ejecución se va a planificar. El parámetro <parameter
->banderas</parameter
+>indicadores</parameter
 > indica si ese parámetro contiene un línea de órdenes de la shell o un guion con órdenes.</para>
 </listitem>
 </varlistentry>
@@ -5295,20 +5677,20 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->startDateTime</parameter
+>fechaHoraDeInicio</parameter
 ></term>
 <listitem>
 <para
 >Especifica la fecha planificada, o la fecha y la hora, en la que se deba mostrar el mensaje. Para una alarma de solo fecha, la cadena debería tener el formato <replaceable
->AAAA-MM-DD [TZ]</replaceable
+>AAAA-MM-DD[ TZ]</replaceable
 > (tal y como lo devuelve el método <methodname
 >QDate::toString(Qt::ISODate)</methodname
 >). Para una alarma con fecha y hora, la cadena debería tener el formato <replaceable
->AAAA-MM-DDTHH:MM[:SS] [TZ]</replaceable
+>AAAA-MM-DDTHH:MM[:SS][ TZ]</replaceable
 > (tal y como lo devuelve el método <methodname
 >QDateTime::toString(Qt::ISODate)</methodname
 >) o <replaceable
->HH:MM[:SS] [Reloj]</replaceable
+>HH:MM[:SS]</replaceable
 >(tal y como lo devuelve el método <methodname
 >QTime::toString(Qt::ISODate)</methodname
 >). Si no se indica ninguna fecha, se usa la fecha del día actual. Tenga en cuenta que el valor de los segundos se ignora.</para>
@@ -5320,16 +5702,14 @@ together with a compatible speech synthesizer, &eg;
 >Europe/London</userinput
 >), <userinput
 >UTC</userinput
-> representando la zona horaria UTC o <userinput
->Clock</userinput
-> para usar la hora local del equipo e ignorar las zonas horarias.</para>
+> representando la zona horaria UTC.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term
 ><parameter
->lateCancel</parameter
+>cancelaciónPosterior</parameter
 ></term>
 <listitem>
 <para
@@ -5370,7 +5750,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurType</parameter
+>tipoDeRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -5387,7 +5767,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurInterval</parameter
+>intervaloDeRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -5400,7 +5780,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurCount</parameter
+>contadorDeRepeticiones</parameter
 ></term>
 <listitem>
 <para
@@ -5411,7 +5791,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->endDateTime</parameter
+>fechaHoraDeFin</parameter
 ></term>
 <listitem>
 <para
@@ -5428,7 +5808,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->subRepeatInterval</parameter
+>intervaloDeSubRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -5439,7 +5819,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->subRepeatCount</parameter
+>contadorDeSubRepeticiones</parameter
 ></term>
 <listitem>
 <para
@@ -5479,107 +5859,116 @@ together with a compatible speech synthesizer, &eg;
 <refsynopsisdiv>
 <synopsis
 >bool scheduleEmail(const QString&amp; <replaceable
->fromID</replaceable
+>nombre</replaceable
 >,
                    const QString&amp; <replaceable
->addresses</replaceable
+>ID_de</replaceable
 >,
                    const QString&amp; <replaceable
->subject</replaceable
+>direcciones</replaceable
 >,
                    const QString&amp; <replaceable
->message</replaceable
+>asunto</replaceable
 >,
                    const QString&amp; <replaceable
->attachments</replaceable
+>mensaje</replaceable
 >,
                    const QString&amp; <replaceable
->startDateTime</replaceable
+>adjuntos</replaceable
+>,
+                   const QString&amp; <replaceable
+>fechaHoraDeInicio</replaceable
 >,
                    int <replaceable
->lateCancel</replaceable
+>cancelaciónTardía</replaceable
 >,
                    unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >,
                    const QString&amp; <replaceable
->recurrence</replaceable
+>recurrencia</replaceable
 >,
                    int <replaceable
->subRepeatInterval</replaceable
+>intervaloSubRepetición</replaceable
 >, 
                    int <replaceable
->subRepeatCount</replaceable
+>contadorSubRepetición</replaceable
 >)
 </synopsis>
 <synopsis
 >bool scheduleEmail(const QString&amp; <replaceable
->fromID</replaceable
+>nombre</replaceable
 >,
                    const QString&amp; <replaceable
->addresses</replaceable
+>ID_de</replaceable
 >,
                    const QString&amp; <replaceable
->subject</replaceable
+>direcciones</replaceable
 >,
                    const QString&amp; <replaceable
->message</replaceable
+>asunto</replaceable
 >,
                    const QString&amp; <replaceable
->attachments</replaceable
+>mensaje</replaceable
 >,
                    const QString&amp; <replaceable
->startDateTime</replaceable
+>adjuntos</replaceable
+>,
+                   const QString&amp; <replaceable
+>fechaHoraDeInicio</replaceable
 >,
                    int <replaceable
->lateCancel</replaceable
+>cancelaciónTardía</replaceable
 >,
                    unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >,
                    int <replaceable
->recurType</replaceable
+>tipoRepetición</replaceable
 >,
                    int <replaceable
->recurInterval</replaceable
+>intervaloRepetición</replaceable
 >,
                    int <replaceable
->recurCount</replaceable
+>contadorRepetición</replaceable
 >)
 </synopsis>
 <synopsis
 >bool scheduleEmail(const QString&amp; <replaceable
->fromID</replaceable
+>nombre</replaceable
 >,
                    const QString&amp; <replaceable
->addresses</replaceable
+>ID_de</replaceable
 >,
                    const QString&amp; <replaceable
->subject</replaceable
+>direcciones</replaceable
 >,
                    const QString&amp; <replaceable
->message</replaceable
+>asunto</replaceable
 >,
                    const QString&amp; <replaceable
->attachments</replaceable
+>mensaje</replaceable
 >,
                    const QString&amp; <replaceable
->startDateTime</replaceable
+>adjuntos</replaceable
+>,
+                   const QString&amp; <replaceable
+>fechaHoraDeInicio</replaceable
 >,
                    int <replaceable
->lateCancel</replaceable
+>cancelaciónTardía</replaceable
 >, 
                    unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >,
                    int <replaceable
->recurType</replaceable
+>tipoRepetición</replaceable
 >,
                    int <replaceable
->recurInterval</replaceable
+>intervaloRepetición</replaceable
 >,
                    const QString&amp; <replaceable
->endTime</replaceable
+>horaFinal</replaceable
 >)
 </synopsis>
 
@@ -5590,7 +5979,18 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->fromID</parameter
+>nombre</parameter
+></term>
+<listitem>
+<para
+>Especifica un nombre opcional para la alarma.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>ID_de</parameter
 ></term>
 <listitem>
 <para
@@ -5647,20 +6047,20 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->startDateTime</parameter
+>fechaHoraDeInicio</parameter
 ></term>
 <listitem>
 <para
 >Especifica la fecha planificada, o la fecha y la hora, en la que se deba mostrar el mensaje. Para una alarma de solo fecha, la cadena debería tener el formato <replaceable
->AAAA-MM-DD [TZ]</replaceable
+>AAAA-MM-DD[ TZ]</replaceable
 > (tal y como lo devuelve el método <methodname
 >QDate::toString(Qt::ISODate)</methodname
 >). Para una alarma con fecha y hora, la cadena debería tener el formato <replaceable
->AAAA-MM-DDTHH:MM[:SS] [TZ]</replaceable
+>AAAA-MM-DDTHH:MM[:SS][ TZ]</replaceable
 > (tal y como lo devuelve el método <methodname
 >QDateTime::toString(Qt::ISODate)</methodname
 >) o <replaceable
->HH:MM[:SS] [Reloj]</replaceable
+>HH:MM[:SS]</replaceable
 >(tal y como lo devuelve el método <methodname
 >QTime::toString(Qt::ISODate)</methodname
 >). Si no se indica ninguna fecha, se usa la fecha del día actual. Tenga en cuenta que el valor de los segundos se ignora.</para>
@@ -5672,16 +6072,14 @@ together with a compatible speech synthesizer, &eg;
 >Europe/London</userinput
 >), <userinput
 >UTC</userinput
-> representando la zona horaria UTC o <userinput
->Clock</userinput
-> para usar la hora local del equipo e ignorar las zonas horarias.</para>
+> representando la zona horaria UTC.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term
 ><parameter
->lateCancel</parameter
+>cancelaciónPosterior</parameter
 ></term>
 <listitem>
 <para
@@ -5722,7 +6120,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurType</parameter
+>tipoDeRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -5739,7 +6137,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurInterval</parameter
+>intervaloDeRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -5752,7 +6150,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurCount</parameter
+>contadorDeRepeticiones</parameter
 ></term>
 <listitem>
 <para
@@ -5763,7 +6161,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->endDateTime</parameter
+>fechaHoraDeFin</parameter
 ></term>
 <listitem>
 <para
@@ -5780,7 +6178,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->subRepeatInterval</parameter
+>intervaloDeSubRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -5791,7 +6189,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->subRepeatCount</parameter
+>contadorDeSubRepeticiones</parameter
 ></term>
 <listitem>
 <para
@@ -5831,80 +6229,89 @@ together with a compatible speech synthesizer, &eg;
 <refsynopsisdiv>
 <synopsis
 >bool scheduleAudio(const QString&amp; <replaceable
->audioURL</replaceable
->,
-                   int <replaceable
->volumePercent</replaceable
+>nombre</replaceable
 >,
                    const QString&amp; <replaceable
->startDateTime</replaceable
+>urlSonido</replaceable
 >,
                    int <replaceable
->lateCancel</replaceable
+>porcentajeVolumen</replaceable
+>,
+                   const QString&amp; <replaceable
+>fechaHoraDeInicio</replaceable
+>,
+                   int <replaceable
+>cancelaciónTardía</replaceable
 >,
                    unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >,
                    const QString&amp; <replaceable
->recurrence</replaceable
+>recurrencia</replaceable
 >,
                    int <replaceable
->subRepeatInterval</replaceable
+>intervaloSubRepetición</replaceable
 >, 
                    int <replaceable
->subRepeatCount</replaceable
+>contadorSubRepetición</replaceable
 >)
 </synopsis>
 <synopsis
 >bool scheduleAudio(const QString&amp; <replaceable
->audioURL</replaceable
->,
-                   int <replaceable
->volumePercent</replaceable
+>nombre</replaceable
 >,
                    const QString&amp; <replaceable
->startDateTime</replaceable
+>urlSonido</replaceable
 >,
                    int <replaceable
->lateCancel</replaceable
+>porcentajeVolumen</replaceable
+>,
+                   const QString&amp; <replaceable
+>fechaHoraDeInicio</replaceable
+>,
+                   int <replaceable
+>cancelaciónTardía</replaceable
 >,
                    unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >,
                    int <replaceable
->recurType</replaceable
+>tipoRepetición</replaceable
 >,
                    int <replaceable
->recurInterval</replaceable
+>intervaloRepetición</replaceable
 >,
                    int <replaceable
->recurCount</replaceable
+>contadorRepetición</replaceable
 >)
 </synopsis>
 <synopsis
 >bool scheduleAudio(const QString&amp; <replaceable
->audioURL</replaceable
->,
-                   int <replaceable
->volumePercent</replaceable
+>nombre</replaceable
 >,
                    const QString&amp; <replaceable
->startDateTime</replaceable
+>urlSonido</replaceable
 >,
                    int <replaceable
->lateCancel</replaceable
+>porcentajeVolumen</replaceable
+>,
+                   const QString&amp; <replaceable
+>fechaHoraDeInicio</replaceable
+>,
+                   int <replaceable
+>cancelaciónTardía</replaceable
 >,
                    unsigned <replaceable
->flags</replaceable
+>indicadores</replaceable
 >,
                    int <replaceable
->recurType</replaceable
+>tipoRepetición</replaceable
 >,
                    int <replaceable
->recurInterval</replaceable
+>intervaloRepetición</replaceable
 >,
                    const QString&amp; <replaceable
->endDateTime</replaceable
+>fechaHoraFinal</replaceable
 >)
 </synopsis>
 
@@ -5915,7 +6322,18 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->audioURL</parameter
+>nombre</parameter
+></term>
+<listitem>
+<para
+>Especifica un nombre opcional para la alarma.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>urlDeSonido</parameter
 ></term>
 <listitem>
 <para
@@ -5926,7 +6344,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->volumePercent</parameter
+>porcentajeVolumen</parameter
 ></term>
 <listitem>
 <para
@@ -5937,20 +6355,20 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->startDateTime</parameter
+>fechaHoraDeInicio</parameter
 ></term>
 <listitem>
 <para
 >Especifica la fecha planificada, o la fecha y la hora, en la que se deba mostrar el mensaje. Para una alarma de solo fecha, la cadena debería tener el formato <replaceable
->AAAA-MM-DD [TZ]</replaceable
+>AAAA-MM-DD[ TZ]</replaceable
 > (tal y como lo devuelve el método <methodname
 >QDate::toString(Qt::ISODate)</methodname
 >). Para una alarma con fecha y hora, la cadena debería tener el formato <replaceable
->AAAA-MM-DDTHH:MM[:SS] [TZ]</replaceable
+>AAAA-MM-DDTHH:MM[:SS][ TZ]</replaceable
 > (tal y como lo devuelve el método <methodname
 >QDateTime::toString(Qt::ISODate)</methodname
 >) o <replaceable
->HH:MM[:SS] [Reloj]</replaceable
+>HH:MM[:SS]</replaceable
 >(tal y como lo devuelve el método <methodname
 >QTime::toString(Qt::ISODate)</methodname
 >). Si no se indica ninguna fecha, se usa la fecha del día actual. Tenga en cuenta que el valor de los segundos se ignora.</para>
@@ -5962,16 +6380,14 @@ together with a compatible speech synthesizer, &eg;
 >Europe/London</userinput
 >), <userinput
 >UTC</userinput
-> representando la zona horaria UTC o <userinput
->Clock</userinput
-> para usar la hora local del equipo e ignorar las zonas horarias.</para>
+> representando la zona horaria UTC.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term
 ><parameter
->lateCancel</parameter
+>cancelaciónPosterior</parameter
 ></term>
 <listitem>
 <para
@@ -6012,7 +6428,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurType</parameter
+>tipoDeRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -6029,7 +6445,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurInterval</parameter
+>intervaloDeRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -6042,7 +6458,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->recurCount</parameter
+>contadorDeRepeticiones</parameter
 ></term>
 <listitem>
 <para
@@ -6053,7 +6469,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->endDateTime</parameter
+>fechaHoraDeFin</parameter
 ></term>
 <listitem>
 <para
@@ -6070,7 +6486,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->subRepeatInterval</parameter
+>intervaloDeSubRepetición</parameter
 ></term>
 <listitem>
 <para
@@ -6081,7 +6497,7 @@ together with a compatible speech synthesizer, &eg;
 <varlistentry>
 <term
 ><parameter
->subRepeatCount</parameter
+>contadorDeSubRepeticiones</parameter
 ></term>
 <listitem>
 <para
@@ -6137,7 +6553,9 @@ together with a compatible speech synthesizer, &eg;
 ></term>
 <listitem>
 <para
->Indica el id. único del evento que se va a editar.</para>
+>Especifica el ID único del evento que se va a editar, opcionalmente precedido por el nombre de configuración o el ID numérico del recurso que contiene el evento, en el formato <replaceable
+>[ID_de_recurso:]UID_de_evento</replaceable
+>.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -6297,7 +6715,7 @@ together with a compatible speech synthesizer, &eg;
 <para
 ><function
 >list()</function
-> es una llamada a &DBus; para devolver una cadena que contiene un resumen de alarmas programadas. La lista muestra detalles concisos de cada alarma pendiente: su identificador de recurso (si se usa Akonadi), UID, siguiente periodo programado y texto del mensaje o archivo.</para>
+> es una llamada a &DBus; para devolver una cadena que contiene un resumen de alarmas programadas. La lista muestra detalles concisos de cada alarma pendiente: su identificador de recurso, UID, siguiente periodo programado y texto del mensaje o archivo.</para>
 
 </refsect1>
 </refentry>
@@ -6345,10 +6763,13 @@ together with a compatible speech synthesizer, &eg;
 ></option
 ></entry>
   <entry
->Cancelar la alarma con el id de evento especificado. Con esta opción no puede especificarse <option
+>Cancelar la alarma con el ID de evento especificado. El ID de evento es el ID único del evento, opcionalmente precedido por el ID del recurso que lo contiene, en el formato <replaceable
+>[ID_de_recurso:]UID_de_evento</replaceable
+>. La acción es la misma que para la llamada &DBus; <link linkend="cancelEvent"
+>cancelEvent()</link
+>. No se puede especificar <option
 >--triggerEvent</option
->.option
->.</entry>
+> junto a esta opción.</entry>
 </row>
 <row>
   <entry
@@ -6358,11 +6779,13 @@ together with a compatible speech synthesizer, &eg;
 ></option
 ></entry>
   <entry
->Lanza la alarma con el identificador de evento indicado. La acción realizada es la misma que en la llamada &DBus; <link linkend="triggerEvent"
+>Activar la alarma con el ID de evento especificado. El ID de evento es el ID único del evento, opcionalmente precedido por el ID del recurso que lo contiene, en el formato <replaceable
+>[ID_de_recurso:]UID_de_evento</replaceable
+>. La acción es la misma que para la llamada &DBus; <link linkend="triggerEvent"
 >triggerEvent()</link
->. No se puede especificar un <option
+>. No se puede especificar <option
 >--cancelEvent</option
-> con esta opción.</entry>
+> junto a esta opción.</entry>
 </row>
 </tbody>
 </tgroup>
@@ -6413,11 +6836,25 @@ together with a compatible speech synthesizer, &eg;
 </question>
 <answer>
 <para
+>La configuración de &kalarm; se guarda en los siguientes archivos de la carpeta <command
+>qtpaths --paths GenericConfigLocation</command
+>:</para>
+
+<itemizedlist>
+<listitem>
+<simpara
 ><filename
 >kalarmrc</filename
-> en la carpeta <command
->qtpaths --paths GenericConfigLocation</command
-> contiene sus preferencias de &kalarm;.</para>
+> contiene las preferencias de &kalarm;.</simpara>
+</listitem>
+
+<listitem>
+<simpara
+><filename
+>kalarmresources</filename
+> contiene la lista de calendarios de alarmas que usa &kalarm; en la actualidad.</simpara>
+</listitem>
+</itemizedlist>
 </answer>
 </qandaentry>
 
@@ -6429,46 +6866,44 @@ together with a compatible speech synthesizer, &eg;
 <answer>
 
 <para
->Los nombres de los archivos de calendario que crea &kalarm; la primera vez que se ejecuta son los siguientes:</para>
+>Cuando &kalarm; se ejecuta por primera vez, crea los siguientes calendarios de alarmas en la carpeta <command
+>qtpaths --pathsGenericDataLocation</command
+>:</para>
 
 <itemizedlist>
 <listitem>
-<para
+<simpara
 ><filename
 >kalarm/calendar.ics</filename
-> en la carpeta <command
->qtpaths --paths GenericDataLocation</command
-> contiene las alarmas activas.</para>
+>, que contiene alarmas activas.</simpara>
 </listitem>
 
 <listitem>
-<para
+<simpara
 ><filename
 >kalarm/expired.ics</filename
-> en la carpeta <command
->qtpaths --paths GenericDataLocation</command
-> contiene las alarmas archivadas.</para>
+>, que contiene alarmas archivadas.</simpara>
 </listitem>
 
 <listitem>
-<para
+<simpara
 ><filename
 >kalarm/template.ics</filename
-> en la carpeta <command
->qtpaths --paths GenericDataLocation</command
-> contiene las plantillas de alarmas.</para>
+>, que contiene plantillas de alarmas.</simpara>
+</listitem>
+
+<listitem>
+<simpara
+><filename
+>kalarm/displaying.ics</filename
+>, que es un archivo de calendario especial que contiene detalles de las alarmas que se muestran actualmente, lo que permite que &kalarm;, cuando se reinicia, vuelva a mostrar las alarmas que se estaban mostrando cuando se detuvo la última vez.</simpara>
 </listitem>
 </itemizedlist>
 
 <para
->Usted puede encontrar que archivos de calendario se encuentran en uso viendo los detalles de cada calendario en la lista de calendarios de alarma. Los nombres de archivo se almacenan leen el archivo de configuración del calendario de alarmas.</para>
-
-<para
->Los detalles de las alarmas que se muestran actualmente se guardan en el archivo de calendario <filename
->kalarm/displaying.ics</filename
-> en la carpeta <command
->qtpaths --paths GenericDataLocation</command
->.</para>
+>Posteriormente, puede sustituir estos calendarios, excepto <filename
+>displaying.ics</filename
+>, o crear calendarios de alarmas adicionales en la ubicación que elija. Puede consultar los archivos de calendario en uso mostrando los detalles de cada calendario en la lista de calendarios de alarmas.</para>
 </answer>
 </qandaentry>
 
@@ -6482,8 +6917,47 @@ together with a compatible speech synthesizer, &eg;
 >Los archivos de calendario en los que &kalarm; se almacena son archivos de texto cuyo formato está definido en el documento <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
 >RFC2445 - Internet Calendaring and Scheduling Core Object Specification (iCalendar)</ulink
 >. Este es el formato estándar utilizado por todas las aplicaciones de kdepim. &kalarm; emplea ciertas propiedades no estándar, en cumplimiento con RFC2445. Estas se documentan en el archivo <filename
->DESIGN.html</filename
+>DESIGN.kalarmcalendar.html</filename
 > distribuido con &kalarm;.</para>
+</answer>
+</qandaentry>
+
+<qandaentry id="akonadi-plugin">
+<question>
+<para
+>¿Cuál es la función del complemento Akonadi de &kalarm;?</para>
+</question>
+<answer>
+<para
+>&kalarm; usa su complemento Akonadi para proporcionar todas las funciones que dependen de &akonadi; (el servicio de almacenamiento multiescritorio de &kde; &PIM;). Si este complemento no está instalado y activado, &kalarm; carecerá de las siguientes funciones: <itemizedlist>
+<listitem>
+<simpara
+>Envío de correos electrónicos a través de &kmail;, dejando &Sendmail; como la única opción para enviar correos electrónicos (consulte las <link linkend="preferences-email"
+>Preferencias de correo electrónico</link
+>).</simpara>
+</listitem>
+<listitem>
+<simpara
+>Arrastrar y soltar correos electrónicos.</simpara>
+</listitem>
+<listitem>
+<simpara
+>Selección de direcciones de correo de &kaddressbook;.</simpara>
+</listitem>
+<listitem>
+<simpara
+>Importar cumpleaños de &kaddressbook;.</simpara>
+</listitem>
+<listitem>
+<simpara
+>Migración de los recursos del calendario de alarmas de &akonadi; en la primera ejecución de una nueva versión de &kalarm;.</simpara>
+</listitem>
+</itemizedlist>
+</para>
+<para
+>Si el complemento está instalado, se puede activar o desactivar en la pestaña <link linkend="preferences-general"
+>General</link
+> del diálogo de configuración.</para>
 </answer>
 </qandaentry>
 
@@ -6501,7 +6975,7 @@ together with a compatible speech synthesizer, &eg;
 > es un pequeño asistente cuya función es auto arrancar &kalarm; en el inicio de sesión.</para>
 
 <para
->&kalarm; se restaura, generalmente, por el gestor de sesiones al iniciar sesión (para volver a mostrar sus ventanas en el mismo estado en que se dejaron al cerrar sesión). Pero si no se estaba ejecutando cuando usted cerró sesión, no lo iniciará el gestor de sesiones y por lo tanto, necesita ser arrancado. Este problema es tal que cuando una aplicación se arranca tanto por el gestor de sesiones como auto iniciada, no hay garantía de lo que aparecerá primero. Si el auto arranque se produce primero, evitará que el gestor de sesiones pueda restaurar el estado de la aplicación.</para>
+>&kalarm; se restaura, generalmente, por el gestor de sesiones al iniciar sesión (para volver a mostrar sus ventanas en el mismo estado en que se dejaron al cerrar sesión). Pero si no se estaba ejecutando cuando cerró sesión, no lo iniciará el gestor de sesiones y por lo tanto, necesita ser arrancado. Este problema es tal que cuando una aplicación se arranca tanto por el gestor de sesiones como auto iniciada, no hay garantía de lo que aparecerá primero. Si el auto arranque se produce primero, evitará que el gestor de sesiones pueda restaurar el estado de la aplicación.</para>
 
 <para
 >Para evitar este problema <application
@@ -6517,7 +6991,7 @@ together with a compatible speech synthesizer, &eg;
 </question>
 <answer>
 <para
->Para lanzar &kalarm; en un escritorio que no sea &plasma;, el principal requisito es asegurar que &kalarm; se ejecuta automáticamente cuando usted inicia sesión. Puede consultar instrucciones más detalladas en el archivo <filename
+>Para lanzar &kalarm; en un escritorio que no sea &plasma;, el principal requisito es asegurar que &kalarm; se ejecuta automáticamente cuando inicie sesión. Puede consultar instrucciones más detalladas en el archivo <filename
 >INSTALL</filename
 > que se distribuye con &kalarm;.</para>
 </answer>
@@ -6535,10 +7009,10 @@ together with a compatible speech synthesizer, &eg;
 <para
 >&kalarm; </para>
 <para
->Derechos de autor del programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright del programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Derechos de autor de la documentación 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright de la documentación 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
 >Traductores: Juan Manuel García Molina <email
@@ -6546,8 +7020,7 @@ together with a compatible speech synthesizer, &eg;
 > y Javier Viñal <email
 >fjvinal@gmail.com</email
 >.</para
-> 
-&underFDL; &underGPL; <para
+> &underFDL; &underGPL; <para
 >Gracias al autor de la aplicación KAlarm de &kde; 1, Stefan Nikolaus <email
 >stefan.nikolaus@stuco.uni-oldenburg.de</email
 >, que accedió amablemente a permitir el uso del nombre &kalarm; para esta aplicación de &kde; 2 en adelante. </para>
