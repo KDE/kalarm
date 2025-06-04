@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.11.1 (KDE Gear 25.04.3) --- 4 June 2025 ===
+* Prevent message windows taking keyboard focus when they pop up.
+
 === Version 3.11.0 (KDE Gear 25.04) --- 18 March 2025 ===
 * Implement audio backends as plugins to allow user selection.
 * Clean up time spin box appearance in some styles, e.g. Oxygen.
