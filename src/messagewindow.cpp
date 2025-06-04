@@ -1,7 +1,7 @@
 /*
  *  messagewindow.cpp  -  displays an alarm message in a window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -74,7 +74,7 @@ const int proximityButtonDelay = 1000;    // (milliseconds)
 const int proximityMultiple = 10;         // multiple of button height distance from cursor for proximity
 
 // Basic flags for the window
-const Qt::WindowFlags     WFLAGS      = Qt::WindowStaysOnTopHint;
+const Qt::WindowFlags     WFLAGS      = Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus;
 const Qt::WindowFlags     WFLAGS2     = Qt::WindowContextHelpButtonHint;
 const Qt::WidgetAttribute WidgetFlags = Qt::WA_DeleteOnClose;
 
