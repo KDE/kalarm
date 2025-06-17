@@ -3749,7 +3749,7 @@ msgstr[1] "%1 hores"
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
-msgstr "%1h %2m"
+msgstr "%1 h %2 m"
 
 #: kalarmcalendar/kaevent.cpp:3108 kalarmcalendar/kaevent.cpp:3195
 #: kalarmcalendar/kaeventformatter.cpp:447
