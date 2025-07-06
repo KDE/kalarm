@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
-set(PIM_VERSION "6.4.80")
+set(PIM_VERSION "6.5.40")
 set(PIM_VERSION ${PIM_VERSION})
 set(RELEASE_SERVICE_VERSION_MAJOR "25")
 set(RELEASE_SERVICE_VERSION_MINOR "11")
@@ -50,7 +50,7 @@ include(ECMFeatureSummary)
 set(QT_REQUIRED_VERSION "6.8.0")
 set(KTEXTADDONS_MIN_VERSION "1.6.0")
 # Do NOT add quote
-set(KDEPIM_DEV_VERSION beta)
+set(KDEPIM_DEV_VERSION alpha)
 
 # add an extra space
 if(DEFINED KDEPIM_DEV_VERSION)
