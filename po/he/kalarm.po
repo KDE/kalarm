@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-14 00:44+0000\n"
-"PO-Revision-Date: 2025-05-20 07:53+0300\n"
+"PO-Revision-Date: 2025-07-07 18:39+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3641,19 +3641,19 @@ msgstr "המופע הבא בחזרה"
 #, kde-format
 msgctxt "@label"
 msgid "Late cancel"
-msgstr ""
+msgstr "ביטול מאוחר"
 
 #: kalarmcalendar/kaeventformatter.cpp:74
 #, kde-format
 msgctxt "@label Automatically close window"
 msgid "Auto close"
-msgstr ""
+msgstr "סגירה אוטומטית"
 
 #: kalarmcalendar/kaeventformatter.cpp:76
 #, kde-format
 msgctxt "@label"
 msgid "Copy to KOrganizer"
-msgstr ""
+msgstr "העתקה ל־KOrganizer"
 
 #: kalarmcalendar/kaeventformatter.cpp:78
 #, kde-format
@@ -3677,13 +3677,13 @@ msgstr "ארכיון"
 #, kde-format
 msgctxt "@label"
 msgid "Revision"
-msgstr ""
+msgstr "מהדורה"
 
 #: kalarmcalendar/kaeventformatter.cpp:86
 #, kde-format
 msgctxt "@label"
 msgid "Custom properties"
-msgstr ""
+msgstr "מאפיינים מותאמים אישית"
 
 #: kalarmcalendar/kaeventformatter.cpp:89
 #, kde-format
@@ -3731,7 +3731,7 @@ msgstr "פעולה לאחר תזכורת"
 #, kde-format
 msgctxt "@label"
 msgid "Akonadi Item ID"
-msgstr ""
+msgstr "פריט מזהה Akonadi"
 
 #: kalarmcalendar/kaeventformatter.cpp:111
 #, kde-format
@@ -3773,7 +3773,7 @@ msgstr "התראה רק פעם אחת"
 #, kde-format
 msgctxt "@label Whether to use standard notification system"
 msgid "Notify"
-msgstr ""
+msgstr "התראה"
 
 #: kalarmcalendar/kaeventformatter.cpp:127
 #, kde-format
@@ -5073,7 +5073,7 @@ msgstr "תוספים"
 #, kde-format
 msgctxt "@title:group"
 msgid "Audio Backend"
-msgstr ""
+msgstr "מנגנון שמע"
 
 #: prefdlg.cpp:578
 #, kde-format
@@ -5130,6 +5130,8 @@ msgid ""
 "You should not check this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
+"לא כדאי לסמן את האפשרות הזאת אלא אם כן התוכנית שלך היא להפסיק להשתמש ב־"
+"<application>KAlarm</application>"
 
 #: prefdlg.cpp:760
 #, kde-kuit-format
@@ -5138,6 +5140,8 @@ msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
 msgstr ""
+"הבחירה הזאת תמנע מ־<application>KAlarm</application> לתפקד<nl/>למעט במקרה של "
+"הפעלה ידנית."
 
 #: prefdlg.cpp:805
 #, kde-kuit-format
@@ -5151,13 +5155,13 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Holiday region:"
-msgstr ""
+msgstr "אזור חגים:"
 
 #: prefdlg.cpp:828
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which holiday region to use"
-msgstr ""
+msgstr "נא לבחור באיזה אזור חגים להשתמש"
 
 #: prefdlg.cpp:836
 #, kde-format
@@ -5175,7 +5179,7 @@ msgstr "אין"
 #, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
-msgstr ""
+msgstr "השכמה מהשהיה לפני התזכורת:"
 
 #: prefdlg.cpp:866
 #, kde-format
