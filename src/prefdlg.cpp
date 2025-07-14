@@ -444,6 +444,8 @@ void PrefsTabBase::showEvent(QShowEvent*)
 MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
+    const int marLeft = style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Run Mode"));
     topLayout()->addWidget(group);
     auto vlayout = new QVBoxLayout(group);
@@ -479,6 +481,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     widget = new QWidget;  // this is for consistent left alignment
     topLayout()->addWidget(widget);
     hbox = new QHBoxLayout(widget);
+    hbox->setContentsMargins(marLeft, 0, 0, 0);
     mQuitWarn = new QCheckBox(i18nc("@option:check", "Warn before quitting"));
     topLayout()->addWidget(mQuitWarn);
     mQuitWarn->setWhatsThis(xi18nc("@info:whatsthis", "Check to display a warning prompt before quitting <application>KAlarm</application>."));
@@ -489,6 +492,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     widget = new QWidget;  // this is for consistent left alignment
     topLayout()->addWidget(widget);
     hbox = new QHBoxLayout(widget);
+    hbox->setContentsMargins(marLeft, 0, 0, 0);
     mUseAlarmNames = new QCheckBox(i18nc("@option:check", "Enable alarm names"));
     mUseAlarmNames->setMinimumSize(mUseAlarmNames->sizeHint());
     mUseAlarmNames->setWhatsThis(i18nc("@info:whatsthis", "Check to have the option to give alarms a name. This is a convenience to help you to identify alarms."));
@@ -499,6 +503,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     widget = new QWidget;  // this is for consistent left alignment
     topLayout()->addWidget(widget);
     hbox = new QHBoxLayout(widget);
+    hbox->setContentsMargins(marLeft, 0, 0, 0);
     mConfirmAlarmDeletion = new QCheckBox(i18nc("@option:check", "Confirm alarm deletions"));
     mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
     mConfirmAlarmDeletion->setWhatsThis(i18nc("@info:whatsthis", "Check to be prompted for confirmation each time you delete an alarm."));
@@ -509,6 +514,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     widget = new QWidget;   // this is to control the QWhatsThis text display area
     topLayout()->addWidget(widget);
     hbox = new QHBoxLayout(widget);
+    hbox->setContentsMargins(marLeft, 0, 0, 0);
     QLabel* label = new QLabel(i18nc("@label:spinbox", "Default defer time interval:"));
     hbox->addWidget(label);
     mDefaultDeferTime = new TimeSpinBox(1, 5999);
@@ -1159,6 +1165,8 @@ void StorePrefTab::slotClearArchived()
 EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
+    const int marLeft = style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+
     QWidget* widget = new QWidget;
     topLayout()->addWidget(widget);
     auto box = new QHBoxLayout(widget);
@@ -1201,6 +1209,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
         widget = new QWidget;  // this is to allow left adjustment
         topLayout()->addWidget(widget);
         box = new QHBoxLayout(widget);
+        box->setContentsMargins(marLeft, 0, 0, 0);
         mEmailCopyToKMail = new QCheckBox(xi18nc("@option:check", "Copy sent emails into <application>KMail</application>'s <resource>%1</resource> folder", KAMail::i18n_sent_mail()));
         mEmailCopyToKMail->setWhatsThis(xi18nc("@info:whatsthis", "After sending an email, store a copy in <application>KMail</application>'s <resource>%1</resource> folder", KAMail::i18n_sent_mail()));
         box->addWidget(mEmailCopyToKMail);
@@ -1210,6 +1219,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     widget = new QWidget;   // this is to allow left adjustment
     topLayout()->addWidget(widget);
     box = new QHBoxLayout(widget);
+    box->setContentsMargins(marLeft, 0, 0, 0);
     mEmailQueuedNotify = new QCheckBox(i18nc("@option:check", "Notify when remote emails are queued"));
     mEmailQueuedNotify->setWhatsThis(
           i18nc("@info:whatsthis", "Display a notification message whenever an email alarm has queued an email for sending to a remote system. "
