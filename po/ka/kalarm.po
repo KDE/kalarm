@@ -2269,7 +2269,7 @@ msgstr "დრო"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
-msgstr "ნაგულისხმები დრო"
+msgstr "ნაგულისხმევი დრო"
 
 #: editdlg.cpp:297
 #, kde-format
@@ -3233,7 +3233,7 @@ msgstr "აირჩიეთ განგაშის შეტყობინ�
 #, kde-format
 msgctxt "@option:check"
 msgid "Use default font"
-msgstr "ნაგულისხმები ფონტის გამოყენება"
+msgstr "ნაგულისხმევი ფონტის გამოყენება"
 
 #: fontcolour.cpp:86
 #, kde-format
@@ -4102,7 +4102,7 @@ msgstr "%1"
 #, kde-format
 msgctxt "@info Using default font"
 msgid "Default"
-msgstr "ნაგულისხმები"
+msgstr "ნაგულისხმევი"
 
 #: kalarmcalendar/kaeventformatter.cpp:366 messagedisplayhelper.cpp:219
 #, kde-format
@@ -5070,13 +5070,13 @@ msgstr "ელფოსტის განგაშის მორგება"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Defaults"
-msgstr "განგაშის ნაგულისხმები პარამეტრები"
+msgstr "განგაშის ნაგულისხმევი პარამეტრები"
 
 #: prefdlg.cpp:166
 #, kde-format
 msgctxt "@title"
 msgid "Default Alarm Edit Settings"
-msgstr "ნაგულისხმები განგაშის პარამეტრების ჩასწორება"
+msgstr "ნაგულისხმევი განგაშის პარამეტრების ჩასწორება"
 
 #: prefdlg.cpp:171
 #, kde-format
@@ -7287,7 +7287,7 @@ msgid ""
 "<para>Failed to create default calendar <resource>%1</resource></"
 "para><para>Location: <filename>%2</filename></para>"
 msgstr ""
-"<para>ჩავარდა შექმნა ნაგულისხმები კალენდრისთვის <resource>%1</resource></"
+"<para>ჩავარდა შექმნა ნაგულისხმევი კალენდრისთვის <resource>%1</resource></"
 "para><para>მდებარეობა: <filename>%2</filename></para>"
 
 #: resources/resourcedatamodelbase.cpp:66
