@@ -8,22 +8,22 @@
 # Markus Slopianka <markus.s@kdemail.net>, 2010.
 # Frederik Schwarzer <schwarzer@kde.org>, 2010, 2011, 2012, 2016, 2022, 2023.
 # Torbjörn Klatt <opensource@torbjoern-klatt.de>, 2011.
-# Frank Steinmetzger <dev-kde@felsenfleischer.de>, 2022.
+# SPDX-FileCopyrightText: 2022, 2025 Frank Steinmetzger <dev-kde@felsenfleischer.de>
 # Intevation GmbH, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 02:42+0000\n"
-"PO-Revision-Date: 2024-12-23 16:54+0100\n"
-"Last-Translator: Johannes Obermayr <johannesobermayr@gmx.de>\n"
+"PO-Revision-Date: 2025-07-22 12:11+0200\n"
+"Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.03.70\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -888,28 +888,28 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Audio backend"
-msgstr ""
+msgstr "Audio-Backend"
 
 #. i18n: ectx: whatsthis, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Which audio backend to prefer."
-msgstr ""
+msgstr "Das zu bevorzugende Audio-Backend."
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:86
 #, kde-format
 msgctxt "@option"
 msgid "MPV"
-msgstr ""
+msgstr "MPV"
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:87
 #, kde-format
 msgctxt "@option"
 msgid "VLC"
-msgstr ""
+msgstr "VLC"
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:92
@@ -5437,15 +5437,15 @@ msgstr "Module"
 #, kde-format
 msgctxt "@title:group"
 msgid "Audio Backend"
-msgstr ""
+msgstr "Audio-Backend"
 
 #: prefdlg.cpp:584
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Choose the volume for playing the sound file."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which audio backend to use to play sound files"
-msgstr "Stellen Sie hier die Lautstärke für die Wiedergabe der Klangdatei ein."
+msgstr ""
+"Wählen Sie hier das Audio-Backend, das für die Wiedergabe von Klangdateien "
+"verwendet werden soll"
 
 #: prefdlg.cpp:599
 #, kde-format
@@ -8058,7 +8058,7 @@ msgstr "Erinnerungsvorlagen"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which type of data to show alarm calendars for"
-msgstr "Wählen Sie, wofür Erinnerungen angezeigt werden sollen."
+msgstr "Wählen Sie, wofür Erinnerungen angezeigt werden sollen"
 
 #: resourceselector.cpp:68
 #, kde-format
