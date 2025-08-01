@@ -471,8 +471,22 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
-    <release version="3.11.2" date="2025-08-14"/>
-    <release version="3.11.1" date="2025-07-03"/>
+    <release version="3.11.2" date="2025-08-14">
+      <description>
+        <p>Release description</p>
+        <ul>
+          <li>Remove excess spacing in Preferences dialog.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="3.11.1" date="2025-07-03">
+      <description>
+        <p>Release description</p>
+        <ul>
+          <li>Prevent message windows taking keyboard focus when they pop up.</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.11.0.2" date="2025-06-05"/>
     <release version="3.11.0.1" date="2025-05-08"/>
     <release version="3.11.0" date="2025-04-17">
