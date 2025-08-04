@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 02:42+0000\n"
-"PO-Revision-Date: 2025-03-06 09:52+0400\n"
+"PO-Revision-Date: 2025-08-03 12:29+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -121,7 +121,7 @@ msgstr "أيّ وقت"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set only a date (without a time) for the alarm"
-msgstr "حدد تاريخًا فقط (بدون وقت) للتنبيه"
+msgstr "حدد تاريخًا فقط (دون وقت) للتنبيه"
 
 #: alarmtimewidget.cpp:133
 #, kde-format
@@ -130,7 +130,7 @@ msgid ""
 "Check to specify only a date (without a time) for the alarm. The alarm will "
 "trigger at the first opportunity on the selected date."
 msgstr ""
-"تحقق من تحديد تاريخ فقط (بدون وقت) للتنبيه. سينطلق التنبيه عند أول فرصة في "
+"تحقق من تحديد تاريخ فقط (دون وقت) للتنبيه. سينطلق التنبيه عند أول فرصة في "
 "التاريخ المحدد."
 
 #: alarmtimewidget.cpp:137
@@ -5544,7 +5544,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Clear Archived Alarms"
-msgstr "امسح المنبّهات المؤرشفة"
+msgstr "امحُ المنبّهات المؤرشفة"
 
 #: prefdlg.cpp:1089
 #, kde-format
@@ -7888,7 +7888,7 @@ msgstr "عيّن اللون…"
 #, kde-format
 msgctxt "@action"
 msgid "Clear Color"
-msgstr "امسح الون"
+msgstr "امحُ الون"
 
 #: resourceselector.cpp:304
 #, kde-format
