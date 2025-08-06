@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 02:42+0000\n"
-"PO-Revision-Date: 2025-08-04 18:33+0400\n"
+"PO-Revision-Date: 2025-08-05 12:58+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -2433,7 +2433,7 @@ msgstr "النافذة"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Notification"
-msgstr "إخطار"
+msgstr "إشعار"
 
 #: editdlgtypes.cpp:91
 #, kde-format
@@ -2534,7 +2534,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Select whether to display the alarm in a window or by the notification "
 "system."
-msgstr "حدد ما إذا كنت تريد عرض المنبه في نافذة أو بواسطة نظام الإخطار."
+msgstr "حدد ما إذا كنت تريد عرض المنبه في نافذة أو بواسطة نظام الإشعار."
 
 #: editdlgtypes.cpp:274
 #, kde-format
@@ -3902,7 +3902,7 @@ msgstr "تذكير مرة واحدة فقط"
 #, kde-format
 msgctxt "@label Whether to use standard notification system"
 msgid "Notify"
-msgstr "إخطار"
+msgstr "إشعار"
 
 #: kalarmcalendar/kaeventformatter.cpp:127
 #, kde-format
