@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 00:44+0000\n"
-"PO-Revision-Date: 2025-08-05 12:58+0400\n"
+"PO-Revision-Date: 2025-08-06 14:31+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1105,8 +1105,8 @@ msgid ""
 "archived alarms are always stored in the default archived alarm calendar.</p>"
 msgstr ""
 "<p>عند حفظ تنبيه جديد أو قالب تنبيه، اطلب التقويم الذي تريد تخزينه فيه، إذا "
-"كان هناك أكثر من تقويم نشط.</p><p>لاحظ أن المنبهات المؤرشفة يتم تخزينها "
-"دائمًا في تقويم المنبهات المؤرشفة المبدئي.</p>"
+"كان هناك أكثر من تقويم نشط.</p><p>لاحظ أن المنبهات المؤرشفة تُخزن دائمًا في "
+"تقويم المنبهات المؤرشفة المبدئي.</p>"
 
 #. i18n: ectx: label, entry (Base_ModalMessages), group (General)
 #: data/kalarmconfig.kcfg:166
@@ -1225,7 +1225,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Time-to-alarm prefix in system tray tooltip"
-msgstr "بادئة كم من \"الوقت حتى المنبة\" في تلميحة صينية النظام"
+msgstr "بادئة كم من \"الوقت حتى المنبه\" في تلميحة صينية النظام"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:206 prefdlg.cpp:2020
@@ -1368,7 +1368,7 @@ msgstr "بداية اليوم لمنبهات التاريخ فقط"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The earliest time of day at which a date-only alarm will be triggered."
-msgstr "أقرب وقت من اليوم الذي سيتم فيه تشغيل منبه التاريخ فقط."
+msgstr "أقرب وقت من اليوم الذي سيعمل فيه منبه التاريخ فقط."
 
 #. i18n: ectx: label, entry (Base_WorkDayStart), group (General)
 #: data/kalarmconfig.kcfg:245
@@ -1731,7 +1731,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Default setting in the alarm edit dialog for blind copying emails to self."
 msgstr ""
-"الإعداد المبدئي في مربع حوار تحرير المنبه لـانسخ البريد الإلكتروني إلى نفسك."
+"الإعداد المبدئي في مربع حوار تحرير المنبه لنسخ البريد الإلكتروني إلى نفسك."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:386
@@ -2358,7 +2358,7 @@ msgid ""
 "Reminder period must be less than the recurrence interval, unless <interface>"
 "%1</interface> is checked."
 msgstr ""
-"يجب أن تكون فترة التذكير أقل من فترة التكرار، ما لم يتم تحديد <interface>%1</"
+"يجب أن تكون فترة التذكير أقل من فترة التكرار، ما لم تُحدد <interface>%1</"
 "interface>."
 
 #: editdlg.cpp:1143
@@ -4162,8 +4162,8 @@ msgid ""
 "default address in <application>KMail</application> or in the "
 "<application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
-"<para>لم يضبط عنوان بريد إلكتروني \"من\".</para><para>يرجى تعيين "
-"عنوانالمبدئي في <application>«بريدك»</application> أو في مربع حوار "
+"<para>لم يضبط عنوان بريد إلكتروني \"من\".</para><para>يرجى تعيين عنوان "
+"المبدئي في <application>«بريدك»</application> أو في مربع حوار "
 "ضبط<application>«منبّهك»</application>.</para>"
 
 #: kamail.cpp:127
@@ -4241,9 +4241,9 @@ msgid ""
 "alarm will be triggered at the first opportunity after its scheduled time, "
 "regardless of how late it is.</para>"
 msgstr ""
-"<para>إذا حددته المربع، فسيلغى المنبه إذا لم يكن من الممكن تشغيلهخلال الفترة "
-"المحددة بعد الوقت المحدد. تشمل الأسباب المحتملة لعدم التشغيل تسجيل خروجك، أو "
-"عدم تشغيل أكس، أو عدم تشغيل <application>«منبّهك»</application>.</"
+"<para>إذا حددته المربع، فسيلغى المنبه إذا لم يكن من الممكن تشغيله خلال "
+"الفترة المحددة بعد الوقت المحدد. تشمل الأسباب المحتملة لعدم التشغيل تسجيل "
+"خروجك، أو عدم تشغيل أكس، أو عدم تشغيل <application>«منبّهك»</application>.</"
 "para><para>إذا ألغيت تحديد المربع، فسيشغّل المنبه عند أول فرصة بعد الوقت "
 "المحدد، بغض النظر عن مدى تأخره.</para>"
 
@@ -5229,10 +5229,10 @@ msgid ""
 "what you enter here. See the <application>KAlarm</application> Handbook for "
 "details of special codes to tailor the command line."
 msgstr ""
-"في غضون ساعة واحدةأدخل سطر الأوامر الكامل اللازم لتنفيذ أمر في نافذة الطرفية "
-"التي اخترتها. بشكل مبدئي سيتم إلحاق سلسلة الأوامر الخاصة بالمنبّه بما تُدخله "
-"هنا. راجع كتيب <application>«منبّهك»</application> للحصول على تفاصيل الرموز "
-"الخاصة لتخصيص سطر الأوامر."
+"في غضون ساعة واحدة أدخل سطر الأوامر الكامل اللازم لتنفيذ أمر في نافذة "
+"الطرفية التي اخترتها. بشكل مبدئي ستُلحق سلسلة الأوامر الخاصة بالمنبّه بما "
+"تُدخله هنا. راجع كتيب <application>«منبّهك»</application> للحصول على تفاصيل "
+"الرموز الخاصة لتخصيص سطر الأوامر."
 
 #: prefdlg.cpp:577
 #, kde-format
@@ -5392,8 +5392,7 @@ msgid ""
 "<para>The earliest time of day at which a date-only alarm will be triggered."
 "</para><para>%1</para>"
 msgstr ""
-"<para>أقرب وقت من اليوم سيتم فيه تشغيل تنبيه التاريخ فقط.</para><para>%1</"
-"para>"
+"<para>أقرب وقت من اليوم سيعمل فيه تنبيه التاريخ فقط.</para><para>%1</para>"
 
 #: prefdlg.cpp:899
 #, kde-format
@@ -5490,8 +5489,8 @@ msgid ""
 "calendar.</para>"
 msgstr ""
 "<para>عند حفظ تنبيه جديد أو قالب تنبيه، اطلب التقويم الذي تريد تخزينه فيه، "
-"إذا كان هناك أكثر من تقويم نشط.</para><para>لاحظ أن المنبهات المؤرشفة يتم "
-"تخزينها دائمًا في تقويم المنبهات المؤرشفة المبدئي.</para>"
+"إذا كان هناك أكثر من تقويم نشط.</para><para>لاحظ أن المنبهات المؤرشفة مخزنة "
+"دائمًا في تقويم المنبهات المؤرشفة المبدئي.</para>"
 
 #: prefdlg.cpp:1056
 #, kde-format
@@ -6086,7 +6085,7 @@ msgid ""
 msgstr ""
 "ألغ تحديد هذا المربع لعرض جميع المنبهات التي تظهر خلال الـ 24 ساعة القادمة "
 "في شريط الأدوات في صينية النظام. حدّد هذا المربع لإدخال حد أقصى لعدد المنبهات "
-"التي سيتم عرضها."
+"التي ستُعرض."
 
 #: prefdlg.cpp:2000
 #, kde-format
@@ -6262,7 +6261,7 @@ msgid ""
 "<application>KAlarm</application> is restarted.</para>"
 msgstr ""
 "<para>شغّل المنبّه في التاريخ/الوقت المحدد وفي كل ولوج حتى ذلك الحين.</"
-"para><para>لاحظ أنه سيُشغّل أيضًا في أي وقت يتم فيه إعادة تشغيل "
+"para><para>لاحظ أنه سيُشغّل أيضًا في أي وقت يعاد فيه التشغيل "
 "<application>«منبّهك»</application>.</para>"
 
 #: recurrenceedit.cpp:112
@@ -8029,7 +8028,7 @@ msgid ""
 "If checked, the sound file will be played repeatedly for as long as the "
 "message is displayed."
 msgstr ""
-"في حالة تحديد هذا الخيار، سيتم تشغيل الملف الصوتي بشكل متكرر طوال فترة عرض "
+"في حالة تحديد هذا الخيار، سيُشغل الملف الصوتي بشكل متكرر طوال فترة عرض "
 "الرسالة."
 
 #: sounddlg.cpp:150
@@ -8182,8 +8181,8 @@ msgid ""
 msgstr ""
 "<para>اختر صوتًا لتشغيله عند عرض الرسالة.<list><item><interface>%1</"
 "interface>: سيعرض الرسالة بصمت.</item><item><interface>%2</interface>: سيصدر "
-"صوت تنبيه بسيط.</item><item><interface>%3</interface>: يتم تشغيل ملف صوتي. "
-"سيُطلب منك اختيار الملف وتعيين خيارات التشغيل. (الخيار غير متاح عند استخدام "
+"صوت تنبيه بسيط.</item><item><interface>%3</interface>: سيُشغل ملف صوتي. سيُطلب "
+"منك اختيار الملف وتعيين خيارات التشغيل. (الخيار غير متاح عند استخدام "
 "الإشعارات.)</item><item><interface>%4</interface>: ينطق نص الرسالة. (يتطلب "
 "الخيار العمل على تثبيت خاصية تحويل النص إلى كلام من Qt.)</item></list></para>"
 
@@ -8263,8 +8262,8 @@ msgid ""
 "will wait for the command to complete before displaying the alarm.</note></"
 "para>"
 msgstr ""
-"<para>أدخل أمر شل لتنفيذه قبل عرض المنبه.</para><para>لاحظ أنه يتم تنفيذه "
-"فقط عندما يعرض المنبه الصحيح،وليس عندما يتم عرض تنبيه تذكيري أو مؤجل.</"
+"<para>أدخل أمر شل لتنفيذه قبل عرض المنبه.</para><para>لاحظ أنه سيُنفذ فقط "
+"عندما يعرض المنبه الصحيح،وليس عندما يُعرض منبه تذكيري أو مؤجل.</"
 "para><para><note>«منبّهك»سينتظر حتى اكتمال الأمر قبل عرض المنبه.</note></para>"
 
 #: specialactions.cpp:173
@@ -8609,7 +8608,7 @@ msgid ""
 "support setting a wakeup time up to 24 hours ahead. You may wish to set up a "
 "test alarm to check your system's capability.</note></para>"
 msgstr ""
-"<para> ستؤدي عملية الاستيقاظ هذه إلى إلغاء أي عملية استيقاظ موجودة تم ضبطها "
+"<para> ستؤدي عملية الاستيقاظ هذه إلى إلغاء أي عملية استيقاظ موجودة المضبوطة "
 "بواسطة «منبّهك» أو أي تطبيق آخر، لأن جهاز حاسوبك لا يمكنه جدولة سوى وقت "
 "استيقاظ واحد.</para><para><note>لا ميزة الاستيقاظ من الوضع المعلق غير مدعومة "
 "على الإطلاق على بعض أجهزة الحاسوب، وخاصة القديمة منها، كما تدعم بعض أجهزة "
