@@ -402,7 +402,7 @@ msgid ""
 "Enter text to appear before the person's name in the alarm message, "
 "including any necessary trailing spaces."
 msgstr ""
-"أدخل نصًا ليظهر قبل اسم الشخص في رسالة المنبّه ، بما في ذلك أي مسافات زائدة "
+"أدخل نصًا ليظهر قبل اسم الشخص في رسالة المنبّه، بما في ذلك أي مسافات زائدة "
 "ضرورية."
 
 #: birthdaydlg.cpp:94
@@ -418,8 +418,8 @@ msgid ""
 "Enter text to appear after the person's name in the alarm message, including "
 "any necessary leading spaces."
 msgstr ""
-"أدخل نصًا ليظهر بعد اسم الشخص في رسالة المنبّه ، بما في ذلك أي مسافات تسبق "
-"النص ضرورية."
+"أدخل نصًا ليظهر بعد اسم الشخص في رسالة المنبّه، بما في ذلك أي مسافات تسبق النص "
+"ضرورية."
 
 #: birthdaydlg.cpp:105
 #, kde-format
@@ -573,7 +573,7 @@ msgstr "اعرض حواريّ تحرير المنبّه لتحرير منبّه 
 #: commandoptions.cpp:185
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
-msgstr "عرض مربع حوار تحرير المنبّه ، مسبقًا مع قالب"
+msgstr "عرض مربع حوار تحرير المنبّه، مسبقًا مع قالب"
 
 #: commandoptions.cpp:189
 #, kde-format
@@ -836,8 +836,8 @@ msgid ""
 "address book lookup, and Akonadi resource migration on first run."
 msgstr ""
 "اختر ما إذا كانت تريد تمكين محلق «أكونادي» لمنبهك، والذي يستخدم  «أكونادي» "
-"لتوفير ميزات تشمل استيراد عيد الميلاد ، وبعض وظائف البريد الإلكتروني، وبحث "
-"دفتر البريد الإلكتروني ، وترحيل موارد «أكونادي» عند التشغيل الأول."
+"لتوفير ميزات تشمل استيراد عيد الميلاد، وبعض وظائف البريد الإلكتروني، وبحث "
+"دفتر البريد الإلكتروني، وترحيل موارد «أكونادي» عند التشغيل الأول."
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:83
@@ -1085,7 +1085,7 @@ msgid ""
 "Enter the default time interval (in minutes) to defer alarms, used by the "
 "Defer Alarm dialog."
 msgstr ""
-"أدخل الفاصل الزمني المبدئي (في دقائق) لتأجيل المنبّهات ، التي يستخدمها مربع "
+"أدخل الفاصل الزمني المبدئي (في دقائق) لتأجيل المنبّهات، التي يستخدمها مربع "
 "الحوار المنبّه المؤجل."
 
 #. i18n: ectx: label, entry (AskResource), group (General)
@@ -2721,7 +2721,7 @@ msgstr "حدده لإهمال الخرج."
 msgctxt "@info"
 msgid ""
 "Log file must be the name or path of a local file, with write permission."
-msgstr "يجب أن يكون ملف السجل هو اسم أو مسار ملف محلي ، بإذن للكتابة."
+msgstr "يجب أن يكون ملف السجل هو اسم أو مسار ملف محلي، بإذن للكتابة."
 
 #: editdlgtypes.cpp:1076
 #, kde-kuit-format
@@ -2794,7 +2794,7 @@ msgid ""
 "Your email identity, used to identify you as the sender when sending email "
 "alarms."
 msgstr ""
-"هوية بريدك الإلكتروني ، تستخدم لتحديد هويتك كمرسل عند إرسال منبّهات البريد "
+"هوية بريدك الإلكتروني، تستخدم لتحديد هويتك كمرسل عند إرسال منبّهات البريد "
 "الإلكتروني."
 
 #: editdlgtypes.cpp:1200
@@ -5683,7 +5683,7 @@ msgid ""
 "Your email address, used to identify you as the sender when sending email "
 "alarms."
 msgstr ""
-"عنوان بريدك الإلكتروني ، يستخدم لتحديد هويتك كمرسل عند إرسال منبّهات البريد "
+"عنوان بريدك الإلكتروني، يستخدم لتحديد هويتك كمرسل عند إرسال منبّهات البريد "
 "الإلكتروني."
 
 #: prefdlg.cpp:1256 prefdlg.cpp:1292
@@ -6067,7 +6067,7 @@ msgid ""
 "Specify whether to include in the system tray tooltip, a summary of alarms "
 "due in the next 24 hours."
 msgstr ""
-"حدد ما إذا كان يجب تضمين في مجموعة أدوات صينية النظام ، وهو ملخص المنبّهات "
+"حدد ما إذا كان يجب تضمين في مجموعة أدوات صينية النظام، وهو ملخص المنبّهات "
 "المستحقة في الـ 24 ساعة القادمة."
 
 #: prefdlg.cpp:1987
@@ -6402,7 +6402,7 @@ msgstr "الاستثناءات"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of exceptions, i.e. dates/times excluded from the recurrence"
-msgstr "قائمة الاستثناءات ، أي التواريخ/الأوقات المستبعدة من التكرار"
+msgstr "قائمة الاستثناءات، أي التواريخ/الأوقات المستبعدة من التكرار"
 
 #: recurrenceedit.cpp:300
 #, kde-format
@@ -6599,7 +6599,7 @@ msgstr "في"
 msgctxt "@info:whatsthis"
 msgid ""
 "Repeat the alarm on one day of the week, in the selected week of the month"
-msgstr "كرر المنبّه في يوم واحد من الأسبوع ، في الأسبوع المحدد من الشهر"
+msgstr "كرر المنبّه في يوم واحد من الأسبوع، في الأسبوع المحدد من الشهر"
 
 #: recurrenceedit.cpp:1334
 #, kde-format
@@ -6804,7 +6804,7 @@ msgid ""
 "Instead of the alarm triggering just once at each recurrence, checking this "
 "option makes the alarm trigger multiple times at each recurrence."
 msgstr ""
-"بدلاً من المنبّه الذي يعمل لمرة واحدة فقط في كل تكرار ، فإن تفعيل هذا الخيار "
+"بدلاً من المنبّه الذي يعمل لمرة واحدة فقط في كل تكرار، فإن تفعيل هذا الخيار "
 "سيجعل المنبه يعمل عدة مرات في كل تكرار."
 
 #: repetitionbutton.cpp:142
@@ -6873,7 +6873,7 @@ msgid ""
 "it to the current format."
 msgstr ""
 "التقويم <resource>%1</resource> في تنسيق قديم (<application> «منبّهك» </"
-"application> الإصدار %2) ، وسيكون للقراءة فقط ما لم تختر تحديثه إلى التنسيق "
+"application> الإصدار %2)، وسيكون للقراءة فقط ما لم تختر تحديثه إلى التنسيق "
 "الحالي."
 
 #: resources/calendarupdater.cpp:88
@@ -7380,7 +7380,7 @@ msgstr "نوع المنبّه (رسالة أو ملف أو أمر أو بريد 
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
-msgstr "اسم المنبه ، أو نص منبّه إذا كان الاسم فارغًا"
+msgstr "اسم المنبه، أو نص منبّه إذا كان الاسم فارغًا"
 
 #: resources/resourcedatamodelbase.cpp:569
 #, kde-format
@@ -7693,7 +7693,7 @@ msgstr "أدخل اسم العرض المستخدم لتحديد هذا التق
 #, kde-format
 msgctxt "@title:group"
 msgid "Access Rights"
-msgstr "تصاريح النّفاذ"
+msgstr "أذونات النّفاذ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, readOnlyCheckbox)
 #: resources/singlefileresourceconfigdialog.ui:238
