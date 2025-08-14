@@ -1,5 +1,5 @@
 /*
- *  audioplayer_vlc.cpp  -  play an audio file
+ *  audioplayer_vlc.cpp  -  play an audio file using the VLC backend
  *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2024-2025 David Jarvie <djarvie@kde.org>
  *

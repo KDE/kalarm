@@ -1,5 +1,5 @@
 /*
- *  audioplayer_mpv.cpp  -  play an audio file
+ *  audioplayer_mpv.cpp  -  play an audio file using the MPV backend
  *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2024 Fabio Bas <ctrlaltca@gmail.com>
  *  SPDX-FileCopyrightText: 2024-2025 David Jarvie <djarvie@kde.org>
@@ -20,7 +20,7 @@
 AudioPlayerMpv* AudioPlayerMpv::mInstance = nullptr;
 
 /******************************************************************************
-* Create a unique audio player using the VLC backend.
+* Create a unique audio player using the MPV backend.
 */
 AudioPlayerMpv* AudioPlayerMpv::create(Type type, const QUrl& audioFile, float volume, float fadeVolume, int fadeSeconds, QObject* parent)
 {

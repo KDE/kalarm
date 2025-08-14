@@ -1,5 +1,5 @@
 /*
- *  audioplayer_mpv.h  -  play an audio file
+ *  audioplayer_mpv.h  -  play an audio file using the MPV backend
  *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2024 Fabio Bas <ctrlaltca@gmail.com>
  *  SPDX-FileCopyrightText: 2025 David Jarvie <djarvie@kde.org>
