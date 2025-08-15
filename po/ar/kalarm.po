@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 00:44+0000\n"
-"PO-Revision-Date: 2025-08-09 22:52+0400\n"
+"PO-Revision-Date: 2025-08-14 12:00+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -267,13 +267,13 @@ msgstr "التاريخ غير صالح"
 #, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
-msgstr "فات تاريخ المنبّه بالفعل"
+msgstr "فات تاريخ المنبّه فعلًا"
 
 #: alarmtimewidget.cpp:366
 #, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"
-msgstr "فات وقت المنبّه بالفعل"
+msgstr "فات وقت المنبّه فعلًا"
 
 #: audioplugin/audioplayer_mpv.cpp:53 audioplugin/audioplayer_vlc.cpp:48
 #, kde-format
@@ -439,7 +439,7 @@ msgid ""
 msgstr ""
 "<para>حدد أعياد الميلاد لتعيين المنبهات لها.<nl/>تعرض هذه القائمة جميع أعياد "
 "الميلاد في <application>«دفتر عناوينك»</application> باستثناء تلك التي توجد "
-"لها منبهات بالفعل.</para><para>يمكنك تحديد أعياد ميلاد متعددة في وقت واحد عن "
+"لها منبهات فعلًا.</para><para>يمكنك تحديد أعياد ميلاد متعددة في وقت واحد عن "
 "طريق سحب الفأرة فوق القائمة، أو عن طريق النقر بالفأرة أثناء الضغط على Ctrl "
 "أو Shift.</para>"
 
@@ -1956,10 +1956,10 @@ msgid ""
 "have a dial-up connection, so that you can then ensure that the email is "
 "actually transmitted."
 msgstr ""
-"تعرض رسالة إشعار عندما يقوم منبه البريد الإلكتروني بوضع رسالة بريد إلكتروني "
-"في قائمة الانتظار لإرسالها إلى نظام بعيد. قد يكون هذا مفيداً إذا كان لديك، "
-"على سبيل المثال لديك اتصال طلب هاتفي، بحيث يمكنك بعد ذلك التأكد من إرسال "
-"البريد الإلكتروني قد أرسل فعلًا."
+"تعرض رسالة إشعار عندما يضع منبه البريد الإلكتروني رسالة بريد إلكتروني في "
+"قائمة الانتظار لإرسالها إلى نظام بعيد. قد يكون هذا مفيداً إذا كان لديك، على "
+"سبيل المثال لديك اتصال طلب هاتفي، بحيث يمكنك بعد ذلك التأكد من إرسال البريد "
+"الإلكتروني قد أرسل فعلًا."
 
 #. i18n: ectx: Menu (file)
 #: data/kalarmui.rc:19
@@ -2306,7 +2306,7 @@ msgstr "عليك إدخال اسم لقالب المنبّهات"
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
-msgstr "اسم القالب مستخدم بالفعل"
+msgstr "اسم القالب مستخدم فعلًا"
 
 #: editdlg.cpp:1036
 #, kde-kuit-format
@@ -5130,8 +5130,8 @@ msgid ""
 "Stop using KAlarm. If you later run it again, it will then resume normal "
 "functioning."
 msgstr ""
-"توقف عن استخدام «منبّهك». إذا قمت بتشغيله مرة أخرى لاحقًا، فسوف يستأنف عمله "
-"بشكل طبيعي."
+"توقف عن استخدام «منبّهك». إذا شغلته مرة أخرى لاحقًا، فسوف يستأنف عمله بشكل "
+"طبيعي."
 
 #: prefdlg.cpp:477
 #, kde-format
@@ -7162,7 +7162,7 @@ msgid ""
 "changes will not work."
 msgstr ""
 "حدد الملف الذي يحتوي على هذا المورد.\n"
-"يجب ألا يكون الملف موجودًا بالفعل.\n"
+"يجب ألا يكون الملف موجودًا فعلًا.\n"
 "لاحظ أنه إذا حُدد عنوان URL لملف بعيد، فلن تعمل مراقبة التغييرات في الملف."
 
 #. i18n: ectx: property (toolTip), widget (KLineEdit, nameText)
@@ -8323,8 +8323,8 @@ msgid ""
 "acknowledged or closed.</para>"
 msgstr ""
 "<para>أدخل أمر الصدفة لتنفيذه بعد إغلاق نافذة المنبّه.</para><para>لاحظ أنه "
-"لا يُنفذ بعد إغلاق نافذة التذكير. إذا قمت بتأجيل التنبيه، فلن ينفذ حتى  تأكيد "
-"تلقي المنبّه أو إغلاقه أخر الأمر.</para>"
+"لا يُنفذ بعد إغلاق نافذة التذكير. إذا أجلت التنبيه، فلن ينفذ حتى  تأكيد تلقي "
+"المنبّه أو إغلاقه أخر الأمر.</para>"
 
 #: templatedlg.cpp:49
 #, kde-format
