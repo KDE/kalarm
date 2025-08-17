@@ -36,7 +36,7 @@ target_link_libraries(kalarmplugin PRIVATE
     KPim6::Mime
 )
 
-target_include_directories(kalarmplugin PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/kalarmcalendar;${kalarm_BINARY_DIR}/src/kalarmcalendar>")
+target_include_directories(kalarmplugin PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/kalarmcalendar>")
 
 set_target_properties(kalarmplugin
     PROPERTIES VERSION ${KDEPIM_LIB_VERSION}

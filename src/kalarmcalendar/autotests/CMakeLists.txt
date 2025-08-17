@@ -17,7 +17,7 @@ macro(macro_unit_tests)
         kalarmcalendar
         Qt::DBus
         Qt::Test)
-    target_include_directories(${_testname} PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/kalarmcalendar;${kalarm_BINARY_DIR}/src/kalarmcalendar>")
+    target_include_directories(${_testname} PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/kalarmcalendar>")
   endforeach()
 endmacro()
 if(NOT WIN32)
