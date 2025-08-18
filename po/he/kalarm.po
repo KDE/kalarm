@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 02:42+0000\n"
-"PO-Revision-Date: 2025-07-11 16:54+0300\n"
+"PO-Revision-Date: 2025-08-17 14:17+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -315,12 +315,10 @@ msgid "Cannot initialize audio player"
 msgstr "לא ניתן להפעיל את נגן השמע"
 
 #: audioplugin/audioplayer_vlc.cpp:140 audioplugin/audioplayer_vlc.cpp:208
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "<para>שגיאה בהשמעת קובץ שמע: <filename>%1</filename></para>"
 
 #: autostart/autostart.cpp:49
 #, kde-format
@@ -662,15 +660,16 @@ msgid "Email subject line"
 msgstr "שורת הנושא של ההודעה"
 
 #: commandoptions.cpp:260
-#, fuzzy, kde-format
+#, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
-msgstr "חזרה עד שעה yyyy-]mm-]dd-]hh:mm]]], או תאריך yyyy-mm-dd"
+msgstr "הדמיית שעת המערכת ‎[[[yyyy-]mm-]dd-]hh:mm [TZ] (מצב ניפוי שגיאות)"
 
 #: commandoptions.cpp:265
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
-msgstr "הצגת התזכורת בשעה yyyy-]mm-]dd-]hh:mm]]], או תאריך yyyy-mm-dd"
+msgstr ""
+"הזנקת התזכורת בשעה ‎[[[yyyy-]mm-]dd-]hh:mm [TZ], או בתאריך yyyy-mm-dd [TZ]"
 
 #: commandoptions.cpp:269
 #, kde-format
@@ -683,9 +682,9 @@ msgid "Trigger alarm with the specified event ID"
 msgstr "הזנקת התזכורת עם מזהה האירוע שצוין"
 
 #: commandoptions.cpp:276
-#, fuzzy, kde-format
+#, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
-msgstr "חזרה עד שעה yyyy-]mm-]dd-]hh:mm]]], או תאריך yyyy-mm-dd"
+msgstr "חוזרת עד השעה ‎[[[yyyy-]mm-]dd-]hh:mm [TZ], או התאריך yyyy-mm-dd [TZ]"
 
 #: commandoptions.cpp:280
 #, kde-format
@@ -704,10 +703,10 @@ msgid "<icode>%1</icode>: invalid email address"
 msgstr "<icode>%1</icode>: כתובת דוא״ל שגויה"
 
 #: commandoptions.cpp:578 commandoptions.cpp:593 commandoptions.cpp:672
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
-msgstr "פרמטר %1 לא תקף"
+msgstr "משתנה <icode>%1</icode> שגוי לתזכורת של תאריך בלבד"
 
 #: commandoptions.cpp:582
 #, kde-kuit-format
@@ -724,10 +723,10 @@ msgid ""
 msgstr ""
 
 #: commandoptions.cpp:785
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:shell"
 msgid ": option(s) only valid with an appropriate action option or message"
-msgstr ": האפשרויות תקפות עם הודעה/%1/%2 בלבד"
+msgstr ": האפשרויות תקפות רק עם אפשרות פעולה או הודעה מתאימות"
 
 #: commandoptions.cpp:806 commandoptions.cpp:823
 #, fuzzy, kde-format
@@ -1953,7 +1952,7 @@ msgstr "הצגת היום"
 #, kde-format
 msgctxt "delimiter for joining holiday names"
 msgid ","
-msgstr ""
+msgstr ","
 
 #: deferdlg.cpp:33
 #, kde-format
@@ -2079,7 +2078,7 @@ msgstr "הזן את התאריך בו יש לקבוע את מועד התזכור
 #, kde-format
 msgctxt "@action:button"
 msgid "Try"
-msgstr ""
+msgstr "לנסות"
 
 #: editdlg.cpp:215
 #, kde-format
@@ -4349,7 +4348,7 @@ msgstr "הצגת לוחות שנה"
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
-msgstr ""
+msgstr "הצגת בורר תאריך"
 
 #: mainwindow.cpp:550
 #, kde-format
@@ -4531,7 +4530,7 @@ msgstr "הקובץ לא נמצא"
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
-msgstr ""
+msgstr "שגיאה"
 
 #: messagedisplayhelper.cpp:483
 #, kde-format
@@ -7658,7 +7657,7 @@ msgstr "תבניות התראות"
 #, kde-format
 msgctxt "@info List separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: resourceselector.cpp:511
 #, kde-format
@@ -7976,7 +7975,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Cancel alarm on error"
-msgstr ""
+msgstr "ביטול תזכורת בעקבות שגיאה"
 
 #: specialactions.cpp:179
 #, kde-format
@@ -7985,6 +7984,8 @@ msgid ""
 "Cancel the alarm if the pre-alarm command fails, i.e. do not display the "
 "alarm or execute any post-alarm action command."
 msgstr ""
+"לבטל את התזכורת אם פקודת הטרום תזכורת נכשלת, כלומר לא להציג את התזכורת או "
+"להריץ פקודת פעילות לאחר תזכורת."
 
 #: specialactions.cpp:183
 #, kde-format
@@ -8136,7 +8137,7 @@ msgstr "מושבתת"
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
-msgstr ""
+msgstr "(חלק מהתזכורות מושבתות)"
 
 #: traywindow.cpp:360
 #, kde-format
