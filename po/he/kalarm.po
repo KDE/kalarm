@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 00:44+0000\n"
-"PO-Revision-Date: 2025-08-17 14:17+0300\n"
+"PO-Revision-Date: 2025-08-19 19:40+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -729,14 +729,14 @@ msgid ": option(s) only valid with an appropriate action option or message"
 msgstr ": האפשרויות תקפות רק עם אפשרות פעולה או הודעה מתאימות"
 
 #: commandoptions.cpp:806 commandoptions.cpp:823
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:shell"
 msgid ""
 "\n"
 "Use --help to get a list of available command line options.\n"
 msgstr ""
 "\n"
-"כדי לקבל רשימה של אפשרויות שורת פקודה זמינות --help -השתמש ב\n"
+"אפשר להשתמש ב־‎--help כדי לקבל את רשימת האפשרויות הזמינות בשורת הפקודות.\n"
 
 #: commandoptions.cpp:851
 #, kde-kuit-format
@@ -751,10 +751,10 @@ msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
 msgstr "<icode>%1</icode> דורש את <icode>%2</icode> או את <icode>%3</icode>"
 
 #: commandoptions.cpp:858
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
-msgstr "פרמטר %1 לא תקף"
+msgstr "משתנה <icode>%1</icode> שגוי"
 
 #: commandoptions.cpp:863
 #, kde-kuit-format
@@ -1381,10 +1381,10 @@ msgstr "בחר את צבע הרקע של ההודעה של התזכורת."
 
 #. i18n: ectx: label, entry (ArchivedKeepDays), group (General)
 #: data/kalarmconfig.kcfg:275
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Days to keep expired alarms"
-msgstr "עריכת תזכורת"
+msgstr "כמה ימים להשאיר תזכורות שתוקפן פג"
 
 #. i18n: ectx: whatsthis, entry (ArchivedKeepDays), group (General)
 #: data/kalarmconfig.kcfg:280
@@ -1434,11 +1434,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultDisplayMethod), group (Defaults)
 #: data/kalarmconfig.kcfg:305
-#, fuzzy, kde-format
-#| msgid "Beep when message is displayed"
+#, kde-format
 msgctxt "@label"
 msgid "Alarm message display method"
-msgstr "                            צפצף כאשר ההודעה מוצגת"
+msgstr "שיטת הצגת הודעות תזכורת"
 
 #. i18n: ectx: whatsthis, entry (DefaultDisplayMethod), group (Defaults)
 #: data/kalarmconfig.kcfg:306
@@ -1664,10 +1663,10 @@ msgstr "תקופת מחזוריות"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:387 prefdlg.cpp:1507
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default setting for the recurrence rule in the alarm edit dialog."
-msgstr "הגדרת ברירת המחדל של תדירות החזרה בדו-שיח עריכת התזכורת."
+msgstr "הגדרת ברירת המחדל לכלל החזרתיות בחלונית עריכת התזכורות."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:389
@@ -1738,24 +1737,24 @@ msgstr "יחידות התראה"
 
 #. i18n: ectx: whatsthis, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:412
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default reminder time units in the alarm edit dialog."
-msgstr "הגדרת ברירת המחדל של תדירות החזרה בדו-שיח עריכת התזכורת."
+msgstr ""
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:415
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "Hours/Minutes"
-msgstr "שעות\\דקות"
+msgstr "שעות/דקות"
 
 #. i18n: ectx: label, entry (DefaultPreAction), group (Defaults)
 #: data/kalarmconfig.kcfg:420
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action"
-msgstr "אפשר &תזכורות"
+msgstr "פעולת טרום תזכורת"
 
 #. i18n: ectx: whatsthis, entry (DefaultPreAction), group (Defaults)
 #: data/kalarmconfig.kcfg:421
@@ -1814,17 +1813,17 @@ msgstr "הגדרת ברירת המחדל של תדירות החזרה בדו-ש�
 
 #. i18n: ectx: label, entry (DefaultPostAction), group (Defaults)
 #: data/kalarmconfig.kcfg:439
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Post-alarm action"
-msgstr "אפשר &תזכורות"
+msgstr "פעולה לאחר תזכורת"
 
 #. i18n: ectx: whatsthis, entry (DefaultPostAction), group (Defaults)
 #: data/kalarmconfig.kcfg:440
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute after alarm message windows are closed."
-msgstr "הזן פקודת מעטפת להפעלה."
+msgstr "פקודת ברירת מחדל להרצה אחרי שחלונות הודעות התזכורות נסגרות."
 
 #. i18n: ectx: label, entry (Base_QuitWarn), group (Notification Messages)
 #: data/kalarmconfig.kcfg:446
@@ -1842,17 +1841,17 @@ msgstr "האם להדחיק את הודעת האזהרה בטרם יציאה מ�
 
 #. i18n: ectx: label, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
 #: data/kalarmconfig.kcfg:451
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Confirm alarm deletions"
-msgstr "&שאל לפני מחיקת תזכורות"
+msgstr "אישור מחיקות תזכורות"
 
 #. i18n: ectx: whatsthis, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
 #: data/kalarmconfig.kcfg:452 prefdlg.cpp:509
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation each time you delete an alarm."
-msgstr "בחר באפשרות זו כדי להישאל בכל פעם לפני שאתה מוחק תזכורת."
+msgstr "יש לסמן כדי לבקש אישור על כל מחיקת תזכורת."
 
 #. i18n: ectx: label, entry (Base_EmailQueuedNotify), group (Notification Messages)
 #: data/kalarmconfig.kcfg:456
@@ -1913,10 +1912,10 @@ msgstr ""
 "תופענה."
 
 #: datepicker.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Alarm Date Selector"
-msgstr "                               כתובת קובץ לוח השנה"
+msgstr "בורר תאריך תזכורת"
 
 #: datepicker.cpp:88
 #, kde-format
@@ -2007,30 +2006,26 @@ msgstr ""
 "אין אפשרות לדחות את התזכורת למועד מאוחר יותר מהחזרה הבאה של ההודעה (כרגע %1)"
 
 #: displaycalendar.cpp:128
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error loading calendar:</para><para><filename>%1</filename></"
 "para><para>Please fix or delete the file.</para>"
 msgstr ""
-"שגיאה בטעינת לוח השנה:\n"
-"%1\n"
-"\n"
-"תקן או מחק את הקובץ."
+"<para>שגיאה בטעינת לוח השנה:</para><para><filename>%1</filename></"
+"para><para>נא לתקן או למחוק את הקובץ.</para>"
 
 #: displaycalendar.cpp:172
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save calendar to <filename>%1</filename>"
-msgstr ""
-"אין אפשרות לשמור את לוח השנה אל\n"
-"\"%1\""
+msgstr "שמירת לוח השנה אל <filename>%1</filename> נכשלה"
 
 #: editdlg.cpp:80
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
-msgstr "&חזרה"
+msgstr "חזרתיות - [%1]"
 
 #: editdlg.cpp:87
 #, kde-format
@@ -2039,16 +2034,16 @@ msgid "Show in KOrganizer"
 msgstr "הצגה ב־KOrganizer"
 
 #: editdlg.cpp:183
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Alarm Template [read-only]"
-msgstr "ברירות מחדל של תזכורות"
+msgstr "תבנית תזכורות [לקריאה בלבד]"
 
 #: editdlg.cpp:184
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Archived Alarm [read-only]"
-msgstr "הפעל את %1"
+msgstr "תזכורת בארכיון [לקריאה בלבד]"
 
 #: editdlg.cpp:185
 #, kde-format
@@ -2057,10 +2052,10 @@ msgid "Alarm [read-only]"
 msgstr "תזכורת [לקריאה בלבד]"
 
 #: editdlg.cpp:196
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
-msgstr "קביעת מועד התזכורת לשעה המצויינת."
+msgstr "תזמון התזכורת בשעה שצוינה."
 
 #: editdlg.cpp:199
 #, kde-format
@@ -2141,12 +2136,14 @@ msgid "Default time"
 msgstr "שעת ברירת מחדל"
 
 #: editdlg.cpp:297
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Do not specify a start time for alarms based on this template. The normal "
 "default start time will be used."
-msgstr "הזן את השעה האחרונה שבה יש לחזור על התזכורת"
+msgstr ""
+"הגדרת זמן התחלה לתזכורות על בסיס התבנית הזאת. ייעשה שימוש בשעת ההתחלה כברירת "
+"מחדל."
 
 #: editdlg.cpp:305
 #, kde-format
@@ -2516,40 +2513,40 @@ msgid "Execute in terminal window"
 msgstr "הפעלה בחלון מסוף"
 
 #: editdlgtypes.cpp:838
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
-msgstr "תזכורת חדשה"
+msgstr "תבנית תזכורת פקודה חדשה"
 
 #: editdlgtypes.cpp:838
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
-msgstr "עריכת תזכורת"
+msgstr "עריכת תבנית תזכורת פקודה"
 
 #: editdlgtypes.cpp:839
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
-msgstr "&פקודה"
+msgstr "תזכורת פקודה חדשה"
 
 #: editdlgtypes.cpp:839
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
-msgstr "&פקודה"
+msgstr "עריכת תזכורת פקודה"
 
 #: editdlgtypes.cpp:847
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
-msgstr "הפעלת הפקודה המצויינת עכשיו"
+msgstr "להריץ את הפקודה שצוינה כעת"
 
 #: editdlgtypes.cpp:848
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
-msgstr "הפעלת הפקודה המצויינת עכשיו"
+msgstr "להריץ את הפקודה שצוינה כעת"
 
 #: editdlgtypes.cpp:855 specialactions.cpp:182
 #, kde-format
@@ -2558,10 +2555,10 @@ msgid "Do not notify errors"
 msgstr "לא להודיע על שגיאות"
 
 #: editdlgtypes.cpp:856
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
-msgstr "הגדרת ברירת המחדל של תדירות החזרה בדו-שיח עריכת התזכורת."
+msgstr "לא להציג הודעת שגיאה אם הפקודה נכשלת."
 
 #: editdlgtypes.cpp:862
 #, kde-format
@@ -2576,10 +2573,10 @@ msgid "Check to execute the command in a terminal window"
 msgstr "יש לסמן כדי להפעיל את הפקודה בחלון מסוף"
 
 #: editdlgtypes.cpp:883
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
-msgstr "הזן את השם של קובץ הטקסט או הכתובת שיש להציג."
+msgstr "נא למלא את השם או הנתיב של קובץ היומן."
 
 #: editdlgtypes.cpp:892
 #, kde-format
@@ -2621,20 +2618,20 @@ msgid ""
 msgstr ""
 
 #: editdlgtypes.cpp:1076
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No terminal is selected for command alarms.</para><para>Please set it "
 "in the <application>KAlarm</application> Configuration dialog.</para>"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr ""
+"<para>לא נבחר מסוף לתזכורות פקודות.</para><para>נא להגדיר אותו בחלונית "
+"ההגדרות של <application>KAlarm</application>.</para>"
 
 #: editdlgtypes.cpp:1096
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
-msgstr ""
-"הפקודה הופעלה:\n"
-"%1"
+msgstr "הופעלה פקודה: <icode>%1</icode>"
 
 #: editdlgtypes.cpp:1130
 #, kde-format
@@ -2667,10 +2664,10 @@ msgid "Edit Email Alarm"
 msgstr "עריכת תזכורת דוא״ל"
 
 #: editdlgtypes.cpp:1176
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
-msgstr "שליחת הדוא\"ל אל הכתובות המצויינות עכשיו"
+msgstr "לשלוח את הודעת הדוא״ל לכתובות שצוינו כעת"
 
 #: editdlgtypes.cpp:1177
 #, kde-format
@@ -2699,14 +2696,14 @@ msgid "To:"
 msgstr "אל:"
 
 #: editdlgtypes.cpp:1205
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter the addresses of the email recipients. Separate multiple addresses by "
 "commas or semicolons."
 msgstr ""
-"הזן את הכתובות של נמעני הדוא\"ל. הפרד בין הכתובות באמצעות תווי פסיק או נקודה-"
-"פסיק."
+"נא למלא את כתובות נמעני הדוא״ל. אם יש יותר מכתובת אחת יש לשים ביניהן פסיק או "
+"נקודה פסיק."
 
 #: editdlgtypes.cpp:1216
 #, kde-format
@@ -3985,11 +3982,11 @@ msgid ""
 msgstr ""
 
 #: kamail.cpp:72
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
-msgstr "&Sendmail"
+msgstr "sent-mail (דוא״ל שנשלח)"
 
 #: kamail.cpp:102
 #, kde-kuit-format
@@ -5202,14 +5199,14 @@ msgid "Start of day for date-only alarms:"
 msgstr "תחילת היום עבור תזכורות של תאריך בלבד:"
 
 #: prefdlg.cpp:894
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>The earliest time of day at which a date-only alarm will be triggered."
 "</para><para>%1</para>"
 msgstr ""
-"השעה המוקדמת ביותר ביום שבה תוצג תזכורת של תאריך בלבד (דהיינו תזכורת עם ציון "
-"שעה של \"כל שעה שהיא\")."
+"<para>השעה המוקדמת ביותר ביום שבה תוזנק תזכורת של תאריך בלבד.</para><para>"
+"%1</para>"
 
 #: prefdlg.cpp:899
 #, kde-format
@@ -5230,10 +5227,10 @@ msgid "Daily start time:"
 msgstr "שעת ההתחלה היומית:"
 
 #: prefdlg.cpp:931
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the start time of the working day.</para><para>%1</para>"
-msgstr "הזן את השם של קובץ הטקסט או הכתובת שיש להציג."
+msgstr "<para>נא למלא את שעת תחילת יום העבודה.</para><para>%1</para>"
 
 #: prefdlg.cpp:943
 #, kde-format
@@ -5242,10 +5239,10 @@ msgid "Daily end time:"
 msgstr "שעת הסיום היומית:"
 
 #: prefdlg.cpp:950
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the end time of the working day.</para><para>%1</para>"
-msgstr "הזן את הטקסט של ההודעה של התזכורת. היא יכולה לכלול מספר שורות."
+msgstr "<para>נא למלא את שעת סיום יום העבודה.</para><para>%1</para>"
 
 #: prefdlg.cpp:955
 #, kde-format
@@ -5260,12 +5257,14 @@ msgid "KOrganizer event duration:"
 msgstr "משך אירוע ב־KOrganizer:"
 
 #: prefdlg.cpp:970
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>Enter the event duration in hours and minutes, for alarms which are "
 "copied to KOrganizer.</para><para>%1</para>"
-msgstr "הזן את השעה האחרונה שבה יש לחזור על התזכורת"
+msgstr ""
+"<para>נא למלא את משך האירוע בשעות ודקות, לתזכורות שמועתקות ל־KOrganizer.</"
+"para><para>%1</para>"
 
 #: prefdlg.cpp:1039
 #, kde-format
@@ -5376,10 +5375,10 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:1153
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete all archived alarms?"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr "למחוק את כל התזכורות מהארכיון?"
 
 #: prefdlg.cpp:1154
 #, kde-format
@@ -5533,12 +5532,14 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:1295
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, for blind copying email alarms to yourself."
-msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
+msgstr ""
+"יש לסמן כדי להשתמש בכתובת דוא״ל ברירת המחדל שמוגדרת ב־<application>KMail</"
+"application>, לשליחת עותק נסתר של הודעות על תזכורות לעצמך."
 
 #: prefdlg.cpp:1397
 #, kde-format
@@ -5573,11 +5574,12 @@ msgstr ""
 "%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1433
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "The default setting for <interface>%1</interface> in the alarm edit dialog."
-msgstr "הגדרת ברירת המחדל של תדירות החזרה בדו-שיח עריכת התזכורת."
+msgstr ""
+"הגדרת ברירת המחדל עבור <interface>%1</interface> בחלונית עריכת התזכורות."
 
 #: prefdlg.cpp:1442 prefdlg.cpp:1897
 #, kde-format
@@ -5598,12 +5600,12 @@ msgid "Font && Color"
 msgstr "גופן וצבע"
 
 #: prefdlg.cpp:1470
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "The default setting for the alarm message display method in the alarm edit "
 "dialog."
-msgstr "הגדרת ברירת המחדל של תדירות החזרה בדו-שיח עריכת התזכורת."
+msgstr "הגדרת ברירת המחדל לשיטת הצגת הודעת התזכורת בחלונית עריכת התזכורות."
 
 #: prefdlg.cpp:1494
 #, kde-format
