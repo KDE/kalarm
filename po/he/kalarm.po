@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 02:42+0000\n"
-"PO-Revision-Date: 2025-08-19 19:40+0300\n"
+"PO-Revision-Date: 2025-08-26 14:57+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -57,13 +57,13 @@ msgid "Program error"
 msgstr "שגיאת תוכנית"
 
 #: alarmtimewidget.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid ""
 "Enter the length of time (in hours and minutes) after the current time to "
 "schedule the alarm."
 msgstr ""
-"הזן את משך הזמן (בשעות ודקות) אחרי השעה הנוכחית שבו ייקבע מועד התזכורת."
+"נא למלא את משך הזמן (בשעות ודקות) אחרי השעה הנוכחית שאליו תתוזמן התזכורת."
 
 #: alarmtimewidget.cpp:68
 #, kde-format
@@ -94,10 +94,10 @@ msgid "At date/time:"
 msgstr "בתאריך/שעה:"
 
 #: alarmtimewidget.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm to the specified date and time."
-msgstr "קביעה מחדש של מועד התזכורת לתאריך והשעה המצויינים."
+msgstr "תזמון של ההתראה מחדש לתאריך והשעה שצוינו."
 
 #: alarmtimewidget.cpp:94
 #, kde-format
@@ -112,12 +112,13 @@ msgid "<para>Enter the date to schedule the alarm.</para><para>%1</para>"
 msgstr "<para>נא למלא את התאריך לתזמון התזכורת.</para><para>%1</para>"
 
 #: alarmtimewidget.cpp:115
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>Enter the time to schedule the alarm.</para><para>%1</para><para>%2</"
 "para>"
-msgstr "הזן את השעה בה יש לקבוע את מועד התזכורת."
+msgstr ""
+"<para>נא למלא את השעה לתזמון התזכורת.</para><para>%1</para><para>%2</para>"
 
 #: alarmtimewidget.cpp:128 recurrenceedit.cpp:251
 #, kde-format
@@ -1858,7 +1859,7 @@ msgstr "יש לסמן כדי לבקש אישור על כל מחיקת תזכור
 #, kde-format
 msgctxt "@label"
 msgid "Notify when remote emails are queued"
-msgstr ""
+msgstr "להודיע כאשר הודעות דוא״ל מרוחקות ממתינות בתור"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailQueuedNotify), group (Notification Messages)
 #: data/kalarmconfig.kcfg:457 prefdlg.cpp:1225
@@ -3009,7 +3010,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "No alarm types are selected to search"
-msgstr ""
+msgstr "לא נבחרו סוגי תזכורות לחיפוש"
 
 #: find.cpp:386
 #, kde-kuit-format
@@ -3017,7 +3018,7 @@ msgctxt "@info"
 msgid ""
 "<para>End of alarm list reached.</para><para>Continue from the beginning?</"
 "para>"
-msgstr ""
+msgstr "<para>הגעת לסוף רשימת התזכורות.</para><para>להמשיך מההתחלה?</para>"
 
 #: find.cpp:387
 #, kde-kuit-format
@@ -3025,7 +3026,7 @@ msgctxt "@info"
 msgid ""
 "<para>Beginning of alarm list reached.</para><para>Continue from the end?</"
 "para>"
-msgstr ""
+msgstr "<para>הגעת לראש רשימת התזכורות.</para><para>להמשיך מהסוף?</para>"
 
 #: fontcolour.cpp:53
 #, kde-format
@@ -3152,31 +3153,31 @@ msgstr "לא ניתן להעלות את לוח השנה אל:<nl/><filename>%1</
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
-msgstr ""
+msgstr "לא ניתן להציג תזכורות ב־KOrganizer"
 
 #: functions.cpp:1038
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
-msgstr ""
+msgstr "לא ניתן להציג תזכורת ב־KOrganizer"
 
 #: functions.cpp:1041
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
-msgstr ""
+msgstr "לא ניתן לעדכן תזכורת ב־KOrganizer"
 
 #: functions.cpp:1044
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
-msgstr ""
+msgstr "לא ניתן למחוק תזכורות מ־KOrganizer"
 
 #: functions.cpp:1045
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
-msgstr ""
+msgstr "לא ניתן למחוק תזכורת מ־KOrganizer"
 
 #: functions.cpp:1055
 #, kde-kuit-format
@@ -3200,13 +3201,13 @@ msgstr "<para>%1</para><para>(שגיאת תקשורת מול KOrganizer)</para>"
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
-msgstr ""
+msgstr "ההשכמה מההשהיה המתוזמנת בוטלה."
 
 #: functions.cpp:1345
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
-msgstr ""
+msgstr "שגיאה במשיכת אימות (%1)"
 
 #: functions.cpp:1394
 #, kde-format
@@ -3625,7 +3626,7 @@ msgstr "שעות העבודה בלבד"
 #, kde-format
 msgctxt "@label"
 msgid "Holidays excluded"
-msgstr ""
+msgstr "בלי חגים"
 
 #: kalarmcalendar/kaeventformatter.cpp:70
 #, kde-format
@@ -4321,7 +4322,7 @@ msgstr "הפעלה מחדש"
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
-msgstr ""
+msgstr "השכמה מהשהיה…"
 
 #: mainwindow.cpp:524
 #, kde-format
@@ -5410,7 +5411,7 @@ msgstr "Sendmail"
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
-msgstr ""
+msgstr "נא לבחור איך לשלוח הודעות דוא״ל כשתזכורת מוזנקת."
 
 #: prefdlg.cpp:1194
 #, fuzzy, kde-kuit-format
@@ -5462,7 +5463,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Notify when remote emails are queued"
-msgstr ""
+msgstr "להודיע כאשר הודעות דוא״ל מרוחקות ממתינות בתור"
 
 #: prefdlg.cpp:1231
 #, kde-format
@@ -5482,7 +5483,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Your email address, used to identify you as the sender when sending email "
 "alarms."
-msgstr ""
+msgstr "כתובת הדוא״ל שלך, משמשת לזהות אותך בתור השולח בעת שליחת"
 
 #: prefdlg.cpp:1256 prefdlg.cpp:1292
 #, kde-kuit-format
@@ -6127,7 +6128,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "This uses the same time zone as the start time."
-msgstr ""
+msgstr "משתמש באותו אזור הזמן כמו שעת ההתחלה."
 
 #: recurrenceedit.cpp:243
 #, kde-kuit-format
@@ -6209,7 +6210,7 @@ msgstr "הסרת הפריט המודגש מרשימת ההחרגות"
 #, kde-format
 msgctxt "@option:check"
 msgid "Exclude holidays"
-msgstr ""
+msgstr "החרגת חגים"
 
 #: recurrenceedit.cpp:329
 #, kde-kuit-format
@@ -6225,7 +6226,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Only during working time"
-msgstr ""
+msgstr "רק במהלך שעות העבודה"
 
 #: recurrenceedit.cpp:337
 #, kde-kuit-format
@@ -6282,7 +6283,7 @@ msgstr "ב־:"
 #, kde-format
 msgctxt "@info"
 msgid "No day selected"
-msgstr ""
+msgstr "לא נבחר יום"
 
 #: recurrenceedit.cpp:1266
 #, kde-format
@@ -6421,7 +6422,7 @@ msgstr "4 לפני הסוף"
 #, kde-format
 msgctxt "@item:inlistbox Every (Monday...) in month"
 msgid "Every"
-msgstr ""
+msgstr "כל"
 
 #: recurrenceedit.cpp:1349
 #, kde-format
@@ -6475,7 +6476,7 @@ msgstr "נא לבחור את החודש בשנה בו התזכורת תחזור 
 #, kde-format
 msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
-msgstr ""
+msgstr "תזכורת ב־29 בפברואר בשנים שאינן מעוברות:"
 
 #: recurrenceedit.cpp:1536
 #, kde-format
@@ -6699,7 +6700,7 @@ msgctxt "@info"
 msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
-msgstr ""
+msgstr "שגיאה!  הקובץ <filename>%1</filename> כבר בשימוש של לוח שנה קיים."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
@@ -6761,7 +6762,7 @@ msgstr "קובצי לוח שנה"
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
-msgstr ""
+msgstr "פרטי הקובץ נבדקים…"
 
 #: resources/migration/dirresourceimportdialog.cpp:405
 #: resources/migration/dirresourceimportdialog.cpp:453
@@ -6805,6 +6806,8 @@ msgid ""
 "using the contents of the directory resource below, you must import it into "
 "a KAlarm calendar file resource."
 msgstr ""
+"KAlarm לא תומך עוד במשאבי תיקייה ללוח שנה. כדי להמשיך להשתמש בתוכן משאב "
+"התיקייה להלן, יש לייבא אותו למשאב קובץ לוח שנה של KAlarm."
 
 #. i18n: ectx: property (text), widget (QLabel, warning2)
 #: resources/migration/dirresourceimportdialog_intro.ui:26
@@ -6848,6 +6851,8 @@ msgid ""
 "using the Import Alarms menu option to import the calendar files contained "
 "within it."
 msgstr ""
+"לבחירתך, אפשר לייבא את משאב תיקיית לוח השנה הזה מאוחר יותר, על ידי שימוש "
+"באפשרות התפריט ייבוא תזכורות כדי לייבא את קובצי לוח השנה שבתוכו."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mergeRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:13
@@ -6884,7 +6889,7 @@ msgstr "שם הקובץ:"
 msgctxt "@info:tooltip"
 msgid ""
 "Select the file to contain this resource. The file must not already exist."
-msgstr ""
+msgstr "נא לבחור את הקובץ להכלת המשאב הזה. אסור שהקובץ כבר יהיה קיים."
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, pathRequester)
 #: resources/migration/dirresourceimportdialog_type.ui:79
@@ -6896,6 +6901,9 @@ msgid ""
 "Note that if the URL of a remote file is specified, monitoring for file "
 "changes will not work."
 msgstr ""
+"נא לבחור את הקובץ להכלת המשאב הזה.\n"
+"אסור שהקובץ כבר יהיה קיים.\n"
+"נא לשים לב שאם צוינה כתובת של קובץ מרוחק, מעקב אחר שינויים בקובץ לא יעבוד."
 
 #. i18n: ectx: property (toolTip), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:109
@@ -6974,13 +6982,13 @@ msgstr "לקריאה בלבד"
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (old format)"
-msgstr ""
+msgstr "לקריאה בלבד (תסדיר ישן)"
 
 #: resources/resourcedatamodelbase.cpp:92
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (other format)"
-msgstr ""
+msgstr "לקריאה בלבד (תסדיר אחר)"
 
 #: resources/resourcedatamodelbase.cpp:114
 #, kde-format
@@ -7112,7 +7120,7 @@ msgstr "סוג התזכורת (הודעה, קובץ, פקודה או דוא״ל)
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
-msgstr ""
+msgstr "שם התזכורת, או טקסט התזכורת אם השם ריק"
 
 #: resources/resourcedatamodelbase.cpp:569
 #, kde-format
@@ -7135,7 +7143,7 @@ msgstr "שם תבנית ההתראות"
 #, kde-format
 msgctxt "@info Alarm never occurs"
 msgid "Never"
-msgstr ""
+msgstr "אף פעם"
 
 #: resources/resourcedatamodelbase.cpp:769
 #, no-c-format, kde-format
@@ -7190,6 +7198,8 @@ msgid ""
 "The calendar <resource>%1</resource> has been made read-only. This was the "
 "default calendar for active alarms."
 msgstr ""
+"לוח השנה <resource>%1</resource> הוסב לקריאה בלבד. זה היה לוח השנה כברירת "
+"המחדל לתזכורות פעילות."
 
 #: resources/resources.cpp:495
 #, kde-kuit-format
@@ -7198,6 +7208,8 @@ msgid ""
 "The calendar <resource>%1</resource> has been made read-only. This was the "
 "default calendar for archived alarms."
 msgstr ""
+"לוח השנה <resource>%1</resource> הוסב לקריאה בלבד. זה היה לוח השנה כברירת "
+"המחדל לתזכורות בארכיון."
 
 #: resources/resources.cpp:500
 #, kde-kuit-format
@@ -7206,6 +7218,8 @@ msgid ""
 "The calendar <resource>%1</resource> has been made read-only. This was the "
 "default calendar for alarm templates."
 msgstr ""
+"לוח השנה <resource>%1</resource> הוסב לקריאה בלבד. זה היה לוח השנה כברירת "
+"המחדל לתבניות של תזכורות."
 
 #: resources/resources.cpp:505
 #, kde-kuit-format
@@ -7215,6 +7229,8 @@ msgid ""
 "the default calendar for:%2</para><para>Please select new default calendars."
 "</para>"
 msgstr ""
+"<para>לוח השנה <resource>%1</resource> הוסב לקריאה בלבד. זה היה לוח השנה "
+"כברירת המחדל עבור:%2</para><para>נא לבחור לוחות שנה חדשים כברירת מחדל.</para>"
 
 #: resources/resources.cpp:513
 #, kde-kuit-format
@@ -7432,6 +7448,9 @@ msgid ""
 "the file or the file is on a remote server that does not support write "
 "access."
 msgstr ""
+"אם מצב קריאה בלבד פעיל, אף שינויים לא ייכתבו לכונן. מצב לקריאה בלבד יופעל "
+"אוטומטית אם אין לך גישה לכתיבה לקובץ או שהקובץ בשרת מרוחק שלא תומך בגישה "
+"לכתיבה."
 
 #: resourceselector.cpp:50
 #, kde-format
@@ -7461,7 +7480,7 @@ msgstr "תבניות התראות"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which type of data to show alarm calendars for"
-msgstr ""
+msgstr "נא לבחור לאיזה סוג של נתונים להציג לוחות שנה של תזכורות עבורו"
 
 #: resourceselector.cpp:68
 #, kde-format
@@ -7537,7 +7556,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>It also contains:%1</para>"
-msgstr ""
+msgstr "<para>הוא מכיל גם:%1</para>"
 
 #: resourceselector.cpp:254
 #, kde-kuit-format
@@ -7546,6 +7565,8 @@ msgid ""
 "<para><resource>%1</resource> is the default calendar for:%2</para>"
 "%3<para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
+"<para><resource>%1</resource> לוח השנה כברירת המחדל עבור:%2</para>"
+"%3<para>להסיר אותו מכל רשימות לוחות השנה?</para>"
 
 #: resourceselector.cpp:258
 #, kde-kuit-format
@@ -7562,6 +7583,8 @@ msgid ""
 "<para><resource>%1</resource> contains:%2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
+"<para><resource>%1</resource> מכיל:%2</para><para>להסיר אותו מכל רשימות "
+"לוחות השנה?</para>"
 
 #: resourceselector.cpp:264
 #, kde-kuit-format
@@ -7699,12 +7722,15 @@ msgid ""
 "<filename>%6</filename><nl/>Permissions: %7<nl/>Status: %8<nl/>Default "
 "calendar: %9</para>"
 msgstr ""
+"<title>%1</title><para>מזהה: %2<nl/>סוג לוח שנה: %3<nl/>תוכן: %4<nl/>%5: "
+"<filename>%6</filename><nl/>הרשאות: %7<nl/>מצב: %8<nl/>לוח שנה כברירת מחדל: "
+"%9</para>"
 
 #: rtcwakeaction.cpp:88
 #, kde-kuit-format
 msgctxt "@text/plain"
 msgid "Could not run <command>%1</command> to set wake from suspend"
-msgstr ""
+msgstr "לא ניתן להריץ את <command>%1</command> כדי להגדיר השכמה מהשהיה"
 
 #: rtcwakeaction.cpp:91
 #, kde-kuit-format
@@ -7713,6 +7739,8 @@ msgid ""
 "Error setting wake from suspend.<nl/>Command was: <command>%1 %2</"
 "command><nl/>Error code: %3."
 msgstr ""
+"שגיאה בהגדרת השכמה מהשהיה.<nl/>הפקודה הייתה: <command>%1 %2</command><nl/"
+">קוד שגיאה: %3."
 
 #: sounddlg.cpp:43
 #, kde-format
@@ -8271,7 +8299,7 @@ msgstr "הפעלת מספר התראות מחדש"
 #, kde-format
 msgctxt "@title:window"
 msgid "Wake From Suspend"
-msgstr ""
+msgstr "השכמה מהשהיה"
 
 #: wakedlg.cpp:146
 #, kde-format
@@ -8295,13 +8323,13 @@ msgstr ""
 #: wakedlg.ui:21
 #, kde-format
 msgid "Wake From Suspend Alarm"
-msgstr ""
+msgstr "תזכורת השכמה מהשהיה"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, showWakeButton)
 #: wakedlg.ui:42
 #, kde-format
 msgid "Show current wake-from-suspend alarm"
-msgstr ""
+msgstr "הצגת תזכורת ההשכמה מהשהיה הנוכחית"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, showWakeButton)
 #: wakedlg.ui:45
@@ -8341,7 +8369,7 @@ msgstr "להשתמש בהתראה המודגשת"
 #: wakedlg.ui:74
 #, kde-format
 msgid "Cancel the current wake-from-suspend"
-msgstr ""
+msgstr "ביטול ההשכמה מההשהיה הנוכחית"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, cancelWakeButton)
 #: wakedlg.ui:77
@@ -8371,7 +8399,7 @@ msgstr ""
 #: wakedlg.ui:123
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
-msgstr ""
+msgstr "מספר הדקות לפני ההתראה להתעוררות ממצב השהיה"
 
 #~ msgctxt "@label"
 #~ msgid "Suppress autostart at login"
