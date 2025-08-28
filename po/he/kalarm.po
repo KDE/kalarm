@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 00:44+0000\n"
-"PO-Revision-Date: 2025-08-26 14:57+0300\n"
+"PO-Revision-Date: 2025-08-27 09:47+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1368,10 +1368,10 @@ msgstr "בחר את צבע הרקע של ההודעה של התזכורת."
 
 #. i18n: ectx: label, entry (ArchivedColour), group (General)
 #: data/kalarmconfig.kcfg:269
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Archived alarm color"
-msgstr "א&ל תאפשר תזכורות כאשר התוכנית לא פועלת"
+msgstr "צבע תזכורות בארכיון"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
 #: data/kalarmconfig.kcfg:270 prefdlg.cpp:2055
@@ -1452,10 +1452,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Cancel if late (minutes)"
-msgstr "בטל במקרה של איחור"
+msgstr "ביטול במקרה של איחור (דקות)"
 
 #. i18n: ectx: whatsthis, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:315
@@ -1563,10 +1563,10 @@ msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת ה
 
 #. i18n: ectx: label, entry (DefaultSoundRepeat), group (Defaults)
 #: data/kalarmconfig.kcfg:357
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Repeat sound file"
-msgstr "בחירת קובץ צליל"
+msgstr "חזרה על קובץ צליל"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundRepeat), group (Defaults)
 #: data/kalarmconfig.kcfg:358
@@ -2208,10 +2208,10 @@ msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "יש לסמן כדי להעתיק את ההתראה ללוח השנה של KOrganizer"
 
 #: editdlg.cpp:1009
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
-msgstr "הזן את הטקסט של ההודעה של התזכורת. היא יכולה לכלול מספר שורות."
+msgstr "יש למלא שם לתבנית התזכורת"
 
 #: editdlg.cpp:1013
 #, kde-format
@@ -2402,16 +2402,16 @@ msgid ""
 msgstr ""
 
 #: editdlgtypes.cpp:182
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
-msgstr "הזן את הטקסט של ההודעה של התזכורת. היא יכולה לכלול מספר שורות."
+msgstr "נא למלא טקסט להודעת התזכורת. אפשר יותר משורה אחת."
 
 #: editdlgtypes.cpp:195
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
-msgstr "הזן את השם של קובץ הטקסט או הכתובת שיש להציג."
+msgstr "נא למלא שם או כתובת של טקסט או קובץ תמונה לתצוגה."
 
 #: editdlgtypes.cpp:202 editdlgtypes.cpp:891 sounddlg.cpp:185
 #, kde-format
@@ -2420,10 +2420,10 @@ msgid "Choose a file"
 msgstr "נא לבחור קובץ"
 
 #: editdlgtypes.cpp:203
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
-msgstr "בחר קובץ טקסט להצגה."
+msgstr "נא לבחור טקסט או קובץ תמונה להצגה."
 
 #: editdlgtypes.cpp:247
 #, kde-format
@@ -2797,10 +2797,10 @@ msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "צרופת דוא״ל שגויה: <filename>%1</filename>"
 
 #: editdlgtypes.cpp:1479
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
-msgstr "האם אתה בטוח שברצונך לשלוח את הדוא\"ל אל הנמענים המצויינים כעת?"
+msgstr "לשלוח את הודעות הדוא״ל כעת לנמענים שצוינו?"
 
 #: editdlgtypes.cpp:1480
 #, kde-format
@@ -2869,17 +2869,17 @@ msgid "Play the audio file now"
 msgstr "השמעת קובץ השמע כעת"
 
 #: editdlgtypes.cpp:1633
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
-msgstr "אם אפשרות זו נבחרת, התזכורת תציג את התוכן של קובץ."
+msgstr "אם האפשרות מסומנת, קובץ הצליל יושמע במחזוריות עד ללחיצה על %1."
 
 #: editdlgtypes.cpp:1849
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
-msgstr "הזן פקודת מעטפת להפעלה."
+msgstr "יש לסמן כדי למלא תוכן סקריפט במקום פקודה בשורות פקודות מעטפת"
 
 #: editdlgtypes.cpp:1855
 #, kde-format
@@ -4621,12 +4621,12 @@ msgid "Defer"
 msgstr "דחייה"
 
 #: messagewindow.cpp:228
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "The scheduled date/time for the message (as opposed to the actual time of "
 "display)."
-msgstr "התאריך והשעה המתוכננים של ההודעה (בניגוד לשעת ההצגה עצמה)"
+msgstr "התאריך/השעה המתוזמנים להודעה (בניגוד לזמן בפועל של התצוגה)."
 
 #: messagewindow.cpp:245
 #, kde-format
@@ -5592,7 +5592,7 @@ msgstr "כללי"
 #, kde-format
 msgctxt "@title:tab Settings specific to alarm type"
 msgid "Type Specific"
-msgstr ""
+msgstr "נקודתי לסוג"
 
 #: prefdlg.cpp:1454
 #, kde-format
@@ -6597,7 +6597,7 @@ msgstr "משך:"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to specify how long the alarm is to be repeated"
-msgstr ""
+msgstr "יש לסמן כדי לציין למשך כמה זמן התזכורת תחזור על עצמה"
 
 #: repetitionbutton.cpp:179
 #, kde-format
@@ -7820,7 +7820,7 @@ msgstr "עוצמת שמע"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
-msgstr ""
+msgstr "יש לסמן כדי לבחור את העוצמה להשמעת קובץ הצליל."
 
 #: sounddlg.cpp:244
 #, kde-format
@@ -8115,14 +8115,14 @@ msgid "Delete the currently highlighted alarm templates"
 msgstr "מחיקת תבנית ההתראות שמודגשות כרגע"
 
 #: templatedlg.cpp:178
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
 msgid_plural "Do you really want to delete the %1 selected alarm templates?"
-msgstr[0] "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
-msgstr[1] "האם אתה בטוח שברצונך למחוק את %1 התזכורות הנבחרות?"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "למחוק את תבנית התזכורת הנבחרת?"
+msgstr[1] "למחוק את שתי תבניות התזכורת הנבחרות?"
+msgstr[2] "למחוק את %1 תבניות התזכורת הנבחרות?"
+msgstr[3] "למחוק את %1 תבניות התזכורת הנבחרות?"
 
 #: templatedlg.cpp:180
 #, fuzzy, kde-format
