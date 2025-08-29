@@ -447,6 +447,7 @@ void KAEventTest::flags()
         QVERIFY(!event.commandDisplay());
         QVERIFY(!event.reminderOnceOnly());
         QVERIFY(!event.emailBcc());
+        KAEvent::setHolidays();
     }
     {
         const KAEvent::Flags flags(KAEvent::COPY_KORGANIZER | KAEvent::WORK_TIME_ONLY);
@@ -1366,15 +1367,14 @@ void KAEventTest::nextOccurrence()
     QVERIFY(hRegion.isHoliday(QDate(2024, 6, 23)));
     QVERIFY(hRegion.isHoliday(QDate(2024, 7, 3)));
     QVERIFY(hRegion.isHoliday(QDate(2024, 8, 4)));
-    KAEvent::setHolidays(Holidays(hRegion));
+    static Holidays holidays(hRegion);
+    KAEvent::setHolidays(holidays);
 
     // Set KAEvent working days to Monday - Friday, 9am - 5pm.
     QBitArray workDays(7, false);
     workDays.fill(true, 0, 5);
     KAEvent::setWorkTime(workDays, QTime(9,0,0), QTime(17,0,0), KADateTime::LocalZone);
 
-#if 0
-// Holiday code causes crash on KDE CI, but not on my machine!
     // Set event recurrence to start June 3, recur every 10 days,
     // with one sub-repetition 2 days later.
     KAEvent event(dtMonday, QStringLiteral("name"), QStringLiteral("text"), Qt::black, Qt::white, QFont(), KAEvent::SubAction::Message, 0, KAEvent::DEFAULT_FONT);
@@ -1409,7 +1409,7 @@ void KAEventTest::nextOccurrence()
     type = event.nextOccurrence(dtSundayHol.addSecs(-60), next, KAEvent::Repeats::Return);
     QCOMPARE(type, KAEvent::OccurType::Recur);
     QCOMPARE(next.kDateTime(), dtSundayHol);
-#endif
+    KAEvent::setHolidays();
 }
 
 #include "moc_kaeventtest.cpp"
