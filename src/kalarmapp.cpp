@@ -1746,8 +1746,11 @@ bool KAlarmApp::scheduleEvent(QueuedAction queuedActionFlags,
         ||  execAlarm(event, event.firstAlarm()) == (void*)-2)
             mActionQueue.enqueue(ActionQEntry(event, QueuedAction::Trigger));
         // If it's a recurring alarm, reschedule it for its next occurrence
-        if (!event.recurs()
-        ||  event.setNextOccurrence(now) == KAEvent::OccurType::None)
+        if (!event.recurs())
+            return true;
+        KAEvent::OccurType type;
+        event.setNextOccurrence(now, type);
+        if (type == KAEvent::OccurType::None)
             return true;
         // It has recurrences in the future
     }
@@ -1910,8 +1913,7 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                             switch (static_cast<KAEvent::OccurType>(type & ~KAEvent::OccurType::Repeat))
                             {
                                 case KAEvent::OccurType::FirstOrOnly:
-                                case KAEvent::OccurType::RecurDate:
-                                case KAEvent::OccurType::RecurDateTime:
+                                case KAEvent::OccurType::Recur:
                                 case KAEvent::OccurType::LastRecur:
                                     limit.setDate(next.date().addDays(maxlate + 1));
                                     if (now >= limit)
@@ -1943,8 +1945,7 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                             switch (static_cast<KAEvent::OccurType>(type & ~KAEvent::OccurType::Repeat))
                             {
                                 case KAEvent::OccurType::FirstOrOnly:
-                                case KAEvent::OccurType::RecurDate:
-                                case KAEvent::OccurType::RecurDateTime:
+                                case KAEvent::OccurType::Recur:
                                 case KAEvent::OccurType::LastRecur:
                                     if (next.effectiveKDateTime().secsTo(now) > maxlate)
                                     {
@@ -2090,7 +2091,6 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
     else
     {
         // Reschedule the alarm for its next occurrence.
-        bool cancelled = false;
         DateTime last = event.mainDateTime(false);   // note this trigger time
         if (last != event.mainDateTime(true))
             last = DateTime();                       // but ignore sub-repetition triggers
@@ -2099,10 +2099,12 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
         const KADateTime now = KADateTime::currentUtcDateTime();
         do
         {
-            const KAEvent::OccurType type = event.setNextOccurrence(next ? next_dt : now);
-            switch (type)
+            KAEvent::OccurType type;
+            if (!event.setNextOccurrence(next ? next_dt : now, type))
             {
-                case KAEvent::OccurType::None:
+                // The next occurrence hasn't changed.
+                if (type == KAEvent::OccurType::None)
+                {
                     // All repetitions are finished, so cancel the event
                     qCDebug(KALARM_LOG) << "KAlarmApp::rescheduleAlarm: No occurrence";
                     if (event.reminderMinutes() < 0  &&  last.isValid()
@@ -2115,25 +2117,14 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
                     }
                     if (cancelAlarm(event, alarm.type(), updateCalAndDisplay))
                         return -1;
-                    break;
-                default:
-                    if (!(type & KAEvent::OccurType::Repeat))
-                        break;
-                    // Next occurrence is a repeat, so fall through to recurrence handling
-                    [[fallthrough]];
-                case KAEvent::OccurType::RecurDate:
-                case KAEvent::OccurType::RecurDateTime:
-                case KAEvent::OccurType::LastRecur:
-                    // The event is due by now and repetitions still remain, so rewrite the event
-                    if (updateCalAndDisplay)
-                        update = true;
-                    break;
-                case KAEvent::OccurType::FirstOrOnly:
-                    // The first occurrence is still due?!?, so don't do anything
-                    break;
+                }
             }
-            if (cancelled)
-                break;
+            else if (type & (KAEvent::OccurType::Repeat | KAEvent::OccurType::Recur))
+            {
+                // The event is due by now and repetitions still remain, so rewrite the event
+                if (updateCalAndDisplay)
+                    update = true;
+            }
             if (event.deferred())
             {
                 // Just in case there's also a deferred alarm, ensure it's removed
@@ -2155,7 +2146,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
                     next = event.excludedByWorkTimeOrHoliday(next_dt);
             }
         } while (next && next_dt <= now);
-        reply = (!cancelled && next_dt.isValid() && (next_dt <= now)) ? 1 : 0;
+        reply = (next_dt.isValid() && (next_dt <= now)) ? 1 : 0;
 
         if (event.reminderMinutes() < 0  &&  last.isValid()
         &&  alarm.type() != KAAlarm::Type::AtLogin)

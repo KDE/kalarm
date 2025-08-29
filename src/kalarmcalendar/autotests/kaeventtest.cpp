@@ -2,7 +2,7 @@
    This file is part of kalarmcal library, which provides access to KAlarm
    calendar data.
 
-   SPDX-FileCopyrightText: 2018-2024 David Jarvie <djarvie@kde.org>
+   SPDX-FileCopyrightText: 2018-2025 David Jarvie <djarvie@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -16,9 +16,12 @@ using namespace KAlarmCal;
 #include <KCalendarCore/Event>
 #include <KCalendarCore/Alarm>
 using namespace KCalendarCore;
+#include <KHolidays/HolidayRegion>
 #include <KLocalizedString>
 
 #include <QTest>
+#include <QFileInfo>
+#include <QTextStream>
 
 QTEST_GUILESS_MAIN(KAEventTest)
 
@@ -1301,26 +1304,109 @@ void KAEventTest::setNextOccurrence()
     const KADateTime dt(QDate(2005, 10, 29), QTime(1, 30, 0), QTimeZone("Europe/London"));
     KAEvent event(dt, QStringLiteral("name"), QStringLiteral("text"), Qt::black, Qt::white, QFont(), KAEvent::SubAction::Message, 0, KAEvent::DEFAULT_FONT);
     event.setRecurDaily(1, QBitArray(7, true), -1, QDate());
-    KAEvent::OccurType type = event.setNextOccurrence(dt);
+    KAEvent::OccurType type;
+    bool updated = event.setNextOccurrence(dt, type);
     const DateTime next1 = event.mainDateTime();
-    QCOMPARE(type, KAEvent::OccurType::RecurDateTime);
+    QVERIFY(updated);
+    QCOMPARE(type, KAEvent::OccurType::Recur);
     QCOMPARE(next1.date(), QDate(2005, 10, 30));
     QCOMPARE(next1.effectiveTime(), QTime(1, 30, 0));
     KAEvent eventUTC = event;
 
     const KADateTime dt1(QDate(2005, 10, 30), QTime(1, 30, 0), QTimeZone("Europe/London"));
-    type = event.setNextOccurrence(next1.kDateTime());
+    updated = event.setNextOccurrence(next1.kDateTime(), type);
     const DateTime next2 = event.mainDateTime();
-    QCOMPARE(type, KAEvent::OccurType::RecurDateTime);
+    QVERIFY(updated);
+    QCOMPARE(type, KAEvent::OccurType::Recur);
     QCOMPARE(next2.date(), QDate(2005, 10, 31));
     QCOMPARE(next2.effectiveTime(), QTime(1, 30, 0));
 
     const KADateTime dt2(QDate(2005, 10, 30), QTime(1, 30, 0), KADateTime::UTC);
-    type = eventUTC.setNextOccurrence(dt2);
+    updated = eventUTC.setNextOccurrence(dt2, type);
     const DateTime next3 = eventUTC.mainDateTime();
-    QCOMPARE(type, KAEvent::OccurType::RecurDateTime);
+    QVERIFY(updated);
+    QCOMPARE(type, KAEvent::OccurType::Recur);
     QCOMPARE(next3.date(), QDate(2005, 10, 31));
     QVERIFY(!next3.isSecondOccurrence());
+}
+
+void KAEventTest::nextOccurrence()
+{
+    // Test behaviour of working time only, excluding holidays and excluding date/time
+    // works as expected, for recurrences and for sub-repetitions.
+    const KADateTime dtMonday(QDate(2024, 6, 3), QTime(12, 0, 0), QTimeZone("Europe/London"));
+    const KADateTime dtThursday(QDate(2024, 6, 13), QTime(12, 0, 0), QTimeZone("Europe/London"));
+    const KADateTime dtSundayHol(QDate(2024, 6, 23), QTime(12, 0, 0), QTimeZone("Europe/London"));
+    const KADateTime dtWednesdayHol(QDate(2024, 7, 3), QTime(12, 0, 0), QTimeZone("Europe/London"));
+    const KADateTime dtSaturday(QDate(2024, 7, 13), QTime(12, 0, 0), QTimeZone("Europe/London"));
+    const KADateTime dtTuesday(QDate(2024, 7, 23), QTime(12, 0, 0), QTimeZone("Europe/London"));
+    const KADateTime dtFriday(QDate(2024, 8, 2), QTime(12, 0, 0), QTimeZone("Europe/London"));
+
+    // Set KAEvent holidays to June 15 and June 23.
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const QString path = dir.path();
+    QFile holidayFile(path + QStringLiteral("/holiday_gb-eaw_en-gb_Test"));
+    QVERIFY(holidayFile.open(QIODeviceBase::WriteOnly));
+    QTextStream fStream(&holidayFile);
+    fStream << "country     \"GB-EAW\"\n"
+               "language    \"en_GB\"\n"
+               "name        \"England and Wales\"\n"
+               "description \"Test holiday file\"\n\n"
+               "\"Holiday Wed Rep\" public on june 5\n"
+               "\"Holiday Sun Rec\" public on june 23\n"
+               "\"Holiday Wed Rec\" public on july 3\n"
+               "\"Holiday Sun Rep\" public on august 4\n";
+    holidayFile.close();
+    KHolidays::HolidayRegion hRegion{QFileInfo(holidayFile)};
+    QVERIFY(hRegion.isValid());
+    const auto holidayList = hRegion.rawHolidays(QDate(2024,1,1), QDate(2024,12,31));
+    QCOMPARE(holidayList.count(), 4);
+    QVERIFY(hRegion.isHoliday(QDate(2024, 6, 5)));
+    QVERIFY(hRegion.isHoliday(QDate(2024, 6, 23)));
+    QVERIFY(hRegion.isHoliday(QDate(2024, 7, 3)));
+    QVERIFY(hRegion.isHoliday(QDate(2024, 8, 4)));
+    KAEvent::setHolidays(Holidays(hRegion));
+
+    // Set KAEvent working days to Monday - Friday, 9am - 5pm.
+    QBitArray workDays(7, false);
+    workDays.fill(true, 0, 5);
+    KAEvent::setWorkTime(workDays, QTime(9,0,0), QTime(17,0,0), KADateTime::LocalZone);
+
+    // Set event recurrence to start June 3, recur every 10 days,
+    // with one sub-repetition 2 days later.
+    KAEvent event(dtMonday, QStringLiteral("name"), QStringLiteral("text"), Qt::black, Qt::white, QFont(), KAEvent::SubAction::Message, 0, KAEvent::DEFAULT_FONT);
+    event.setRecurDaily(10, QBitArray(7, true), -1, QDate());  // recur every 10 days
+    event.setRepetition(Repetition(Duration(2, Duration::Days), 1));   // 1 sub-rep after 2 days
+    DateTime next;
+
+    // Get next recurrence/sub-repetition.
+    KAEvent::OccurType type = event.nextOccurrence(dtSundayHol.addSecs(-60), next, KAEvent::Repeats::Return);
+    QCOMPARE(type, KAEvent::OccurType::Recur);
+    QCOMPARE(next.kDateTime(), dtSundayHol);
+    type = event.nextOccurrence(dtSundayHol, next, KAEvent::Repeats::Return);
+    QVERIFY(type & KAEvent::OccurType::Repeat);
+    QCOMPARE(next.kDateTime(), dtSundayHol.addDays(2));
+    type = event.nextOccurrence(dtSundayHol.addDays(2), next, KAEvent::Repeats::Return);
+    QCOMPARE(type, KAEvent::OccurType::Recur);
+    QCOMPARE(next.kDateTime(), dtSundayHol.addDays(10));
+
+    // Exclude a recurrence date: returns next recurrence, not sub-repetition
+    event.setExceptionDates({dtSundayHol.date()});
+    type = event.nextOccurrence(dtSundayHol.addSecs(-60), next, KAEvent::Repeats::Return);
+    QCOMPARE(type, KAEvent::OccurType::Recur);
+    QCOMPARE(next.kDateTime(), dtSundayHol.addDays(10));
+    type = event.nextOccurrence(dtSundayHol, next, KAEvent::Repeats::Return);
+    QCOMPARE(type, KAEvent::OccurType::Recur);
+    QCOMPARE(next.kDateTime(), dtSundayHol.addDays(10));
+    type = event.nextOccurrence(dtSundayHol.addDays(2), next, KAEvent::Repeats::Return);
+    QCOMPARE(type, KAEvent::OccurType::Recur);
+    QCOMPARE(next.kDateTime(), dtSundayHol.addDays(10));
+
+    event.setExceptionDates({});   // clear the exception
+    type = event.nextOccurrence(dtSundayHol.addSecs(-60), next, KAEvent::Repeats::Return);
+    QCOMPARE(type, KAEvent::OccurType::Recur);
+    QCOMPARE(next.kDateTime(), dtSundayHol);
 }
 
 #include "moc_kaeventtest.cpp"

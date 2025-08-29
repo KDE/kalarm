@@ -3,7 +3,7 @@
  *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -154,7 +154,7 @@ public:
         return *this;
     }
     void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, int repeatPause, bool allowEmptyFile);
-    KAEvent::OccurType setNextOccurrence(const KADateTime& preDateTime);
+    bool               setNextOccurrence(const KADateTime& preDateTime, KAEvent::OccurType& type);
     void               setFirstRecurrence();
     void               setCategory(CalEvent::Type);
     void               setRepeatAtLogin(bool);
@@ -2261,10 +2261,15 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
             {
                 // The last repetition (if any) of the current recurrence has already passed.
                 // Adjust to the next scheduled recurrence after now.
-                if (!mMainExpired  &&  setNextOccurrence(now) == KAEvent::OccurType::None)
+                if (!mMainExpired)
                 {
-                    mMainExpired = true;
-                    --mAlarmCount;
+                    KAEvent::OccurType type;
+                    setNextOccurrence(now, type);
+                    if (type == KAEvent::OccurType::None)
+                    {
+                        mMainExpired = true;
+                        --mAlarmCount;
+                    }
                 }
             }
             else
@@ -3246,15 +3251,24 @@ bool KAEventPrivate::occursAfter(const KADateTime& preDateTime, bool includeRepe
 * occurs after the specified date/time, that repetition is set as the next
 * occurrence.
 */
-KAEvent::OccurType KAEvent::setNextOccurrence(const KADateTime& preDateTime)
+void KAEvent::setNextOccurrence(const KADateTime& preDateTime)
 {
-    return d->setNextOccurrence(preDateTime);
+    KAEvent::OccurType type;
+    d->setNextOccurrence(preDateTime, type);
 }
 
-KAEvent::OccurType KAEventPrivate::setNextOccurrence(const KADateTime& preDateTime)
+bool KAEvent::setNextOccurrence(const KADateTime& preDateTime, KAEvent::OccurType& type)
+{
+    return d->setNextOccurrence(preDateTime, type);
+}
+
+bool KAEventPrivate::setNextOccurrence(const KADateTime& preDateTime, KAEvent::OccurType& type)
 {
     if (preDateTime < mNextMainDateTime.effectiveKDateTime())
-        return KAEvent::OccurType::FirstOrOnly;    // it might not be the first recurrence - tant pis
+    {
+        type = KAEvent::OccurType::Recur;
+        return false;
+    }
     KADateTime pre = preDateTime;
     // If there are repetitions, adjust the comparison date/time so that
     // we find the earliest recurrence which has a repetition falling after
@@ -3263,17 +3277,16 @@ KAEvent::OccurType KAEventPrivate::setNextOccurrence(const KADateTime& preDateTi
         pre = KADateTime(mRepetition.duration(-mRepetition.count()).end(preDateTime.qDateTime()));
 
     DateTime afterPre;          // next recurrence after 'pre'
-    KAEvent::OccurType type;
     if (pre < mNextMainDateTime.effectiveKDateTime())
     {
         afterPre = mNextMainDateTime;
-        type = KAEvent::OccurType::FirstOrOnly;   // may not actually be the first occurrence
+        type = KAEvent::OccurType::Recur;
     }
     else if (checkRecur() != KARecurrence::NO_RECUR)
     {
         type = nextRecurrence(pre, afterPre);
         if (type == KAEvent::OccurType::None)
-            return KAEvent::OccurType::None;
+            return false;
         if (type != KAEvent::OccurType::FirstOrOnly  &&  afterPre != mNextMainDateTime)
         {
             // Need to reschedule the next trigger date/time
@@ -3290,7 +3303,10 @@ KAEvent::OccurType KAEventPrivate::setNextOccurrence(const KADateTime& preDateTi
         }
     }
     else
-        return KAEvent::OccurType::None;
+    {
+        type = KAEvent::OccurType::None;
+        return false;
+    }
 
     if (mRepetition)
     {
@@ -3312,7 +3328,7 @@ KAEvent::OccurType KAEventPrivate::setNextOccurrence(const KADateTime& preDateTi
             mTriggerChanged = true;
         }
     }
-    return type;
+    return type != KAEvent::OccurType::FirstOrOnly;
 }
 
 /******************************************************************************
@@ -3434,7 +3450,7 @@ KAEvent::OccurType KAEventPrivate::previousOccurrence(const KADateTime& afterDat
         if (dt == recurStart)
             type = KAEvent::OccurType::FirstOrOnly;
         else if (mRecurrence->getNextDateTime(dt).isValid())
-            type = result.isDateOnly() ? KAEvent::OccurType::RecurDate : KAEvent::OccurType::RecurDateTime;
+            type = KAEvent::OccurType::Recur;
         else
             type = KAEvent::OccurType::LastRecur;
     }
@@ -5142,7 +5158,7 @@ KAEvent::OccurType KAEventPrivate::nextRecurrence(const KADateTime& preDateTime,
         return KAEvent::OccurType::FirstOrOnly;
     if (mRecurrence->duration() >= 0  &&  dt == mRecurrence->endDateTime())
         return KAEvent::OccurType::LastRecur;
-    return result.isDateOnly() ? KAEvent::OccurType::RecurDate : KAEvent::OccurType::RecurDateTime;
+    return KAEvent::OccurType::Recur;
 }
 
 /******************************************************************************

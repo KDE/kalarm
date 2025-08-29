@@ -3,7 +3,7 @@
  *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -249,16 +249,11 @@ public:
     /** What type of occurrence is due. */
     enum class OccurType
     {
-        None                = 0,      //!< no occurrence is due
-        FirstOrOnly         = 0x01,   //!< the first occurrence (takes precedence over LastRecur)
-        RecurDate           = 0x02,   //!< a recurrence with only a date, not a time
-        RecurDateTime       = 0x03,   //!< a recurrence with a date and time
-        LastRecur           = 0x04,   //!< the last recurrence
-        Repeat              = 0x10,   //!< (bitmask for a sub-repetition of an occurrence)
-        FirstOrOnlyRepeat   = Repeat | FirstOrOnly,   //!< a sub-repetition of the first occurrence
-        RecurDateRepeat     = Repeat | RecurDate,     //!< a sub-repetition of a date-only recurrence
-        RecurDateTimeRepeat = Repeat | RecurDateTime, //!< a sub-repetition of a date/time recurrence
-        LastRecurRepeat     = Repeat | LastRecur      //!< a sub-repetition of the last recurrence
+        None              = 0,             //!< no occurrence is due
+        Recur             = 0x01,          //!< a recurrence or the only occurrence (bitmask)
+        FirstOrOnly       = 0x02 | Recur,  //!< the first occurrence (takes precedence over LastRecur)
+        LastRecur         = 0x04 | Recur,  //!< the last recurrence
+        Repeat            = 0x10           //!< a sub-repetition of an occurrence (bitmask)
     };
 
     /** How to treat sub-repetitions in nextOccurrence(). */
@@ -1245,9 +1240,15 @@ public:
      *  @note If the event is date-only, its occurrences are considered to occur
      *        at the start-of-day time when comparing with @p preDateTime.
      *
+     *  @param preDateTime  the date/time after which to set the next occurrence
+     *  @param type         the occurrence type of the next occurrence. Note that
+     *                      only None, Recur and Repeat values/bitmasks are valid;
+     *                      other bit values should be disregarded.
+     *  @return whether the event's next occurrence has been updated
      *  @see nextOccurrence()
      */
-    OccurType setNextOccurrence(const KADateTime& preDateTime);
+    bool setNextOccurrence(const KADateTime& preDateTime, OccurType& type);
+    void setNextOccurrence(const KADateTime& preDateTime);
 
     /** Get the date/time of the next occurrence of the event, strictly after
      *  the specified date/time. Reminders are ignored.
