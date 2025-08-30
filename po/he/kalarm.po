@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 02:42+0000\n"
-"PO-Revision-Date: 2025-08-27 09:47+0300\n"
+"PO-Revision-Date: 2025-08-28 20:25+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -159,10 +159,10 @@ msgid "Reschedule the alarm for the specified time interval after now."
 msgstr "קביעה מחדש של מועד התזכורת למשך הזמן המצויין אחרי רגע זה."
 
 #: alarmtimewidget.cpp:139
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
-msgstr "קביעה של מועד התזכורת למשך הזמן המצויין מרגע זה."
+msgstr "תזמון ההתראה אחרי משך הזמן שצוין מעכשיו."
 
 #: alarmtimewidget.cpp:149 editdlg.cpp:340
 #, kde-kuit-format
@@ -209,10 +209,10 @@ msgid "1 week"
 msgstr "שבוע"
 
 #: alarmtimewidget.cpp:169
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr "הזן את התאריך בו יש לקבוע את מועד התזכורת."
+msgstr "בחירת זמן השהיה מרשימת הערכים שהוגדרו מראש"
 
 #: alarmtimewidget.cpp:177
 #, kde-kuit-format
@@ -896,10 +896,10 @@ msgstr "צבע חזית"
 
 #. i18n: ectx: whatsthis, entry (DefaultFgColour), group (General)
 #: data/kalarmconfig.kcfg:103
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default foreground color for alarm message windows."
-msgstr "בחר את צבע הרקע של ההודעה של התזכורת."
+msgstr "צבע ברירת המחדל לחזית חלונות הודעות תזכורת."
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
 #: data/kalarmconfig.kcfg:107 kalarmcalendar/kaeventformatter.cpp:95
@@ -910,10 +910,10 @@ msgstr "צבע רקע"
 
 #. i18n: ectx: whatsthis, entry (DefaultBgColour), group (General)
 #: data/kalarmconfig.kcfg:108
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default background color for alarm message windows."
-msgstr "בחר את צבע הרקע של ההודעה של התזכורת."
+msgstr "צבע ברירת המחדל לרקע חלונות הודעות תזכורת."
 
 #. i18n: ectx: label, entry (UseAlarmName), group (General)
 #: data/kalarmconfig.kcfg:112
@@ -2267,12 +2267,14 @@ msgid ""
 msgstr ""
 
 #: editdlg.cpp:1143
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid ""
 "The duration of a repetition within the recurrence must be less than the "
 "recurrence interval minus any reminder period"
-msgstr "סוג החזרה של התזכורת או תדירות החזרה שלה."
+msgstr ""
+"משך החזרתיות בטווח ההישנות חייב להיות קטן ממשך ההישנות פחות טווח תזכורות "
+"כלשהן"
 
 #: editdlg.cpp:1150
 #, kde-format
@@ -2337,10 +2339,10 @@ msgid "Notification"
 msgstr "התראה"
 
 #: editdlgtypes.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
-msgstr "בקש אישור"
+msgstr "אישור לאישור התזכורת"
 
 #: editdlgtypes.cpp:127
 #, kde-format
@@ -2460,10 +2462,10 @@ msgid ""
 msgstr ""
 
 #: editdlgtypes.cpp:286
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
-msgstr "בחר באפשרות זו כדי שתוצג בפניך בקשה לאישור כאשר תסגור את התזכורת."
+msgstr "יש לסמן כדי שתופיע בקשה לאישור שאישרת את התזכורת."
 
 #: editdlgtypes.cpp:295
 #, kde-format
@@ -4024,12 +4026,14 @@ msgid ""
 msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
 
 #: kamail.cpp:127
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No 'From' email address is configured.</para><para>Please set it in "
 "the <application>KAlarm</application> Configuration dialog.</para>"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr ""
+"<para>לא הוגדרה כתובת ‚מאת’.</para><para>נא להגדיר אותה בחלונית ההגדרות של "
+"<application>KAlarm</application>.</para>"
 
 #: kamail.cpp:157
 #, kde-kuit-format
@@ -4109,10 +4113,10 @@ msgid "Cancel if late by"
 msgstr "ביטול במקרה של איחור ב־"
 
 #: latecancel.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how late will cause the alarm to be canceled"
-msgstr "הזן את הטקסט של ההודעה של התזכורת. היא יכולה לכלול מספר שורות."
+msgstr "נא לציין כמה איחור יגרום לביטול תזכורת"
 
 #: latecancel.cpp:75
 #, kde-format
@@ -4237,15 +4241,14 @@ msgid "weeks"
 msgstr "שבועות"
 
 #: lib/timespinbox.cpp:123
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Press the Shift key while clicking the spin buttons to adjust the time by a "
 "larger step (6 hours / 5 minutes)."
 msgstr ""
-"\n"
-"הקש על מקש ה-Shift תוך כדי לחיצה על כפתורי הטווח כדי לשנות את השעה לטווחי "
-"זמן גדולים יותר (6 שעות \\ 5 דקות)."
+"יש להחזיק את Shift תוך לחיצה על כפתורי הטווח כדי לכוון את השעה בצעדים גדולים "
+"יותר (6 שעות / 5 דקות)."
 
 #: lib/timezonecombo.cpp:19
 #, kde-format
@@ -5313,7 +5316,7 @@ msgstr "התראות בארכיון"
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep alarms after expiry"
-msgstr ""
+msgstr "להשאיר את התזכורות אחרי שתוקפן פג"
 
 #: prefdlg.cpp:1064
 #, kde-format
@@ -5799,7 +5802,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
-msgstr ""
+msgstr "להסתיר אוטומטית אם אין תזכורות פעילות"
 
 #: prefdlg.cpp:1949
 #, kde-kuit-format
