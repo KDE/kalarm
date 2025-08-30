@@ -2718,11 +2718,6 @@ void KAEvent::setHolidays()
     KAEventPrivate::mHolidays = &KAEventPrivate::mDummyHolidays;
 }
 
-void KAEvent::setHolidays()
-{
-    KAEventPrivate::mHolidays = &KAEventPrivate::mDummyHolidays;
-}
-
 void KAEvent::setWorkTimeOnly(bool wto)
 {
     d->mWorkTimeOnly = wto;

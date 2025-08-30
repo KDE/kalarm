@@ -1022,9 +1022,6 @@ public:
     /** Clear the holiday data used by all KAEvent instances. */
     static void setHolidays();
 
-    /** Clear the holiday data used by all KAEvent instances. */
-    static void setHolidays();
-
     /** Enable or disable the alarm on non-working days and outside working hours.
      *  Note that this option only has any effect for recurring alarms.
      *  @param wto  true to restrict to working time, false to enable any time
