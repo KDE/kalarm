@@ -188,11 +188,13 @@ public:
     DateTime           deferralLimit(KAEvent::DeferLimit* = nullptr) const;
     KAEvent::Flags     flags() const;
     bool               excludedByWorkTimeOrHoliday(const KADateTime& dt) const;
+    bool               excludedByWorkTime(const KADateTime& wdt) const;
+    KAEvent::SubRepExclude repExcludedByWorkTimeOrHoliday(const KADateTime& recurDt, int count) const;
     bool               setRepetition(const Repetition&);
     DateTime           nextDateTime(KAEvent::NextTypes) const;
     bool               occursAfter(const KADateTime& preDateTime, bool includeRepetitions) const;
     KAEvent::OccurType nextOccurrence(const KADateTime& preDateTime, DateTime& result, KAEvent::Repeats = KAEvent::Repeats::Ignore) const;
-    KAEvent::OccurType previousOccurrence(const KADateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
+    KAEvent::OccurType previousOccurrence(const KADateTime& afterDateTime, DateTime& result, KAEvent::RepeatsP) const;
     void               setRecurrence(const KARecurrence&);
     bool               setRecur(KCalendarCore::RecurrenceRule::PeriodType, int freq, int count, QDate end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
     bool               setRecur(KCalendarCore::RecurrenceRule::PeriodType, int freq, int count, const KADateTime& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
@@ -214,7 +216,7 @@ private:
     void               copy(const KAEventPrivate&);
     bool               mayOccurDailyDuringWork(const KADateTime&) const;
     int                nextWorkRepetition(const KADateTime& pre) const;
-    void               calcNextWorkingTime(const DateTime& nextTrigger) const;
+    void               calcNextWorkingTime(const DateTime& nextTrigger, bool skipRepeats) const;
     DateTime           nextWorkingTime() const;
     KAEvent::OccurType nextRecurrence(const KADateTime& preDateTime, DateTime& result) const;
     void               setAudioAlarm(const KCalendarCore::Alarm::Ptr&) const;
@@ -237,6 +239,7 @@ public:
     mutable DateTime   mMainTrigger;       // next trigger time, ignoring reminders and working hours
     mutable DateTime   mAllWorkTrigger;    // next trigger time, taking account of reminders and working hours
     mutable DateTime   mMainWorkTrigger;   // next trigger time, ignoring reminders but taking account of working hours
+    mutable bool       mMainWorkTriggerIsRecur; // whether mMainWorkTrigger is a recurrence, not a sub-repetition
     mutable KAEvent::CmdErr mCommandError{KAEvent::CmdErr::None}; // command execution error last time the alarm triggered
 
     QString            mEventID;           // UID: KCalendarCore::Event unique ID
@@ -1015,6 +1018,7 @@ void KAEventPrivate::copy(const KAEventPrivate& event)
     mMainTrigger             = event.mMainTrigger;
     mAllWorkTrigger          = event.mAllWorkTrigger;
     mMainWorkTrigger         = event.mMainWorkTrigger;
+    mMainWorkTriggerIsRecur  = event.mMainWorkTriggerIsRecur;
     mCommandError            = event.mCommandError;
     mEventID                 = event.mEventID;
     mCustomProperties        = event.mCustomProperties;
@@ -2458,6 +2462,9 @@ DateTime KAEventPrivate::nextDateTime(KAEvent::NextTypes type) const
         return DateTime();
     const int offsetToRecur = now.secsTo(nextRecur.effectiveKDateTime());
 
+    bool checkedWorkHol = false;   // whether nextRecur has been checked for working time/holiday
+    bool excludeWorkHol = false;   // whether nextRecur is excluded by working time/holiday
+
     // If desired, check for the first sub-repetition after now.
     DateTime result;
     if (type & KAEvent::NextRepeat)
@@ -2465,27 +2472,47 @@ DateTime KAEventPrivate::nextDateTime(KAEvent::NextTypes type) const
         // If the recurrence is before now, find the first sub-repetition after now.
         if (offsetToRecur <= 0)
         {
-            const int repInterval = mRepetition.intervalSeconds();
-            const int count = -offsetToRecur / repInterval + 1;   // first sub-repetition AFTER now
-            if (count <= mRepetition.count())
+            if (type & KAEvent::NextWorkHoliday)
             {
-                const DateTime nextRep = nextRecur.addSecs(repInterval * count);
-                if (!(type & KAEvent::NextWorkHoliday)
-                ||  !excludedByWorkTimeOrHoliday(nextRep.effectiveKDateTime()))
-                    result = nextRep;
+                // If the previous recurrence was excluded by working time/holiday
+                // retrictions, its sub-repetitions are also excluded.
+                excludeWorkHol = excludedByWorkTimeOrHoliday(nextRecur.effectiveKDateTime());
+                checkedWorkHol = true;
+            }
+            if (!excludeWorkHol)
+            {
+                const int repInterval = mRepetition.intervalSeconds();
+                bool foundRep = false;  // haven't found a sub-repetition ok for working time/holidays yet
+                for (int count = -offsetToRecur / repInterval + 1;   // first sub-repetition AFTER now
+                     count <= mRepetition.count();  ++count)
+                {
+                    const DateTime nextRep = nextRecur.addSecs(repInterval * count);
+                    if (!(type & KAEvent::NextWorkHoliday)
+                    ||  !excludedByWorkTimeOrHoliday(nextRep.effectiveKDateTime()))
+                    {
+                        result = nextRep;
+                        foundRep = true;   // found a sub-repeition ok for working time/holidays
+                        break;
+                    }
+                }
+                if (!foundRep)
+                {
+                    excludeWorkHol = true;   // the recurrence found is excluded by work time/holidays
+                    checkedWorkHol = true;
+                }
             }
         }
     }
-
-    bool checkedWorkHol = false;   // whether nextRecur has been checked for working time/holiday
-    bool excludeWorkHol = false;   // whether nextRecur is excluded by working time/holiday
 
     // If desired, check for the first reminder after now.
     DateTime resultReminder;
     if (type & KAEvent::NextReminder)
     {
-        excludeWorkHol = excludedByWorkTimeOrHoliday(nextRecur.effectiveKDateTime());
-        checkedWorkHol = true;
+        if (!checkedWorkHol)
+        {
+            excludeWorkHol = excludedByWorkTimeOrHoliday(nextRecur.effectiveKDateTime());
+            checkedWorkHol = true;
+        }
         if (!excludeWorkHol)
         {
             // Reminders are never returned if the recurrence which they relate to
@@ -2524,9 +2551,9 @@ DateTime KAEventPrivate::nextDateTime(KAEvent::NextTypes type) const
             excludeWorkHol = excludedByWorkTimeOrHoliday(nextRecur.effectiveKDateTime());
         if (excludeWorkHol)
         {
-            // Find first recurrence/repetition which complies with working time/
+            // The recurrence found is excluded by work time or holidays.
+            // Find next recurrence/repetition which complies with working time/
             // holiday restrictions.
-            // The next recurrence found is excluded by work time or holidays.
             // Find a subsequent sub-repetition or recurrence which is not excluded.
             calcTriggerTimes();
             return (type & KAEvent::NextReminder) ? mAllWorkTrigger : mMainWorkTrigger;
@@ -2691,6 +2718,11 @@ void KAEvent::setHolidays()
     KAEventPrivate::mHolidays = &KAEventPrivate::mDummyHolidays;
 }
 
+void KAEvent::setHolidays()
+{
+    KAEventPrivate::mHolidays = &KAEventPrivate::mDummyHolidays;
+}
+
 void KAEvent::setWorkTimeOnly(bool wto)
 {
     d->mWorkTimeOnly = wto;
@@ -2720,10 +2752,42 @@ bool KAEventPrivate::excludedByWorkTimeOrHoliday(const KADateTime& dt) const
     if (!mWorkTimeOnly)
         return false;
     const KADateTime wdt = dt.toTimeSpec(mWorkDayTimeSpec);
+    return excludedByWorkTime(wdt);
+}
+
+/******************************************************************************
+* Check whether a date/time (which must use mWorkDayTimeSpec) conflicts with
+* working hours restrictions for the alarm.
+*/
+bool KAEventPrivate::excludedByWorkTime(const KADateTime& wdt) const
+{
+    Q_ASSERT(wdt.timeSpec() == mWorkDayTimeSpec);
     if (!mWorkDays.testBit(wdt.date().dayOfWeek() - 1))
         return true;
     return !wdt.isDateOnly()
        &&  (wdt.time() < mWorkDayStart  ||  wdt.time() >= mWorkDayEnd);
+}
+
+/******************************************************************************
+* Check whether a sub-repetition conflicts with working hours and/or holiday
+* restrictions for the alarm. If its recurrence conflicts, the sub-repetition
+* automatically conflicts.
+*/
+KAEvent::SubRepExclude KAEvent::repExcludedByWorkTimeOrHoliday(const KADateTime& recurDt, int count) const
+{
+    return d->repExcludedByWorkTimeOrHoliday(recurDt, count);
+}
+
+KAEvent::SubRepExclude KAEventPrivate::repExcludedByWorkTimeOrHoliday(const KADateTime& recurDt, int count) const
+{
+    if (!mExcludeHolidays  &&  !mWorkTimeOnly)
+        return KAEvent::SubRepExclude::Ok;
+    // Check the recurrence
+    if (excludedByWorkTimeOrHoliday(recurDt))
+        return KAEvent::SubRepExclude::Recur;
+    // Check the sub-repetition
+    KADateTime repDt(mRepetition.duration(count).end(recurDt.qDateTime()));
+    return excludedByWorkTimeOrHoliday(repDt) ? KAEvent::SubRepExclude::Repeat : KAEvent::SubRepExclude::Ok;
 }
 
 /******************************************************************************
@@ -3387,7 +3451,7 @@ KAEvent::OccurType KAEventPrivate::nextOccurrence(const KADateTime& preDateTime,
             // However, if the intervals between recurrences vary, we could possibly
             // have missed a later recurrence which fits the criterion, so check again.
             DateTime dt;
-            const KAEvent::OccurType newType = previousOccurrence(repeatDT.effectiveKDateTime(), dt, false);
+            const KAEvent::OccurType newType = previousOccurrence(repeatDT.effectiveKDateTime(), dt, KAEvent::RepeatsP::Ignore);
             if (dt > result)
             {
                 type = newType;
@@ -3419,13 +3483,13 @@ KAEvent::OccurType KAEventPrivate::nextOccurrence(const KADateTime& preDateTime,
 * last previous repetition is returned if appropriate.
 * 'result' = date/time of previous occurrence, or invalid date/time if none.
 */
-KAEvent::OccurType KAEvent::previousOccurrence(const KADateTime& afterDateTime, DateTime& result, bool includeRepetitions) const
+KAEvent::OccurType KAEvent::previousOccurrence(const KADateTime& afterDateTime, DateTime& result, RepeatsP o) const
 {
-    return d->previousOccurrence(afterDateTime, result, includeRepetitions);
+    return d->previousOccurrence(afterDateTime, result, o);
 }
 
 KAEvent::OccurType KAEventPrivate::previousOccurrence(const KADateTime& afterDateTime, DateTime& result,
-        bool includeRepetitions) const
+        KAEvent::RepeatsP includeRepetitions) const
 {
     Q_ASSERT(!afterDateTime.isDateOnly());
     if (mStartDateTime >= afterDateTime)
@@ -3460,7 +3524,7 @@ KAEvent::OccurType KAEventPrivate::previousOccurrence(const KADateTime& afterDat
             type = KAEvent::OccurType::LastRecur;
     }
 
-    if (includeRepetitions  &&  mRepetition)
+    if (includeRepetitions == KAEvent::RepeatsP::Return  &&  mRepetition)
     {
         // Find the latest repetition which is before the specified time.
         const int repetition = mRepetition.previousRepeatCount(result.effectiveKDateTime(), afterDateTime);
@@ -4019,6 +4083,7 @@ void KAEventPrivate::dumpDebug() const
     qCDebug(KALARMCAL_LOG) << "-- mMainTrigger:" << mMainTrigger.toString();
     qCDebug(KALARMCAL_LOG) << "-- mAllWorkTrigger:" << mAllWorkTrigger.toString();
     qCDebug(KALARMCAL_LOG) << "-- mMainWorkTrigger:" << mMainWorkTrigger.toString();
+    qCDebug(KALARMCAL_LOG) << "-- mMainWorkTriggerIsRecur:" << mMainWorkTriggerIsRecur;
     qCDebug(KALARMCAL_LOG) << "-- mCategory:" << mCategory;
     qCDebug(KALARMCAL_LOG) << "-- mName:" << mName;
     if (mCategory == CalEvent::TEMPLATE)
@@ -4507,9 +4572,26 @@ void KAEventPrivate::calcTriggerTimes() const
                 :                                             mMainTrigger.addMins(-mReminderMinutes);
     // If only-during-working-time is set and it recurs, it won't actually trigger
     // unless it falls during working hours.
-    if ((!mWorkTimeOnly && !excludeHolidays)
-    ||  !recurs
-    ||  !excludedByWorkTimeOrHoliday(mMainTrigger.kDateTime()))
+    bool excluded = false;   // whether next occurrence is excluded by working time/holidays
+    bool skipRepeats = false;   // whether next sub-rep is excluded by recurrence working time/holidays
+    if (recurs  &&  (mWorkTimeOnly || excludeHolidays))
+    {
+        // Check if current recurrence is excluded by working time/holidays.
+        if (mNextRepeat && mRepetition)
+        {
+            // The next trigger is a sub-repetition.
+            KAEvent::SubRepExclude excl = repExcludedByWorkTimeOrHoliday(mainDateTime(false).kDateTime(), mNextRepeat);
+            skipRepeats = (excl == KAEvent::SubRepExclude::Recur);
+            excluded = (excl != KAEvent::SubRepExclude::Ok);
+        }
+        else
+        {
+            // The next trigger is a recurrence.
+            excluded = excludedByWorkTimeOrHoliday(mMainTrigger.kDateTime());
+            skipRepeats = excluded;
+        }
+    }
+    if (!excluded)
     {
         // It only occurs once, or it complies with any working hours/holiday
         // restrictions.
@@ -4525,7 +4607,7 @@ void KAEventPrivate::calcTriggerTimes() const
         if (!excludeHolidays)
         {
             // There are no holiday restrictions.
-            calcNextWorkingTime(mMainTrigger);
+            calcNextWorkingTime(mMainTrigger, skipRepeats);
         }
         else if (mHolidays->isValid())
         {
@@ -4534,12 +4616,15 @@ void KAEventPrivate::calcTriggerTimes() const
             KADateTime kdt;
             for (int i = 0;  i < 20;  ++i)
             {
-                calcNextWorkingTime(nextTrigger);
+                calcNextWorkingTime(nextTrigger, skipRepeats);
                 if (!mHolidays->isHoliday(mMainWorkTrigger.date()))
                     return;    // found a non-holiday occurrence
                 kdt = mMainWorkTrigger.effectiveKDateTime();
                 kdt.setTime(QTime(23, 59, 59));
-                const KAEvent::OccurType type = nextOccurrence(kdt, nextTrigger, KAEvent::Repeats::Return);
+                // If mMainWorkTrigger is a recurrence, skip its sub-repetitions.
+                // If it's a sub-repetition, look for the next sub-repetition.
+                KAEvent::Repeats repType = mMainWorkTriggerIsRecur ? KAEvent::Repeats::Ignore : KAEvent::Repeats::Return;
+                const KAEvent::OccurType type = nextOccurrence(kdt, nextTrigger, repType);
                 if (!nextTrigger.isValid())
                     break;
                 if (!excludedByWorkTimeOrHoliday(nextTrigger.kDateTime()))
@@ -4555,14 +4640,15 @@ void KAEventPrivate::calcTriggerTimes() const
     }
     else if (excludeHolidays  &&  mHolidays->isValid())
     {
-        // Holidays are excluded.
+        // Holidays are excluded, but there are no working time restrictions.
         DateTime nextTrigger = mMainTrigger;
         KADateTime kdt;
         for (int i = 0;  i < 20;  ++i)
         {
             kdt = nextTrigger.effectiveKDateTime();
             kdt.setTime(QTime(23, 59, 59));
-            const KAEvent::OccurType type = nextOccurrence(kdt, nextTrigger, KAEvent::Repeats::Return);
+            KAEvent::Repeats repType = skipRepeats ? KAEvent::Repeats::Ignore : KAEvent::Repeats::Return;
+            const KAEvent::OccurType type = nextOccurrence(kdt, nextTrigger, repType);
             if (!nextTrigger.isValid())
                 break;
             if (!mHolidays->isHoliday(nextTrigger.date()))
@@ -4572,18 +4658,24 @@ void KAEventPrivate::calcTriggerTimes() const
                 mAllWorkTrigger = (type & KAEvent::OccurType::Repeat) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
                 return;   // found a non-holiday occurrence
             }
+            // If nextTrigger is a recurrence, skip its sub-repetitions.
+            skipRepeats = !(type & KAEvent::OccurType::Repeat);
         }
         mMainWorkTrigger = mAllWorkTrigger = DateTime();
     }
 }
 
 /******************************************************************************
-* Return the time of the next scheduled occurrence of the event during working
+* Set the time of the next scheduled occurrence of the event during working
 * hours, for an alarm which is restricted to working hours.
+* mMainWorkTriggerIsRecur is set to indicate whether mMainWorkTrigger is a
+* recurrence or a sub-repetition.
 * On entry, 'nextTrigger' = the next recurrence or repetition (as returned by
 * mainDateTime(true) ).
+* 'skipRepeats' is true if the next occurrence is a sub-repetition and the
+* current recurrence is excluded by working time/holidays.
 */
-void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
+void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger, bool skipRepeats) const
 {
     qCDebug(KALARMCAL_LOG) << "next=" << nextTrigger.kDateTime().toString(QStringLiteral("%Y-%m-%d %H:%M"));
 
@@ -4636,6 +4728,8 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
         ||  nDayPos == 1)
         {
             // It recurs on the same day each week
+            if (skipRepeats)
+                return;    // it recurs on a non-working day
             if (!mRepetition || weeklyRepeat)
                 return;    // any repetitions are also weekly
 
@@ -4644,7 +4738,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
             // on a working day.
             KADateTime dt(nextTriggerWT.kDateTime().addDays(1));
             dt.setTime(QTime(0, 0, 0));
-            previousOccurrence(dt, newdt, false);
+            previousOccurrence(dt, newdt, KAEvent::RepeatsP::Ignore);
             if (!newdt.isValid())
                 return;    // this should never happen
             kdt = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
@@ -4657,18 +4751,23 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                     break;
                 if (!repeatNum)
                 {
+                    // Have checked all sub-repetitions: now find the next recurrence.
                     nextOccurrence(newdt.kDateTime(), newdt, KAEvent::Repeats::Ignore);
                     if (mWorkDays.testBit(day))
                     {
                         newdt = newdt.toTimeSpec(nextTrigger.timeSpec());
                         mMainWorkTrigger = newdt;
                         mAllWorkTrigger  = mMainWorkTrigger.addMins(-reminder);
+                        mMainWorkTriggerIsRecur = true;
                         return;
                     }
+                    if (skipRepeats)
+                        return;
                     kdt = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
                 }
                 else
                 {
+                    // Check a sub-repetition.
                     const int inc = repeatFreq * repeatNum;
                     if (mWorkDays.testBit((day + inc) % 7))
                     {
@@ -4676,6 +4775,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                         kdt.setDateOnly(true);
                         kdt = kdt.toTimeSpec(nextTrigger.timeSpec());
                         mMainWorkTrigger = mAllWorkTrigger = kdt;
+                        mMainWorkTriggerIsRecur = false;
                         return;
                     }
                 }
@@ -4686,7 +4786,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
         {
             // It's a date-only alarm with either no sub-repetition or a
             // sub-repetition which always falls on the same day of the week
-            // as the recurrence (if any).
+            // as the recurrence.
             unsigned days = 0;
             for (; ;)
             {
@@ -4707,6 +4807,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
             kdt = kdt.toTimeSpec(nextTrigger.timeSpec());
             mMainWorkTrigger = kdt;
             mAllWorkTrigger  = kdt.addSecs(-60 * reminder);
+            mMainWorkTriggerIsRecur = true;
             return;
         }
 
@@ -4714,16 +4815,24 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
         // as does the sub-repetition.
         // Find the previous recurrence (as opposed to sub-repetition)
         unsigned days = 1 << (kdt.date().dayOfWeek() - 1);
-        KADateTime dt(nextTriggerWT.kDateTime().addDays(1));
-        dt.setTime(QTime(0, 0, 0));
-        previousOccurrence(dt, newdt, false);
-        if (!newdt.isValid())
-            return;    // this should never happen
-        kdt = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
-        int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
+        int day = 0;
+        if (!skipRepeats)
+        {
+            // The previous recurrence was on a working day, so its remaining
+            // sub-repetitions need to be checked.
+            KADateTime dt(nextTriggerWT.kDateTime().addDays(1));
+            dt.setTime(QTime(0, 0, 0));
+            previousOccurrence(dt, newdt, KAEvent::RepeatsP::Ignore);
+            if (!newdt.isValid())
+                return;    // this should never happen
+            kdt = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
+            day = kdt.date().dayOfWeek() - 1;   // Monday = 0
+        }
         for (int repeatNum = mNextRepeat;  ;  repeatNum = 0)
         {
-            while (++repeatNum <= mRepetition.count())
+            // Check sub-repetitions - but only if the recurrence was in
+            // working time.
+            while (!skipRepeats  &&  ++repeatNum <= mRepetition.count())
             {
                 const int inc = repeatFreq * repeatNum;
                 if (mWorkDays.testBit((day + inc) % 7))
@@ -4732,12 +4841,15 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                     kdt.setDateOnly(true);
                     kdt = kdt.toTimeSpec(nextTrigger.timeSpec());
                     mMainWorkTrigger = mAllWorkTrigger = kdt;
+                    mMainWorkTriggerIsRecur = false;
                     return;
                 }
                 if ((days & allDaysMask) == allDaysMask)
                     return;    // found an occurrence on every possible day of the week!?!
                 days |= 1 << day;
             }
+
+            // Get the next recurrence.
             nextOccurrence(kdt, newdt, KAEvent::Repeats::Ignore);
             if (!newdt.isValid())
                 return;
@@ -4745,15 +4857,18 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
             day = kdt.date().dayOfWeek() - 1;
             if (mWorkDays.testBit(day))
             {
+                // Found a recurrence on a working day.
                 kdt.setDateOnly(true);
                 kdt = kdt.toTimeSpec(nextTrigger.timeSpec());
                 mMainWorkTrigger = kdt;
                 mAllWorkTrigger  = kdt.addSecs(-60 * reminder);
+                mMainWorkTriggerIsRecur = true;
                 return;
             }
             if ((days & allDaysMask) == allDaysMask)
                 return;    // found an occurrence on every possible day of the week!?!
             days |= 1 << day;
+            skipRepeats = true;   // the recurrence is not on a working day
         }
         return;
     }
@@ -4783,7 +4898,9 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
         unsigned days = 0;
         for (; ;)
         {
-            const KAEvent::OccurType type = nextOccurrence(kdt, newdt, KAEvent::Repeats::Return);
+            // Skip sub-repetitions if the recurrence wasn't in working time.
+            KAEvent::Repeats repType = skipRepeats ? KAEvent::Repeats::Ignore : KAEvent::Repeats::Return;
+            const KAEvent::OccurType type = nextOccurrence(kdt, newdt, repType);
             if (!newdt.isValid())
                 return;
             repetition = (type & KAEvent::OccurType::Repeat);
@@ -4797,12 +4914,14 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                 if ((days & allDaysMask) == allDaysMask)
                     return;    // found a recurrence on every possible day of the week!?!
                 days |= 1 << day;
+                skipRepeats = true;   // the recurrence is not on a working day
             }
         }
         mMainWorkTrigger = nextTriggerWT;
         mMainWorkTrigger.setDate(kdt.date());
         mMainWorkTrigger = mMainWorkTrigger.toTimeSpec(nextTrigger.timeSpec());
         mAllWorkTrigger = repetition ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
+        mMainWorkTriggerIsRecur = !repetition;
         return;
     }
 
@@ -4832,14 +4951,30 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
             // It's a repetition inside a recurrence, each of which occurs
             // at different times of day (bearing in mind that the repetition
             // may occur at daily intervals after each recurrence).
-            // Find the previous recurrence (as opposed to sub-repetition)
             repeatFreq = mRepetition.intervalSeconds();
-            previousOccurrence(kdt.addSecs(1), newdt, false);
-            if (!newdt.isValid())
-                return;    // this should never happen
-            kdtRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
-            repeatNum = kdtRecur.secsTo(kdt) / repeatFreq;
-            kdt = kdtRecur.addSecs(repeatNum * repeatFreq);
+
+            if (skipRepeats)
+            {
+                // The last recurrence was not in working time, so skip its
+                // sub-repetitions.
+                nextOccurrence(kdt, newdt, KAEvent::Repeats::Ignore);
+                if (!newdt.isValid())
+                    return;    // this should never happen
+                kdtRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
+                skipRepeats = excludedByWorkTime(kdtRecur);
+                repeatNum = 0;
+                kdt = kdtRecur;
+            }
+            else
+            {
+                // Find the previous recurrence (as opposed to sub-repetition)
+                previousOccurrence(kdt.addSecs(1), newdt, KAEvent::RepeatsP::Ignore);
+                if (!newdt.isValid())
+                    return;    // this should never happen
+                kdtRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
+                repeatNum = kdtRecur.secsTo(kdt) / repeatFreq;
+                kdt = kdtRecur.addSecs(repeatNum * repeatFreq);
+            }
         }
         else
         {
@@ -4865,7 +5000,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
         int transitionIx = -1;
         for (int n = 0;  n < 7 * 24 * 60;  ++n)
         {
-            if (mRepetition)
+            if (!skipRepeats  &&  mRepetition)
             {
                 // Check the sub-repetitions for this recurrence
                 for (; ;)
@@ -4883,6 +5018,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                         {
                             kdt = kdt.toTimeSpec(nextTrigger.timeSpec());
                             mMainWorkTrigger = mAllWorkTrigger = kdt;
+                            mMainWorkTriggerIsRecur = false;
                             return;
                         }
                     }
@@ -4893,6 +5029,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
             if (!newdt.isValid())
                 return;
             kdtRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
+            skipRepeats = excludedByWorkTime(kdtRecur);
             dayRecur = kdtRecur.date().dayOfWeek() - 1;   // Monday = 0
             const QTime t = kdtRecur.time();
             if (t >= mWorkDayStart  &&  t < mWorkDayEnd)
@@ -4902,6 +5039,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                     kdtRecur = kdtRecur.toTimeSpec(nextTrigger.timeSpec());
                     mMainWorkTrigger = kdtRecur;
                     mAllWorkTrigger  = kdtRecur.addSecs(-60 * reminder);
+                    mMainWorkTriggerIsRecur = true;
                     return;
                 }
             }
@@ -4922,10 +5060,11 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                     transitionIx = i;
                 if (++transitionIx >= tzTransitions.count())
                     return;
-                previousOccurrence(KADateTime(tzTransitions[transitionIx].atUtc), newdt, false);
+                previousOccurrence(KADateTime(tzTransitions[transitionIx].atUtc), newdt, KAEvent::RepeatsP::Ignore);
                 kdtRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
                 if (finalDate.daysTo(kdtRecur.date()) > 365)
                     return;
+                skipRepeats = excludedByWorkTime(kdtRecur);
                 firstTime = kdtRecur.time();
                 firstOffset = kdtRecur.utcOffset();
                 currentOffset = firstOffset;
@@ -4945,12 +5084,27 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
          * Then, it is still possible that a working time sub-repetition
          * could occur immediately after a seasonal time change.
          */
-        // Find the previous recurrence (as opposed to sub-repetition)
         const int repeatFreq = mRepetition.intervalSeconds();
-        previousOccurrence(kdt.addSecs(1), newdt, false);
-        if (!newdt.isValid())
-            return;    // this should never happen
-        KADateTime kdtRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
+        KADateTime kdtRecur;
+        if (skipRepeats)
+        {
+            // The last recurrence was not in working time, so skip its
+            // sub-repetitions.
+            nextOccurrence(kdt, newdt, KAEvent::Repeats::Ignore);
+            if (!newdt.isValid())
+                return;    // this should never happen
+            kdtRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
+            skipRepeats = excludedByWorkTime(kdtRecur);
+            kdt = kdtRecur;
+        }
+        else
+        {
+            // Find the previous recurrence (as opposed to sub-repetition)
+            previousOccurrence(kdt.addSecs(1), newdt, KAEvent::RepeatsP::Ignore);
+            if (!newdt.isValid())
+                return;    // this should never happen
+            kdtRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
+        }
         const bool recurDuringWork = (kdtRecur.time() >= mWorkDayStart  &&  kdtRecur.time() < mWorkDayEnd);
 
         // Use the previous recurrence as a base for checking whether
@@ -4980,7 +5134,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
             for (; ;)
             {
                 // Check the sub-repetitions for this recurrence
-                if (repeatsDuringWork >= 0)
+                if (!skipRepeats  &&  repeatsDuringWork >= 0)
                 {
                     for (; ;)
                     {
@@ -5008,6 +5162,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                             {
                                 kdt = kdt.toTimeSpec(nextTrigger.timeSpec());
                                 mMainWorkTrigger = mAllWorkTrigger = kdt;
+                                mMainWorkTriggerIsRecur = false;
                                 return;
                             }
                             repeatsDuringWork = 1;
@@ -5032,6 +5187,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                 kdtRecur = kdtNextRecur;
                 nextOccurrence(kdtRecur, newdt, KAEvent::Repeats::Ignore);
                 kdtNextRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
+                skipRepeats = excludedByWorkTime(kdtNextRecur);
                 dateRecur = kdtRecur.date();
                 const int dayRecur = dateRecur.dayOfWeek() - 1;   // Monday = 0
                 if (recurDuringWork  &&  mWorkDays.testBit(dayRecur))
@@ -5039,6 +5195,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                     kdtRecur = kdtRecur.toTimeSpec(nextTrigger.timeSpec());
                     mMainWorkTrigger = kdtRecur;
                     mAllWorkTrigger  = kdtRecur.addSecs(-60 * reminder);
+                    mMainWorkTriggerIsRecur = true;
                     return;
                 }
                 days |= 1 << dayRecur;
@@ -5056,9 +5213,10 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
             if (++transitionIx >= tzTransitions.count())
                 return;
             kdt = KADateTime(tzTransitions[transitionIx].atUtc);
-            previousOccurrence(kdt, newdt, false);
+            previousOccurrence(kdt, newdt, KAEvent::RepeatsP::Ignore);
             kdt = kdt.toTimeSpec(mWorkDayTimeSpec);
             kdtRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
+            skipRepeats = excludedByWorkTime(kdtRecur);
         }
         return;  // not found - give up
     }

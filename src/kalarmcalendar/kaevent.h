@@ -256,12 +256,27 @@ public:
         Repeat            = 0x10           //!< a sub-repetition of an occurrence (bitmask)
     };
 
+    /** Whether a sub-repetition is excluded due to working time/holidays. */
+    enum class SubRepExclude
+    {
+        Ok,      //!< not affected by working time/holidays
+        Recur,   //!< the recurrence is excluded due to working time/holidays
+        Repeat   //!< the sub-repetition (but not the recurrence) is excluded due to working time/holidays
+    };
+
     /** How to treat sub-repetitions in nextOccurrence(). */
     enum class Repeats
     {
         Ignore = 0,    //!< check for recurrences only, ignore sub-repetitions
-        Return,        //!< return a sub-repetition if it's the next occurrence
+        Return,        //!< return a sub-repetition if it's the next/previous occurrence
         RecurBefore    //!< if a sub-repetition is the next occurrence, return the previous recurrence, not the sub-repetition
+    };
+
+    /** How to treat sub-repetitions in previousOccurrence(). */
+    enum class RepeatsP
+    {
+        Ignore = 0,    //!< check for recurrences only, ignore sub-repetitions
+        Return         //!< return a sub-repetition if it's the next/previous occurrence
     };
 
     /** What type of occurrence currently limits how long the alarm can be deferred. */
@@ -883,8 +898,8 @@ public:
      *                                     be returned. N.B. Reminders are not displayed for
      *                                     sub-repetitions.
      * - @p type contains NextWorkHoliday: as above but the search continues until a
-     *                                     recurrence is found which occurs during working
-     *                                     hours and not on a holiday.
+     *                                     recurrence is found which complies with any
+     *                                     working hours and holiday restrictions.
      * - @p type contains NextDeferral:    if the event (not a reminder) has been deferred,
      *                                     returns the deferral time.
      *                                     If a reminder has been deferred AND @p type
@@ -1007,6 +1022,9 @@ public:
     /** Clear the holiday data used by all KAEvent instances. */
     static void setHolidays();
 
+    /** Clear the holiday data used by all KAEvent instances. */
+    static void setHolidays();
+
     /** Enable or disable the alarm on non-working days and outside working hours.
      *  Note that this option only has any effect for recurring alarms.
      *  @param wto  true to restrict to working time, false to enable any time
@@ -1033,6 +1051,23 @@ public:
      *               actually scheduled to occur at time @p dt.)
      */
     bool excludedByWorkTimeOrHoliday(const KADateTime& dt) const;
+
+    /** Check whether a sub-repetition conflicts with working hours and/or holiday
+     *  restrictions for the alarm. Note that if its recurrence conflicts, the
+     *  sub-repetition automatically conflicts.
+     *  @note If @p recurDt is date-only, only holidays and/or working days are
+     *        taken account of; working hours are ignored.
+     *  @note No check is made as to whether a recurrence is actually scheduled
+     *        to occur at time @p recurDt.
+     *  @param recurDt  the date/time of the sub-repetition's recurrence.
+     *  @param index    the index to the sub-repetition to check.
+     *  @return whether the alarm is disabled from occurring either because the
+     *               recurrence at @p recurDt is outside working hours (if the alarm
+     *               is working time only) or is during a holiday (if the alarm is
+     *               disabled on holidays), or if the time of the sub-repetition
+     *               is similarly restricted;
+     */
+    SubRepExclude repExcludedByWorkTimeOrHoliday(const KADateTime& recurDt, int index) const;
 
     /** Set working days and times, to be used by all KAEvent instances.
      *  @param days      bits set to 1 for each working day. Array element 0 = Monday ... 6 = Sunday.
@@ -1274,15 +1309,17 @@ public:
      *  @note If the event is date-only, its occurrences are considered to occur
      *        at the start-of-day time when comparing with @p preDateTime.
      *
-     *  @param afterDateTime       the specified date/time.
-     *  @param result              date/time of previous occurrence, or invalid
-     *                             date/time if none.
-     *  @param includeRepetitions  if true and the alarm has a sub-repetition, the
-     *                             last previous repetition is returned if
-     *                             appropriate.
+     *  @param afterDateTime  the specified date/time.
+     *  @param result         date/time of previous occurrence, or invalid
+     *                        date/time if none.
+     *  @param option         = Ignore: only recurrences are returned;
+     *                        = Return: if the alarm has a sub-repetition, the
+     *                                  last previous repetition is returned if
+     *                                  appropriate;
+     *                        Other values must not be specified.
      *  @see nextOccurrence()
      */
-    OccurType previousOccurrence(const KADateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
+    OccurType previousOccurrence(const KADateTime& afterDateTime, DateTime& result, RepeatsP includeRepetitions) const;
 
     /** Set the event to be a copy of the specified event, making the specified
      *  alarm the 'displaying' alarm.

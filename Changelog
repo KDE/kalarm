@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.12.0 (KDE Gear 25.12) --- 30 August 2025 ===
+* If a recurrence is suppressed by work time/holidays/exception, suppress its sub-repetitions.
+
 === Version 3.11.2 (KDE Gear 25.08) --- 14 July 2025 ===
 * Remove excess spacing in Preferences dialogue.
 

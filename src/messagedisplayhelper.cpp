@@ -113,7 +113,7 @@ MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent
     {
         if (event.reminderMinutes() < 0)
         {
-            event.previousOccurrence(alarm.dateTime(false).effectiveKDateTime(), mDateTime, false);
+            event.previousOccurrence(alarm.dateTime(false).effectiveKDateTime(), mDateTime, KAEvent::RepeatsP::Ignore);
             if (!mDateTime.isValid()  &&  event.repeatAtLogin())
                 mDateTime = alarm.dateTime().addSecs(event.reminderMinutes() * 60);
         }

@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2025-03-17</date>
-<releaseinfo>3.11.0 (KDE Gear 25.04)</releaseinfo>
+<date>2025-08-30</date>
+<releaseinfo>3.12.0 (KDE Gear 25.12)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -1882,6 +1882,16 @@ repeats every hour from noon to 6 pm each Thursday, you would set up a
 weekly recurrence on Thursday at 12:00, and use the Sub-Repetition
 dialog to specify an interval of 1 hour and either a count of 6 or a
 duration of 6 hours.</para>
+
+<note><para>Sub-repetitions are only triggered after a main recurrence
+which actually triggers. If a main recurrence is suppressed by an
+exception date/time or by holiday or working time restrictions, the
+sub-repetitions for that instance of the recurrence will not be
+triggered.</para>
+
+<para>Individual sub-repetitions will also be suppressed if they occur
+at an exception date/time, or during holiday or working time
+restrictions.</para></note>
 
 <para>In the Sub-Repetition dialog which is displayed when you click
 the <guibutton>Sub-Repetition</guibutton> button, check

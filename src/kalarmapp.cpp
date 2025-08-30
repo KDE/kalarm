@@ -1909,7 +1909,7 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                             // It's too late to display the scheduled occurrence.
                             // Find the last previous occurrence of the alarm.
                             DateTime next;
-                            const KAEvent::OccurType type = event.previousOccurrence(now, next, true);
+                            const KAEvent::OccurType type = event.previousOccurrence(now, next, KAEvent::RepeatsP::Return);
                             switch (static_cast<KAEvent::OccurType>(type & ~KAEvent::OccurType::Repeat))
                             {
                                 case KAEvent::OccurType::FirstOrOnly:
@@ -1941,7 +1941,7 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                             // It's over the maximum interval late.
                             // Find the most recent occurrence of the alarm.
                             DateTime next;
-                            const KAEvent::OccurType type = event.previousOccurrence(now, next, true);
+                            const KAEvent::OccurType type = event.previousOccurrence(now, next, KAEvent::RepeatsP::Return);
                             switch (static_cast<KAEvent::OccurType>(type & ~KAEvent::OccurType::Repeat))
                             {
                                 case KAEvent::OccurType::FirstOrOnly:
