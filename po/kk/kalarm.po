@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 00:44+0000\n"
+"POT-Creation-Date: 2025-08-30 00:43+0000\n"
 "PO-Revision-Date: 2013-07-07 03:28+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -3756,7 +3756,7 @@ msgstr ""
 "күнтізбенің күйін тексеріп не өзгертіп <interface>Көрініс -> Күнтізбелерді "
 "көрсету</interface> дегенге барыңыз."
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2468
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3766,19 +3766,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Команданы орындау қатесі (қоршау ортасына қатынау рұқсат етілмеген):"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2621
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Уақытша скрипт файлын құру қатесі"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2717
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Ескерту алдындағы әрекет:"
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2723
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3849,7 +3849,7 @@ msgstr "Қашан:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3092
+#: kalarmcalendar/kaevent.cpp:3102
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Brief form of 'At Login'"
 #| msgid "Login"
@@ -3857,7 +3857,7 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Кіргенде"
 
-#: kalarmcalendar/kaevent.cpp:3092
+#: kalarmcalendar/kaevent.cpp:3102
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "At login"
@@ -3865,7 +3865,7 @@ msgctxt "@info"
 msgid "At login"
 msgstr "Жүйеге кіргенде"
 
-#: kalarmcalendar/kaevent.cpp:3101 kalarmcalendar/kaevent.cpp:3188
+#: kalarmcalendar/kaevent.cpp:3111 kalarmcalendar/kaevent.cpp:3198
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3877,7 +3877,7 @@ msgid "1 Minute"
 msgid_plural "%1 Minutes"
 msgstr[0] "%1 минут"
 
-#: kalarmcalendar/kaevent.cpp:3103 kalarmcalendar/kaevent.cpp:3190
+#: kalarmcalendar/kaevent.cpp:3113 kalarmcalendar/kaevent.cpp:3200
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
@@ -3888,7 +3888,7 @@ msgid "1 Hour"
 msgid_plural "%1 Hours"
 msgstr[0] "%1 сағат"
 
-#: kalarmcalendar/kaevent.cpp:3105 kalarmcalendar/kaevent.cpp:3191
+#: kalarmcalendar/kaevent.cpp:3115 kalarmcalendar/kaevent.cpp:3201
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Hours and minutes"
 #| msgid "%1h %2m"
@@ -3896,7 +3896,7 @@ msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1сағ %2мин"
 
-#: kalarmcalendar/kaevent.cpp:3108 kalarmcalendar/kaevent.cpp:3195
+#: kalarmcalendar/kaevent.cpp:3118 kalarmcalendar/kaevent.cpp:3205
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
@@ -3907,7 +3907,7 @@ msgid "1 Day"
 msgid_plural "%1 Days"
 msgstr[0] "%1 күн"
 
-#: kalarmcalendar/kaevent.cpp:3110 kalarmcalendar/kaevent.cpp:3196
+#: kalarmcalendar/kaevent.cpp:3120 kalarmcalendar/kaevent.cpp:3206
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Week"
@@ -3917,7 +3917,7 @@ msgid "1 Week"
 msgid_plural "%1 Weeks"
 msgstr[0] "%1 апта"
 
-#: kalarmcalendar/kaevent.cpp:3112
+#: kalarmcalendar/kaevent.cpp:3122
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Month"
@@ -3927,7 +3927,7 @@ msgid "1 Month"
 msgid_plural "%1 Months"
 msgstr[0] "%1 ай"
 
-#: kalarmcalendar/kaevent.cpp:3114
+#: kalarmcalendar/kaevent.cpp:3124
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Year"
@@ -3937,7 +3937,7 @@ msgid "1 Year"
 msgid_plural "%1 Years"
 msgstr[0] "%1 жыл"
 
-#: kalarmcalendar/kaevent.cpp:3120
+#: kalarmcalendar/kaevent.cpp:3130
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -3945,7 +3945,7 @@ msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Жоқ"
 
-#: kalarmcalendar/kaevent.cpp:3198
+#: kalarmcalendar/kaevent.cpp:3208
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 00:44+0000\n"
+"POT-Creation-Date: 2025-08-30 00:43+0000\n"
 "PO-Revision-Date: 2025-04-21 15:19+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -3482,7 +3482,7 @@ msgstr ""
 "interface> 메뉴에서 보관된 알람 캘린더를 선택한 다음 <interface>보관된 알람"
 "의 기본값으로 사용</interface>을 선택하십시오."
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2468
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3492,19 +3492,19 @@ msgstr ""
 "명령을 실행할 수 없음\n"
 "(명령 알람에 대해 선택된 터미널 없음)"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2621
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "임시 스크립트 알람을 만드는 중 오류 발생"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2717
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "알람 이전 동작:"
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2723
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3563,19 +3563,19 @@ msgstr "만료 기한:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3092
+#: kalarmcalendar/kaevent.cpp:3102
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "로그인"
 
-#: kalarmcalendar/kaevent.cpp:3092
+#: kalarmcalendar/kaevent.cpp:3102
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "로그인 시"
 
-#: kalarmcalendar/kaevent.cpp:3101 kalarmcalendar/kaevent.cpp:3188
+#: kalarmcalendar/kaevent.cpp:3111 kalarmcalendar/kaevent.cpp:3198
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3584,7 +3584,7 @@ msgid "1 Minute"
 msgid_plural "%1 Minutes"
 msgstr[0] "%1분"
 
-#: kalarmcalendar/kaevent.cpp:3103 kalarmcalendar/kaevent.cpp:3190
+#: kalarmcalendar/kaevent.cpp:3113 kalarmcalendar/kaevent.cpp:3200
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3592,13 +3592,13 @@ msgid "1 Hour"
 msgid_plural "%1 Hours"
 msgstr[0] "%1시간"
 
-#: kalarmcalendar/kaevent.cpp:3105 kalarmcalendar/kaevent.cpp:3191
+#: kalarmcalendar/kaevent.cpp:3115 kalarmcalendar/kaevent.cpp:3201
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1시간 %2분"
 
-#: kalarmcalendar/kaevent.cpp:3108 kalarmcalendar/kaevent.cpp:3195
+#: kalarmcalendar/kaevent.cpp:3118 kalarmcalendar/kaevent.cpp:3205
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3606,34 +3606,34 @@ msgid "1 Day"
 msgid_plural "%1 Days"
 msgstr[0] "%1일"
 
-#: kalarmcalendar/kaevent.cpp:3110 kalarmcalendar/kaevent.cpp:3196
+#: kalarmcalendar/kaevent.cpp:3120 kalarmcalendar/kaevent.cpp:3206
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
 msgid_plural "%1 Weeks"
 msgstr[0] "%1주"
 
-#: kalarmcalendar/kaevent.cpp:3112
+#: kalarmcalendar/kaevent.cpp:3122
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
 msgid_plural "%1 Months"
 msgstr[0] "%1개월"
 
-#: kalarmcalendar/kaevent.cpp:3114
+#: kalarmcalendar/kaevent.cpp:3124
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
 msgid_plural "%1 Years"
 msgstr[0] "%1년"
 
-#: kalarmcalendar/kaevent.cpp:3120
+#: kalarmcalendar/kaevent.cpp:3130
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "없음"
 
-#: kalarmcalendar/kaevent.cpp:3198
+#: kalarmcalendar/kaevent.cpp:3208
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"

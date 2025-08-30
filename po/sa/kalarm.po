@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 00:44+0000\n"
+"POT-Creation-Date: 2025-08-30 00:43+0000\n"
 "PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -3474,7 +3474,7 @@ msgstr ""
 "इत्यस्य उपयोगं कुर्वन्तु पञ्चाङ्गानि</interface> दर्शयन्तु, संग्रहीत-अलार्म-पञ्चाङ्गं चिनोतु, "
 "<interface>संग्रहीत-अलार्म-कृते पूर्वनिर्धारितरूपेण उपयोगं कुर्वन्तु</interface> इति चिनोतु ।"
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2468
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3484,19 +3484,19 @@ msgstr ""
 "आदेशं निष्पादयितुं असफलम्\n"
 "(आदेश-अलार्म-कृते कोऽपि टर्मिनल् चयनितः नास्ति)"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2621
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "अस्थायी स्क्रिप्ट् सञ्चिकां निर्मातुं त्रुटिः"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2717
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "अलार्मपूर्वक्रिया :"
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2723
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3555,19 +3555,19 @@ msgstr "देय:"
 msgid "KAlarm"
 msgstr "K अलार्म"
 
-#: kalarmcalendar/kaevent.cpp:3092
+#: kalarmcalendar/kaevent.cpp:3102
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "प्रवेशः"
 
-#: kalarmcalendar/kaevent.cpp:3092
+#: kalarmcalendar/kaevent.cpp:3102
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "प्रवेशे"
 
-#: kalarmcalendar/kaevent.cpp:3101 kalarmcalendar/kaevent.cpp:3188
+#: kalarmcalendar/kaevent.cpp:3111 kalarmcalendar/kaevent.cpp:3198
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3577,7 +3577,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "१ मिनिट्"
 msgstr[1] "%1 मिनिट्"
 
-#: kalarmcalendar/kaevent.cpp:3103 kalarmcalendar/kaevent.cpp:3190
+#: kalarmcalendar/kaevent.cpp:3113 kalarmcalendar/kaevent.cpp:3200
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3586,13 +3586,13 @@ msgid_plural "%1 Hours"
 msgstr[0] "१ घण्टा"
 msgstr[1] "%1 घण्टा"
 
-#: kalarmcalendar/kaevent.cpp:3105 kalarmcalendar/kaevent.cpp:3191
+#: kalarmcalendar/kaevent.cpp:3115 kalarmcalendar/kaevent.cpp:3201
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1ह %2म्"
 
-#: kalarmcalendar/kaevent.cpp:3108 kalarmcalendar/kaevent.cpp:3195
+#: kalarmcalendar/kaevent.cpp:3118 kalarmcalendar/kaevent.cpp:3205
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3601,7 +3601,7 @@ msgid_plural "%1 Days"
 msgstr[0] "१ दिवसे"
 msgstr[1] "%1 दिवसाः"
 
-#: kalarmcalendar/kaevent.cpp:3110 kalarmcalendar/kaevent.cpp:3196
+#: kalarmcalendar/kaevent.cpp:3120 kalarmcalendar/kaevent.cpp:3206
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3609,7 +3609,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "१ सप्ताहः"
 msgstr[1] "%1 सप्ताहाः"
 
-#: kalarmcalendar/kaevent.cpp:3112
+#: kalarmcalendar/kaevent.cpp:3122
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3617,7 +3617,7 @@ msgid_plural "%1 Months"
 msgstr[0] "१ मासः"
 msgstr[1] "%1 मासाः"
 
-#: kalarmcalendar/kaevent.cpp:3114
+#: kalarmcalendar/kaevent.cpp:3124
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3625,13 +3625,13 @@ msgid_plural "%1 Years"
 msgstr[0] "१ वर्ष"
 msgstr[1] "%1 वर्षाणि"
 
-#: kalarmcalendar/kaevent.cpp:3120
+#: kalarmcalendar/kaevent.cpp:3130
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "न कश्चित्"
 
-#: kalarmcalendar/kaevent.cpp:3198
+#: kalarmcalendar/kaevent.cpp:3208
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"

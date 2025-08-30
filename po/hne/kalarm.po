@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 00:44+0000\n"
+"POT-Creation-Date: 2025-08-30 00:43+0000\n"
 "PO-Revision-Date: 2009-02-27 17:53+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -3494,7 +3494,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2468
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3504,19 +3504,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "कमांड लागू करे मं फेल (सेल एक्सेस अधिकृत नइ):"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2621
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "अस्थाई स्क्रिप्ट फाइल बनाए मं गलती"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2717
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "प्री-अलार्म काम:"
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2723
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3581,7 +3581,7 @@ msgstr "तारीकः"
 msgid "KAlarm"
 msgstr "के-अलार्म"
 
-#: kalarmcalendar/kaevent.cpp:3092
+#: kalarmcalendar/kaevent.cpp:3102
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Brief form of 'At Login'"
 #| msgid "Login"
@@ -3589,7 +3589,7 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "लागइन"
 
-#: kalarmcalendar/kaevent.cpp:3092
+#: kalarmcalendar/kaevent.cpp:3102
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "At login"
@@ -3597,7 +3597,7 @@ msgctxt "@info"
 msgid "At login"
 msgstr "लागिन मं"
 
-#: kalarmcalendar/kaevent.cpp:3101 kalarmcalendar/kaevent.cpp:3188
+#: kalarmcalendar/kaevent.cpp:3111 kalarmcalendar/kaevent.cpp:3198
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3610,7 +3610,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 मिनट"
 msgstr[1] "%1 मिनट"
 
-#: kalarmcalendar/kaevent.cpp:3103 kalarmcalendar/kaevent.cpp:3190
+#: kalarmcalendar/kaevent.cpp:3113 kalarmcalendar/kaevent.cpp:3200
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
@@ -3622,7 +3622,7 @@ msgid_plural "%1 Hours"
 msgstr[0] "1 घंटा"
 msgstr[1] "%1 घंटे"
 
-#: kalarmcalendar/kaevent.cpp:3105 kalarmcalendar/kaevent.cpp:3191
+#: kalarmcalendar/kaevent.cpp:3115 kalarmcalendar/kaevent.cpp:3201
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Hours and minutes"
 #| msgid "%1h %2m"
@@ -3630,7 +3630,7 @@ msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1h %2m"
 
-#: kalarmcalendar/kaevent.cpp:3108 kalarmcalendar/kaevent.cpp:3195
+#: kalarmcalendar/kaevent.cpp:3118 kalarmcalendar/kaevent.cpp:3205
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
@@ -3642,7 +3642,7 @@ msgid_plural "%1 Days"
 msgstr[0] "1 दिन"
 msgstr[1] "%1 दिन"
 
-#: kalarmcalendar/kaevent.cpp:3110 kalarmcalendar/kaevent.cpp:3196
+#: kalarmcalendar/kaevent.cpp:3120 kalarmcalendar/kaevent.cpp:3206
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Week"
@@ -3653,7 +3653,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 हफ्ता"
 msgstr[1] "%1 हफ्ता"
 
-#: kalarmcalendar/kaevent.cpp:3112
+#: kalarmcalendar/kaevent.cpp:3122
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Month"
@@ -3664,7 +3664,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 महिना"
 msgstr[1] "%1 महिना"
 
-#: kalarmcalendar/kaevent.cpp:3114
+#: kalarmcalendar/kaevent.cpp:3124
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Year"
@@ -3675,7 +3675,7 @@ msgid_plural "%1 Years"
 msgstr[0] "1 साल"
 msgstr[1] "%1 साल"
 
-#: kalarmcalendar/kaevent.cpp:3120
+#: kalarmcalendar/kaevent.cpp:3130
 #, fuzzy, kde-format
 #| msgctxt "@info/plain No recurrence"
 #| msgid "None"
@@ -3683,7 +3683,7 @@ msgctxt "@info No recurrence"
 msgid "None"
 msgstr "कुछ नइ"
 
-#: kalarmcalendar/kaevent.cpp:3198
+#: kalarmcalendar/kaevent.cpp:3208
 #, fuzzy, kde-format
 #| msgctxt "@info/plain No recurrence"
 #| msgid "None"
