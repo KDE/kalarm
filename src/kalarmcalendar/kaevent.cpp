@@ -4626,7 +4626,7 @@ void KAEventPrivate::calcTriggerTimes() const
                     mAllWorkTrigger = (type & KAEvent::OccurType::Repeat) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
                     return;   // found a non-holiday occurrence
                 }
-                skipRepeats = true;
+                skipRepeats = !(type & KAEvent::OccurType::Repeat);
             }
             mMainWorkTrigger = mAllWorkTrigger = DateTime();
         }
