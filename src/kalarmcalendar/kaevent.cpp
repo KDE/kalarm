@@ -3408,65 +3408,69 @@ KAEvent::OccurType KAEvent::nextOccurrence(const KADateTime& preDateTime, DateTi
 KAEvent::OccurType KAEventPrivate::nextOccurrence(const KADateTime& preDateTime, DateTime& result,
         KAEvent::Repeats includeRepetitions) const
 {
-    KADateTime pre = preDateTime;
-    if (includeRepetitions != KAEvent::Repeats::Ignore)
+    if (checkRecur() == KARecurrence::NO_RECUR)
     {
-        // Repeats::Return or Repeats::RecurBefore
-        if (!mRepetition)
-            includeRepetitions = KAEvent::Repeats::Ignore;
+        // The event only occurs once.
+        if (preDateTime < mNextMainDateTime.effectiveKDateTime())
+        {
+            result = mNextMainDateTime;
+            return KAEvent::OccurType::FirstOrOnly;
+        }
         else
-            pre = KADateTime(mRepetition.duration(-mRepetition.count()).end(preDateTime.qDateTime()));
+        {
+            result = DateTime();
+            return KAEvent::OccurType::None;
+        }
     }
 
-    KAEvent::OccurType type;
-    const bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
-    if (recurs)
-        type = nextRecurrence(pre, result);
-    else if (pre < mNextMainDateTime.effectiveKDateTime())
+    if (includeRepetitions == KAEvent::Repeats::Ignore  ||  !mRepetition)
     {
-        result = mNextMainDateTime;
-        type = KAEvent::OccurType::FirstOrOnly;
-    }
-    else
-    {
-        result = DateTime();
-        type = KAEvent::OccurType::None;
+        // Return the first recurrence after preDateTime.
+        return nextRecurrence(preDateTime, result);
     }
 
-    if (type != KAEvent::OccurType::None  &&  result <= preDateTime  &&  includeRepetitions != KAEvent::Repeats::Ignore)
+    // Need to take account of sub-repetitions (Repeats::Return or Repeats::RecurBefore).
+    // Find the last recurrence before preDateTime which has sub-repetitions
+    // after preDateTime, and the first recurrence after preDateTime.
+    // So start from the total sub-repetition duration before preDateTime, but note
+    // that if the intervals between recurrences vary, there could possibly be more
+    // than one recurrence between then and preDateTime, so a loop is needed.
+    KAEvent::OccurType type          = KAEvent::OccurType::None;
+    KAEvent::OccurType lastRecurType = KAEvent::OccurType::None;
+    DateTime lastRecurDt;
+    KADateTime pre = KADateTime(mRepetition.duration(-mRepetition.count()).end(preDateTime.qDateTime()));
+    for (;;)
     {
-        // Repeats::Return or Repeats::RecurBefore
-        // The next occurrence is a sub-repetition
-        int repetition = mRepetition.nextRepeatCount(result.kDateTime(), preDateTime);
-        const DateTime repeatDT(mRepetition.duration(repetition).end(result.qDateTime()));
-        if (recurs)
+        DateTime next;
+        KAEvent::OccurType nextType = nextRecurrence(pre, next);
+        if (nextType == KAEvent::OccurType::None  ||  next > preDateTime)
         {
-            // We've found a recurrence before the specified date/time, which has
-            // a sub-repetition after the date/time.
-            // However, if the intervals between recurrences vary, we could possibly
-            // have missed a later recurrence which fits the criterion, so check again.
-            DateTime dt;
-            const KAEvent::OccurType newType = previousOccurrence(repeatDT.effectiveKDateTime(), dt, KAEvent::RepeatsP::Ignore);
-            if (dt > result)
-            {
-                type = newType;
-                result = dt;
-                if (includeRepetitions == KAEvent::Repeats::Return  &&  result <= preDateTime)
-                {
-                    // The next occurrence is a sub-repetition
-                    repetition = mRepetition.nextRepeatCount(result.kDateTime(), preDateTime);
-                    result = DateTime(mRepetition.duration(repetition).end(result.qDateTime()));
-                    type = type | KAEvent::OccurType::Repeat;
-                }
-                return type;
-            }
+            // We've either found the first recurrence after preDateTime,
+            // or there isn't one.
+            type = nextType;
+            result = next;
+            break;
         }
-        if (includeRepetitions == KAEvent::Repeats::Return)
+        lastRecurType = nextType;
+        lastRecurDt = next;
+        pre = next.kDateTime();
+    }
+    if (lastRecurType != KAEvent::OccurType::None  &&  lastRecurDt <= preDateTime)
+    {
+        // We've found a recurrence before the specified date/time.
+        // Check if the next occurrence is a sub-repetition.
+        int repetition = mRepetition.nextRepeatCount(lastRecurDt.kDateTime(), preDateTime);
+        DateTime repDt = DateTime(mRepetition.duration(repetition).end(lastRecurDt.qDateTime()));
+        if (type != KAEvent::OccurType::None  &&  repDt >= result)
+            return type;    // the sub-repetition is later than the next recurrence
+        // The next occurrence is a sub-repetition.
+        if (includeRepetitions == KAEvent::Repeats::RecurBefore)
         {
-            // The next occurrence is a sub-repetition
-            result = repeatDT;
-            type = type | KAEvent::OccurType::Repeat;
+            result = lastRecurDt;
+            return lastRecurType;
         }
+        result = repDt;
+        return lastRecurType | KAEvent::OccurType::Repeat;
     }
     return type;
 }
@@ -3492,32 +3496,25 @@ KAEvent::OccurType KAEventPrivate::previousOccurrence(const KADateTime& afterDat
         result = KADateTime();
         return KAEvent::OccurType::None;     // the event starts after the specified date/time
     }
-
-    // Find the latest recurrence of the event
-    KAEvent::OccurType type;
     if (checkRecur() == KARecurrence::NO_RECUR)
     {
         result = mStartDateTime;
-        type = KAEvent::OccurType::FirstOrOnly;
+        return KAEvent::OccurType::FirstOrOnly;
     }
-    else
-    {
-        const KADateTime recurStart = mRecurrence->startDateTime();
-        KADateTime after = afterDateTime.toTimeSpec(mStartDateTime.timeSpec());
-        if (mStartDateTime.isDateOnly()  &&  afterDateTime.time() > DateTime::startOfDay())
-            after = after.addDays(1);    // today's recurrence (if today recurs) has passed
-        const KADateTime dt = mRecurrence->getPreviousDateTime(after);
-        result = dt;
-        result.setDateOnly(mStartDateTime.isDateOnly());
-        if (!dt.isValid())
-            return KAEvent::OccurType::None;
-        if (dt == recurStart)
-            type = KAEvent::OccurType::FirstOrOnly;
-        else if (mRecurrence->getNextDateTime(dt).isValid())
-            type = KAEvent::OccurType::Recur;
-        else
-            type = KAEvent::OccurType::LastRecur;
-    }
+
+    // Find the latest recurrence of the event
+    const KADateTime recurStart = mRecurrence->startDateTime();
+    KADateTime after = afterDateTime.toTimeSpec(mStartDateTime.timeSpec());
+    if (mStartDateTime.isDateOnly()  &&  afterDateTime.time() > DateTime::startOfDay())
+        after = after.addDays(1);    // today's recurrence (if today recurs) has passed
+    const KADateTime dt = mRecurrence->getPreviousDateTime(after);
+    result = dt;
+    result.setDateOnly(mStartDateTime.isDateOnly());
+    if (!dt.isValid())
+        return KAEvent::OccurType::None;
+    KAEvent::OccurType type = (dt == recurStart) ? KAEvent::OccurType::FirstOrOnly
+                            : (mRecurrence->getNextDateTime(dt).isValid()) ? KAEvent::OccurType::Recur
+                            : KAEvent::OccurType::LastRecur;
 
     if (includeRepetitions == KAEvent::RepeatsP::Return  &&  mRepetition)
     {
@@ -4629,6 +4626,7 @@ void KAEventPrivate::calcTriggerTimes() const
                     mAllWorkTrigger = (type & KAEvent::OccurType::Repeat) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
                     return;   // found a non-holiday occurrence
                 }
+                skipRepeats = true;
             }
             mMainWorkTrigger = mAllWorkTrigger = DateTime();
         }
@@ -4719,8 +4717,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger, bool skipR
         const int repeatFreq = mRepetition.intervalDays();
         const bool weeklyRepeat = mRepetition && !(repeatFreq % 7);
         const Duration interval = mRecurrence->regularInterval();
-        if ((!interval.isNull()  &&  !(interval.asDays() % 7))
-        ||  nDayPos == 1)
+        if (nDayPos == 1  &&  !interval.isNull()  &&  !(interval.asDays() % 7))
         {
             // It recurs on the same day each week
             if (skipRepeats)
@@ -4738,6 +4735,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger, bool skipR
                 return;    // this should never happen
             kdt = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
             const int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
+
             for (int repeatNum = mNextRepeat + 1;  ;  ++repeatNum)
             {
                 if (repeatNum > mRepetition.count())
@@ -4746,7 +4744,9 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger, bool skipR
                     break;
                 if (!repeatNum)
                 {
-                    // Have checked all sub-repetitions: now find the next recurrence.
+                    // Have checked all sub-repetitions: now find the next recurrence,
+                    // which must be on a working day (because skipRepeats would have
+                    // caused a return above).
                     nextOccurrence(newdt.kDateTime(), newdt, KAEvent::Repeats::Ignore);
                     if (mWorkDays.testBit(day))
                     {
@@ -4754,11 +4754,8 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger, bool skipR
                         mMainWorkTrigger = newdt;
                         mAllWorkTrigger  = mMainWorkTrigger.addMins(-reminder);
                         mMainWorkTriggerIsRecur = true;
-                        return;
                     }
-                    if (skipRepeats)
-                        return;
-                    kdt = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
+                    return;  // no recurrence falls on a working day (shouldn't get to here)
                 }
                 else
                 {
