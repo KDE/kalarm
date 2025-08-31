@@ -1,6 +1,6 @@
 # translation of kalarm.po to
 # translation of alarmdaemonctrl.po to
-# Version: $Revision: 1717075 $
+# Version: $Revision: 1717143 $
 #
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2004, 2005, 2006.
@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-30 00:43+0000\n"
+"POT-Creation-Date: 2025-08-31 00:43+0000\n"
 "PO-Revision-Date: 2025-01-11 11:19+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -3657,19 +3657,19 @@ msgstr "Zakończenie:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3102
+#: kalarmcalendar/kaevent.cpp:3161
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Logowanie"
 
-#: kalarmcalendar/kaevent.cpp:3102
+#: kalarmcalendar/kaevent.cpp:3161
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "Przy logowaniu"
 
-#: kalarmcalendar/kaevent.cpp:3111 kalarmcalendar/kaevent.cpp:3198
+#: kalarmcalendar/kaevent.cpp:3170 kalarmcalendar/kaevent.cpp:3257
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3680,7 +3680,7 @@ msgstr[0] "1 minuta"
 msgstr[1] "%1 minuty"
 msgstr[2] "%1 minut"
 
-#: kalarmcalendar/kaevent.cpp:3113 kalarmcalendar/kaevent.cpp:3200
+#: kalarmcalendar/kaevent.cpp:3172 kalarmcalendar/kaevent.cpp:3259
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3690,13 +3690,13 @@ msgstr[0] "1 godzina"
 msgstr[1] "%1 godziny"
 msgstr[2] "%1 godzin"
 
-#: kalarmcalendar/kaevent.cpp:3115 kalarmcalendar/kaevent.cpp:3201
+#: kalarmcalendar/kaevent.cpp:3174 kalarmcalendar/kaevent.cpp:3260
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1h %2m"
 
-#: kalarmcalendar/kaevent.cpp:3118 kalarmcalendar/kaevent.cpp:3205
+#: kalarmcalendar/kaevent.cpp:3177 kalarmcalendar/kaevent.cpp:3264
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3706,7 +3706,7 @@ msgstr[0] "1 dzień"
 msgstr[1] "%1 dni"
 msgstr[2] "%1 dni"
 
-#: kalarmcalendar/kaevent.cpp:3120 kalarmcalendar/kaevent.cpp:3206
+#: kalarmcalendar/kaevent.cpp:3179 kalarmcalendar/kaevent.cpp:3265
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3715,7 +3715,7 @@ msgstr[0] "1 tydzień"
 msgstr[1] "%1 tygodnie"
 msgstr[2] "%1 tygodni"
 
-#: kalarmcalendar/kaevent.cpp:3122
+#: kalarmcalendar/kaevent.cpp:3181
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3724,7 +3724,7 @@ msgstr[0] "1 miesiąc"
 msgstr[1] "%1 miesiące"
 msgstr[2] "%1 miesięcy"
 
-#: kalarmcalendar/kaevent.cpp:3124
+#: kalarmcalendar/kaevent.cpp:3183
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3733,13 +3733,13 @@ msgstr[0] "1 rok"
 msgstr[1] "%1 lata"
 msgstr[2] "%1 lat"
 
-#: kalarmcalendar/kaevent.cpp:3130
+#: kalarmcalendar/kaevent.cpp:3189
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Brak"
 
-#: kalarmcalendar/kaevent.cpp:3208
+#: kalarmcalendar/kaevent.cpp:3267
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"

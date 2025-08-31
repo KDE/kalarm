@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-30 00:43+0000\n"
+"POT-Creation-Date: 2025-08-31 00:43+0000\n"
 "PO-Revision-Date: 2011-03-28 17:53+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -3574,7 +3574,7 @@ msgstr "Datum:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3102
+#: kalarmcalendar/kaevent.cpp:3161
 #, fuzzy, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
@@ -3582,14 +3582,14 @@ msgstr ""
 "_: Brief form of 'At Login'\n"
 "Prijava"
 
-#: kalarmcalendar/kaevent.cpp:3102
+#: kalarmcalendar/kaevent.cpp:3161
 #, fuzzy, kde-format
 #| msgid "At login"
 msgctxt "@info"
 msgid "At login"
 msgstr "Pri prijavljivanju"
 
-#: kalarmcalendar/kaevent.cpp:3111 kalarmcalendar/kaevent.cpp:3198
+#: kalarmcalendar/kaevent.cpp:3170 kalarmcalendar/kaevent.cpp:3257
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3600,7 +3600,7 @@ msgstr[0] "%1 minut"
 msgstr[1] "%1 minuta"
 msgstr[2] "%1 minuta"
 
-#: kalarmcalendar/kaevent.cpp:3113 kalarmcalendar/kaevent.cpp:3200
+#: kalarmcalendar/kaevent.cpp:3172 kalarmcalendar/kaevent.cpp:3259
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, fuzzy, kde-format
 msgctxt "@info"
@@ -3610,13 +3610,13 @@ msgstr[0] "%1 čas"
 msgstr[1] "%1 časa"
 msgstr[2] "%1 časova"
 
-#: kalarmcalendar/kaevent.cpp:3115 kalarmcalendar/kaevent.cpp:3201
+#: kalarmcalendar/kaevent.cpp:3174 kalarmcalendar/kaevent.cpp:3260
 #, fuzzy, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1č %2m"
 
-#: kalarmcalendar/kaevent.cpp:3118 kalarmcalendar/kaevent.cpp:3205
+#: kalarmcalendar/kaevent.cpp:3177 kalarmcalendar/kaevent.cpp:3264
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 msgctxt "@info"
@@ -3626,7 +3626,7 @@ msgstr[0] "%1 dan"
 msgstr[1] "%1 dana"
 msgstr[2] "%1 dana"
 
-#: kalarmcalendar/kaevent.cpp:3120 kalarmcalendar/kaevent.cpp:3206
+#: kalarmcalendar/kaevent.cpp:3179 kalarmcalendar/kaevent.cpp:3265
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3635,7 +3635,7 @@ msgstr[0] "%1 sedmica"
 msgstr[1] "%1 sedmice"
 msgstr[2] "%1 sedmica"
 
-#: kalarmcalendar/kaevent.cpp:3122
+#: kalarmcalendar/kaevent.cpp:3181
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3644,7 +3644,7 @@ msgstr[0] "%1 mjesec"
 msgstr[1] "%1 mjeseca"
 msgstr[2] "%1 mjeseci"
 
-#: kalarmcalendar/kaevent.cpp:3124
+#: kalarmcalendar/kaevent.cpp:3183
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3653,14 +3653,14 @@ msgstr[0] "%1 godina"
 msgstr[1] "%1 godine"
 msgstr[2] "%1 godina"
 
-#: kalarmcalendar/kaevent.cpp:3130
+#: kalarmcalendar/kaevent.cpp:3189
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Nijedan"
 
-#: kalarmcalendar/kaevent.cpp:3208
+#: kalarmcalendar/kaevent.cpp:3267
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No repetition"
