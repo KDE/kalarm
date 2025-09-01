@@ -96,9 +96,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->17 de març de 2025</date>
+>30 d'agost de 2025</date>
 <releaseinfo
->3.11.0 (KDE Gear 25.04)</releaseinfo>
+>3.12.0 (KDE Gear 25.12)</releaseinfo>
 
 <abstract>
 <para
@@ -2242,6 +2242,14 @@
 >Podeu utilitzar el botó <guibutton
 >Subrepetició</guibutton
 > per a configurar una repetició dins d'una repetició. En aquest cas, cada vegada que l'alarma faci com se li especifica a la recurrència principal, en lloc d'activar-se un cop, ho farà en repetides ocasions d'acord amb les especificacions de la subrepetició. Per exemple, per a configurar una alarma que es repeteix cada hora des del migdia fins a les 18:00 de cada dijous, establireu una repetició setmanal el dijous a les 12:00, i utilitzareu el diàleg de subrepetició per a especificar un interval d'1 hora i o bé un compte de 6 o bé una durada de 6 hores.</para>
+
+<note
+><para
+>Les subrepeticions només s'activen després d'una recurrència principal que realment s'activa. Si se suprimeix una recurrència principal a causa d'una data/hora d'excepció o per restriccions de vacances o de jornada laboral, no s'activaran les subrepeticions per a aquesta instància de la recurrència.</para>
+
+<para
+>També se suprimiran les subrepeticions individuals si es produeixen en una data/hora d'excepció, o durant les restriccions de vacances o de jornada laboral.</para
+></note>
 
 <para
 >Al diàleg <guibutton

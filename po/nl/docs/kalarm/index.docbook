@@ -96,9 +96,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2025-03-17</date>
+>2025-08-30</date>
 <releaseinfo
->3.11.0 (KDE Gear 25.04)</releaseinfo>
+>3.12.0 (KDE Gear 25.12)</releaseinfo>
 
 <abstract>
 <para
@@ -2246,6 +2246,14 @@
 >U kunt de knop <guibutton
 >Deelherhaling</guibutton
 > gebruiken om een herhaling in een herhaling in te stellen. In dat geval wordt elke keer wanneer het alarm afgaat zoals gespecificeerd in de hoofdherhaling, in plaats van eenmalig geactiveerd herhaald geactiveerd overeenkomstig de specificatie van uw deelherhaling. Om bijvoorbeeld een alarm in te stellen dat zich elk uur herhaalt vanaf het middaguur tot 18 uur elke donderdag, zou u een wekelijks herhaling op donderdag om 12:00 uur in moeten stellen en de dialoog Deelherhaling moeten gebruiken om een interval van 1 uur te specificeren en ofwel een aantal van 6 of een duur van 6 uren.</para>
+
+<note
+><para
+>Sub-herhalingen worden alleen gestart na een hoofdherhaling die echt start. Als een hoofdherhaling wordt onderdrukt door een uitzonderingsdatum/tijd of door vakantie of werktijdbeperkingen, zullen de sub-herhalingen voor dat exemplaar van de herhaling niet gestart worden.</para>
+
+<para
+>Individuele sub-herhalingen zullen ook onderdrukt worden als ze plaatsvinden op een uitzonderingsdatum/tijd of tijdens vakantie of werktijdbeperkingen.</para
+></note>
 
 <para
 >In de dialoog Deelherhaling die wordt getoond wanneer u klikt op de knop <guibutton
