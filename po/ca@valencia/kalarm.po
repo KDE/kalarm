@@ -212,8 +212,7 @@ msgstr "1 setmana"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr ""
-"Seleccioneu el retard de temps d'entre una llista de valors predefinits"
+msgstr "Trieu el retard de temps d'entre una llista de valors predefinits"
 
 #: alarmtimewidget.cpp:177
 #, kde-kuit-format
@@ -240,7 +239,7 @@ msgid ""
 "Choose a time zone for this alarm which is different from the default time "
 "zone set in KAlarm's configuration dialog."
 msgstr ""
-"Seleccioneu una zona horària per a esta alarma que siga diferent de la zona "
+"Trieu una zona horària per a esta alarma que siga diferent de la zona "
 "horària predeterminada establida en el diàleg de configuració de KAlarm."
 
 #: alarmtimewidget.cpp:227 prefdlg.cpp:804
@@ -253,7 +252,7 @@ msgstr "Zona horària:"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
-msgstr "Seleccioneu la zona horària que s'utilitzarà per a esta alarma."
+msgstr "Trieu la zona horària que s'utilitzarà per a esta alarma."
 
 #: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
 #, kde-format
@@ -434,7 +433,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
-msgstr "Seleccioneu les dates de naixement"
+msgstr "Trieu les dates de naixement"
 
 #: birthdaydlg.cpp:135
 #, kde-kuit-format
@@ -446,8 +445,8 @@ msgid ""
 "dragging the mouse over the list, or by clicking the mouse while pressing "
 "Ctrl or Shift.</para>"
 msgstr ""
-"<para>Seleccioneu les dates de naixement per a establir alarmes.<nl/>Esta "
-"llista vos mostra totes les dates de naixement que hi ha a "
+"<para>Trieu les dates de naixement per a establir alarmes.<nl/>Esta llista "
+"vos mostra totes les dates de naixement que hi ha a "
 "<application>KAddressBook</application>, a excepció d'aquelles per a les que "
 "ja hi ha una alarma.</para><para>Podeu seleccionar múltiples dates de "
 "naixement d'una sola vegada arrossegant el ratolí sobre la llista o clicant "
@@ -485,7 +484,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
 msgstr ""
-"Selecciona si el recordatori s'ha d'activar abans o després de la data de "
+"Tria si el recordatori s'ha d'activar abans o després de la data de "
 "naixement."
 
 #: birthdaydlg.cpp:197 recurrenceedit.cpp:142
@@ -869,8 +868,8 @@ msgid ""
 "provide features including birthday import, some email functions, email "
 "address book lookup, and Akonadi resource migration on first run."
 msgstr ""
-"Seleccioneu si s'ha d'activar el connector Akonadi de KAlarm, que utilitza "
-"Akonadi per a proporcionar característiques que inclouen la importació "
+"Trieu si s'ha d'activar el connector Akonadi de KAlarm, que utilitza Akonadi "
+"per a proporcionar característiques que inclouen la importació "
 "d'aniversaris, algunes característiques de correu electrònic, la busca de "
 "llibretes d'adreces de correu electrònic i la migració de recursos d'Akonadi "
 "en la primera execució."
@@ -918,8 +917,8 @@ msgid ""
 "Select the time zone which KAlarm should use as its default for displaying "
 "and entering dates and times."
 msgstr ""
-"Selecciona la zona horària que KAlarm hauria d'utilitzar com a "
-"predeterminada per a mostrar i introduir les dates i hores."
+"Tria la zona horària que KAlarm hauria d'utilitzar com a predeterminada per "
+"a mostrar i introduir les dates i hores."
 
 #. i18n: ectx: label, entry (Base_HolidayRegion), group (General)
 #: data/kalarmconfig.kcfg:97
@@ -933,7 +932,7 @@ msgstr "Regió de dies festius"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the holiday region to use."
-msgstr "Seleccioneu la regió que s'utilitzarà de dies festius."
+msgstr "Trieu la regió que s'utilitzarà de dies festius."
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
 #: data/kalarmconfig.kcfg:102 kalarmcalendar/kaeventformatter.cpp:93
@@ -980,8 +979,8 @@ msgid ""
 "Choose whether to be able to give alarms a name. This is a convenience to "
 "help you to identify alarms."
 msgstr ""
-"Seleccioneu si es podrà donar un nom a les alarmes. Açò és molt pràctic per "
-"a ajudar a identificar-les."
+"Trieu si es podrà donar un nom a les alarmes. Açò és molt pràctic per ajudar "
+"a identificar-les."
 
 #. i18n: ectx: label, entry (MessageFont), group (General)
 #: data/kalarmconfig.kcfg:118
@@ -2037,8 +2036,8 @@ msgstr "Confirma la supressió de les alarmes"
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation each time you delete an alarm."
 msgstr ""
-"Seleccioneu-la perquè se vos requerisca confirmació cada vegada que suprimiu "
-"una alarma."
+"Trieu-la perquè se vos requerisca confirmació cada vegada que suprimiu una "
+"alarma."
 
 #. i18n: ectx: label, entry (Base_EmailQueuedNotify), group (Notification Messages)
 #: data/kalarmconfig.kcfg:456
@@ -2099,8 +2098,8 @@ msgid ""
 "Select dates to show in the alarm list. Only alarms due on these dates will "
 "be shown."
 msgstr ""
-"Seleccioneu les dates que es mostraran en la llista d'alarmes. Només es "
-"mostraran les alarmes que vencen en estes dates."
+"Trieu les dates que es mostraran en la llista d'alarmes. Només es mostraran "
+"les alarmes que vencen en estes dates."
 
 #: datepicker.cpp:56
 #, kde-format
@@ -2617,7 +2616,7 @@ msgid ""
 "a text or image file.</item><item><interface>%3</interface>: the alarm will "
 "display the output from a command.</item></list></para>"
 msgstr ""
-"<para>Seleccioneu què ha de mostrar l'alarma:<list><item><interface>%1</"
+"<para>Trieu què ha de mostrar l'alarma:<list><item><interface>%1</"
 "interface>: l'alarma mostrarà el missatge de text que introduïu.</"
 "item><item><interface>%2</interface>: l'alarma mostrarà el contingut d'un "
 "fitxer de text o una imatge.</item><item><interface>%3</interface>: l'alarma "
@@ -2646,7 +2645,7 @@ msgstr "Trieu un fitxer"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
-msgstr "Seleccioneu un fitxer de text o una imatge que es mostrarà."
+msgstr "Trieu un fitxer de text o una imatge que es mostrarà."
 
 #: editdlgtypes.cpp:247
 #, kde-format
@@ -2654,8 +2653,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Select whether to display the alarm in a window or by the notification "
 "system."
-msgstr ""
-"Selecciona si mostrar l'alarma en una finestra o pel sistema de notificació."
+msgstr "Tria si mostrar l'alarma en una finestra o pel sistema de notificació."
 
 #: editdlgtypes.cpp:274
 #, kde-format
@@ -2684,14 +2682,13 @@ msgid ""
 "Select whether the reminder should be triggered before or after the main "
 "alarm"
 msgstr ""
-"Selecciona si el recordatori s'ha d'activar abans o després de l'alarma "
-"principal"
+"Tria si el recordatori s'ha d'activar abans o després de l'alarma principal"
 
 #: editdlgtypes.cpp:286
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
-msgstr "Seleccioneu perquè es demane confirmació quan reconeixeu l'alarma."
+msgstr "Trieu perquè es demane confirmació quan reconeixeu l'alarma."
 
 #: editdlgtypes.cpp:295
 #, kde-format
@@ -2721,7 +2718,7 @@ msgstr "Mostra ara l'eixida de l'ordre"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
-msgstr "Seleccioneu el fitxer de text o una imatge que s'haja de mostrar"
+msgstr "Trieu el fitxer de text o una imatge que s'haja de mostrar"
 
 #: editdlgtypes.cpp:806
 #, kde-format
@@ -2799,7 +2796,7 @@ msgstr "Eixida de l'ordre"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
-msgstr "Seleccioneu per a executar l'ordre en una finestra de terminal"
+msgstr "Trieu per a executar l'ordre en una finestra de terminal"
 
 #: editdlgtypes.cpp:883
 #, kde-format
@@ -2811,7 +2808,7 @@ msgstr "Introduïu el nom o el camí del fitxer de registre."
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
-msgstr "Seleccioneu un fitxer de registre."
+msgstr "Trieu un fitxer de registre."
 
 #: editdlgtypes.cpp:895
 #, kde-format
@@ -2951,7 +2948,7 @@ msgstr "Obri la llibreta d'adreces"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
-msgstr "Seleccioneu les adreces de correu des de la llibreta d'adreces."
+msgstr "Trieu les adreces de correu des de la llibreta d'adreces."
 
 #: editdlgtypes.cpp:1224
 #, kde-format
@@ -3285,7 +3282,7 @@ msgstr "Color de primer pla:"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the alarm message foreground color"
-msgstr "Selecciona el color de primer pla per al missatge de l'alarma"
+msgstr "Tria el color de primer pla per al missatge de l'alarma"
 
 #: fontcolour.cpp:68
 #, kde-format
@@ -3297,7 +3294,7 @@ msgstr "Color de fons:"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the alarm message background color"
-msgstr "Selecciona el color de fons del missatge de l'alarma"
+msgstr "Tria el color de fons del missatge de l'alarma"
 
 #: fontcolour.cpp:83
 #, kde-format
@@ -3379,7 +3376,7 @@ msgstr "Fitxers de calendari"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
-msgstr "Seleccioneu el calendari que s'ha d'exportar"
+msgstr "Trieu el calendari que s'ha d'exportar"
 
 #: functions.cpp:966
 #, kde-kuit-format
@@ -3629,7 +3626,7 @@ msgstr ""
 "Les alarmes estan configurades per a ser arxivades, però açò no és possible "
 "perquè no s'ha establit cap calendari d'alarma arxivada com a predeterminat."
 "<nl/><nl/>Per a solucionar-ho, utilitzeu <interface>Visualitza | Mostra els "
-"calendaris</interface>, seleccioneu un calendari d'alarmes i activeu "
+"calendaris</interface>, trieu un calendari d'alarmes i activeu "
 "<interface>Utilitzeu com a predeterminat per a les alarmes arxivades</"
 "interface>."
 
@@ -4407,13 +4404,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Please select a file to display"
-msgstr "Seleccioneu un fitxer que s'haja de mostrar"
+msgstr "Trieu un fitxer que s'haja de mostrar"
 
 #: lib/file.cpp:110
 #, kde-format
 msgctxt "@info"
 msgid "Please select a file to play"
-msgstr "Seleccioneu un fitxer que s'haja de reproduir"
+msgstr "Trieu un fitxer que s'haja de reproduir"
 
 #: lib/file.cpp:116
 #, kde-kuit-format
@@ -5287,7 +5284,7 @@ msgid ""
 "help you to identify alarms."
 msgstr ""
 "Marqueu-la per a tindre l'opció de donar un nom a les alarmes. Açò és molt "
-"pràctic per a ajudar a identificar-les."
+"pràctic per ajudar a identificar-les."
 
 #: prefdlg.cpp:507
 #, kde-format
@@ -5333,8 +5330,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to execute command alarms in a terminal window by <icode>%1</icode>"
 msgstr ""
-"Seleccioneu-la per a executar les alarmes d'ordre en una finestra de "
-"terminal utilitzant <icode>%1</icode>"
+"Trieu-la per a executar les alarmes d'ordre en una finestra de terminal "
+"utilitzant <icode>%1</icode>"
 
 #: prefdlg.cpp:558
 #, kde-format
@@ -5373,8 +5370,7 @@ msgstr "Dorsal d'àudio"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which audio backend to use to play sound files"
-msgstr ""
-"Seleccioneu quin dorsal d'àudio es farà servir per a reproduir fitxers de so"
+msgstr "Trieu quin dorsal d'àudio es farà servir per a reproduir fitxers de so"
 
 #: prefdlg.cpp:599
 #, kde-format
@@ -5456,7 +5452,7 @@ msgid ""
 "Select the time zone which <application>KAlarm</application> should use as "
 "its default for displaying and entering dates and times."
 msgstr ""
-"Selecciona la zona horària que <application>KAlarm</application> hauria "
+"Tria la zona horària que <application>KAlarm</application> hauria "
 "d'utilitzar com a predeterminades per a mostrar i introduir les dates i "
 "hores."
 
@@ -5470,7 +5466,7 @@ msgstr "Regió de dies festius:"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which holiday region to use"
-msgstr "Seleccioneu quina regió utilitzar de dies festius"
+msgstr "Trieu quina regió utilitzar de dies festius"
 
 #: prefdlg.cpp:842
 #, kde-format
@@ -5535,7 +5531,7 @@ msgstr "Horari de treball"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check the days in the week which are work days"
-msgstr "Seleccioneu els dies de la setmana que són dies feiners"
+msgstr "Trieu els dies de la setmana que són dies feiners"
 
 #: prefdlg.cpp:924
 #, kde-format
@@ -5745,8 +5741,7 @@ msgstr "Sendmail"
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
 msgstr ""
-"Seleccioneu com s'enviarà el correu electrònic quan s'active una alarma de "
-"correu."
+"Trieu com s'enviarà el correu electrònic quan s'active una alarma de correu."
 
 #: prefdlg.cpp:1194
 #, kde-kuit-format
@@ -6087,8 +6082,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Select to set the default volume for sound files in the alarm edit dialog."
 msgstr ""
-"Seleccioneu esta opció per a establir el volum predeterminat per als fitxers "
-"de so en el diàleg d'edició de l'alarma."
+"Trieu esta opció per a establir el volum predeterminat per als fitxers de so "
+"en el diàleg d'edició de l'alarma."
 
 #: prefdlg.cpp:1628
 #, kde-format
@@ -6291,12 +6286,12 @@ msgid ""
 "message windows in the center of the screen, but disable buttons for a short "
 "time after the window is displayed.</item></list></para>"
 msgstr ""
-"<para>Seleccioneu la manera de reduir la possibilitat de reconéixer "
-"accidentalment les alarmes de missatge:<list><item>col·loca les finestres "
-"del missatge de l'alarma tan lluny com siga possible de la posició actual "
-"del cursor del ratolí, o</item><item>col·loca les finestres de les alarmes "
-"de missatge en el centre de la pantalla, però desactiva els botons durant un "
-"espai curt de temps després de mostrar la finestra.</item></list></para>"
+"<para>Trieu la manera de reduir la possibilitat de reconéixer accidentalment "
+"les alarmes de missatge:<list><item>col·loca les finestres del missatge de "
+"l'alarma tan lluny com siga possible de la posició actual del cursor del "
+"ratolí, o</item><item>col·loca les finestres de les alarmes de missatge en "
+"el centre de la pantalla, però desactiva els botons durant un espai curt de "
+"temps després de mostrar la finestra.</item></list></para>"
 
 #: prefdlg.cpp:2077
 #, kde-format
@@ -6720,8 +6715,7 @@ msgstr "Introduïu el nombre de dies entre les repeticions de l'alarma"
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which the alarm is allowed to occur"
 msgstr ""
-"Seleccioneu els dies de la setmana en els que es permet la repetició de "
-"l'alarma"
+"Trieu els dies de la setmana en els que es permet la repetició de l'alarma"
 
 #: recurrenceedit.cpp:1279
 #, kde-format
@@ -6739,7 +6733,7 @@ msgstr "Introduïu el nombre de setmanes entre les repeticions de l'alarma"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which to repeat the alarm"
-msgstr "Seleccioneu els dies de la setmana en els que es repetirà l'alarma"
+msgstr "Trieu els dies de la setmana en els que es repetirà l'alarma"
 
 #: recurrenceedit.cpp:1303
 #, kde-format
@@ -6763,7 +6757,7 @@ msgstr "Últim"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the month on which to repeat the alarm"
-msgstr "Seleccioneu el dia del mes en el qual repetir l'alarma"
+msgstr "Trieu el dia del mes en el qual repetir l'alarma"
 
 #: recurrenceedit.cpp:1325
 #, kde-format
@@ -6849,13 +6843,13 @@ msgstr "Cada"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the week of the month in which to repeat the alarm"
-msgstr "Selecciona la setmana del mes en la que es repetirà l'alarma"
+msgstr "Tria la setmana del mes en la que es repetirà l'alarma"
 
 #: recurrenceedit.cpp:1363
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the week on which to repeat the alarm"
-msgstr "Seleccionar el dia de la setmana en el que es repetirà l'alarma"
+msgstr "Triar el dia de la setmana en el que es repetirà l'alarma"
 
 #: recurrenceedit.cpp:1485
 #, kde-format
@@ -6891,7 +6885,7 @@ msgstr "Mesos:"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the months of the year in which to repeat the alarm"
-msgstr "Seleccioneu els mesos de l'any en els quals repetir l'alarma"
+msgstr "Trieu els mesos de l'any en els quals repetir l'alarma"
 
 #: recurrenceedit.cpp:1532
 #, kde-format
@@ -6924,8 +6918,8 @@ msgid ""
 "Select which date, if any, the February 29th alarm should trigger in non-"
 "leap years"
 msgstr ""
-"Seleccioneu la data, si cal, en què s'ha d'activar l'alarma del 29 de febrer "
-"en els anys que no siguen de traspàs"
+"Trieu la data, si cal, en què s'ha d'activar l'alarma del 29 de febrer en "
+"els anys que no siguen de traspàs"
 
 #: recurrenceedit.cpp:1626
 #, kde-format
@@ -7137,7 +7131,7 @@ msgstr "Configuració de calendari"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Select storage type of new calendar:"
-msgstr "Seleccioneu el tipus d'emmagatzematge del calendari nou:"
+msgstr "Trieu el tipus d'emmagatzematge del calendari nou:"
 
 #: resources/fileresourcecreator.cpp:137
 #, kde-kuit-format
@@ -7321,8 +7315,7 @@ msgstr "Importa en un recurs de fitxer de calendari existent"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the resource to import the directory resource's alarms into."
-msgstr ""
-"Seleccioneu el recurs al qual importar les alarmes del recurs de directori."
+msgstr "Trieu el recurs al qual importar les alarmes del recurs de directori."
 
 #. i18n: ectx: property (text), widget (QRadioButton, newRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:49
@@ -7346,7 +7339,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Select the file to contain this resource. The file must not already exist."
 msgstr ""
-"Seleccioneu el fitxer que contindrà este recurs. Cal que el fitxer encara no "
+"Trieu el fitxer que contindrà este recurs. Cal que el fitxer encara no "
 "existisca."
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, pathRequester)
@@ -7359,7 +7352,7 @@ msgid ""
 "Note that if the URL of a remote file is specified, monitoring for file "
 "changes will not work."
 msgstr ""
-"Seleccioneu el fitxer que contindrà este recurs.\n"
+"Trieu el fitxer que contindrà este recurs.\n"
 "Cal que el fitxer encara no existisca.\n"
 "Cal tindre en compte que si s'especifica l'URL d'un fitxer remot, el control "
 "dels canvis en el fitxer no funcionarà."
@@ -7693,15 +7686,14 @@ msgid ""
 "</para>"
 msgstr ""
 "<para>El calendari <resource>%1</resource> s'ha fet de només lectura. Este "
-"era el calendari predeterminat per a: %2</para><para>Seleccioneu un "
-"calendari predeterminat nou.</para>"
+"era el calendari predeterminat per a: %2</para><para>Trieu un calendari "
+"predeterminat nou.</para>"
 
 #: resources/resources.cpp:513
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>Please select a new default calendar.</para>"
-msgstr ""
-"<para>%1</para><para>Seleccioneu un calendari predeterminat nou.</para>"
+msgstr "<para>%1</para><para>Trieu un calendari predeterminat nou.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7816,9 +7808,9 @@ msgid ""
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
-"Seleccioneu el fitxer que sostindrà este calendari. Si el fitxer no existix, "
-"es crearà. També es pot especificar l'URL d'un fitxer remot, però cal tindre "
-"en compte que en este cas no funcionarà el control de canvis en el fitxer."
+"Trieu el fitxer que sostindrà este calendari. Si el fitxer no existix, es "
+"crearà. També es pot especificar l'URL d'un fitxer remot, però cal tindre en "
+"compte que en este cas no funcionarà el control de canvis en el fitxer."
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
@@ -7845,7 +7837,7 @@ msgstr "Plantilles d'alarma"
 #: resources/singlefileresourceconfigdialog.ui:133
 #, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr "Seleccioneu quin tipus d'alarma hauria de contindre este calendari."
+msgstr "Trieu quin tipus d'alarma hauria de contindre este calendari."
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
@@ -7952,8 +7944,7 @@ msgstr "Plantilles d'alarma"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which type of data to show alarm calendars for"
-msgstr ""
-"Seleccioneu el tipus de dades que s'ha de mostrar pels calendaris d'alarma"
+msgstr "Trieu el tipus de dades que s'ha de mostrar pels calendaris d'alarma"
 
 #: resourceselector.cpp:68
 #, kde-format
@@ -8277,7 +8268,7 @@ msgstr "Introduïu el nom o l'URL del fitxer de so que es reproduirà."
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
-msgstr "Seleccioneu un fitxer de so que es reproduirà."
+msgstr "Trieu un fitxer de so que es reproduirà."
 
 #: sounddlg.cpp:208
 #, kde-format
@@ -8307,7 +8298,7 @@ msgstr "Volum"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
-msgstr "Seleccioneu-ho per a triar el volum de reproducció del fitxer de so."
+msgstr "Trieu-ho per a triar el volum de reproducció del fitxer de so."
 
 #: sounddlg.cpp:244
 #, kde-format
@@ -8326,8 +8317,7 @@ msgstr "Esvaïment"
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
 msgstr ""
-"Seleccioneu-ho per a esvair el volum quan el fitxer de so comence a "
-"reproduir-se."
+"Trieu-ho per a esvair el volum quan el fitxer de so comence a reproduir-se."
 
 #: sounddlg.cpp:266
 #, kde-format
@@ -8399,7 +8389,7 @@ msgid ""
 "is spoken. (Option requires working Qt text-to-speech installation.)</item></"
 "list></para>"
 msgstr ""
-"<para>Seleccioneu un so per a reproduir en mostrar el missatge."
+"<para>Trieu un so per a reproduir en mostrar el missatge."
 "<list><item><interface>%1</interface>: el missatge es mostra en silenci.</"
 "item><item><interface>%2</interface>: sona un timbre senzill.</"
 "item><item><interface>%3</interface>: es reproduïx un fitxer d'àudio. Es "
@@ -8656,7 +8646,7 @@ msgstr "Sup&rimix"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Alarm Template"
-msgstr "Seleccioneu una plantilla d'alarma"
+msgstr "Trieu una plantilla d'alarma"
 
 #: templatepickdlg.cpp:60
 #, kde-format

@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-31 00:43+0000\n"
-"PO-Revision-Date: 2025-08-28 20:25+0300\n"
+"PO-Revision-Date: 2025-09-01 08:16+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1519,10 +1519,10 @@ msgstr "צליל"
 
 #. i18n: ectx: whatsthis, entry (Base_DefaultSoundType), group (Defaults)
 #: data/kalarmconfig.kcfg:336
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default sound type in the alarm edit dialog."
-msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
+msgstr "סוג צליל כברירת מחדל בחלונית עריכת תזכורת."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
 #: data/kalarmconfig.kcfg:340
@@ -1540,10 +1540,10 @@ msgstr "קובץ שמע"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundFile), group (Defaults)
 #: data/kalarmconfig.kcfg:347
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default sound file path in the alarm edit dialog."
-msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
+msgstr "נתיב קובץ צליל כברירת מחדל בחלונית עריכת תזכורת."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
 #: data/kalarmconfig.kcfg:350 kalarmcalendar/kaeventformatter.cpp:115
@@ -1570,10 +1570,10 @@ msgstr "חזרה על קובץ צליל"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundRepeat), group (Defaults)
 #: data/kalarmconfig.kcfg:358
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for sound repetition."
-msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
+msgstr "הגדרת ברירת מחדל בחלונית עריכת התזכורות לחזרה על צלילים."
 
 #. i18n: ectx: label, entry (DefaultCmdScript), group (Defaults)
 #: data/kalarmconfig.kcfg:362
@@ -1584,10 +1584,10 @@ msgstr ""
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdScript), group (Defaults)
 #: data/kalarmconfig.kcfg:363
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for command script entry."
-msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
+msgstr "הגדרת ברירת מחדל בחלונית עריכת התזכורות למילוי סקריפט פקודות."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:367
@@ -1635,10 +1635,10 @@ msgstr "קובץ יומן"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogFile), group (Defaults)
 #: data/kalarmconfig.kcfg:378
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default log file path for command alarms in the alarm edit dialog."
-msgstr "הגדרת ברירת המחדל של תדירות החזרה בדו-שיח עריכת התזכורת."
+msgstr "נתיב קובץ יומן כברירת מחדל לתזכורות פקודות בחלונית עריכת התזכורות."
 
 #. i18n: ectx: label, entry (DefaultEmailBcc), group (Defaults)
 #: data/kalarmconfig.kcfg:381
@@ -1649,11 +1649,11 @@ msgstr "עותק מהדוא״ל אליי"
 
 #. i18n: ectx: whatsthis, entry (DefaultEmailBcc), group (Defaults)
 #: data/kalarmconfig.kcfg:382
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Default setting in the alarm edit dialog for blind copying emails to self."
-msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
+msgstr "הגדרת ברירת מחדל בחלונית עריכת התזכורות לעותק נסתר של דוא״ל לעצמו."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:386
