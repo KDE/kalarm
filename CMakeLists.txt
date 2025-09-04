@@ -30,6 +30,7 @@ set(KF_MIN_VERSION "6.16.0")
 
 find_package(ECM ${KF_MIN_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 include(ECMInstallIcons)
 
 include(ECMSetupVersion)
