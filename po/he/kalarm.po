@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-31 00:43+0000\n"
-"PO-Revision-Date: 2025-09-01 08:16+0300\n"
+"PO-Revision-Date: 2025-09-04 10:04+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -5417,7 +5417,7 @@ msgid "Choose how to send email when an email alarm is triggered."
 msgstr "נא לבחור איך לשלוח הודעות דוא״ל כשתזכורת מוזנקת."
 
 #: prefdlg.cpp:1194
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>%1<list><item><interface>%2</interface>: The email is sent "
@@ -5426,10 +5426,11 @@ msgid ""
 "if your system is configured to use <application>sendmail</application> or a "
 "sendmail compatible mail transport agent.</item></list></para>"
 msgstr ""
-"בחר כיצד תישלח הודעת הדוא\"ל כאשר תזכורת דוא\"ל מופעלת.\n"
-"KMail: יוצג חלון כתבן של KMail שיאפשר לך לשלוח את הדוא\"ל.\n"
-"Sendmail: הדוא\"ל יישלח באופן אוטומטי. אפשרות זו תעבוד רק אם המערכת שלך "
-"מוגדרת לשימוש ב-\"sendmail\" או \"mail\"."
+"<para>%1<list><item><interface>%2</interface>: ההודעה נשלחה אוטומטית דרך "
+"<application>KMail</application>.</item><item><interface>%3</interface>: "
+"ההודעה נשלחה אוטומטית. האפשרות הזאת תעבוד רק אם המערכת שלך הוגדרה לעבוד עם "
+"<application>sendmail</application> או סוכן תעבורת דוא״ל תואם sendmail.</"
+"item></list></para>"
 
 #: prefdlg.cpp:1202
 #, kde-kuit-format
@@ -5495,12 +5496,14 @@ msgid "Use default <application>KMail</application> identity"
 msgstr "להשתמש בזהות ברירת המחדל של <application>KMail</application>"
 
 #: prefdlg.cpp:1259
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, to identify you as the sender when sending email alarms."
-msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
+msgstr ""
+"יש לסמן כדי להשתמש בכתובת דוא״ל ברירת המחדל שמוגדרת תחת <application>KMail</"
+"application>, כדי לזהות אותך בתור המוען בשליחת תזכורות דרך דוא״ל."
 
 #: prefdlg.cpp:1263
 #, kde-kuit-format
@@ -6695,7 +6698,7 @@ msgstr "הגדרת לוח שנה"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Select storage type of new calendar:"
-msgstr ""
+msgstr "בחירת אחסון של לוח השנה החדש:"
 
 #: resources/fileresourcecreator.cpp:137
 #, kde-kuit-format
@@ -7378,7 +7381,7 @@ msgstr "תבניות התראות"
 #: resources/singlefileresourceconfigdialog.ui:133
 #, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr ""
+msgstr "נא לבחור איזה סוג של תזכורות אמור להכיל לוח השנה הזה."
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
