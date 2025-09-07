@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 02:42+0000\n"
-"PO-Revision-Date: 2025-09-04 10:04+0300\n"
+"PO-Revision-Date: 2025-09-05 13:40+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -5836,7 +5836,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
-msgstr ""
+msgstr "חלונית עצה לשורת המערכת"
 
 #: prefdlg.cpp:1977
 #, kde-format
@@ -5858,7 +5858,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
-msgstr ""
+msgstr "מספר התזכורות המרבי להצגה:"
 
 #: prefdlg.cpp:1996
 #, kde-format
@@ -5902,7 +5902,7 @@ msgstr "צבע תזכורת בארכיון:"
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
-msgstr ""
+msgstr "חלונות הודעת תזכורת"
 
 #: prefdlg.cpp:2074
 #, kde-kuit-format
@@ -5931,7 +5931,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
-msgstr ""
+msgstr "השהיית הפעלת כפתורים (בשניות):"
 
 #: prefdlg.cpp:2098
 #, kde-format
@@ -5941,6 +5941,8 @@ msgid ""
 "window is shown, to reduce the chance of alarm messages being accidentally "
 "acknowledged."
 msgstr ""
+"נא למלא כמה זמן הכפתורים אמורים להישאר מושבתים אחרי שחלון הודעת התזכורת "
+"מופיע, כדי לצמצם את הסיכוי שהודעת תזכורת תאושר בטעות."
 
 #: prefdlg.cpp:2102
 #, kde-format
