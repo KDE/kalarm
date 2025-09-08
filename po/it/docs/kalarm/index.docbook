@@ -132,9 +132,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2025-03-17</date>
+>2025-08-30</date>
 <releaseinfo
->3.11.0 (KDE Gear 25.04)</releaseinfo>
+>3.12.0 (KDE Gear 25.12)</releaseinfo>
 
 <abstract>
 <para
@@ -2276,6 +2276,14 @@
 >Puoi usare il pulsante <guibutton
 >Sottoripetizione</guibutton
 > per configurare una ripetizione all'interno di un'altra. In questo caso, ogni volta che l'avviso si deve attivare secondo la ricorrenza principale, invece di essere attivato una volta sola, viene attivato ripetutamente secondo la specifica della sottoripetizione. Per esempio, per configurare un avviso che si ripete ogni ora da mezzogiorno alle sei di sera ogni giovedì, potresti configurare una ricorrenza settimanale per il giovedì alle 12:00, e usare la finestra della sottoripetizione per specificare un intervallo di un'ora e un conto di sei unità o una durata di sei ore.</para>
+
+<note
+><para
+>Le sotto-ripetizioni vengono attivate a seguito dell'attivazione effettiva di un'occorrenza principale. Se l'occorrenza principale viene soppressa da un'eccezione relativa a data/ora o da restrizioni relative a ferie o orario lavorativo, le sotto-ripetizioni per quella istanza della ricorrenza non saranno attivate.</para>
+
+<para
+>Specifiche sotto-ripetizioni saranno ugualmente soppresse se si verificano in occasione di un'eccezione relativa a data/ora, o durante restrizioni relative a ferie o orario lavorativo.</para
+></note>
 
 <para
 >Nella finestra di sottoripetizione che viene visualizzata quando fai clic sul pulsante <guibutton
