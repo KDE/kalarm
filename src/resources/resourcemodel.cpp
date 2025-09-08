@@ -1,7 +1,7 @@
 /*
  *  resourcemodel.cpp  -  models containing flat list of resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -33,7 +33,7 @@ void ResourceFilterModel::setEventTypeFilter(CalEvent::Type type)
     if (type != mAlarmType)
     {
         mAlarmType = type;
-        invalidateFilter();
+        invalidateRowsFilter();
     }
 }
 
@@ -42,7 +42,7 @@ void ResourceFilterModel::setFilterWritable(bool writable)
     if (writable != mWritableOnly)
     {
         mWritableOnly = writable;
-        invalidateFilter();
+        invalidateRowsFilter();
     }
 }
 
@@ -52,7 +52,7 @@ void ResourceFilterModel::setFilterEnabled(bool enabled)
     {
         Q_EMIT layoutAboutToBeChanged();
         mEnabledOnly = enabled;
-        invalidateFilter();
+        invalidateRowsFilter();
         Q_EMIT layoutChanged();
     }
 }
@@ -63,7 +63,7 @@ void ResourceFilterModel::setFilterText(const QString& text)
     {
         Q_EMIT layoutAboutToBeChanged();
         mFilterText = text;
-        invalidateFilter();
+        invalidateRowsFilter();
         Q_EMIT layoutChanged();
     }
 }
@@ -567,7 +567,7 @@ bool ResourceFilterCheckListModel::filterAcceptsRow(int sourceRow, const QModelI
 void ResourceFilterCheckListModel::resourceTypeChanged(ResourceCheckListModel* model)
 {
     if (model == sourceModel())
-        invalidateFilter();
+        invalidateRowsFilter();
 }
 
 /******************************************************************************
