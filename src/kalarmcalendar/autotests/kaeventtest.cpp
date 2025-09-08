@@ -1331,17 +1331,24 @@ void KAEventTest::setNextOccurrence()
     QVERIFY(!next3.isSecondOccurrence());
 }
 
-void KAEventTest::nextOccurrence()
+void KAEventTest::nextDateTime()
 {
     // Test behaviour of working time only, excluding holidays and excluding date/time
     // works as expected, for recurrences and for sub-repetitions.
-    const KADateTime dtMonday(QDate(2024, 6, 3), QTime(12, 0, 0), QTimeZone("Europe/London"));
-    const KADateTime dtThursday(QDate(2024, 6, 13), QTime(12, 0, 0), QTimeZone("Europe/London"));
-    const KADateTime dtSundayHol(QDate(2024, 6, 23), QTime(12, 0, 0), QTimeZone("Europe/London"));
-    const KADateTime dtWednesdayHol(QDate(2024, 7, 3), QTime(12, 0, 0), QTimeZone("Europe/London"));
-    const KADateTime dtSaturday(QDate(2024, 7, 13), QTime(12, 0, 0), QTimeZone("Europe/London"));
-    const KADateTime dtTuesday(QDate(2024, 7, 23), QTime(12, 0, 0), QTimeZone("Europe/London"));
-    const KADateTime dtFriday(QDate(2024, 8, 2), QTime(12, 0, 0), QTimeZone("Europe/London"));
+
+    // NOTE: Because the Holidays class only deals with dates in the future,
+    //       we have to find a future year whose dates are on the correct 
+    //       days of the week for this test.
+    int year;
+    for (year = QDate::currentDate().year() + 1;  QDate(year, 6, 3).dayOfWeek() != 1;  ++year) ;
+    const KADateTime dtMon_6_3(QDate(year, 6, 3), QTime(12, 0, 0), QTimeZone("Europe/London"));
+    const KADateTime dtThu_6_13(QDate(year, 6, 13), QTime(12, 0, 0), QTimeZone("Europe/London"));
+    const KADateTime dtSunHol_6_23(QDate(year, 6, 23), QTime(12, 0, 0), QTimeZone("Europe/London"));
+    const KADateTime dtWedHol_7_3(QDate(year, 7, 3), QTime(12, 0, 0), QTimeZone("Europe/London"));
+    const KADateTime dtSat_7_13(QDate(year, 7, 13), QTime(12, 0, 0), QTimeZone("Europe/London"));
+    const KADateTime dtTue_7_23(QDate(year, 7, 23), QTime(12, 0, 0), QTimeZone("Europe/London"));
+    const KADateTime dtFri_8_2(QDate(year, 8, 2), QTime(12, 0, 0), QTimeZone("Europe/London"));
+    const KADateTime dtThu_8_22(QDate(year, 8, 22), QTime(12, 0, 0), QTimeZone("Europe/London"));
 
     // Set KAEvent holidays to June 15 and June 23.
     QTemporaryDir dir;
@@ -1361,14 +1368,14 @@ void KAEventTest::nextOccurrence()
     holidayFile.close();
     KHolidays::HolidayRegion hRegion{QFileInfo(holidayFile)};
     QVERIFY(hRegion.isValid());
-    const auto holidayList = hRegion.rawHolidays(QDate(2024,1,1), QDate(2024,12,31));
+    const auto holidayList = hRegion.rawHolidays(QDate(year,1,1), QDate(year,12,31));
     QCOMPARE(holidayList.count(), 4);
-    QVERIFY(hRegion.isHoliday(QDate(2024, 6, 5)));
-    QVERIFY(hRegion.isHoliday(QDate(2024, 6, 23)));
-    QVERIFY(hRegion.isHoliday(QDate(2024, 7, 3)));
-    QVERIFY(hRegion.isHoliday(QDate(2024, 8, 4)));
     static Holidays holidays(hRegion);
     KAEvent::setHolidays(holidays);
+    QVERIFY(holidays.isHoliday(QDate(year, 6, 5)));
+    QVERIFY(holidays.isHoliday(QDate(year, 6, 23)));
+    QVERIFY(holidays.isHoliday(QDate(year, 7, 3)));
+    QVERIFY(holidays.isHoliday(QDate(year, 8, 4)));
 
     // Set KAEvent working days to Monday - Friday, 9am - 5pm.
     QBitArray workDays(7, false);
@@ -1377,38 +1384,147 @@ void KAEventTest::nextOccurrence()
 
     // Set event recurrence to start June 3, recur every 10 days,
     // with one sub-repetition 2 days later.
-    KAEvent event(dtMonday, QStringLiteral("name"), QStringLiteral("text"), Qt::black, Qt::white, QFont(), KAEvent::SubAction::Message, 0, KAEvent::DEFAULT_FONT);
+    KAEvent event(dtMon_6_3, QStringLiteral("name"), QStringLiteral("text"), Qt::black, Qt::white, QFont(), KAEvent::SubAction::Message, 0, KAEvent::DEFAULT_FONT);
     event.setRecurDaily(10, QBitArray(7, true), -1, QDate());  // recur every 10 days
     event.setRepetition(Repetition(Duration(2, Duration::Days), 1));   // 1 sub-rep after 2 days
     DateTime next;
 
     // Get next recurrence/sub-repetition.
-    KAEvent::OccurType type = event.nextOccurrence(dtSundayHol.addSecs(-60), next, KAEvent::Repeats::Return);
-    QCOMPARE(type, KAEvent::OccurType::Recur);
-    QCOMPARE(next.kDateTime(), dtSundayHol);
-    type = event.nextOccurrence(dtSundayHol, next, KAEvent::Repeats::Return);
-    QVERIFY(type & KAEvent::OccurType::Repeat);
-    QCOMPARE(next.kDateTime(), dtSundayHol.addDays(2));
-    type = event.nextOccurrence(dtSundayHol.addDays(2), next, KAEvent::Repeats::Return);
-    QCOMPARE(type, KAEvent::OccurType::Recur);
-    QCOMPARE(next.kDateTime(), dtSundayHol.addDays(10));
+    KAEvent::TriggerType type = event.nextDateTime(dtSunHol_6_23.addSecs(-60), next, KAEvent::NextRepeat);
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtSunHol_6_23);
+    type = event.nextDateTime(dtSunHol_6_23, next, KAEvent::NextRepeat);
+    QVERIFY(KAEvent::isRepeat(type));
+    QCOMPARE(next.kDateTime(), dtSunHol_6_23.addDays(2));
+    type = event.nextDateTime(dtSunHol_6_23.addDays(2), next, KAEvent::NextRepeat);
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtSunHol_6_23.addDays(10));
 
     // Exclude a recurrence date: returns next recurrence, not sub-repetition
-    event.setExceptionDates({dtSundayHol.date()});
-    type = event.nextOccurrence(dtSundayHol.addSecs(-60), next, KAEvent::Repeats::Return);
-    QCOMPARE(type, KAEvent::OccurType::Recur);
-    QCOMPARE(next.kDateTime(), dtSundayHol.addDays(10));
-    type = event.nextOccurrence(dtSundayHol, next, KAEvent::Repeats::Return);
-    QCOMPARE(type, KAEvent::OccurType::Recur);
-    QCOMPARE(next.kDateTime(), dtSundayHol.addDays(10));
-    type = event.nextOccurrence(dtSundayHol.addDays(2), next, KAEvent::Repeats::Return);
-    QCOMPARE(type, KAEvent::OccurType::Recur);
-    QCOMPARE(next.kDateTime(), dtSundayHol.addDays(10));
+    event.setExceptionDates({dtSunHol_6_23.date()});
+    type = event.nextDateTime(dtSunHol_6_23.addSecs(-60), next, KAEvent::NextRepeat);
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtSunHol_6_23.addDays(10));
+    type = event.nextDateTime(dtSunHol_6_23, next, KAEvent::NextRepeat);
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtSunHol_6_23.addDays(10));
+    type = event.nextDateTime(dtSunHol_6_23.addDays(2), next, KAEvent::NextRepeat);
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtSunHol_6_23.addDays(10));
 
     event.setExceptionDates({});   // clear the exception
-    type = event.nextOccurrence(dtSundayHol.addSecs(-60), next, KAEvent::Repeats::Return);
-    QCOMPARE(type, KAEvent::OccurType::Recur);
-    QCOMPARE(next.kDateTime(), dtSundayHol);
+    type = event.nextDateTime(dtSunHol_6_23.addSecs(-60), next, KAEvent::NextRepeat);
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtSunHol_6_23);
+
+    // Working time only: returns recurrence, or sub-repetition only if the recurrence
+    // actually triggered.
+    event.setWorkTimeOnly(true);
+    // Check recurrence unaffected by working time still triggers
+    type = event.nextDateTime(dtMon_6_3.addSecs(-60), next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QVERIFY(KAEvent::isFirstRecur(type));
+    QCOMPARE(next.kDateTime(), dtMon_6_3);
+    type = event.nextDateTime(dtMon_6_3, next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QVERIFY(KAEvent::isRepeat(type));
+    QCOMPARE(next.kDateTime(), dtMon_6_3.addDays(2));
+    // Recurrence, and therefore its sub-repetition, suppressed by working time
+    type = event.nextDateTime(dtSunHol_6_23.addSecs(-60), next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtSunHol_6_23.addDays(10));
+    type = event.nextDateTime(dtSunHol_6_23, next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtSunHol_6_23.addDays(10));
+    // Individual sub-repetition suppressed by working time
+    event.setRepetition(Repetition(Duration(2, Duration::Days), 2));   // 2 sub-reps after 2 days
+    type = event.nextDateTime(dtThu_6_13, next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QVERIFY(KAEvent::isRepeat(type));
+    QCOMPARE(next.kDateTime(), dtThu_6_13.addDays(4));
+    event.setRepetition(Repetition(Duration(2, Duration::Days), 1));   // 1 sub-rep after 2 days
+    event.setWorkTimeOnly(false);
+
+    // Holidays excluded: returns recurrence, or sub-repetition only if the recurrence
+    // actually triggered.
+    event.setExcludeHolidays(true);
+    // Check recurrence unaffected by holidays still triggers
+    type = event.nextDateTime(dtThu_8_22.addSecs(-60), next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtThu_8_22);
+    type = event.nextDateTime(dtThu_8_22, next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QVERIFY(KAEvent::isRepeat(type));
+    QCOMPARE(next.kDateTime(), dtThu_8_22.addDays(2));
+    type = event.nextDateTime(dtThu_8_22.addDays(2), next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtThu_8_22.addDays(10));
+    // Recurrence, and therefore its sub-repetition, suppressed by holiday
+    QVERIFY(holidays.isHoliday(dtWedHol_7_3.date()));
+    type = event.nextDateTime(dtWedHol_7_3.addSecs(-60), next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtWedHol_7_3.addDays(10));
+    type = event.nextDateTime(dtWedHol_7_3, next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtWedHol_7_3.addDays(10));
+    // Individual sub-repetition suppressed by holiday
+    type = event.nextDateTime(dtMon_6_3.addSecs(-60), next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QVERIFY(KAEvent::isFirstRecur(type));
+    QCOMPARE(next.kDateTime(), dtMon_6_3);
+    type = event.nextDateTime(dtMon_6_3, next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtMon_6_3.addDays(10));
+    event.setExcludeHolidays(false);
+
+    // Work time only, and holidays excluded: returns recurrence, or sub-repetition only
+    // if the recurrence actually triggered.
+    event.setWorkTimeOnly(true);
+    event.setExcludeHolidays(true);
+    // Check recurrence unaffected by working time or holidays still triggers
+    type = event.nextDateTime(dtTue_7_23.addSecs(-60), next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtTue_7_23);
+    type = event.nextDateTime(dtTue_7_23, next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QVERIFY(KAEvent::isRepeat(type));
+    QCOMPARE(next.kDateTime(), dtTue_7_23.addDays(2));
+    type = event.nextDateTime(dtTue_7_23.addDays(2), next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtTue_7_23.addDays(10));
+    // Recurrence, and therefore its sub-repetition, suppressed by holiday
+    type = event.nextDateTime(dtWedHol_7_3.addSecs(-60), next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtWedHol_7_3.addDays(20));
+    type = event.nextDateTime(dtWedHol_7_3, next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtWedHol_7_3.addDays(20));
+    // Recurrence, and therefore its sub-repetition, suppressed by working time
+    type = event.nextDateTime(dtSat_7_13.addSecs(-60), next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtSat_7_13.addDays(10));
+    type = event.nextDateTime(dtSat_7_13, next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtSat_7_13.addDays(10));
+    // Recurrence, and therefore its sub-repetition, suppressed by both working time
+    // and holiday
+    type = event.nextDateTime(dtSunHol_6_23.addSecs(-60), next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtTue_7_23);
+    type = event.nextDateTime(dtSunHol_6_23, next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtTue_7_23);
+    // Individual sub-repetition suppressed by working time
+    type = event.nextDateTime(dtThu_8_22, next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtThu_8_22.addDays(20));
+    // Individual sub-repetition suppressed by holiday
+    type = event.nextDateTime(dtMon_6_3.addSecs(-60), next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QVERIFY(KAEvent::isFirstRecur(type));
+    QCOMPARE(next.kDateTime(), dtMon_6_3);
+    // Individual sub-repetition suppressed by both working time and holiday
+    type = event.nextDateTime(dtFri_8_2, next, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday));
+    QCOMPARE(type, KAEvent::TriggerType::Recur);
+    QCOMPARE(next.kDateTime(), dtFri_8_2.addDays(10));
+
+//TODO: Test for date-only alarms
+
+    event.setWorkTimeOnly(false);
+    event.setExcludeHolidays(false);
     KAEvent::setHolidays();
 }
 

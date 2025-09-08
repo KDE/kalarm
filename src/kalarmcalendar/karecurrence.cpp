@@ -3,7 +3,7 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -46,6 +46,7 @@ public:
         mRecurrence.clear();
         mFeb29Type  = Feb29_None;
         mCachedType = -1;
+        mCachedDayPosMask = 0;
     }
     bool set(Type, int freq, int count, int f29, const KADateTime& start, const KADateTime& end);
     bool init(RecurrenceRule::PeriodType, int freq, int count, int feb29Type, const KADateTime& start, const KADateTime& end);
@@ -54,11 +55,13 @@ public:
     KADateTime endDateTime() const;
     int  combineDurations(const RecurrenceRule*, const RecurrenceRule*, QDate& end) const;
     static QTimeZone toTimeZone(const KADateTime::Spec& spec);
+    void cacheDayPosMask();
 
     static Feb29Type mDefaultFeb29;
     Recurrence_p     mRecurrence;
     Feb29Type        mFeb29Type = Feb29_None;    // yearly recurrence on Feb 29th (leap years) / Mar 1st (non-leap years)
     mutable int      mCachedType = -1;
+    unsigned         mCachedDayPosMask = 0;
 };
 
 QTimeZone KARecurrence::Private::toTimeZone(const KADateTime::Spec& spec)
@@ -258,6 +261,7 @@ bool KARecurrence::Private::init(RecurrenceRule::PeriodType recurType, int freq,
         mFeb29Type = feb29Type;
     }
     mRecurrence.setStartDateTime(msecs0(startdt), dateOnly);   // sets recurrence all-day if date-only
+    cacheDayPosMask();
     return true;
 }
 
@@ -459,6 +463,22 @@ void KARecurrence::Private::fix()
         mRecurrence.setDuration(count);
     else
         mRecurrence.setEndDate(end);
+
+    cacheDayPosMask();
+}
+
+/******************************************************************************
+* Cache the day pos mask. To be called whenever the recurrence rule changes.
+*/
+void KARecurrence::Private::cacheDayPosMask()
+{
+    mCachedDayPosMask = 0;
+    const QList<RecurrenceRule::WDayPos> pos = mRecurrence.defaultRRuleConst()->byDays();
+    for (const RecurrenceRule::WDayPos& p : pos)
+    {
+        const int day = p.day() - 1;  // Monday = 0
+        mCachedDayPosMask |= 1 << day;
+    }
 }
 
 /******************************************************************************
@@ -725,6 +745,11 @@ QBitArray KARecurrence::days() const
     return d->mRecurrence.days();
 }
 
+unsigned KARecurrence::dayPosMask() const
+{
+    return d->mCachedDayPosMask;
+}
+
 QList<RecurrenceRule::WDayPos> KARecurrence::monthPositions() const
 {
     return d->mRecurrence.monthPositions();
@@ -778,16 +803,19 @@ void KARecurrence::addYearlyMonth(short month)
 void KARecurrence::addYearlyPos(short pos, const QBitArray& days)
 {
     d->mRecurrence.addYearlyPos(pos, days);
+    d->cacheDayPosMask();
 }
 
 void KARecurrence::addMonthlyPos(short pos, const QBitArray& days)
 {
     d->mRecurrence.addMonthlyPos(pos, days);
+    d->cacheDayPosMask();
 }
 
 void KARecurrence::addMonthlyPos(short pos, ushort day)
 {
     d->mRecurrence.addMonthlyPos(pos, day);
+    d->cacheDayPosMask();
 }
 
 void KARecurrence::addMonthlyDate(short day)
@@ -1236,6 +1264,7 @@ void KARecurrence::addExDate(const QDate& exdate)
 void KARecurrence::shiftTimes(const QTimeZone& oldSpec, const QTimeZone& newSpec)
 {
     d->mRecurrence.shiftTimes(oldSpec, newSpec);
+    d->cacheDayPosMask();
 }
 
 RecurrenceRule* KARecurrence::defaultRRuleConst() const

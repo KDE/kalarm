@@ -3,7 +3,7 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2009-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -123,17 +123,31 @@ bool Repetition::isDaily() const
 
 int Repetition::intervalDays() const
 {
-    return d->mInterval.asDays();
+    return d->mInterval.isDaily() ? d->mInterval.asDays() : -1;
 }
 
 int Repetition::intervalMinutes() const
 {
-    return d->mInterval.asSeconds() / 60;
+    return d->mInterval.isDaily() ? -1 : d->mInterval.asSeconds() / 60;
 }
 
 int Repetition::intervalSeconds() const
 {
-    return d->mInterval.asSeconds();
+    return d->mInterval.isDaily() ? -1 : d->mInterval.asSeconds();
+}
+
+KADateTime Repetition::repeatTime(const KADateTime& start, int count) const
+{
+    return d->mInterval.isDaily()
+           ? start.addDays(count * d->mInterval.asDays())
+           : start.addSecs(count * d->mInterval.asSeconds());
+}
+
+KADateTime Repetition::startTime(const KADateTime& countTime, int count) const
+{
+    return d->mInterval.isDaily()
+           ? countTime.addDays(-count * d->mInterval.asDays())
+           : countTime.addSecs(-count * d->mInterval.asSeconds());
 }
 
 int Repetition::nextRepeatCount(const KADateTime& from, const KADateTime& preDateTime) const

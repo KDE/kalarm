@@ -1909,27 +1909,21 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                             // It's too late to display the scheduled occurrence.
                             // Find the last previous occurrence of the alarm.
                             DateTime next;
-                            const KAEvent::OccurType type = event.previousOccurrence(now, next, KAEvent::RepeatsP::Return);
-                            switch (static_cast<KAEvent::OccurType>(type & ~KAEvent::OccurType::Repeat))
+                            const KAEvent::OccurType type = event.previousOccurrence(now, next, KAEvent::Repeats::Return);
+                            if (KAEvent::isRecur(type))
                             {
-                                case KAEvent::OccurType::FirstOrOnly:
-                                case KAEvent::OccurType::Recur:
-                                case KAEvent::OccurType::LastRecur:
-                                    limit.setDate(next.date().addDays(maxlate + 1));
-                                    if (now >= limit)
-                                    {
-                                        if (type == KAEvent::OccurType::LastRecur
-                                        ||  (type == KAEvent::OccurType::FirstOrOnly && !event.recurs()))
-                                            cancel = true;   // last occurrence (and there are no repetitions)
-                                        else
-                                            reschedule = true;
-                                    }
-                                    break;
-                                case KAEvent::OccurType::None:
-                                default:
-                                    reschedule = true;
-                                    break;
+                                limit.setDate(next.date().addDays(maxlate + 1));
+                                if (now >= limit)
+                                {
+                                    if (KAEvent::isLastRecur(type))
+//TODO: Could there be repetitions outstanding???
+                                        cancel = true;   // last occurrence (and there are no repetitions)
+                                    else
+                                        reschedule = true;
+                                }
                             }
+                            else
+                                reschedule = true;
                         }
                     }
                     else
@@ -1941,26 +1935,20 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                             // It's over the maximum interval late.
                             // Find the most recent occurrence of the alarm.
                             DateTime next;
-                            const KAEvent::OccurType type = event.previousOccurrence(now, next, KAEvent::RepeatsP::Return);
-                            switch (static_cast<KAEvent::OccurType>(type & ~KAEvent::OccurType::Repeat))
+                            const KAEvent::OccurType type = event.previousOccurrence(now, next, KAEvent::Repeats::Return);
+                            if (KAEvent::isRecur(type))
                             {
-                                case KAEvent::OccurType::FirstOrOnly:
-                                case KAEvent::OccurType::Recur:
-                                case KAEvent::OccurType::LastRecur:
-                                    if (next.effectiveKDateTime().secsTo(now) > maxlate)
-                                    {
-                                        if (type == KAEvent::OccurType::LastRecur
-                                        ||  (type == KAEvent::OccurType::FirstOrOnly && !event.recurs()))
-                                            cancel = true;   // last occurrence (and there are no repetitions)
-                                        else
-                                            reschedule = true;
-                                    }
-                                    break;
-                                case KAEvent::OccurType::None:
-                                default:
-                                    reschedule = true;
-                                    break;
+                                if (next.effectiveKDateTime().secsTo(now) > maxlate)
+                                {
+                                    if (KAEvent::isLastRecur(type))
+//TODO: Could there be repetitions outstanding???
+                                        cancel = true;   // last occurrence (and there are no repetitions)
+                                    else
+                                        reschedule = true;
+                                }
                             }
+                            else
+                                reschedule = true;
                         }
                     }
 
@@ -2119,7 +2107,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
                         return -1;
                 }
             }
-            else if (type & (KAEvent::OccurType::Repeat | KAEvent::OccurType::Recur))
+            else if (KAEvent::isRecur(type) || KAEvent::isRepeat(type))
             {
                 // The event is due by now and repetitions still remain, so rewrite the event
                 if (updateCalAndDisplay)

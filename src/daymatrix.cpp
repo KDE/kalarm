@@ -8,7 +8,7 @@
  *
  *  SPDX-FileCopyrightText: 2003 Cornelius Schumacher <schumacher@kde.org>
  *  SPDX-FileCopyrightText: 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
- *  SPDX-FileCopyrightText: 2021-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2021-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later WITH Qt-Commercial-exception-1.0
 */
@@ -248,18 +248,15 @@ void DayMatrix::updateEvents(const Resource& resource, const KADateTime& before,
             DateTime nextDt;
             for (KADateTime from = before;  ;  )
             {
-                evnt.nextOccurrence(from, nextDt, KAEvent::Repeats::Return);
+                evnt.nextDateTime(from, nextDt, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday), to);
                 if (!nextDt.isValid())
                     break;
                 from = nextDt.effectiveKDateTime().toTimeSpec(timeSpec);
                 if (from > to)
                     break;
-                if (!evnt.excludedByWorkTimeOrHoliday(from))
-                {
-                    mResourceEventDates[id] += from.date();
-                    if (mResourceEventDates[id].count() >= NUMDAYS)
-                        break;   // all days have alarms due
-                }
+                mResourceEventDates[id] += from.date();
+                if (mResourceEventDates[id].count() >= NUMDAYS)
+                    break;   // all days have alarms due
 
                 // If the alarm recurs more than once per day, don't waste
                 // time checking any more occurrences for the same day.
@@ -507,7 +504,7 @@ void DayMatrix::paintEvent(QPaintEvent*)
     QSet<QDate> nonWorkHolidays;
     {
         const KAlarmCal::Holidays& holidays = Preferences::holidays();
-        for (int i = 0; i < NUMDAYS; ++i)
+        for (int i = std::max(mTodayIndex, 0); i < NUMDAYS; ++i)
         {
             const QDate date = mStartDate.addDays(i);
             if (holidays.isHoliday(date))

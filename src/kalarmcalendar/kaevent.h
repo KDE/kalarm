@@ -246,15 +246,101 @@ public:
         Audio   = static_cast<int>(KAAlarm::Action::Audio)     //!< play an audio file
     };
 
-    /** What type of occurrence is due. */
-    enum class OccurType
+    /** What type of trigger is due.
+     *  Use the following inline functions to access/set this value:
+     *  - isRecur(TriggerType) to check whether it is a recurrence or only occurrence.
+     *  - recurType(TriggerType) to extract the recurrence type (excluding sub-repetition).
+     *  - isLastRecur(TriggerType) to check whether it is the last recurrence or only occurrence.
+     *  - isFirstRecur(TriggerType) to check whether it is the first recurrence or only occurrence.
+     *  - isOnlyOccur(TriggerType) to check whether it is the only occurrence.
+     *  - isRepeat(TriggerType) to check whether it is a sub-repetition.
+     *  - repeatNum(TriggerType) to extract the sub-repetition number, or 0 if it's a recurrence.
+     *  - setRepeatNum(TriggerType, int) to set the sub-repetition number, or 0 for a recurrence.
+     */
+    enum class TriggerType : unsigned
     {
-        None              = 0,             //!< no occurrence is due
-        Recur             = 0x01,          //!< a recurrence or the only occurrence (bitmask)
-        FirstOrOnly       = 0x02 | Recur,  //!< the first occurrence (takes precedence over LastRecur)
-        LastRecur         = 0x04 | Recur,  //!< the last recurrence
-        Repeat            = 0x10           //!< a sub-repetition of an occurrence (bitmask)
+        None              = 0,       //!< no occurrence is due
+        Recur             = 0x01,    //!< a recurrence or the only occurrence (bitmask). Use isRecur(TriggerType) to return this.
+        First             = 0x02,    //!< the first occurrence. May be combined with Last.
+        Last              = 0x04,    //!< the last recurrence. May be combined with First.
+        RecurTypeMask     = Recur | First | Last,
+        Reminder          = 0x10,    //!< a reminder for a recurrence
+        Deferral          = 0x20,    //!< a deferral
+        RepeatNumMask     = 0x3FFFC0 //!< the sub-repetition number. Use repeatNum(TriggerType) to extract this.
+                                     //!< Use isRepeat(TriggerType) to check if it's a sub-repetition.
+                                     //!< Use setRepeatNum(TriggerType) to set sub-repetition number into TriggerType.
     };
+
+    static bool isRecur(TriggerType type)
+    { return static_cast<int>(type) & static_cast<int>(TriggerType::Recur); }
+
+    static TriggerType recurType(TriggerType type)
+    { return static_cast<TriggerType>(static_cast<int>(type) & static_cast<int>(TriggerType::RecurTypeMask)); }
+
+    static bool isFirstRecur(TriggerType type)
+    { return static_cast<int>(type) & static_cast<int>(TriggerType::First); }
+
+    static bool isLastRecur(TriggerType type)
+    { return static_cast<int>(type) & static_cast<int>(TriggerType::Last); }
+
+    static bool isOnlyOccur(TriggerType type)
+    { return (static_cast<int>(type) & (static_cast<int>(TriggerType::First) | static_cast<int>(TriggerType::Last))) == (static_cast<int>(TriggerType::First) | static_cast<int>(TriggerType::Last)); }
+
+    static bool isRepeat(TriggerType type)
+    { return static_cast<bool>(static_cast<int>(type) & static_cast<int>(TriggerType::RepeatNumMask)); }
+
+    static int repeatNum(TriggerType type)
+    { return static_cast<int>(static_cast<unsigned>(static_cast<int>(type) & static_cast<unsigned>(TriggerType::RepeatNumMask)) >> 6); }
+
+    static TriggerType setRepeatNum(TriggerType, int repeatNum)
+    { return static_cast<TriggerType>((repeatNum << 6) & static_cast<int>(TriggerType::RepeatNumMask)); }
+
+    /** What type of occurrence is due.
+     *  Use the following inline functions to access/set this value:
+     *  - isRecur(OccurType) to check whether it is a recurrence or only occurrence.
+     *  - recurType(OccurType) to extract the recurrence type (excluding sub-repetition).
+     *  - isLastRecur(OccurType) to check whether it is the last recurrence or only occurrence.
+     *  - isFirstRecur(OccurType) to check whether it is the first recurrence or only occurrence.
+     *  - isOnlyOccur(OccurType) to check whether it is the only occurrence.
+     *  - isRepeat(OccurType) to check whether it is a sub-repetition.
+     *  - repeatNum(OccurType) to extract the sub-repetition number, or 0 if it's a recurrence.
+     *  - setRepeatNum(OccurType, int) to set the sub-repetition number, or 0 for a recurrence.
+     */
+    enum class OccurType : unsigned
+    {
+        None          = (unsigned)TriggerType::None,          //!< no occurrence is due
+        Recur         = (unsigned)TriggerType::Recur,         //!< a recurrence or the only occurrence (bitmask). Use isRecur(OccurType) to return this.
+        First         = (unsigned)TriggerType::First,         //!< the first occurrence. May be combined with Last.
+        Last          = (unsigned)TriggerType::Last,          //!< the last recurrence. May be combined with First.
+        RecurTypeMask = (unsigned)TriggerType::RecurTypeMask,
+        RepeatNumMask = (unsigned)TriggerType::RepeatNumMask  //!< the sub-repetition number. Use repeatNum(OccurType) to extract this.
+                                                       //!< Use isRepeat(OccurType) to check if it's a sub-repetition.
+                                                       //!< Use setRepeatNum(OccurType) to set sub-repetition number into OccurType.
+    };
+
+    static bool isRecur(OccurType type)
+    { return isRecur(static_cast<TriggerType>(type)); }
+
+    static OccurType recurType(OccurType type)
+    { return static_cast<OccurType>(recurType(static_cast<TriggerType>(type))); }
+
+    static bool isFirstRecur(OccurType type)
+    { return isFirstRecur(static_cast<TriggerType>(type)); }
+
+    static bool isLastRecur(OccurType type)
+    { return isLastRecur(static_cast<TriggerType>(type)); }
+
+    static bool isOnlyOccur(OccurType type)
+    { return isOnlyOccur(static_cast<TriggerType>(type)); }
+
+    static bool isRepeat(OccurType type)
+    { return isRepeat(static_cast<TriggerType>(type)); }
+
+    static int repeatNum(OccurType type)
+    { return repeatNum(static_cast<TriggerType>(type)); }
+
+    static OccurType setRepeatNum(OccurType, int repeatNum)
+    { return static_cast<OccurType>(setRepeatNum(TriggerType::None, repeatNum)); }
 
     /** Whether a sub-repetition is excluded due to working time/holidays. */
     enum class SubRepExclude
@@ -264,19 +350,11 @@ public:
         Repeat   //!< the sub-repetition (but not the recurrence) is excluded due to working time/holidays
     };
 
-    /** How to treat sub-repetitions in nextOccurrence(). */
+    /** How to treat sub-repetitions in previousOccurrence(). */
     enum class Repeats
     {
         Ignore = 0,    //!< check for recurrences only, ignore sub-repetitions
-        Return,        //!< return a sub-repetition if it's the next/previous occurrence
-        RecurBefore    //!< if a sub-repetition is the next occurrence, return the previous recurrence, not the sub-repetition
-    };
-
-    /** How to treat sub-repetitions in previousOccurrence(). */
-    enum class RepeatsP
-    {
-        Ignore = 0,    //!< check for recurrences only, ignore sub-repetitions
-        Return         //!< return a sub-repetition if it's the next/previous occurrence
+        Return         //!< return a sub-repetition if it's the previous occurrence
     };
 
     /** What type of occurrence currently limits how long the alarm can be deferred. */
@@ -889,8 +967,8 @@ public:
      */
     void setTime(const KADateTime& dt);
 
-    /** Return the next time the event will trigger or be displayed. The evaluation
-     *  depends on @p type:
+    /** Return the next time the event will trigger or be displayed, strictly after the
+     *  specified date/time. The evaluation depends on @p type:
      * - @p type == NextRecur:             returns the next recurrence or only occurrence.
      * - @p type contains NextRepeat:      returns the only occurrence or next
      *                                     recurrence/sub-repetition.
@@ -905,10 +983,13 @@ public:
      *                                     If a reminder has been deferred AND @p type
      *                                     contains NextReminder, returns the deferral time.
      *
-     *  @param type  what to check for when evaluating the next occurrence or display.
+     *  @param preDateTime  the date/time after which to find the next trigger/display.
+     *  @param result       date/time of next trigger/display, or invalid date/time if none.
+     *  @param type         what to check for when evaluating the next trigger/display.
+     *  @param endTime      last date/time to return.
      *  @see startDateTime(), setTime()
      */
-    DateTime nextDateTime(NextTypes type) const;
+    TriggerType nextDateTime(const KADateTime& preDateTime, DateTime& result, NextTypes type, const KADateTime& endTime = {}) const;
 
     /** Return the next time the main alarm will trigger.
      *  @note No account is taken of any working hours or holiday restrictions.
@@ -1285,20 +1366,6 @@ public:
     bool setNextOccurrence(const KADateTime& preDateTime, OccurType& type);
     void setNextOccurrence(const KADateTime& preDateTime);
 
-    /** Get the date/time of the next occurrence of the event, strictly after
-     *  the specified date/time. Reminders are ignored.
-     *  @note No account is taken of any working hours or holiday restrictions
-     *        when determining the next event occurrence.
-     *  @note If the event is date-only, its occurrences are considered to occur
-     *        at the start-of-day time when comparing with @p preDateTime.
-     *
-     *  @param preDateTime the specified date/time.
-     *  @param result      date/time of next occurrence, or invalid date/time if none.
-     *  @param option      how/whether to make allowance for sub-repetitions.
-     *  @see nextRepetition(), setNextOccurrence(), previousOccurrence(), occursAfter()
-     */
-    OccurType nextOccurrence(const KADateTime& preDateTime, DateTime& result, Repeats option = Repeats::Ignore) const;
-
     /** Get the date/time of the last previous occurrence of the event,
      *  strictly before the specified date/time. Reminders are ignored.
      *  @note No account is taken of any working hours or holiday restrictions
@@ -1316,7 +1383,7 @@ public:
      *                        Other values must not be specified.
      *  @see nextOccurrence()
      */
-    OccurType previousOccurrence(const KADateTime& afterDateTime, DateTime& result, RepeatsP includeRepetitions) const;
+    OccurType previousOccurrence(const KADateTime& afterDateTime, DateTime& result, Repeats includeRepetitions) const;
 
     /** Set the event to be a copy of the specified event, making the specified
      *  alarm the 'displaying' alarm.
@@ -1488,6 +1555,15 @@ inline KAEvent::OccurType operator|(KAEvent::OccurType t1, KAEvent::OccurType t2
 
 inline KAEvent::OccurType operator~(KAEvent::OccurType type)
 { return static_cast<KAEvent::OccurType>(~static_cast<int>(type)); }
+
+inline int operator&(KAEvent::TriggerType t1, KAEvent::TriggerType t2)
+{ return static_cast<int>(t1) & static_cast<int>(t2); }
+
+inline KAEvent::TriggerType operator|(KAEvent::TriggerType t1, KAEvent::TriggerType t2)
+{ return static_cast<KAEvent::TriggerType>(static_cast<int>(t1) | static_cast<int>(t2)); }
+
+inline KAEvent::TriggerType operator~(KAEvent::TriggerType type)
+{ return static_cast<KAEvent::TriggerType>(~static_cast<int>(type)); }
 
 inline int operator&(KAEvent::CmdErr e1, KAEvent::CmdErr e2)
 { return static_cast<int>(e1) & static_cast<int>(e2); }

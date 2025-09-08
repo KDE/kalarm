@@ -3,7 +3,7 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2023-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -17,12 +17,14 @@ namespace KAlarmCal
 
 Holidays::Holidays(const KHolidays::HolidayRegion& holidayRegion)
 {
-    initialise(holidayRegion.regionCode());
+    mRegion.reset(new KHolidays::HolidayRegion(holidayRegion));
+    initialise();
 }
 
 Holidays::Holidays(const QString& regionCode)
 {
-    initialise(regionCode);
+    mRegion.reset(new KHolidays::HolidayRegion(regionCode));
+    initialise();
 }
 
 /******************************************************************************
@@ -34,7 +36,8 @@ void Holidays::setRegion(const KHolidays::HolidayRegion& holidayRegion)
         return;
     mTypes.clear();
     mNames.clear();
-    initialise(holidayRegion.regionCode());
+    mRegion.reset(new KHolidays::HolidayRegion(holidayRegion));
+    initialise();
 }
 
 /******************************************************************************
@@ -46,15 +49,15 @@ void Holidays::setRegion(const QString& regionCode)
         return;
     mTypes.clear();
     mNames.clear();
-    initialise(regionCode);
+    mRegion.reset(new KHolidays::HolidayRegion(regionCode));
+    initialise();
 }
 
 /******************************************************************************
 * Set a new holiday region.
 */
-void Holidays::initialise(const QString& regionCode)
+void Holidays::initialise()
 {
-    mRegion.reset(new KHolidays::HolidayRegion(regionCode));
     mCacheStartDate = QDate::currentDate().addDays(-1);   // in case KAlarm time zone is different
     mNoCacheDate    = mCacheStartDate;
 
@@ -96,7 +99,10 @@ bool Holidays::isHoliday(const QDate& date) const
 Holidays::Type Holidays::holidayType(const QDate& date) const
 {
     if (date < QDate::currentDate().addDays(-1))
+    {
+        Q_ASSERT(date >= QDate::currentDate());
         return None;
+    }
     const int offset = mCacheStartDate.daysTo(date);
     if (date < mNoCacheDate)
         return mTypes[offset*2] ? NonWorking : mTypes[offset*2 + 1] ? Working : None;

@@ -20,6 +20,6 @@ private Q_SLOTS:
     void fromKCalEvent();
     void toKCalEvent();
     void setNextOccurrence();
-    void nextOccurrence();
+    void nextDateTime();
 };
 

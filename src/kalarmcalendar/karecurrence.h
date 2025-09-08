@@ -3,7 +3,7 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -206,6 +206,12 @@ public:
 
     /** Returns week day mask (bit 0 = Monday). */
     QBitArray days() const; // Emulate the old behavior
+
+    /** Returns a bit mask of the days of the week when a MONTHLY_POS
+     *  or YEARLY_POS recurrence can occur.
+     *  @return day mask (Monday = 1, Sunday = 1 << 7), or 0 if not *_POS type.
+     */
+    unsigned dayPosMask() const;
 
     /** Returns list of day positions in months. */
     QList<KCalendarCore::RecurrenceRule::WDayPos> monthPositions() const;

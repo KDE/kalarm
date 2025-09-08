@@ -3,7 +3,7 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2009-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -93,16 +93,43 @@ public:
 
     /** Return the repetition interval in terms of days.
      *  If necessary, the interval is rounded down to a whole number of days.
+     *  Note that if the interval is defined in minutes, it cannot be reliably
+     *  converted to days because the interval in days could vary across a
+     *  seasonal time transition.
+     *  @return repetition interval in days, or -1 if the interval is defined in minutes.
      */
     int intervalDays() const;
 
     /** Return the repetition interval in terms of minutes.
      *  If necessary, the interval is rounded down to a whole number of minutes.
+     *  Note that if the interval is defined in days, it cannot be reliably
+     *  converted to minutes because the interval in minutes will vary across a
+     *  seasonal time transition.
+     *  @return repetition interval in minutes, or -1 if the interval is defined in days.
      */
     int intervalMinutes() const;
 
-    /** Return the repetition interval in terms of seconds. */
+    /** Return the repetition interval in terms of seconds.
+     *  Note that if the interval is defined in days, it cannot be reliably
+     *  converted to seconds because the interval in seconds will vary across a
+     *  seasonal time transition.
+     *  @return repetition interval in seconds, or -1 if the interval is defined in days.
+     */
     int intervalSeconds() const;
+
+    /** Return the time of a repetition given its count.
+     *  This takes account of whether the repetition is specified by days or minutes,
+     *  which makes a difference over seasonal time transitions.
+     *  @param start  the date/time of the start of the repetition.
+     *  @param count  the repetition count to find.
+     */
+    KADateTime repeatTime(const KADateTime& start, int count) const;
+
+    /** Return the repetition start time, given the time and count of one repetition.
+     *  @param countTime  the date/time of the sub-repetition.
+     *  @param count      the repetition count which occurs at @p countTime.
+     */
+    KADateTime startTime(const KADateTime& countTime, int count) const;
 
     /** Find the repetition count for the next repetition after a specified time.
      *  @param from         repetition start time, which should not be a date-only value

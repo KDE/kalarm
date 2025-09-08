@@ -1,7 +1,7 @@
 /*
  *  eventmodel.cpp  -  model containing flat list of events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -334,6 +334,7 @@ bool AlarmListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePa
         {
             // Determine whether this event is included in the date filter,
             // and cache its status.
+            KADateTime endDateTime = mFilterDates.constLast().second;
             KADateTime occurs;
             for (int i = 0, count = mFilterDates.size();  i < count && !occurs.isValid();  ++i)
             {
@@ -342,7 +343,7 @@ bool AlarmListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePa
                 while (!occurs.isValid())
                 {
                     DateTime nextDt;
-                    ev.nextOccurrence(from, nextDt, KAEvent::Repeats::Return);
+                    ev.nextDateTime(from, nextDt, (KAEvent::NextRepeat | KAEvent::NextWorkHoliday), endDateTime);
                     if (!nextDt.isValid())
                     {
                         resourceHash[ev.id()] = KADateTime();
@@ -368,12 +369,8 @@ bool AlarmListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePa
                         }
                     }
                     // It lies in this date range.
-                    if (!ev.excludedByWorkTimeOrHoliday(from))
-                    {
-                        occurs = from;
-                        break;    // event occurs in this date range
-                    }
-                    // This occurrence is excluded, so check for another.
+                    occurs = from;
+                    break;    // event occurs in this date range
                 }
             }
             resourceHash[ev.id()] = occurs;

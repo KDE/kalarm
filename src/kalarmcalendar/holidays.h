@@ -3,7 +3,7 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2023-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -25,9 +25,12 @@ namespace KAlarmCal
 {
 
 /**
- * Class providing future holiday data for a holiday region.
+ * Class providing FUTURE holiday data for a holiday region.
  * Data is cached to avoid unnecessary repeated evaluations of holiday data by
  * KHolidays functions.
+ *
+ * NOTE: Dates before the current date are NOT handled, since KAlarm does not
+ *       use such dates.
  */
 class KALARMCAL_EXPORT Holidays
 {
@@ -90,7 +93,7 @@ public:
     void setCacheYears(int years);
 
 private:
-    void initialise(const QString& regionCode);
+    void initialise();
     void extendCache(const QDate& end) const;
 
     QSharedPointer<const KHolidays::HolidayRegion> mRegion;

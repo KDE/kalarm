@@ -1,7 +1,7 @@
 /*
  *  resourcescalendar.cpp  -  KAlarm calendar resources access
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -716,21 +716,23 @@ void ResourcesCalendar::checkKernelWakeSuspend(ResourceId key, const KAEvent& ev
 {
     if (KernelWakeAlarm::isAvailable()  &&  event.enabled()  &&  event.wakeFromSuspend())
     {
-        const KADateTime dt = event.nextDateTime(KAEvent::NextWorkHoliday).kDateTime();
-        if (!dt.isDateOnly())   // can't determine a wakeup time for date-only events
+        DateTime dt;
+        event.nextDateTime(KADateTime::currentUtcDateTime(), dt, KAEvent::NextWorkHoliday);
+        if (dt.isValid())
         {
-            KernelWakeAlarm& kernelAlarm = mWakeSuspendTimers[key][event.id()];
-            if (theApp()->alarmsEnabled())
-                kernelAlarm.arm(dt.addSecs(static_cast<int>(Preferences::wakeFromSuspendAdvance()) * -60));
-            else
-                kernelAlarm.disarm();
+            if (!dt.isDateOnly())   // can't determine a wakeup time for date-only events
+            {
+                KernelWakeAlarm& kernelAlarm = mWakeSuspendTimers[key][event.id()];
+                if (theApp()->alarmsEnabled())
+                    kernelAlarm.arm(dt.kDateTime().addSecs(static_cast<int>(Preferences::wakeFromSuspendAdvance()) * -60));
+                else
+                    kernelAlarm.disarm();
+            }
+            return;
         }
     }
-    else
-    {
-        if (mWakeSuspendTimers.contains(key))
-            mWakeSuspendTimers[key].remove(event.id());   // this cancels the timer
-    }
+    if (mWakeSuspendTimers.contains(key))
+        mWakeSuspendTimers[key].remove(event.id());   // this cancels the timer
 }
 
 /******************************************************************************

@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -1061,7 +1061,7 @@ bool EditAlarmDlg::validate()
             else
                 pre = pre.addSecs(-1);
             DateTime next;
-            event.nextOccurrence(pre, next, KAEvent::Repeats::Ignore);
+            event.nextDateTime(pre, next, KAEvent::NextRecur);
             if (next != dt)
             {
                 QString prompt = dateOnly ? i18nc("@info The parameter is a date value",
@@ -1089,10 +1089,17 @@ bool EditAlarmDlg::validate()
             {
                 // A timed recurrence has an entered start date which
                 // has already expired, so we must adjust it.
-                if (event.nextOccurrence(now, mAlarmDateTime, KAEvent::Repeats::RecurBefore) == KAEvent::OccurType::None)
+                const KAEvent::TriggerType type = event.nextDateTime(now, mAlarmDateTime, KAEvent::NextRepeat);
+                if (type == KAEvent::TriggerType::None)
                 {
                     KAMessageBox::error(this, i18nc("@info", "Recurrence has already expired"));
                     return false;
+                }
+                const int repeatNum = KAEvent::repeatNum(type);
+                if (repeatNum)
+                {
+                    // The next occurrence is a sub-repetition. Find the last recurrence.
+                    mAlarmDateTime = event.repetition().startTime(mAlarmDateTime.kDateTime(), repeatNum);
                 }
                 if (event.workTimeOnly()  &&  !event.nextTrigger(KAEvent::Trigger::Display).isValid())
                 {
