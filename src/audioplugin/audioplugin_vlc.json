@@ -26,7 +26,6 @@
         "Description[ta]": "VLC ஒலி செருகுநிரல்",
         "Description[tr]": "VLC ses eklentisi",
         "Description[uk]": "Звуковий додаток VLC",
-        "Description[x-test]": "xxVLC audio pluginxx",
         "Description[zh_CN]": "VLC 音频插件",
         "Description[zh_TW]": "VLC 音訊外掛程式",
         "Name": "VLC audio",
@@ -55,7 +54,6 @@
         "Name[ta]": "VLC ஒலி",
         "Name[tr]": "VLC Sesi",
         "Name[uk]": "звук VLC",
-        "Name[x-test]": "xxVLC audioxx",
         "Name[zh_CN]": "VLC 音频",
         "Name[zh_TW]": "VLC 音訊",
         "Version": "1.0"

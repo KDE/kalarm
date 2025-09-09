@@ -26,7 +26,6 @@
         "Description[ta]": "MPV ஒலி செருகுநிரல்",
         "Description[tr]": "MPV ses eklentisi",
         "Description[uk]": "Звуковий додаток MPV",
-        "Description[x-test]": "xxMPV audio pluginxx",
         "Description[zh_CN]": "MPV 音频插件",
         "Description[zh_TW]": "MPV 音訊外掛程式",
         "Name": "MPV audio",
@@ -55,7 +54,6 @@
         "Name[ta]": "MPV ஒலி",
         "Name[tr]": "MPV Sesi",
         "Name[uk]": "звук MPV",
-        "Name[x-test]": "xxMPV audioxx",
         "Name[zh_CN]": "MPV 音频",
         "Name[zh_TW]": "MPV 音訊",
         "Version": "1.0"
