@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-31 00:43+0000\n"
+"POT-Creation-Date: 2025-09-09 00:57+0000\n"
 "PO-Revision-Date: 2024-03-27 23:14+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -2378,19 +2378,19 @@ msgstr ""
 "alarmen. Dei vert derfor endra til datoen/klokkeslettet for neste gjentaking "
 "(%1)."
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1095
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Gjentakingstidspunktet er alt forbi"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1106
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarmen vert aldri utløyst i arbeidstida"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2400,7 +2400,7 @@ msgstr ""
 "Påminningsperioden må vera mindre enn gjentakings­intervallet, med mindre det "
 "er kryssa av for <interface>%1</interface>."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1150
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2410,7 +2410,7 @@ msgstr ""
 "Lengda på ei gjentaking inni ei gjentaking må vera mindre enn gjentakings­"
 "intervallet minus eventuell påminningstid."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1157
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2420,31 +2420,31 @@ msgstr ""
 "Perioden for gjentaking inni gjentaking må vera i dagar eller veker for ein "
 "datoalarm."
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1188
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Du må velja ein kalender å lagra alarmen i."
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1269
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Færre val <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1270
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Vis færre val"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1275
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Fleire val >>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1276
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3542,7 +3542,7 @@ msgstr ""
 "avkryssa, velja ein kalender for arkiverte alarmar og kryssa av for "
 "<interface>Bruk som standard for arkiverte alarmar</interface>."
 
-#: kalarmapp.cpp:2468
+#: kalarmapp.cpp:2456
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3552,19 +3552,19 @@ msgstr ""
 "Klarte ikkje køyra kommando\n"
 "(ingen terminal for kommandoalarmar er valt)"
 
-#: kalarmapp.cpp:2621
+#: kalarmapp.cpp:2609
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Feil ved oppretting av mellombels skriptfil"
 
-#: kalarmapp.cpp:2717
+#: kalarmapp.cpp:2705
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Handling før alarm:"
 
-#: kalarmapp.cpp:2723
+#: kalarmapp.cpp:2711
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3623,19 +3623,19 @@ msgstr "Forfallsdato:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Innlogging"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "Ved innlogging"
 
-#: kalarmcalendar/kaevent.cpp:3170 kalarmcalendar/kaevent.cpp:3257
+#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3645,7 +3645,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 minutt"
 msgstr[1] "%1 minutt"
 
-#: kalarmcalendar/kaevent.cpp:3172 kalarmcalendar/kaevent.cpp:3259
+#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3654,13 +3654,13 @@ msgid_plural "%1 Hours"
 msgstr[0] "1 time"
 msgstr[1] "%1 timar"
 
-#: kalarmcalendar/kaevent.cpp:3174 kalarmcalendar/kaevent.cpp:3260
+#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1h.%2m"
 
-#: kalarmcalendar/kaevent.cpp:3177 kalarmcalendar/kaevent.cpp:3264
+#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3669,7 +3669,7 @@ msgid_plural "%1 Days"
 msgstr[0] "1 dag"
 msgstr[1] "%1 dagar"
 
-#: kalarmcalendar/kaevent.cpp:3179 kalarmcalendar/kaevent.cpp:3265
+#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3677,7 +3677,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 veke"
 msgstr[1] "%1 veker"
 
-#: kalarmcalendar/kaevent.cpp:3181
+#: kalarmcalendar/kaevent.cpp:3247
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3685,7 +3685,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 månad"
 msgstr[1] "%1 månadar"
 
-#: kalarmcalendar/kaevent.cpp:3183
+#: kalarmcalendar/kaevent.cpp:3249
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3693,13 +3693,13 @@ msgid_plural "%1 Years"
 msgstr[0] "1 år"
 msgstr[1] "%1 år"
 
-#: kalarmcalendar/kaevent.cpp:3189
+#: kalarmcalendar/kaevent.cpp:3255
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Inga"
 
-#: kalarmcalendar/kaevent.cpp:3267
+#: kalarmcalendar/kaevent.cpp:3335
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"

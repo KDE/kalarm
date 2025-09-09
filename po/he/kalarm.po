@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-31 00:43+0000\n"
+"POT-Creation-Date: 2025-09-09 00:57+0000\n"
 "PO-Revision-Date: 2025-09-05 13:40+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -2246,19 +2246,19 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1095
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "תוקף החזרה כבר פג"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1106
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr ""
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2266,7 +2266,7 @@ msgid ""
 "%1</interface> is checked."
 msgstr ""
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1150
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2276,7 +2276,7 @@ msgstr ""
 "משך החזרתיות בטווח ההישנות חייב להיות קטן ממשך ההישנות פחות טווח תזכורות "
 "כלשהן"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1157
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2284,31 +2284,31 @@ msgid ""
 "or weeks for a date-only alarm"
 msgstr ""
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1188
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "נא לבחור לוח שנה בו לשמור את התזכורת"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1269
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "פחות אפשרויות <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1270
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "להציג פחות אפשרויות"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1275
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "אפשרויות נוספות >>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1276
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3359,7 +3359,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2468
+#: kalarmapp.cpp:2456
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3369,19 +3369,19 @@ msgstr ""
 "הרצת הפקודה נכשלה\n"
 "(לא נבחר מסוף לתזכורות פקודות)"
 
-#: kalarmapp.cpp:2621
+#: kalarmapp.cpp:2609
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "שגיאה ביצירת קובץ סקריפט זמני"
 
-#: kalarmapp.cpp:2717
+#: kalarmapp.cpp:2705
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "פעולת טרום תזכורת:"
 
-#: kalarmapp.cpp:2723
+#: kalarmapp.cpp:2711
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3440,19 +3440,19 @@ msgstr "יעד:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "כניסה"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "בכניסה למערכת"
 
-#: kalarmcalendar/kaevent.cpp:3170 kalarmcalendar/kaevent.cpp:3257
+#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3464,7 +3464,7 @@ msgstr[1] "שתי דקות"
 msgstr[2] "%1 דקות"
 msgstr[3] "%1 דקות"
 
-#: kalarmcalendar/kaevent.cpp:3172 kalarmcalendar/kaevent.cpp:3259
+#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3475,13 +3475,13 @@ msgstr[1] "שעתיים"
 msgstr[2] "%1 שעות"
 msgstr[3] "%1 שעות"
 
-#: kalarmcalendar/kaevent.cpp:3174 kalarmcalendar/kaevent.cpp:3260
+#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1 שע׳ %2 דק׳"
 
-#: kalarmcalendar/kaevent.cpp:3177 kalarmcalendar/kaevent.cpp:3264
+#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3492,7 +3492,7 @@ msgstr[1] "יומיים"
 msgstr[2] "%1 ימים"
 msgstr[3] "%1 ימים"
 
-#: kalarmcalendar/kaevent.cpp:3179 kalarmcalendar/kaevent.cpp:3265
+#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3502,7 +3502,7 @@ msgstr[1] "שבועיים"
 msgstr[2] "%1 שבועות"
 msgstr[3] "%1 שבועות"
 
-#: kalarmcalendar/kaevent.cpp:3181
+#: kalarmcalendar/kaevent.cpp:3247
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3512,7 +3512,7 @@ msgstr[1] "חודשיים"
 msgstr[2] "%1 חודשים"
 msgstr[3] "%1 חודשים"
 
-#: kalarmcalendar/kaevent.cpp:3183
+#: kalarmcalendar/kaevent.cpp:3249
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3522,13 +3522,13 @@ msgstr[1] "שנתיים"
 msgstr[2] "%1 שנה"
 msgstr[3] "%1 שנים"
 
-#: kalarmcalendar/kaevent.cpp:3189
+#: kalarmcalendar/kaevent.cpp:3255
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "בלי"
 
-#: kalarmcalendar/kaevent.cpp:3267
+#: kalarmcalendar/kaevent.cpp:3335
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"

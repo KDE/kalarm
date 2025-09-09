@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-31 00:43+0000\n"
+"POT-Creation-Date: 2025-09-09 00:57+0000\n"
 "PO-Revision-Date: 2025-01-03 10:11+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -2456,19 +2456,19 @@ msgstr ""
 "alarmes, per tant, s'ajustarà a la data i hora de la pròxima recurrència "
 "(%1)."
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1095
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "La recurrència ja ha expirat"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1106
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "L'alarma mai esdevindrà durant l'horari de treball"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2478,7 +2478,7 @@ msgstr ""
 "El període del recordatori ha de ser més xicotet que l'interval de "
 "recurrència, excepte si <interface>%1</interface> està marcada."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1150
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2488,7 +2488,7 @@ msgstr ""
 "La duració d'una repetició en l'ocurrència ha de ser inferior a l'interval "
 "de recurrència menys el període de recordatori"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1157
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2498,31 +2498,31 @@ msgstr ""
 "Per a una repetició amb recurrència, el seu període ha de ser en unitats de "
 "dies o setmanes per a una alarma per data"
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1188
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Heu d'escollir un calendari en el qual guardar l'alarma"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1269
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Menys opcions <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1270
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Mostra menys opcions"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1275
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Més opcions >>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1276
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3630,7 +3630,7 @@ msgstr ""
 "<interface>Utilitzeu com a predeterminat per a les alarmes arxivades</"
 "interface>."
 
-#: kalarmapp.cpp:2468
+#: kalarmapp.cpp:2456
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3640,19 +3640,19 @@ msgstr ""
 "No s'ha pogut executar l'ordre\n"
 "(no s'ha seleccionat cap terminal per a les alarmes d'ordre)"
 
-#: kalarmapp.cpp:2621
+#: kalarmapp.cpp:2609
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "S'ha produït un error en crear un fitxer de script temporal"
 
-#: kalarmapp.cpp:2717
+#: kalarmapp.cpp:2705
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Acció de prealarma:"
 
-#: kalarmapp.cpp:2723
+#: kalarmapp.cpp:2711
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3711,19 +3711,19 @@ msgstr "Venciment:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Inici de sessió"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "En iniciar la sessió"
 
-#: kalarmcalendar/kaevent.cpp:3170 kalarmcalendar/kaevent.cpp:3257
+#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3733,7 +3733,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 minut"
 msgstr[1] "%1 minuts"
 
-#: kalarmcalendar/kaevent.cpp:3172 kalarmcalendar/kaevent.cpp:3259
+#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3742,13 +3742,13 @@ msgid_plural "%1 Hours"
 msgstr[0] "1 hora"
 msgstr[1] "%1 hores"
 
-#: kalarmcalendar/kaevent.cpp:3174 kalarmcalendar/kaevent.cpp:3260
+#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1 h %2 m"
 
-#: kalarmcalendar/kaevent.cpp:3177 kalarmcalendar/kaevent.cpp:3264
+#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3757,7 +3757,7 @@ msgid_plural "%1 Days"
 msgstr[0] "1 dia"
 msgstr[1] "%1 dies"
 
-#: kalarmcalendar/kaevent.cpp:3179 kalarmcalendar/kaevent.cpp:3265
+#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3765,7 +3765,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 setmana"
 msgstr[1] "%1 setmanes"
 
-#: kalarmcalendar/kaevent.cpp:3181
+#: kalarmcalendar/kaevent.cpp:3247
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3773,7 +3773,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 mes"
 msgstr[1] "%1 mesos"
 
-#: kalarmcalendar/kaevent.cpp:3183
+#: kalarmcalendar/kaevent.cpp:3249
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3781,13 +3781,13 @@ msgid_plural "%1 Years"
 msgstr[0] "1 any"
 msgstr[1] "%1 anys"
 
-#: kalarmcalendar/kaevent.cpp:3189
+#: kalarmcalendar/kaevent.cpp:3255
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Sense"
 
-#: kalarmcalendar/kaevent.cpp:3267
+#: kalarmcalendar/kaevent.cpp:3335
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"

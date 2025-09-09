@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-31 00:43+0000\n"
+"POT-Creation-Date: 2025-09-09 00:57+0000\n"
 "PO-Revision-Date: 2015-01-08 09:03+0100\n"
 "Last-Translator: Samir Ribic <samir.ribic@etf.unsa.ba>\n"
 "Language-Team: bosanski <bs@li.org>\n"
@@ -2455,19 +2455,19 @@ msgstr ""
 "Početni datum/vrijeme se ne slažu sa  uzorkom ponavljanja alarma, tako da će "
 "biti prilagođeni na datum/vrijeme sljedećeg ponavljanja (%1)."
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1095
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Vrijeme alarma je već prošlo"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1106
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarm se nikad neće pojaviti tokom radnih sati"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2477,7 +2477,7 @@ msgstr ""
 "Period podsjetnika mora biti manji od intervala ponavljanja, osim ako "
 "<interface>%1</interface> je označeno."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1150
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2487,7 +2487,7 @@ msgstr ""
 "Trajanje ponavljanja u okviru ponavljanja mora biti manje od intervala "
 "ponavljanja minus period podesećanja"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1157
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2497,13 +2497,13 @@ msgstr ""
 "Za ponavljanje unutar ponavljanja, period mora biti u jedinicama dana ili "
 "sedmica za alarme samo sa datumom"
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1188
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Morate izabrati kalendar u koji želite sačuvati alarm"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1269
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2511,7 +2511,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Manje opcija<<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1270
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2519,13 +2519,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Manje opcija<<"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1275
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Više opcija>>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1276
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
@@ -3660,7 +3660,7 @@ msgstr ""
 "Prikaži kalendare</interface> da provjerite ili promijenite statuse "
 "kalendara."
 
-#: kalarmapp.cpp:2468
+#: kalarmapp.cpp:2456
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3670,19 +3670,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Neuspjelo izvršavanje komande(pristup ljusci nije ovlašten)"
 
-#: kalarmapp.cpp:2621
+#: kalarmapp.cpp:2609
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Greška pri kreiranju privremene datoteke za skriptu."
 
-#: kalarmapp.cpp:2717
+#: kalarmapp.cpp:2705
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Akcija prije alarma:"
 
-#: kalarmapp.cpp:2723
+#: kalarmapp.cpp:2711
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3743,7 +3743,7 @@ msgstr ""
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "At Login"
@@ -3751,7 +3751,7 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Prilikom prijave"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "At login"
@@ -3759,7 +3759,7 @@ msgctxt "@info"
 msgid "At login"
 msgstr "Prilikom prijave"
 
-#: kalarmcalendar/kaevent.cpp:3170 kalarmcalendar/kaevent.cpp:3257
+#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3772,7 +3772,7 @@ msgstr[0] "Minute"
 msgstr[1] "Minute"
 msgstr[2] "Minute"
 
-#: kalarmcalendar/kaevent.cpp:3172 kalarmcalendar/kaevent.cpp:3259
+#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3782,13 +3782,13 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: kalarmcalendar/kaevent.cpp:3174 kalarmcalendar/kaevent.cpp:3260
+#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr ""
 
-#: kalarmcalendar/kaevent.cpp:3177 kalarmcalendar/kaevent.cpp:3264
+#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3798,7 +3798,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: kalarmcalendar/kaevent.cpp:3179 kalarmcalendar/kaevent.cpp:3265
+#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Weekly"
@@ -3809,7 +3809,7 @@ msgstr[0] "Sedmično"
 msgstr[1] "Sedmično"
 msgstr[2] "Sedmično"
 
-#: kalarmcalendar/kaevent.cpp:3181
+#: kalarmcalendar/kaevent.cpp:3247
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Monthly"
@@ -3820,7 +3820,7 @@ msgstr[0] "Mjesečno"
 msgstr[1] "Mjesečno"
 msgstr[2] "Mjesečno"
 
-#: kalarmcalendar/kaevent.cpp:3183
+#: kalarmcalendar/kaevent.cpp:3249
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Yearly"
@@ -3831,7 +3831,7 @@ msgstr[0] "Godišnje"
 msgstr[1] "Godišnje"
 msgstr[2] "Godišnje"
 
-#: kalarmcalendar/kaevent.cpp:3189
+#: kalarmcalendar/kaevent.cpp:3255
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -3839,7 +3839,7 @@ msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Nijedan"
 
-#: kalarmcalendar/kaevent.cpp:3267
+#: kalarmcalendar/kaevent.cpp:3335
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"

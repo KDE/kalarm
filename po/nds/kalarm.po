@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-31 00:43+0000\n"
+"POT-Creation-Date: 2025-09-09 00:57+0000\n"
 "PO-Revision-Date: 2014-09-18 17:01+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -2478,19 +2478,19 @@ msgstr ""
 "Anfangdatum un -tiet passt nich to den Alarm sien Wedderhaalmuster, dat "
 "warrt op't Datum un de Tiet vun de nakamen Wedderhalen (%1) sett."
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1095
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Perioodsche Wedderhalen is al aflopen"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1106
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "De Alarm warrt nienich över de Arbeittiet-Stünnen utlööst"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2500,7 +2500,7 @@ msgstr ""
 "De Vöraftiet vun den Vöranstoot mutt körter wesen as de Wedderhalenperiood, "
 "tominnst wenn <interface>%1</interface> nich anmaakt is."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1150
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2510,7 +2510,7 @@ msgstr ""
 "De Tiet för de Wedderhalen mutt körter wesen as de Wedderhaalperiood minus "
 "de Vöraftiet vun en vörhannen Vöranstoot."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1157
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2520,13 +2520,13 @@ msgstr ""
 "Du muttst de Tiet för Wedderhalen binnen de Wedderhaalperiood in Daag oder "
 "Weken angeven, wenn för den Alarm bloots en Datum angeven is."
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1188
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Du muttst en Kalenner utsöken, binnen den Du den Alarm sekern wullt"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1269
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2534,7 +2534,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Weniger Optschonen <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1270
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2542,13 +2542,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Weniger Optschonen <<"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1275
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Mehr Optschonen >>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1276
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
@@ -3701,7 +3701,7 @@ msgstr ""
 "wiesen</interface>, wenn Du den Status vun Dien Kalenners bekieken oder "
 "ännern wullt."
 
-#: kalarmapp.cpp:2468
+#: kalarmapp.cpp:2456
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3711,19 +3711,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Befehl lett sik nich utföhren (keen Togriep op Konsool)"
 
-#: kalarmapp.cpp:2621
+#: kalarmapp.cpp:2609
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Fehler bi't Opstellen vun de temporeer Skriptdatei."
 
-#: kalarmapp.cpp:2717
+#: kalarmapp.cpp:2705
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Akschoon vör den Alarm:"
 
-#: kalarmapp.cpp:2723
+#: kalarmapp.cpp:2711
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3794,7 +3794,7 @@ msgstr "Anstahn:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Brief form of 'At Login'"
 #| msgid "Login"
@@ -3802,7 +3802,7 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Anmellen"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "At login"
@@ -3810,7 +3810,7 @@ msgctxt "@info"
 msgid "At login"
 msgstr "Bi't Anmellen"
 
-#: kalarmcalendar/kaevent.cpp:3170 kalarmcalendar/kaevent.cpp:3257
+#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3823,7 +3823,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] " 1 Minuut"
 msgstr[1] "%1 Minuten"
 
-#: kalarmcalendar/kaevent.cpp:3172 kalarmcalendar/kaevent.cpp:3259
+#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
@@ -3835,7 +3835,7 @@ msgid_plural "%1 Hours"
 msgstr[0] " 1 Stünn"
 msgstr[1] "%1 Stünnen"
 
-#: kalarmcalendar/kaevent.cpp:3174 kalarmcalendar/kaevent.cpp:3260
+#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Hours and minutes"
 #| msgid "%1h %2m"
@@ -3843,7 +3843,7 @@ msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1h %2min"
 
-#: kalarmcalendar/kaevent.cpp:3177 kalarmcalendar/kaevent.cpp:3264
+#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
@@ -3855,7 +3855,7 @@ msgid_plural "%1 Days"
 msgstr[0] " 1 Dag"
 msgstr[1] "%1 Daag"
 
-#: kalarmcalendar/kaevent.cpp:3179 kalarmcalendar/kaevent.cpp:3265
+#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Week"
@@ -3866,7 +3866,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 Week"
 msgstr[1] "%1 Weken"
 
-#: kalarmcalendar/kaevent.cpp:3181
+#: kalarmcalendar/kaevent.cpp:3247
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Month"
@@ -3877,7 +3877,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 Maand"
 msgstr[1] "%1 Maanden"
 
-#: kalarmcalendar/kaevent.cpp:3183
+#: kalarmcalendar/kaevent.cpp:3249
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Year"
@@ -3888,7 +3888,7 @@ msgid_plural "%1 Years"
 msgstr[0] "1 Johr"
 msgstr[1] "%1 Johren"
 
-#: kalarmcalendar/kaevent.cpp:3189
+#: kalarmcalendar/kaevent.cpp:3255
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -3896,7 +3896,7 @@ msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Keen"
 
-#: kalarmcalendar/kaevent.cpp:3267
+#: kalarmcalendar/kaevent.cpp:3335
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"

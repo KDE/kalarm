@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-31 00:43+0000\n"
+"POT-Creation-Date: 2025-09-09 00:57+0000\n"
 "PO-Revision-Date: 2017-09-28 18:00+0200\n"
 "Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
@@ -2470,19 +2470,19 @@ msgstr ""
 "Početni datum/vreme nije poklopljen obrascem ponavljanja alarma, pa će biti "
 "pomeren na datum/vreme sledećeg ponavljanja (%1)."
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1095
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Ponavljanje je već prošlo."
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1106
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarm se nikad neće oglasiti u vreme radnih časova."
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2492,7 +2492,7 @@ msgstr ""
 "Period podsećanja mora biti manji od perioda ponavljanja, osim ako je "
 "popunjeno <interface>%1</interface>."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1150
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2502,7 +2502,7 @@ msgstr ""
 "Trajanje ponavljanja unutar ponavljanja mora biti manje od perioda "
 "spoljašnjeg ponavljanja minus eventualni period podsećanja."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1157
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2512,13 +2512,13 @@ msgstr ""
 "Period ponavljanja unutar ponavljanja mora biti u jedinicama dana ili "
 "sedmica za alarme samo sa datumom."
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1188
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Morate izabrati kalendar za upisivanje alarma."
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1269
 #, fuzzy, kde-format
 #| msgctxt "@action:Button"
 #| msgid "Less Options <<"
@@ -2526,7 +2526,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Manje opcija <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1270
 #, fuzzy, kde-format
 #| msgctxt "@action:Button"
 #| msgid "Less Options <<"
@@ -2534,13 +2534,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Manje opcija <<"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1275
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Više opcija >>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1276
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
@@ -3678,7 +3678,7 @@ msgstr ""
 "upisivi kalendar alarma.</p><p>Idite pod <interface>Prikaz->Prikaži "
 "kalendare</interface> da proverite ili izmenite stanja kalendara.</p>"
 
-#: kalarmapp.cpp:2468
+#: kalarmapp.cpp:2456
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3688,19 +3688,19 @@ msgstr ""
 "Ne mogu da izvršim naredbu\n"
 "(nije izabran terminal za naredbene alarme)."
 
-#: kalarmapp.cpp:2621
+#: kalarmapp.cpp:2609
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Greška pri stvaranju privremenog fajla skripte."
 
-#: kalarmapp.cpp:2717
+#: kalarmapp.cpp:2705
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Radnja pre alarma:"
 
-#: kalarmapp.cpp:2723
+#: kalarmapp.cpp:2711
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3765,7 +3765,7 @@ msgstr ""
 msgid "KAlarm"
 msgstr "Alarm"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "At Login"
@@ -3773,7 +3773,7 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "po prijavljivanju"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "At login"
@@ -3781,7 +3781,7 @@ msgctxt "@info"
 msgid "At login"
 msgstr "na prijavljivanju"
 
-#: kalarmcalendar/kaevent.cpp:3170 kalarmcalendar/kaevent.cpp:3257
+#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3795,7 +3795,7 @@ msgstr[1] "minuti"
 msgstr[2] "minuti"
 msgstr[3] "minuti"
 
-#: kalarmcalendar/kaevent.cpp:3172 kalarmcalendar/kaevent.cpp:3259
+#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3806,13 +3806,13 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: kalarmcalendar/kaevent.cpp:3174 kalarmcalendar/kaevent.cpp:3260
+#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr ""
 
-#: kalarmcalendar/kaevent.cpp:3177 kalarmcalendar/kaevent.cpp:3264
+#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3823,7 +3823,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: kalarmcalendar/kaevent.cpp:3179 kalarmcalendar/kaevent.cpp:3265
+#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Weekly"
@@ -3835,7 +3835,7 @@ msgstr[1] "sedmično"
 msgstr[2] "sedmično"
 msgstr[3] "sedmično"
 
-#: kalarmcalendar/kaevent.cpp:3181
+#: kalarmcalendar/kaevent.cpp:3247
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Monthly"
@@ -3847,7 +3847,7 @@ msgstr[1] "mesečno"
 msgstr[2] "mesečno"
 msgstr[3] "mesečno"
 
-#: kalarmcalendar/kaevent.cpp:3183
+#: kalarmcalendar/kaevent.cpp:3249
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Yearly"
@@ -3859,7 +3859,7 @@ msgstr[1] "godišnje"
 msgstr[2] "godišnje"
 msgstr[3] "godišnje"
 
-#: kalarmcalendar/kaevent.cpp:3189
+#: kalarmcalendar/kaevent.cpp:3255
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -3867,7 +3867,7 @@ msgctxt "@info No recurrence"
 msgid "None"
 msgstr "ništa"
 
-#: kalarmcalendar/kaevent.cpp:3267
+#: kalarmcalendar/kaevent.cpp:3335
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"

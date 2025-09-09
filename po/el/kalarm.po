@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-31 00:43+0000\n"
+"POT-Creation-Date: 2025-09-09 00:57+0000\n"
 "PO-Revision-Date: 2024-09-19 15:13+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -2509,19 +2509,19 @@ msgstr ""
 "συναγερμού. Για αυτό θα ρυθμιστεί στην ημερομηνία της επόμενης επανάληψης "
 "(%1)."
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1095
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Η επανεμφάνιση έχει ήδη λήξει"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1106
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Ο συναγερμός δε θα εμφανίζεται κατά τις ώρες εργασίας"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2531,7 +2531,7 @@ msgstr ""
 "Η περίοδος της υπενθύμισης πρέπει να είναι μικρότερη από το διάστημα της "
 "επανεμφάνισης, εκτός και αν το <interface>%1</interface> είναι επιλεγμένο."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1150
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2541,7 +2541,7 @@ msgstr ""
 "Η διάρκεια της απλής επανάληψης συναγερμού πρέπει να είναι μικρότερη από το "
 "διάστημα επανεμφάνισης μείον οποιαδήποτε περίοδο υπενθύμισης"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1157
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2551,32 +2551,32 @@ msgstr ""
 "Η περίοδος της απλής επανάληψης συναγερμού πρέπει να είναι σε μονάδες ημερών "
 "ή εβδομάδων για έναν μόνο συναγερμό ημέρας"
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1188
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr ""
 "Πρέπει να επιλέξτε ένα ημερολόγιο στο οποίο θα αποθηκευτεί ο συναγερμός"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1269
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Λιγότερες επιλογές <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1270
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Εμφάνιση λιγότερων επιλογών"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1275
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Περισσότερες επιλογές >>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1276
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3694,7 +3694,7 @@ msgstr ""
 "ημερολόγιο αρχειοθετημένων συναγερμών και επιλέξτε <interface>Χρήση ως "
 "προκαθορισμένου για αρχειοθετημένους συναγερμούς</interface>."
 
-#: kalarmapp.cpp:2468
+#: kalarmapp.cpp:2456
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3704,19 +3704,19 @@ msgstr ""
 "Αποτυχία εκτέλεσης εντολής\n"
 "(δεν επιλέχθηκε τερματικό για συναγερμούς εντολών)"
 
-#: kalarmapp.cpp:2621
+#: kalarmapp.cpp:2609
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Σφάλμα δημιουργίας προσωρινού αρχείου σεναρίου"
 
-#: kalarmapp.cpp:2717
+#: kalarmapp.cpp:2705
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Ενέργεια πριν το συναγερμό:"
 
-#: kalarmapp.cpp:2723
+#: kalarmapp.cpp:2711
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3775,19 +3775,19 @@ msgstr "Λήξη:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Σύνδεση"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "Στη σύνδεση"
 
-#: kalarmcalendar/kaevent.cpp:3170 kalarmcalendar/kaevent.cpp:3257
+#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3797,7 +3797,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 λεπτό"
 msgstr[1] "%1 λεπτά"
 
-#: kalarmcalendar/kaevent.cpp:3172 kalarmcalendar/kaevent.cpp:3259
+#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3806,13 +3806,13 @@ msgid_plural "%1 Hours"
 msgstr[0] "1 ώρα"
 msgstr[1] "%1 ώρες"
 
-#: kalarmcalendar/kaevent.cpp:3174 kalarmcalendar/kaevent.cpp:3260
+#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1ω %2λ"
 
-#: kalarmcalendar/kaevent.cpp:3177 kalarmcalendar/kaevent.cpp:3264
+#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3821,7 +3821,7 @@ msgid_plural "%1 Days"
 msgstr[0] "1 ημέρα"
 msgstr[1] "%1 ημέρες"
 
-#: kalarmcalendar/kaevent.cpp:3179 kalarmcalendar/kaevent.cpp:3265
+#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3829,7 +3829,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 εβδομάδα"
 msgstr[1] "%1 εβδομάδες"
 
-#: kalarmcalendar/kaevent.cpp:3181
+#: kalarmcalendar/kaevent.cpp:3247
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3837,7 +3837,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 μήνας"
 msgstr[1] "%1 μήνες"
 
-#: kalarmcalendar/kaevent.cpp:3183
+#: kalarmcalendar/kaevent.cpp:3249
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3845,13 +3845,13 @@ msgid_plural "%1 Years"
 msgstr[0] "1 έτος"
 msgstr[1] "%1 έτη"
 
-#: kalarmcalendar/kaevent.cpp:3189
+#: kalarmcalendar/kaevent.cpp:3255
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Καμία"
 
-#: kalarmcalendar/kaevent.cpp:3267
+#: kalarmcalendar/kaevent.cpp:3335
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"

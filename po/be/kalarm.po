@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-31 00:43+0000\n"
+"POT-Creation-Date: 2025-09-09 00:57+0000\n"
 "PO-Revision-Date: 2007-10-28 14:03+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -2339,19 +2339,19 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1095
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Час напамінку ўжо прайшло"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1106
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr ""
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1135
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2361,7 +2361,7 @@ msgstr ""
 "Перыяд папярэдняга напамінку павінен быць менш перыяду паўтору, калі "
 "ўсталяваны '%1'."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1150
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -2370,7 +2370,7 @@ msgid ""
 msgstr ""
 "Перыяд простага паўтору напамінку павінен быць менш асноўнага перыяду паўтору"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1157
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -2380,31 +2380,31 @@ msgstr ""
 "Перыяд простага паўтору напамінку на дату павінен быць паказаны ў днях або "
 "тыднях"
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1188
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Вылучыце шаблон для новага напамінку."
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1269
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr ""
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1270
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr ""
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1275
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr ""
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1276
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3521,7 +3521,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2468
+#: kalarmapp.cpp:2456
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -3529,19 +3529,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Памылка запуску каманды (доступ да абалонкі забаронены):"
 
-#: kalarmapp.cpp:2621
+#: kalarmapp.cpp:2609
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Памылка стварэння часовага файла скрыпту"
 
-#: kalarmapp.cpp:2717
+#: kalarmapp.cpp:2705
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Папярэдняе дзеянне:"
 
-#: kalarmapp.cpp:2723
+#: kalarmapp.cpp:2711
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3603,19 +3603,19 @@ msgstr "Дата:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, fuzzy, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Пры рэгістрацыі"
 
-#: kalarmcalendar/kaevent.cpp:3161
+#: kalarmcalendar/kaevent.cpp:3227
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "Пры рэгістрацыі ў сістэме"
 
-#: kalarmcalendar/kaevent.cpp:3170 kalarmcalendar/kaevent.cpp:3257
+#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3627,7 +3627,7 @@ msgstr[0] "Штомесяц"
 msgstr[1] "Штомесяц"
 msgstr[2] "Штомесяц"
 
-#: kalarmcalendar/kaevent.cpp:3172 kalarmcalendar/kaevent.cpp:3259
+#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3637,13 +3637,13 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: kalarmcalendar/kaevent.cpp:3174 kalarmcalendar/kaevent.cpp:3260
+#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr ""
 
-#: kalarmcalendar/kaevent.cpp:3177 kalarmcalendar/kaevent.cpp:3264
+#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 #| msgid "Days"
@@ -3654,7 +3654,7 @@ msgstr[0] "Дзён"
 msgstr[1] "Дзён"
 msgstr[2] "Дзён"
 
-#: kalarmcalendar/kaevent.cpp:3179 kalarmcalendar/kaevent.cpp:3265
+#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
 #, fuzzy, kde-format
 #| msgid "Weeks"
 msgctxt "@info"
@@ -3664,7 +3664,7 @@ msgstr[0] "Тыднеў"
 msgstr[1] "Тыднеў"
 msgstr[2] "Тыднеў"
 
-#: kalarmcalendar/kaevent.cpp:3181
+#: kalarmcalendar/kaevent.cpp:3247
 #, fuzzy, kde-format
 #| msgid "Monthly"
 msgctxt "@info"
@@ -3674,7 +3674,7 @@ msgstr[0] "Штомесяц"
 msgstr[1] "Штомесяц"
 msgstr[2] "Штомесяц"
 
-#: kalarmcalendar/kaevent.cpp:3183
+#: kalarmcalendar/kaevent.cpp:3249
 #, fuzzy, kde-format
 #| msgid "Yearly"
 msgctxt "@info"
@@ -3684,14 +3684,14 @@ msgstr[0] "Штогод"
 msgstr[1] "Штогод"
 msgstr[2] "Штогод"
 
-#: kalarmcalendar/kaevent.cpp:3189
+#: kalarmcalendar/kaevent.cpp:3255
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Няма"
 
-#: kalarmcalendar/kaevent.cpp:3267
+#: kalarmcalendar/kaevent.cpp:3335
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No repetition"
