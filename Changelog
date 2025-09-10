@@ -5,6 +5,7 @@ KAlarm Change Log
 * Improvements and bug fixes to recurrence/work time/holidays calculations.
 
 === Version 3.11.3 (KDE Gear 25.08.2) --- 10 September 2025 ===
+* If an alarm is late-cancelled, don't remove the event if a sub-repetition is still due.
 * In edit dialog, don't output high accuracy warning if start time is before now.
 
 === Version 3.11.2 (KDE Gear 25.08) --- 14 July 2025 ===

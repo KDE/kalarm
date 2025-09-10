@@ -1899,6 +1899,8 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                     // Alarm is due, and it is to be cancelled if too late.
                     qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent: LATE_CANCEL";
                     bool cancel = false;
+                    bool tooLate = false;
+                    KAEvent::OccurType prevType = KAEvent::OccurType::None;
                     if (alarm.dateTime().isDateOnly())
                     {
                         // The alarm has no time, so cancel it if its date is too far past
@@ -1909,18 +1911,12 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                             // It's too late to display the scheduled occurrence.
                             // Find the last previous occurrence of the alarm.
                             DateTime next;
-                            const KAEvent::OccurType type = event.previousOccurrence(now, next, KAEvent::Repeats::Return);
-                            if (KAEvent::isRecur(type))
+                            prevType = event.previousOccurrence(now, next, KAEvent::Repeats::Return);
+                            if (KAEvent::isRecur(prevType))
                             {
                                 limit.setDate(next.date().addDays(maxlate + 1));
                                 if (now >= limit)
-                                {
-                                    if (KAEvent::isLastRecur(type))
-//TODO: Could there be repetitions outstanding???
-                                        cancel = true;   // last occurrence (and there are no repetitions)
-                                    else
-                                        reschedule = true;
-                                }
+                                    tooLate = true;
                             }
                             else
                                 reschedule = true;
@@ -1935,21 +1931,26 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                             // It's over the maximum interval late.
                             // Find the most recent occurrence of the alarm.
                             DateTime next;
-                            const KAEvent::OccurType type = event.previousOccurrence(now, next, KAEvent::Repeats::Return);
-                            if (KAEvent::isRecur(type))
+                            prevType = event.previousOccurrence(now, next, KAEvent::Repeats::Return);
+                            if (KAEvent::isRecur(prevType))
                             {
                                 if (next.effectiveKDateTime().secsTo(now) > maxlate)
-                                {
-                                    if (KAEvent::isLastRecur(type))
-//TODO: Could there be repetitions outstanding???
-                                        cancel = true;   // last occurrence (and there are no repetitions)
-                                    else
-                                        reschedule = true;
-                                }
+                                    tooLate = true;
                             }
                             else
                                 reschedule = true;
                         }
+                    }
+                    if (tooLate)
+                    {
+                        // If it's past the last recurrence, and there are no
+                        // sub-repetitions to come, cancel the alarm.
+                        DateTime next;
+                        if (KAEvent::isLastRecur(prevType)
+                        &&  event.nextDateTime(now, next, KAEvent::NextRepeat) == KAEvent::TriggerType::None)
+                            cancel = true;
+                        else
+                            reschedule = true;
                     }
 
                     if (cancel)
