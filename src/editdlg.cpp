@@ -1031,13 +1031,17 @@ bool EditAlarmDlg::validate()
             mTimeWidget->getDateTime();   // display the error message now
             return false;
         }
-        if (!mAlarmDateTime.isDateOnly()  &&  KADateTime::currentUtcDateTime().secsTo(mAlarmDateTime.kDateTime()) / 60 < 10)
+        if (!mAlarmDateTime.isDateOnly())
         {
-            if (KAMessageBox::warningContinueCancel(this, xi18nc("@info", "<para>KAlarm does not provide high accuracy alarms.</para><para> The alarm will trigger at the minute boundary before the specified time from now.</para>"), QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), QStringLiteral("HighAccuracy"))
-                    != KMessageBox::Continue)
+            const int mins = KADateTime::currentUtcDateTime().secsTo(mAlarmDateTime.kDateTime()) / 60;
+            if (mins > 0  &&  mins < 10)
             {
-                mTimeWidget->setFocus();
-                return false;
+                if (KAMessageBox::warningContinueCancel(this, xi18nc("@info", "<para>KAlarm does not provide high accuracy alarms.</para><para> The alarm will trigger at the minute boundary before the specified time from now.</para>"), QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), QStringLiteral("HighAccuracy"))
+                        != KMessageBox::Continue)
+                {
+                    mTimeWidget->setFocus();
+                    return false;
+                }
             }
         }
     }
