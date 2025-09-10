@@ -1916,7 +1916,7 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                                     limit.setDate(next.date().addDays(maxlate + 1));
                                     if (now >= limit)
                                     {
-                                        if (type == KAEvent::OccurType::LastRecur
+                                        if ((type == KAEvent::OccurType::LastRecur  &&  event.nextOccurrence(now, next, KAEvent::Repeats::Return) == KAEvent::OccurType::None)
                                         ||  (type == KAEvent::OccurType::FirstOrOnly && !event.recurs()))
                                             cancel = true;   // last occurrence (and there are no repetitions)
                                         else
@@ -1948,7 +1948,7 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                                 case KAEvent::OccurType::LastRecur:
                                     if (next.effectiveKDateTime().secsTo(now) > maxlate)
                                     {
-                                        if (type == KAEvent::OccurType::LastRecur
+                                        if ((type == KAEvent::OccurType::LastRecur  &&  event.nextOccurrence(now, next, KAEvent::Repeats::Return) == KAEvent::OccurType::None)
                                         ||  (type == KAEvent::OccurType::FirstOrOnly && !event.recurs()))
                                             cancel = true;   // last occurrence (and there are no repetitions)
                                         else
