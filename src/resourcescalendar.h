@@ -1,7 +1,7 @@
 /*
  *  resourcescalendar.h  -  KAlarm calendar resources access
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -67,6 +67,8 @@ public:
     static KAEvent        updateEvent(const KAEvent&, bool saveIfReadOnly = true);
     static bool           deleteEvent(const KAEvent&, Resource&, bool save = false);
     static void           purgeEvents(const QList<KAlarmCal::KAEvent>&);
+    static bool           isInactive(const KAEvent&);
+    static bool           canEventRetrigger(const KAEvent&);
     static ResourcesCalendar* instance()     { return mInstance; }
 
 Q_SIGNALS:
@@ -92,6 +94,7 @@ private:
                                          CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
     static QList<KAEvent> events(CalEvent::Types, const Resource&);
     void                  findEarliestAlarm(const Resource&);
+    bool                  isInactive(const KAEvent&, const Resource&);
     void                  checkForDisabledAlarms();
     void                  checkForDisabledAlarms(bool oldEnabled, bool newEnabled);
     static QList<KAEvent> eventsForResource(const Resource&, const QSet<QString>& eventIds);
@@ -107,6 +110,7 @@ private:
     static EarliestMap    mEarliestAlarm;        // alarm with earliest trigger time, by resource
     static EarliestMap    mEarliestNonDispAlarm; // non-display alarm with earliest trigger time, by resource
     static QSet<QString>  mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
+    static QSet<QString>  mInactiveEvents;     // IDs of alarms which have triggered but aren't writable
     static bool           mIgnoreAtLogin;      // ignore new/updated repeat-at-login alarms
     static bool           mHaveDisabledAlarms; // there is at least one individually disabled alarm
     // Wake from suspend kernel timers: indexed by resource and event ID.
