@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.11.3 (KDE Gear 25.08.2) --- 10 September 2025 ===
+* In edit dialog, don't output high accuracy warning if start time is before now.
+
 === Version 3.11.2 (KDE Gear 25.08) --- 14 July 2025 ===
 * Remove excess spacing in Preferences dialogue.
 
