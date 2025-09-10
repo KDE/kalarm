@@ -2055,6 +2055,8 @@ void KAlarmApp::alarmCompleted(const KAEvent& event)
 int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updateCalAndDisplay, const KADateTime& nextDt)
 {
     qCDebug(KALARM_LOG) << "KAlarmApp::rescheduleAlarm: Alarm type:" << alarm.type();
+    if (!ResourcesCalendar::canEventRetrigger(event))
+        return 0;
     int reply = 0;
     bool update = false;
     event.startChanges();

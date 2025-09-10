@@ -23,6 +23,7 @@ ResourcesCalendar::ResourceMap ResourcesCalendar::mResourceMap;
 ResourcesCalendar::EarliestMap ResourcesCalendar::mEarliestAlarm;
 ResourcesCalendar::EarliestMap ResourcesCalendar::mEarliestNonDispAlarm;
 QSet<QString>                  ResourcesCalendar::mPendingAlarms;
+QSet<QString>                  ResourcesCalendar::mInactiveEvents;
 bool                           ResourcesCalendar::mIgnoreAtLogin {false};
 bool                           ResourcesCalendar::mHaveDisabledAlarms {false};
 QHash<ResourceId, QHash<QString, KernelWakeAlarm>> ResourcesCalendar::mWakeSuspendTimers;
@@ -461,7 +462,6 @@ KAEvent ResourcesCalendar::updateEvent(const KAEvent& evnt, bool saveIfReadOnly)
     return {};
 }
 
-
 /******************************************************************************
 * Delete the specified event from the resource calendar, if it exists.
 * The calendar is then optionally saved.
@@ -517,6 +517,7 @@ CalEvent::Type ResourcesCalendar::deleteEventInternal(const QString& eventID, co
         mWakeSuspendTimers[key].remove(eventID);   // this cancels the timer
 
     mResourceMap[key].remove(eventID);
+    mInactiveEvents.remove(eventID);
     if (mEarliestAlarm.value(key)        == eventID
     ||  mEarliestNonDispAlarm.value(key) == eventID)
         mInstance->findEarliestAlarm(resource);
@@ -530,6 +531,73 @@ CalEvent::Type ResourcesCalendar::deleteEventInternal(const QString& eventID, co
             status = s;
     }
     return status;
+}
+
+/******************************************************************************
+* Check whether an event has been marked as inactive due to having triggered
+* previously but being unable to be updated due to being read-only, or its
+* resource being disabled, read-only or incompatible with the current KAlarm
+* calendar format.
+*/
+bool ResourcesCalendar::isInactive(const KAEvent& evnt)
+{
+    if (!mInactiveEvents.contains(evnt.id()))
+        return false;
+
+    // The event is marked inactive. Check that it is still in that state.
+    if (!evnt.isReadOnly())
+    {
+        const ResourceId key = evnt.resourceId();
+        Resource resource = Resources::resource(key);
+        if (resource.isWritable(evnt.category()))
+        {
+            mInactiveEvents.remove(evnt.id());
+            return false;
+        }
+    }
+    return true;
+}
+
+/******************************************************************************
+* Check whether an event has been marked as inactive due to having triggered
+* previously but being unable to be updated due to being read-only.
+*/
+bool ResourcesCalendar::isInactive(const KAEvent& evnt, const Resource& resource)
+{
+    if (!mInactiveEvents.contains(evnt.id()))
+        return false;
+
+    // The event is marked inactive. Check that it is still in that state.
+    if (!evnt.isReadOnly()  &&  resource.isWritable(evnt.category()))
+    {
+        mInactiveEvents.remove(evnt.id());
+        return false;
+    }
+    return true;
+}
+
+/******************************************************************************
+* Check whether an event can be updated after triggering, to enable it to be
+* able to trigger again. This requires the resource to be enabled, writable and
+* compatible with the current KAlarm calendar format.
+* If it cannot be updated, it is noted as inactive until the resource becomes
+* updatable again.
+*/
+bool ResourcesCalendar::canEventRetrigger(const KAEvent& evnt)
+{
+    const ResourceId key = evnt.resourceId();
+    if (!evnt.isReadOnly())
+    {
+        Resource resource = Resources::resource(key);
+        if (resource.isWritable(evnt.category()))
+            return true;
+    }
+    // The event or its resource is read-only, so mark the event as inactive.
+    mInactiveEvents.insert(evnt.id());
+    if (mEarliestAlarm.value(key) == evnt.id()
+    ||  mEarliestNonDispAlarm.value(key) == evnt.id())
+        mInstance->findEarliestAlarm(Resources::resource(key));
+    return false;
 }
 
 /******************************************************************************
@@ -764,7 +832,8 @@ void ResourcesCalendar::findEarliestAlarm(const Resource& resource)
     for (const KAEvent& evnt : evnts)
     {
         if (evnt.category() != CalEvent::ACTIVE
-        ||  mPendingAlarms.contains(evnt.id()))
+        ||  mPendingAlarms.contains(evnt.id())
+        ||  isInactive(evnt, resource))
             continue;
         const KADateTime dt = evnt.nextTrigger(KAEvent::Trigger::All).effectiveKDateTime();
         if (dt.isValid())
