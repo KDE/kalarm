@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 02:42+0000\n"
+"POT-Creation-Date: 2025-09-11 02:31+0000\n"
 "PO-Revision-Date: 2007-09-07 11:50+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -2645,7 +2645,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "टेम्प्लेट नाम पहिले नै प्रयोगमा छ"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2654,7 +2654,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2662,7 +2662,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2670,21 +2670,21 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1098
 #, fuzzy, kde-format
 #| msgid "Recurrence has already expired"
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "पनरावृत्तिको पहिले नै म्याद समाप्त भएको छ"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1103
 #, fuzzy, kde-format
 #| msgid "The alarm will never occur during working hours"
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "कार्यघण्टामा संसूचक कहिले पनि उत्पन्न हुँदैन"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1132
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Reminder period must be less than the recurrence interval, unless '%1' is "
@@ -2695,7 +2695,7 @@ msgid ""
 "%1</interface> is checked."
 msgstr "सचेतक अवधि पुनरावृत्ति अन्तराल भन्दा कम हुनुपर्छ, अन्यथा '%1' चेक गरिएको हुन्छ ।"
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1147
 #, fuzzy, kde-format
 #| msgid ""
 #| "Simple alarm repetition duration must be less than the recurrence "
@@ -2708,7 +2708,7 @@ msgstr ""
 "सामान्य संसूचक पुनरावृत्ति अवधि पुनरावृत्ति अन्तराल समयबाट कुनै पनि सचेतक अवधि घटाएर आएको "
 "अवधिसँग बराबर हुनुपर्नेछ"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, fuzzy, kde-format
 #| msgid ""
 #| "Simple alarm repetition period must be in units of days or weeks for a "
@@ -2720,32 +2720,32 @@ msgid ""
 msgstr ""
 "मिति मात्र संसूचकका लागि सामान्य संसूचक दोहोरिने अवधि दिन वा हप्ता एकाईमा हुनुपर्छ"
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1185
 #, fuzzy, kde-format
 #| msgid "You must select a resource to save the alarm in"
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "तपाईँले संसूचकलाई बचत गर्न संसाधन चयन गर्नुपर्दछ"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1266
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr ""
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr ""
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1272
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr ""
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -4038,7 +4038,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2479
 #, fuzzy, kde-format
 #| msgid "Failed to execute command (shell access not authorized):"
 msgctxt "@info"
@@ -4047,21 +4047,21 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "आदेश कार्यान्वयन गर्न असफल (शेल पहुँच आधिकारिक छैन):"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2632
 #, fuzzy, kde-format
 #| msgid "Error creating temporary script file"
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "अस्थायी स्क्रिप्ट फाइल सिर्जना गर्दा त्रुटि"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2728
 #, fuzzy, kde-format
 #| msgid "Pre-alarm action:"
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "संसूचक पुर्वको कार्य:"
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2734
 #, fuzzy, kde-format
 #| msgid "Post-alarm action:"
 msgctxt "@info"

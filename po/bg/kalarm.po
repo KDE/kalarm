@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 02:42+0000\n"
+"POT-Creation-Date: 2025-09-11 02:31+0000\n"
 "PO-Revision-Date: 2025-01-07 23:27+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -2379,7 +2379,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Това име вече се използва"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2390,7 +2390,7 @@ msgstr ""
 "<para>KAlarm не осигурява аларми с висока точност.</para><para> Алармата ще "
 "се задейства на границата на минутата преди посоченото време от сега.</para>"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2400,7 +2400,7 @@ msgstr ""
 "Началната дата не съвпада с модела на повтаряемост на алармата, затова тя ще "
 "бъде коригирана до датата на следващото повторение (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2410,19 +2410,19 @@ msgstr ""
 "Началната дата/час не съвпада с модела на повторение на алармата, така че тя "
 "ще бъде коригирана до датата/часа на следващото повторение (%1)."
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1098
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Времето за ново появяване на алармата вече е отминало"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Алармата няма да се активира през работно време"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1132
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2432,7 +2432,7 @@ msgstr ""
 "Времето на напомняне трябва да е преди времето на новото появяване, освен "
 "ако не е включена отметка <interface>%1</interface>."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1147
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2442,7 +2442,7 @@ msgstr ""
 "Продължителността на обикновеното повторение трябва да е по-малко от това на "
 "новото появяване минус напомнянето"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2452,31 +2452,31 @@ msgstr ""
 "Продължителността на обикновеното повторение трябва да е в дни или седмици "
 "за аларми, за които е посочен само деня на включване"
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1185
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Трябва да изберете календар, в който да се запази алармата"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1266
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "По-малко опции <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Показване на по-малко опции…"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1272
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Повече опции >>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3599,7 +3599,7 @@ msgstr ""
 "interface>, изберете календар за архивиране на аларми и поставете отметка на "
 "<interface>Използване по подразбиране за архивиране на аларми</interface>."
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2479
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3609,19 +3609,19 @@ msgstr ""
 "Грешка при изпълнение на команда\n"
 " (не е избран терминал за алармени команди)"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2632
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Грешка при създаване на временен файл за скрипта"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2728
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Действие преди аларма:"
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2734
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

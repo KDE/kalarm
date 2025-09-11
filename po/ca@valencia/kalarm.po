@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 02:42+0000\n"
+"POT-Creation-Date: 2025-09-11 02:31+0000\n"
 "PO-Revision-Date: 2025-01-03 10:11+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -2423,7 +2423,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "El nom de la plantilla ja es troba en ús"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2435,7 +2435,7 @@ msgstr ""
 "s'activarà en el límit del minut anterior a l'hora especificada des d'ara.</"
 "para>"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2445,7 +2445,7 @@ msgstr ""
 "La data d'inici no coincidix amb el patró de recurrència de les alarmes, per "
 "tant, s'ajustarà a la data de la pròxima recurrència (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2456,19 +2456,19 @@ msgstr ""
 "alarmes, per tant, s'ajustarà a la data i hora de la pròxima recurrència "
 "(%1)."
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1098
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "La recurrència ja ha expirat"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "L'alarma mai esdevindrà durant l'horari de treball"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1132
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2478,7 +2478,7 @@ msgstr ""
 "El període del recordatori ha de ser més xicotet que l'interval de "
 "recurrència, excepte si <interface>%1</interface> està marcada."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1147
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2488,7 +2488,7 @@ msgstr ""
 "La duració d'una repetició en l'ocurrència ha de ser inferior a l'interval "
 "de recurrència menys el període de recordatori"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2498,31 +2498,31 @@ msgstr ""
 "Per a una repetició amb recurrència, el seu període ha de ser en unitats de "
 "dies o setmanes per a una alarma per data"
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1185
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Heu d'escollir un calendari en el qual guardar l'alarma"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1266
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Menys opcions <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Mostra menys opcions"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1272
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Més opcions >>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3630,7 +3630,7 @@ msgstr ""
 "<interface>Utilitzeu com a predeterminat per a les alarmes arxivades</"
 "interface>."
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2479
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3640,19 +3640,19 @@ msgstr ""
 "No s'ha pogut executar l'ordre\n"
 "(no s'ha seleccionat cap terminal per a les alarmes d'ordre)"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2632
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "S'ha produït un error en crear un fitxer de script temporal"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2728
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Acció de prealarma:"
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2734
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

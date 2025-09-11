@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 02:42+0000\n"
+"POT-Creation-Date: 2025-09-11 02:31+0000\n"
 "PO-Revision-Date: 2025-02-07 22:59+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -2249,7 +2249,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "樣本名稱已存在。"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2260,7 +2260,7 @@ msgstr ""
 "<para>KAlarm 不提供高精確度的鬧鐘。</para><para>鬧鐘會在指定時間與現在時間之"
 "間的分鐘邊界觸發。</para>"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2268,7 +2268,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr "開始日期與鬧鐘的循環樣式不符，因此會被調整到下一次循環的日期（%1）。"
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2278,19 +2278,19 @@ msgstr ""
 "開始日期時間與鬧鐘的循環樣式不符，因此會被調整到下一次循環的日期與時間"
 "（%1）。"
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1098
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "循環時間已過。"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "此鬧鐘將不會在工作時間內響鈴"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1132
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2300,7 +2300,7 @@ msgstr ""
 "設定提醒的時間必須少於所設定的循環時間，除非選取 <interface>%1</interface> 選"
 "項。"
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1147
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2308,7 +2308,7 @@ msgid ""
 "recurrence interval minus any reminder period"
 msgstr "在循環內重複的間隔必須比循環間隔減去提醒時間間隔還要小。"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2316,31 +2316,31 @@ msgid ""
 "or weeks for a date-only alarm"
 msgstr "只設定日期的鬧鐘，其循環內的重複時間必須以天或周為單位。"
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1185
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "選擇行事曆以儲存鬧鐘。"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1266
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "較少選項<<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "顯示較少選項"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1272
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "更多選項>>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3401,7 +3401,7 @@ msgstr ""
 "><nl/>要修正這個問題，請使用 <interface>檢視 | 顯示行事曆</interface>，選取一"
 "個封存鬧鐘行事曆，然後勾選 <interface>設為封存鬧鐘的預設</interface>。"
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2479
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3411,19 +3411,19 @@ msgstr ""
 "執行指令失敗\n"
 "（指令鬧鐘尚未指定終端）"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2632
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "產生暫時文稿檔案時發生錯誤"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2728
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "鬧鐘響鈴前動作："
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2734
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

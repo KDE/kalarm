@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 02:42+0000\n"
+"POT-Creation-Date: 2025-09-11 02:31+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -2463,7 +2463,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "ឈ្មោះ​ពុម្ព​កំពុង​ស្ថិត​ក្នុង​ការប្រើប្រាស់"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2472,7 +2472,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2482,7 +2482,7 @@ msgstr ""
 "កាលបរិច្ឆេទ​ចាប់ផ្ដើម​មិនផ្គូផ្គង​នឹង​លំនាំ​កើតឡើង​ដដែល​​នៃ​ការជូនដំណឹង​ទេ ដូច្នេះ​វា​នឹង​ត្រូវ​បាន​កែសម្រួល​"
 "ទៅកាលបរិច្ឆេទ​នៃការ​កើត​ឡើង​បន្ទាប់ (%1) ។"
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2492,19 +2492,19 @@ msgstr ""
 "ពេលវេលា/កាលបរិច្ឆេទ​ចាប់ផ្ដើម​មិន​ផ្គូផ្គង​នឹង​លំនាំដើម​កើតឡើង​​របស់​ការ​រោទិ៍​ទេ ដូច្នេះ​វា​នឹង​ត្រូវបាន​"
 "កែសម្រួល​ទៅ​ពេលវេលា/កាលបរិច្ឆេទ​នៃ​ការ​កើត​ឡើង​បន្ទាប់ (%1) ។"
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1098
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "ការកើតឡើង​ដដែលៗ​បាន​ផុតកំណត់​រួច​ហើយ"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "ការ​ជូនដំណឹង​នឹង​មិន​កើតឡើង​នៅ​​អំឡុង​ម៉ោង​ធ្វើការ​ទេ"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1132
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2514,7 +2514,7 @@ msgstr ""
 "អំឡុងពេល​កម្មវិធី​រំលឹង ត្រូវ​តែ​តិច​ជាង​ចន្លោះ​ពេល​កើតឡើង​វិញ យ៉ាងហោចណាស់​បាន​ធីក <interface>%1</"
 "interface> ។"
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1147
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2524,7 +2524,7 @@ msgstr ""
 "ថិរវេលា​នៃ​ការ​ធ្វើឡើងវិញ​នៅ​ក្នុង​ការ​កើតឡើង​ដដែលៗ ត្រូវតែ​តិច​ជាង​ចន្លោះ​ពេល​កើតឡើង​ដដែលៗ ដក​​អំឡុងពេល​"
 "កម្មវិធី​រំលឹក"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2534,13 +2534,13 @@ msgstr ""
 "ចំពោះ​ការ​ធ្វើ​ឡើង​វិញ​នៅ​ក្នុង​ការ​កើតឡើង​ដដែល ថិរវេលា​របស់​វា​ត្រូវតែ​ជា​ឯកតា​នៃ​ថ្ងៃ ឬ​សប្ដាហ៍​សម្រាប់​ការ​"
 "ជូនដំណឹង​តែ​កាលបរិច្ឆេទ"
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1185
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "អ្នកត្រូវតែ​ជ្រើស​ប្រតិទិន​ដែលត្រូវ​រក្សាទុក​ការ​ជូនដំណឹង"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1266
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2548,7 +2548,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "ជម្រើស​តិច <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1267
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2556,13 +2556,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "ជម្រើស​តិច <<"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1272
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "ជម្រើស​ច្រើន >>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
@@ -3661,7 +3661,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2479
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3671,19 +3671,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "បាន​បរាជ័យ​ក្នុង​ការ​ប្រតិបត្តិ​ពាក្យ​បញ្ជា (កា​រ​ចូល​ដំណើរការ​សែល​មិន​ត្រូវ​បាន​អនុញ្ញាត)"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2632
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "កំហុស​ក្នុងការ​បង្កើត​ឯកសារ​ស្គ្រីប​បណ្ដោះ​អាសន្ន"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2728
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "អំពើ​មុន​ការជូនដំណឹង ៖"
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2734
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

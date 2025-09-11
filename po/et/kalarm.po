@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 02:42+0000\n"
+"POT-Creation-Date: 2025-09-11 02:31+0000\n"
 "PO-Revision-Date: 2020-05-15 08:19+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -2416,7 +2416,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Mallinimi on juba kasutusel"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2425,7 +2425,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2435,7 +2435,7 @@ msgstr ""
 "Alguskuupäev ei klapi häire kordumismustriga, mistõttu see muudetakse "
 "järgmise korduse kuupäevaks (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2445,19 +2445,19 @@ msgstr ""
 "Alguse kuupäev/kellaaeg ei klapi häire kordumismustriga, mistõttu see "
 "muudetakse järgmise korduse kuupäevaks/kellaajaks (%1)."
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1098
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Kordumise aeg on juba möödunud"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Häiret ei anta kordagi töötundide ajal"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1132
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2467,7 +2467,7 @@ msgstr ""
 "Meeldetuletuse aeg peab olema väiksem kui korduse intervall, kui just pole "
 "sisse lülitatud <interface>%1</interface>."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1147
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2477,7 +2477,7 @@ msgstr ""
 "Kordusesisese korduse kestus aeg peab olema väiksem kui korduse intervall "
 "miinus meeldetuletuse aeg"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2487,19 +2487,19 @@ msgstr ""
 "Kordusesisese korduse periood peab ainult kuupäevaga määratud häirete korral "
 "olema päevades või nädalates"
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1185
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Vali kalender, kuhu häire salvestada."
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1266
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Vähem valikuid <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1267
 #, fuzzy, kde-format
 #| msgctxt "@action:Button"
 #| msgid "Fewer Options <<"
@@ -2507,13 +2507,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Vähem valikuid <<"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1272
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Rohkem valikuid >>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
@@ -3623,7 +3623,7 @@ msgstr ""
 ">Olukorra parandamiseks kasuta menüükäsku <interface>Vaade | Kalendrite "
 "näitamine</interface> kalendrite oleku kontrollimiseks või muutmiseks."
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2479
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3633,19 +3633,19 @@ msgstr ""
 "Käsu käivitamine nurjus\n"
 "(käsuhäirele ei ole terminali valitud)"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2632
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Viga ajutise skriptifaili loomisel"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2728
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Häire-eelne toiming:"
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2734
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

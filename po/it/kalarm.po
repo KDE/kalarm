@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 02:42+0000\n"
+"POT-Creation-Date: 2025-09-11 02:31+0000\n"
 "PO-Revision-Date: 2025-05-24 16:17+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -2413,7 +2413,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Il nome del modello è già usato"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2424,7 +2424,7 @@ msgstr ""
 "<para>KAlarm non fornisce avvisi ad alta precisione.</para><para>L'avviso si "
 "attiverà al limite dei minuti prima dell'ora specificata da adesso.</para>"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2434,7 +2434,7 @@ msgstr ""
 "La data iniziale non corrisponde allo schema di ricorrenza dell'avviso, "
 "quindi sarà corretto alla data della prossima ricorrenza (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2445,19 +2445,19 @@ msgstr ""
 "dell'avviso, quindi saranno corrette alla data e ora della prossima "
 "ricorrenza (%1)."
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1098
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "La ricorrenza è già passata"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "L'avviso non si attiverà mai nell'orario di lavoro"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1132
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2467,7 +2467,7 @@ msgstr ""
 "Il periodo del promemoria deve essere minore dell'intervallo di ricorrenza a "
 "meno che <interface>%1</interface> non sia selezionato."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1147
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2477,7 +2477,7 @@ msgstr ""
 "La durata di ripetizione entro la ricorrenza deve essere meno "
 "dell'intervallo di ricorrenza meno il periodo del promemoria"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2487,31 +2487,31 @@ msgstr ""
 "Il periodo di una ripetizione entro la ricorrenza deve essere in unità di "
 "giorni o settimane per un avviso senza orario"
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1185
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Devi selezionare un calendario in cui salvare l'avviso"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1266
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Meno opzioni <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Mostra meno opzioni"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1272
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Più opzioni >>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3621,7 +3621,7 @@ msgstr ""
 "calendario di avvisi archiviati e marca <interface>Usa come predefinita per "
 "gli avvisi archiviati</interface>."
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2479
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3631,19 +3631,19 @@ msgstr ""
 "Esecuzione del comando non riuscita\n"
 "(nessun terminale selezionato per gli avvisi dei comandi)"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2632
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Errore nella creazione del file di script temporaneo"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2728
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Azione di preavviso:"
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2734
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

@@ -1,6 +1,6 @@
 # translation of kalarm.po to
 # translation of alarmdaemonctrl.po to
-# Version: $Revision: 1713457 $
+# Version: $Revision: 1717912 $
 #
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2004, 2005, 2006.
@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 02:42+0000\n"
+"POT-Creation-Date: 2025-09-11 02:31+0000\n"
 "PO-Revision-Date: 2025-01-11 11:19+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -2369,7 +2369,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Wzorzec o tej nazwie jest już używany"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2380,7 +2380,7 @@ msgstr ""
 "<para>KAlarm nie zapewnia alarmów o wysokiej dokładności.</para><para> Alarm "
 "zostanie wywołany w granicy minuty wg ustawionego czasu od teraz.</para>"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2390,7 +2390,7 @@ msgstr ""
 "Data rozpoczęcia nie pasuje do wzorca powtórzeń alarmu, więc będzie "
 "dopasowana do daty następnego powtórzenia (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2400,19 +2400,19 @@ msgstr ""
 "Data/czas rozpoczęcia nie pasuje do wzorca powtórzeń alarmu, więc będzie "
 "dopasowana/y do daty/czasu następnego powtórzenia (%1)."
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1098
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Czas powtarzania alarmu już minął"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarm nigdy nie wystąpi w godzinach pracy"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1132
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2422,7 +2422,7 @@ msgstr ""
 "Czas przypomnienia musi być krótszy niż czas powtarzania, chyba, że włączono "
 "opcję <interface>'%1'</interface>."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1147
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2432,7 +2432,7 @@ msgstr ""
 "Okres powtórzenia zwykłego alarmu musi być krótszy niż okres powtarzania "
 "tego alarmu pomniejszony o czas przypomnienia"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2441,31 +2441,31 @@ msgid ""
 msgstr ""
 "Okres powtórzenia alarmu tylko-data musi być wyrażony w dniach lub tygodniach"
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1185
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Wybierz kalendarz do zapisania alarmu"
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1266
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Mniej możliwości <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Pokaż mniej możliwości"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1272
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Więcej możliwości >>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3576,7 +3576,7 @@ msgstr ""
 "Widok | Pokaż kalendarze</interface>, i zaznacz <interface>Użyj jako "
 "domyślnego do archiwizowania alarmów</interface>."
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2479
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3586,19 +3586,19 @@ msgstr ""
 "Nie można wykonać polecenia\n"
 "(nie wybrano terminalu dla alarów w postaci poleceń)"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2632
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Błąd przy tworzeniu tymczasowego pliku skryptu"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2728
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Czynność przed wywołaniem alarmu:"
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2734
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

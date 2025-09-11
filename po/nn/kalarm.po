@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 02:42+0000\n"
+"POT-Creation-Date: 2025-09-11 02:31+0000\n"
 "PO-Revision-Date: 2024-03-27 23:14+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -2345,7 +2345,7 @@ msgstr "Dette malnamnet er alt i bruk"
 
 # Sjå https://bugs.kde.org/show_bug.cgi?id=463278 for forklaring.
 # (Meldinga vert vist både viss ein vel «x minutt frå no» og viss ein vel eit spesifikt klokkeslett.)
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2357,7 +2357,7 @@ msgstr ""
 "vert utløyst ved overgangen mellom to heile minutt for det aktuelle "
 "klokkeslettet.</para>"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2367,7 +2367,7 @@ msgstr ""
 "Startdatoen stemmer ikkje med gjentakings­mønsteret til alarmen. Han vert "
 "derfor endra til datoen for neste gjentaking (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2378,19 +2378,19 @@ msgstr ""
 "alarmen. Dei vert derfor endra til datoen/klokkeslettet for neste gjentaking "
 "(%1)."
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1098
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Gjentakingstidspunktet er alt forbi"
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarmen vert aldri utløyst i arbeidstida"
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1132
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2400,7 +2400,7 @@ msgstr ""
 "Påminningsperioden må vera mindre enn gjentakings­intervallet, med mindre det "
 "er kryssa av for <interface>%1</interface>."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1147
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2410,7 +2410,7 @@ msgstr ""
 "Lengda på ei gjentaking inni ei gjentaking må vera mindre enn gjentakings­"
 "intervallet minus eventuell påminningstid."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2420,31 +2420,31 @@ msgstr ""
 "Perioden for gjentaking inni gjentaking må vera i dagar eller veker for ein "
 "datoalarm."
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1185
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Du må velja ein kalender å lagra alarmen i."
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1266
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Færre val <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Vis færre val"
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1272
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Fleire val >>"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3542,7 +3542,7 @@ msgstr ""
 "avkryssa, velja ein kalender for arkiverte alarmar og kryssa av for "
 "<interface>Bruk som standard for arkiverte alarmar</interface>."
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2479
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3552,19 +3552,19 @@ msgstr ""
 "Klarte ikkje køyra kommando\n"
 "(ingen terminal for kommandoalarmar er valt)"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2632
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Feil ved oppretting av mellombels skriptfil"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2728
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Handling før alarm:"
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2734
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

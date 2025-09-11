@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 02:42+0000\n"
+"POT-Creation-Date: 2025-09-11 02:31+0000\n"
 "PO-Revision-Date: 2005-10-06 11:21+0800\n"
 "Last-Translator: junetazawawi <junetazawawi@yahoo.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -2472,7 +2472,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Nama template sudah digunakan"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2481,7 +2481,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2489,7 +2489,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2497,20 +2497,20 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1098
 #, fuzzy, kde-format
 #| msgid "Recurrence has already expired"
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Pengulangan telah luput "
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr ""
 
-#: editdlg.cpp:1128
+#: editdlg.cpp:1132
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Reminder period must be less than the recurrence interval, unless '%1' is "
@@ -2523,7 +2523,7 @@ msgstr ""
 "Tempoh peringatan mesti kurang daripada sela masa pengulangan, kecuali '%1' "
 "disemak"
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1147
 #, fuzzy, kde-format
 #| msgid ""
 #| "Simple alarm repetition duration must be less than the recurrence "
@@ -2536,7 +2536,7 @@ msgstr ""
 "Tempoh pengulangan penggera ringkas mesti kurang daripada sela masa ulangan "
 "tolak jangka masa sebarang peringatan"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, fuzzy, kde-format
 #| msgid ""
 #| "Simple alarm repetition period must be in units of days or weeks for a "
@@ -2549,31 +2549,31 @@ msgstr ""
 "Tempoh jangka masa pengulangan penggera mesti dalam unit hari atau minggu "
 "atau penggera  tarikh sahaja"
 
-#: editdlg.cpp:1181
+#: editdlg.cpp:1185
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Pilih templat untuk mendasari penggera baru."
 
-#: editdlg.cpp:1262
+#: editdlg.cpp:1266
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr ""
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr ""
 
-#: editdlg.cpp:1268
+#: editdlg.cpp:1272
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr ""
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3844,7 +3844,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2477
+#: kalarmapp.cpp:2479
 #, fuzzy, kde-format
 #| msgid "Failed to execute command (shell access not authorized):"
 msgctxt "@info"
@@ -3853,21 +3853,21 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Gagal melaksanakan arahan (akses shell tidak sah)"
 
-#: kalarmapp.cpp:2630
+#: kalarmapp.cpp:2632
 #, fuzzy, kde-format
 #| msgid "Error creating temporary script file"
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Ralat semasa mencipta fail skrip sementara"
 
-#: kalarmapp.cpp:2726
+#: kalarmapp.cpp:2728
 #, fuzzy, kde-format
 #| msgid "Pre-alarm action:"
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Tindakan prapenggera:"
 
-#: kalarmapp.cpp:2732
+#: kalarmapp.cpp:2734
 #, fuzzy, kde-format
 #| msgid "Post-alarm action:"
 msgctxt "@info"
