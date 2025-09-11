@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2002-11-07 11:37+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -2257,7 +2257,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr ""
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2266,7 +2266,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2274,7 +2274,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2282,19 +2282,19 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Alarm tyd het alreeds verstrek"
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr ""
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2302,7 +2302,7 @@ msgid ""
 "%1</interface> is checked."
 msgstr ""
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -2310,7 +2310,7 @@ msgid ""
 "recurrence interval minus any reminder period"
 msgstr "Die alarm's herhaling tipe of herhaling interval."
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2318,31 +2318,31 @@ msgid ""
 "or weeks for a date-only alarm"
 msgstr ""
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Invoer die datum na skeduleer die alarm."
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr ""
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr ""
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr ""
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3444,7 +3444,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -3454,19 +3454,19 @@ msgstr ""
 "Gevaal na uitvoer opdrag:\n"
 "%1"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Verwyder die verlig aanhegsel van die e-pos."
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Aktiveer Alarms"
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

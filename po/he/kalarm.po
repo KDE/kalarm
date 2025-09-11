@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2025-09-05 13:40+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -2219,7 +2219,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "שם התבנית כבר בשימוש"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2228,7 +2228,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2238,7 +2238,7 @@ msgstr ""
 "תאריך ההתחלה לא תואם לתבנית החזרה של התזכורת, לכן הוא יותאם לתאריך של המופע "
 "הבא (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2246,19 +2246,19 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "תוקף החזרה כבר פג"
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr ""
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2266,7 +2266,7 @@ msgid ""
 "%1</interface> is checked."
 msgstr ""
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2276,7 +2276,7 @@ msgstr ""
 "משך החזרתיות בטווח ההישנות חייב להיות קטן ממשך ההישנות פחות טווח תזכורות "
 "כלשהן"
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2284,31 +2284,31 @@ msgid ""
 "or weeks for a date-only alarm"
 msgstr ""
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "נא לבחור לוח שנה בו לשמור את התזכורת"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "פחות אפשרויות <<"
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "להציג פחות אפשרויות"
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "אפשרויות נוספות >>"
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3359,7 +3359,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3369,19 +3369,19 @@ msgstr ""
 "הרצת הפקודה נכשלה\n"
 "(לא נבחר מסוף לתזכורות פקודות)"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "שגיאה ביצירת קובץ סקריפט זמני"
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "פעולת טרום תזכורת:"
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

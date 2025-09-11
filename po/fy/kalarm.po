@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2007-04-24 00:52+0200\n"
 "Last-Translator: Rinse de Vries <rinsedevries@kde.nl>\n"
 "Language-Team: Frysk <kde-i18n-fry@kde.org>\n"
@@ -2632,7 +2632,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Namme sjabloan wurdt al brûkt"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2641,7 +2641,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2649,7 +2649,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2657,20 +2657,20 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, fuzzy, kde-format
 #| msgid "Recurrence has already expired"
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Werhelling is al ferrûn"
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr ""
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Reminder period must be less than the recurrence interval, unless '%1' is "
@@ -2683,7 +2683,7 @@ msgstr ""
 "It tiidskoft fan it omtinken moat koarter wêze as it tiidskoft fan de "
 "werhelling, útsein at %1 oan stiet."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, fuzzy, kde-format
 #| msgid ""
 #| "Simple alarm repetition duration must be less than the recurrence "
@@ -2696,7 +2696,7 @@ msgstr ""
 "De duer fan de ienfâldige werhelling fan it alaarm moat sa koart mooglik "
 "wêze."
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, fuzzy, kde-format
 #| msgid ""
 #| "Simple alarm repetition period must be in units of days or weeks for a "
@@ -2709,32 +2709,32 @@ msgstr ""
 "It ynterfal fan de ienfâldige werhelling moat yn dagen of wiken opjûn wurde "
 "foar in alaarm mei allinnich in datum"
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, fuzzy, kde-format
 #| msgid "Select a template to base the new alarm on."
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Selektearje in sjabloan wêrop't jo it nije alaarm basearje wolle."
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr ""
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr ""
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr ""
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -4052,7 +4052,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, fuzzy, kde-format
 #| msgid "Failed to execute command (shell access not authorized):"
 msgctxt "@info"
@@ -4061,21 +4061,21 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Útfieren shell-kommando is mislearre (shell-tagong net tastien):"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, fuzzy, kde-format
 #| msgid "Error creating temporary script file"
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Fout by it skriuwen fan in tydlik skripttriem"
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, fuzzy, kde-format
 #| msgid "Pre-alarm action:"
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Aksje foarôfgeand oan alaarm:"
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, fuzzy, kde-format
 #| msgid "Post-alarm action:"
 msgctxt "@info"

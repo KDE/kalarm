@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2007-10-28 14:03+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -2314,7 +2314,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Імя шаблону ўжо выкарыстоўваецца"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2323,7 +2323,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2331,7 +2331,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2339,19 +2339,19 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Час напамінку ўжо прайшло"
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr ""
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2361,7 +2361,7 @@ msgstr ""
 "Перыяд папярэдняга напамінку павінен быць менш перыяду паўтору, калі "
 "ўсталяваны '%1'."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -2370,7 +2370,7 @@ msgid ""
 msgstr ""
 "Перыяд простага паўтору напамінку павінен быць менш асноўнага перыяду паўтору"
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -2380,31 +2380,31 @@ msgstr ""
 "Перыяд простага паўтору напамінку на дату павінен быць паказаны ў днях або "
 "тыднях"
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Вылучыце шаблон для новага напамінку."
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr ""
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr ""
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr ""
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3521,7 +3521,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -3529,19 +3529,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Памылка запуску каманды (доступ да абалонкі забаронены):"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Памылка стварэння часовага файла скрыпту"
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Папярэдняе дзеянне:"
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

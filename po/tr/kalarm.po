@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2025-03-14 20:25+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -2371,7 +2371,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Bu şablon adı zaten kullanılıyor"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2382,7 +2382,7 @@ msgstr ""
 "<para>K Alarm, yüksek kesinlikli alarmlar sağlamaz.</para><para> Alarm, "
 "bundan sonra belirtilen süreden önceki dakika sınırında tetiklenecek.</para>"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2392,7 +2392,7 @@ msgstr ""
 "Başlangıç tarihi bu alarmın yineleme örüntüsüyle eşleşmiyor, bu yüzden alarm "
 "bir sonraki yineleme tarihine (%1) göre düzenlenecek."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2402,19 +2402,19 @@ msgstr ""
 "Başlangıç tarihi/zamanı alarmın yineleme şablonu ile eşleşmiyor, bu yüzden "
 "başlangıç tarihi sonraki yinelemenin (%1) zamanında/tarihinde düzenlenecek."
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Yineleme zamanı geçmiş"
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarm çalışma saatlerinde asla gösterilmez"
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2424,7 +2424,7 @@ msgstr ""
 "<interface>%1</interface> denetlenmediği sürece, anımsatma süresi yineleme "
 "aralığından daha kısa olmalıdır."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2434,7 +2434,7 @@ msgstr ""
 "Yinelenme içindeki bir yinelenme süresi, yinelenme aralığı eksi anımsatıcı "
 "döneminden daha kısa olmalıdır"
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2444,31 +2444,31 @@ msgstr ""
 "Yinelenme içindeki bir yineleme için yalnızca-günlük bir alarm için periyot "
 "birimi gün veya hafta olmalıdır"
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Alarmın kaydedileceği bir takvim seçmelisiniz"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Daha Az Seçenek <<"
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Daha az seçenekler göster"
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Daha Fazla Seçenek >>"
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3562,7 +3562,7 @@ msgstr ""
 "bir arşivlenmiş alarm takvimi seçin ve <interface>Arşivlenmiş Alarmlar için "
 "Öntanımlı Olarak Kullan</interface>’ı imleyin."
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3572,19 +3572,19 @@ msgstr ""
 "Komut yürütülemedi\n"
 "(komut alarmları için seçili uçbirim yok)"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Geçici betik dosyası oluşturulamadı"
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Alarm uyarısından önce yapılacak eylem:"
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

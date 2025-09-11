@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2024-09-19 07:53+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -2333,7 +2333,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Název šablony je již používán"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2342,7 +2342,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2352,7 +2352,7 @@ msgstr ""
 "Datum spuštění neodpovídá vzorci pro opakování upomínky, takže bude "
 "nastaveno na datum následujícího opakování (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2362,19 +2362,19 @@ msgstr ""
 "Datum / čas spuštění neodpovídá vzorci pro opakování upomínky, takže bude "
 "nastaveno na datum / čas následujícího opakování (%1)."
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Čas opakování již uplynul"
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Upomínka nebude kvůli pracovní době nikdy zobrazena"
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2384,7 +2384,7 @@ msgstr ""
 "Perioda připomenutí musí být menší než interval opakování vyjma situace, kdy "
 "je označeno <interface>%1</interface>."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2394,7 +2394,7 @@ msgstr ""
 "Délka vnořeného opakování musí být menší než interval hlavního opakování "
 "mínus perioda připomenutí"
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2404,31 +2404,31 @@ msgstr ""
 "Perioda vnořeného opakování pro upomínky s datem musí být zadána v "
 "jednotkách dnů nebo týdnů"
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Musíte zvolit kalendář do kterého bude upomínka uložena"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Méně možností <<"
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Zobrazit méně možností"
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Více možností >>"
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3512,7 +3512,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3522,19 +3522,19 @@ msgstr ""
 "Příkaz nelze spustit\n"
 "(není určen žádný terminál pro upomínky příkazem)"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Chyba při vytváření dočasného souboru se skriptem"
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Činnost před upomínkou:"
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

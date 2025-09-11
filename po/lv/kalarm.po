@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2025-02-13 15:56+0200\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
@@ -2369,7 +2369,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Sagataves nosaukums jau ir aizņemts"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2380,7 +2380,7 @@ msgstr ""
 "<para>„KAlarm“ nenodrošina augsta precizitātes signālus.</para><para> "
 "Signāls ieslēgsies minūšu robežās pirms norādītā laika no šī brīža.</para>"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2390,7 +2390,7 @@ msgstr ""
 "Sākuma datums nesakrīt ar signāla atkārtošanās shēmu, tādēļ tas tiks "
 "iestatīts uz nākamo atkārtošanās datumu (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2400,19 +2400,19 @@ msgstr ""
 "Sākuma datums/laiks nesakrīt ar signāla atkārtošanās shēmu, tādēļ tas tiks "
 "iestatīts uz nākamo atkārtošanās datumu/laiku (%1)."
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Atkārtošanās termiņš jau ir beidzies"
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Signāls netiks palaists darba laikā"
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2422,7 +2422,7 @@ msgstr ""
 "Atgādinājumu periodam jābūt īsākam par atkārtošanās intervālu, ja vien nav "
 "atzīmēts <interface>%1</interface>."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2432,7 +2432,7 @@ msgstr ""
 "Atkārtošanās ilgumam atkārtošanās periodā ir jābūt īsākam par atkārtošanās "
 "intervālu, ievērojot jebkādu atgādinājuma periodu"
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2442,31 +2442,31 @@ msgstr ""
 "Ja atkārtošanās periodā ir atkārtošanās, šim periodam tikai datuma signālā "
 "jābūt dienu vai nedēļu vienību garumā."
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Izvēlieties kalendāru, kurā saglabāt signālu"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Mazāk opciju <<"
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Rādīt mazāk opciju"
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Vairāk opciju >>"
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3558,7 +3558,7 @@ msgstr ""
 "signālu kalendāru un atzīmējiet <interface>Izmantot kā noklusējumu "
 "arhivētiem signāliem</interface>."
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3568,19 +3568,19 @@ msgstr ""
 "Neizdevās izpildīt komandu\n"
 "(komandu signāliem nav norādīts terminālis)"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Kļūda, izveidojot pagaidu skripta datni"
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Darbība pirms signāla:"
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

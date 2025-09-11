@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2025-01-03 09:44+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -2392,7 +2392,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Txantiloiaren izena dagoeneko erabilita dago"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2404,7 +2404,7 @@ msgstr ""
 "para><para>Alarma, orain hasita, zehaztutako denboran, minutuko mugan "
 "eragingo da.</para>"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2414,7 +2414,7 @@ msgstr ""
 "Hasierako data ez dator bat alarmaren errepikatze ereduarekin, beraz, "
 "hurrengo errepikaren datara egokituko da (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2424,19 +2424,19 @@ msgstr ""
 "Hasierako data/ordua ez dator bat alarmaren errepikatze ereduarekin, beraz, "
 "hurrengo errepikaren data/ordura egokituko da (%1)."
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Errepikatzea iraungi da dagoeneko"
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarma ez da sekula lanorduetan gertatuko"
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2446,7 +2446,7 @@ msgstr ""
 "Oroigarriaren aldia errepikatze bitartea baino txikiagoa izan behar da, "
 "<interface>%1</interface> markatuta dagoenean izan ezik."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2456,7 +2456,7 @@ msgstr ""
 "Errepikatze barruko errepikapen baten iraupena, errepikatze bitartea ken "
 "oroigarri aldiak baino txikiagoa izan behar du"
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2466,31 +2466,31 @@ msgstr ""
 "Data bakarrik duen alarma batek, errepikatze barruko errepikapen baten "
 "aldiaren unitatea egun edo asteetakoa izan behar du"
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Hautatu alarma gordetzeko egutegi bat"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Aukera gutxiago <<"
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Erakutsi aukera gutxiago"
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Aukera gehiago >>"
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3591,7 +3591,7 @@ msgstr ""
 "artxibatutako alarmen egutegi bat, eta markatu <interface>Erabili "
 "lehenetsitako gisa artxibatutako alarmetarako</interface>."
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3601,19 +3601,19 @@ msgstr ""
 "Komandoa exekutatzea huts egin du\n"
 "(ez da komando-alarmetarako terminalik hautatu)"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Errorea behin-behineko script fitxategia sortzean"
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Alarma-aurreko ekintza:"
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

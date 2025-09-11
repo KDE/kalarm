@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2024-04-22 15:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -2239,7 +2239,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "模板名称已被使用"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2250,7 +2250,7 @@ msgstr ""
 "<para>KAlarm不提供高精度闹钟</para><para>闹钟将会在指定时刻前一分钟的末尾触发"
 "</para>"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2258,7 +2258,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr "该开始日期与闹钟的重复规则不匹配，已将其调整到下次重复的日期 (%1)。"
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2268,19 +2268,19 @@ msgstr ""
 "该开始时间或日期与闹钟的重复规则不匹配，已将其调整到下次重复的时间及日期 "
 "(%1)。"
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "重复已过期"
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "闹钟不会在工作时间响铃"
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2288,7 +2288,7 @@ msgid ""
 "%1</interface> is checked."
 msgstr "提示时段必须小于重复间隔，除非已勾选了<interface>%1</interface>。"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2296,7 +2296,7 @@ msgid ""
 "recurrence interval minus any reminder period"
 msgstr "重复周期内子重复的重复时间必须小于重复间隔减去提醒时长的差"
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2304,31 +2304,31 @@ msgid ""
 "or weeks for a date-only alarm"
 msgstr "仅日期闹钟重复周期内子重复的时间单位必须为日或周"
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "您必须选择一个用于保存闹钟的日历"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "更少选项 <<"
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "显示更少选项"
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "更多选项 >>"
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3386,7 +3386,7 @@ msgstr ""
 "题，请点击<interface>视图 | 显示日历</interface>，选中一个已归档闹钟日历，并"
 "勾选<interface>设为默认的已归档闹钟日历</interface>。"
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3396,19 +3396,19 @@ msgstr ""
 "执行命令失败\n"
 "(尚未选择命令闹钟所使用的终端)"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "创建临时脚本文件时出错"
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "响铃前操作："
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

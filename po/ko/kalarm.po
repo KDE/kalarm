@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2025-04-21 15:19+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -2307,7 +2307,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "같은 이름으로 된 템플릿이 이미 존재합니다"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2318,7 +2318,7 @@ msgstr ""
 "<para>KAlarm은 고정밀 알람을 제공하지 않습니다.</para><para>알람은 지금부터 "
 "지정한 시간까지의 분 단위 시간 이내에 트리거됩니다.</para>"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2328,7 +2328,7 @@ msgstr ""
 "시작 날짜가 알람의 반복 패턴과 일치하지 않으므로 다음 반복의 시작 날짜(%1)로 "
 "조정됩니다."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2338,19 +2338,19 @@ msgstr ""
 "시작 날짜/시간이 알람의 반복 패턴과 일치하지 않으므로 다음 반복의 시작 날짜/"
 "시간(%1)으로 조정됩니다."
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "반복이 이미 만료됨"
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "알람이 업무 시간에 울리지 않음"
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2360,7 +2360,7 @@ msgstr ""
 "<interface>%1</interface> 옵션을 선택하지 않는 한 미리 알림 주기는 반복 간격"
 "보다 짧아야 합니다."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2370,7 +2370,7 @@ msgstr ""
 "중첩된 반복 기간은 반복 기간에서 모든 남은 미리 알림 기간을 제외한 값보다 작"
 "아야 함"
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2378,31 +2378,31 @@ msgid ""
 "or weeks for a date-only alarm"
 msgstr "날짜 전용 알람의 중첩된 반복의 주기는 일이나 주 단위여야 함"
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "알람을 저장할 캘린더를 선택해야 함"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "더 적은 옵션 <<"
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "옵션 덜 보기"
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "더 많은 옵션 >>"
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3482,7 +3482,7 @@ msgstr ""
 "interface> 메뉴에서 보관된 알람 캘린더를 선택한 다음 <interface>보관된 알람"
 "의 기본값으로 사용</interface>을 선택하십시오."
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3492,19 +3492,19 @@ msgstr ""
 "명령을 실행할 수 없음\n"
 "(명령 알람에 대해 선택된 터미널 없음)"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "임시 스크립트 알람을 만드는 중 오류 발생"
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "알람 이전 동작:"
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

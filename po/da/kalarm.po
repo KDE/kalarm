@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2016-08-15 16:35+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -2431,7 +2431,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Skabelonnavn er allerede i brug"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2440,7 +2440,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2450,7 +2450,7 @@ msgstr ""
 "Startdatoen matcher ikke alarmens gentagelsesmønster, så den vil blive "
 "justeret til datoen for den næste gentagelse (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2460,19 +2460,19 @@ msgstr ""
 "Startdatoen/-klokkeslættet matcher ikke alarmens gentagelsesmønster, så der "
 "vil blive justeret til datoen/klokkeslættet for den næste gentagelse (%1)."
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Gentagelse er allerede udløbet"
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarmen vil aldrig forekomme i arbejdstimerne"
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2482,7 +2482,7 @@ msgstr ""
 "Påmindelsesperiode skal være mindre end gentagelsesintervallet, med mindre "
 "<interface>%1</interface> er markeret."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2492,7 +2492,7 @@ msgstr ""
 "Varigheden af en repetition skal være mindre end gentagelsesintervallet "
 "minus eventuel påmindelsesperiode."
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2502,13 +2502,13 @@ msgstr ""
 "For repetition indenfor gentagelsen, skal dens periode være i enheder af "
 "dage eller uger for en alarm som kun er pr. dato"
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Du skal vælge en kalender at gemme alarmen i"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, fuzzy, kde-format
 #| msgctxt "@action:Button"
 #| msgid "Less Options <<"
@@ -2516,7 +2516,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Færre indstillinger <<"
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, fuzzy, kde-format
 #| msgctxt "@action:Button"
 #| msgid "Less Options <<"
@@ -2524,13 +2524,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Færre indstillinger <<"
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Flere indstillinger >>"
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
@@ -3672,7 +3672,7 @@ msgstr ""
 "alarmkalender er aktiveret.<nl/><nl/>For at rette dette brug<interface>Vis | "
 "Vis kalendere</interface> for at tjekke eller ændre kalenderstatus."
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3682,19 +3682,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Mislykkedes at køre kommando (skal-adgang ikke godkendt)"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Fejl ved oprettelse af midlertidig scriptfil"
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Præ-alarm handling:"
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

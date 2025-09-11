@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2025-04-02 16:59+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -2391,7 +2391,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Nomine de patrono ja in uso"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2402,7 +2402,7 @@ msgstr ""
 "<para>KAlarm non forni alarmas de alte precision.</para><para>Le alarma se "
 "discatenera al limite del minuta ante le specificate tempore ab nunc.</para>"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2412,7 +2412,7 @@ msgstr ""
 "Le data initial non coincide con le patrono de recurrentia de alarma, assi "
 "illo essera adjustate al data del proxime recurrentia (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2423,19 +2423,19 @@ msgstr ""
 "alarma, assi illo essera adjustate al data/tempore del proxime recurrentia "
 "(%1)."
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Recurrentia ha ja expirate"
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Le alarma jammais occurrera durante horas de travalio"
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2445,7 +2445,7 @@ msgstr ""
 "Periodo de memento debe esser inferior que le intervallo de recurrentia, a "
 "minus que <interface>%1</interface> es marcate."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2455,7 +2455,7 @@ msgstr ""
 "Le duration de un repetition intra le recurrentia debe esser inferior del "
 "intervallo de recurrentia minus ulle periodo de memento"
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2465,31 +2465,31 @@ msgstr ""
 "Per un repetition intra le recurrentia, su periodo debe esser in unitate de "
 "dies o septimanas per alarma solmente de data"
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Tu debe seliger un calendario ubi salveguardar le alarma"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Minus Optiones <<"
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Monstra Minus Optiones "
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Plure optiones >>"
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3593,7 +3593,7 @@ msgstr ""
 "calendario de alarms archivate, e controla <interface>Usa como predefinite "
 "per Alarmas Archivate</interface>. "
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3603,19 +3603,19 @@ msgstr ""
 "Il falleva a executar commando\n"
 " (necun terminal seligite per alarmas de commando)"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Error durante que on creava file de script temporari"
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Action de ante-alarma:"
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

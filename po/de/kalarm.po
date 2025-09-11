@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2025-07-22 12:11+0200\n"
 "Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -2451,7 +2451,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Dieser Vorlagenname wird bereits verwendet"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2463,7 +2463,7 @@ msgstr ""
 "Erinnerung wird zur angefangenen Minute in der angegebenen Zeit ausgelöst.</"
 "para>"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2473,7 +2473,7 @@ msgstr ""
 "Das Startdatum passt nicht zum Wiederholungsrhythmus der Erinnerung, daher "
 "wird das Startdatum auf den nächsten passenden Termin gelegt (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2484,19 +2484,19 @@ msgstr ""
 "Erinnerung, daher wird das Startdatum/die Uhrzeit auf den nächsten passenden "
 "Termin gelegt (%1)."
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Der Termin der Ereigniswiederholung wurde bereits überschritten."
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Die Erinnerung wird während der Arbeits-/Bürozeiten ausgelöst"
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2506,7 +2506,7 @@ msgstr ""
 "Der Abstand muss kleiner sein als das Wiederholungsintervall, außer "
 "<interface>%1</interface> ist aktiviert."
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2516,7 +2516,7 @@ msgstr ""
 "Der Abstand für zusätzliche Wiederholung muss kleiner sein als das "
 "Wiederholungsintervall abzüglich des Erinnerungsvorlaufs."
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2526,31 +2526,31 @@ msgstr ""
 "Das Intervall für die zusätzliche Wiederholung muss bei tagesgebundenen "
 "Erinnerungen in Tagen oder Wochen angegeben werden."
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Wählen Sie den Kalender zum Speichern der Erinnerung."
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Weniger Optionen <<"
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Weniger Optionen anzeigen"
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Mehr Optionen anzeigen"
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -3698,7 +3698,7 @@ msgstr ""
 "aktivieren Sie <interface>Als Standard für abgelaufene Erinnerungen "
 "verwenden</interface>"
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3708,19 +3708,19 @@ msgstr ""
 "Die Ausführung des Befehls ist fehlgeschlagen\n"
 "es ist kein Terminal für Befehls-Erinnerungen ausgewählt"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Fehler beim Erstellen der temporären Skriptdatei"
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Vor der Erinnerung auszulösende Aktion:"
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

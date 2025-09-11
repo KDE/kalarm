@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4.3\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:57+0000\n"
+"POT-Creation-Date: 2025-09-11 00:42+0000\n"
 "PO-Revision-Date: 2024-03-21 10:32+0100\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -2424,7 +2424,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "A megadott sablonnév már foglalt"
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2433,7 +2433,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2443,7 +2443,7 @@ msgstr ""
 "A kezdő dátum nem illeszkedik a figyelmeztetés ismétlődési mintájára, emiatt "
 "a következő ismétlődés dátumához lesz igazítva (%1)."
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1076
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2453,19 +2453,19 @@ msgstr ""
 "A kezdő dátum/idő nem illeszkedik a figyelmeztetés ismétlődési mintájára, "
 "emiatt a következő ismétlődés dátumához/idejéhez lesz igazítva (%1)."
 
-#: editdlg.cpp:1095
+#: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Az ismétlődési periódus már lejárt"
 
-#: editdlg.cpp:1106
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "A figyelmeztető nem jelenik meg munkaidő alatt"
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1139
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2475,7 +2475,7 @@ msgstr ""
 "Az emlékeztetők időtartományának kisebbnek kell lennie az ismétlődési "
 "periódusnál, hacsak nincs bejelölve ez: <interface>%1</interface>"
 
-#: editdlg.cpp:1150
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2485,7 +2485,7 @@ msgstr ""
 "Az emlékeztetők ismétlődési időtartamának kisebbnek kell lennie az "
 "ismétlődési időköznél mínusz az emlékeztetési időnek"
 
-#: editdlg.cpp:1157
+#: editdlg.cpp:1161
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2495,13 +2495,13 @@ msgstr ""
 "A figyelmeztetők ismétlődési időközét napban vagy hétben kell megadni "
 "időpont nélküli figyelmeztető esetén"
 
-#: editdlg.cpp:1188
+#: editdlg.cpp:1192
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Ki kell választani, melyik naptárba legyen elmentve a figyelmeztető"
 
-#: editdlg.cpp:1269
+#: editdlg.cpp:1273
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2509,7 +2509,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Kevesebb részlet <<"
 
-#: editdlg.cpp:1270
+#: editdlg.cpp:1274
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2517,13 +2517,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Kevesebb részlet <<"
 
-#: editdlg.cpp:1275
+#: editdlg.cpp:1279
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Több részlet >>"
 
-#: editdlg.cpp:1276
+#: editdlg.cpp:1280
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
@@ -3672,7 +3672,7 @@ msgstr ""
 "használja a <interface>Nézet | Naptárak megjelenítése</interface> menüpontot "
 "a naptárállapotok ellenőrzéséhez vagy megváltoztatásához."
 
-#: kalarmapp.cpp:2456
+#: kalarmapp.cpp:2459
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3684,19 +3684,19 @@ msgstr ""
 "Nem sikerült végrehajtani a parancsot (nincs megfelelő hozzáférés a "
 "parancsértelmezőhöz):"
 
-#: kalarmapp.cpp:2609
+#: kalarmapp.cpp:2612
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Nem sikerült létrehozni egy ideiglenes szkriptet"
 
-#: kalarmapp.cpp:2705
+#: kalarmapp.cpp:2708
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Művelet a figyelmeztető előtt:"
 
-#: kalarmapp.cpp:2711
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
