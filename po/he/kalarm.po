@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-11 00:42+0000\n"
-"PO-Revision-Date: 2025-09-05 13:40+0300\n"
+"PO-Revision-Date: 2025-09-17 10:44+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -355,7 +355,7 @@ msgstr "יישום להרצה"
 #: autostart/autostart.cpp:60
 #, kde-format
 msgid "Command line arguments to pass to application"
-msgstr "ארגומנטים של שורת הפקודה להעברה ליישום"
+msgstr "ארגומנטים של שורת הפקודות להעברה ליישום"
 
 #: birthdaydlg.cpp:51
 #, kde-format
