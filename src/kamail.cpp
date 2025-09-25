@@ -791,7 +791,7 @@ bool parseAddress(const char* & scursor, const char* const send, Address& result
     if (parseMailbox(scursor, send, maybeMailbox, isCRLF))
     {
         // yes, it is:
-        result.displayName.clear();
+        result.setDisplayName({});
         result.mailboxList.append(maybeMailbox);
         return true;
     }
@@ -808,7 +808,7 @@ bool parseAddress(const char* & scursor, const char* const send, Address& result
         addrSpec.localPart = maybeUserName;
         addrSpec.domain.clear();
         maybeMailbox.setAddress(addrSpec);
-        result.displayName.clear();
+        result.setDisplayName({});
         result.mailboxList.append(maybeMailbox);
         return true;
     }
