@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -58,6 +58,10 @@ TrayWindow::TrayWindow(MainWindow* parent)
     qCDebug(KALARM_LOG) << "TrayWindow:";
     setToolTipIconByName(QStringLiteral("kalarm"));
     setToolTipTitle(KAboutData::applicationData().displayName());
+    //TODO: See Bug 486033 and Bug 498753: Using "kalarm" icon name shows coloured icon
+    //TODO: Bug 486033: Using "kalarm" icon name shows coloured icon under Plasma 6;
+    //      Bug 498753: Using "kalarm-symbolic" shows blank icon in XFCE.
+    //      A blank icon is a more serious bug, so we're using "kalarm".
     setIconByName(QStringLiteral("kalarm"));
     setStatus(Active);
     setCategory(ApplicationStatus);
