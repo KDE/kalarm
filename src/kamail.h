@@ -18,7 +18,7 @@
 
 class QUrl;
 namespace KMime {
-    namespace Types { struct Address; }
+    namespace Types { class Address; }
     class Message;
 }
 class AkonadiPlugin;
