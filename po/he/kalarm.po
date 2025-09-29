@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-11 00:42+0000\n"
-"PO-Revision-Date: 2025-09-17 10:44+0300\n"
+"POT-Creation-Date: 2025-09-29 00:43+0000\n"
+"PO-Revision-Date: 2025-09-27 22:44+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -4017,13 +4017,16 @@ msgid ""
 msgstr ""
 
 #: kamail.cpp:122
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No 'From' email address is configured.</para><para>Please set a "
 "default address in <application>KMail</application> or in the "
 "<application>KAlarm</application> Configuration dialog.</para>"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr ""
+"<para>לא מוגדרת כתובת דוא״ל ‚מאת’.</para><para>נא להגדיר כתובת ברירת מחדל ב־"
+"<application>KMail</application> או בחלונית ההגדרות של <application>KAlarm</"
+"application>.</para>"
 
 #: kamail.cpp:127
 #, kde-kuit-format
@@ -8160,30 +8163,30 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "נא לבחור תבנית עליה לבסס את ההתראה החדשה."
 
-#: traywindow.cpp:70
+#: traywindow.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "התראה חדשה"
 
-#: traywindow.cpp:295
+#: traywindow.cpp:299
 #, kde-format
 msgid "Disabled"
 msgstr "מושבתת"
 
-#: traywindow.cpp:300
+#: traywindow.cpp:304
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(חלק מהתזכורות מושבתות)"
 
-#: traywindow.cpp:360
+#: traywindow.cpp:364
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:362
+#: traywindow.cpp:366
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"

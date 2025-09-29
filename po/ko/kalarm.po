@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-11 00:42+0000\n"
+"POT-Creation-Date: 2025-09-29 00:43+0000\n"
 "PO-Revision-Date: 2025-04-21 15:19+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -8365,30 +8365,30 @@ msgctxt "@info:whatsthis"
 msgid "Select a template to base the new alarm on."
 msgstr "새 알람을 만들 때 사용할 템플릿을 선택합니다."
 
-#: traywindow.cpp:70
+#: traywindow.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "새 알람"
 
-#: traywindow.cpp:295
+#: traywindow.cpp:299
 #, kde-format
 msgid "Disabled"
 msgstr "비활성화됨"
 
-#: traywindow.cpp:300
+#: traywindow.cpp:304
 #, kde-format
 msgctxt "@info:tooltip Brief: some alarms are disabled"
 msgid "(Some alarms disabled)"
 msgstr "(일부 알람 비활성화됨)"
 
-#: traywindow.cpp:360
+#: traywindow.cpp:364
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
 msgstr "(%1%2:%3)"
 
-#: traywindow.cpp:362
+#: traywindow.cpp:366
 #, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"
