@@ -461,7 +461,16 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
-    <release version="3.11.3" date="2025-10-09"/>
+    <release version="3.11.3" date="2025-10-09">
+      <description>
+        <p>Release description</p>
+        <ul>
+          <li>If an alarm is late-cancelled, don't remove the event if a sub-repetition is still due.</li>
+          <li>Fix infinite loop when alarms trigger, if they are read-only or if the calendar is non-writable.</li>
+          <li>In edit dialog, don't display high accuracy warning if start time is before now.</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.11.2.1" date="2025-09-11"/>
     <release version="3.11.2" date="2025-08-14">
       <description>
