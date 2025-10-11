@@ -49,7 +49,7 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMDeprecationSettings)
 include(ECMFeatureSummary)
 set(QT_REQUIRED_VERSION "6.8.0")
-set(KTEXTADDONS_MIN_VERSION "1.7.1")
+set(KTEXTADDONS_MIN_VERSION "1.8.0")
 # Do NOT add quote
 set(KDEPIM_DEV_VERSION alpha)
 
