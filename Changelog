@@ -57,7 +57,7 @@ KAlarm Change Log
 * Display error message if error occurs trying to play an audio file [KDE Bug 484503]
 
 === Version 3.8.0 (KDE Gear 24.02.1) --- 8 March 2024 ===
-* Use libcanberra instead of Phonon to play sounds, for thread safety [KDE Bug 381334]
+* Use libcanberra instead of Phonon to play sounds, for thread safety [KDE Bug 481334]
 * In Edit Alarm dialogue, allow save if Set Volume checkbox is toggled.
 
 === Version 3.7.0 (KDE Gear 24.02) --- 9 February 2024 ===
