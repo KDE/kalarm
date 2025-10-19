@@ -258,8 +258,15 @@ void AlarmListModel::setEventTypeFilter(CalEvent::Types types)
     if (this != mAllInstance
     &&  types != mFilterTypes)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        beginFilterChange();
+#endif
         mFilterTypes = types;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
         invalidateFilter();
+#endif
     }
 }
 
@@ -562,8 +569,15 @@ void TemplateListModel::setAlarmActionFilter(KAEvent::Action types)
     // Ensure that the filter isn't applied to the 'all' instance.
     if (this != mAllInstance  &&  types != mActionsFilter)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        beginFilterChange();
+#endif
         mActionsFilter = types;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
         invalidateFilter();
+#endif
     }
 }
 
@@ -572,8 +586,15 @@ void TemplateListModel::setAlarmActionsEnabled(KAEvent::Action types)
     // Ensure that the setting isn't applied to the 'all' instance.
     if (this != mAllInstance  &&  types != mActionsEnabled)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        beginFilterChange();
+#endif
         mActionsEnabled = types;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
         invalidateFilter();
+#endif
     }
 }
 

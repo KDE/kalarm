@@ -79,11 +79,17 @@ BirthdaySortModel::BirthdaySortModel(QObject* parent)
 */
 void BirthdaySortModel::setPrefixSuffix(const QString& prefix, const QString& suffix, const QStringList& alarmMessageList)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+    beginFilterChange();
+#endif
     mPrefix = prefix;
     mSuffix = suffix;
     mContactsWithAlarm = alarmMessageList;
-
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+    endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
     invalidateFilter();
+#endif
 }
 
 bool BirthdaySortModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const

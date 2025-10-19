@@ -32,8 +32,15 @@ void ResourceFilterModel::setEventTypeFilter(CalEvent::Type type)
 {
     if (type != mAlarmType)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        beginFilterChange();
+#endif
         mAlarmType = type;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
         invalidateRowsFilter();
+#endif
     }
 }
 
@@ -41,8 +48,15 @@ void ResourceFilterModel::setFilterWritable(bool writable)
 {
     if (writable != mWritableOnly)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        beginFilterChange();
+#endif
         mWritableOnly = writable;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
         invalidateRowsFilter();
+#endif
     }
 }
 
@@ -51,8 +65,15 @@ void ResourceFilterModel::setFilterEnabled(bool enabled)
     if (enabled != mEnabledOnly)
     {
         Q_EMIT layoutAboutToBeChanged();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        beginFilterChange();
+#endif
         mEnabledOnly = enabled;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
         invalidateRowsFilter();
+#endif
         Q_EMIT layoutChanged();
     }
 }
@@ -62,8 +83,15 @@ void ResourceFilterModel::setFilterText(const QString& text)
     if (text != mFilterText)
     {
         Q_EMIT layoutAboutToBeChanged();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        beginFilterChange();
+#endif
         mFilterText = text;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
         invalidateRowsFilter();
+#endif
         Q_EMIT layoutChanged();
     }
 }
@@ -566,8 +594,14 @@ bool ResourceFilterCheckListModel::filterAcceptsRow(int sourceRow, const QModelI
 */
 void ResourceFilterCheckListModel::resourceTypeChanged(ResourceCheckListModel* model)
 {
-    if (model == sourceModel())
+    if (model == sourceModel()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        beginFilterChange();
+        endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
         invalidateRowsFilter();
+#endif
+    }
 }
 
 /******************************************************************************
