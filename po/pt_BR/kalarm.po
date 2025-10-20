@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-29 00:43+0000\n"
+"POT-Creation-Date: 2025-10-20 00:43+0000\n"
 "PO-Revision-Date: 2025-08-04 15:24-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -7579,13 +7579,13 @@ msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
 msgstr "%1d %2:%3"
 
-#: resources/resourcemodel.cpp:329
+#: resources/resourcemodel.cpp:357
 #, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
 msgstr "Você não pode desabilitar seu calendário padrão de alarmes ativos."
 
-#: resources/resourcemodel.cpp:335
+#: resources/resourcemodel.cpp:363
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -7595,7 +7595,7 @@ msgstr ""
 "Você não poderá desativar o seu calendário padrão de alarmes arquivados, "
 "enquanto os alarmes expirados estiverem configurados para serem mantidos."
 
-#: resources/resourcemodel.cpp:339
+#: resources/resourcemodel.cpp:367
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"

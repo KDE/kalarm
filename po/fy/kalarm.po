@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-29 00:43+0000\n"
+"POT-Creation-Date: 2025-10-20 00:43+0000\n"
 "PO-Revision-Date: 2007-04-24 00:52+0200\n"
 "Last-Translator: Rinse de Vries <rinsedevries@kde.nl>\n"
 "Language-Team: Frysk <kde-i18n-fry@kde.org>\n"
@@ -8608,7 +8608,7 @@ msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
 msgstr " %1d, %2:%3 "
 
-#: resources/resourcemodel.cpp:329
+#: resources/resourcemodel.cpp:357
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the selected alarm?"
 #| msgid_plural "Do you really want to delete the %1 selected alarms?"
@@ -8616,7 +8616,7 @@ msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
 msgstr "Wolle jo it selektearre alaarm wiskje?"
 
-#: resources/resourcemodel.cpp:335
+#: resources/resourcemodel.cpp:363
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the selected alarm?"
 #| msgid_plural "Do you really want to delete the %1 selected alarms?"
@@ -8626,7 +8626,7 @@ msgid ""
 "are configured to be kept."
 msgstr "Wolle jo it selektearre alaarm wiskje?"
 
-#: resources/resourcemodel.cpp:339
+#: resources/resourcemodel.cpp:367
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the selected alarm?"
 #| msgid_plural "Do you really want to delete the %1 selected alarms?"

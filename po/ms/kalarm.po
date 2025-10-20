@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-29 00:43+0000\n"
+"POT-Creation-Date: 2025-10-20 00:43+0000\n"
 "PO-Revision-Date: 2005-10-06 11:21+0800\n"
 "Last-Translator: junetazawawi <junetazawawi@yahoo.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -8191,13 +8191,13 @@ msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
 msgstr " %1d %2:%3 "
 
-#: resources/resourcemodel.cpp:329
+#: resources/resourcemodel.cpp:357
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
 msgstr "_n: Anda pasti ingin menghapuskan penggera yang dipilih?"
 
-#: resources/resourcemodel.cpp:335
+#: resources/resourcemodel.cpp:363
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -8205,7 +8205,7 @@ msgid ""
 "are configured to be kept."
 msgstr "_n: Anda pasti ingin menghapuskan penggera yang dipilih?"
 
-#: resources/resourcemodel.cpp:339
+#: resources/resourcemodel.cpp:367
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"

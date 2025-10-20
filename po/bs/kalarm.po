@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-29 00:43+0000\n"
+"POT-Creation-Date: 2025-10-20 00:43+0000\n"
 "PO-Revision-Date: 2015-01-08 09:03+0100\n"
 "Last-Translator: Samir Ribic <samir.ribic@etf.unsa.ba>\n"
 "Language-Team: bosanski <bs@li.org>\n"
@@ -7903,13 +7903,13 @@ msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
 msgstr "%1d %2:%3"
 
-#: resources/resourcemodel.cpp:329
+#: resources/resourcemodel.cpp:357
 #, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
 msgstr "Ne možete isključiti vaš zadani aktivni alarm kalendara."
 
-#: resources/resourcemodel.cpp:335
+#: resources/resourcemodel.cpp:363
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -7919,7 +7919,7 @@ msgstr ""
 "Ne možete isključiti vaš zadani arhivirani alarm kalendara dok su istekli "
 "alarmi podešeni da budu sačuvani."
 
-#: resources/resourcemodel.cpp:339
+#: resources/resourcemodel.cpp:367
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"

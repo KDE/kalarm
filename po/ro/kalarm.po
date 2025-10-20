@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-29 00:43+0000\n"
+"POT-Creation-Date: 2025-10-20 00:43+0000\n"
 "PO-Revision-Date: 2021-05-15 16:59+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -8028,13 +8028,13 @@ msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
 msgstr "%1d %2:%3"
 
-#: resources/resourcemodel.cpp:329
+#: resources/resourcemodel.cpp:357
 #, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
 msgstr "Nu puteți dezactiva calendarul implicit de alarmă activă."
 
-#: resources/resourcemodel.cpp:335
+#: resources/resourcemodel.cpp:363
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -8044,7 +8044,7 @@ msgstr ""
 "Nu puteți dezactiva calendarul implicit de alarmă arhivată în timp ce "
 "alarmele expirate sunt configurate pentru a fi păstrate."
 
-#: resources/resourcemodel.cpp:339
+#: resources/resourcemodel.cpp:367
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Do you really want to delete all archived alarms?"

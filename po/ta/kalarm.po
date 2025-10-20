@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-29 00:43+0000\n"
+"POT-Creation-Date: 2025-10-20 00:43+0000\n"
 "PO-Revision-Date: 2025-01-26 17:20+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -7427,13 +7427,13 @@ msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
 msgstr "%1 நாள் %2:%3"
 
-#: resources/resourcemodel.cpp:329
+#: resources/resourcemodel.cpp:357
 #, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
 msgstr "செயலிலுள்ள அலாரங்களுக்கான இயல்பிருப்பு நாள்காட்டியை முடக்க முடியாது."
 
-#: resources/resourcemodel.cpp:335
+#: resources/resourcemodel.cpp:363
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -7443,7 +7443,7 @@ msgstr ""
 "காலாவதியான அலாரங்களை வைத்திருக்குமாறு கேயலாரம் அமைக்கப்பட்டிருக்கும்போது, "
 "காப்பகப்படுத்திய அலாரங்களுக்கான் இயல்பிருப்பு நாள்காட்டியை முடக்க முடியாது."
 
-#: resources/resourcemodel.cpp:339
+#: resources/resourcemodel.cpp:367
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"

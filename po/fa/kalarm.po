@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-29 00:43+0000\n"
+"POT-Creation-Date: 2025-10-20 00:43+0000\n"
 "PO-Revision-Date: 2007-08-22 18:39+0330\n"
 "Last-Translator: Nazanin Kazemi <kazemi@itland.ir>\n"
 "Language-Team: Persian <kde-i18n-fa@kde.org>\n"
@@ -8339,7 +8339,7 @@ msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
 msgstr "%1ساعت %2دقیقه"
 
-#: resources/resourcemodel.cpp:329
+#: resources/resourcemodel.cpp:357
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "You cannot disable your default active alarm resource."
@@ -8347,7 +8347,7 @@ msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
 msgstr "نمی توانید منبع هشدار فعال پیش‌فرضتان را غیرفعال سازید."
 
-#: resources/resourcemodel.cpp:335
+#: resources/resourcemodel.cpp:363
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid ""
@@ -8361,7 +8361,7 @@ msgstr ""
 "هنگامی که هشدارهای انقضایافته پیکربندی می‌شوند تا حفظ شوند، نمی‌توانید منبع "
 "هشدار بایگانی‌شده پیش‌فرض خود را حذف کنید."
 
-#: resources/resourcemodel.cpp:339
+#: resources/resourcemodel.cpp:367
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Do you really want to disable your default resource?"

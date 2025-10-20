@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-29 00:43+0000\n"
+"POT-Creation-Date: 2025-10-20 00:43+0000\n"
 "PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -7367,13 +7367,13 @@ msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
 msgstr "%1d %2:%3"
 
-#: resources/resourcemodel.cpp:329
+#: resources/resourcemodel.cpp:357
 #, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
 msgstr "भवान् स्वस्य पूर्वनिर्धारितं सक्रिय-अलार्म-पञ्चाङ्गं निष्क्रियं कर्तुं न शक्नोति ।"
 
-#: resources/resourcemodel.cpp:335
+#: resources/resourcemodel.cpp:363
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -7383,7 +7383,7 @@ msgstr ""
 "भवन्तः स्वस्य पूर्वनिर्धारितं संग्रहीतं अलार्म-पञ्चाङ्गं निष्क्रियं कर्तुं न शक्नुवन्ति यदा अवधिः "
 "समाप्ताः अलार्माः स्थापनार्थं विन्यस्ताः सन्ति ।"
 
-#: resources/resourcemodel.cpp:339
+#: resources/resourcemodel.cpp:367
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"
