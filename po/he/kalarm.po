@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-11 02:31+0000\n"
-"PO-Revision-Date: 2025-09-27 22:44+0300\n"
+"PO-Revision-Date: 2025-10-28 17:21+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1766,10 +1766,10 @@ msgstr "הזן פקודת מעטפת להפעלה."
 
 #. i18n: ectx: label, entry (DefaultExecPreActionOnDeferral), group (Defaults)
 #: data/kalarmconfig.kcfg:424
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Execute pre-alarm action for deferred alarms"
-msgstr "אפשר &תזכורות"
+msgstr "הרצת פעולת טרום תזכורת לתזכורות שנדחו"
 
 #. i18n: ectx: whatsthis, entry (DefaultExecPreActionOnDeferral), group (Defaults)
 #: data/kalarmconfig.kcfg:425
@@ -4612,7 +4612,7 @@ msgstr "לא ניתן להקריא את ההודעה"
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
-msgstr ""
+msgstr "תת־מערכת ההקראה לא זמינה"
 
 #: messagenotification.cpp:518
 #, kde-format
@@ -4656,7 +4656,7 @@ msgstr "הודעת ההתראה"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
-msgstr ""
+msgstr "פלט פקודת ההתראות"
 
 #: messagewindow.cpp:359
 #, kde-format
@@ -4668,7 +4668,7 @@ msgstr "הודעת הדוא״ל לשליחה"
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
-msgstr ""
+msgstr "לא להציג את הודעת השגיאה הזאת שוב להתראה הזאת"
 
 #: messagewindow.cpp:426
 #, kde-format
@@ -4937,7 +4937,7 @@ msgstr "מצב הרצה"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run automatically"
-msgstr ""
+msgstr "הרצה אוטומטית"
 
 #: prefdlg.cpp:462
 #, kde-format
@@ -4946,12 +4946,14 @@ msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
 msgstr ""
+"להפעיל את KAlarm אוטומטית עם הכניסה למערכת. יש לסמן את האפשרות הזאת כדי "
+"להפעיל תפקוד רגיל של KAlarm."
 
 #: prefdlg.cpp:465
 #, kde-format
 msgctxt "@option:radio"
 msgid "Run manually only"
-msgstr ""
+msgstr "הרצה ידנית בלבד"
 
 #: prefdlg.cpp:468
 #, kde-format
@@ -4960,6 +4962,8 @@ msgid ""
 "Only run KAlarm manually, never automatically. KAlarm will only function "
 "when you manually start it."
 msgstr ""
+"להריץ את KAlarm ידנית בלבד, אף פעם לא אוטומטית. KAlarm יעבוד רק לאחר הפעלתו "
+"באופן ידני."
 
 #: prefdlg.cpp:471
 #, kde-format
@@ -4994,6 +4998,8 @@ msgid ""
 "Check to display a warning prompt before quitting <application>KAlarm</"
 "application>."
 msgstr ""
+"יש לסמן כדי להציג אזהרה עם הצעות חלופיות לפני היציאה מ־<application>KAlarm</"
+"application>."
 
 #: prefdlg.cpp:496
 #, kde-format
