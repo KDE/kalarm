@@ -7,6 +7,7 @@
  */
 
 #include "preferences.h"
+#include "config-kalarm.h"
 
 #include "kalarm.h"
 #include "kamail.h"
@@ -668,7 +669,7 @@ void splitXTermCommands()
 
 Preferences::SoundType Preferences::defaultSoundType()
 {
-#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
+#if HAVE_TEXT_TO_SPEECH_SUPPORT
     return self()->base_DefaultSoundType();
 #else
     SoundType type = self()->base_DefaultSoundType();

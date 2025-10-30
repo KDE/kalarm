@@ -158,7 +158,7 @@ set_package_properties(KF6TextEditTextToSpeech PROPERTIES DESCRIPTION
 )
 
 if(TARGET KF6::TextEditTextToSpeech)
-    add_definitions(-DHAVE_TEXT_TO_SPEECH_SUPPORT)
+    set(HAVE_TEXT_TO_SPEECH_SUPPORT TRUE)
 endif()
 
 if(ENABLE_AKONADI_PLUGIN)

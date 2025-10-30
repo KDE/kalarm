@@ -5,3 +5,9 @@
 
 /* Define to 1 if RTC wake-from-suspend is enabled */
 #cmakedefine01 ENABLE_RTC_WAKE_FROM_SUSPEND
+
+/* Define to 1 if text to speech is enabled */
+#cmakedefine01 HAVE_TEXT_TO_SPEECH_SUPPORT
+
+/* Define to 1 if text to speech enqueue is enabled */
+#cmakedefine01 HAVE_TEXTTOSPEECH_ENQUEUE_SUPPORT

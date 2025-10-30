@@ -7,6 +7,7 @@
  */
 
 #include "messagedisplayhelper.h"
+#include "config-kalarm.h"
 #include "messagedisplayhelper_p.h"
 #include "messagedisplay.h"
 
@@ -25,7 +26,7 @@
 #include "screensaver.h" // DBUS-generated
 #include "kalarm_debug.h"
 
-#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
+#if HAVE_TEXT_TO_SPEECH_SUPPORT
 #include <TextEditTextToSpeech/TextToSpeech>
 #endif
 
@@ -842,7 +843,7 @@ void MessageDisplayHelper::playAudio()
 */
 void MessageDisplayHelper::slotSpeak()
 {
-#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
+#if HAVE_TEXT_TO_SPEECH_SUPPORT
     TextEditTextToSpeech::TextToSpeech* tts = TextEditTextToSpeech::TextToSpeech::self();
     if (!tts->isReady())
     {

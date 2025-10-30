@@ -7,6 +7,7 @@
  */
 
 #include "soundpicker.h"
+#include "config-kalarm.h"
 
 #include "sounddlg.h"
 #include "lib/autoqpointer.h"
@@ -14,7 +15,7 @@
 #include "lib/file.h"
 #include "lib/pushbutton.h"
 
-#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
+#if HAVE_TEXT_TO_SPEECH_SUPPORT
 #include <TextEditTextToSpeech/TextToSpeech>
 #endif
 #include <KLocalizedString>
@@ -129,7 +130,7 @@ void SoundPicker::showFile(bool show)
 */
 void SoundPicker::showSpeak(bool show)
 {
-#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
+#if HAVE_TEXT_TO_SPEECH_SUPPORT
     if (!TextEditTextToSpeech::TextToSpeech::self()->isReady())
 #endif
         show = false;    // speech capability is not installed or configured

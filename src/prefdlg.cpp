@@ -7,6 +7,7 @@
  */
 
 #include "prefdlg.h"
+#include "config-kalarm.h"
 #include "prefdlg_p.h"
 
 #include "alarmtimewidget.h"
@@ -49,7 +50,7 @@
 #include <KHolidays/HolidayRegion>
 using namespace KHolidays;
 
-#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
+#if HAVE_TEXT_TO_SPEECH_SUPPORT
 #include <TextEditTextToSpeech/TextToSpeech>
 #endif
 
@@ -1585,7 +1586,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     mSound->addItem(SoundPicker::i18n_combo_None());         // index 0
     mSound->addItem(SoundPicker::i18n_combo_Beep());         // index 1
     mSound->addItem(SoundPicker::i18n_combo_File());         // index 2
-#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
+#if HAVE_TEXT_TO_SPEECH_SUPPORT
     if (TextEditTextToSpeech::TextToSpeech::self()->isReady())
         mSound->addItem(SoundPicker::i18n_combo_Speak());    // index 3
 #endif
@@ -1771,7 +1772,7 @@ bool EditPrefTab::apply(bool syncToDisc)
     Preferences::SoundType snd;
     switch (mSound->currentIndex())
     {
-#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
+#if HAVE_TEXT_TO_SPEECH_SUPPORT
         case 3:  snd = Preferences::Sound_Speak; break;
 #endif
         case 2:  snd = Preferences::Sound_File;  break;
@@ -1858,7 +1859,7 @@ int EditPrefTab::soundIndex(Preferences::SoundType type)
 {
     switch (type)
     {
-#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
+#if HAVE_TEXT_TO_SPEECH_SUPPORT
         case Preferences::Sound_Speak: return 3;
 #endif
         case Preferences::Sound_File:  return 2;
