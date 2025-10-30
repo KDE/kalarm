@@ -851,8 +851,11 @@ void MessageDisplayHelper::slotSpeak()
         clearErrorMessage(ErrMsg_Speak);
         return;
     }
-
+#if HAVE_TEXTTOSPEECH_ENQUEUE_SUPPORT
+    tts->enqueue(mMessage);
+#else
     tts->say(mMessage);
+#endif
 #endif
 }
 
