@@ -1,7 +1,7 @@
 /*
  *  calendarupdater.cpp  -  base class to update a calendar to current KAlarm format
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,6 +9,7 @@
 #include "calendarupdater.h"
 
 #include "lib/desktop.h"
+#include "lib/i18n.h"
 
 #include <KLocalizedString>
 
@@ -91,7 +92,7 @@ QString CalendarUpdater::conversionPrompt(const QString& calendarName, const QSt
     return xi18nc("@info", "<para>%1</para><para>"
                  "<warning>Do not update the calendar if it is also used with an older version of <application>KAlarm</application> "
                  "(e.g. on another computer). If you do so, the calendar may become unusable there.</warning></para>"
-                 "<para>Do you wish to update the calendar?</para>", msg);
+                 "<para>Do you wish to update the calendar?</para>", xi18nAsSubsParam(msg));
 }
 
 #include "moc_calendarupdater.cpp"

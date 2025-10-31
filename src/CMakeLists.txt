@@ -71,6 +71,7 @@ set(libkalarm_SRCS
     lib/file.cpp
     lib/filedialog.cpp
     lib/groupbox.cpp
+    lib/i18n.cpp
     lib/label.cpp
     lib/locale.cpp
     lib/messagebox.cpp
@@ -99,6 +100,7 @@ set(libkalarm_SRCS
     lib/file.h
     lib/filedialog.h
     lib/groupbox.h
+    lib/i18n.h
     lib/label.h
     lib/locale.h
     lib/messagebox.h
