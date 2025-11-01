@@ -477,7 +477,7 @@ UpdateResult updateTemplate(KAEvent& event, QWidget* msgParent)
 * Delete alarms from a resource.
 * If the events are archived, the events' IDs are changed to archived IDs if necessary.
 */
-UpdateResult deleteEvent(KAEvent& event, Resource& resource, bool archive, QWidget* msgParent, bool showKOrgErr)
+UpdateResult deleteEvent(KAEvent& event, Resource& resource, bool archive, QWidget* msgParent, bool showKOrgErr)    //cppcheck-suppress[constParameterReference]  'event' is being deleted
 {
     QList<KAEvent> events(1, event);
     return deleteEvents(events, resource, archive, msgParent, showKOrgErr);
@@ -620,7 +620,7 @@ void deleteDisplayEvent(const QString& eventID)
 *              to use the default way of determining the active alarm calendar.
 *   ineligibleIndexes - will be filled in with the indexes to any ineligible events.
 */
-UpdateResult reactivateEvent(KAEvent& event, Resource& resource, QWidget* msgParent, bool showKOrgErr)
+UpdateResult reactivateEvent(KAEvent& event, Resource& resource, QWidget* msgParent, bool showKOrgErr)    //cppcheck-suppress[constParameterReference]  'event' is being amended
 {
     QList<int> ids;
     QList<KAEvent> events(1, event);
