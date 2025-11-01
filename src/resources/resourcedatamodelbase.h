@@ -1,7 +1,7 @@
 /*
  *  resourcedatamodelbase.h  -  base for models containing calendars and events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -70,7 +70,7 @@ public:
 
     static QSize iconSize()       { return mIconSize; }
 
-    /** Return a bulleted list of alarm types for inclusion in an i18n message. */
+    /** Return a list of alarm types for inclusion in an i18n message. */
     static QString typeListForDisplay(CalEvent::Types);
 
     /** Get the tooltip for a resource. The resource's enabled status is

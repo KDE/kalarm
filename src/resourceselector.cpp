@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  calendar resource selection widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2006-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2006-2025 David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  SPDX-FileCopyrightText: 2003, 2004 Cornelius Schumacher <schumacher@kde.org>
  *  SPDX-FileCopyrightText: 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -250,15 +250,15 @@ void ResourceSelector::removeResource()
             QString otherTypes;
             const CalEvent::Types nonStandardTypes(allTypes & ~standardTypes);
             if (nonStandardTypes != currentType)
-                otherTypes = xi18nc("@info", "<para>It also contains:%1</para>", ResourceDataModelBase::typeListForDisplay(nonStandardTypes));
-            text = xi18nc("@info", "<para><resource>%1</resource> is the default calendar for:%2</para>%3"
+                otherTypes = i18nc("@info", "It also contains %1", ResourceDataModelBase::typeListForDisplay(nonStandardTypes));
+            text = xi18nc("@info", "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</para>"
                                   "<para>Do you really want to remove it from all calendar lists?</para>", name, stdTypes, otherTypes);
         }
         else
             text = xi18nc("@info", "Do you really want to remove your default calendar (<resource>%1</resource>) from the list?", name);
     }
     else if (allTypes != currentType)
-        text = xi18nc("@info", "<para><resource>%1</resource> contains:%2</para><para>Do you really want to remove it from all calendar lists?</para>",
+        text = xi18nc("@info", "<para><resource>%1</resource> contains %2</para><para>Do you really want to remove it from all calendar lists?</para>",
                      name, ResourceDataModelBase::typeListForDisplay(allTypes));
     else
         text = xi18nc("@info", "Do you really want to remove the calendar <resource>%1</resource> from the list?", name);

@@ -1,7 +1,7 @@
 /*
  *  resource.cpp  -  generic class containing an alarm calendar resource
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2019-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2019-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -482,35 +482,21 @@ void Resources::notifySettingsChanged(ResourceType* res, ResourceType::Changes c
         if (std != CalEvent::EMPTY)
         {
             setStandard(r, CalEvent::EMPTY);
-            bool singleType = true;
             QString msg;
-            switch (std)
-            {
-                case CalEvent::ACTIVE:
-                    msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
-                                 "This was the default calendar for active alarms.",
-                                 res->displayName());
-                    break;
-                case CalEvent::ARCHIVED:
-                    msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
-                                 "This was the default calendar for archived alarms.",
-                                 res->displayName());
-                    break;
-                case CalEvent::TEMPLATE:
-                    msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
-                                 "This was the default calendar for alarm templates.",
-                                 res->displayName());
-                    break;
-                default:
-                    msg = xi18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
-                                 "This was the default calendar for:%2</para>"
-                                 "<para>Please select new default calendars.</para>",
-                                 res->displayName(), ResourceDataModelBase::typeListForDisplay(std));
-                    singleType = false;
-                    break;
-            }
-            if (singleType)
-                msg = xi18nc("@info", "<para>%1</para><para>Please select a new default calendar.</para>", msg);
+            int n = 0;
+            if (std & CalEvent::ACTIVE)
+                ++n;
+            if (std & CalEvent::ARCHIVED)
+                ++n;
+            if (std & CalEvent::TEMPLATE)
+                ++n;
+            msg = xi18np("<para>The calendar <resource>%2</resource> has been made read-only.</para>"
+                         "<para>This was the default calendar for %3.</para>"
+                         "<para>Please select a new default calendar.</para>",
+                         "<para>The calendar <resource>%2</resource> has been made read-only.</para>"
+                         "<para>This was the default calendar for %3.</para>"
+                         "<para>Please select new default calendars.</para>",
+                         n, res->displayName(), ResourceDataModelBase::typeListForDisplay(std));
             notifyResourceMessage(res->id(), ResourceType::MessageType::Info, msg, QString());
         }
     }

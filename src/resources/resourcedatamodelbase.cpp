@@ -1,7 +1,7 @@
 /*
  *  resourcedatamodelbase.cpp  -  base for models containing calendars and events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -57,20 +57,24 @@ ResourceDataModelBase::~ResourceDataModelBase()
 }
 
 /******************************************************************************
-* Create a bulleted list of alarm types for insertion into <para>...</para>.
+* Create a list of alarm types for insertion into <para>...</para>.
 */
 QString ResourceDataModelBase::typeListForDisplay(CalEvent::Types alarmTypes)
 {
-    QString list;
+    QStringList types;
     if (alarmTypes & CalEvent::ACTIVE)
-        list += "<item>"_L1 + i18nc("@item:intext", "Active Alarms") + "</item>"_L1;
+        types += i18nc("@item:intext", "Active Alarms");
     if (alarmTypes & CalEvent::ARCHIVED)
-        list += "<item>"_L1 + i18nc("@item:intext", "Archived Alarms") + "</item>"_L1;
+        types += i18nc("@item:intext", "Archived Alarms");
     if (alarmTypes & CalEvent::TEMPLATE)
-        list += "<item>"_L1 + i18nc("@item:intext", "Alarm Templates") + "</item>"_L1;
-    if (!list.isEmpty())
-        list = "<list>"_L1 + list + "</list>"_L1;
-    return list;
+        types += i18nc("@item:intext", "Alarm Templates");
+    switch (types.count())
+    {
+        case 1:  return types.at(0);
+        case 2:  return i18nc("@info List of alarm types", "%1, %2", types.at(0), types.at(1));
+        case 3:  return i18nc("@info List of alarm types", "%1, %2, %3", types.at(0), types.at(1), types.at(2));
+        default: return QString();
+    }
 }
 
 /******************************************************************************
