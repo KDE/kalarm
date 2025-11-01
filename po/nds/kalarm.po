@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:43+0000\n"
+"POT-Creation-Date: 2025-11-01 00:46+0000\n"
 "PO-Revision-Date: 2014-09-18 17:01+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -7379,7 +7379,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "Disse Kalenner lett sik nich daalladen: <filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:85
+#: resources/calendarupdater.cpp:86
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -7396,7 +7396,7 @@ msgstr ""
 "(<application>KAlarm</application> Verschoon %2). Se blifft so lang bloots "
 "leesbor, as Du ehr nich op't aktuelle Formaat opfrischst."
 
-#: resources/calendarupdater.cpp:88
+#: resources/calendarupdater.cpp:89
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -7413,7 +7413,7 @@ msgstr ""
 "oolt <application> KAlarm</application>-Formaat. Se blievt so lang bloots "
 "leesbor, as Du se nich op't aktuelle Formaat opfrischst."
 
-#: resources/calendarupdater.cpp:91
+#: resources/calendarupdater.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

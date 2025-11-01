@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:43+0000\n"
+"POT-Creation-Date: 2025-11-01 00:46+0000\n"
 "PO-Revision-Date: 2025-08-14 12:00+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -6864,7 +6864,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "تعذّر تنزيل التقويم: <filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:85
+#: resources/calendarupdater.cpp:86
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6876,7 +6876,7 @@ msgstr ""
 "application> الإصدار %2)، وسيكون للقراءة فقط ما لم تختر تحديثه إلى التنسيق "
 "الحالي."
 
-#: resources/calendarupdater.cpp:88
+#: resources/calendarupdater.cpp:89
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6888,7 +6888,7 @@ msgstr ""
 "<application> «منبّهك» </application>قديم، وستكون للقراءة فقط ما لم تختر "
 "تحديثها إلى التنسيق الحالي."
 
-#: resources/calendarupdater.cpp:91
+#: resources/calendarupdater.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

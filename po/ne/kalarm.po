@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:43+0000\n"
+"POT-Creation-Date: 2025-11-01 00:46+0000\n"
 "PO-Revision-Date: 2007-09-07 11:50+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -7950,7 +7950,7 @@ msgstr ""
 "क्यालेन्डर डाउनलोड गर्न सकिँदैन:\n"
 "%1"
 
-#: resources/calendarupdater.cpp:85
+#: resources/calendarupdater.cpp:86
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Resource <b>%1</b> is in an old format (KAlarm version %2), and will be "
@@ -7964,7 +7964,7 @@ msgstr ""
 "संसाधन <b>%1</b> पूरानो ढाँचा (केडीई संसूचक संस्करण %2)मा छ, र तपाईँले यसलाई हालको "
 "ढाँचामा अद्यावधिक गर्न नरोजेमा पढिने मात्र छ ।"
 
-#: resources/calendarupdater.cpp:88
+#: resources/calendarupdater.cpp:89
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Some or all of the alarms in resource <b>%1</b> are in an old KAlarm "
@@ -7979,7 +7979,7 @@ msgstr ""
 "स्रोत <b>%1</b> का केही वा सबै संसूचक पूरानो केडीई संसूचक ढाँचामा छन्, र तपाईँले हालको "
 "ढाँचामा तिनीहरूलाई अद्यावधिक गर्न नरोजेमा पढिने मात्र हुन्छन् ।"
 
-#: resources/calendarupdater.cpp:91
+#: resources/calendarupdater.cpp:92
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>%1<br><br>WARNING: Do not update the resource if it is shared with "

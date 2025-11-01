@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:43+0000\n"
+"POT-Creation-Date: 2025-11-01 00:46+0000\n"
 "PO-Revision-Date: 2014-09-12 16:04+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -6850,7 +6850,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "Kan ikke laste ned kalender: <filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:85
+#: resources/calendarupdater.cpp:86
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6859,7 +6859,7 @@ msgid ""
 "it to the current format."
 msgstr ""
 
-#: resources/calendarupdater.cpp:88
+#: resources/calendarupdater.cpp:89
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6868,7 +6868,7 @@ msgid ""
 "choose to update them to the current format."
 msgstr ""
 
-#: resources/calendarupdater.cpp:91
+#: resources/calendarupdater.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

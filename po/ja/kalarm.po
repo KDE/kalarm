@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:43+0000\n"
+"POT-Creation-Date: 2025-11-01 00:46+0000\n"
 "PO-Revision-Date: 2011-08-14 14:09-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -7232,7 +7232,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "カレンダーをダウンロードできません: <filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:85
+#: resources/calendarupdater.cpp:86
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -7244,7 +7244,7 @@ msgstr ""
 "application> バージョン %2) です。現在のフォーマットに更新しなければ読み取り"
 "専用になります。"
 
-#: resources/calendarupdater.cpp:88
+#: resources/calendarupdater.cpp:89
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -7256,7 +7256,7 @@ msgstr ""
 "<application>KAlarm</application> のフォーマットです。現在のフォーマットに更"
 "新しなければ読み取り専用になります。"
 
-#: resources/calendarupdater.cpp:91
+#: resources/calendarupdater.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

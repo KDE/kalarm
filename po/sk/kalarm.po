@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:43+0000\n"
+"POT-Creation-Date: 2025-11-01 00:46+0000\n"
 "PO-Revision-Date: 2022-04-25 19:18+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -7162,7 +7162,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "Nepodarilo sa stiahnuť kalendár: <filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:85
+#: resources/calendarupdater.cpp:86
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Calendar <resource>%1</resource> is in an old format "
@@ -7178,7 +7178,7 @@ msgstr ""
 "application> verzia %2) a bude iba na čítanie, dokiaľ sa ho rozhodnete "
 "aktualizovať na aktuálny formát."
 
-#: resources/calendarupdater.cpp:88
+#: resources/calendarupdater.cpp:89
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Some or all of the alarms in calendar <resource>%1</resource> are in an "
@@ -7194,7 +7194,7 @@ msgstr ""
 "<application>KAlarm</application> formáte a budú iba na čítanie, dokiaľ sa "
 "ich rozhodnete aktualizovať na aktuálny formát."
 
-#: resources/calendarupdater.cpp:91
+#: resources/calendarupdater.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

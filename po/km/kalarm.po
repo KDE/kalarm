@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:43+0000\n"
+"POT-Creation-Date: 2025-11-01 00:46+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -7286,7 +7286,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "មិនអាច​ទាញយក​ប្រតិទិន ៖ <filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:85
+#: resources/calendarupdater.cpp:86
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -7303,7 +7303,7 @@ msgstr ""
 "application> កំណែ %2) ហើយ​នឹងក្លាយ​ជា​ បានតែ​អាន រហូតទាល់អ្នក​ជ្រើស​ធ្វើ​​បច្ចុប្បន្នភាព​​​​ជា​ទ្រង់ទ្រាយ​"
 "បច្ចុប្បន្ន ។"
 
-#: resources/calendarupdater.cpp:88
+#: resources/calendarupdater.cpp:89
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -7320,7 +7320,7 @@ msgstr ""
 "<application>KAlarm</application> ចាស់ ហើយ​​បានតែ​អាន ទាល់តែ​អ្នក​ជ្រើស​ធ្វើ​បច្ចុប្បន្នភាព​​"
 "ពួកវា​ទៅ​ជា​ទ្រង់ទ្រាយ​បច្ចុប្បន្ន ។"
 
-#: resources/calendarupdater.cpp:91
+#: resources/calendarupdater.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

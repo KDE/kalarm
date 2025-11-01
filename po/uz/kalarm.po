@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:43+0000\n"
+"POT-Creation-Date: 2025-11-01 00:46+0000\n"
 "PO-Revision-Date: 2006-12-17 13:25+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -7145,7 +7145,7 @@ msgstr ""
 "Audio faylni ochib boʻlmadi:\n"
 "%1"
 
-#: resources/calendarupdater.cpp:85
+#: resources/calendarupdater.cpp:86
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -7154,7 +7154,7 @@ msgid ""
 "it to the current format."
 msgstr ""
 
-#: resources/calendarupdater.cpp:88
+#: resources/calendarupdater.cpp:89
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -7163,7 +7163,7 @@ msgid ""
 "choose to update them to the current format."
 msgstr ""
 
-#: resources/calendarupdater.cpp:91
+#: resources/calendarupdater.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

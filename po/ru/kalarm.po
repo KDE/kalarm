@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:43+0000\n"
+"POT-Creation-Date: 2025-11-01 00:46+0000\n"
 "PO-Revision-Date: 2025-04-01 12:28+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -6996,7 +6996,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "Не удалось загрузить календарь <filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:85
+#: resources/calendarupdater.cpp:86
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -7008,7 +7008,7 @@ msgstr ""
 "(<application>KAlarm</application> версии %2) и доступен только для чтения "
 "до тех пор, пока не будет сохранён в новом формате."
 
-#: resources/calendarupdater.cpp:88
+#: resources/calendarupdater.cpp:89
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -7020,7 +7020,7 @@ msgstr ""
 "в старом формате <application>KAlarm</application> и доступны только для "
 "чтения до тех пор, пока не будут сохранены в новом формате."
 
-#: resources/calendarupdater.cpp:91
+#: resources/calendarupdater.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

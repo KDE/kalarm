@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:43+0000\n"
+"POT-Creation-Date: 2025-11-01 00:46+0000\n"
 "PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -6805,7 +6805,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "पञ्चाङ्गं अवतरणं कर्तुं न शक्यते: <filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:85
+#: resources/calendarupdater.cpp:86
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6817,7 +6817,7 @@ msgstr ""
 "संस्करण %2) अस्ति, तथा च केवलं पठनीयं भविष्यति यावत् भवान् वर्तमानस्वरूपे अद्यतनं कर्तुं न "
 "चिनोति ।"
 
-#: resources/calendarupdater.cpp:88
+#: resources/calendarupdater.cpp:89
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6829,7 +6829,7 @@ msgstr ""
 "<application>KAlarm</application> प्रारूपेण सन्ति, तथा च केवलं पठनीयाः भविष्यन्ति "
 "यावत् भवान् तान् वर्तमानस्वरूपे अद्यतनीकर्तुं न चिनोति"
 
-#: resources/calendarupdater.cpp:91
+#: resources/calendarupdater.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:43+0000\n"
+"POT-Creation-Date: 2025-11-01 00:46+0000\n"
 "PO-Revision-Date: 2025-01-26 17:20+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -6863,7 +6863,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "<filename>%1</filename> என்ற நாள்காட்டியை பதிவிறக்க முடியவில்லை."
 
-#: resources/calendarupdater.cpp:85
+#: resources/calendarupdater.cpp:86
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6875,7 +6875,7 @@ msgstr ""
 "(<application>கேயலாரம்</application> பதிப்பு %2). அதை நீங்கள் புதிய கோப்பு "
 "வடிவத்தில் சேமிக்காத பட்சத்தில், அது படிக்க மட்டும் கூடியதாக இருக்கும்."
 
-#: resources/calendarupdater.cpp:88
+#: resources/calendarupdater.cpp:89
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6887,7 +6887,7 @@ msgstr ""
 "<application>கேயலாரத்தின்</application> பழைய படிவத்தில் உள்ளன. அவற்றை புதிய "
 "படிவத்தில் சேமிக்காவிடில், அவை படிக்க மட்டும் கூடியவையாக இருக்கும்."
 
-#: resources/calendarupdater.cpp:91
+#: resources/calendarupdater.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

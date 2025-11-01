@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-31 00:43+0000\n"
+"POT-Creation-Date: 2025-11-01 00:46+0000\n"
 "PO-Revision-Date: 2025-02-07 22:59+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -6658,7 +6658,7 @@ msgstr ""
 "無法下載行事曆：\n"
 "<filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:85
+#: resources/calendarupdater.cpp:86
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6669,7 +6669,7 @@ msgstr ""
 "行事曆 <resource>%1</resource> 是舊的格式（<application>KAlarm</application> "
 "版本 %2），除非您選擇將它更新為目前的格式，否則將會設為唯讀。"
 
-#: resources/calendarupdater.cpp:88
+#: resources/calendarupdater.cpp:89
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6681,7 +6681,7 @@ msgstr ""
 "<application>KAlarm</application> 格式，在您選擇將它們更新為目前的格式之前將"
 "會設為唯讀。"
 
-#: resources/calendarupdater.cpp:91
+#: resources/calendarupdater.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
