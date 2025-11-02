@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-01 00:46+0000\n"
+"POT-Creation-Date: 2025-11-02 00:42+0000\n"
 "PO-Revision-Date: 2017-09-28 18:00+0200\n"
 "Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
@@ -7793,7 +7793,19 @@ msgctxt "@item:intext"
 msgid "Alarm Templates"
 msgstr "šabloni alarma"
 
-#: resources/resourcedatamodelbase.cpp:86
+#: resources/resourcedatamodelbase.cpp:74
+#, kde-format
+msgctxt "@info List of alarm types"
+msgid "%1, %2"
+msgstr ""
+
+#: resources/resourcedatamodelbase.cpp:75
+#, kde-format
+msgctxt "@info List of alarm types"
+msgid "%1, %2, %3"
+msgstr ""
+
+#: resources/resourcedatamodelbase.cpp:90
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Read-only"
@@ -7801,7 +7813,7 @@ msgctxt "@item:intext Calendar status"
 msgid "Read-only"
 msgstr "samo‑za‑čitanje"
 
-#: resources/resourcedatamodelbase.cpp:89
+#: resources/resourcedatamodelbase.cpp:93
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Read-only (old format)"
@@ -7809,7 +7821,7 @@ msgctxt "@item:intext Calendar status"
 msgid "Read-only (old format)"
 msgstr "samo‑za‑čitanje (stari format)"
 
-#: resources/resourcedatamodelbase.cpp:92
+#: resources/resourcedatamodelbase.cpp:96
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Read-only (other format)"
@@ -7817,37 +7829,37 @@ msgctxt "@item:intext Calendar status"
 msgid "Read-only (other format)"
 msgstr "samo‑za‑čitanje (drugi format)"
 
-#: resources/resourcedatamodelbase.cpp:114
+#: resources/resourcedatamodelbase.cpp:118
 #, kde-format
 msgctxt "@title:column"
 msgid "Time"
 msgstr "vreme"
 
-#: resources/resourcedatamodelbase.cpp:116
+#: resources/resourcedatamodelbase.cpp:120
 #, kde-format
 msgctxt "@title:column"
 msgid "Time To"
 msgstr "vreme do"
 
-#: resources/resourcedatamodelbase.cpp:118
+#: resources/resourcedatamodelbase.cpp:122
 #, kde-format
 msgctxt "@title:column"
 msgid "Repeat"
 msgstr "ponavljanje"
 
-#: resources/resourcedatamodelbase.cpp:120
+#: resources/resourcedatamodelbase.cpp:124
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:122
+#: resources/resourcedatamodelbase.cpp:126
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:124
+#: resources/resourcedatamodelbase.cpp:128
 #, fuzzy, kde-format
 #| msgctxt "@title:column Template name"
 #| msgid "Name"
@@ -7855,105 +7867,105 @@ msgctxt "@title:column"
 msgid "Name"
 msgstr "ime"
 
-#: resources/resourcedatamodelbase.cpp:126
+#: resources/resourcedatamodelbase.cpp:130
 #, kde-format
 msgctxt "@title:column"
 msgid "Message, File or Command"
 msgstr "poruka, fajl ili naredba"
 
-#: resources/resourcedatamodelbase.cpp:128
+#: resources/resourcedatamodelbase.cpp:132
 #, kde-format
 msgctxt "@title:column Template name"
 msgid "Name"
 msgstr "ime"
 
-#: resources/resourcedatamodelbase.cpp:140
+#: resources/resourcedatamodelbase.cpp:144
 #, kde-format
 msgctxt "@title:column"
 msgid "Calendars"
 msgstr "kalendari"
 
-#: resources/resourcedatamodelbase.cpp:451
+#: resources/resourcedatamodelbase.cpp:455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
 msgstr "Izvršavanje naredbe propalo"
 
-#: resources/resourcedatamodelbase.cpp:453
+#: resources/resourcedatamodelbase.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
 msgstr "Izvršavanje radnje pre alarma propalo"
 
-#: resources/resourcedatamodelbase.cpp:455
+#: resources/resourcedatamodelbase.cpp:459
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
 msgstr "Izvršavanje radnje posle alarma propalo"
 
-#: resources/resourcedatamodelbase.cpp:457
+#: resources/resourcedatamodelbase.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
 msgstr "Izvršavanje radnje pre i posle alarma propalo"
 
-#: resources/resourcedatamodelbase.cpp:488
+#: resources/resourcedatamodelbase.cpp:492
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
 msgstr "Deaktivirani"
 
-#: resources/resourcedatamodelbase.cpp:491
+#: resources/resourcedatamodelbase.cpp:495
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 msgstr "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 
-#: resources/resourcedatamodelbase.cpp:496
+#: resources/resourcedatamodelbase.cpp:500
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename>"
 msgstr "%1<nl/>%2: <filename>%3</filename>"
 
-#: resources/resourcedatamodelbase.cpp:557
+#: resources/resourcedatamodelbase.cpp:561
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
 msgstr "Sledeći zakazani datum i vreme alarma."
 
-#: resources/resourcedatamodelbase.cpp:559
+#: resources/resourcedatamodelbase.cpp:563
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
 msgstr "Koliko još ima do sledećeg zakazanog oglašavanja alarma."
 
-#: resources/resourcedatamodelbase.cpp:561
+#: resources/resourcedatamodelbase.cpp:565
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
 msgstr "Koliko često se alarm ponavlja."
 
-#: resources/resourcedatamodelbase.cpp:563
+#: resources/resourcedatamodelbase.cpp:567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Background color of alarm message"
 msgstr "Boja pozadine alarmne poruke."
 
-#: resources/resourcedatamodelbase.cpp:565
+#: resources/resourcedatamodelbase.cpp:569
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm type (message, file, command or email)"
 msgstr "Tip alarma (poruka, fajl, naredba ili e‑pošta)."
 
-#: resources/resourcedatamodelbase.cpp:567
+#: resources/resourcedatamodelbase.cpp:571
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
 msgstr ""
 
 # rewrite-msgid: /line//
-#: resources/resourcedatamodelbase.cpp:569
+#: resources/resourcedatamodelbase.cpp:573
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7963,32 +7975,32 @@ msgstr ""
 "Tekst alarmne poruke, URL tekstualnog fajla za prikaz, naredba za "
 "izvršavanje, ili tema e‑pošte."
 
-#: resources/resourcedatamodelbase.cpp:571
+#: resources/resourcedatamodelbase.cpp:575
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
 msgstr "Ime šablona alarma."
 
-#: resources/resourcedatamodelbase.cpp:663
-#: resources/resourcedatamodelbase.cpp:763
+#: resources/resourcedatamodelbase.cpp:667
+#: resources/resourcedatamodelbase.cpp:767
 #, kde-format
 msgctxt "@info Alarm never occurs"
 msgid "Never"
 msgstr "nikad"
 
-#: resources/resourcedatamodelbase.cpp:769
+#: resources/resourcedatamodelbase.cpp:773
 #, no-c-format, kde-format
 msgctxt "@info n days"
 msgid "%1d"
 msgstr "%1d"
 
-#: resources/resourcedatamodelbase.cpp:779
+#: resources/resourcedatamodelbase.cpp:783
 #, kde-format
 msgctxt "@info hours:minutes"
 msgid "%1:%2"
 msgstr "%1.%2"
 
-#: resources/resourcedatamodelbase.cpp:786
+#: resources/resourcedatamodelbase.cpp:790
 #, kde-format
 msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
@@ -8022,53 +8034,37 @@ msgctxt "@title:window"
 msgid "Choose Calendar"
 msgstr "Izbor kalendara"
 
-#: resources/resources.cpp:490
-#, kde-kuit-format
-msgctxt "@info"
+#: resources/resources.cpp:493
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
+#| "was the default calendar for:%2</para><para>Please select new default "
+#| "calendars.</para>"
 msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for active alarms."
-msgstr ""
-"Kalendar <resource>%1</resource> postavljen je na samo‑za‑čitanje. Ovo je "
-"bio podrazumevani kalendar aktivnih alarma."
-
-#: resources/resources.cpp:495
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for archived alarms."
-msgstr ""
-"Kalendar <resource>%1</resource> postavljen je na samo‑za‑čitanje. Ovo je "
-"bio podrazumevani kalendar arhiviranih alarma."
-
-#: resources/resources.cpp:500
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for alarm templates."
-msgstr ""
-"Kalendar <resource>%1</resource> postavljen je na samo‑za‑čitanje. Ovo je "
-"bio podrazumevani kalendar šablona alarma."
-
-#: resources/resources.cpp:505
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"<para>The calendar <resource>%1</resource> has been made read-only. This was "
-"the default calendar for:%2</para><para>Please select new default calendars."
-"</para>"
-msgstr ""
+"<para>The calendar <resource>%2</resource> has been made read-only.</"
+"para><para>This was the default calendar for %3.</para><para>Please select a "
+"new default calendar.</para>"
+msgid_plural ""
+"<para>The calendar <resource>%2</resource> has been made read-only.</"
+"para><para>This was the default calendar for %3.</para><para>Please select "
+"new default calendars.</para>"
+msgstr[0] ""
 "<para>Kalendar <resource>%1</resource> postavljen je na samo‑za‑čitanje. Ovo "
 "je bio podrazumevani kalendar za: %2</para><para>Izaberite nove "
 "podrazumevane kalendare.</para>"
-
-#: resources/resources.cpp:513
-#, kde-kuit-format
-msgctxt "@info"
-msgid "<para>%1</para><para>Please select a new default calendar.</para>"
-msgstr "<para>%1</para><para>Izaberite novi podrazumevani kalendar.</para>"
+msgstr[1] ""
+"<para>Kalendar <resource>%1</resource> postavljen je na samo‑za‑čitanje. Ovo "
+"je bio podrazumevani kalendar za: %2</para><para>Izaberite nove "
+"podrazumevane kalendare.</para>"
+msgstr[2] ""
+"<para>Kalendar <resource>%1</resource> postavljen je na samo‑za‑čitanje. Ovo "
+"je bio podrazumevani kalendar za: %2</para><para>Izaberite nove "
+"podrazumevane kalendare.</para>"
+msgstr[3] ""
+"<para>Kalendar <resource>%1</resource> postavljen je na samo‑za‑čitanje. Ovo "
+"je bio podrazumevani kalendar za: %2</para><para>Izaberite nove "
+"podrazumevane kalendare.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -8442,17 +8438,23 @@ msgstr ""
 "njihovo čuvanje."
 
 #: resourceselector.cpp:253
-#, kde-kuit-format
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "<para>It also contains:%1</para>"
 msgctxt "@info"
-msgid "<para>It also contains:%1</para>"
+msgid "It also contains %1"
 msgstr "<para>Takođe sadrži: %1</para>"
 
 #: resourceselector.cpp:254
-#, kde-kuit-format
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
+#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> is the default calendar for:%2</para>"
-"%3<para>Do you really want to remove it from all calendar lists?</para>"
+"<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
+"para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
 "<para><resource>%1</resource> je podrazumevani kalendar za tip: %2</para>"
 "%3<para>Želite li zaista da ga uklonite sa svih spiskova kalendara?</para>"
@@ -8468,10 +8470,14 @@ msgstr ""
 "resource>) sa spiska?"
 
 #: resourceselector.cpp:261
-#, kde-kuit-format
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
+#| "to remove it from all calendar lists?</para>"
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> contains:%2</para><para>Do you really want to "
+"<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
 "<para><resource>%1</resource> sadrži: %2</para><para>Želite li zaista da ga "
@@ -9378,6 +9384,34 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Broj minuta pre alarma za buđenje iz suspendovanosti"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The calendar <resource>%1</resource> has been made read-only. This was "
+#~ "the default calendar for active alarms."
+#~ msgstr ""
+#~ "Kalendar <resource>%1</resource> postavljen je na samo‑za‑čitanje. Ovo je "
+#~ "bio podrazumevani kalendar aktivnih alarma."
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The calendar <resource>%1</resource> has been made read-only. This was "
+#~ "the default calendar for archived alarms."
+#~ msgstr ""
+#~ "Kalendar <resource>%1</resource> postavljen je na samo‑za‑čitanje. Ovo je "
+#~ "bio podrazumevani kalendar arhiviranih alarma."
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The calendar <resource>%1</resource> has been made read-only. This was "
+#~ "the default calendar for alarm templates."
+#~ msgstr ""
+#~ "Kalendar <resource>%1</resource> postavljen je na samo‑za‑čitanje. Ovo je "
+#~ "bio podrazumevani kalendar šablona alarma."
+
+#~ msgctxt "@info"
+#~ msgid "<para>%1</para><para>Please select a new default calendar.</para>"
+#~ msgstr "<para>%1</para><para>Izaberite novi podrazumevani kalendar.</para>"
 
 #~ msgctxt "@label"
 #~ msgid "Suppress autostart at login"

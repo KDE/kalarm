@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-01 00:46+0000\n"
+"POT-Creation-Date: 2025-11-02 00:42+0000\n"
 "PO-Revision-Date: 2020-05-15 08:19+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -7593,55 +7593,67 @@ msgctxt "@item:intext"
 msgid "Alarm Templates"
 msgstr "Häiremallid"
 
-#: resources/resourcedatamodelbase.cpp:86
+#: resources/resourcedatamodelbase.cpp:74
+#, kde-format
+msgctxt "@info List of alarm types"
+msgid "%1, %2"
+msgstr ""
+
+#: resources/resourcedatamodelbase.cpp:75
+#, kde-format
+msgctxt "@info List of alarm types"
+msgid "%1, %2, %3"
+msgstr ""
+
+#: resources/resourcedatamodelbase.cpp:90
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only"
 msgstr "Kirjutuskaitstud"
 
-#: resources/resourcedatamodelbase.cpp:89
+#: resources/resourcedatamodelbase.cpp:93
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (old format)"
 msgstr "Kirjutuskaitstud (vana vorming)"
 
-#: resources/resourcedatamodelbase.cpp:92
+#: resources/resourcedatamodelbase.cpp:96
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (other format)"
 msgstr "Kirjutuskaitstud (muu vorming)"
 
-#: resources/resourcedatamodelbase.cpp:114
+#: resources/resourcedatamodelbase.cpp:118
 #, kde-format
 msgctxt "@title:column"
 msgid "Time"
 msgstr "Aeg"
 
-#: resources/resourcedatamodelbase.cpp:116
+#: resources/resourcedatamodelbase.cpp:120
 #, kde-format
 msgctxt "@title:column"
 msgid "Time To"
 msgstr "Aega jäänud"
 
-#: resources/resourcedatamodelbase.cpp:118
+#: resources/resourcedatamodelbase.cpp:122
 #, kde-format
 msgctxt "@title:column"
 msgid "Repeat"
 msgstr "Kordamine"
 
-#: resources/resourcedatamodelbase.cpp:120
+#: resources/resourcedatamodelbase.cpp:124
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
 msgstr "Värv"
 
-#: resources/resourcedatamodelbase.cpp:122
+#: resources/resourcedatamodelbase.cpp:126
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Tüüp"
 
-#: resources/resourcedatamodelbase.cpp:124
+#: resources/resourcedatamodelbase.cpp:128
 #, fuzzy, kde-format
 #| msgctxt "@title:column Template name"
 #| msgid "Name"
@@ -7649,103 +7661,103 @@ msgctxt "@title:column"
 msgid "Name"
 msgstr "Nimi"
 
-#: resources/resourcedatamodelbase.cpp:126
+#: resources/resourcedatamodelbase.cpp:130
 #, kde-format
 msgctxt "@title:column"
 msgid "Message, File or Command"
 msgstr "Teade, fail või käsk"
 
-#: resources/resourcedatamodelbase.cpp:128
+#: resources/resourcedatamodelbase.cpp:132
 #, kde-format
 msgctxt "@title:column Template name"
 msgid "Name"
 msgstr "Nimi"
 
-#: resources/resourcedatamodelbase.cpp:140
+#: resources/resourcedatamodelbase.cpp:144
 #, kde-format
 msgctxt "@title:column"
 msgid "Calendars"
 msgstr "Kalendrid"
 
-#: resources/resourcedatamodelbase.cpp:451
+#: resources/resourcedatamodelbase.cpp:455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
 msgstr "Käsu käivitamine nurjus"
 
-#: resources/resourcedatamodelbase.cpp:453
+#: resources/resourcedatamodelbase.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
 msgstr "Häire-eelse toimingu käivitamine nurjus"
 
-#: resources/resourcedatamodelbase.cpp:455
+#: resources/resourcedatamodelbase.cpp:459
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
 msgstr "Häirejärgse toimingu käivitamine nurjus"
 
-#: resources/resourcedatamodelbase.cpp:457
+#: resources/resourcedatamodelbase.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
 msgstr "Häire-eelse ja -järgse toimingu käivitamine nurjus"
 
-#: resources/resourcedatamodelbase.cpp:488
+#: resources/resourcedatamodelbase.cpp:492
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
 msgstr "Keelatud"
 
-#: resources/resourcedatamodelbase.cpp:491
+#: resources/resourcedatamodelbase.cpp:495
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 msgstr "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 
-#: resources/resourcedatamodelbase.cpp:496
+#: resources/resourcedatamodelbase.cpp:500
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename>"
 msgstr "%1<nl/>%2: <filename>%3</filename>"
 
-#: resources/resourcedatamodelbase.cpp:557
+#: resources/resourcedatamodelbase.cpp:561
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
 msgstr "Häire järgmine kuupäev ja aeg"
 
-#: resources/resourcedatamodelbase.cpp:559
+#: resources/resourcedatamodelbase.cpp:563
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
 msgstr "Häire järgmise esitamise kuupäev ja aeg"
 
-#: resources/resourcedatamodelbase.cpp:561
+#: resources/resourcedatamodelbase.cpp:565
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
 msgstr "Häire kordumise intervall"
 
-#: resources/resourcedatamodelbase.cpp:563
+#: resources/resourcedatamodelbase.cpp:567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Background color of alarm message"
 msgstr "Häireteate taustavärv"
 
-#: resources/resourcedatamodelbase.cpp:565
+#: resources/resourcedatamodelbase.cpp:569
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm type (message, file, command or email)"
 msgstr "Häire tüüp (teade, fail, käsk või kiri)"
 
-#: resources/resourcedatamodelbase.cpp:567
+#: resources/resourcedatamodelbase.cpp:571
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:569
+#: resources/resourcedatamodelbase.cpp:573
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7755,32 +7767,32 @@ msgstr ""
 "Häire teate tekst, näidatava tekstifaili URL, käivitatav käsk või kirja "
 "teemarida"
 
-#: resources/resourcedatamodelbase.cpp:571
+#: resources/resourcedatamodelbase.cpp:575
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
 msgstr "Häiremalli nimi"
 
-#: resources/resourcedatamodelbase.cpp:663
-#: resources/resourcedatamodelbase.cpp:763
+#: resources/resourcedatamodelbase.cpp:667
+#: resources/resourcedatamodelbase.cpp:767
 #, kde-format
 msgctxt "@info Alarm never occurs"
 msgid "Never"
 msgstr "Mitte kunagi"
 
-#: resources/resourcedatamodelbase.cpp:769
+#: resources/resourcedatamodelbase.cpp:773
 #, no-c-format, kde-format
 msgctxt "@info n days"
 msgid "%1d"
 msgstr " %1p "
 
-#: resources/resourcedatamodelbase.cpp:779
+#: resources/resourcedatamodelbase.cpp:783
 #, kde-format
 msgctxt "@info hours:minutes"
 msgid "%1:%2"
 msgstr "%1:%2"
 
-#: resources/resourcedatamodelbase.cpp:786
+#: resources/resourcedatamodelbase.cpp:790
 #, kde-format
 msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
@@ -7814,52 +7826,27 @@ msgctxt "@title:window"
 msgid "Choose Calendar"
 msgstr "Kalendri valimine"
 
-#: resources/resources.cpp:490
-#, kde-kuit-format
-msgctxt "@info"
+#: resources/resources.cpp:493
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
+#| "was the default calendar for:%2</para><para>Please select new default "
+#| "calendars.</para>"
 msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for active alarms."
-msgstr ""
-"Kalender <resource>%1</resource> muudeti kirjutuskaitstuks. See oli "
-"aktiivsete häirete vaikekalender."
-
-#: resources/resources.cpp:495
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for archived alarms."
-msgstr ""
-"Kalender <resource>%1</resource> muudeti kirjutuskaitstuks. See oli aegunud "
-"häirete vaikekalender."
-
-#: resources/resources.cpp:500
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for alarm templates."
-msgstr ""
-"Kalender <resource>%1</resource> muudeti kirjutuskaitstuks. See oli "
-"häiremallide vaikekalender."
-
-#: resources/resources.cpp:505
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"<para>The calendar <resource>%1</resource> has been made read-only. This was "
-"the default calendar for:%2</para><para>Please select new default calendars."
-"</para>"
-msgstr ""
+"<para>The calendar <resource>%2</resource> has been made read-only.</"
+"para><para>This was the default calendar for %3.</para><para>Please select a "
+"new default calendar.</para>"
+msgid_plural ""
+"<para>The calendar <resource>%2</resource> has been made read-only.</"
+"para><para>This was the default calendar for %3.</para><para>Please select "
+"new default calendars.</para>"
+msgstr[0] ""
 "<para>Kalender <resource>%1</resource> muudeti kirjutuskaitstuks. See oli %2 "
 "jaoks vaikekalender:</para><para>Palun vali uued vaikekalendrid.</para>"
-
-#: resources/resources.cpp:513
-#, kde-kuit-format
-msgctxt "@info"
-msgid "<para>%1</para><para>Please select a new default calendar.</para>"
-msgstr "<para>%1</para><para>Palun määra uus vaikekalender.</para>"
+msgstr[1] ""
+"<para>Kalender <resource>%1</resource> muudeti kirjutuskaitstuks. See oli %2 "
+"jaoks vaikekalender:</para><para>Palun vali uued vaikekalendrid.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -8211,17 +8198,23 @@ msgstr ""
 "aegunud häirete salvestamine."
 
 #: resourceselector.cpp:253
-#, kde-kuit-format
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "<para>It also contains:%1</para>"
 msgctxt "@info"
-msgid "<para>It also contains:%1</para>"
+msgid "It also contains %1"
 msgstr "<para>See sisaldab ka:%1</para>"
 
 #: resourceselector.cpp:254
-#, kde-kuit-format
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
+#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> is the default calendar for:%2</para>"
-"%3<para>Do you really want to remove it from all calendar lists?</para>"
+"<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
+"para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
 "<para><resource>%1</resource> on %2 jaoks vaikekalender</para>%3<para>Kas "
 "tõesti eemaldada see kõigist kalendriloenditest?</para>"
@@ -8236,10 +8229,14 @@ msgstr ""
 "Kas tõesti eemaldada nimekirjast vaikekalender (<resource>%1</resource>)?"
 
 #: resourceselector.cpp:261
-#, kde-kuit-format
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
+#| "to remove it from all calendar lists?</para>"
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> contains:%2</para><para>Do you really want to "
+"<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
 "<para><resource>%1</resource> sisaldab: %2</para><para>Kas tõesti eemaldada "
@@ -9136,6 +9133,34 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Minutit arv enne häiret uneseisundist ärkamiseks"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The calendar <resource>%1</resource> has been made read-only. This was "
+#~ "the default calendar for active alarms."
+#~ msgstr ""
+#~ "Kalender <resource>%1</resource> muudeti kirjutuskaitstuks. See oli "
+#~ "aktiivsete häirete vaikekalender."
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The calendar <resource>%1</resource> has been made read-only. This was "
+#~ "the default calendar for archived alarms."
+#~ msgstr ""
+#~ "Kalender <resource>%1</resource> muudeti kirjutuskaitstuks. See oli "
+#~ "aegunud häirete vaikekalender."
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The calendar <resource>%1</resource> has been made read-only. This was "
+#~ "the default calendar for alarm templates."
+#~ msgstr ""
+#~ "Kalender <resource>%1</resource> muudeti kirjutuskaitstuks. See oli "
+#~ "häiremallide vaikekalender."
+
+#~ msgctxt "@info"
+#~ msgid "<para>%1</para><para>Please select a new default calendar.</para>"
+#~ msgstr "<para>%1</para><para>Palun määra uus vaikekalender.</para>"
 
 #~ msgctxt "@label"
 #~ msgid "Suppress autostart at login"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-01 00:46+0000\n"
+"POT-Creation-Date: 2025-11-02 00:42+0000\n"
 "PO-Revision-Date: 2025-02-07 22:59+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -7023,157 +7023,169 @@ msgctxt "@item:intext"
 msgid "Alarm Templates"
 msgstr "鬧鐘樣本"
 
-#: resources/resourcedatamodelbase.cpp:86
+#: resources/resourcedatamodelbase.cpp:74
+#, kde-format
+msgctxt "@info List of alarm types"
+msgid "%1, %2"
+msgstr ""
+
+#: resources/resourcedatamodelbase.cpp:75
+#, kde-format
+msgctxt "@info List of alarm types"
+msgid "%1, %2, %3"
+msgstr ""
+
+#: resources/resourcedatamodelbase.cpp:90
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only"
 msgstr "唯讀"
 
-#: resources/resourcedatamodelbase.cpp:89
+#: resources/resourcedatamodelbase.cpp:93
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (old format)"
 msgstr "唯讀（舊格式）"
 
-#: resources/resourcedatamodelbase.cpp:92
+#: resources/resourcedatamodelbase.cpp:96
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (other format)"
 msgstr "唯讀（其他格式）"
 
-#: resources/resourcedatamodelbase.cpp:114
+#: resources/resourcedatamodelbase.cpp:118
 #, kde-format
 msgctxt "@title:column"
 msgid "Time"
 msgstr "時間"
 
-#: resources/resourcedatamodelbase.cpp:116
+#: resources/resourcedatamodelbase.cpp:120
 #, kde-format
 msgctxt "@title:column"
 msgid "Time To"
 msgstr "剩餘時間"
 
-#: resources/resourcedatamodelbase.cpp:118
+#: resources/resourcedatamodelbase.cpp:122
 #, kde-format
 msgctxt "@title:column"
 msgid "Repeat"
 msgstr "重複"
 
-#: resources/resourcedatamodelbase.cpp:120
+#: resources/resourcedatamodelbase.cpp:124
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
 msgstr "顏色"
 
-#: resources/resourcedatamodelbase.cpp:122
+#: resources/resourcedatamodelbase.cpp:126
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "類型"
 
-#: resources/resourcedatamodelbase.cpp:124
+#: resources/resourcedatamodelbase.cpp:128
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "名稱"
 
-#: resources/resourcedatamodelbase.cpp:126
+#: resources/resourcedatamodelbase.cpp:130
 #, kde-format
 msgctxt "@title:column"
 msgid "Message, File or Command"
 msgstr "訊息，檔案或指令"
 
-#: resources/resourcedatamodelbase.cpp:128
+#: resources/resourcedatamodelbase.cpp:132
 #, kde-format
 msgctxt "@title:column Template name"
 msgid "Name"
 msgstr "名稱"
 
-#: resources/resourcedatamodelbase.cpp:140
+#: resources/resourcedatamodelbase.cpp:144
 #, kde-format
 msgctxt "@title:column"
 msgid "Calendars"
 msgstr "行事曆"
 
-#: resources/resourcedatamodelbase.cpp:451
+#: resources/resourcedatamodelbase.cpp:455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
 msgstr "指令執行失敗"
 
-#: resources/resourcedatamodelbase.cpp:453
+#: resources/resourcedatamodelbase.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
 msgstr "鬧鐘響鈴前動作失敗"
 
-#: resources/resourcedatamodelbase.cpp:455
+#: resources/resourcedatamodelbase.cpp:459
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
 msgstr "鬧鐘響鈴後動作失敗"
 
-#: resources/resourcedatamodelbase.cpp:457
+#: resources/resourcedatamodelbase.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
 msgstr "鬧鐘響鈴前與響鈴後動作失敗"
 
-#: resources/resourcedatamodelbase.cpp:488
+#: resources/resourcedatamodelbase.cpp:492
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
 msgstr "已關閉"
 
-#: resources/resourcedatamodelbase.cpp:491
+#: resources/resourcedatamodelbase.cpp:495
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 msgstr "%1<nl/>%2：<filename>%3</filename><nl/>%4"
 
-#: resources/resourcedatamodelbase.cpp:496
+#: resources/resourcedatamodelbase.cpp:500
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename>"
 msgstr "%1<nl/>%2：<filename>%3</filename>"
 
-#: resources/resourcedatamodelbase.cpp:557
+#: resources/resourcedatamodelbase.cpp:561
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
 msgstr "鬧鐘下一次響鈴日期與時間"
 
-#: resources/resourcedatamodelbase.cpp:559
+#: resources/resourcedatamodelbase.cpp:563
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
 msgstr "到下一次鬧鐘響鈴有多久"
 
-#: resources/resourcedatamodelbase.cpp:561
+#: resources/resourcedatamodelbase.cpp:565
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
 msgstr "鬧鐘多久重複響一次"
 
-#: resources/resourcedatamodelbase.cpp:563
+#: resources/resourcedatamodelbase.cpp:567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Background color of alarm message"
 msgstr "鬧鐘訊息的背景顏色"
 
-#: resources/resourcedatamodelbase.cpp:565
+#: resources/resourcedatamodelbase.cpp:569
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm type (message, file, command or email)"
 msgstr "鬧鐘類型（訊息，檔案，指令或電子郵件）"
 
-#: resources/resourcedatamodelbase.cpp:567
+#: resources/resourcedatamodelbase.cpp:571
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
 msgstr "鬧鐘名稱，名稱空白時為鬧鐘文字"
 
-#: resources/resourcedatamodelbase.cpp:569
+#: resources/resourcedatamodelbase.cpp:573
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7181,32 +7193,32 @@ msgid ""
 "email subject line"
 msgstr "鬧鐘訊息文字，或要顯示的網址，或要執行的指令，或要送出電子郵件的標題。"
 
-#: resources/resourcedatamodelbase.cpp:571
+#: resources/resourcedatamodelbase.cpp:575
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
 msgstr "鬧鐘樣本的名稱"
 
-#: resources/resourcedatamodelbase.cpp:663
-#: resources/resourcedatamodelbase.cpp:763
+#: resources/resourcedatamodelbase.cpp:667
+#: resources/resourcedatamodelbase.cpp:767
 #, kde-format
 msgctxt "@info Alarm never occurs"
 msgid "Never"
 msgstr "從不"
 
-#: resources/resourcedatamodelbase.cpp:769
+#: resources/resourcedatamodelbase.cpp:773
 #, no-c-format, kde-format
 msgctxt "@info n days"
 msgid "%1d"
 msgstr " %1 天"
 
-#: resources/resourcedatamodelbase.cpp:779
+#: resources/resourcedatamodelbase.cpp:783
 #, kde-format
 msgctxt "@info hours:minutes"
 msgid "%1:%2"
 msgstr "%1：%2"
 
-#: resources/resourcedatamodelbase.cpp:786
+#: resources/resourcedatamodelbase.cpp:790
 #, kde-format
 msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
@@ -7238,49 +7250,24 @@ msgctxt "@title:window"
 msgid "Choose Calendar"
 msgstr "選擇行事曆"
 
-#: resources/resources.cpp:490
-#, kde-kuit-format
-msgctxt "@info"
+#: resources/resources.cpp:493
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
+#| "was the default calendar for:%2</para><para>Please select new default "
+#| "calendars.</para>"
 msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for active alarms."
-msgstr ""
-"行事曆 <resource>%1</resource> 已設為唯讀。它原本是作用中鬧鐘的預設行事曆。"
-
-#: resources/resources.cpp:495
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for archived alarms."
-msgstr ""
-"行事曆 <resource>%1</resource> 已設為唯讀。它原本是已封存鬧鐘的預設行事曆。"
-
-#: resources/resources.cpp:500
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for alarm templates."
-msgstr ""
-"行事曆 <resource>%1</resource> 已設為唯讀。它原本是鬧鐘樣本的預設行事曆。"
-
-#: resources/resources.cpp:505
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"<para>The calendar <resource>%1</resource> has been made read-only. This was "
-"the default calendar for:%2</para><para>Please select new default calendars."
-"</para>"
-msgstr ""
+"<para>The calendar <resource>%2</resource> has been made read-only.</"
+"para><para>This was the default calendar for %3.</para><para>Please select a "
+"new default calendar.</para>"
+msgid_plural ""
+"<para>The calendar <resource>%2</resource> has been made read-only.</"
+"para><para>This was the default calendar for %3.</para><para>Please select "
+"new default calendars.</para>"
+msgstr[0] ""
 "<para>行事曆 <resource>%1</resource> 已變成唯讀。這是 %2 的預設行事曆。</"
 "para> <para>請選擇新的預設行事曆。</para>"
-
-#: resources/resources.cpp:513
-#, kde-kuit-format
-msgctxt "@info"
-msgid "<para>%1</para><para>Please select a new default calendar.</para>"
-msgstr "<para>%1</para> <para>請選擇新的預設行事曆。</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7600,17 +7587,23 @@ msgid ""
 msgstr "您無法移除您預設封存鬧鐘行事曆，因為您設定將逾時的鬧鐘保留。"
 
 #: resourceselector.cpp:253
-#, kde-kuit-format
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "<para>It also contains:%1</para>"
 msgctxt "@info"
-msgid "<para>It also contains:%1</para>"
+msgid "It also contains %1"
 msgstr "<para>它也包含了：%1</para>"
 
 #: resourceselector.cpp:254
-#, kde-kuit-format
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
+#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> is the default calendar for:%2</para>"
-"%3<para>Do you really want to remove it from all calendar lists?</para>"
+"<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
+"para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
 "<para><resource>%1</resource>是 %2 的預設行事曆。</para> %3 <para>您確定要將"
 "它從所有行事曆清單中移除嗎？</para>"
@@ -7624,10 +7617,14 @@ msgid ""
 msgstr "您真的要從清單中移除您的預設行事曆（<resource>%1</resource>）嗎？"
 
 #: resourceselector.cpp:261
-#, kde-kuit-format
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
+#| "to remove it from all calendar lists?</para>"
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> contains:%2</para><para>Do you really want to "
+"<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
 "<para><resource>%1</resource> 包含 %2。</para> <para>您確定要將它從所有行事曆"
@@ -8466,6 +8463,33 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "在鬧鐘響多少分鐘以前從休眠中喚醒"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The calendar <resource>%1</resource> has been made read-only. This was "
+#~ "the default calendar for active alarms."
+#~ msgstr ""
+#~ "行事曆 <resource>%1</resource> 已設為唯讀。它原本是作用中鬧鐘的預設行事"
+#~ "曆。"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The calendar <resource>%1</resource> has been made read-only. This was "
+#~ "the default calendar for archived alarms."
+#~ msgstr ""
+#~ "行事曆 <resource>%1</resource> 已設為唯讀。它原本是已封存鬧鐘的預設行事"
+#~ "曆。"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The calendar <resource>%1</resource> has been made read-only. This was "
+#~ "the default calendar for alarm templates."
+#~ msgstr ""
+#~ "行事曆 <resource>%1</resource> 已設為唯讀。它原本是鬧鐘樣本的預設行事曆。"
+
+#~ msgctxt "@info"
+#~ msgid "<para>%1</para><para>Please select a new default calendar.</para>"
+#~ msgstr "<para>%1</para> <para>請選擇新的預設行事曆。</para>"
 
 #~ msgctxt "@label"
 #~ msgid "Suppress autostart at login"

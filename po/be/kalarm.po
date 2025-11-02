@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-01 00:46+0000\n"
+"POT-Creation-Date: 2025-11-02 00:42+0000\n"
 "PO-Revision-Date: 2007-10-28 14:03+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -7354,113 +7354,125 @@ msgctxt "@item:intext"
 msgid "Alarm Templates"
 msgstr "Шаблоны напамінкаў"
 
-#: resources/resourcedatamodelbase.cpp:86
+#: resources/resourcedatamodelbase.cpp:74
+#, kde-format
+msgctxt "@info List of alarm types"
+msgid "%1, %2"
+msgstr ""
+
+#: resources/resourcedatamodelbase.cpp:75
+#, kde-format
+msgctxt "@info List of alarm types"
+msgid "%1, %2, %3"
+msgstr ""
+
+#: resources/resourcedatamodelbase.cpp:90
 #, fuzzy, kde-format
 #| msgid "read-only"
 msgctxt "@item:intext Calendar status"
 msgid "Read-only"
 msgstr "Толькі чытанне"
 
-#: resources/resourcedatamodelbase.cpp:89
+#: resources/resourcedatamodelbase.cpp:93
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (old format)"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:92
+#: resources/resourcedatamodelbase.cpp:96
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (other format)"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:114
+#: resources/resourcedatamodelbase.cpp:118
 #, fuzzy, kde-format
 #| msgid "Time"
 msgctxt "@title:column"
 msgid "Time"
 msgstr "Час"
 
-#: resources/resourcedatamodelbase.cpp:116
+#: resources/resourcedatamodelbase.cpp:120
 #, fuzzy, kde-format
 msgctxt "@title:column"
 msgid "Time To"
 msgstr "Час да"
 
-#: resources/resourcedatamodelbase.cpp:118
+#: resources/resourcedatamodelbase.cpp:122
 #, fuzzy, kde-format
 msgctxt "@title:column"
 msgid "Repeat"
 msgstr "Паўтор"
 
-#: resources/resourcedatamodelbase.cpp:120
+#: resources/resourcedatamodelbase.cpp:124
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:122
+#: resources/resourcedatamodelbase.cpp:126
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:124
+#: resources/resourcedatamodelbase.cpp:128
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Імя"
 
-#: resources/resourcedatamodelbase.cpp:126
+#: resources/resourcedatamodelbase.cpp:130
 #, fuzzy, kde-format
 msgctxt "@title:column"
 msgid "Message, File or Command"
 msgstr "Паведамленне, файл або каманда"
 
-#: resources/resourcedatamodelbase.cpp:128
+#: resources/resourcedatamodelbase.cpp:132
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column Template name"
 msgid "Name"
 msgstr "Імя"
 
-#: resources/resourcedatamodelbase.cpp:140
+#: resources/resourcedatamodelbase.cpp:144
 #, fuzzy, kde-format
 msgctxt "@title:column"
 msgid "Calendars"
 msgstr "Адрас файла каляндара"
 
-#: resources/resourcedatamodelbase.cpp:451
+#: resources/resourcedatamodelbase.cpp:455
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
 msgstr "Памылка выканання каманды:"
 
-#: resources/resourcedatamodelbase.cpp:453
+#: resources/resourcedatamodelbase.cpp:457
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
 msgstr "Папярэдняе дзеянне:"
 
-#: resources/resourcedatamodelbase.cpp:455
+#: resources/resourcedatamodelbase.cpp:459
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
 msgstr "Дзеянне пасля напамінку:"
 
-#: resources/resourcedatamodelbase.cpp:457
+#: resources/resourcedatamodelbase.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:488
+#: resources/resourcedatamodelbase.cpp:492
 #, fuzzy, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
 msgstr "Выключана"
 
-#: resources/resourcedatamodelbase.cpp:491
+#: resources/resourcedatamodelbase.cpp:495
 #, fuzzy, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename><nl/>%4"
@@ -7469,7 +7481,7 @@ msgstr ""
 "\n"
 "%1"
 
-#: resources/resourcedatamodelbase.cpp:496
+#: resources/resourcedatamodelbase.cpp:500
 #, fuzzy, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename>"
@@ -7478,44 +7490,44 @@ msgstr ""
 "\n"
 "%1"
 
-#: resources/resourcedatamodelbase.cpp:557
+#: resources/resourcedatamodelbase.cpp:561
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
 msgstr "Наступная дата і час напамінку"
 
-#: resources/resourcedatamodelbase.cpp:559
+#: resources/resourcedatamodelbase.cpp:563
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
 msgstr "Колькі засталося да наступнага напамінку"
 
-#: resources/resourcedatamodelbase.cpp:561
+#: resources/resourcedatamodelbase.cpp:565
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
 msgstr "Інтэрвал паміж паўторамі напамінку"
 
-#: resources/resourcedatamodelbase.cpp:563
+#: resources/resourcedatamodelbase.cpp:567
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Background color of alarm message"
 msgstr "Колер фону напамінку"
 
-#: resources/resourcedatamodelbase.cpp:565
+#: resources/resourcedatamodelbase.cpp:569
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm type (message, file, command or email)"
 msgstr ""
 "Тып напамінку (паведамленне, паказ файла, каманда або адпраўленне ліста)"
 
-#: resources/resourcedatamodelbase.cpp:567
+#: resources/resourcedatamodelbase.cpp:571
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:569
+#: resources/resourcedatamodelbase.cpp:573
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7525,32 +7537,32 @@ msgstr ""
 "Тэкст напамінку, імя паказваемага тэкставага файла, выконваемая каманда або "
 "радок тэмы паштовага паведамлення"
 
-#: resources/resourcedatamodelbase.cpp:571
+#: resources/resourcedatamodelbase.cpp:575
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
 msgstr "Імя шаблону напамінку"
 
-#: resources/resourcedatamodelbase.cpp:663
-#: resources/resourcedatamodelbase.cpp:763
+#: resources/resourcedatamodelbase.cpp:667
+#: resources/resourcedatamodelbase.cpp:767
 #, fuzzy, kde-format
 msgctxt "@info Alarm never occurs"
 msgid "Never"
 msgstr "Ніколі"
 
-#: resources/resourcedatamodelbase.cpp:769
+#: resources/resourcedatamodelbase.cpp:773
 #, no-c-format, kde-format
 msgctxt "@info n days"
 msgid "%1d"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:779
+#: resources/resourcedatamodelbase.cpp:783
 #, kde-format
 msgctxt "@info hours:minutes"
 msgid "%1:%2"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:786
+#: resources/resourcedatamodelbase.cpp:790
 #, kde-format
 msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
@@ -7582,47 +7594,32 @@ msgctxt "@title:window"
 msgid "Choose Calendar"
 msgstr "Адрас файла каляндара"
 
-#: resources/resources.cpp:490
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for active alarms."
-msgstr ""
-
-#: resources/resources.cpp:495
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for archived alarms."
-msgstr ""
-
-#: resources/resources.cpp:500
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for alarm templates."
-msgstr ""
-
-#: resources/resources.cpp:505
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"<para>The calendar <resource>%1</resource> has been made read-only. This was "
-"the default calendar for:%2</para><para>Please select new default calendars."
-"</para>"
-msgstr ""
-
-#: resources/resources.cpp:513
+#: resources/resources.cpp:493
 #, fuzzy, kde-kuit-format
-msgctxt "@info"
-msgid "<para>%1</para><para>Please select a new default calendar.</para>"
-msgstr ""
-"%1\n"
+msgid ""
+"<para>The calendar <resource>%2</resource> has been made read-only.</"
+"para><para>This was the default calendar for %3.</para><para>Please select a "
+"new default calendar.</para>"
+msgid_plural ""
+"<para>The calendar <resource>%2</resource> has been made read-only.</"
+"para><para>This was the default calendar for %3.</para><para>Please select "
+"new default calendars.</para>"
+msgstr[0] ""
+"У цяперашні час актывацыя напамінкаў адключаная.\n"
 "\n"
-"Пакажыце яго ў наладах."
+"Вы жадаеце актываваць напамінкі?"
+msgstr[1] ""
+"У цяперашні час актывацыя напамінкаў адключаная.\n"
+"\n"
+"Вы жадаеце актываваць напамінкі?"
+msgstr[2] ""
+"У цяперашні час актывацыя напамінкаў адключаная.\n"
+"\n"
+"Вы жадаеце актываваць напамінкі?"
+msgstr[3] ""
+"У цяперашні час актывацыя напамінкаў адключаная.\n"
+"\n"
+"Вы жадаеце актываваць напамінкі?"
 
 #: resources/resourceselectdialog.cpp:36
 #, fuzzy, kde-format
@@ -7966,17 +7963,17 @@ msgstr ""
 "Вы сапраўды жадаеце выдаліць %n вылучаных напамінкаў?"
 
 #: resourceselector.cpp:253
-#, kde-kuit-format
+#, kde-format
 msgctxt "@info"
-msgid "<para>It also contains:%1</para>"
+msgid "It also contains %1"
 msgstr ""
 
 #: resourceselector.cpp:254
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> is the default calendar for:%2</para>"
-"%3<para>Do you really want to remove it from all calendar lists?</para>"
+"<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
+"para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
 "У цяперашні час актывацыя напамінкаў адключаная.\n"
 "\n"
@@ -7994,7 +7991,7 @@ msgstr "Паслаць паведамленне электроннай пошт�
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> contains:%2</para><para>Do you really want to "
+"<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
 "У цяперашні час актывацыя напамінкаў адключаная.\n"
@@ -8828,6 +8825,14 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
+
+#, fuzzy
+#~ msgctxt "@info"
+#~ msgid "<para>%1</para><para>Please select a new default calendar.</para>"
+#~ msgstr ""
+#~ "%1\n"
+#~ "\n"
+#~ "Пакажыце яго ў наладах."
 
 #, fuzzy
 #~ msgctxt "@label"

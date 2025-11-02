@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-01 00:46+0000\n"
+"POT-Creation-Date: 2025-11-02 00:42+0000\n"
 "PO-Revision-Date: 2005-12-29 22:18+0100\n"
 "Last-Translator: Arnar Leosson <leosson@frisurf.no>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -7725,116 +7725,128 @@ msgctxt "@item:intext"
 msgid "Alarm Templates"
 msgstr "Texti í áminnigu"
 
-#: resources/resourcedatamodelbase.cpp:86
+#: resources/resourcedatamodelbase.cpp:74
+#, kde-format
+msgctxt "@info List of alarm types"
+msgid "%1, %2"
+msgstr ""
+
+#: resources/resourcedatamodelbase.cpp:75
+#, kde-format
+msgctxt "@info List of alarm types"
+msgid "%1, %2, %3"
+msgstr ""
+
+#: resources/resourcedatamodelbase.cpp:90
 #, fuzzy, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only"
 msgstr "Dags:"
 
-#: resources/resourcedatamodelbase.cpp:89
+#: resources/resourcedatamodelbase.cpp:93
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (old format)"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:92
+#: resources/resourcedatamodelbase.cpp:96
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (other format)"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:114
+#: resources/resourcedatamodelbase.cpp:118
 #, fuzzy, kde-format
 #| msgid "Time"
 msgctxt "@title:column"
 msgid "Time"
 msgstr "Tími"
 
-#: resources/resourcedatamodelbase.cpp:116
+#: resources/resourcedatamodelbase.cpp:120
 #, fuzzy, kde-format
 #| msgid "Time To"
 msgctxt "@title:column"
 msgid "Time To"
 msgstr "Tími til"
 
-#: resources/resourcedatamodelbase.cpp:118
+#: resources/resourcedatamodelbase.cpp:122
 #, fuzzy, kde-format
 #| msgid "Repeat"
 msgctxt "@title:column"
 msgid "Repeat"
 msgstr "Endurtaka"
 
-#: resources/resourcedatamodelbase.cpp:120
+#: resources/resourcedatamodelbase.cpp:124
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:122
+#: resources/resourcedatamodelbase.cpp:126
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:124
+#: resources/resourcedatamodelbase.cpp:128
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nafn"
 
-#: resources/resourcedatamodelbase.cpp:126
+#: resources/resourcedatamodelbase.cpp:130
 #, fuzzy, kde-format
 #| msgid "Message, File or Command"
 msgctxt "@title:column"
 msgid "Message, File or Command"
 msgstr "Skilaboð, skrá eða skipun"
 
-#: resources/resourcedatamodelbase.cpp:128
+#: resources/resourcedatamodelbase.cpp:132
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column Template name"
 msgid "Name"
 msgstr "Nafn"
 
-#: resources/resourcedatamodelbase.cpp:140
+#: resources/resourcedatamodelbase.cpp:144
 #, fuzzy, kde-format
 msgctxt "@title:column"
 msgid "Calendars"
 msgstr "Dagbókarslóð"
 
-#: resources/resourcedatamodelbase.cpp:451
+#: resources/resourcedatamodelbase.cpp:455
 #, fuzzy, kde-format
 #| msgid "Command execution error:"
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
 msgstr "Keyrsluvilla:"
 
-#: resources/resourcedatamodelbase.cpp:453
+#: resources/resourcedatamodelbase.cpp:457
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
 msgstr "Stillingar póstvakningar"
 
-#: resources/resourcedatamodelbase.cpp:455
+#: resources/resourcedatamodelbase.cpp:459
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
 msgstr "Stillingar póstvakningar"
 
-#: resources/resourcedatamodelbase.cpp:457
+#: resources/resourcedatamodelbase.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:488
+#: resources/resourcedatamodelbase.cpp:492
 #, fuzzy, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
 msgstr "S&lökkva"
 
-#: resources/resourcedatamodelbase.cpp:491
+#: resources/resourcedatamodelbase.cpp:495
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -7845,7 +7857,7 @@ msgstr ""
 "Gat ekki bætt við skránni:\n"
 "%1"
 
-#: resources/resourcedatamodelbase.cpp:496
+#: resources/resourcedatamodelbase.cpp:500
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -7856,48 +7868,48 @@ msgstr ""
 "Gat ekki bætt við skránni:\n"
 "%1"
 
-#: resources/resourcedatamodelbase.cpp:557
+#: resources/resourcedatamodelbase.cpp:561
 #, fuzzy, kde-format
 #| msgid "Next scheduled date and time of the alarm"
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
 msgstr "Næsti áætlaði dagur og tími uppkalls"
 
-#: resources/resourcedatamodelbase.cpp:559
+#: resources/resourcedatamodelbase.cpp:563
 #, fuzzy, kde-format
 #| msgid "How long until the next scheduled trigger of the alarm"
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
 msgstr "Hversu langt er í næstu áætluðu áminningu"
 
-#: resources/resourcedatamodelbase.cpp:561
+#: resources/resourcedatamodelbase.cpp:565
 #, fuzzy, kde-format
 #| msgid "How often the alarm recurs"
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
 msgstr "Hversu oft ámininngin endurtekur sig"
 
-#: resources/resourcedatamodelbase.cpp:563
+#: resources/resourcedatamodelbase.cpp:567
 #, fuzzy, kde-format
 #| msgid "Background color of alarm message"
 msgctxt "@info:whatsthis"
 msgid "Background color of alarm message"
 msgstr "Bakgrunnslitur uppkallsskeytis"
 
-#: resources/resourcedatamodelbase.cpp:565
+#: resources/resourcedatamodelbase.cpp:569
 #, fuzzy, kde-format
 #| msgid "Alarm type (message, file, command or email)"
 msgctxt "@info:whatsthis"
 msgid "Alarm type (message, file, command or email)"
 msgstr "Áminningartegund (skilaboð, skrá, skipun eða tölvupóstur)"
 
-#: resources/resourcedatamodelbase.cpp:567
+#: resources/resourcedatamodelbase.cpp:571
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:569
+#: resources/resourcedatamodelbase.cpp:573
 #, fuzzy, kde-format
 #| msgid ""
 #| "Alarm message text, URL of text file to display, command to execute, or "
@@ -7910,21 +7922,21 @@ msgstr ""
 "Texti skeytis, slóð textaskráar sem á að birta, skipun sem skal keyra eða "
 "fyrirsögn pósts."
 
-#: resources/resourcedatamodelbase.cpp:571
+#: resources/resourcedatamodelbase.cpp:575
 #, fuzzy, kde-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
 msgstr "Skrifaðu inn nafnið á áminningarsniðinu"
 
-#: resources/resourcedatamodelbase.cpp:663
-#: resources/resourcedatamodelbase.cpp:763
+#: resources/resourcedatamodelbase.cpp:667
+#: resources/resourcedatamodelbase.cpp:767
 #, kde-format
 msgctxt "@info Alarm never occurs"
 msgid "Never"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:769
+#: resources/resourcedatamodelbase.cpp:773
 #, fuzzy, no-c-format, kde-format
 #| msgctxt "n days"
 #| msgid " %1d "
@@ -7932,7 +7944,7 @@ msgctxt "@info n days"
 msgid "%1d"
 msgstr " %1d "
 
-#: resources/resourcedatamodelbase.cpp:779
+#: resources/resourcedatamodelbase.cpp:783
 #, fuzzy, kde-format
 #| msgctxt "Hours and Minutes"
 #| msgid "%1H %2M"
@@ -7940,7 +7952,7 @@ msgctxt "@info hours:minutes"
 msgid "%1:%2"
 msgstr "%1klst %2mín"
 
-#: resources/resourcedatamodelbase.cpp:786
+#: resources/resourcedatamodelbase.cpp:790
 #, fuzzy, kde-format
 #| msgctxt "days hours:minutes"
 #| msgid " %1d %2:%3 "
@@ -7974,50 +7986,18 @@ msgctxt "@title:window"
 msgid "Choose Calendar"
 msgstr "Dagbókarslóð"
 
-#: resources/resources.cpp:490
+#: resources/resources.cpp:493
 #, kde-kuit-format
-msgctxt "@info"
 msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for active alarms."
-msgstr ""
-
-#: resources/resources.cpp:495
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for archived alarms."
-msgstr ""
-
-#: resources/resources.cpp:500
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for alarm templates."
-msgstr ""
-
-#: resources/resources.cpp:505
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"<para>The calendar <resource>%1</resource> has been made read-only. This was "
-"the default calendar for:%2</para><para>Please select new default calendars."
-"</para>"
-msgstr ""
-
-#: resources/resources.cpp:513
-#, fuzzy, kde-kuit-format
-#| msgctxt "Please set the 'From' email address..."
-#| msgid ""
-#| "%1\n"
-#| "Please set it in the Preferences dialog."
-msgctxt "@info"
-msgid "<para>%1</para><para>Please select a new default calendar.</para>"
-msgstr ""
-"%1\n"
-"Vinsamlegast stilltu það í stillingaglugganum."
+"<para>The calendar <resource>%2</resource> has been made read-only.</"
+"para><para>This was the default calendar for %3.</para><para>Please select a "
+"new default calendar.</para>"
+msgid_plural ""
+"<para>The calendar <resource>%2</resource> has been made read-only.</"
+"para><para>This was the default calendar for %3.</para><para>Please select "
+"new default calendars.</para>"
+msgstr[0] ""
+msgstr[1] ""
 
 #: resources/resourceselectdialog.cpp:36
 #, fuzzy, kde-format
@@ -8361,17 +8341,17 @@ msgid ""
 msgstr "Ertu viss um að þú viljir eyða völdu uppkalli?"
 
 #: resourceselector.cpp:253
-#, kde-kuit-format
+#, kde-format
 msgctxt "@info"
-msgid "<para>It also contains:%1</para>"
+msgid "It also contains %1"
 msgstr ""
 
 #: resourceselector.cpp:254
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> is the default calendar for:%2</para>"
-"%3<para>Do you really want to remove it from all calendar lists?</para>"
+"<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
+"para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
 
 #: resourceselector.cpp:258
@@ -8386,7 +8366,7 @@ msgstr "Ertu viss um að þú viljir eyða völdu uppkalli?"
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> contains:%2</para><para>Do you really want to "
+"<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
 
@@ -9230,6 +9210,17 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
+
+#, fuzzy
+#~| msgctxt "Please set the 'From' email address..."
+#~| msgid ""
+#~| "%1\n"
+#~| "Please set it in the Preferences dialog."
+#~ msgctxt "@info"
+#~ msgid "<para>%1</para><para>Please select a new default calendar.</para>"
+#~ msgstr ""
+#~ "%1\n"
+#~ "Vinsamlegast stilltu það í stillingaglugganum."
 
 #, fuzzy
 #~ msgctxt "@label"

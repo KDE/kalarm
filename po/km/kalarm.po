@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-01 00:46+0000\n"
+"POT-Creation-Date: 2025-11-02 00:42+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -7712,7 +7712,19 @@ msgctxt "@item:intext"
 msgid "Alarm Templates"
 msgstr "ពុម្ព​ការ​ជូនដំណឹង"
 
-#: resources/resourcedatamodelbase.cpp:86
+#: resources/resourcedatamodelbase.cpp:74
+#, kde-format
+msgctxt "@info List of alarm types"
+msgid "%1, %2"
+msgstr ""
+
+#: resources/resourcedatamodelbase.cpp:75
+#, kde-format
+msgctxt "@info List of alarm types"
+msgid "%1, %2, %3"
+msgstr ""
+
+#: resources/resourcedatamodelbase.cpp:90
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Read-only"
@@ -7720,7 +7732,7 @@ msgctxt "@item:intext Calendar status"
 msgid "Read-only"
 msgstr "បាន​តែ​អាន"
 
-#: resources/resourcedatamodelbase.cpp:89
+#: resources/resourcedatamodelbase.cpp:93
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Read-only (old format)"
@@ -7728,7 +7740,7 @@ msgctxt "@item:intext Calendar status"
 msgid "Read-only (old format)"
 msgstr "បាន​តែ​អានប៉ុណ្ណោះ​ (ទ្រង់ទ្រាយ​ចាស់)"
 
-#: resources/resourcedatamodelbase.cpp:92
+#: resources/resourcedatamodelbase.cpp:96
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Read-only (other format)"
@@ -7736,37 +7748,37 @@ msgctxt "@item:intext Calendar status"
 msgid "Read-only (other format)"
 msgstr "បាន​តែ​អាន​ប៉ុណ្ណោះ (ទ្រង់ទ្រាយ​ផ្សេងទៀត)"
 
-#: resources/resourcedatamodelbase.cpp:114
+#: resources/resourcedatamodelbase.cpp:118
 #, kde-format
 msgctxt "@title:column"
 msgid "Time"
 msgstr "ពេល​វេលា​"
 
-#: resources/resourcedatamodelbase.cpp:116
+#: resources/resourcedatamodelbase.cpp:120
 #, kde-format
 msgctxt "@title:column"
 msgid "Time To"
 msgstr "ពេលវេលា​ទៅ"
 
-#: resources/resourcedatamodelbase.cpp:118
+#: resources/resourcedatamodelbase.cpp:122
 #, kde-format
 msgctxt "@title:column"
 msgid "Repeat"
 msgstr "ធ្វើ​ឡើងវិញ"
 
-#: resources/resourcedatamodelbase.cpp:120
+#: resources/resourcedatamodelbase.cpp:124
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:122
+#: resources/resourcedatamodelbase.cpp:126
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:124
+#: resources/resourcedatamodelbase.cpp:128
 #, fuzzy, kde-format
 #| msgctxt "@title:column Template name"
 #| msgid "Name"
@@ -7774,104 +7786,104 @@ msgctxt "@title:column"
 msgid "Name"
 msgstr "ឈ្មោះ"
 
-#: resources/resourcedatamodelbase.cpp:126
+#: resources/resourcedatamodelbase.cpp:130
 #, kde-format
 msgctxt "@title:column"
 msgid "Message, File or Command"
 msgstr "សារ​ ឯកសារ ឬ​ពាក្យ​បញ្ជា"
 
-#: resources/resourcedatamodelbase.cpp:128
+#: resources/resourcedatamodelbase.cpp:132
 #, kde-format
 msgctxt "@title:column Template name"
 msgid "Name"
 msgstr "ឈ្មោះ"
 
-#: resources/resourcedatamodelbase.cpp:140
+#: resources/resourcedatamodelbase.cpp:144
 #, kde-format
 msgctxt "@title:column"
 msgid "Calendars"
 msgstr "ប្រតិទិន​"
 
-#: resources/resourcedatamodelbase.cpp:451
+#: resources/resourcedatamodelbase.cpp:455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
 msgstr "បរាជ័យ​ក្នុងការ​ប្រតិបត្តិ​ពាក្យ​បញ្ជា"
 
-#: resources/resourcedatamodelbase.cpp:453
+#: resources/resourcedatamodelbase.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
 msgstr "បរាជ័យ​ក្នុង​ការ​ប្រតិបត្តិ​ការ​ជូន​ដំណឹង​ជា​មុន"
 
-#: resources/resourcedatamodelbase.cpp:455
+#: resources/resourcedatamodelbase.cpp:459
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
 msgstr "បរាជ័យ​ក្នុង​ការ​ប្រតិបត្តិ​ការ​ជូន​ដំណឹង​តាម​ក្រោយ"
 
-#: resources/resourcedatamodelbase.cpp:457
+#: resources/resourcedatamodelbase.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
 msgstr "បរាជ័យ​ក្នុង​ការ​ជូន​ដំណឹង​ជា​មុន និង​តាម​ក្រោយ"
 
-#: resources/resourcedatamodelbase.cpp:488
+#: resources/resourcedatamodelbase.cpp:492
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
 msgstr "បិទ​"
 
-#: resources/resourcedatamodelbase.cpp:491
+#: resources/resourcedatamodelbase.cpp:495
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 msgstr "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 
-#: resources/resourcedatamodelbase.cpp:496
+#: resources/resourcedatamodelbase.cpp:500
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename>"
 msgstr "%1<nl/>%2: <filename>%3</filename>"
 
-#: resources/resourcedatamodelbase.cpp:557
+#: resources/resourcedatamodelbase.cpp:561
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
 msgstr "កាលបរិច្ឆេទ និង​ពេល​វេលា​ដែល​បាន​របស់​ការ​ជូន​ដំណឹង"
 
-#: resources/resourcedatamodelbase.cpp:559
+#: resources/resourcedatamodelbase.cpp:563
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
 msgstr "រយៈពេល​រហូត​ដល់​ការ​កេះគៀវ​ដែលបាន​កំណត់​បន្ទាប់​របស់​ការ​ជូនដំណឹង"
 
-#: resources/resourcedatamodelbase.cpp:561
+#: resources/resourcedatamodelbase.cpp:565
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
 msgstr "ចំនួន​ដង​ដែល​ការ​ជូន​ដំណឹង​ធ្វើ​ឡើងវិញ"
 
-#: resources/resourcedatamodelbase.cpp:563
+#: resources/resourcedatamodelbase.cpp:567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Background color of alarm message"
 msgstr "ពណ៌​ផ្ទៃ​ខាងក្រោយ​របស់​សារការជូនដំណឹង"
 
-#: resources/resourcedatamodelbase.cpp:565
+#: resources/resourcedatamodelbase.cpp:569
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm type (message, file, command or email)"
 msgstr "ប្រភេទការជូនដំណឹង (សារ ឯកសារ ពាក្យ​បញ្ជា ឬ​អ៊ីមែល)"
 
-#: resources/resourcedatamodelbase.cpp:567
+#: resources/resourcedatamodelbase.cpp:571
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:569
+#: resources/resourcedatamodelbase.cpp:573
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7881,14 +7893,14 @@ msgstr ""
 "អត្ថបទ​សារការជូនដំណឹង URL របស់​ឯកសារ​អត្ថបទ​ដែល​ត្រូវ​បង្ហាញ ពាក្យ​បញ្ជា​ដែល​ត្រូវ​ប្រតិបត្តិ ឬ​បន្ទាត់​"
 "ប្រធានបទ​អ៊ីមែល"
 
-#: resources/resourcedatamodelbase.cpp:571
+#: resources/resourcedatamodelbase.cpp:575
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
 msgstr "ឈ្មោះ​ពុម្ព​នៃ​ការជូនដំណឹង"
 
-#: resources/resourcedatamodelbase.cpp:663
-#: resources/resourcedatamodelbase.cpp:763
+#: resources/resourcedatamodelbase.cpp:667
+#: resources/resourcedatamodelbase.cpp:767
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Alarm never occurs"
 #| msgid "Never"
@@ -7896,7 +7908,7 @@ msgctxt "@info Alarm never occurs"
 msgid "Never"
 msgstr "កុំ"
 
-#: resources/resourcedatamodelbase.cpp:769
+#: resources/resourcedatamodelbase.cpp:773
 #, fuzzy, no-c-format, kde-format
 #| msgctxt "@info/plain n days"
 #| msgid "%1d"
@@ -7904,7 +7916,7 @@ msgctxt "@info n days"
 msgid "%1d"
 msgstr "%1d"
 
-#: resources/resourcedatamodelbase.cpp:779
+#: resources/resourcedatamodelbase.cpp:783
 #, fuzzy, kde-format
 #| msgctxt "@info/plain hours:minutes"
 #| msgid "%1:%2"
@@ -7912,7 +7924,7 @@ msgctxt "@info hours:minutes"
 msgid "%1:%2"
 msgstr "%1 ៖%2"
 
-#: resources/resourcedatamodelbase.cpp:786
+#: resources/resourcedatamodelbase.cpp:790
 #, fuzzy, kde-format
 #| msgctxt "@info/plain days hours:minutes"
 #| msgid "%1d %2:%3"
@@ -7948,64 +7960,24 @@ msgctxt "@title:window"
 msgid "Choose Calendar"
 msgstr "ជ្រើស​​ប្រតិទិន"
 
-#: resources/resources.cpp:490
+#: resources/resources.cpp:493
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
-#| "The calendar <resource>%1</resource> has been made read-only. This was "
-#| "the default calendar for active alarms."
-msgctxt "@info"
+#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
+#| "was the default calendar for:%2</para><para>Please select new default "
+#| "calendars.</para>"
 msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for active alarms."
-msgstr ""
-"ប្រតិទិន <resource>%1</resource> ត្រូវ​បាន​បង្កើត​​ឡើង​សម្រាប់​តែ​អាន​ប៉ុណ្ណោះ ។ វា​គឺជា​ប្រតិទិន​"
-"លំនាំដើម​សម្រាប់​ម៉ោង​រោទ៍​ដែល​សកម្ម ។"
-
-#: resources/resources.cpp:495
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "The calendar <resource>%1</resource> has been made read-only. This was "
-#| "the default calendar for archived alarms."
-msgctxt "@info"
-msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for archived alarms."
-msgstr ""
-"ប្រតិទិន <resource>%1</resource> ត្រូវ​បាន​បង្កើត​ឡើង​សម្រាប់​តែ​ការ​អាន​ប៉ុណ្ណោះ ។ វា​គឺជា​ប្រតិទិន​"
-"លំនាំដើម​សម្រាប់​ម៉ោង​រោទ៍​ដែល​បាន​ទុក​ក្នុង​ប័ណ្ណសារ ។"
-
-#: resources/resources.cpp:500
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "The calendar <resource>%1</resource> has been made read-only. This was "
-#| "the default calendar for alarm templates."
-msgctxt "@info"
-msgid ""
-"The calendar <resource>%1</resource> has been made read-only. This was the "
-"default calendar for alarm templates."
-msgstr ""
-"ប្រតិទិន <resource>%1</resource> ត្រូវ​បាន​បង្កើត​ឡើង​សម្រាប់​តែ​អាន​ប៉ុណ្ណោះ ។ វា​គឺជា​ប្រតិទិន​"
-"លំនាំដើម​សម្រាប់​ពុម្ព​ម៉ោង​រោទ៍ ។"
-
-#: resources/resources.cpp:505
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"<para>The calendar <resource>%1</resource> has been made read-only. This was "
-"the default calendar for:%2</para><para>Please select new default calendars."
-"</para>"
-msgstr ""
+"<para>The calendar <resource>%2</resource> has been made read-only.</"
+"para><para>This was the default calendar for %3.</para><para>Please select a "
+"new default calendar.</para>"
+msgid_plural ""
+"<para>The calendar <resource>%2</resource> has been made read-only.</"
+"para><para>This was the default calendar for %3.</para><para>Please select "
+"new default calendars.</para>"
+msgstr[0] ""
 "<para>ប្រតិទិន <resource>%1</resource> ត្រូវ​បាន​បង្កើត​ឡើង​សម្រាប់​តែ​ការ​អាន​ប៉ុណ្ណោះ ។ វា​គឺជា​"
 "ប្រតិទិន​លំនាំដើម​សម្រាប់ ៖%2</para><para>សូម​ជ្រើស​ប្រតិទិន​លំនាំដើម​ថ្មី ។</para>"
-
-#: resources/resources.cpp:513
-#, kde-kuit-format
-msgctxt "@info"
-msgid "<para>%1</para><para>Please select a new default calendar.</para>"
-msgstr "<para>%1</para><para>សូម​ជ្រើស​ប្រតិទិន​លំនាំដើម​ថ្មី​មួយ ។</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -8376,17 +8348,23 @@ msgstr ""
 "ត្រូវបាន​កំណត់រចនា​សម្ព័ន្ធ​ឲ្យ​ទុក ។"
 
 #: resourceselector.cpp:253
-#, kde-kuit-format
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "<para>It also contains:%1</para>"
 msgctxt "@info"
-msgid "<para>It also contains:%1</para>"
+msgid "It also contains %1"
 msgstr "<para>វា​ក៏មាន ៖%1</para>"
 
 #: resourceselector.cpp:254
-#, kde-kuit-format
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
+#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> is the default calendar for:%2</para>"
-"%3<para>Do you really want to remove it from all calendar lists?</para>"
+"<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
+"para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
 "<para><resource>%1</resource> ជា​ប្រតិទិន​លំនាំដើម​សម្រាប់ ៖%2</para>%3<para>តើ​អ្នក​ពិតជា​"
 "ចង់​យក​វា​ចេញ​ពី​បញ្ជី​ប្រតិទិន​ទាំងអស់​ឬ ?</para>"
@@ -8400,10 +8378,14 @@ msgid ""
 msgstr "តើ​អ្នក​ពិតជា​ចង់​យក​ប្រតិទិន​លំនាំដើម​របស់​អ្នក​ (<resource>%1</resource>) ចេញ​ពី​បញ្ជី​ឬ ?"
 
 #: resourceselector.cpp:261
-#, kde-kuit-format
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
+#| "to remove it from all calendar lists?</para>"
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> contains:%2</para><para>Do you really want to "
+"<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
 "<para><resource>%1</resource> មាន ៖%2</para><para>តើ​អ្នក​ពិតជា​ចង់​យក​វា​ចេញ​ពី​បញ្ជី​ប្រតិទិន​"
@@ -9350,6 +9332,49 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "ចំនួន​នាទី​មុន​ពេល​​ម៉ោង​រោទ៍​ជូន​ដំណឹង​ពី​ការ​រោទ៍​ដែល​បាន​ផ្អាក"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid ""
+#~| "The calendar <resource>%1</resource> has been made read-only. This was "
+#~| "the default calendar for active alarms."
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The calendar <resource>%1</resource> has been made read-only. This was "
+#~ "the default calendar for active alarms."
+#~ msgstr ""
+#~ "ប្រតិទិន <resource>%1</resource> ត្រូវ​បាន​បង្កើត​​ឡើង​សម្រាប់​តែ​អាន​ប៉ុណ្ណោះ ។ វា​គឺជា​ប្រតិទិន​"
+#~ "លំនាំដើម​សម្រាប់​ម៉ោង​រោទ៍​ដែល​សកម្ម ។"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid ""
+#~| "The calendar <resource>%1</resource> has been made read-only. This was "
+#~| "the default calendar for archived alarms."
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The calendar <resource>%1</resource> has been made read-only. This was "
+#~ "the default calendar for archived alarms."
+#~ msgstr ""
+#~ "ប្រតិទិន <resource>%1</resource> ត្រូវ​បាន​បង្កើត​ឡើង​សម្រាប់​តែ​ការ​អាន​ប៉ុណ្ណោះ ។ វា​គឺជា​"
+#~ "ប្រតិទិន​លំនាំដើម​សម្រាប់​ម៉ោង​រោទ៍​ដែល​បាន​ទុក​ក្នុង​ប័ណ្ណសារ ។"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid ""
+#~| "The calendar <resource>%1</resource> has been made read-only. This was "
+#~| "the default calendar for alarm templates."
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The calendar <resource>%1</resource> has been made read-only. This was "
+#~ "the default calendar for alarm templates."
+#~ msgstr ""
+#~ "ប្រតិទិន <resource>%1</resource> ត្រូវ​បាន​បង្កើត​ឡើង​សម្រាប់​តែ​អាន​ប៉ុណ្ណោះ ។ វា​គឺជា​ប្រតិទិន​"
+#~ "លំនាំដើម​សម្រាប់​ពុម្ព​ម៉ោង​រោទ៍ ។"
+
+#~ msgctxt "@info"
+#~ msgid "<para>%1</para><para>Please select a new default calendar.</para>"
+#~ msgstr "<para>%1</para><para>សូម​ជ្រើស​ប្រតិទិន​លំនាំដើម​ថ្មី​មួយ ។</para>"
 
 #~ msgctxt "@label"
 #~ msgid "Suppress autostart at login"
