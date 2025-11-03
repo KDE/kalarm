@@ -17,15 +17,15 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-02 00:42+0000\n"
-"PO-Revision-Date: 2025-03-14 20:25+0300\n"
-"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"PO-Revision-Date: 2025-11-02 22:53+0300\n"
+"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.07.70\n"
+"X-Generator: Lokalize 25.08.2\n"
 "(http: //www.transifex.com/projects/p/kdepim-k-tr/language/tr/)\n"
 "X-POOTLE-MTIME: 1413131629.000000\n"
 
@@ -7323,13 +7323,13 @@ msgstr "Alarm Şablonları"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7551,12 +7551,7 @@ msgid "Choose Calendar"
 msgstr "Takvim Seç"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7566,13 +7561,13 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para><resource>%1</resource> takvimi saltokunur yapıldı. Bu takvim %2 için "
-"öntanımlı takvimdi.</para><para>Lütfen yeni bir öntanımlı takvim seçin.</"
-"para>"
+"<para><resource>%2</resource> takvimi saltokunur yapıldı.</para><para>Bu, %3 "
+"için olan öntanımlı takvimdi.</para><para>Lütfen yeni bir öntanımlı takvim "
+"seçin.</para>"
 msgstr[1] ""
-"<para><resource>%1</resource> takvimi saltokunur yapıldı. Bu takvim %2 için "
-"öntanımlı takvimdi.</para><para>Lütfen yeni bir öntanımlı takvim seçin.</"
-"para>"
+"<para><resource>%2</resource> takvimi saltokunur yapıldı.</para><para>Bu, %3 "
+"için olan öntanımlı takvimdi.</para><para>Lütfen yeni bir öntanımlı "
+"takvimler seçin.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7897,27 +7892,21 @@ msgstr ""
 "arşivlenmiş alarm takvimini kaldıramazsın."
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>Ayrıca içerir:%1</para>"
+msgstr "Ayrıca %1 içerir"
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> şunun için öntanımlı takvimdir: %2</para>"
-"%3<para>Bunu bütün takvim listesinden kaldırmayı gerçekten istiyor musunuz?</"
-"para> "
+"<para><resource>%1</resource>, %2 için olan öntanımlı takvimdir.</para><para>"
+"%3</para><para>Onu tüm takvim listelerinden kaldırmayı gerçekten istiyor "
+"musunuz?</para>"
 
 #: resourceselector.cpp:258
 #, kde-kuit-format
@@ -7930,17 +7919,13 @@ msgstr ""
 "gerçekten istiyor musunuz?"
 
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> içerir: %2</para><para> Bunu bütün takvim "
+"<para><resource>%1</resource>, %2 içerir.</para><para>Onu tüm takvim "
 "listelerinden kaldırmayı gerçekten istiyor musunuz?</para>"
 
 #: resourceselector.cpp:264

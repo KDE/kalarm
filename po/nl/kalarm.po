@@ -18,14 +18,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-02 00:42+0000\n"
-"PO-Revision-Date: 2025-01-03 17:54+0100\n"
+"PO-Revision-Date: 2025-11-02 13:41+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 25.08.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -7637,13 +7637,13 @@ msgstr "Alarmsjablonen"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7879,12 +7879,7 @@ msgid "Choose Calendar"
 msgstr "Kies agenda"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7894,13 +7889,13 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para>De agenda <resource>%1</resource> is alleen-lezen gemaakt. Dit was de "
-"standaard agenda voor:%2</para><para>Gaarne nieuwe standaard agenda's "
-"selecteren.</para>"
+"<para>De agenda <resource>%2</resource> is alleen-lezen gemaakt.</"
+"para><para> Dit was de standaard agenda voor %3</para><para>Gaarne nieuwe "
+"standaard agenda selecteren.</para>"
 msgstr[1] ""
-"<para>De agenda <resource>%1</resource> is alleen-lezen gemaakt. Dit was de "
-"standaard agenda voor:%2</para><para>Gaarne nieuwe standaard agenda's "
-"selecteren.</para>"
+"<para>De agenda <resource>%2</resource> is alleen-lezen gemaakt.</"
+"para><para>Dit was de standaard agenda voor %3</para><para>Gaarne nieuwe "
+"standaard agenda's selecteren.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -8240,26 +8235,20 @@ msgstr ""
 "terwijl verlopen alarmen opgeslagen moeten worden."
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>Het bevat ook:%1</para>"
+msgstr "Het bevat ook %1"
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> is de standaard agenda voor:%2</para>"
-"%3<para>Wilt u het uit alle agendalijsten verwijderen?</para>"
+"<para><resource>%1</resource> is de standaard agenda voor %2</para><para>%3</"
+"para><para>Wilt u het uit alle agendalijsten verwijderen?</para>"
 
 #: resourceselector.cpp:258
 #, kde-kuit-format
@@ -8272,17 +8261,13 @@ msgstr ""
 "verwijderen?"
 
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> bevat:%2</para><para>Wilt u het uit alle "
+"<para><resource>%1</resource> bevat %2</para><para>Wilt u het uit alle "
 "agendalijsten verwijderen?</para>"
 
 #: resourceselector.cpp:264

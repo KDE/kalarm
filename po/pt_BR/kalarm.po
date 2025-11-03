@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-02 00:42+0000\n"
-"PO-Revision-Date: 2025-08-04 15:24-0300\n"
+"PO-Revision-Date: 2025-11-02 06:06-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -7392,13 +7392,13 @@ msgstr "Modelos de alarme"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7620,12 +7620,7 @@ msgid "Choose Calendar"
 msgstr "Escolher calendário"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7635,13 +7630,13 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para>O calendário <resource>%1</resource> foi criado somente para leitura. "
-"Este é o calendário padrão para:%2</para><para>Por favor, selecione novos "
-"calendários padrão.</para>"
+"<para>O calendário <resource>%2</resource> foi criado somente para leitura.</"
+"para><para>Ele era o calendário padrão para:%3.</para><para>Por favor, "
+"selecione um novo calendário padrão.</para>"
 msgstr[1] ""
-"<para>O calendário <resource>%1</resource> foi criado somente para leitura. "
-"Este é o calendário padrão para:%2</para><para>Por favor, selecione novos "
-"calendários padrão.</para>"
+"<para>O calendário <resource>%2</resource> foi criado somente para leitura.</"
+"para><para>Ele era o calendário padrão para:%3.</para><para>Por favor, "
+"selecione novos calendários padrão.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7972,26 +7967,21 @@ msgstr ""
 "enquanto os alarmes expirados estiverem configurados para serem mantidos."
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>Também contém:%1</para>"
+msgstr "Também contém %1"
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> é o calendário por omissão para:%2</para>"
-"%3<para>Deseja realmente removê-lo de todas as listas de calendários?</para>"
+"<para><resource>%1</resource> é o calendário padrão para:%2</para><para>%3</"
+"para><para>Deseja realmente removê-lo de todas as listas de calendários?</"
+"para>"
 
 #: resourceselector.cpp:258
 #, kde-kuit-format
@@ -8004,17 +7994,13 @@ msgstr ""
 "resource>)?"
 
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> contém:%2</para><para>Deseja realmente removê-"
+"<para><resource>%1</resource> contém %2</para><para>Deseja realmente removê-"
 "lo de todas as listas de calendários?</para>"
 
 #: resourceselector.cpp:264

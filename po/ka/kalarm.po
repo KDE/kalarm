@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-02 00:42+0000\n"
-"PO-Revision-Date: 2025-01-03 04:06+0100\n"
+"PO-Revision-Date: 2025-11-02 06:48+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.8\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -7312,13 +7312,13 @@ msgstr "განგაშის შაბლონები"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7540,12 +7540,7 @@ msgid "Choose Calendar"
 msgstr "აირჩიეთ კალენდარი"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7555,12 +7550,12 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para>კალენდარი <resource>%1</resource> ახლა მხოლოდ კითხვადია . ეს იყო "
-"ნაგულისხმევი კალენდარი დანიშნულებისთვის:%2</para><para>აირჩიეთ ახალი "
-"ნაგულისხმევი კალენდრები.</para>"
+"<para>კალენდარი <resource>%2</resource> ახლა მხოლოდ კითხვადია . ეს იყო "
+"ნაგულისხმევი კალენდარი ანგარიშისთვის: %3</para><para>აირჩიეთ ახალი "
+"ნაგულისხმევი კალენდარი.</para>"
 msgstr[1] ""
-"<para>კალენდარი <resource>%1</resource> ახლა მხოლოდ კითხვადია . ეს იყო "
-"ნაგულისხმევი კალენდარი დანიშნულებისთვის:%2</para><para>აირჩიეთ ახალი "
+"<para>კალენდარი <resource>%2</resource> ახლა მხოლოდ კითხვადია . ეს იყო "
+"ნაგულისხმევი კალენდარი ანგარიშისთვის: %3</para><para>აირჩიეთ ახალი "
 "ნაგულისხმევი კალენდრები.</para>"
 
 #: resources/resourceselectdialog.cpp:36
@@ -7889,27 +7884,20 @@ msgstr ""
 "მითითებულია, რომ ვადაგასული განგაშები მასში იყოს შენახული."
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>ის ასევე შეიცავს:%1</para>"
+msgstr "ის ასევე შეიცავს: %1"
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> ეს თქვენი ნაგულისხმევი კალენდარია "
-"ანგარიშისთვის :%2</para>%3<para>მართლა გნებავთ მისი ყველა კალენდრის სიიდან "
-"წაშლა?</para>"
+"<para><resource>%1</resource> ეს ნაგულისხმევი კალენდარია ანგარიშისთვის: %2</"
+"para>%3<para>მართლა გნებავთ მისი ყველა კალენდრის სიიდან წაშლა?</para>"
 
 #: resourceselector.cpp:258
 #, kde-kuit-format
@@ -7922,17 +7910,13 @@ msgstr ""
 "სიიდან წაშლა?"
 
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> შეიცავს:%2</para><para>მართლა გნებავთ მისი "
+"<para><resource>%1</resource> შეიცავს: %2</para><para>მართლა გნებავთ მისი "
 "ყველა კალენდრის სიიდან წაშლა?</para>"
 
 #: resourceselector.cpp:264

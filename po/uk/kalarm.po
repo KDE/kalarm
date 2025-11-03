@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-02 00:42+0000\n"
-"PO-Revision-Date: 2025-01-03 13:34+0200\n"
+"PO-Revision-Date: 2025-11-02 11:52+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7382,13 +7382,13 @@ msgstr "Шаблони нагадувань"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7611,12 +7611,7 @@ msgid "Choose Calendar"
 msgstr "Вибір календаря"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7626,21 +7621,21 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para>Календар <resource>%1</resource> переведено у режим лише читання. Цей "
-"календар був типовим для  %2</para><para>Будь ласка, виберіть нові календарі."
-"</para>"
+"<para>Календар <resource>%2</resource> було переведено у режим лише читання."
+"</para><para>Цей календар був типовим для %3.</para><para>Будь ласка, "
+"виберіть нові типові календарі.</para>"
 msgstr[1] ""
-"<para>Календар <resource>%1</resource> переведено у режим лише читання. Цей "
-"календар був типовим для  %2</para><para>Будь ласка, виберіть нові календарі."
-"</para>"
+"<para>Календар <resource>%2</resource> було переведено у режим лише читання."
+"</para><para>Цей календар був типовим для %3.</para><para>Будь ласка, "
+"виберіть нові типовій календарі.</para>"
 msgstr[2] ""
-"<para>Календар <resource>%1</resource> переведено у режим лише читання. Цей "
-"календар був типовим для  %2</para><para>Будь ласка, виберіть нові календарі."
-"</para>"
+"<para>Календар <resource>%2</resource> було переведено у режим лише читання."
+"</para><para>Цей календар був типовим для %3.</para><para>Будь ласка, "
+"виберіть нові типові календарі.</para>"
 msgstr[3] ""
-"<para>Календар <resource>%1</resource> переведено у режим лише читання. Цей "
-"календар був типовим для  %2</para><para>Будь ласка, виберіть нові календарі."
-"</para>"
+"<para>Календар <resource>%2</resource> було переведено у режим лише читання."
+"</para><para>Цей календар був типовим для %3.</para><para>Будь ласка, "
+"виберіть новий типовий календар.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7970,26 +7965,20 @@ msgstr ""
 "прострочені нагадування налаштовані на збереження."
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>Також містить:%1</para>"
+msgstr "Також містить %1"
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> є типовим календарем для:%2</para>%3<para>Ви "
-"справді бажаєте вилучити його з усіх списків календарів?</para>"
+"<para><resource>%1</resource> є типовим календарем для: %2</para><para>%3</"
+"para><para>Ви справді бажаєте вилучити його з усіх списків календарів?</para>"
 
 #: resourceselector.cpp:258
 #, kde-kuit-format
@@ -8002,17 +7991,13 @@ msgstr ""
 "цього списку?"
 
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> містить%2</para><para>Ви справді бажаєте "
+"<para><resource>%1</resource> містить %2</para><para>Ви справді бажаєте "
 "вилучити його з усіх списків календарів?</para>"
 
 #: resourceselector.cpp:264
