@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-02 00:42+0000\n"
-"PO-Revision-Date: 2025-01-04 10:47+0100\n"
+"PO-Revision-Date: 2025-11-03 10:05+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -37,7 +37,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 25.08.2\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -104,7 +104,7 @@ msgstr ""
 msgctxt "@info"
 msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
 msgstr ""
-"Ceci utilise le fuseau horaire par défaut de KAlarm, indiqué dans la boîte "
+"Ceci utilise le fuseau horaire par défaut de KAlarm, indiqué dans la boite "
 "de dialogue de configuration."
 
 #: alarmtimewidget.cpp:92
@@ -275,7 +275,7 @@ msgid ""
 "zone set in KAlarm's configuration dialog."
 msgstr ""
 "Choisissez un fuseau horaire pour cette alarme qui soit différent de celui "
-"marqué comme par défaut dans la boîte de dialogue de configuration de KAlarm."
+"marqué comme par défaut dans la boite de dialogue de configuration de KAlarm."
 
 #: alarmtimewidget.cpp:227 prefdlg.cpp:805
 #, kde-format
@@ -454,7 +454,7 @@ msgid ""
 "Enter text to appear before the person's name in the alarm message, "
 "including any necessary trailing spaces."
 msgstr ""
-"Saisissez le texte qui doit apparaître avant le nom de la personne dans le "
+"Saisissez le texte qui doit apparaitre avant le nom de la personne dans le "
 "message de l'alarme, incluant les espaces nécessaires."
 
 #: birthdaydlg.cpp:94
@@ -471,7 +471,7 @@ msgid ""
 "Enter text to appear after the person's name in the alarm message, including "
 "any necessary leading spaces."
 msgstr ""
-"Saisissez le texte qui doit apparaître après le nom de la personne dans le "
+"Saisissez le texte qui doit apparaitre après le nom de la personne dans le "
 "message de l'alarme, incluant les espaces finales nécessaires."
 
 # unreviewed-context
@@ -761,7 +761,7 @@ msgstr ""
 #: commandoptions.cpp:270
 #, kde-format
 msgid "Display system tray icon"
-msgstr "Afficher l'icône dans la boîte à miniatures"
+msgstr "Afficher l'icône dans la boite à miniatures"
 
 #: commandoptions.cpp:273
 #, kde-format
@@ -1055,7 +1055,7 @@ msgstr "Police par défaut pour l'affichage des messages d'alarme."
 #, kde-format
 msgctxt "@label"
 msgid "Show in system tray"
-msgstr "Afficher la boîte à miniatures"
+msgstr "Afficher la boite à miniatures"
 
 #. i18n: ectx: whatsthis, entry (ShowInSystemTray), group (General)
 #: data/kalarmconfig.kcfg:125
@@ -1066,7 +1066,7 @@ msgid ""
 "tray provides easy access and a status indication.</p>"
 msgstr ""
 "<p>Cochez ceci pour afficher l'icône <application>KAlarm</application> dans "
-"la boîte à miniatures. Cet affichage dans la boîte à miniatures vous permet "
+"la boite à miniatures. Cet affichage dans la boite à miniatures vous permet "
 "un accès aisé à <application>KAlarm</application> et une indication sur son "
 "état.</p>"
 
@@ -1076,7 +1076,7 @@ msgstr ""
 msgctxt "@label"
 msgid "Auto-hide in system tray if no alarms due within period"
 msgstr ""
-"Masquer automatiquement dans la boîte à miniatures si aucune alarme n'est "
+"Masquer automatiquement dans la boite à miniatures si aucune alarme n'est "
 "prévue dans la période"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoHideSystemTray), group (General)
@@ -1090,10 +1090,10 @@ msgid ""
 "p><p>Enter 0 to always show the system tray icon.</p>"
 msgstr ""
 "<p> Saisissez -1 pour masquer l'icône de <application>KAlarm</application> "
-"automatiquement dans la boîte à miniature quand il n'y a pas d'alarme active."
-"</p><p>Pour masquer automatiquement l'icône de la boîte à miniatures quand "
+"automatiquement dans la boite à miniature quand il n'y a pas d'alarme active."
+"</p><p>Pour masquer automatiquement l'icône de la boite à miniatures quand "
 "il n'y a pas d'alarme prévue dans une période définie, saisissez la période "
-"en minutes.</p><p>Saisissez 0 pour toujours afficher l'icône dans la boîte à "
+"en minutes.</p><p>Saisissez 0 pour toujours afficher l'icône dans la boite à "
 "miniatures.</p>"
 
 #. i18n: ectx: label, entry (NoAutoHideSystemTrayDesktops), group (General)
@@ -1101,7 +1101,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Desktops without auto-hide in system tray"
-msgstr "Bureaux sans masquage automatique dans la boîte à miniatures"
+msgstr "Bureaux sans masquage automatique dans la boite à miniatures"
 
 #. i18n: ectx: whatsthis, entry (NoAutoHideSystemTrayDesktops), group (General)
 #: data/kalarmconfig.kcfg:137
@@ -1110,7 +1110,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Desktops for which the auto-hide in system tray option is not available."
 msgstr ""
-"Bureaux pour lesquels l'option de masquage automatique dans la boîte à "
+"Bureaux pour lesquels l'option de masquage automatique dans la boite à "
 "miniatures n'est pas disponible."
 
 #. i18n: ectx: label, entry (Base_AutoStart), group (General)
@@ -1185,7 +1185,7 @@ msgid ""
 "Enter the default time interval (in minutes) to defer alarms, used by the "
 "Defer Alarm dialog."
 msgstr ""
-"Saisissez la durée (en minutes) du différé des alarmes, utilisée la boîte de "
+"Saisissez la durée (en minutes) du différé des alarmes, utilisée la boite de "
 "dialogue de différé d'alarme."
 
 #. i18n: ectx: label, entry (AskResource), group (General)
@@ -1273,7 +1273,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Number of alarms to show in system tray tooltip"
-msgstr "Nombre d'alarmes à afficher dans l'aide de la boîte à miniatures"
+msgstr "Nombre d'alarmes à afficher dans l'aide de la boite à miniatures"
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
 #: data/kalarmconfig.kcfg:187
@@ -1288,7 +1288,7 @@ msgid ""
 "      "
 msgstr ""
 "<p>Le nombre d'alarmes prévues dans les prochaines 24 heures devant être "
-"affichées dans l'aide de la boîte à miniatures :\n"
+"affichées dans l'aide de la boite à miniatures :\n"
 "        <ul><li>0 pour n'en afficher aucune</li>\n"
 "        <li>-1 pour toutes les afficher</li>\n"
 "        <li>> 0 pour fixer la limite à ce nombre.</li></ul></p>\n"
@@ -1299,7 +1299,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Show alarm times in system tray tooltip"
-msgstr "Afficher les moments d'alarme dans la boîte à miniatures"
+msgstr "Afficher les moments d'alarme dans la boite à miniatures"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
 #: data/kalarmconfig.kcfg:194 prefdlg.cpp:2004
@@ -1310,14 +1310,14 @@ msgid ""
 "alarm is due."
 msgstr ""
 "Définir si l'heure de déclenchement de chaque alarme doit être affichée dans "
-"la bulle d'aide de la boîte à miniatures."
+"la bulle d'aide de la boite à miniatures."
 
 #. i18n: ectx: label, entry (ShowTooltipTimeToAlarm), group (General)
 #: data/kalarmconfig.kcfg:199
 #, kde-format
 msgctxt "@label"
 msgid "Show time to alarms in system tray tooltip"
-msgstr "Afficher le temps restant avant les alarmes dans la boîte à miniatures"
+msgstr "Afficher le temps restant avant les alarmes dans la boite à miniatures"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
 #: data/kalarmconfig.kcfg:200 prefdlg.cpp:2010
@@ -1328,7 +1328,7 @@ msgid ""
 "alarm is due."
 msgstr ""
 "Définir si le temps restant avant chaque alarme doit être affiché dans la "
-"bulle d'aide de la boîte à miniatures."
+"bulle d'aide de la boite à miniatures."
 
 #. i18n: ectx: label, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:205
@@ -1337,7 +1337,7 @@ msgctxt "@label"
 msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr ""
 "Préfixe du temps restant avant le déclenchement d'une alarme, dans l'aide de "
-"la boîte à miniatures"
+"la boite à miniatures"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:206 prefdlg.cpp:2021
@@ -1348,7 +1348,7 @@ msgid ""
 "system tray tooltip."
 msgstr ""
 "Saisissez le texte à afficher en face du temps restant avant l'alarme, dans "
-"la bulle d'aide de la boîte à miniatures."
+"la bulle d'aide de la boite à miniatures."
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:211
@@ -1649,7 +1649,7 @@ msgid ""
 "determine whether to display alarm messages in windows or in system "
 "notifications."
 msgstr ""
-"Les paramètres par défaut de la boîte de dialogue de modification de "
+"Les paramètres par défaut de la boite de dialogue de modification de "
 "l'alarme pour la « méthode d'affichage » pour déterminer d'afficher les "
 "messages d'alarmes soit dans des fenêtres ou soit dans les notifications du "
 "système."
@@ -1669,7 +1669,7 @@ msgid ""
 "Default value in the alarm edit dialog for late cancellation time (in "
 "minutes). 0 for no late cancellation, >0 how many minutes before cancelling."
 msgstr ""
-"La valeur par défaut dans la boîte de dialogue de modification pour l'heure "
+"La valeur par défaut dans la boite de dialogue de modification pour l'heure "
 "d'annulation tardive (in minute). 0 pour ne permettre aucune annulation "
 "tardive, > 0 pour indiquer le nombre de minutes avant l'annulation."
 
@@ -1688,7 +1688,7 @@ msgstr ""
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
 msgstr ""
-"Configuration par défaut dans la boîte de dialogue de modification de "
+"Configuration par défaut dans la boite de dialogue de modification de "
 "l'alarme pour le paramètre « fermeture automatique si tardive »"
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
@@ -1706,7 +1706,7 @@ msgid ""
 "Default setting in the alarm edit dialog for \"confirm alarm acknowledgement"
 "\"."
 msgstr ""
-"Configuration par défaut dans la boîte de dialogue de modification de "
+"Configuration par défaut dans la boite de dialogue de modification de "
 "l'alarme pour le paramètre « Confirmer la prise en compte de l'alarme »"
 
 # unreviewed-context
@@ -1723,7 +1723,7 @@ msgstr "Afficher dans KOrganizer"
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"show in KOrganizer\"."
 msgstr ""
-"Configuration par défaut dans la boîte de dialogue de modification de "
+"Configuration par défaut dans la boite de dialogue de modification de "
 "l'alarme pour le paramètre « A afficher dans KOrganizer »"
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
@@ -1739,7 +1739,7 @@ msgstr "Son"
 msgctxt "@info:whatsthis"
 msgid "Default sound type in the alarm edit dialog."
 msgstr ""
-"Type de son par défaut dans la boîte de dialogue de modification de l'alarme."
+"Type de son par défaut dans la boite de dialogue de modification de l'alarme."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
 #: data/kalarmconfig.kcfg:340
@@ -1762,7 +1762,7 @@ msgstr "Fichier de son"
 msgctxt "@info:whatsthis"
 msgid "Default sound file path in the alarm edit dialog."
 msgstr ""
-"Emplacement du fichier son par défaut dans la boîte de dialogue de "
+"Emplacement du fichier son par défaut dans la boite de dialogue de "
 "modification de l'alarme."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
@@ -1780,7 +1780,7 @@ msgid ""
 "Default sound volume in the alarm edit dialog. -1 to deselect volume, or 0 - "
 "100 %"
 msgstr ""
-"Volume par défaut du son dans la boîte de dialogue de modification de "
+"Volume par défaut du son dans la boite de dialogue de modification de "
 "l'alarme. -1 pour couper le son, ou entre 0 et 100 %"
 
 #. i18n: ectx: label, entry (DefaultSoundRepeat), group (Defaults)
@@ -1796,7 +1796,7 @@ msgstr "Répéter le fichier sonore"
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for sound repetition."
 msgstr ""
-"Configuration par défaut dans la boîte de dialogue de modification de "
+"Configuration par défaut dans la boite de dialogue de modification de "
 "l'alarme pour la répétition du son."
 
 #. i18n: ectx: label, entry (DefaultCmdScript), group (Defaults)
@@ -1812,7 +1812,7 @@ msgstr "Saisissez un script"
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for command script entry."
 msgstr ""
-"Configuration par défaut dans la boîte de dialogue de modification de "
+"Configuration par défaut dans la boite de dialogue de modification de "
 "l'alarme pour l'entrée script de commande."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
@@ -1830,7 +1830,7 @@ msgid ""
 "Default setting in the alarm edit dialog for where to send command alarm "
 "output."
 msgstr ""
-"Configuration par défaut dans la boîte de dialogue de modification de "
+"Configuration par défaut dans la boite de dialogue de modification de "
 "l'alarme pour l'endroit où envoyer la sortie de la commande de l'alarme."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
@@ -1867,7 +1867,7 @@ msgstr "Fichier journal"
 msgctxt "@info:whatsthis"
 msgid "Default log file path for command alarms in the alarm edit dialog."
 msgstr ""
-"Fichier journal par défaut pour les alarmes par commande dans la boîte de "
+"Fichier journal par défaut pour les alarmes par commande dans la boite de "
 "dialogue de modification de l'alarme."
 
 # unreviewed-context
@@ -1885,7 +1885,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Default setting in the alarm edit dialog for blind copying emails to self."
 msgstr ""
-"Configuration par défaut dans la boîte de dialogue de modification de "
+"Configuration par défaut dans la boite de dialogue de modification de "
 "l'alarme pour l'envoi d'une copie cachée à soi-même."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
@@ -1901,7 +1901,7 @@ msgstr "Période des occurrences"
 msgctxt "@info:whatsthis"
 msgid "The default setting for the recurrence rule in the alarm edit dialog."
 msgstr ""
-"Les propriétés d'occurrence par défaut dans la boîte de dialogue de "
+"Les propriétés d'occurrence par défaut dans la boite de dialogue de "
 "modification de l'alarme."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
@@ -1983,7 +1983,7 @@ msgstr "Unités de rappel"
 msgctxt "@info:whatsthis"
 msgid "Default reminder time units in the alarm edit dialog."
 msgstr ""
-"Unités de temps par défaut pour les rappels dans la boîte de dialogue de "
+"Unités de temps par défaut pour les rappels dans la boite de dialogue de "
 "modification de l'alarme."
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
@@ -4424,7 +4424,7 @@ msgid ""
 msgstr ""
 "<para>Aucune adresse « De » d'expéditeur n'est définie.</para><para>Veuillez "
 "définir une adresse par défaut dans <application>KMail</application> ou la "
-"boîte de dialogue de configuration de <application>KAlarm</application></"
+"boite de dialogue de configuration de <application>KAlarm</application></"
 "para>."
 
 #: kamail.cpp:127
@@ -4758,7 +4758,7 @@ msgstr "Afficher les alarmes archivées"
 #, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
-msgstr "Afficher dans la boîte à miniatures"
+msgstr "Afficher dans la boite à miniatures"
 
 # unreviewed-context
 #: mainwindow.cpp:533
@@ -5483,7 +5483,7 @@ msgid ""
 "the Defer Alarm dialog."
 msgstr ""
 "Saisissez l'intervalle de temps (heures & minutes) par défaut de report des "
-"alarmes, utilisé par la boîte de dialogue de report d'alarme."
+"alarmes, utilisé par la boite de dialogue de report d'alarme."
 
 #: prefdlg.cpp:530
 #, kde-format
@@ -5526,7 +5526,7 @@ msgid ""
 "details of special codes to tailor the command line."
 msgstr ""
 "Saisissez la ligne de commande complète afin d'exécuter une commande dans la "
-"fenêtre de terminal désirée. Par défaut, la chaîne de la commande de "
+"fenêtre de terminal désirée. Par défaut, la chaine de la commande de "
 "l'alarme sera ajoutée à ce que vous saisissez ici. Veuillez consulter le "
 "manuel de <application>KAlarm</application> pour des détails sur les codes "
 "spéciaux manipulant la ligne de commande."
@@ -6113,7 +6113,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "The default setting for <interface>%1</interface> in the alarm edit dialog."
 msgstr ""
-"La configuration par défaut de <interface>%1</interface> dans la boîte de "
+"La configuration par défaut de <interface>%1</interface> dans la boite de "
 "dialogue pour la modification de l'alarme."
 
 #: prefdlg.cpp:1443 prefdlg.cpp:1898
@@ -6142,7 +6142,7 @@ msgid ""
 "dialog."
 msgstr ""
 "Les paramètres par défaut pour la méthode d'affichage du message d'alarme "
-"dans la boîte de dialogue de modification d'alarmes."
+"dans la boite de dialogue de modification d'alarmes."
 
 #: prefdlg.cpp:1495
 #, kde-format
@@ -6212,7 +6212,7 @@ msgid ""
 "The default units for the reminder in the alarm edit dialog, for alarms due "
 "soon."
 msgstr ""
-"Les unités par défaut pour le rappel dans la boîte de dialogue de "
+"Les unités par défaut pour le rappel dans la boite de dialogue de "
 "modification de l'alarme, pour les alarmes proches."
 
 #: prefdlg.cpp:1578
@@ -6324,7 +6324,7 @@ msgid ""
 "indication.</para>"
 msgstr ""
 "<para>Cochez cela pour afficher l'icône <application>KAlarm</application> "
-"dans la boîte à miniatures. Cet affichage dans la boîte à miniatures vous "
+"dans la boite à miniatures. Cet affichage dans la boite à miniatures vous "
 "permet un accès aisé à <application>KAlarm</application> et une indication "
 "sur son état.</para>"
 
@@ -6342,7 +6342,7 @@ msgid ""
 "regardless of whether alarms are due."
 msgstr ""
 "Cochez cette case pour afficher l'icône <application>KAlarm</application> "
-"dans la boîte à miniatures, peu importe les alarmes prévues."
+"dans la boite à miniatures, peu importe les alarmes prévues."
 
 #: prefdlg.cpp:1946
 #, kde-format
@@ -6359,9 +6359,9 @@ msgid ""
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
 "Cochez pour masquer l'icône de <application>KAlarm</application> "
-"automatiquement dans la boîte à miniatures s'il n'y a pas d'alarme active. "
+"automatiquement dans la boite à miniatures s'il n'y a pas d'alarme active. "
 "Quand elle est cachée, l'icône peut toujours être ré-affichée en utilisant "
-"l'option pour afficher les icônes masquées de la boîte à miniatures."
+"l'option pour afficher les icônes masquées de la boite à miniatures."
 
 #: prefdlg.cpp:1956
 #, kde-kuit-format
@@ -6373,10 +6373,10 @@ msgid ""
 "to show hidden icons."
 msgstr ""
 "Cochez pour masquer l'icône de <application>KAlarm</application> "
-"automatiquement dans la boîte à miniatures s'il n'y a pas d'alarme prévue "
+"automatiquement dans la boite à miniatures s'il n'y a pas d'alarme prévue "
 "dans la période indiquée. Quand elle est cachée, l'icône peut toujours être "
 "ré-affichée en utilisant l'option pour afficher les icônes masquées de la "
-"boîte à miniatures."
+"boite à miniatures."
 
 #: prefdlg.cpp:1959
 #, kde-format
@@ -6389,7 +6389,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
-msgstr "Bulle d'aide de la boîte à miniatures"
+msgstr "Bulle d'aide de la boite à miniatures"
 
 #: prefdlg.cpp:1978
 #, kde-format
@@ -6404,7 +6404,7 @@ msgid ""
 "Specify whether to include in the system tray tooltip, a summary of alarms "
 "due in the next 24 hours."
 msgstr ""
-"Définir s'il faut inclure dans la bulle d'aide de la boîte à miniatures un "
+"Définir s'il faut inclure dans la bulle d'aide de la boite à miniatures un "
 "résumé des alarmes qui se déclencheront dans les 24 heures suivantes."
 
 #: prefdlg.cpp:1988
@@ -6421,7 +6421,7 @@ msgid ""
 "tooltip. Check to enter an upper limit on the number to be displayed."
 msgstr ""
 "Décochez cette case pour afficher toutes alarmes des prochaines 24 heures "
-"dans la bulle d'aide de la boîte à miniatures. Cochez la pour saisir un "
+"dans la bulle d'aide de la boite à miniatures. Cochez la pour saisir un "
 "nombre maximum d'alarmes à afficher."
 
 #: prefdlg.cpp:2001
@@ -6836,7 +6836,7 @@ msgid ""
 "dialog.</para>"
 msgstr ""
 "<para>N'exécuter l'alarme que pendant les heures de travail.</para> "
-"<para>Vous pouvez spécifier les jours et heures de travail dans la boîte de "
+"<para>Vous pouvez spécifier les jours et heures de travail dans la boite de "
 "dialogue de configuration.</para>"
 
 #: recurrenceedit.cpp:380
@@ -7648,13 +7648,13 @@ msgstr "Modèles d'alarme"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7877,12 +7877,7 @@ msgid "Choose Calendar"
 msgstr "Choisir l'agenda"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7892,13 +7887,13 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para>Le calendrier <resource>%1</resource> a été mis en lecture seule. "
-"C'était le calendrier par défaut pour : %2</para><para> Veuillez "
-"sélectionner les nouveaux calendriers par défaut.</para>"
+"<para>L'agenda <resource>%2</resource> a été positionné en lecture seule. </"
+"para><para>C'était l'agenda par défaut pour %3</para><para> Veuillez "
+"sélectionner un nouvel agenda par défaut.</para>"
 msgstr[1] ""
-"<para>Le calendrier <resource>%1</resource> a été mis en lecture seule. "
-"C'était le calendrier par défaut pour : %2</para><para> Veuillez "
-"sélectionner les nouveaux calendriers par défaut.</para>"
+"<para>L'agenda <resource>%2</resource> a été positionné en lecture seule. </"
+"para><para>C'était l'agenda par défaut pour %3</para><para> Veuillez "
+"sélectionner de nouveaux agendas par défaut.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -8165,7 +8160,7 @@ msgid ""
 "whether a calendar is enabled (checked) or disabled (unchecked). The default "
 "calendar is shown in bold."
 msgstr ""
-"Liste des agendas disponibles du type sélectionné. L'état de la boîte à "
+"Liste des agendas disponibles du type sélectionné. L'état de la boite à "
 "cocher indique si un agenda est activé (cochée) ou désactivé (décochée). "
 "L'agenda par défaut est affiché en gras."
 
@@ -8235,27 +8230,21 @@ msgstr ""
 "alors que des alarmes expirées sont configurées pour être conservées."
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>Il contient aussi : %1</para>"
+msgstr "Il contient aussi %1."
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> est le calendrier par défaut pour : %2</para>"
-"%3<para>Voulez-vous vraiment le supprimer de toutes les listes du "
-"calendrier ?</para>"
+"<para><resource>%1</resource> est l'agenda par défaut pour %2</para>"
+"%3<para>. Voulez-vous vraiment le supprimer de toutes les listes de "
+"l'agenda ?</para>"
 
 #: resourceselector.cpp:258
 #, kde-kuit-format
@@ -8268,17 +8257,13 @@ msgstr ""
 "resource>) de la liste ?"
 
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> contient : %2</para><para>Voulez-vous vraiment "
+"<para><resource>%1</resource> contient %2</para><para>Voulez-vous vraiment "
 "le supprimer depuis toutes les listes de l'agenda ?</para>"
 
 #: resourceselector.cpp:264
