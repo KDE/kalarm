@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-02 00:42+0000\n"
-"PO-Revision-Date: 2025-08-14 12:00+0400\n"
+"PO-Revision-Date: 2025-11-05 18:42+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -7236,13 +7236,13 @@ msgstr "قوالب المنبّهات"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1، %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1، %2، %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7819,26 +7819,20 @@ msgstr ""
 "المنتهية للاحتفاظ بها."
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>ويحتوي أيضًا على:%1</para>"
+msgstr "ويحتوي أيضًا على %1"
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> هو التقويم المبدئي لـ:%2</para>%3<para>هل تريد "
-"حقًا إزالته من جميع قوائم التقويم؟</para>"
+"<para><resource>%1</resource> هو التقويم المبدئي لـ:%2</para><para>%3</"
+"para><para>هل تريد حقًا إزالته من جميع قوائم التقويم؟</para>"
 
 #: resourceselector.cpp:258
 #, kde-kuit-format
@@ -7849,17 +7843,13 @@ msgid ""
 msgstr "هل تريد حقًا إزالة تقويمك المبدئي (<resource>%1</resource>) من القائمة؟"
 
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> يحتوي على:%2</para><para>هل تريد حقًا إزالته من "
+"<para><resource>%1</resource> يحتوي على %2</para><para>هل تريد حقًا إزالته من "
 "جميع قوائم التقويم؟</para>"
 
 #: resourceselector.cpp:264
