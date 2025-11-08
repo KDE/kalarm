@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-02 00:42+0000\n"
-"PO-Revision-Date: 2025-01-07 23:27+0100\n"
+"PO-Revision-Date: 2025-11-07 18:24+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.03.70\n"
+"X-Generator: Lokalize 25.07.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -7384,13 +7384,13 @@ msgstr "Шаблони на аларми"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7612,12 +7612,7 @@ msgid "Choose Calendar"
 msgstr "Избор на календар"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7627,13 +7622,13 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para>Календарът <resource>%1</resource> е направен само за четене. Това "
-"беше календарът по подразбиране за:%2</para><para>Моля, изберете нови "
-"календари по подразбиране.</para>"
+"<para>Календарът <resource>%2</resource> е направен само за четене. </"
+"para><para>Това беше календарът по подразбиране за:%3</para><para>Моля, "
+"изберете нов календар по подразбиране.</para>"
 msgstr[1] ""
-"<para>Календарът <resource>%1</resource> е направен само за четене. Това "
-"беше календарът по подразбиране за:%2</para><para>Моля, изберете нови "
-"календари по подразбиране.</para>"
+"<para>Календарът <resource>%2</resource> е направен само за четене. </"
+"para><para>Това беше календарът по подразбиране за:%3</para><para>Моля, "
+"изберете нови календари по подразбиране.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7961,19 +7956,13 @@ msgstr ""
 "когато е конфигурирано запазването на изтекли аларми."
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>Той също така съдържа:%1</para>"
+msgstr "Той също така съдържа:%1"
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
@@ -7994,11 +7983,7 @@ msgstr ""
 "resource>) от списъка?"
 
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
