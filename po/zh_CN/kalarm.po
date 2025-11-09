@@ -6995,13 +6995,13 @@ msgstr "闹钟模板"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1，%2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1，%2，%3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7219,12 +7219,7 @@ msgid "Choose Calendar"
 msgstr "选择日历"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7234,8 +7229,8 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para>日历 <resource>%1</resource> 已设为只读且为 %2 的默认日历。</"
-"para><para>请选择新的默认日历。</para>"
+"<para>日历 <resource>%2</resource> 已被设置为只读。</para><para>这是 %3 的默"
+"认日历。</para><para>请选择新的默认日历。</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7555,26 +7550,20 @@ msgid ""
 msgstr "配置保留过期闹钟后，无法删除默认的已归档闹钟日历。"
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>同时包含：%1</para>"
+msgstr "它同时包含 %1"
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> 是 %2 的默认日历</para>%3<para>您确定要从日历列"
-"表中删除它吗？</para>"
+"<para><resource>%1</resource> 是 %2 的默认日历</para><para>%3</para><para>您"
+"确定要将其从所有日历列表中移除吗？</para>"
 
 #: resourceselector.cpp:258
 #, kde-kuit-format
@@ -7585,18 +7574,14 @@ msgid ""
 msgstr "您确定要从列表中删除默认日历 (<resource>%1</resource>) 吗？"
 
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> 包含：%2</para><para>您确定要从日历列表中删除它"
-"吗？</para>"
+"<para><resource>%1</resource> 包含 %2</para><para>您确定要将其从所有日历列表"
+"中移除吗？</para>"
 
 #: resourceselector.cpp:264
 #, kde-kuit-format
@@ -8426,31 +8411,3 @@ msgstr "输入闹钟响铃前唤醒系统的分钟数，此项可确保系统在
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "闹钟唤醒睡眠前的分钟数"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "The calendar <resource>%1</resource> has been made read-only. This was "
-#~ "the default calendar for active alarms."
-#~ msgstr ""
-#~ "已将日历 <resource>%1</resource> 设为只读，该日历将作为活动闹钟的默认日"
-#~ "历。"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "The calendar <resource>%1</resource> has been made read-only. This was "
-#~ "the default calendar for archived alarms."
-#~ msgstr ""
-#~ "已将日历 <resource>%1</resource> 设为只读，该日历将作为已归档闹钟的默认日"
-#~ "历。"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "The calendar <resource>%1</resource> has been made read-only. This was "
-#~ "the default calendar for alarm templates."
-#~ msgstr ""
-#~ "已将日历 <resource>%1</resource> 设为只读，该日历将作为闹钟模板的默认日"
-#~ "历。"
-
-#~ msgctxt "@info"
-#~ msgid "<para>%1</para><para>Please select a new default calendar.</para>"
-#~ msgstr "<para>%1</para><para>请选择新的默认日历。</para>"
