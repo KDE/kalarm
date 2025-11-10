@@ -405,11 +405,11 @@ public:
 
 QByteArray KAEvent::currentCalendarVersionString()
 {
-    return {"2.7.0"};   // This is NOT the KAlarmCal library .so version!
+    return {"3.12.0"};   // This is NOT the KAlarmCal library .so version!
 }
 int KAEvent::currentCalendarVersion()
 {
-    return Version(2, 7, 0);   // This is NOT the KAlarmCal library .so version!
+    return Version(3, 12, 0);   // This is NOT the KAlarmCal library .so version!
 }
 
 // Custom calendar properties.
@@ -763,18 +763,29 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
     {
         // This property is used only when the main alarm has expired.
         // If a main alarm is found, this property is ignored (see below).
-        const QStringList list = prop.split(QLatin1Char(':'));
+        QStringList list = prop.split(QLatin1Char(':'));
         if (list.count() >= 2)
         {
-            const int interval = static_cast<int>(list[0].toUInt());
-            const int count = static_cast<int>(list[1].toUInt());
-            if (interval && count)
+            const QStringView intervalParam(list[0]);
+            int len = intervalParam.length() - 1;
+            bool days = false;
+            switch (intervalParam.at(len).toLatin1())
             {
-                if (interval % (24 * 60))
-                    mRepetition.set(Duration(interval * 60, Duration::Seconds), count);
-                else
-                    mRepetition.set(Duration(interval / (24 * 60), Duration::Days), count);
+                case 'D':
+                    days = true;
+                    break;
+                case 'M':
+                    break;
+                default:     // default to minutes
+                    ++len;
+                    break;
             }
+            const int interval = intervalParam.left(len).toUInt();  // -> 0 if conversion fails
+            const int count = static_cast<int>(list[1].toUInt());
+            if (days)
+                mRepetition.set(Duration(interval, Duration::Days), count);
+            else
+                mRepetition.set(Duration(interval * 60, Duration::Seconds), count);
         }
     }
     mNextMainDateTime = readDateTime(event, localZone, dateOnly, mStartDateTime);
@@ -1277,8 +1288,11 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction ui
     {
         // Alarm repetition is normally held in the main alarm, but since
         // the main alarm has expired, store in a custom property.
-        const QString repparam = QStringLiteral("%1:%2").arg(mRepetition.intervalMinutes()).arg(mRepetition.count());
-#pragma message("Need to distinguish between daily and minutely repetitions")
+        QString repparam;
+        if (mRepetition.isDaily())
+            repparam = QStringLiteral("%1D:%2").arg(mRepetition.intervalDays()).arg(mRepetition.count());
+        else
+            repparam = QStringLiteral("%1M:%2").arg(mRepetition.intervalMinutes()).arg(mRepetition.count());
         ev->setCustomProperty(KACalendar::APPNAME, REPEAT_PROPERTY, repparam);
     }
 
@@ -5606,7 +5620,8 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
     const bool pre_2_3_0  = (calendarVersion < Version(2, 3, 0));
     const bool pre_2_3_2  = (calendarVersion < Version(2, 3, 2));
     const bool pre_2_7_0  = (calendarVersion < Version(2, 7, 0));
-    Q_ASSERT(currentCalendarVersion() == Version(2, 7, 0));
+    const bool pre_3_12_0 = (calendarVersion < Version(3, 12, 0));
+    Q_ASSERT(currentCalendarVersion() == Version(3, 12, 0));
 
     const QTimeZone localZone = QTimeZone::systemTimeZone();
 
@@ -6180,6 +6195,35 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
                         preFlags += KAEventPrivate::REMINDER_ONCE_FLAG;
                     preFlags += reminder;
                     event->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY, preFlags.join(KAEventPrivate::SC));
+                }
+            }
+        }
+
+        if (pre_3_12_0)
+        {
+            /*
+             * It's a KAlarm pre-3.12.0 calendar file.
+             * The interval parameter in the REPEAT property was always stored as minutes.
+             */
+            const QString prop = event->customProperty(KACalendar::APPNAME, KAEventPrivate::REPEAT_PROPERTY);
+            if (!prop.isEmpty())
+            {
+                // Append a time unit suffix to the event's REPEAT property interval parameter.
+                const QStringList list = prop.split(QLatin1Char(':'));
+qDebug()<<"convertKCalEvents: LIST:"<<list;
+                if (list.count() >= 2)
+                {
+                    int interval = static_cast<int>(list[0].toUInt());
+                    QChar suffix;
+                    if (interval % (24 * 60))
+                        suffix = QLatin1Char('M');
+                    else
+                    {
+                        suffix = QLatin1Char('D');
+                        interval /= (24 * 60);
+                    }
+                    event->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::REPEAT_PROPERTY,
+                                       QStringLiteral("%1%2:%3").arg(interval).arg(suffix).arg(list[1]));
                 }
             }
         }

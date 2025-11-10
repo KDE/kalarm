@@ -30,6 +30,7 @@
 #include "dbusproperties.h"          // DBUS-generated
 #include "kalarmcalendar/datetime.h"
 #include "kalarmcalendar/karecurrence.h"
+#include "kalarmcalendar/version.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -243,7 +244,12 @@ bool KAlarmApp::initialiseTimerResources()
         connect(ResourcesCalendar::instance(), &ResourcesCalendar::atLoginEventAdded, this, &KAlarmApp::atLoginEventAdded);
         DisplayCalendar::initialise();
         // Finally, initialise the resources which generate signals as they initialise.
-        DataModel::initialise();
+        // If the last KAlarm version to run was older than 3.12.0, the KeepFormat flag
+        // in the resource configurations needs to be ignored to allow the user to be
+        // prompted to update the calendar versions, because KeepFormat was erroneously
+        // always set true.
+        const int oldVersion = getVersionNumber(Preferences::previousVersion());
+        DataModel::initialise(oldVersion < Version(3, 12, 0));
         return true;
     }
     return false;
