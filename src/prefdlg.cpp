@@ -637,7 +637,7 @@ void MiscPrefTab::restore(bool defaults, bool)
     mXtermCommand->setText(id == 0 ? xtermCmd.second : QString());
     if (mAudioBackend)
     {
-        AudioPlugin* audioPlugin = Preferences::audioPlugin();
+        const AudioPlugin* audioPlugin = Preferences::audioPlugin();
         const QList<AudioPlugin*> audioPlugins = PluginManager::instance()->audioPlugins();
         int i = 0;
         for (const auto plugin : audioPlugins)
