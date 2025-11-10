@@ -1,7 +1,7 @@
 /*
  *  fileresourceconfigmanager.h  -  config manager for resources accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -40,7 +40,7 @@ public:
     /** Reads the 'kalarmresources' config file and creates the resources
      *  defined in it. If called more than once, this method will do nothing.
      */
-    static void createResources(QObject* parent);
+    static void createResources(QObject* parent, bool ignoreKeepFormat);
 
     /** Writes the 'kalarmresources' config file. */
     static void writeConfig();

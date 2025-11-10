@@ -1,7 +1,7 @@
 /*
  *  fileresourceconfigmanager.cpp  -  config manager for resources accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -48,7 +48,7 @@ FileResourceConfigManager::FileResourceConfigManager()
 /******************************************************************************
 * Read the current config and create all resources.
 */
-void FileResourceConfigManager::createResources(QObject* parent)
+void FileResourceConfigManager::createResources(QObject* parent, bool ignoreKeepFormat)
 {
     FileResourceConfigManager* manager = instance();
     if (manager->mCreated)
@@ -108,7 +108,7 @@ void FileResourceConfigManager::createResources(QObject* parent)
 
                     // Update the calendar to the current KAlarm format if necessary, and
                     // if the user agrees.
-                    FileResourceCalendarUpdater::updateToCurrentFormat(resource, false, parent);
+                    FileResourceCalendarUpdater::updateToCurrentFormat(resource, ignoreKeepFormat, parent);
                 }
             }
         }

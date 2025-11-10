@@ -1,7 +1,7 @@
 /*
  *  datamodel.cpp  -  model independent access to calendar functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,8 +12,10 @@
 #define DATA_MODEL FileResourceDataModel
 
 
-void DataModel::initialise()
+void DataModel::initialise(bool ignoreKeepFormat)
 {
+    if (ignoreKeepFormat)
+        DATA_MODEL::setCreateResourcesIgnoreKeepFormat();
     DATA_MODEL::instance();
     // Record in kalarmrc, for information only, which backend is in use.
     Preferences::setBackend(ResourceDataModelBase::mInstance->dataStorageBackend());
@@ -58,6 +60,7 @@ ResourceCreator* DataModel::createResourceCreator(KAlarmCal::CalEvent::Type defa
 {
     return ResourceDataModelBase::mInstance ? ResourceDataModelBase::mInstance->createResourceCreator(defaultType, parent) : nullptr;
 }
+
 
 void DataModel::updateCalendarToCurrentFormat(Resource& resource, bool ignoreKeepFormat, QObject* parent)
 {

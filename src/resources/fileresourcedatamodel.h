@@ -1,7 +1,7 @@
 /*
  *  fileresourcedatamodel.h  -  model containing file system resources and their events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -63,6 +63,13 @@ public:
     bool           addEvent(KAEvent&, Resource&);
 
     bool           haveEvents() const                   { return mHaveEvents; }
+
+    /** When FileResourceConfigManager::createResources() is called, specify
+     *  that KeepFormat setting should be ignored. This is to provide an override
+     *  when the calendar file format has changed.
+     *  If used, it must be called before the first time instance() is called.
+     */
+    static void    setCreateResourcesIgnoreKeepFormat();
 
     int            rowCount(const QModelIndex& parent = QModelIndex()) const override;
     int            columnCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -150,6 +157,7 @@ private:
     void updateHaveEvents(bool have)        { mHaveEvents = have;  Q_EMIT haveEventsStatus(have); }
 
     static bool mInstanceIsOurs;        // mInstance is a FileResourceDataModel instance
+    static bool mCreateResourcesIgnoreKeepFormat;
     // Resource nodes for model root [Resource = Resource()], and
     // Event nodes for each resource.
     QHash<Resource, QList<Node*>> mResourceNodes;

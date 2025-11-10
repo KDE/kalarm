@@ -111,7 +111,7 @@ Compliant with the iCalendar specification, KAlarm defines a number of custom fi
     <tr><td colspan=2><tt>X-KDE-KALARM-NEXTRECUR</tt></td><td>The single parameter records the next due recurrence date/time of the main alarm or, if sub-repetitions are still pending after the latest recurrence, the date/time of that recurrence</td></tr>
     <tr><td></td><td><tt><em>date-time</em></tt></td><td>The date and optional time, in the format <tt><em>YYYYMMDD</em>T<em>HHMMSS</em></tt> for a date/time alarm, or <tt><em>YYYYMMDD</em></tt> for a date-only alarm. E.g. <tt class=eg>19990131T120000</tt></td></tr>
     <tr><td colspan=2><tt>X-KDE-KALARM-REPEAT</tt></td><td>Used for an active alarm when its main alarm has expired (e.g. when the last occurrence of the alarm has been deferred), holds the alarm's sub-repetition information. (Normally, this is held in the main alarm.)</td></tr>
-    <tr><td></td><td><tt><em>interval</em>:<em>count</em></tt></td><td>Sub-repetition interval (in minutes) and count</td></tr>
+    <tr><td></td><td><tt><em>interval</em>:<em>count</em></tt></td><td>Sub-repetition interval and count. An optional suffix in <tt><em>interval</em></tt> indicates the time units: no suffix = minutes, <tt>M</tt> = minutes, <tt>D</tt> = days. </td></tr>
     <tr><td colspan=2><tt>X-KDE-KALARM-LOG</tt></td><td>The single parameter specifies where command alarm output should go; default = discard</td></tr>
     <tr><td></td><td><tt>xterm:</tt></td><td>Display command output in a terminal window</td></tr>
     <tr><td class=cont></td><td class=cont><tt>display:</tt></td><td class=cont>Display command output in an alarm window</td></tr>

@@ -1,8 +1,11 @@
 KAlarm Change Log
 
-=== Version 3.12.0 (KDE Gear 25.12) --- 8 September 2025 ===
+=== Version 3.12.0 (KDE Gear 25.12) --- 10 November 2025 ===
 * If a recurrence is suppressed by work time/holidays/exception, suppress its sub-repetitions.
 * Improvements and bug fixes to recurrence/work time/holidays calculations.
+* Fix formatting of user messages which showed HTML tags.
+* Distinguish between daily and minutely sub-repetitions in alarm calendar.
+* Only mark calendars as 'KeepFormat' if the user declines to update them.
 
 === Version 3.11.3 (KDE Gear 25.08.2) --- 11 September 2025 ===
 * If an alarm is late-cancelled, don't remove the event if a sub-repetition is still due.

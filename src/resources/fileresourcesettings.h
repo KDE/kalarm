@@ -1,7 +1,7 @@
 /*
  *  fileresourcesettings.h  -  settings for calendar resource accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -306,20 +306,20 @@ private:
 
     KConfigGroup*     mConfigGroup {nullptr}; // the config group holding all this resource's config
                                               // Until this is set, no notifications will be made
-    ResourceId        mId {-1};          // resource's unique ID
-    QUrl              mUrl;              // location of file or directory
-    QString           mDisplayLocation;  // displayable location of file or directory
-    QString           mDisplayName;      // name for user display
-    QByteArray        mHash;             // hash of the calendar file contents
+    ResourceId      mId {-1};          // resource's unique ID
+    QUrl            mUrl;              // location of file or directory
+    QString         mDisplayLocation;  // displayable location of file or directory
+    QString         mDisplayName;      // name for user display
+    QByteArray      mHash;             // hash of the calendar file contents
     QHash<QString, KAEvent::CmdErr> mCommandErrors;  // event IDs and their command error types
-    QColor            mBackgroundColour; // background colour to display the resource and its alarms
-    Storage           mStorageType {Storage::None};  // how the calendar is stored
-    CalEvent::Types   mAlarmTypes {CalEvent::EMPTY}; // alarm types which the resource contains
-    CalEvent::Types   mEnabled {CalEvent::EMPTY};    // alarm types for which the resource is enabled
-    CalEvent::Types   mStandard {CalEvent::EMPTY};   // alarm types for which the resource is the standard resource
-    bool              mReadOnly {false};  // the resource is read-only
-    bool              mKeepFormat {true}; // do not update the calendar file to the current KAlarm format
-    bool              mUpdateFormat {false}; // request to update the calendar file to the current KAlarm format
+    QColor          mBackgroundColour; // background colour to display the resource and its alarms
+    Storage         mStorageType {Storage::None};  // how the calendar is stored
+    CalEvent::Types mAlarmTypes {CalEvent::EMPTY}; // alarm types which the resource contains
+    CalEvent::Types mEnabled {CalEvent::EMPTY};    // alarm types for which the resource is enabled
+    CalEvent::Types mStandard {CalEvent::EMPTY};   // alarm types for which the resource is the standard resource
+    bool            mReadOnly {false};     // the resource is read-only
+    bool            mKeepFormat {false};   // do not update the calendar file to the current KAlarm format
+    bool            mUpdateFormat {false}; // request to update the calendar file to the current KAlarm format
 };
 
 // vim: et sw=4:

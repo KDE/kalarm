@@ -1,7 +1,7 @@
 /*
  *  fileresourcedatamodel.cpp  -  model containing file system resources and their events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -43,6 +43,7 @@ public:
 
 
 bool FileResourceDataModel::mInstanceIsOurs = false;
+bool FileResourceDataModel::mCreateResourcesIgnoreKeepFormat = false;
 
 /******************************************************************************
 * Returns the unique instance, creating it first if necessary.
@@ -109,7 +110,7 @@ FileResourceDataModel::FileResourceDataModel(QObject* parent)
 */
 void FileResourceDataModel::initialise()
 {
-    FileResourceConfigManager::createResources(this);
+    FileResourceConfigManager::createResources(this, mCreateResourcesIgnoreKeepFormat);
     setCalendarsCreated();
 
     FileResourceMigrator* migrator = FileResourceMigrator::instance();
@@ -143,6 +144,16 @@ FileResourceDataModel::~FileResourceDataModel()
         mInstanceIsOurs = false;
     }
     delete Resources::instance();
+}
+
+/******************************************************************************
+* When FileResourceConfigManager::createResources() is called, specify that
+* KeepFormat setting should be ignored.
+*/
+void FileResourceDataModel::setCreateResourcesIgnoreKeepFormat()
+{
+    Q_ASSERT(!mInstance);   // must be called before the instance is created
+    mCreateResourcesIgnoreKeepFormat = true;
 }
 
 /******************************************************************************

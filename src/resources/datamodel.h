@@ -1,7 +1,7 @@
 /*
  *  datamodel.h  -  model independent access to calendar functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2019-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2019-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -25,8 +25,14 @@ class ResourceCreator;
 class DataModel
 {
 public:
-    /** Initialise the data model. */
-    static void initialise();
+    /** Initialise the data model.
+     *  @param ignoreKeepFormat = true to specify that when
+     *                            ResourceConfigManager::createResources() is called,
+     *                            the KeepFormat settings for the calendars should be
+     *                            ignored. This is to provide an override when
+     *                            the calendar file format has changed.
+     */
+    static void initialise(bool ignoreKeepFormat);
 
     /** Terminate access to the data model, and tidy up. */
     static void terminate();
