@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-02 00:42+0000\n"
-"PO-Revision-Date: 2025-10-28 17:21+0200\n"
+"PO-Revision-Date: 2025-11-09 08:27+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1048,10 +1048,10 @@ msgstr "לא להריץ"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:156
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Default defer time interval"
-msgstr "דחה &למשך:"
+msgstr "משך זמן דחייה כברירת מחדל"
 
 #. i18n: ectx: whatsthis, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:157
@@ -1150,19 +1150,19 @@ msgstr ""
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
 #: data/kalarmconfig.kcfg:194 prefdlg.cpp:2004
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Specify whether to show in the system tray tooltip, the time at which each "
 "alarm is due."
-msgstr "בחר את צבע הרקע של ההודעה של התזכורת."
+msgstr "בחירה האם להציג בחלונית בשורת המערכת, הזמן עד לתזכורת."
 
 #. i18n: ectx: label, entry (ShowTooltipTimeToAlarm), group (General)
 #: data/kalarmconfig.kcfg:199
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Show time to alarms in system tray tooltip"
-msgstr "הפעל את &סמל מגש המערכת באופן אוטומטי בעת הכניסה"
+msgstr "הצגת הזמן עד לתזכורות בחלונית בשורת המערכת"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
 #: data/kalarmconfig.kcfg:200 prefdlg.cpp:2010
@@ -6993,13 +6993,13 @@ msgstr "תבניות התראות"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7563,12 +7563,10 @@ msgstr ""
 "פג מוגדרות להישמר."
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>הוא מכיל גם:%1</para>"
+msgstr "הוא מכיל גם: %1"
 
 #: resourceselector.cpp:254
 #, fuzzy, kde-kuit-format
@@ -8145,14 +8143,14 @@ msgstr[2] "למחוק את %1 תבניות התזכורת הנבחרות?"
 msgstr[3] "למחוק את %1 תבניות התזכורת הנבחרות?"
 
 #: templatedlg.cpp:180
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"
 msgid_plural "Delete Alarm Templates"
-msgstr[0] "מחיקת תזכורת"
-msgstr[1] "מחיקת תזכורות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "מחיקת תבנית תזכורות"
+msgstr[1] "מחיקת תבניות תזכורות"
+msgstr[2] "מחיקת תבניות תזכורות"
+msgstr[3] "מחיקת תבניות תזכורות"
 
 #: templatedlg.cpp:181
 #, kde-format

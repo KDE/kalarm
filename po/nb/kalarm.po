@@ -8658,7 +8658,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Hvor mange minutter før varsling maskinen skal vekkes fra dvale"
-
-#~ msgctxt "@info"
-#~ msgid "<para>%1</para><para>Please select a new default calendar.</para>"
-#~ msgstr "<para>%1</para> <para>Velg ny standardkalender.</para>"
