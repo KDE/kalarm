@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-02 00:42+0000\n"
+"POT-Creation-Date: 2025-11-11 02:56+0000\n"
 "PO-Revision-Date: 2007-09-07 11:50+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -3963,7 +3963,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "संसूचक टेम्प्लेट बचत गर्दा त्रुटि"
 
-#: kalarmapp.cpp:815
+#: kalarmapp.cpp:821
 #, fuzzy, kde-format
 #| msgid ""
 #| "Quitting will disable alarms\n"
@@ -3975,33 +3975,33 @@ msgstr ""
 "अन्त्य गर्दा संसूचक अक्षम हुन्छन्\n"
 "(एकपटक सबै संसूचक सन्देश सञ्झ्याल बन्द हुन्छन्) ।"
 
-#: kalarmapp.cpp:825
+#: kalarmapp.cpp:831
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 
-#: kalarmapp.cpp:1042
+#: kalarmapp.cpp:1048
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1056
+#: kalarmapp.cpp:1062
 #, fuzzy, kde-kuit-format
 #| msgid "Error recreating alarm"
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "संसूचक पुन: सिर्जना गर्दा त्रुटि"
 
-#: kalarmapp.cpp:1112
+#: kalarmapp.cpp:1118
 #, fuzzy, kde-kuit-format
 #| msgid "%1: Event %2 not found, or not editable"
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: घटना %2 फेला परेन, वा सम्पादनयोग्य छैन"
 
-#: kalarmapp.cpp:1424
+#: kalarmapp.cpp:1430
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4010,14 +4010,14 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1464
+#: kalarmapp.cpp:1470
 #, fuzzy, kde-kuit-format
 #| msgid "%1: Event %2 not found, or not editable"
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: घटना %2 फेला परेन, वा सम्पादनयोग्य छैन"
 
-#: kalarmapp.cpp:1492
+#: kalarmapp.cpp:1498
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4027,7 +4027,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1500
+#: kalarmapp.cpp:1506
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4038,7 +4038,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2459
+#: kalarmapp.cpp:2465
 #, fuzzy, kde-format
 #| msgid "Failed to execute command (shell access not authorized):"
 msgctxt "@info"
@@ -4047,21 +4047,21 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "आदेश कार्यान्वयन गर्न असफल (शेल पहुँच आधिकारिक छैन):"
 
-#: kalarmapp.cpp:2612
+#: kalarmapp.cpp:2618
 #, fuzzy, kde-format
 #| msgid "Error creating temporary script file"
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "अस्थायी स्क्रिप्ट फाइल सिर्जना गर्दा त्रुटि"
 
-#: kalarmapp.cpp:2708
+#: kalarmapp.cpp:2714
 #, fuzzy, kde-format
 #| msgid "Pre-alarm action:"
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "संसूचक पुर्वको कार्य:"
 
-#: kalarmapp.cpp:2714
+#: kalarmapp.cpp:2720
 #, fuzzy, kde-format
 #| msgid "Post-alarm action:"
 msgctxt "@info"
@@ -4134,7 +4134,7 @@ msgstr "मिति:"
 msgid "KAlarm"
 msgstr "केडीई संसूचक"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, fuzzy, kde-format
 #| msgctxt "Brief form of 'At Login'"
 #| msgid "Login"
@@ -4142,14 +4142,14 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "लगइन"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, fuzzy, kde-format
 #| msgid "At login"
 msgctxt "@info"
 msgid "At login"
 msgstr "यसमा लगइन गर्नुहोस्"
 
-#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
+#: kalarmcalendar/kaevent.cpp:3250 kalarmcalendar/kaevent.cpp:3343
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -4161,7 +4161,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "१ मिनेट"
 msgstr[1] "%1 मिनेट"
 
-#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
+#: kalarmcalendar/kaevent.cpp:3252 kalarmcalendar/kaevent.cpp:3345
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, fuzzy, kde-format
 #| msgid "1 Hour"
@@ -4172,7 +4172,7 @@ msgid_plural "%1 Hours"
 msgstr[0] "१ घण्टा"
 msgstr[1] "%1 घण्टा"
 
-#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
+#: kalarmcalendar/kaevent.cpp:3254 kalarmcalendar/kaevent.cpp:3346
 #, fuzzy, kde-format
 #| msgctxt "Undo-action: message"
 #| msgid "%1: %2"
@@ -4180,7 +4180,7 @@ msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1: %2"
 
-#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
+#: kalarmcalendar/kaevent.cpp:3257 kalarmcalendar/kaevent.cpp:3336
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 #| msgid "1 Day"
@@ -4191,7 +4191,7 @@ msgid_plural "%1 Days"
 msgstr[0] "१ दिन"
 msgstr[1] "%1 दिन"
 
-#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
+#: kalarmcalendar/kaevent.cpp:3259 kalarmcalendar/kaevent.cpp:3337
 #, fuzzy, kde-format
 #| msgid "1 Week"
 #| msgid_plural "%1 Weeks"
@@ -4201,7 +4201,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "१ हप्ता"
 msgstr[1] "%1 हप्ता"
 
-#: kalarmcalendar/kaevent.cpp:3247
+#: kalarmcalendar/kaevent.cpp:3261
 #, fuzzy, kde-format
 #| msgid "1 Month"
 #| msgid_plural "%1 Months"
@@ -4211,7 +4211,7 @@ msgid_plural "%1 Months"
 msgstr[0] "१ महिना"
 msgstr[1] "%1 महिना"
 
-#: kalarmcalendar/kaevent.cpp:3249
+#: kalarmcalendar/kaevent.cpp:3263
 #, fuzzy, kde-format
 #| msgid "1 Year"
 #| msgid_plural "%1 Years"
@@ -4221,14 +4221,14 @@ msgid_plural "%1 Years"
 msgstr[0] "१ वर्ष"
 msgstr[1] "%1 वर्ष"
 
-#: kalarmcalendar/kaevent.cpp:3255
+#: kalarmcalendar/kaevent.cpp:3269
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "कुनै पनि होइन"
 
-#: kalarmcalendar/kaevent.cpp:3335
+#: kalarmcalendar/kaevent.cpp:3349
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No repetition"
@@ -8720,28 +8720,28 @@ msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
 msgstr "क्यालेन्डर '%1' लोड गर्न सकेन ।"
 
-#: resources/singlefileresource.cpp:634
+#: resources/singlefileresource.cpp:635
 #, fuzzy, kde-format
 #| msgid "Calendar Files"
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "क्यालेन्डर फाइल"
 
-#: resources/singlefileresource.cpp:647
+#: resources/singlefileresource.cpp:648
 #, fuzzy, kde-kuit-format
 #| msgid "Could not load calendar '%1'."
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "क्यालेन्डर '%1' लोड गर्न सकेन ।"
 
-#: resources/singlefileresource.cpp:739
+#: resources/singlefileresource.cpp:740
 #, fuzzy, kde-kuit-format
 #| msgid "Could not load calendar '%1'."
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "क्यालेन्डर '%1' लोड गर्न सकेन ।"
 
-#: resources/singlefileresource.cpp:776
+#: resources/singlefileresource.cpp:777
 #, fuzzy, kde-kuit-format
 #| msgid "Could not load calendar '%1'."
 msgctxt "@info"

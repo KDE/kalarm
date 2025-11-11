@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-02 00:42+0000\n"
+"POT-Creation-Date: 2025-11-11 02:56+0000\n"
 "PO-Revision-Date: 2025-04-01 12:28+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -3502,7 +3502,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Ошибка сохранения шаблона напоминания"
 
-#: kalarmapp.cpp:815
+#: kalarmapp.cpp:821
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3511,25 +3511,25 @@ msgstr ""
 "После выхода из программы напоминания не будут показываться (если все окна "
 "напоминаний также закрыты)."
 
-#: kalarmapp.cpp:825
+#: kalarmapp.cpp:831
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Выход из программы отменит запланированный сигнал «разбудить систему»."
 
-#: kalarmapp.cpp:1042
+#: kalarmapp.cpp:1048
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Не удалось создать напоминание: не указан календарь по умолчанию"
 
-#: kalarmapp.cpp:1056
+#: kalarmapp.cpp:1062
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Ошибка создания напоминания"
 
-#: kalarmapp.cpp:1112
+#: kalarmapp.cpp:1118
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
@@ -3537,7 +3537,7 @@ msgstr ""
 "<icode>%1</icode>: Событие <resource>%2</resource> не найдено или не "
 "является уникальным"
 
-#: kalarmapp.cpp:1424
+#: kalarmapp.cpp:1430
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3550,7 +3550,7 @@ msgstr ""
 "в меню <interface>Вид | Показать календари</interface> и проверьте/измените "
 "состояние календарей."
 
-#: kalarmapp.cpp:1464
+#: kalarmapp.cpp:1470
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
@@ -3558,7 +3558,7 @@ msgstr ""
 "<icode>%1</icode>: Событие <resource>%2</resource> не найдено или не "
 "доступно для правки"
 
-#: kalarmapp.cpp:1492
+#: kalarmapp.cpp:1498
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3572,7 +3572,7 @@ msgstr ""
 ">Для исправления ситуации выберите в меню <interface>Вид | Показать "
 "календари</interface> и проверьте или измените состояние календарей."
 
-#: kalarmapp.cpp:1500
+#: kalarmapp.cpp:1506
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3589,7 +3589,7 @@ msgstr ""
 "установите флажок <interface>Использовать по умолчанию для устаревших "
 "напоминаний</interface>."
 
-#: kalarmapp.cpp:2459
+#: kalarmapp.cpp:2465
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3599,19 +3599,19 @@ msgstr ""
 "Не удалось выполнить команду\n"
 "(не указан терминал для командных напоминаний)"
 
-#: kalarmapp.cpp:2612
+#: kalarmapp.cpp:2618
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Ошибка создания временного файла сценария"
 
-#: kalarmapp.cpp:2708
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Предварительное действие:"
 
-#: kalarmapp.cpp:2714
+#: kalarmapp.cpp:2720
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3670,19 +3670,19 @@ msgstr "Срок:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "При входе"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "При входе в систему"
 
-#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
+#: kalarmcalendar/kaevent.cpp:3250 kalarmcalendar/kaevent.cpp:3343
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3694,7 +3694,7 @@ msgstr[1] "%1 минуты"
 msgstr[2] "%1 минут"
 msgstr[3] "1 минута"
 
-#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
+#: kalarmcalendar/kaevent.cpp:3252 kalarmcalendar/kaevent.cpp:3345
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3705,13 +3705,13 @@ msgstr[1] "%1 часа"
 msgstr[2] "%1 часов"
 msgstr[3] "1 час"
 
-#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
+#: kalarmcalendar/kaevent.cpp:3254 kalarmcalendar/kaevent.cpp:3346
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1ч %2м"
 
-#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
+#: kalarmcalendar/kaevent.cpp:3257 kalarmcalendar/kaevent.cpp:3336
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3722,7 +3722,7 @@ msgstr[1] "%1 дня"
 msgstr[2] "%1 дней"
 msgstr[3] "1 день"
 
-#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
+#: kalarmcalendar/kaevent.cpp:3259 kalarmcalendar/kaevent.cpp:3337
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3732,7 +3732,7 @@ msgstr[1] "%1 недели"
 msgstr[2] "%1 недель"
 msgstr[3] "1 неделя"
 
-#: kalarmcalendar/kaevent.cpp:3247
+#: kalarmcalendar/kaevent.cpp:3261
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3742,7 +3742,7 @@ msgstr[1] "%1 месяца"
 msgstr[2] "%1 месяцев"
 msgstr[3] "1 месяц"
 
-#: kalarmcalendar/kaevent.cpp:3249
+#: kalarmcalendar/kaevent.cpp:3263
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3752,13 +3752,13 @@ msgstr[1] "%1 года"
 msgstr[2] "%1 лет"
 msgstr[3] "1 год"
 
-#: kalarmcalendar/kaevent.cpp:3255
+#: kalarmcalendar/kaevent.cpp:3269
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Нет"
 
-#: kalarmcalendar/kaevent.cpp:3335
+#: kalarmcalendar/kaevent.cpp:3349
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"
@@ -7710,25 +7710,25 @@ msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
 msgstr "Не удалось загрузить файл <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:634
+#: resources/singlefileresource.cpp:635
 #, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "Календарь не открыт."
 
-#: resources/singlefileresource.cpp:647
+#: resources/singlefileresource.cpp:648
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "Не удалось сохранить файл <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:739
+#: resources/singlefileresource.cpp:740
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "Не удалось загрузить файл <filename>%1</filename>. (%2)"
 
-#: resources/singlefileresource.cpp:776
+#: resources/singlefileresource.cpp:777
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"

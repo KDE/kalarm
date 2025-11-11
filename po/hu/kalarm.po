@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4.3\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-02 00:42+0000\n"
+"POT-Creation-Date: 2025-11-11 02:56+0000\n"
 "PO-Revision-Date: 2024-03-21 10:32+0100\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -3577,7 +3577,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Hiba történt a figyelmeztetősablon mentésekor"
 
-#: kalarmapp.cpp:815
+#: kalarmapp.cpp:821
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3586,20 +3586,20 @@ msgstr ""
 "Kilépés esetén le lesznek tiltva a figyelmeztetők (a már megnyitott "
 "üzenetablakok bezárása után)."
 
-#: kalarmapp.cpp:825
+#: kalarmapp.cpp:831
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 "Kilépés esetén megszakadnak az ütemezett felfüggesztésből felébresztések."
 
-#: kalarmapp.cpp:1042
+#: kalarmapp.cpp:1048
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1056
+#: kalarmapp.cpp:1062
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error recreating alarm"
@@ -3607,13 +3607,13 @@ msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Hiba történt a figyelmeztető újralétrehozásakor"
 
-#: kalarmapp.cpp:1112
+#: kalarmapp.cpp:1118
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: a(z) <resource>%2</resource> esemény nem található vagy nem egyedi"
 
-#: kalarmapp.cpp:1424
+#: kalarmapp.cpp:1430
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3626,14 +3626,14 @@ msgstr ""
 "használja a <interface>Nézet | Naptárak megjelenítése</interface> menüpontot "
 "a naptárállapotok ellenőrzéséhez vagy megváltoztatásához."
 
-#: kalarmapp.cpp:1464
+#: kalarmapp.cpp:1470
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 "%1: a(z) <resource>%2</resource> esemény nem található vagy nem szerkeszthető"
 
-#: kalarmapp.cpp:1492
+#: kalarmapp.cpp:1498
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3652,7 +3652,7 @@ msgstr ""
 "használja a <interface>Nézet | Naptárak megjelenítése</interface> menüpontot "
 "a naptárállapotok ellenőrzéséhez vagy megváltoztatásához."
 
-#: kalarmapp.cpp:1500
+#: kalarmapp.cpp:1506
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3672,7 +3672,7 @@ msgstr ""
 "használja a <interface>Nézet | Naptárak megjelenítése</interface> menüpontot "
 "a naptárállapotok ellenőrzéséhez vagy megváltoztatásához."
 
-#: kalarmapp.cpp:2459
+#: kalarmapp.cpp:2465
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3684,19 +3684,19 @@ msgstr ""
 "Nem sikerült végrehajtani a parancsot (nincs megfelelő hozzáférés a "
 "parancsértelmezőhöz):"
 
-#: kalarmapp.cpp:2612
+#: kalarmapp.cpp:2618
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Nem sikerült létrehozni egy ideiglenes szkriptet"
 
-#: kalarmapp.cpp:2708
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Művelet a figyelmeztető előtt:"
 
-#: kalarmapp.cpp:2714
+#: kalarmapp.cpp:2720
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3755,19 +3755,19 @@ msgstr "Határidő:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Bejelentkezéskor"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "Bejelentkezéskor"
 
-#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
+#: kalarmcalendar/kaevent.cpp:3250 kalarmcalendar/kaevent.cpp:3343
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3777,7 +3777,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 perc"
 msgstr[1] "%1 perc"
 
-#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
+#: kalarmcalendar/kaevent.cpp:3252 kalarmcalendar/kaevent.cpp:3345
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3786,13 +3786,13 @@ msgid_plural "%1 Hours"
 msgstr[0] "1 óra"
 msgstr[1] "%1 óra"
 
-#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
+#: kalarmcalendar/kaevent.cpp:3254 kalarmcalendar/kaevent.cpp:3346
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1ó %2p"
 
-#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
+#: kalarmcalendar/kaevent.cpp:3257 kalarmcalendar/kaevent.cpp:3336
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3801,7 +3801,7 @@ msgid_plural "%1 Days"
 msgstr[0] "1 nap"
 msgstr[1] "%1 nap"
 
-#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
+#: kalarmcalendar/kaevent.cpp:3259 kalarmcalendar/kaevent.cpp:3337
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3809,7 +3809,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 hét"
 msgstr[1] "%1 hét"
 
-#: kalarmcalendar/kaevent.cpp:3247
+#: kalarmcalendar/kaevent.cpp:3261
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3817,7 +3817,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 hónap"
 msgstr[1] "%1 hónap"
 
-#: kalarmcalendar/kaevent.cpp:3249
+#: kalarmcalendar/kaevent.cpp:3263
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Year"
@@ -3828,7 +3828,7 @@ msgid_plural "%1 Years"
 msgstr[0] "1 év"
 msgstr[1] "%1 év"
 
-#: kalarmcalendar/kaevent.cpp:3255
+#: kalarmcalendar/kaevent.cpp:3269
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -3836,7 +3836,7 @@ msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Nincs"
 
-#: kalarmcalendar/kaevent.cpp:3335
+#: kalarmcalendar/kaevent.cpp:3349
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -8088,25 +8088,25 @@ msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
 msgstr "Nem sikerült betölteni a(z) <filename>%1</filename> fájlt."
 
-#: resources/singlefileresource.cpp:634
+#: resources/singlefileresource.cpp:635
 #, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "A naptár nincs megnyitva."
 
-#: resources/singlefileresource.cpp:647
+#: resources/singlefileresource.cpp:648
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "Nem sikerült menteni a(z) <filename>%1</filename> fájlt."
 
-#: resources/singlefileresource.cpp:739
+#: resources/singlefileresource.cpp:740
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "Nem sikerült betölteni a(z) <filename>%1</filename> fájlt.(%2)"
 
-#: resources/singlefileresource.cpp:776
+#: resources/singlefileresource.cpp:777
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"
