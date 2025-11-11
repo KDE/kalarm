@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-02 00:42+0000\n"
+"POT-Creation-Date: 2025-11-11 00:43+0000\n"
 "PO-Revision-Date: 2019-09-29 12:31+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
@@ -3735,7 +3735,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Эҷоди қолиби нави хотиррасонӣ"
 
-#: kalarmapp.cpp:815
+#: kalarmapp.cpp:821
 #, fuzzy, kde-format
 #| msgid ""
 #| "Quitting will disable alarms\n"
@@ -3747,31 +3747,31 @@ msgstr ""
 "Баъди баромадан аз барнома, хотиррасонӣ намоиш нахоҳад шуд\n"
 "(агар тамоми тирезаҳои хотиррасонӣ низ ҳам пӯшида шуда бошанд)."
 
-#: kalarmapp.cpp:825
+#: kalarmapp.cpp:831
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 
-#: kalarmapp.cpp:1042
+#: kalarmapp.cpp:1048
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1056
+#: kalarmapp.cpp:1062
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Хатои талаби KMail"
 
-#: kalarmapp.cpp:1112
+#: kalarmapp.cpp:1118
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "Намоиши танзимот"
 
-#: kalarmapp.cpp:1424
+#: kalarmapp.cpp:1430
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3780,13 +3780,13 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1464
+#: kalarmapp.cpp:1470
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "Намоиши танзимот"
 
-#: kalarmapp.cpp:1492
+#: kalarmapp.cpp:1498
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3796,7 +3796,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1500
+#: kalarmapp.cpp:1506
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3807,7 +3807,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2459
+#: kalarmapp.cpp:2465
 #, fuzzy, kde-format
 #| msgid "Failed to execute command (shell access not authorized):"
 msgctxt "@info"
@@ -3816,20 +3816,20 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Хатои оғоз намудани дастурот (дастрасӣ ба ҷилд манъ аст):"
 
-#: kalarmapp.cpp:2612
+#: kalarmapp.cpp:2618
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Хатои талаби KMail"
 
-#: kalarmapp.cpp:2708
+#: kalarmapp.cpp:2714
 #, fuzzy, kde-format
 #| msgid "Pre-alarm action:"
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Амали пешакӣ:"
 
-#: kalarmapp.cpp:2714
+#: kalarmapp.cpp:2720
 #, fuzzy, kde-format
 #| msgid "Post-alarm action:"
 msgctxt "@info"
@@ -3900,7 +3900,7 @@ msgstr "Сана:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, fuzzy, kde-format
 #| msgctxt "Brief form of 'At Login'"
 #| msgid "Login"
@@ -3908,14 +3908,14 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Ҳангоми ба қайдгирӣ"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, fuzzy, kde-format
 #| msgid "At login"
 msgctxt "@info"
 msgid "At login"
 msgstr "Ҳангоми қайдкунӣ дар низом"
 
-#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
+#: kalarmcalendar/kaevent.cpp:3250 kalarmcalendar/kaevent.cpp:3343
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3927,7 +3927,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "%1 дақиқа"
 msgstr[1] "%1 дақиқаҳо"
 
-#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
+#: kalarmcalendar/kaevent.cpp:3252 kalarmcalendar/kaevent.cpp:3345
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, fuzzy, kde-format
 #| msgid "1 Hour"
@@ -3938,7 +3938,7 @@ msgid_plural "%1 Hours"
 msgstr[0] "%1 соат"
 msgstr[1] "%1 соатҳо"
 
-#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
+#: kalarmcalendar/kaevent.cpp:3254 kalarmcalendar/kaevent.cpp:3346
 #, fuzzy, kde-format
 #| msgctxt "Hours and Minutes"
 #| msgid "%1H %2M"
@@ -3948,7 +3948,7 @@ msgstr ""
 "Соатҳо ва дақиқаҳо\n"
 "%1С %2Д"
 
-#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
+#: kalarmcalendar/kaevent.cpp:3257 kalarmcalendar/kaevent.cpp:3336
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 #| msgid "1 Day"
@@ -3959,7 +3959,7 @@ msgid_plural "%1 Days"
 msgstr[0] "%1 рӯз"
 msgstr[1] "%1 рӯзҳо"
 
-#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
+#: kalarmcalendar/kaevent.cpp:3259 kalarmcalendar/kaevent.cpp:3337
 #, fuzzy, kde-format
 #| msgid "1 Week"
 #| msgid_plural "%1 Weeks"
@@ -3969,7 +3969,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "%1 ҳафта"
 msgstr[1] "%1 ҳафтаҳо"
 
-#: kalarmcalendar/kaevent.cpp:3247
+#: kalarmcalendar/kaevent.cpp:3261
 #, fuzzy, kde-format
 #| msgid "1 Month"
 #| msgid_plural "%1 Months"
@@ -3979,7 +3979,7 @@ msgid_plural "%1 Months"
 msgstr[0] "%1 моҳ"
 msgstr[1] "%1 моҳҳо"
 
-#: kalarmcalendar/kaevent.cpp:3249
+#: kalarmcalendar/kaevent.cpp:3263
 #, fuzzy, kde-format
 #| msgid "1 Year"
 #| msgid_plural "%1 Years"
@@ -3989,14 +3989,14 @@ msgid_plural "%1 Years"
 msgstr[0] "%1 сол"
 msgstr[1] "%1 солҳо"
 
-#: kalarmcalendar/kaevent.cpp:3255
+#: kalarmcalendar/kaevent.cpp:3269
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Нест"
 
-#: kalarmcalendar/kaevent.cpp:3335
+#: kalarmcalendar/kaevent.cpp:3349
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No repetition"
@@ -8283,13 +8283,13 @@ msgstr ""
 "Наметавонам файли садои зеринро боз кунам:\n"
 "%1"
 
-#: resources/singlefileresource.cpp:634
+#: resources/singlefileresource.cpp:635
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "Адреси файли тақвимӣ"
 
-#: resources/singlefileresource.cpp:647
+#: resources/singlefileresource.cpp:648
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -8300,7 +8300,7 @@ msgstr ""
 "Наметавонам файли садои зеринро боз кунам:\n"
 "%1"
 
-#: resources/singlefileresource.cpp:739
+#: resources/singlefileresource.cpp:740
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -8311,7 +8311,7 @@ msgstr ""
 "Наметавонам файли садои зеринро боз кунам:\n"
 "%1"
 
-#: resources/singlefileresource.cpp:776
+#: resources/singlefileresource.cpp:777
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"

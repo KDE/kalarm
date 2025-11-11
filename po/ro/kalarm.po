@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-02 00:42+0000\n"
+"POT-Creation-Date: 2025-11-11 00:43+0000\n"
 "PO-Revision-Date: 2021-05-15 16:59+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -3660,7 +3660,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Eroare la citirea cărții de adrese"
 
-#: kalarmapp.cpp:815
+#: kalarmapp.cpp:821
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3669,25 +3669,25 @@ msgstr ""
 "Renunțarea va dezactiva alarmele (o dată ce toate ferestrele cu mesaje de "
 "alarmă sunt închise)."
 
-#: kalarmapp.cpp:825
+#: kalarmapp.cpp:831
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Renunțarea va anula trezirea programată de la suspendare."
 
-#: kalarmapp.cpp:1042
+#: kalarmapp.cpp:1048
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1056
+#: kalarmapp.cpp:1062
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Eroare la citirea cărții de adrese"
 
-#: kalarmapp.cpp:1112
+#: kalarmapp.cpp:1118
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:shell"
 #| msgid ""
@@ -3699,7 +3699,7 @@ msgstr ""
 "<icode>%1</icode>: Evenimentul <resource>%2</resource> nu a fost găsit sau "
 "nu este redactabil"
 
-#: kalarmapp.cpp:1424
+#: kalarmapp.cpp:1430
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3708,7 +3708,7 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1464
+#: kalarmapp.cpp:1470
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:shell"
 #| msgid ""
@@ -3720,7 +3720,7 @@ msgstr ""
 "<icode>%1</icode>: Evenimentul <resource>%2</resource> nu a fost găsit sau "
 "nu este redactabil"
 
-#: kalarmapp.cpp:1492
+#: kalarmapp.cpp:1498
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3730,7 +3730,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1500
+#: kalarmapp.cpp:1506
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3741,7 +3741,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2459
+#: kalarmapp.cpp:2465
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3751,19 +3751,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Eșec la execuția comenzii (acces la consolă neautorizat)"
 
-#: kalarmapp.cpp:2612
+#: kalarmapp.cpp:2618
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Eroare la citirea cărții de adrese"
 
-#: kalarmapp.cpp:2708
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Acțiune pre-alarmă:"
 
-#: kalarmapp.cpp:2714
+#: kalarmapp.cpp:2720
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3834,7 +3834,7 @@ msgstr "Dată:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Brief form of 'At Login'"
 #| msgid "Login"
@@ -3842,7 +3842,7 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Autentificare"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "At login"
@@ -3850,7 +3850,7 @@ msgctxt "@info"
 msgid "At login"
 msgstr "La autentificare"
 
-#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
+#: kalarmcalendar/kaevent.cpp:3250 kalarmcalendar/kaevent.cpp:3343
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3864,7 +3864,7 @@ msgstr[0] "1 minut"
 msgstr[1] "%1 minute"
 msgstr[2] "%1 de minute"
 
-#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
+#: kalarmcalendar/kaevent.cpp:3252 kalarmcalendar/kaevent.cpp:3345
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
@@ -3877,7 +3877,7 @@ msgstr[0] "1 oră"
 msgstr[1] "%1 ore"
 msgstr[2] "%1 de ore"
 
-#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
+#: kalarmcalendar/kaevent.cpp:3254 kalarmcalendar/kaevent.cpp:3346
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Hours and minutes"
 #| msgid "%1h %2m"
@@ -3885,7 +3885,7 @@ msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1H %2M"
 
-#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
+#: kalarmcalendar/kaevent.cpp:3257 kalarmcalendar/kaevent.cpp:3336
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
@@ -3898,7 +3898,7 @@ msgstr[0] "1 zi"
 msgstr[1] "%1 zile"
 msgstr[2] "%1 de zile"
 
-#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
+#: kalarmcalendar/kaevent.cpp:3259 kalarmcalendar/kaevent.cpp:3337
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Week"
@@ -3910,7 +3910,7 @@ msgstr[0] "1 săptămână"
 msgstr[1] "%1 săptămâni"
 msgstr[2] "%1 de săptămâni"
 
-#: kalarmcalendar/kaevent.cpp:3247
+#: kalarmcalendar/kaevent.cpp:3261
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Month"
@@ -3922,7 +3922,7 @@ msgstr[0] "1 lună"
 msgstr[1] "%1 luni"
 msgstr[2] "%1 de luni"
 
-#: kalarmcalendar/kaevent.cpp:3249
+#: kalarmcalendar/kaevent.cpp:3263
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Year"
@@ -3934,7 +3934,7 @@ msgstr[0] "1 an"
 msgstr[1] "%1 ani"
 msgstr[2] "%1 de ani"
 
-#: kalarmcalendar/kaevent.cpp:3255
+#: kalarmcalendar/kaevent.cpp:3269
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -3942,7 +3942,7 @@ msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Niciuna"
 
-#: kalarmcalendar/kaevent.cpp:3335
+#: kalarmcalendar/kaevent.cpp:3349
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -8175,13 +8175,13 @@ msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
 msgstr "Calendarul <filename>%1</filename> nu poate fi încărcat."
 
-#: resources/singlefileresource.cpp:634
+#: resources/singlefileresource.cpp:635
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "URL-ul fișierului calendar"
 
-#: resources/singlefileresource.cpp:647
+#: resources/singlefileresource.cpp:648
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -8189,7 +8189,7 @@ msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "Calendarul <filename>%1</filename> nu poate fi încărcat."
 
-#: resources/singlefileresource.cpp:739
+#: resources/singlefileresource.cpp:740
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -8197,7 +8197,7 @@ msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "Calendarul <filename>%1</filename> nu poate fi încărcat."
 
-#: resources/singlefileresource.cpp:776
+#: resources/singlefileresource.cpp:777
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."

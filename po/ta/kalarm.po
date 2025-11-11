@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-02 00:42+0000\n"
+"POT-Creation-Date: 2025-11-11 00:43+0000\n"
 "PO-Revision-Date: 2025-11-02 13:50+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-l10n-ta@kde.org>\n"
@@ -3419,7 +3419,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "அலார வார்ப்புருவை சேமிப்பதில் சிக்கல்"
 
-#: kalarmapp.cpp:815
+#: kalarmapp.cpp:821
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3427,32 +3427,32 @@ msgid ""
 msgstr ""
 "வெளியேறுதல் அலாரங்களை செயலிழக்க செய்யும் (திறந்திருக்கும் தகவல் சாளரங்களை மூடியபின்)"
 
-#: kalarmapp.cpp:825
+#: kalarmapp.cpp:831
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "கணினியை தூக்கத்திலிருந்து எழுப்ப வேண்டியதை வெளியேறுதல் ரத்து செய்யும்."
 
-#: kalarmapp.cpp:1042
+#: kalarmapp.cpp:1048
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "அலாரத்தை உருவாக்க முடியவில்லை: இயல்பிருப்பு நாள்காட்டி அமைக்கப்படவில்லை"
 
-#: kalarmapp.cpp:1056
+#: kalarmapp.cpp:1062
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "அலாரத்தை உருவாக்குவதில் சிக்கல்"
 
-#: kalarmapp.cpp:1112
+#: kalarmapp.cpp:1118
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr ""
 "%1: <resource>%2</resource> என்ற நிகழ்வு கண்டுபிடிக்கப்படவில்லை, அல்லது முரண்படுகிறது"
 
-#: kalarmapp.cpp:1424
+#: kalarmapp.cpp:1430
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3464,7 +3464,7 @@ msgstr ""
 "திருத்தவோ முடியாது.<nl/><nl/>இதை சரிசெய்ய, <interface>பார்வை | நாள்காட்டிகளை "
 "காட்டு</interface> என்பதன் மூலம் நாள்காட்டிகளை அமையுங்கள்."
 
-#: kalarmapp.cpp:1464
+#: kalarmapp.cpp:1470
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
@@ -3472,7 +3472,7 @@ msgstr ""
 "%1: <resource>%2</resource> நிகழ்வை கண்டுபிடிக்க முடியவில்லை, அல்லது திருத்த "
 "முடியவில்லை"
 
-#: kalarmapp.cpp:1492
+#: kalarmapp.cpp:1498
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3486,7 +3486,7 @@ msgstr ""
 "<interface>பார்வை | நாள்காட்டிகளை காட்டு</interface> என்பதன் மூலம் நாள்காட்டிகளை "
 "அமையுங்கள்."
 
-#: kalarmapp.cpp:1500
+#: kalarmapp.cpp:1506
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3502,7 +3502,7 @@ msgstr ""
 "ஏதாவதொரு நாள்காட்டியை தேர்ந்தெடுத்து, <interface>காப்பகப்படுத்திய அலாரங்களுக்கு "
 "இயல்பிருப்பாக பயன்படுத்து</interface> என்பதை குறியுங்கள்."
 
-#: kalarmapp.cpp:2459
+#: kalarmapp.cpp:2465
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3512,19 +3512,19 @@ msgstr ""
 "கட்டளையை இயக்கு முடியவில்லை\n"
 "(கட்டளை அலாரங்களுக்கு எந்த முனையமும் தேர்ந்தெடுக்கப்படவில்லை)"
 
-#: kalarmapp.cpp:2612
+#: kalarmapp.cpp:2618
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "தற்காலிக சிறுநிரல் கோப்பை உருவாக்குவதில் சிக்கல்"
 
-#: kalarmapp.cpp:2708
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "அலாரத்திற்கு முந்தைய செயல்:"
 
-#: kalarmapp.cpp:2714
+#: kalarmapp.cpp:2720
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3583,19 +3583,19 @@ msgstr "உரிய நேரம்:"
 msgid "KAlarm"
 msgstr "கேஅலாரம்"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "நுழைவு"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "அமர்வில் நுழையும்போது"
 
-#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
+#: kalarmcalendar/kaevent.cpp:3250 kalarmcalendar/kaevent.cpp:3343
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3605,7 +3605,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 நிமிடம்"
 msgstr[1] "%1 நிமிடம்"
 
-#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
+#: kalarmcalendar/kaevent.cpp:3252 kalarmcalendar/kaevent.cpp:3345
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3614,13 +3614,13 @@ msgid_plural "%1 Hours"
 msgstr[0] "1 மணிநேரம்"
 msgstr[1] "%1 மணிநேரம்"
 
-#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
+#: kalarmcalendar/kaevent.cpp:3254 kalarmcalendar/kaevent.cpp:3346
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1ம %2நி"
 
-#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
+#: kalarmcalendar/kaevent.cpp:3257 kalarmcalendar/kaevent.cpp:3336
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3629,7 +3629,7 @@ msgid_plural "%1 Days"
 msgstr[0] "1 நாள்"
 msgstr[1] "%1 நாட்கள்"
 
-#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
+#: kalarmcalendar/kaevent.cpp:3259 kalarmcalendar/kaevent.cpp:3337
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3637,7 +3637,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 வாரம்"
 msgstr[1] "%1 வாரங்கள்"
 
-#: kalarmcalendar/kaevent.cpp:3247
+#: kalarmcalendar/kaevent.cpp:3261
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3645,7 +3645,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 மாதம்"
 msgstr[1] "%1 மாதங்கள்"
 
-#: kalarmcalendar/kaevent.cpp:3249
+#: kalarmcalendar/kaevent.cpp:3263
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3653,13 +3653,13 @@ msgid_plural "%1 Years"
 msgstr[0] "1 ஆண்டு"
 msgstr[1] "%1 ஆண்டுகள்"
 
-#: kalarmcalendar/kaevent.cpp:3255
+#: kalarmcalendar/kaevent.cpp:3269
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "ஏதுமில்லை"
 
-#: kalarmcalendar/kaevent.cpp:3335
+#: kalarmcalendar/kaevent.cpp:3349
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"
@@ -7565,25 +7565,25 @@ msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
 msgstr "<filename>%1</filename> என்ற கோப்பை ஏற்ற முடியவில்லை."
 
-#: resources/singlefileresource.cpp:634
+#: resources/singlefileresource.cpp:635
 #, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "நாள்காட்டி திறக்கப்படவில்லை."
 
-#: resources/singlefileresource.cpp:647
+#: resources/singlefileresource.cpp:648
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "<filename>%1</filename> என்ற கோப்பை சேமிக்க முடியவில்லை."
 
-#: resources/singlefileresource.cpp:739
+#: resources/singlefileresource.cpp:740
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "<filename>%1</filename> என்ற கோப்பை ஏற்ற முடியவில்லை. (%2)"
 
-#: resources/singlefileresource.cpp:776
+#: resources/singlefileresource.cpp:777
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"

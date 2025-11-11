@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim/kalarm.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-02 00:42+0000\n"
+"POT-Creation-Date: 2025-11-11 00:43+0000\n"
 "PO-Revision-Date: 2004-09-20 15:44+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Breton <LL@li.org>\n"
@@ -3516,39 +3516,39 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Krouiñ ur patrom dihuner"
 
-#: kalarmapp.cpp:815
+#: kalarmapp.cpp:821
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Quitting will disable alarms (once any alarm message windows are closed)."
 msgstr ""
 
-#: kalarmapp.cpp:825
+#: kalarmapp.cpp:831
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 
-#: kalarmapp.cpp:1042
+#: kalarmapp.cpp:1048
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1056
+#: kalarmapp.cpp:1062
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Fazi en ur galv KMail"
 
-#: kalarmapp.cpp:1112
+#: kalarmapp.cpp:1118
 #, fuzzy, kde-kuit-format
 #| msgid "%1 Resource Settings"
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "Kefluniadur an danvez %1"
 
-#: kalarmapp.cpp:1424
+#: kalarmapp.cpp:1430
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3557,14 +3557,14 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1464
+#: kalarmapp.cpp:1470
 #, fuzzy, kde-kuit-format
 #| msgid "%1 Resource Settings"
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "Kefluniadur an danvez %1"
 
-#: kalarmapp.cpp:1492
+#: kalarmapp.cpp:1498
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3574,7 +3574,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1500
+#: kalarmapp.cpp:1506
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3585,7 +3585,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2459
+#: kalarmapp.cpp:2465
 #, fuzzy, kde-format
 #| msgid "Failed to execute command:"
 msgctxt "@info"
@@ -3594,20 +3594,20 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Sac'het o seveniñ ar goulev :"
 
-#: kalarmapp.cpp:2612
+#: kalarmapp.cpp:2618
 #, fuzzy, kde-format
 #| msgid "Error creating temporary script file"
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Fazi en ur c'hrouiñ ur restr urzhiaoueg padennek"
 
-#: kalarmapp.cpp:2708
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr ""
 
-#: kalarmapp.cpp:2714
+#: kalarmapp.cpp:2720
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3679,7 +3679,7 @@ msgstr "Deiziad :"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, fuzzy, kde-format
 #| msgctxt "Brief form of 'At Login'"
 #| msgid "Login"
@@ -3687,14 +3687,14 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Ereañ"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, fuzzy, kde-format
 #| msgid "At login"
 msgctxt "@info"
 msgid "At login"
 msgstr "En ur ereañ"
 
-#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
+#: kalarmcalendar/kaevent.cpp:3250 kalarmcalendar/kaevent.cpp:3343
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3705,7 +3705,7 @@ msgid "1 Minute"
 msgid_plural "%1 Minutes"
 msgstr[0] "%1 munudenn"
 
-#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
+#: kalarmcalendar/kaevent.cpp:3252 kalarmcalendar/kaevent.cpp:3345
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, fuzzy, kde-format
 #| msgid "1 Hour"
@@ -3715,7 +3715,7 @@ msgid "1 Hour"
 msgid_plural "%1 Hours"
 msgstr[0] "%1 eur"
 
-#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
+#: kalarmcalendar/kaevent.cpp:3254 kalarmcalendar/kaevent.cpp:3346
 #, fuzzy, kde-format
 #| msgctxt "Undo-action: message"
 #| msgid "%1: %2"
@@ -3723,7 +3723,7 @@ msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1 : %2"
 
-#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
+#: kalarmcalendar/kaevent.cpp:3257 kalarmcalendar/kaevent.cpp:3336
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 #| msgid "1 Day"
@@ -3733,7 +3733,7 @@ msgid "1 Day"
 msgid_plural "%1 Days"
 msgstr[0] "%1 deiz"
 
-#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
+#: kalarmcalendar/kaevent.cpp:3259 kalarmcalendar/kaevent.cpp:3337
 #, fuzzy, kde-format
 #| msgid "1 Week"
 #| msgid_plural "%1 Weeks"
@@ -3742,7 +3742,7 @@ msgid "1 Week"
 msgid_plural "%1 Weeks"
 msgstr[0] "%1 sizhun"
 
-#: kalarmcalendar/kaevent.cpp:3247
+#: kalarmcalendar/kaevent.cpp:3261
 #, fuzzy, kde-format
 #| msgid "1 Month"
 #| msgid_plural "%1 Months"
@@ -3751,7 +3751,7 @@ msgid "1 Month"
 msgid_plural "%1 Months"
 msgstr[0] "%1 miz"
 
-#: kalarmcalendar/kaevent.cpp:3249
+#: kalarmcalendar/kaevent.cpp:3263
 #, fuzzy, kde-format
 #| msgid "1 Year"
 #| msgid_plural "%1 Years"
@@ -3760,14 +3760,14 @@ msgid "1 Year"
 msgid_plural "%1 Years"
 msgstr[0] "%1 bloazh"
 
-#: kalarmcalendar/kaevent.cpp:3255
+#: kalarmcalendar/kaevent.cpp:3269
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Ebet"
 
-#: kalarmcalendar/kaevent.cpp:3335
+#: kalarmcalendar/kaevent.cpp:3349
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No repetition"
@@ -7869,13 +7869,13 @@ msgstr ""
 "N'hellan ket digeriñ ar rest klevet :\n"
 "%1"
 
-#: resources/singlefileresource.cpp:634
+#: resources/singlefileresource.cpp:635
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "URL restr an deiziadur"
 
-#: resources/singlefileresource.cpp:647
+#: resources/singlefileresource.cpp:648
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -7886,7 +7886,7 @@ msgstr ""
 "N'hellan ket digeriñ ar rest klevet :\n"
 "%1"
 
-#: resources/singlefileresource.cpp:739
+#: resources/singlefileresource.cpp:740
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -7897,7 +7897,7 @@ msgstr ""
 "N'hellan ket digeriñ ar rest klevet :\n"
 "%1"
 
-#: resources/singlefileresource.cpp:776
+#: resources/singlefileresource.cpp:777
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-02 00:42+0000\n"
+"POT-Creation-Date: 2025-11-11 00:43+0000\n"
 "PO-Revision-Date: 2011-03-28 17:53+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -3423,7 +3423,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Greška pri pozivu KMail-a"
 
-#: kalarmapp.cpp:815
+#: kalarmapp.cpp:821
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -3432,31 +3432,31 @@ msgstr ""
 "Obustavljanje će isključiti alarme\n"
 "(čim se svi prozori alarmnih poruka zatvore)."
 
-#: kalarmapp.cpp:825
+#: kalarmapp.cpp:831
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 
-#: kalarmapp.cpp:1042
+#: kalarmapp.cpp:1048
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1056
+#: kalarmapp.cpp:1062
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Greška pri pozivu KMail-a"
 
-#: kalarmapp.cpp:1112
+#: kalarmapp.cpp:1118
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr ""
 
-#: kalarmapp.cpp:1424
+#: kalarmapp.cpp:1430
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3465,13 +3465,13 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1464
+#: kalarmapp.cpp:1470
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 
-#: kalarmapp.cpp:1492
+#: kalarmapp.cpp:1498
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3481,7 +3481,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1500
+#: kalarmapp.cpp:1506
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3492,7 +3492,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2459
+#: kalarmapp.cpp:2465
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -3500,19 +3500,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Nisam uspio da izvršim naredbu (nije dozvoljen pristup školjki):"
 
-#: kalarmapp.cpp:2612
+#: kalarmapp.cpp:2618
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Greška pri pozivu KMail-a"
 
-#: kalarmapp.cpp:2708
+#: kalarmapp.cpp:2714
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Postavke e-pošte alarma"
 
-#: kalarmapp.cpp:2714
+#: kalarmapp.cpp:2720
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3574,7 +3574,7 @@ msgstr "Datum:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, fuzzy, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
@@ -3582,14 +3582,14 @@ msgstr ""
 "_: Brief form of 'At Login'\n"
 "Prijava"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, fuzzy, kde-format
 #| msgid "At login"
 msgctxt "@info"
 msgid "At login"
 msgstr "Pri prijavljivanju"
 
-#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
+#: kalarmcalendar/kaevent.cpp:3250 kalarmcalendar/kaevent.cpp:3343
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
@@ -3600,7 +3600,7 @@ msgstr[0] "%1 minut"
 msgstr[1] "%1 minuta"
 msgstr[2] "%1 minuta"
 
-#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
+#: kalarmcalendar/kaevent.cpp:3252 kalarmcalendar/kaevent.cpp:3345
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, fuzzy, kde-format
 msgctxt "@info"
@@ -3610,13 +3610,13 @@ msgstr[0] "%1 čas"
 msgstr[1] "%1 časa"
 msgstr[2] "%1 časova"
 
-#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
+#: kalarmcalendar/kaevent.cpp:3254 kalarmcalendar/kaevent.cpp:3346
 #, fuzzy, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1č %2m"
 
-#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
+#: kalarmcalendar/kaevent.cpp:3257 kalarmcalendar/kaevent.cpp:3336
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 msgctxt "@info"
@@ -3626,7 +3626,7 @@ msgstr[0] "%1 dan"
 msgstr[1] "%1 dana"
 msgstr[2] "%1 dana"
 
-#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
+#: kalarmcalendar/kaevent.cpp:3259 kalarmcalendar/kaevent.cpp:3337
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3635,7 +3635,7 @@ msgstr[0] "%1 sedmica"
 msgstr[1] "%1 sedmice"
 msgstr[2] "%1 sedmica"
 
-#: kalarmcalendar/kaevent.cpp:3247
+#: kalarmcalendar/kaevent.cpp:3261
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3644,7 +3644,7 @@ msgstr[0] "%1 mjesec"
 msgstr[1] "%1 mjeseca"
 msgstr[2] "%1 mjeseci"
 
-#: kalarmcalendar/kaevent.cpp:3249
+#: kalarmcalendar/kaevent.cpp:3263
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3653,14 +3653,14 @@ msgstr[0] "%1 godina"
 msgstr[1] "%1 godine"
 msgstr[2] "%1 godina"
 
-#: kalarmcalendar/kaevent.cpp:3255
+#: kalarmcalendar/kaevent.cpp:3269
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Nijedan"
 
-#: kalarmcalendar/kaevent.cpp:3335
+#: kalarmcalendar/kaevent.cpp:3349
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No repetition"
@@ -7584,13 +7584,13 @@ msgstr ""
 "Ne mogu učitati kalendar na\n"
 "'%1'"
 
-#: resources/singlefileresource.cpp:634
+#: resources/singlefileresource.cpp:635
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "URL kalendarskog datotekaa"
 
-#: resources/singlefileresource.cpp:647
+#: resources/singlefileresource.cpp:648
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
@@ -7598,7 +7598,7 @@ msgstr ""
 "Ne mogu učitati kalendar na\n"
 "'%1'"
 
-#: resources/singlefileresource.cpp:739
+#: resources/singlefileresource.cpp:740
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
@@ -7606,7 +7606,7 @@ msgstr ""
 "Ne mogu učitati kalendar na\n"
 "'%1'"
 
-#: resources/singlefileresource.cpp:776
+#: resources/singlefileresource.cpp:777
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"

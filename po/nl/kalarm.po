@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-02 00:42+0000\n"
+"POT-Creation-Date: 2025-11-11 00:43+0000\n"
 "PO-Revision-Date: 2025-11-02 13:41+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -3679,7 +3679,7 @@ msgid "Error saving alarm template"
 msgstr "Fout bij het opslaan van het alarmsjabloon"
 
 # korter, duidelijker en beter in overeenstemming met engelse tekst
-#: kalarmapp.cpp:815
+#: kalarmapp.cpp:821
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3687,32 +3687,32 @@ msgid ""
 msgstr ""
 "Afsluiten zal alarmen uitschakelen (als laatste alarmvenster gesloten is)."
 
-#: kalarmapp.cpp:825
+#: kalarmapp.cpp:831
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Verlaten zal het geplande ontwaken-uit-onderbreken annuleren"
 
-#: kalarmapp.cpp:1042
+#: kalarmapp.cpp:1048
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Kan geen alarm aanmaken: geen standaard agenda gedefinieerd"
 
-#: kalarmapp.cpp:1056
+#: kalarmapp.cpp:1062
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Fout bij aanmaken van alarm"
 
-#: kalarmapp.cpp:1112
+#: kalarmapp.cpp:1118
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr ""
 "%1: Evenement <resource>%2</resource> werd niet gevonden of is niet uniek"
 
-#: kalarmapp.cpp:1424
+#: kalarmapp.cpp:1430
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3725,7 +3725,7 @@ msgstr ""
 "gebruikt u <interface>Beeld | Toon agenda's</interface> om de statussen van "
 "agenda's te controleren."
 
-#: kalarmapp.cpp:1464
+#: kalarmapp.cpp:1470
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
@@ -3733,7 +3733,7 @@ msgstr ""
 "%1: Evenement <resource>%2</resource> werd niet gevonden of is niet te "
 "bewerken"
 
-#: kalarmapp.cpp:1492
+#: kalarmapp.cpp:1498
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3747,7 +3747,7 @@ msgstr ""
 "<nl/><nl/>Om dit te repareren, gebruik <interface>Weergave | agenda's tonen</"
 "interface> om de statussen van agenda te controleren of te wijzigen."
 
-#: kalarmapp.cpp:1500
+#: kalarmapp.cpp:1506
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3763,7 +3763,7 @@ msgstr ""
 "interface>, selecteer een gearchiveerde alarmenagenda, en controleer "
 "<interface>Als standaard gebruiken voor gearchiveerde alarmen</interface>."
 
-#: kalarmapp.cpp:2459
+#: kalarmapp.cpp:2465
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3774,20 +3774,20 @@ msgstr ""
 "(geen terminal geselecteerd voor alarmen via een commando)"
 
 # kort, duidelijk
-#: kalarmapp.cpp:2612
+#: kalarmapp.cpp:2618
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Fout bij het schrijven van een tijdelijk scriptbestand"
 
 # ter voorkoming verwarring
-#: kalarmapp.cpp:2708
+#: kalarmapp.cpp:2714
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Actie voorafgaand aan alarm:"
 
-#: kalarmapp.cpp:2714
+#: kalarmapp.cpp:2720
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3851,20 +3851,20 @@ msgid "KAlarm"
 msgstr "KAlarm"
 
 # letterlijke vertaling toegepast
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Aanmelden"
 
-#: kalarmcalendar/kaevent.cpp:3227
+#: kalarmcalendar/kaevent.cpp:3241
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "Bij aanmelden"
 
 # die variabele, hebben we het voorheen over gehad
-#: kalarmcalendar/kaevent.cpp:3236 kalarmcalendar/kaevent.cpp:3329
+#: kalarmcalendar/kaevent.cpp:3250 kalarmcalendar/kaevent.cpp:3343
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3874,7 +3874,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 minuut"
 msgstr[1] "%1 minuten"
 
-#: kalarmcalendar/kaevent.cpp:3238 kalarmcalendar/kaevent.cpp:3331
+#: kalarmcalendar/kaevent.cpp:3252 kalarmcalendar/kaevent.cpp:3345
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3883,13 +3883,13 @@ msgid_plural "%1 Hours"
 msgstr[0] "1 uur"
 msgstr[1] "%1 uren"
 
-#: kalarmcalendar/kaevent.cpp:3240 kalarmcalendar/kaevent.cpp:3332
+#: kalarmcalendar/kaevent.cpp:3254 kalarmcalendar/kaevent.cpp:3346
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1u %2m"
 
-#: kalarmcalendar/kaevent.cpp:3243 kalarmcalendar/kaevent.cpp:3322
+#: kalarmcalendar/kaevent.cpp:3257 kalarmcalendar/kaevent.cpp:3336
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3898,7 +3898,7 @@ msgid_plural "%1 Days"
 msgstr[0] "1 dag"
 msgstr[1] "%1 dagen"
 
-#: kalarmcalendar/kaevent.cpp:3245 kalarmcalendar/kaevent.cpp:3323
+#: kalarmcalendar/kaevent.cpp:3259 kalarmcalendar/kaevent.cpp:3337
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3906,7 +3906,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 week"
 msgstr[1] "%1 weken"
 
-#: kalarmcalendar/kaevent.cpp:3247
+#: kalarmcalendar/kaevent.cpp:3261
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3914,7 +3914,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 maand"
 msgstr[1] "%1 maanden"
 
-#: kalarmcalendar/kaevent.cpp:3249
+#: kalarmcalendar/kaevent.cpp:3263
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3922,13 +3922,13 @@ msgid_plural "%1 Years"
 msgstr[0] "1 jaar"
 msgstr[1] "%1 jaren"
 
-#: kalarmcalendar/kaevent.cpp:3255
+#: kalarmcalendar/kaevent.cpp:3269
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Geen"
 
-#: kalarmcalendar/kaevent.cpp:3335
+#: kalarmcalendar/kaevent.cpp:3349
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"
@@ -7969,25 +7969,25 @@ msgstr "Kon bestand <filename>%1</filename> niet laden."
 
 # url zouden we vertalen met webadres... is hier een beetje twijfelachtig daar het ook een lokaal pad kan zijn.
 # 'of pad naar' toegevoegd
-#: resources/singlefileresource.cpp:634
+#: resources/singlefileresource.cpp:635
 #, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "Agenda niet geopend."
 
-#: resources/singlefileresource.cpp:647
+#: resources/singlefileresource.cpp:648
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "Kon bestand <filename>%1</filename> niet opslaan."
 
-#: resources/singlefileresource.cpp:739
+#: resources/singlefileresource.cpp:740
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "Kan bestand <filename>%1</filename> niet laden. (%2)"
 
-#: resources/singlefileresource.cpp:776
+#: resources/singlefileresource.cpp:777
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"
