@@ -1323,7 +1323,7 @@ public:
      *        when determining the next event sub-repetition.
      *
      *  @return sub-repetition count (>=1), or 0 for the main recurrence.
-     *  @see nextOccurrence()
+     *  @see nextDateTime()
      */
     int nextRepetition() const;
 
@@ -1341,7 +1341,7 @@ public:
      *  @param includeRepetitions if true and the alarm has a sub-repetition, the
      *                            method will return true if any sub-repetitions
      *                            occur after @p preDateTime.
-     *  @see nextOccurrence()
+     *  @see nextDateTime()
      */
     bool occursAfter(const KADateTime& preDateTime, bool includeRepetitions) const;
 
@@ -1361,7 +1361,7 @@ public:
      *                      only None, Recur and Repeat values/bitmasks are valid;
      *                      other bit values should be disregarded.
      *  @return whether the event's next occurrence has been updated
-     *  @see nextOccurrence()
+     *  @see nextDateTime()
      */
     bool setNextOccurrence(const KADateTime& preDateTime, OccurType& type);
     void setNextOccurrence(const KADateTime& preDateTime);
@@ -1381,7 +1381,7 @@ public:
      *                                  last previous repetition is returned if
      *                                  appropriate;
      *                        Other values must not be specified.
-     *  @see nextOccurrence()
+     *  @see nextDateTime()
      */
     OccurType previousOccurrence(const KADateTime& afterDateTime, DateTime& result, Repeats includeRepetitions) const;
 
