@@ -14,14 +14,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-11 00:43+0000\n"
-"PO-Revision-Date: 2025-02-07 22:59+0900\n"
+"PO-Revision-Date: 2025-11-13 22:11+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.03.70\n"
+"X-Generator: Lokalize 25.11.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -7251,12 +7251,7 @@ msgid "Choose Calendar"
 msgstr "選擇行事曆"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7266,8 +7261,8 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para>行事曆 <resource>%1</resource> 已變成唯讀。這是 %2 的預設行事曆。</"
-"para> <para>請選擇新的預設行事曆。</para>"
+"<para>行事曆 <resource>%2</resource> 已變成唯讀。<para>這原是 %3 的預設行事"
+"曆。</para></para> <para>請選擇新的預設行事曆。</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7587,26 +7582,20 @@ msgid ""
 msgstr "您無法移除您預設封存鬧鐘行事曆，因為您設定將逾時的鬧鐘保留。"
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>它也包含了：%1</para>"
+msgstr "它也包含了 %1"
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource>是 %2 的預設行事曆。</para> %3 <para>您確定要將"
-"它從所有行事曆清單中移除嗎？</para>"
+"<para><resource>%1</resource>是 %2 的預設行事曆。</para><para>%3</para><para>"
+"您確定要將它從所有行事曆清單中移除嗎？</para>"
 
 #: resourceselector.cpp:258
 #, kde-kuit-format
@@ -7617,11 +7606,7 @@ msgid ""
 msgstr "您真的要從清單中移除您的預設行事曆（<resource>%1</resource>）嗎？"
 
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
