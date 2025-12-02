@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2025-08-30</date>
+<date>2025-12-3</date>
 <releaseinfo>3.12.0 (KDE Gear 25.12)</releaseinfo>
 
 <abstract>
@@ -1995,6 +1995,10 @@ display options are described below.</para>
 display alarms will be suspended until notifications are re-enabled.
 Note that this applies to all display alarms, regardless of whether
 they are displayed in windows or as notifications.</para>
+
+<para>Note that on a single screen system, the window manager may
+inhibit notifications while any application is running full screen,
+which will automatically suspend the execution of display alarms.</para>
 
 <sect2 id="message-window">
 <title>Alarm Message Window</title>
