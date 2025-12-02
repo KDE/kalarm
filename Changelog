@@ -2,6 +2,7 @@ KAlarm Change Log
 
 === Version 3.12.1 (KDE Gear 25.12.1) --- 2 December 2025 ===
 * Prevent multiple Defer Alarm dialogs for the same event [KDE Bug 512828]
+* If Defer is disabled for a notification alarm, don't show two Edit buttons.
 
 === Version 3.12.0 (KDE Gear 25.12) --- 10 November 2025 ===
 * If a recurrence is suppressed by work time/holidays/exception, suppress its sub-repetitions.

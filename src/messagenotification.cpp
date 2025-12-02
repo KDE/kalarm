@@ -1,7 +1,7 @@
 /*
  *  messagenotification.cpp  -  displays an alarm message in a system notification
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -513,6 +513,7 @@ void MessageNotification::setNotificationText()
 */
 void MessageNotification::setNotificationButtons()
 {
+    clearActions();
     if (mEnableEdit)
     {
         auto editAction = addAction(i18nc("@action:button", "Edit"));
