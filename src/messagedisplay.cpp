@@ -1,7 +1,7 @@
 /*
  *  messagedisplay.cpp  -  base class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -211,12 +211,12 @@ MessageDisplay::DeferDlgData* MessageDisplay::createDeferDlg(QObject* thisObject
     dlg->setObjectName(QLatin1StringView("DeferDlg"));    // used by LikeBack
     dlg->setDeferMinutes(mDefaultDeferMinutes() > 0 ? mDefaultDeferMinutes() : Preferences::defaultDeferTime());
     dlg->setLimit(mEvent());
-    auto data = new DeferDlgData(this, dlg);
+    auto data = new DeferDlgData(this, dlg, mEventId(), mAlarmType(), mCommandError());
     if (!displayClosing)
+    {
+        enableDeferButton(false);   // prevent multiple defer dialogs for the event
         data->displayObj = thisObject;
-    data->eventId      = mEventId();
-    data->alarmType    = mAlarmType();
-    data->commandError = mCommandError();
+    }
     return data;
 }
 
@@ -311,7 +311,10 @@ void MessageDisplay::processDeferDlg(DeferDlgData* data, int result)
     else
     {
         if (display)
+        {
+            display->enableDeferButton(true);
             display->raiseDisplay();
+        }
     }
     delete data;
 }

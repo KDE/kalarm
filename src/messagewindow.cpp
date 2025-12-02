@@ -1197,7 +1197,7 @@ void MessageWindow::slotDefer()
     if (!Preferences::modalMessages())
         lower();
     executeDeferDlg(mDeferData);
-    mDeferData = nullptr;   // it was deleted by executeDeferDlg()
+    mDeferData = nullptr;   // its ownership was transferred by executeDeferDlg()
 }
 
 /******************************************************************************
