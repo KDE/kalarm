@@ -1,7 +1,7 @@
 /*
  *  messagedisplay.h  -  base class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -121,7 +121,8 @@ public:
         KAAlarm::Type     alarmType;
         KAEvent::CmdErr   commandError;
 
-        DeferDlgData(MessageDisplay* m, DeferAlarmDlg* d) : dlg(d), display(m) {}     //cppcheck-suppress[uninitMemberVar]  user must initialise struct
+        DeferDlgData(MessageDisplay* m, DeferAlarmDlg* d, EventId e, KAAlarm::Type a, KAEvent::CmdErr c)
+          : dlg(d), display(m), eventId(e), alarmType(a), commandError(c) {}
         ~DeferDlgData();
     };
 
