@@ -117,7 +117,7 @@ QList<MessageWindow*> MessageWindow::mWindowList;
 * displayed.
 */
 MessageWindow::MessageWindow(const KAEvent& event, const KAAlarm& alarm, int flags)
-    : MainWindowBase(nullptr, static_cast<Qt::WindowFlags>(WFLAGS | WFLAGS2 | ((flags & AlwaysHide) || getWorkAreaAndModal() ? Qt::WindowType(0) : Qt::X11BypassWindowManagerHint)))
+    : MainWindowBase(nullptr, static_cast<Qt::WindowFlags>(WFLAGS | WFLAGS2 | ((flags & AlwaysHide) || getWorkAreaAndModal() ? Qt::WindowType(0) : Qt::BypassWindowManagerHint)))
     , MessageDisplay(event, alarm, flags)
     , mRestoreHeight(0)
 {
@@ -511,7 +511,7 @@ void MessageWindow::setUpDisplay()
 #if ENABLE_X11
     if (KWindowSystem::isPlatformX11())
     {
-        const bool modal = !(windowFlags() & Qt::X11BypassWindowManagerHint);
+        const bool modal = !(windowFlags() & Qt::BypassWindowManagerHint);
         NET::States wstate = NET::Sticky | NET::KeepAbove;
         if (modal)
             wstate |= NET::Modal;
@@ -1192,8 +1192,8 @@ void MessageWindow::activeWindowChanged(WId win)
 void MessageWindow::slotDefer()
 {
     mDeferData = createDeferDlg(this, false);
-    if (windowFlags() & Qt::X11BypassWindowManagerHint)
-        mDeferData->dlg->setWindowFlags(mDeferData->dlg->windowFlags() | Qt::X11BypassWindowManagerHint);
+    if (windowFlags() & Qt::BypassWindowManagerHint)
+        mDeferData->dlg->setWindowFlags(mDeferData->dlg->windowFlags() | Qt::BypassWindowManagerHint);
     if (!Preferences::modalMessages())
         lower();
     executeDeferDlg(mDeferData);
@@ -1234,9 +1234,8 @@ void MessageWindow::enableEditButton(bool enable)
 
 /******************************************************************************
 * Check whether the message window should be modal, i.e. with title bar etc.
-*
-* Also find the usable area of the desktop (excluding panel etc.), on the
-* appropriate screen if there are multiple screens.
+* If there are multiple screens, also find which screen to show the window on,
+* and find the usable area of the desktop (excluding panel etc) on that screen.
 */
 bool MessageWindow::getWorkAreaAndModal()
 {
@@ -1264,7 +1263,6 @@ bool MessageWindow::getWorkAreaAndModal()
             for (int s = 0;  s < numScreens;  ++s)
             {
                 if (screenTypes[s] == NoFullScreen)
-
                 {
                     // There is no full screen window on this screen
                     mScreenNumber = s;
