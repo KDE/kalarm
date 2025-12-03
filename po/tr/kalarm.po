@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2025-12-03 00:44+0000\n"
 "PO-Revision-Date: 2025-11-02 22:53+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -4806,13 +4806,13 @@ msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr "Konuşma alt sistemi kullanılabilir değil"
 
-#: messagenotification.cpp:518
+#: messagenotification.cpp:519
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit"
 msgstr "Düzen"
 
-#: messagenotification.cpp:527
+#: messagenotification.cpp:528
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer"

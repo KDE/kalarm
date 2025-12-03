@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2025-12-03 00:44+0000\n"
 "PO-Revision-Date: 2024-09-19 15:13+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -4955,13 +4955,13 @@ msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr "Το υποσύστημα κείμενο-σε-ομιλία δεν είναι διαθέσιμο"
 
-#: messagenotification.cpp:518
+#: messagenotification.cpp:519
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: messagenotification.cpp:527
+#: messagenotification.cpp:528
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer"

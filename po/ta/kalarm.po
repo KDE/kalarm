@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2025-12-03 00:44+0000\n"
 "PO-Revision-Date: 2025-11-02 13:50+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-l10n-ta@kde.org>\n"
@@ -4749,13 +4749,13 @@ msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr "உரையை பேச்சாக்கும் நிரல் கிட்டவில்லை"
 
-#: messagenotification.cpp:518
+#: messagenotification.cpp:519
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit"
 msgstr "திருத்து"
 
-#: messagenotification.cpp:527
+#: messagenotification.cpp:528
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer"
