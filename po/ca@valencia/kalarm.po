@@ -296,8 +296,8 @@ msgctxt "@info"
 msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
 msgstr ""
-"<para>S'ha produït un error en reproduir el fitxer d'àudio: <filename>%1</"
-"filename></para><para>%2</para>"
+"<para>S'ha produït un error mentre es reproduia el fitxer d'àudio: <filename>"
+"%1</filename></para><para>%2</para>"
 
 #: audioplugin/audioplayer_mpv.cpp:146
 #, kde-format
@@ -310,8 +310,8 @@ msgstr "No s'ha pogut establir el volum d'àudio: %1"
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr ""
-"<para>S'ha produït un error en reproduir el fitxer d'àudio: <filename>%1</"
-"filename></para>"
+"<para>S'ha produït un error mentre es reproduia el fitxer d'àudio: <filename>"
+"%1</filename></para>"
 
 #: audioplugin/audioplayer_vlc.cpp:116
 #, kde-format
@@ -324,8 +324,8 @@ msgstr "No s'ha pogut restablir el reproductor d'àudio"
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
 msgstr ""
-"<para>S'ha produït un error en reproduir el fitxer d'àudio: <filename>%1</"
-"filename></para>"
+"<para>S'ha produït un error mentre es reproduia el fitxer d'àudio: <filename>"
+"%1</filename></para>"
 
 #: autostart/autostart.cpp:49
 #, kde-format
@@ -2207,15 +2207,15 @@ msgid ""
 "<para>Error loading calendar:</para><para><filename>%1</filename></"
 "para><para>Please fix or delete the file.</para>"
 msgstr ""
-"<para>S'ha produït un error en carregar el calendari:</para><para><filename>"
-"%1</filename></para><para>Per favor, solucioneu-ho o suprimiu el fitxer.</"
-"para>"
+"<para>S'ha produït un error mentre es carregava el calendari:</"
+"para><para><filename>%1</filename></para><para>Per favor, solucioneu-ho o "
+"suprimiu el fitxer.</para>"
 
 #: displaycalendar.cpp:172
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save calendar to <filename>%1</filename>"
-msgstr "No s'ha pogut guardar el calendari a <filename>%1</filename>"
+msgstr "Ha fallat mentre es guardava el calendari a <filename>%1</filename>"
 
 #: editdlg.cpp:80
 #, kde-format
@@ -3383,20 +3383,21 @@ msgstr "Trieu el calendari que s'ha d'exportar"
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
 msgstr ""
-"S'ha produït un error en carregar el calendari per a annexar-lo a:<nl/"
-"><filename>%1</filename>"
+"S'ha produït un error mentre es carregava el calendari per a annexar-lo a:"
+"<nl/><filename>%1</filename>"
 
 #: functions.cpp:1005
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
-msgstr "No s'ha pogut guardar el nou calendari a:<nl/><filename>%1</filename>"
+msgstr ""
+"Ha fallat mentre es guardava el calendari nou a:<nl/><filename>%1</filename>"
 
 #: functions.cpp:1018
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
-msgstr "No s'ha pogut pujar el nou calendari a:<nl/><filename>%1</filename>"
+msgstr "No s'ha pogut pujar el calendari nou a:<nl/><filename>%1</filename>"
 
 #: functions.cpp:1037
 #, kde-format
@@ -3458,7 +3459,7 @@ msgstr "L'activació després de la suspensió programada s'ha cancel·lat."
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
-msgstr "S'ha produït un error en obtindre l'autorització (%1)"
+msgstr "S'ha produït un error mentre s'obtenia l'autorització (%1)"
 
 #: functions.cpp:1394
 #, kde-format
@@ -3499,49 +3500,49 @@ msgstr "Conserva-les desactivades"
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
-msgstr "S'ha produït un error en guardar les alarmes"
+msgstr "S'ha produït un error mentre es guardaven les alarmes"
 
 #: functions.cpp:1993
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
-msgstr "S'ha produït un error en guardar l'alarma"
+msgstr "S'ha produït un error mentre es guardava l'alarma"
 
 #: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
-msgstr "S'ha produït un error en suprimir les alarmes"
+msgstr "S'ha produït un error mentre se suprimien les alarmes"
 
 #: functions.cpp:1997
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
-msgstr "S'ha produït un error en suprimir l'alarma"
+msgstr "S'ha produït un error mentre se suprimia l'alarma"
 
 #: functions.cpp:2000
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
-msgstr "S'ha produït un error en guardar les alarmes reactivades"
+msgstr "S'ha produït un error mentre es guardaven les alarmes reactivades"
 
 #: functions.cpp:2001
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
-msgstr "S'ha produït un error en guardar l'alarma reactivada"
+msgstr "S'ha produït un error mentre es guardava l'alarma reactivada"
 
 #: functions.cpp:2004
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
-msgstr "S'ha produït un error en guardar les plantilles d'alarma"
+msgstr "S'ha produït un error mentre es guardaven les plantilles d'alarma"
 
 #: functions.cpp:2005
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
-msgstr "S'ha produït un error en guardar la plantilla d'alarma"
+msgstr "S'ha produït un error mentre es guardava la plantilla d'alarma"
 
 #: kalarmapp.cpp:821
 #, kde-format
@@ -3570,7 +3571,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
-msgstr "S'ha produït un error en crear l'alarma"
+msgstr "S'ha produït un error mentre es creava l'alarma"
 
 #: kalarmapp.cpp:1118
 #, kde-kuit-format
@@ -3637,14 +3638,14 @@ msgid ""
 "Failed to execute command\n"
 "(no terminal selected for command alarms)"
 msgstr ""
-"No s'ha pogut executar l'ordre\n"
+"Ha fallat mentre s'executava l'ordre\n"
 "(no s'ha seleccionat cap terminal per a les alarmes d'ordre)"
 
 #: kalarmapp.cpp:2618
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
-msgstr "S'ha produït un error en crear un fitxer de script temporal"
+msgstr "S'ha produït un error mentre es creava un fitxer de script temporal"
 
 #: kalarmapp.cpp:2714
 #, kde-format
@@ -4315,7 +4316,8 @@ msgstr "No s'ha trobat <command>%1</command>"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
-msgstr "S'ha produït un error en adjuntar el fitxer: <filename>%1</filename>"
+msgstr ""
+"S'ha produït un error mentre s'adjuntava el fitxer: <filename>%1</filename>"
 
 #: kamail.cpp:294
 #, kde-kuit-format
@@ -4333,13 +4335,13 @@ msgstr "S'ha posat un correu a la cua de correu eixint"
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
-msgstr "No s'ha pogut enviar el correu electrònic"
+msgstr "Ha fallat mentre s'enviava el correu electrònic"
 
 #: kamail.cpp:542
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"
-msgstr "S'ha produït un error en enviar el correu electrònic"
+msgstr "S'ha produït un error mentre s'enviava el correu electrònic"
 
 #: latecancel.cpp:25
 #, kde-format
@@ -4466,25 +4468,27 @@ msgstr "No"
 msgctxt "@info"
 msgid "Failed to execute command (shell access not authorized)"
 msgstr ""
-"No s'ha pogut executar l'ordre (accés no autoritzat a l'intèrpret d'ordres)"
+"Ha fallat mentre s'executava l'ordre (accés no autoritzat a l'intèrpret "
+"d'ordres)"
 
 #: lib/shellprocess.cpp:145
 #, kde-format
 msgctxt "@info"
 msgid "Failed to execute command"
-msgstr "No s'ha pogut executar l'ordre"
+msgstr "Ha fallat mentre s'executava l'ordre"
 
 #: lib/shellprocess.cpp:147
 #, kde-format
 msgctxt "@info"
 msgid "Failed to execute command (not found or not executable)"
-msgstr "No s'ha pogut executar l'ordre (no s'ha trobat o no és executable)"
+msgstr ""
+"Ha fallat mentre s'executava l'ordre (no s'ha trobat o no és executable)"
 
 #: lib/shellprocess.cpp:149
 #, kde-format
 msgctxt "@info"
 msgid "Command execution error"
-msgstr "S'ha produït un error en l'execució de l'ordre"
+msgstr "S'ha produït un error durant l'execució de l'ordre"
 
 #: lib/shellprocess.cpp:152
 #, kde-format
@@ -4798,7 +4802,7 @@ msgstr "El fitxer és una carpeta"
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
-msgstr "No s'ha pogut obrir el fitxer"
+msgstr "Ha fallat mentre s'obria el fitxer"
 
 #: messagedisplayhelper.cpp:298
 #, kde-format
@@ -7092,14 +7096,17 @@ msgstr "El calendari no està configurat."
 msgctxt "@info"
 msgid "Error loading calendar <resource>%1</resource>."
 msgstr ""
-"S'ha produït un error en carregar el calendari <resource>%1</resource>."
+"S'ha produït un error mentre es carregava el calendari <resource>%1</"
+"resource>."
 
 #: resources/fileresource.cpp:432 resources/fileresource.cpp:472
 #: resources/fileresource.cpp:482
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error saving calendar <resource>%1</resource>."
-msgstr "S'ha produït un error en guardar el calendari <resource>%1</resource>."
+msgstr ""
+"S'ha produït un error mentre es guardava el calendari <resource>%1</"
+"resource>."
 
 #: resources/fileresource.cpp:462
 #, kde-format
@@ -7119,7 +7126,8 @@ msgstr ""
 msgctxt "@info"
 msgid "Failed to update format of calendar <resource>%1</resource>"
 msgstr ""
-"No s'ha pogut actualitzar el format del calendari <resource>%1</resource>"
+"Ha fallat mentre s'actualitzava el format del calendari <resource>%1</"
+"resource>"
 
 #: resources/fileresourcecreator.cpp:54
 #, kde-format
@@ -7407,7 +7415,7 @@ msgid ""
 "<para>Failed to create default calendar <resource>%1</resource></"
 "para><para>Location: <filename>%2</filename></para>"
 msgstr ""
-"<para>No s'ha pogut crear el calendari predeterminat <resource>%1</"
+"<para>Ha fallat mentre es creava el calendari predeterminat <resource>%1</"
 "resource></para><para>Ubicació: <filename>%2</filename></para>"
 
 #: resources/resourcedatamodelbase.cpp:66
@@ -7724,7 +7732,7 @@ msgstr "Encara hi ha una càrrega anterior en curs."
 #, kde-format
 msgctxt "@info"
 msgid "A previous save is still in progress."
-msgstr "Encara hi ha un guardada anterior en curs."
+msgstr "Encara hi ha una guardada anterior en curs."
 
 #: resources/singlefileresource.cpp:232
 #, kde-kuit-format
@@ -7975,13 +7983,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new active alarm calendar"
-msgstr "Afig un nou calendari d'alarmes actives"
+msgstr "Afig un calendari nou d'alarmes actives"
 
 #: resourceselector.cpp:115
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new archived alarm calendar"
-msgstr "Afig un nou calendari d'alarmes arxivades"
+msgstr "Afig un calendari nou d'alarmes arxivades"
 
 #: resourceselector.cpp:119
 #, kde-format
@@ -8198,8 +8206,8 @@ msgid ""
 "Error setting wake from suspend.<nl/>Command was: <command>%1 %2</"
 "command><nl/>Error code: %3."
 msgstr ""
-"S'ha produït un error en activar des de la suspensió.<nl/>L'ordre ha sigut: "
-"<command>%1%2</command><nl/>Codi d'error: %3."
+"S'ha produït un error mentre s'activava des de la suspensió.<nl/>L'ordre ha "
+"sigut: <command>%1%2</command><nl/>Codi d'error: %3."
 
 #: sounddlg.cpp:43
 #, kde-format
@@ -8676,13 +8684,13 @@ msgstr "No s'ha trobat l'alarma"
 #, kde-format
 msgctxt "@info"
 msgid "Error recreating alarm"
-msgstr "S'ha produït un error en recrear l'alarma"
+msgstr "S'ha produït un error mentre es recreava l'alarma"
 
 #: undo.cpp:406
 #, kde-format
 msgctxt "@info"
 msgid "Error recreating alarm template"
-msgstr "S'ha produït un error en recrear la plantilla d'alarma"
+msgstr "S'ha produït un error mentre es recreava la plantilla d'alarma"
 
 #: undo.cpp:407
 #, kde-format
