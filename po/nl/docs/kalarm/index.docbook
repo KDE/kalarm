@@ -96,7 +96,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2025-08-30</date>
+>2025-12-3</date>
 <releaseinfo
 >3.12.0 (KDE Gear 25.12)</releaseinfo>
 
@@ -2367,6 +2367,9 @@
 
 <para
 >Als u meldingen voor het bureaublad uitzet zal het uitvoeren van te tonen alarmen worden onderbroken totdat meldingen opnieuw worden ingeschakeld. Merk op dat dit van toepassing is op alle te tonen alarmen, ongeacht of ze getoond worden in vensters of als meldingen.</para>
+
+<para
+>Houd er rekening mee dat op een systeem met één scherm de vensterbeheerder meldingen kan blokkeren terwijl een applicatie op volledig scherm draait, waardoor de uitvoering van weergavealarmen automatisch wordt onderbroken.</para>
 
 <sect2 id="message-window">
 <title

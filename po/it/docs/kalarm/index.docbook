@@ -132,7 +132,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2025-08-30</date>
+>2025-12-3</date>
 <releaseinfo
 >3.12.0 (KDE Gear 25.12)</releaseinfo>
 
@@ -2397,6 +2397,9 @@
 
 <para
 >Se blocchi le notifiche per il desktop, l'esecuzione degli avvisi visivi sarà sospesa fino alla riattivazione delle notifiche. Nota come questo si applica a tutti gli avvisi visivi, indipendentemente dal fatto che siano mostrati in una finestra o come notifiche.</para>
+
+<para
+>Si noti come in un sistema con un solo schermo, il gestore delle finestre potrebbe bloccare le notifiche quando c'è un'applicazione a pieno schermo, e questo automaticamente sospende l'esecuzione della visualizzazione degli avvisi.</para>
 
 <sect2 id="message-window">
 <title

@@ -124,7 +124,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2025-08-30</date>
+>2025-12-3</date>
 <releaseinfo
 >3.12.0 (KDE Gear 25.12)</releaseinfo>
 
@@ -2403,6 +2403,9 @@
 
 <para
 >Si inhibe las notificaciones para el escritorio, la ejecución de las alarmas visibles se suspenderá hasta que se vuelvan a activar las notificaciones. Tenga en cuenta que esto se aplica a todas las alarmas en pantalla, independientemente de si se muestran en ventanas o como notificaciones.</para>
+
+<para
+>Tenga en cuenta que en un sistema con una sola pantalla, el gestor de ventanas puede inhibir las notificaciones mientras alguna aplicación se esté ejecutando en pantalla completa, lo que suspenderá automáticamente la ejecución de las alarmas en pantalla.</para>
 
 <sect2 id="message-window">
 <title

@@ -96,7 +96,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->30 d'agost de 2025</date>
+>3 de desembre de 2025</date>
 <releaseinfo
 >3.12.0 (KDE Gear 25.12)</releaseinfo>
 
@@ -2363,6 +2363,9 @@
 
 <para
 >Si inhibiu les notificacions per a l'escriptori, l'execució de les alarmes visuals se suspendrà fins que es tornin a habilitar les notificacions. Recordeu que això s'aplica a totes les alarmes visuals, independentment de si es mostren en finestres o com a notificacions.</para>
+
+<para
+>Tingueu en compte que en un sistema de pantalla única, el gestor de finestres pot inhibir les notificacions mentre qualsevol aplicació s'està executant a pantalla completa, la qual cosa suspendrà automàticament l'execució de la visualització d'alarmes.</para>
 
 <sect2 id="message-window">
 <title
