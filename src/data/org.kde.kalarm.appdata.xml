@@ -461,7 +461,18 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
-    <release version="3.12.0" date="2025-12-11"/>
+    <release version="3.12.0" date="2025-12-11">
+      <description>
+        <p>Release description</p>
+        <ul>
+          <li>If a recurrence is suppressed by work time/holidays/exception, suppress its sub-repetitions.
+          <li>Improvements and bug fixes to recurrence/work time/holidays calculations.
+          <li>Fix formatting of user messages which showed HTML tags.
+          <li>Distinguish between daily and minutely sub-repetitions in alarm calendar.
+          <li>Only mark calendars as 'KeepFormat' if the user declines to update them.
+        </ul>
+      </description>
+    </release>
     <release version="3.11.3.1" date="2025-11-06"/>
     <release version="3.11.3" date="2025-10-09">
       <description>
