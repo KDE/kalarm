@@ -465,11 +465,11 @@
       <description>
         <p>Release description</p>
         <ul>
-          <li>If a recurrence is suppressed by work time/holidays/exception, suppress its sub-repetitions.
-          <li>Improvements and bug fixes to recurrence/work time/holidays calculations.
-          <li>Fix formatting of user messages which showed HTML tags.
-          <li>Distinguish between daily and minutely sub-repetitions in alarm calendar.
-          <li>Only mark calendars as 'KeepFormat' if the user declines to update them.
+          <li>If a recurrence is suppressed by work time/holidays/exception, suppress its sub-repetitions.</li>
+          <li>Improvements and bug fixes to recurrence/work time/holidays calculations.</li>
+          <li>Fix formatting of user messages which showed HTML tags.</li>
+          <li>Distinguish between daily and minutely sub-repetitions in alarm calendar.</li>
+          <li>Only mark calendars as 'KeepFormat' if the user declines to update them.</li>
         </ul>
       </description>
     </release>
