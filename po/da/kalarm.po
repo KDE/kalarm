@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 14:41+0000\n"
+"POT-Creation-Date: 2025-12-07 02:40+0000\n"
 "PO-Revision-Date: 2016-08-15 16:35+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -5124,7 +5124,7 @@ msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr "Tekst-til-tale-undersystemet er ikke tilgængeligt"
 
-#: messagenotification.cpp:518
+#: messagenotification.cpp:519
 #, fuzzy, kde-format
 #| msgctxt "@title:tab"
 #| msgid "Edit"
@@ -5132,7 +5132,7 @@ msgctxt "@action:button"
 msgid "Edit"
 msgstr "Redigér"
 
-#: messagenotification.cpp:527
+#: messagenotification.cpp:528
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Cancel Deferral"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 14:41+0000\n"
+"POT-Creation-Date: 2025-12-07 02:40+0000\n"
 "PO-Revision-Date: 2002-11-07 11:37+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -4718,13 +4718,13 @@ msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr ""
 
-#: messagenotification.cpp:518
+#: messagenotification.cpp:519
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Edit"
 msgstr "Verander..."
 
-#: messagenotification.cpp:527
+#: messagenotification.cpp:528
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Defer"

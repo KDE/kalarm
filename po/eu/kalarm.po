@@ -12,15 +12,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 14:41+0000\n"
-"PO-Revision-Date: 2025-01-03 09:44+0100\n"
+"POT-Creation-Date: 2025-12-07 02:40+0000\n"
+"PO-Revision-Date: 2025-12-06 22:12+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 25.08.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, kde-format
@@ -491,7 +491,7 @@ msgstr "Ezarri alarma errepikapen osagarri bat"
 #: commandoptions.cpp:128
 #, kde-format
 msgid "Prompt for confirmation when alarm is acknowledged"
-msgstr "Eskatu berrespena alarmaz konturatu izana adierazteko"
+msgstr "Eskatu baieztapena alarma onartu dela adierazteko"
 
 #: commandoptions.cpp:131
 #, kde-format
@@ -1608,7 +1608,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Confirm acknowledgement"
-msgstr "Berretsi jaso izanaren adierazpena"
+msgstr "Baieztatu onarpena"
 
 #. i18n: ectx: whatsthis, entry (DefaultConfirmAck), group (Defaults)
 #: data/kalarmconfig.kcfg:326
@@ -1618,8 +1618,8 @@ msgid ""
 "Default setting in the alarm edit dialog for \"confirm alarm acknowledgement"
 "\"."
 msgstr ""
-"Alarma editatzeko elkarrizketa-koadroan, \"Berretsi jaso izanaren adierazpena"
-"\" aukerarako ezarpen lehenetsia."
+"Alarma editatzeko elkarrizketa-koadroan, \"baieztatu alarma onarpena\"."
+"aukerarako ezarpen lehenetsia"
 
 #. i18n: ectx: label, entry (DefaultCopyToKOrganizer), group (Defaults)
 #: data/kalarmconfig.kcfg:330
@@ -2657,7 +2657,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
-msgstr "Markatu, alarma bat aitortzen duzunean berrespena eska dakizun."
+msgstr "Markatu, alarma onartzen duzunean baieztapena eska dakizun."
 
 #: editdlgtypes.cpp:295
 #, kde-format
@@ -4624,8 +4624,8 @@ msgstr "Freskatu alarmak"
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
-msgstr[0] "Benetan ezabatu nahi duzu hautatutako alarma?"
-msgstr[1] "Benetan ezabatu nahi dituzu hautatutako %1 alarmak?"
+msgstr[0] "Ziur zaude hautatutako alarma ezabatu nahi duzula?"
+msgstr[1] "Ziur zaude hautatutako %1 alarmak ezabatu nahi dituzula?"
 
 #: mainwindow.cpp:816
 #, kde-format
@@ -4836,13 +4836,13 @@ msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr "Testutik ahotserako azpisistema ez dago erabilgarri"
 
-#: messagenotification.cpp:518
+#: messagenotification.cpp:519
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit"
 msgstr "Editatu"
 
-#: messagenotification.cpp:527
+#: messagenotification.cpp:528
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer"
@@ -4898,7 +4898,7 @@ msgstr "Ez berriz azaldu alarma honetarako errore mezu hau"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
-msgstr "Alarma aitortu"
+msgstr "Onartu alarma"
 
 #: messagewindow.cpp:431 resourceselector.cpp:77 templatedlg.cpp:81
 #, kde-format
@@ -4980,19 +4980,19 @@ msgstr "Aktibatu <application>KAlarm</application>"
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
-msgstr "Ziur zaude alarma hau aitortu nahi duzula?"
+msgstr "Ziur zaude alarma hau onartu nahi duzula?"
 
 #: messagewindow.cpp:1077
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
-msgstr "Alarma aitortu"
+msgstr "Onartu alarma"
 
 #: messagewindow.cpp:1077
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
-msgstr "Aitortu"
+msgstr "Onartu"
 
 #: messagewindow.cpp:1132
 #, kde-kuit-format
@@ -6230,11 +6230,11 @@ msgid ""
 "message windows in the center of the screen, but disable buttons for a short "
 "time after the window is displayed.</item></list></para>"
 msgstr ""
-"<para>Aukeratu alarmei ustekabean aitortza emateko aukera nola murriztu:"
-"<list><item>Kokatu alarma mezuaren leihoa sagu-kurtsorearen kokalekutik ahal "
-"den urrutien, edo </item><item>Kokatu alarma mezuaren leihoa pantailaren "
-"erdian, baina ezgaitu botoiak denbora labur batez, leihoa azaldu ondoren.</"
-"item></list></para>"
+"<para>Hautatu alarma-mezuak ustekabean onartzeko aukera:<list><item>Kokatu "
+"alarma-mezuen leihoak sagu-kurtsorearen uneko kokalekutik ahal den urrutien, "
+"edo </item><item>Kokatu alarma-mezuen leihoak pantailaren erdian, baina "
+"leihoa azaldu ondoren ezgaitu botoiak denbora labur batez.</item></list></"
+"para>"
 
 #: prefdlg.cpp:2078
 #, kde-format
@@ -6263,8 +6263,8 @@ msgid ""
 "acknowledged."
 msgstr ""
 "Sartu, alarma-mezuaren leihoa erakutsi ondoren, haren botoiak zenbat "
-"denboraz ezgaituta egon behar duten, ustekabean alarma-mezuak aitortzeko "
-"aukerak murrizteko."
+"denboraz ezgaituta egon behar duten, ustekabean alarma-mezuak onartzeko "
+"aukera murrizteko."
 
 #: prefdlg.cpp:2103
 #, kde-format
@@ -7356,13 +7356,13 @@ msgstr "Alarma-txantiloiak"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7575,7 +7575,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"
-msgstr "Benetan ezgaitu nahi duzu zure egutegi lehenetsia?"
+msgstr "Ziur zaude zure egutegi lehenetsia ezgaitu nahi duzula?"
 
 #: resources/resources.cpp:289
 #, kde-format
@@ -7584,12 +7584,7 @@ msgid "Choose Calendar"
 msgstr "Aukeratu egutegia"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7599,13 +7594,13 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para><resource>%1</resource> egutegia soilik irakurtzeko egin da. Hau zen "
-"honetarako egutegi lehenetsia: %2</para><para>Mesedez, aukeratu "
-"lehenetsitako egutegi berri bat.</para>"
+"<para><resource>%2</resource> egutegia soilik irakurtzeko egin da. Hau zen "
+"%3(e)rako egutegi lehenetsia.</para><para>Mesedez, aukeratu lehenetsitako "
+"egutegi berri bat.</para>"
 msgstr[1] ""
-"<para><resource>%1</resource> egutegia soilik irakurtzeko egin da. Hau zen "
-"honetarako egutegi lehenetsia: %2</para><para>Mesedez, aukeratu "
-"lehenetsitako egutegi berri bat.</para>"
+"<para><resource>%2</resource> egutegia soilik irakurtzeko egin da. Hau zen "
+"%3(e)rako egutegi lehenetsia.</para><para>Mesedez, aukeratu lehenetsitako "
+"egutegi berri bat.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7934,26 +7929,20 @@ msgstr ""
 "alarmak gordetzeko konfiguratuta dagoen bitartean."
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>Hau ere badu:%1</para>"
+msgstr "%1 ere badu"
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> lehenetsitako egutegia da honentzako: %2</para>"
-"%3<para>Benetan kendu nahi duzu egutegi-zerrenda guztietatik?</para>"
+"<para><resource>%1</resource> %2(e)rako egutegi lehenetsita da</para>"
+"%3<para>Ziur zaude egutegi-zerrenda guztietatik kendu nahi duzula?</para>"
 
 #: resourceselector.cpp:258
 #, kde-kuit-format
@@ -7962,22 +7951,18 @@ msgid ""
 "Do you really want to remove your default calendar (<resource>%1</resource>) "
 "from the list?"
 msgstr ""
-"Benetan kendu nahi duzu zure egutegi lehenetsia (<resource>%1</resource>) "
-"zerrendatik?"
+"Ziur zaude zure egutegi lehenetsia (<resource>%1</resource>) zerrendatik "
+"kendu nahi duzula?"
 
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource>(e)k dauka:%2</para><para>Benetan kendu nahi "
-"duzu egutegi-zerrenda guztietatik?</para>"
+"<para><resource>%1</resource>(e)k %2 du</para><para>Ziur zaude egutegi-"
+"zerrenda guztietatik kendu nahi duzula?</para>"
 
 #: resourceselector.cpp:264
 #, kde-kuit-format
@@ -7985,7 +7970,8 @@ msgctxt "@info"
 msgid ""
 "Do you really want to remove the calendar <resource>%1</resource> from the "
 "list?"
-msgstr "Benetan kendu nahi duzu <resource>%1</resource> egutegia zerrendatik?"
+msgstr ""
+"Ziur zaude <resource>%1</resource> egutegia zerrendatik kendu nahi duzula?"
 
 #: resourceselector.cpp:289
 #, kde-format
@@ -8458,10 +8444,10 @@ msgid ""
 "you defer the alarm, it is not executed until the alarm is finally "
 "acknowledged or closed.</para>"
 msgstr ""
-"<para>Sartu alarma-leihoa itxi ondoren exekutatu beharreko komando-lerroko "
-"komando bat.</para><para>Kontuan izan ez dela exekutatuko oroigarri-leiho "
-"bat itxi ondoren. Alarma geroratzen baduzu, ez da exekutatuko azkenean "
-"alarmari kasu egin edo ixten duzun arte.</para>"
+"<para>Sartu alarma-leihoa itxi ondoren exekutatu beharreko oskoleko komando "
+"bat.</para><para>Kontuan izan ez dela exekutatuko oroigarri-leiho bat itxi "
+"ondoren. Alarma geroratzen baduzu, ez da exekutatuko azkenean alarma onartu "
+"edo ixten duzun arte.</para>"
 
 #: templatedlg.cpp:49
 #, kde-format
@@ -8545,8 +8531,8 @@ msgstr "Ezabatu unean nabarmenduta dauden alarma-txantiloiak"
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
 msgid_plural "Do you really want to delete the %1 selected alarm templates?"
-msgstr[0] "Benetan ezabatu nahi duzu hautatutako alarma-txantiloia?"
-msgstr[1] "Benetan ezabatu nahi dituzu hautatutako %1 alarma-txantiloiak?"
+msgstr[0] "Ziur zaude hautatutako alarma-txantiloia ezabatu nahi duzula?"
+msgstr[1] "Ziur zaude hautatutako %1 alarma-txantiloiak ezabatu nahi dituzula?"
 
 #: templatedlg.cpp:180
 #, kde-format
