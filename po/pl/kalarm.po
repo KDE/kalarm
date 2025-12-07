@@ -1,6 +1,6 @@
 # translation of kalarm.po to
 # translation of alarmdaemonctrl.po to
-# Version: $Revision: 1724285 $
+# Version: $Revision: 1724487 $
 #
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2004, 2005, 2006.
@@ -18,15 +18,16 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-03 00:44+0000\n"
-"PO-Revision-Date: 2025-01-11 11:19+0100\n"
+"PO-Revision-Date: 2025-12-06 15:56+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
-"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language-Team: pl\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -7347,13 +7348,13 @@ msgstr "Wzorce alarmów"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7575,12 +7576,7 @@ msgid "Choose Calendar"
 msgstr "Wybierz kalendarz"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7590,17 +7586,17 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para>Zmieniono dostęp do kalendarza <resource>%1</resource> na tylko-do-"
-"odczytu. Był to domyślny kalendarz dla:%2</para><para> Wybierz nowe domyślne "
-"kalendarze.</para>"
+"<para>Zmieniono dostęp do kalendarza <resource>%2</resource> na tylko-do-"
+"odczytu.</para><para>Był to domyślny kalendarz dla %3</para><para>Wybierz "
+"nowy domyślny kalendarz.</para>"
 msgstr[1] ""
-"<para>Zmieniono dostęp do kalendarza <resource>%1</resource> na tylko-do-"
-"odczytu. Był to domyślny kalendarz dla:%2</para><para> Wybierz nowe domyślne "
-"kalendarze.</para>"
+"<para>Zmieniono dostęp do kalendarza <resource>%2</resource> na tylko-do-"
+"odczytu.</para><para>Był to domyślny kalendarz dla %3</para><para>Wybierz "
+"nowe domyślne kalendarze.</para>"
 msgstr[2] ""
-"<para>Zmieniono dostęp do kalendarza <resource>%1</resource> na tylko-do-"
-"odczytu. Był to domyślny kalendarz dla:%2</para><para> Wybierz nowe domyślne "
-"kalendarze.</para>"
+"<para>Zmieniono dostęp do kalendarza <resource>%2</resource> na tylko-do-"
+"odczytu.</para><para>Był to domyślny kalendarz dla %3</para><para>Wybierz "
+"nowe domyślne kalendarze.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7931,26 +7927,21 @@ msgstr ""
 "wygasłe alarmy mają być przechowywane."
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>Również zawiera:%1</para>"
+msgstr "On również zawiera %1"
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> jest domyślnym kalendarzem dla:%2</para>"
-"%3<para>Czy na pewno chcesz usunąć go z listy wszystkich kalendarzy?</para>"
+"<para><resource>%1</resource> jest domyślnym kalendarzem dla %2</para><para>"
+"%3</para><para>Czy na pewno chcesz usunąć go z listy wszystkich kalendarzy?</"
+"para>"
 
 #: resourceselector.cpp:258
 #, kde-kuit-format
@@ -7962,17 +7953,13 @@ msgstr ""
 "Czy na pewno usunąć domyślny kalendarz (<resource>%1</resource>) z listy?"
 
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> zawiera:%2</para><para>Czy na pewno chcesz go "
+"<para><resource>%1</resource> zawiera %2</para><para>Czy na pewno chcesz go "
 "usunąć z listy wszystkich kalendarzy?</para>"
 
 #: resourceselector.cpp:264
