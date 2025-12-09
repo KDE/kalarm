@@ -472,7 +472,7 @@ void EditAlarmDlg::initValues(const KAEvent& event)
     mChanged           = false;
     mOnlyDeferred      = false;
     mExpiredRecurrence = false;
-    mLateCancel->showAutoClose(false);
+    mLateCancel->allowAutoClose(false);
     bool deferGroupVisible = false;
     if (event.isValid())
     {
@@ -672,13 +672,13 @@ void EditAlarmDlg::saveState(const KAEvent* event)
     checkText(mSavedTextFileCommandMessage, false);
     if (mTimeWidget)
         mSavedDateTime = mTimeWidget->getDateTime(false, false);
-    mSavedLateCancel       = mLateCancel->minutes();
+    mSavedLateCancel = mLateCancel->minutes();
     if (mWakeFromSuspend)
         mSavedWakeFromSuspend = mWakeFromSuspend->isChecked();
     if (mShowInKorganizer)
         mSavedShowInKorganizer = mShowInKorganizer->isChecked();
-    mSavedRecurrenceType   = mRecurrenceEdit->repeatType();
-    mSavedDeferTime        = mDeferDateTime.kDateTime();
+    mSavedRecurrenceType = mRecurrenceEdit->repeatType();
+    mSavedDeferTime      = mDeferDateTime.kDateTime();
 }
 
 /******************************************************************************

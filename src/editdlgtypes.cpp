@@ -294,7 +294,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent& event)
 {
     mTryButton->setToolTip(i18nc("@info:tooltip", "Display the alarm now"));
     mEmailId = -1;
-    lateCancel()->showAutoClose(true);
+    lateCancel()->allowAutoClose(true);
     if (event.isValid())
     {
         if (mAlarmType == KAEvent::SubAction::Message  &&  event.emailId()
@@ -713,7 +713,7 @@ void EditDisplayAlarmDlg::slotDisplayMethodChanged(int index)
     mSoundPicker->showFile(enable);
     // Because notifications automatically time out after 10 seconds,
     // auto-close would always occur after a notification closes.
-    lateCancel()->showAutoClose(enable);
+    lateCancel()->allowAutoClose(enable);
     // Set the text message edit box colours according to the display method.
     setColours(mFontColourButton->fgColour(), mFontColourButton->bgColour());
 }

@@ -1,7 +1,7 @@
 /*
  *  latecancel.cpp  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -128,14 +128,10 @@ void LateCancelSelector::setDateOnly(bool dateOnly)
     }
 }
 
-void LateCancelSelector::showAutoClose(bool show)
+void LateCancelSelector::allowAutoClose(bool allow)
 {
-    if (show)
-        mAutoClose->show();
-    else
-        mAutoClose->hide();
-    mAutoCloseShown = show;
-    updateGeometry();
+    mAutoCloseAllowed = allow;
+    updateAutoClose();
 }
 
 bool LateCancelSelector::isAutoClose() const
@@ -162,7 +158,22 @@ void LateCancelSelector::slotToggled(bool on)
     }
     else
         mStack->setCurrentWidget(mCheckboxFrame);
-    mAutoClose->setEnabled(on);
+    updateAutoClose();
+}
+
+void LateCancelSelector::updateAutoClose()
+{
+    const bool show = mTimeSelector->isChecked() && mAutoCloseAllowed;
+    if (show != mAutoCloseShown)
+    {
+        mAutoClose->setEnabled(show);
+        if (show)
+            mAutoClose->show();
+        else
+            mAutoClose->hide();
+        mAutoCloseShown = show;
+        updateGeometry();
+    }
 }
 
 #include "moc_latecancel.cpp"

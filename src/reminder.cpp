@@ -1,7 +1,7 @@
 /*
  *  reminder.cpp  -  reminder setting widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -33,9 +33,8 @@ QString Reminder::i18n_chk_FirstRecurrenceOnly()   { return i18nc("@option:check
 
 Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsThis,
                    const QString& beforeAfterWhatsThis, bool allowHourMinute,
-                   bool showOnceOnly, QWidget* parent)
+                   bool allowOnceOnly, QWidget* parent)
     : QFrame(parent)
-    , mOnceOnlyEnabled(showOnceOnly)
 {
     auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
@@ -47,12 +46,12 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
     mTimeSignCombo->addItem(i18nc("@item:inlistbox", "afterwards"));
     mTimeSignCombo->setWhatsThis(beforeAfterWhatsThis);
     mTimeSignCombo->setCurrentIndex(0);   // default to "in advance"
-    connect(mTime, &TimeSelector::toggled, this, &Reminder::slotReminderToggled);
+    connect(mTime, &TimeSelector::toggled, this, [this]() { updateOnceOnly(); });
     connect(mTime, &TimeSelector::valueChanged, this, &Reminder::changed);
     connect(mTimeSignCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &Reminder::changed);
     topLayout->addWidget(mTime, 0, Qt::AlignLeft);
 
-    if (showOnceOnly)
+    if (allowOnceOnly)
     {
         auto layout = new QHBoxLayout();
         layout->setContentsMargins(0, 0, 0, 0);
@@ -68,8 +67,6 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
         layout->addWidget(mOnceOnly);
         layout->addStretch();
     }
-    else
-        mOnceOnly = nullptr;
 }
 
 /******************************************************************************
@@ -120,8 +117,8 @@ void Reminder::enableOnceOnly(bool enable)
 {
     if (mOnceOnly)
     {
-        mOnceOnlyEnabled = enable;
-        mOnceOnly->setEnabled(enable && mTime->isChecked());
+        mOnceOnlyAllowed = enable;
+        updateOnceOnly();
     }
 }
 
@@ -179,12 +176,20 @@ void Reminder::setFocusOnCount()
 }
 
 /******************************************************************************
-* Called when the Reminder checkbox is toggled.
+* Update the visibility and enabled state of the Once only checkbox.
 */
-void Reminder::slotReminderToggled(bool on)
+void Reminder::updateOnceOnly()
 {
     if (mOnceOnly)
-        mOnceOnly->setEnabled(on && mOnceOnlyEnabled);
+    {
+        const bool enable = mTime->isChecked() && mOnceOnlyAllowed;
+        mOnceOnly->setEnabled(enable);
+        if (enable)
+            mOnceOnly->show();
+        else
+            mOnceOnly->hide();
+        updateGeometry();
+    }
 }
 
 /******************************************************************************

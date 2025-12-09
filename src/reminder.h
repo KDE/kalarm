@@ -1,7 +1,7 @@
 /*
  *  reminder.h  -  reminder setting widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -22,7 +22,7 @@ class Reminder : public QFrame
 public:
     Reminder(const QString& reminderWhatsThis, const QString& valueWhatsThis,
              const QString& beforeAfterWhatsThis, bool allowHourMinute,
-             bool showOnceOnly, QWidget* parent);
+             bool allowOnceOnly, QWidget* parent);
     void           setAfterOnly(bool after);
     bool           isReminder() const;
     bool           isOnceOnly() const;
@@ -43,15 +43,14 @@ public Q_SLOTS:
 Q_SIGNALS:
     void           changed();
 
-private Q_SLOTS:
-    void           slotReminderToggled(bool);
-
 private:
+    void           updateOnceOnly();
+
     TimeSelector*  mTime;
-    CheckBox*      mOnceOnly;
+    CheckBox*      mOnceOnly {nullptr};
     ComboBox*      mTimeSignCombo;
     bool           mReadOnly {false};   // the widget is read only
-    bool           mOnceOnlyEnabled;    // 'mOnceOnly' checkbox is allowed to be enabled
+    bool           mOnceOnlyAllowed;    // 'mOnceOnly' checkbox is allowed to be enabled
 };
 
 // vim: et sw=4:
