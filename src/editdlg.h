@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "kalarmapp.h"
 #include "resources/resource.h"
 #include "kalarmcalendar/alarmtext.h"
 #include "kalarmcalendar/datetime.h"
@@ -105,7 +106,7 @@ protected:
     virtual KAEvent::Flags getAlarmFlags() const;
     virtual bool    type_validate(bool trial) = 0;
     virtual void    type_aboutToTry() {}
-    virtual void    type_executedTry(const QString& text, void* obj) { Q_UNUSED(text); Q_UNUSED(obj); }
+    virtual void    type_executedTry(const QString& text, KAlarmApp::ExecAlarmResult result) { Q_UNUSED(text); Q_UNUSED(result); }
     virtual Reminder* createReminder(QWidget* parent)  { Q_UNUSED(parent); return nullptr; }
     virtual CheckBox* type_createConfirmAckCheckbox(QWidget* parent)  { Q_UNUSED(parent); return nullptr; }
     virtual CheckBox* type_createNoInhibit(QWidget* parent)  { Q_UNUSED(parent); return nullptr; }

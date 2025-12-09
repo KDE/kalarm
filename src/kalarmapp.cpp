@@ -1042,7 +1042,7 @@ void KAlarmApp::processQueue()
                 switch (action)
                 {
                     case QueuedAction::Trigger:
-                        if (execAlarm(entry.event, entry.event.firstAlarm()) == (void*)-2)
+                        if (execAlarm(entry.event, entry.event.firstAlarm()).status == ExecAlarmStatus::Inhibited)
                             inhibit = true;
                         break;
                     case QueuedAction::Handle:
@@ -1758,7 +1758,7 @@ bool KAlarmApp::scheduleEvent(QueuedAction queuedActionFlags,
         // First execute it once without adding it to the calendar file.
         qCDebug(KALARM_LOG) << "KAlarmApp::scheduleEvent: executing" << text;
         if (!mInitialised
-        ||  execAlarm(event, event.firstAlarm()) == (void*)-2)
+        ||  execAlarm(event, event.firstAlarm()).status == ExecAlarmStatus::Inhibited)
             mActionQueue.enqueue(ActionQEntry(event, QueuedAction::Trigger));
         // If it's a recurring alarm, reschedule it for its next occurrence
         if (!event.recurs())
@@ -2012,7 +2012,7 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
             // any others. This ensures that the updated event is only saved once to the calendar.
             if (alarmToExecute.isValid())
             {
-                if (execAlarm(event, alarmToExecute, Reschedule | (alarmToExecute.repeatAtLogin() ? NoExecFlag : AllowDefer)) == (void*)-2)
+                if (execAlarm(event, alarmToExecute, Reschedule | (alarmToExecute.repeatAtLogin() ? NoExecFlag : AllowDefer)).status == ExecAlarmStatus::Inhibited)
                     return 0;    // display alarm, but notifications are inhibited
             }
             else
@@ -2025,7 +2025,7 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                     const KAAlarm alarm = event.firstAlarm();
                     if (alarm.isValid())
                     {
-                        if (execAlarm(event, alarm) == (void*)-2)
+                        if (execAlarm(event, alarm).status == ExecAlarmStatus::Inhibited)
                             return 0;    // display alarm, but notifications are inhibited
                     }
                 }
@@ -2217,14 +2217,11 @@ bool KAlarmApp::cancelReminderAndDeferral(KAEvent& event)
 
 /******************************************************************************
 * Execute an alarm by displaying its message or file, or executing its command.
-* Reply = ShellProcess instance if a command alarm
-*       = MessageWindow if an audio alarm
-*       != null if successful
-*       = -1 if execution has not completed
-*       = -2 if can't execute display/audio event because notifications are inhibited.
-*       = null if the alarm is disabled, or if an error message was output.
+* Reply = status of alarm execution, plus
+*         ShellProcess instance if a command alarm, or nullptr if error
+*         MessageWindow if an audio alarm, or nullptr if error
 */
-void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags flags)
+KAlarmApp::ExecAlarmResult KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags flags)
 {
     if (!mAlarmsEnabled  ||  !event.enabled())
     {
@@ -2232,7 +2229,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
         qCDebug(KALARM_LOG) << "KAlarmApp::execAlarm:" << event.id() << ": disabled";
         if (flags & Reschedule)
             rescheduleAlarm(event, alarm, true);
-        return nullptr;
+        return ExecAlarmStatus::Error;
     }
 
     if (mNotificationsInhibited  &&  !(flags & NoNotifyInhibit)  &&  !event.noInhibit()
@@ -2240,10 +2237,10 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
     {
         // It's a display event and notifications are inhibited.
         qCDebug(KALARM_LOG) << "KAlarmApp::execAlarm:" << event.id() << ": notifications inhibited";
-        return (void*)-2;
+        return ExecAlarmStatus::Inhibited;
     }
 
-    void* result = (void*)1;
+    ExecAlarmResult result(ExecAlarmStatus::Success);
     event.setArchive();
 
     switch (alarm.action())
@@ -2253,7 +2250,8 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
             {
                 // execCommandAlarm() will error if the user is not authorised
                 // to run shell commands.
-                result = execCommandAlarm(event, alarm, flags & NoRecordCmdError);
+                ShellProcess* ptr = execCommandAlarm(event, alarm, flags & NoRecordCmdError);
+                result = ExecAlarmResult(ptr);
                 if (flags & Reschedule)
                     rescheduleAlarm(event, alarm, true);
                 break;
@@ -2286,7 +2284,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
                     if (pd->event->id() == event.id()  &&  (pd->flags & ProcData::PRE_ACTION))
                     {
                         qCDebug(KALARM_LOG) << "KAlarmApp::execAlarm: Already executing pre-DISPLAY command";
-                        return pd->process;   // already executing - don't duplicate the action
+                        return ExecAlarmResult(pd->process);   // already executing - don't duplicate the action
                     }
                 }
 
@@ -2298,7 +2296,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
                 if (doShellCommand(command, event, &alarm, (pdFlags | ProcData::PRE_ACTION)))
                 {
                     ResourcesCalendar::setAlarmPending(event);
-                    return result;     // display the message after the command completes
+                    return ExecAlarmStatus::Success;     // display the message after the command completes
                 }
                 // Error executing command
                 if (event.extraActionOptions() & KAEvent::CancelOnPreActError)
@@ -2307,7 +2305,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
                     qCDebug(KALARM_LOG) << "KAlarmApp::execAlarm:" << event.id() << ": pre-action failed: cancelled";
                     if (flags & Reschedule)
                         rescheduleAlarm(event, alarm, true);
-                    return nullptr;
+                    return ExecAlarmStatus::Error;
                 }
                 // Display the message even though it failed
             }
@@ -2355,13 +2353,13 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
             {
                 // The email has either been sent or failed - not queued
                 if (ans < 0)
-                    result = nullptr;  // failure
+                    result = ExecAlarmStatus::Error;  // failure
                 data.queued = false;
                 emailSent(data, errmsgs, (ans > 0));
             }
             else
             {
-                result = (void*)-1;   // email has been queued
+                result = ExecAlarmStatus::Incomplete;   // email has been queued
             }
             if (flags & Reschedule)
                 rescheduleAlarm(event, alarm, true);
@@ -2384,10 +2382,10 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
                 // There's an existing message window: replay the sound
                 disp->repeat(alarm);    // N.B. this reschedules the alarm
             }
-            return dynamic_cast<MessageWindow*>(disp);
+            return ExecAlarmResult(dynamic_cast<MessageWindow*>(disp));
         }
         default:
-            return nullptr;
+            return ExecAlarmStatus::Error;
     }
     return result;
 }

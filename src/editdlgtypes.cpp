@@ -1086,10 +1086,10 @@ bool EditCommandAlarmDlg::type_validate(bool trial)
 * Called when the Try action has been executed.
 * Tell the user the result of the Try action.
 */
-void EditCommandAlarmDlg::type_executedTry(const QString& text, void* result)
+void EditCommandAlarmDlg::type_executedTry(const QString& text, KAlarmApp::ExecAlarmResult result)
 {
-    auto* proc = static_cast<ShellProcess*>(result);
-    if (proc  &&  proc != (void*)-1
+    auto* proc = static_cast<ShellProcess*>(result.ptr);
+    if (proc  &&  result.status != KAlarmApp::ExecAlarmStatus::Incomplete
     &&  mCmdOutputGroup->checkedButton() != mCmdExecInTerm)
     {
         theApp()->commandMessage(proc, this);
@@ -1788,9 +1788,9 @@ void EditAudioAlarmDlg::slotTry()
 /******************************************************************************
 * Called when the Try action has been executed.
 */
-void EditAudioAlarmDlg::type_executedTry(const QString&, void* result)
+void EditAudioAlarmDlg::type_executedTry(const QString&, KAlarmApp::ExecAlarmResult result)
 {
-    mMessageWindow = (MessageWindow*)result;    // note which MessageWindow controls the audio playback
+    mMessageWindow = static_cast<MessageWindow*>(result.ptr);    // note which MessageWindow controls the audio playback
     if (mMessageWindow)
     {
         slotAudioPlaying(true);

@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.h  -  dialogues to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -160,7 +160,7 @@ protected:
     void            type_setEvent(KAEvent&, const KADateTime&, const QString& name, const QString& text, int lateCancel, bool trial) override;
     KAEvent::Flags  getAlarmFlags() const override;
     bool            type_validate(bool trial) override;
-    void            type_executedTry(const QString& text, void* obj) override;
+    void            type_executedTry(const QString& text, KAlarmApp::ExecAlarmResult result) override;
     bool            checkText(QString& result, bool showErrorMessage = true) const override;
 
 private Q_SLOTS:
@@ -279,7 +279,7 @@ protected:
     void            type_setEvent(KAEvent&, const KADateTime&, const QString& name, const QString& text, int lateCancel, bool trial) override;
     KAEvent::Flags  getAlarmFlags() const override;
     bool            type_validate(bool trial) override { Q_UNUSED(trial); return true; }
-    void            type_executedTry(const QString& text, void* obj) override;
+    void            type_executedTry(const QString& text, KAlarmApp::ExecAlarmResult result) override;
     CheckBox*       type_createNoInhibit(QWidget* parent) override  { return createNoInhibit(parent); }
     bool            checkText(QString& result, bool showErrorMessage = true) const override;
 

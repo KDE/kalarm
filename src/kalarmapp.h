@@ -46,6 +46,32 @@ public:
     };
     Q_DECLARE_FLAGS(ExecAlarmFlags, ExecAlarmFlag)
 
+    /** Result status for execAlarm(). */
+    enum class ExecAlarmStatus
+    {
+        Success,
+        Error,        // the alarm is disabled, or an error message was output.
+        Incomplete,   // execution has not completed
+        Inhibited     // can't execute display/audio event because notifications are inhibited
+    };
+    struct ExecAlarmResult
+    {
+        ExecAlarmResult()
+          : status(ExecAlarmStatus::Error)
+          , ptr(nullptr) {}
+        ExecAlarmResult(ExecAlarmStatus s, void* p = nullptr)
+          : status(s)
+          , ptr(p) {}
+        ExecAlarmResult(void* p)
+          : status(p ? ExecAlarmStatus::Success : ExecAlarmStatus::Error)
+          , ptr(p) {}
+        ExecAlarmResult operator=(ExecAlarmStatus s)
+        { status = s;  ptr = nullptr;  return *this; }
+
+        ExecAlarmStatus status;
+        void*           ptr;      // nullptr if status == Error
+    };
+
     ~KAlarmApp() override;
 
     /** Create the unique instance. */
@@ -75,8 +101,7 @@ public:
     bool               displayTrayIcon(bool show, MainWindow* = nullptr);
     bool               trayIconDisplayed() const       { return mTrayWindow; }
     bool               editNewAlarm(MainWindow* = nullptr);
-
-    void*              execAlarm(KAEvent&, const KAAlarm&, ExecAlarmFlags flags = NoExecFlag);
+    ExecAlarmResult    execAlarm(KAEvent&, const KAAlarm&, ExecAlarmFlags flags = NoExecFlag);
     ShellProcess*      execCommandAlarm(const KAEvent&, const KAAlarm&, bool noRecordError = false,
                                         QObject* receiver = nullptr,
                                         const char* slotOutput = nullptr,
