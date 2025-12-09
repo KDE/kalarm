@@ -1470,6 +1470,12 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     label->setBuddy(mDisplayMethod);
     widget->setWhatsThis(i18nc("@info:whatsthis", "The default setting for the alarm message display method in the alarm edit dialog."));
 
+    // Never inhibit execution of the alarm
+    mNoInhibit = new QCheckBox(EditAlarmDlg::i18n_chk_NoInhibit());
+    mNoInhibit->setMinimumSize(mNoInhibit->sizeHint());
+    mNoInhibit->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_chk_NoInhibit()).toString());
+    tgLayout->addWidget(mNoInhibit);
+
     // Show in KOrganizer
     mCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_chk_ShowInKOrganizer());
     mCopyToKOrganizer->setMinimumSize(mCopyToKOrganizer->sizeHint());
@@ -1679,6 +1685,7 @@ void EditPrefTab::restore(bool, bool allTabs)
     if (allTabs  ||  mTabs->currentIndex() == mTabGeneral)
     {
         mDisplayMethod->setCurrentIndex(Preferences::defaultDisplayMethod() == Preferences::Display_Window ? 0 : 1);
+        mNoInhibit->setChecked(Preferences::defaultNoInhibit());
         mCopyToKOrganizer->setChecked(Preferences::defaultCopyToKOrganizer());
         mLateCancel->setChecked(Preferences::defaultLateCancel());
         switch (Preferences::defaultRecurPeriod())
@@ -1809,6 +1816,9 @@ bool EditPrefTab::apply(bool syncToDisc)
     }
     if (disp != Preferences::defaultDisplayMethod())
         Preferences::setDefaultDisplayMethod(disp);
+    b = mNoInhibit->isChecked();
+    if (b != Preferences::defaultNoInhibit())
+        Preferences::setDefaultNoInhibit(b);
     b = mCopyToKOrganizer->isChecked();
     if (b != Preferences::defaultCopyToKOrganizer())
         Preferences::setDefaultCopyToKOrganizer(b);
@@ -2104,20 +2114,6 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     box->addStretch();    // left adjust the controls
     grid->addWidget(widget, 2, 1, Qt::AlignLeft);
 
-    if (KWindowSystem::isPlatformX11())
-    {
-        grid->setRowMinimumHeight(3, style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
-
-        mModalMessages = new QCheckBox(i18nc("@option:check", "Message windows have a title bar and take keyboard focus"), group);
-        mModalMessages->setMinimumSize(mModalMessages->sizeHint());
-        mModalMessages->setWhatsThis(xi18nc("@info:whatsthis",
-              "<para>Specify the characteristics of alarm message windows:"
-              "<list><item>If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.</item>"
-              "<item>If unchecked, the window does not interfere with your typing when "
-              "it is displayed, but it has no title bar and cannot be moved or resized.</item></list></para>"));
-        grid->addWidget(mModalMessages, 4, 0, 1, 2, Qt::AlignLeft);
-    }
-
     if (topWindows)
         topWindows->addStretch();    // top adjust the widgets
 }
@@ -2166,8 +2162,6 @@ void ViewPrefTab::restore(bool, bool allTabs)
         if (mWindowPosition)
             mWindowPosition->setButton(Preferences::messageButtonDelay() ? 1 : 0);
         mWindowButtonDelay->setValue(Preferences::messageButtonDelay());
-        if (mModalMessages)
-            mModalMessages->setChecked(Preferences::modalMessages());
     }
 }
 
@@ -2214,12 +2208,6 @@ bool ViewPrefTab::apply(bool syncToDisc)
         n = mWindowButtonDelay->value();
     if (n != Preferences::messageButtonDelay())
         Preferences::setMessageButtonDelay(n);
-    if (mModalMessages)
-    {
-        b = mModalMessages->isChecked();
-        if (b != Preferences::modalMessages())
-            Preferences::setModalMessages(b);
-    }
     return PrefsTabBase::apply(syncToDisc);
 }
 

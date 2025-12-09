@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -74,12 +74,14 @@ public:
     void            setRepeatAtLogin();
     virtual void    setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) = 0;
     void            setLateCancel(int minutes);
+    void            setNoInhibit(bool);
     void            setWakeFromSuspend(bool);
     void            setShowInKOrganizer(bool);
 
     QSize           sizeHint() const override    { return minimumSizeHint(); }
 
     static int      instanceCount();
+    static QString  i18n_chk_NoInhibit();          // text of 'Never inhibit alarm' checkbox
     static QString  i18n_chk_ShowInKOrganizer();   // text of 'Show in KOrganizer' checkbox
 
 protected:
@@ -106,6 +108,8 @@ protected:
     virtual void    type_executedTry(const QString& text, void* obj) { Q_UNUSED(text); Q_UNUSED(obj); }
     virtual Reminder* createReminder(QWidget* parent)  { Q_UNUSED(parent); return nullptr; }
     virtual CheckBox* type_createConfirmAckCheckbox(QWidget* parent)  { Q_UNUSED(parent); return nullptr; }
+    virtual CheckBox* type_createNoInhibit(QWidget* parent)  { Q_UNUSED(parent); return nullptr; }
+    CheckBox*       createNoInhibit(QWidget* parent);
     virtual bool    checkText(QString& result, bool showErrorMessage = true) const = 0;
 
     void            showMainPage();
@@ -179,6 +183,7 @@ private:
     AlarmTimeWidget*    mTimeWidget {nullptr};
     LateCancelSelector* mLateCancel;
     Reminder*           mReminder;             // null except for display alarms
+    CheckBox*           mNoInhibit {nullptr};
     CheckBox*           mWakeFromSuspend {nullptr};
     CheckBox*           mShowInKorganizer {nullptr};
 
@@ -215,6 +220,7 @@ private:
     KADateTime          mSavedDeferTime;        // mDeferDateTime value
     int                 mSavedRecurrenceType;   // RecurrenceEdit::RepeatType value
     int                 mSavedLateCancel;       // mLateCancel value
+    bool                mSavedNoInhibit;        // mNoInhibit status
     bool                mSavedWakeFromSuspend;  // mWakeFromSuspend status
     bool                mSavedShowInKorganizer; // mShowInKorganizer status
 };

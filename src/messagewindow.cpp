@@ -117,11 +117,14 @@ QList<MessageWindow*> MessageWindow::mWindowList;
 * displayed.
 */
 MessageWindow::MessageWindow(const KAEvent& event, const KAAlarm& alarm, int flags)
-    : MainWindowBase(nullptr, static_cast<Qt::WindowFlags>(WFLAGS | WFLAGS2 | ((flags & AlwaysHide) || getWorkAreaAndModal() ? Qt::WindowType(0) : Qt::BypassWindowManagerHint)))
+    : MainWindowBase(nullptr, WFLAGS | WFLAGS2)
     , MessageDisplay(event, alarm, flags)
     , mRestoreHeight(0)
 {
     qCDebug(KALARM_LOG) << "MessageWindow():" << mEventId();
+    const bool modal = getWorkAreaAndModal();
+    if (!(flags & AlwaysHide)  &&  !modal)
+        setWindowFlags(WFLAGS | WFLAGS2 | Qt::BypassWindowManagerHint);
     setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
     setWindowModality(Qt::WindowModal);
     setObjectName("MessageWindow"_L1);    // used by LikeBack
@@ -424,8 +427,12 @@ void MessageWindow::setUpDisplay()
     connect(mOkButton, &QAbstractButton::clicked, this, &MessageWindow::slotOk);
     grid->addWidget(mOkButton, 0, gridIndex++, Qt::AlignHCenter);
     mOkButton->setWhatsThis(i18nc("@info:whatsthis", "Acknowledge the alarm"));
+    mLastButton = mOkButton;
 
-    if (mShowEdit())
+    // Don't show Edit, Defer, KMail or KAlarm buttons if displaying over an active
+    // full screen window, since the edit and defer dialogs might be hidden by the
+    // full screen window, leaving the message window unresponsive and stuck.
+    if (mShowEdit()  &&  !mFullScreenActive)
     {
         // Edit button
         mEditButton = new PushButton(i18nc("@action:button", "Edit..."), topWidget);
@@ -434,21 +441,26 @@ void MessageWindow::setUpDisplay()
         grid->addWidget(mEditButton, 0, gridIndex++, Qt::AlignHCenter);
         mEditButton->setToolTip(i18nc("@info:tooltip", "Edit the alarm"));
         mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the alarm."));
+        mLastButton = mEditButton;
     }
 
-    // Defer button
-    mDeferButton = new PushButton(i18nc("@action:button", "Defer..."), topWidget);
-    mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
-    connect(mDeferButton, &QAbstractButton::clicked, this, &MessageWindow::slotDefer);
-    grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
-    mDeferButton->setToolTip(i18nc("@info:tooltip", "Defer the alarm until later"));
-    mDeferButton->setWhatsThis(xi18nc("@info:whatsthis", "<para>Defer the alarm until later.</para>"
-                                    "<para>You will be prompted to specify when the alarm should be redisplayed.</para>"));
+    if (!mFullScreenActive)
+    {
+        // Defer button
+        mDeferButton = new PushButton(i18nc("@action:button", "Defer..."), topWidget);
+        mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
+        connect(mDeferButton, &QAbstractButton::clicked, this, &MessageWindow::slotDefer);
+        grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
+        mDeferButton->setToolTip(i18nc("@info:tooltip", "Defer the alarm until later"));
+        mDeferButton->setWhatsThis(xi18nc("@info:whatsthis", "<para>Defer the alarm until later.</para>"
+                                        "<para>You will be prompted to specify when the alarm should be redisplayed.</para>"));
+        mLastButton = mDeferButton;
 
-    if (mNoDefer())
-        mDeferButton->hide();
-    else
-        mHelper->setDeferralLimit(mEvent());    // ensure that button is disabled when alarm can't be deferred any more
+        if (mNoDefer())
+            mDeferButton->hide();
+        else
+            mHelper->setDeferralLimit(mEvent());    // ensure that button is disabled when alarm can't be deferred any more
+    }
 
     if (!mAudioFile().isEmpty()  &&  (mVolume() || mFadeVolume() > 0))
     {
@@ -460,11 +472,12 @@ void MessageWindow::setUpDisplay()
         mSilenceButton->setWhatsThis(i18nc("@info:whatsthis", "Stop playing the sound"));
         // To avoid getting in a mess, disable the button until sound playing has been set up
         mSilenceButton->setEnabled(false);
+        mLastButton = mSilenceButton;
 
         mHelper->setSilenceButton(mSilenceButton);
     }
 
-    if (mEmailId() >= 0  &&  Preferences::useAkonadi())
+    if (mEmailId() >= 0  &&  Preferences::useAkonadi()  &&  !mFullScreenActive)
     {
         // KMail button
         mKMailButton = new PushButton(topWidget);
@@ -473,22 +486,30 @@ void MessageWindow::setUpDisplay()
         grid->addWidget(mKMailButton, 0, gridIndex++, Qt::AlignHCenter);
         mKMailButton->setToolTip(xi18nc("@info:tooltip Locate this email in KMail", "Locate in <application>KMail</application>"));
         mKMailButton->setWhatsThis(xi18nc("@info:whatsthis", "Locate and highlight this email in <application>KMail</application>"));
+        mLastButton = mKMailButton;
     }
 
-    // KAlarm button
-    mKAlarmButton = new PushButton(topWidget);
-    mKAlarmButton->setIcon(QIcon::fromTheme(KAboutData::applicationData().componentName()));
-    connect(mKAlarmButton, &QAbstractButton::clicked, this, [this]() { MessageWindow::displayMainWindow(); });
-    grid->addWidget(mKAlarmButton, 0, gridIndex++, Qt::AlignHCenter);
-    mKAlarmButton->setToolTip(xi18nc("@info:tooltip", "Activate <application>KAlarm</application>"));
-    mKAlarmButton->setWhatsThis(xi18nc("@info:whatsthis", "Activate <application>KAlarm</application>"));
+    if (!mFullScreenActive)
+    {
+        // KAlarm button
+        mKAlarmButton = new PushButton(topWidget);
+        mKAlarmButton->setIcon(QIcon::fromTheme(KAboutData::applicationData().componentName()));
+        connect(mKAlarmButton, &QAbstractButton::clicked, this, [this]() { MessageWindow::displayMainWindow(); });
+        grid->addWidget(mKAlarmButton, 0, gridIndex++, Qt::AlignHCenter);
+        mKAlarmButton->setToolTip(xi18nc("@info:tooltip", "Activate <application>KAlarm</application>"));
+        mKAlarmButton->setWhatsThis(xi18nc("@info:whatsthis", "Activate <application>KAlarm</application>"));
+        mLastButton = mKAlarmButton;
+    }
 
-    int butsize = mKAlarmButton->sizeHint().height();
+    int butsize = 0;
+    if (mKAlarmButton)
+        butsize = mKAlarmButton->sizeHint().height();
     if (mSilenceButton)
         butsize = qMax(butsize, mSilenceButton->sizeHint().height());
     if (mKMailButton)
         butsize = qMax(butsize, mKMailButton->sizeHint().height());
-    mKAlarmButton->setFixedSize(butsize, butsize);
+    if (mKAlarmButton)
+        mKAlarmButton->setFixedSize(butsize, butsize);
     if (mSilenceButton)
         mSilenceButton->setFixedSize(butsize, butsize);
     if (mKMailButton)
@@ -497,13 +518,14 @@ void MessageWindow::setUpDisplay()
     // Disable all buttons initially, to prevent accidental clicking on if they happen to be
     // under the mouse just as the window appears.
     mOkButton->setEnabled(false);
-    if (mDeferButton->isVisible())
+    if (mDeferButton  &&  mDeferButton->isVisible())
         mDeferButton->setEnabled(false);
     if (mEditButton)
         mEditButton->setEnabled(false);
     if (mKMailButton)
         mKMailButton->setEnabled(false);
-    mKAlarmButton->setEnabled(false);
+    if (mKAlarmButton)
+        mKAlarmButton->setEnabled(false);
 
     topLayout->activate();
     setMinimumSize(QSize(grid->sizeHint().width() + dcmLeft + dcmRight,
@@ -590,12 +612,9 @@ void MessageWindow::repeat(const KAAlarm& alarm)
             playAudio();
         else
         {
-            if (!mDeferData  ||  Preferences::modalMessages())
-            {
-                raise();
-                playAudio();
-            }
-            if (mDeferButton->isVisible())
+            raise();
+            playAudio();
+            if (mDeferButton  &&  mDeferButton->isVisible())
             {
                 mDeferButton->setEnabled(true);
                 mHelper->setDeferralLimit(event);    // ensure that button is disabled when alarm can't be deferred any more
@@ -933,7 +952,7 @@ void MessageWindow::showEvent(QShowEvent* se)
 
             // Find the enclosing rectangle for the new button positions
             // and check if the cursor is too near
-            QRect buttons = mOkButton->geometry().united(mKAlarmButton->geometry());
+            QRect buttons = mOkButton->geometry().united(mLastButton->geometry());
             buttons.translate(rect.left() + x - frame.left(), rect.top() + y - frame.top());
             const int minDistance = proximityMultiple * mOkButton->height();
             if ((abs(cursor.x() - buttons.left()) < minDistance
@@ -1016,8 +1035,9 @@ void MessageWindow::displayComplete()
 void MessageWindow::enableButtons()
 {
     mOkButton->setEnabled(true);
-    mKAlarmButton->setEnabled(true);
-    if (mDeferButton->isVisible()  &&  !mDisableDeferral())
+    if (mKAlarmButton)
+        mKAlarmButton->setEnabled(true);
+    if (mDeferButton  &&  mDeferButton->isVisible()  &&  !mDisableDeferral())
         mDeferButton->setEnabled(true);
     if (mEditButton)
         mEditButton->setEnabled(true);
@@ -1194,8 +1214,6 @@ void MessageWindow::slotDefer()
     mDeferData = createDeferDlg(this, false);
     if (windowFlags() & Qt::BypassWindowManagerHint)
         mDeferData->dlg->setWindowFlags(mDeferData->dlg->windowFlags() | Qt::BypassWindowManagerHint);
-    if (!Preferences::modalMessages())
-        lower();
     executeDeferDlg(mDeferData);
     mDeferData = nullptr;   // its ownership was transferred by executeDeferDlg()
 }
@@ -1206,24 +1224,27 @@ void MessageWindow::slotDefer()
 void MessageWindow::setButtonsReadOnly(bool ro)
 {
     mOkButton->setReadOnly(ro, true);
-    mDeferButton->setReadOnly(ro, true);
+    if (mDeferButton)
+        mDeferButton->setReadOnly(ro, true);
     if (mEditButton)
         mEditButton->setReadOnly(ro, true);
     if (mSilenceButton)
         mSilenceButton->setReadOnly(ro, true);
     if (mKMailButton)
         mKMailButton->setReadOnly(ro, true);
-    mKAlarmButton->setReadOnly(ro, true);
+    if (mKAlarmButton)
+        mKAlarmButton->setReadOnly(ro, true);
 }
 
 bool MessageWindow::isDeferButtonEnabled() const
 {
-    return mDeferButton->isEnabled()  &&  mDeferButton->isVisible();
+    return mDeferButton  &&  mDeferButton->isEnabled()  &&  mDeferButton->isVisible();
 }
 
 void MessageWindow::enableDeferButton(bool enable)
 {
-    mDeferButton->setEnabled(enable);
+    if (mDeferButton)
+        mDeferButton->setEnabled(enable);
 }
 
 void MessageWindow::enableEditButton(bool enable)
@@ -1234,13 +1255,20 @@ void MessageWindow::enableEditButton(bool enable)
 
 /******************************************************************************
 * Check whether the message window should be modal, i.e. with title bar etc.
+* This is the normal case, but if there is an active full screen window, on
+* X11 the message window has to bypass the window manager in order to display
+* on top of it (which has the side effect that it will have no window
+* decoration).
+*
 * If there are multiple screens, also find which screen to show the window on,
 * and find the usable area of the desktop (excluding panel etc) on that screen.
+*
+* Reply = true to display a normal modal window, false to bypass the window
+*         manager.
 */
 bool MessageWindow::getWorkAreaAndModal()
 {
     mScreenNumber = -1;
-    const bool modal = Preferences::modalMessages();
     const QList<QScreen*> screens = QGuiApplication::screens();
     const int numScreens = screens.count();
     if (numScreens > 1)
@@ -1259,14 +1287,14 @@ bool MessageWindow::getWorkAreaAndModal()
                 screenRects[s] = screens[s]->geometry();
             const FullScreenType full = findFullScreenWindows(screenRects, screenTypes);
             if (full == NoFullScreen  ||  screenTypes[mScreenNumber] == NoFullScreen)
-                return modal;
+                return true;
             for (int s = 0;  s < numScreens;  ++s)
             {
                 if (screenTypes[s] == NoFullScreen)
                 {
                     // There is no full screen window on this screen
                     mScreenNumber = s;
-                    return modal;
+                    return true;
                 }
             }
             // All screens contain a full screen window: use one without
@@ -1276,7 +1304,7 @@ bool MessageWindow::getWorkAreaAndModal()
                 if (screenTypes[s] == FullScreen)
                 {
                     mScreenNumber = s;
-                    return modal;
+                    return true;
                 }
             }
         }
@@ -1287,7 +1315,7 @@ bool MessageWindow::getWorkAreaAndModal()
             FullScreenType full = haveFullScreenWindow(mScreenNumber);
 //qCDebug(KALARM_LOG)<<"full="<<full<<", screen="<<mScreenNumber;
             if (full == NoFullScreen)
-                return modal;   // KAlarm's screen doesn't contain a full screen window
+                return true;   // KAlarm's screen doesn't contain a full screen window
             if (full == FullScreen)
                 inactiveScreen = mScreenNumber;
             for (int s = 0;  s < numScreens;  ++s)
@@ -1299,7 +1327,7 @@ bool MessageWindow::getWorkAreaAndModal()
                     {
                         // There is no full screen window on this screen
                         mScreenNumber = s;
-                        return modal;
+                        return true;
                     }
                     if (full == FullScreen  &&  inactiveScreen < 0)
                         inactiveScreen = s;
@@ -1310,12 +1338,26 @@ bool MessageWindow::getWorkAreaAndModal()
                 // All screens contain a full screen window: use one without
                 // an active full screen window.
                 mScreenNumber = inactiveScreen;
-                return modal;
+                return true;
             }
         }
         return false;  // can't logically get here, since there can only be one active window...
     }
-    return modal;
+
+#if ENABLE_X11
+    if (KWindowSystem::isPlatformX11())
+    {
+        const WId activeId = KX11Extras::activeWindow();
+        const KWindowInfo wi = KWindowInfo(activeId, NET::WMState);
+        if (wi.valid()  &&  wi.hasState(NET::FullScreen))
+        {
+            mFullScreenActive = true;
+            return false;    // the active window is full screen.
+        }
+    }
+#endif
+
+    return true;
 }
 
 namespace

@@ -74,6 +74,7 @@ protected:
     void            type_setEvent(KAEvent&, const KADateTime&, const QString& name, const QString& text, int lateCancel, bool trial) override;
     KAEvent::Flags  getAlarmFlags() const override;
     bool            type_validate(bool trial) override { Q_UNUSED(trial); return true; }
+    CheckBox*       type_createNoInhibit(QWidget* parent) override  { return createNoInhibit(parent); }
     CheckBox*       type_createConfirmAckCheckbox(QWidget* parent) override  { mConfirmAck = createConfirmAckCheckbox(parent); return mConfirmAck; }
     bool            checkText(QString& result, bool showErrorMessage = true) const override;
 
@@ -279,6 +280,7 @@ protected:
     KAEvent::Flags  getAlarmFlags() const override;
     bool            type_validate(bool trial) override { Q_UNUSED(trial); return true; }
     void            type_executedTry(const QString& text, void* obj) override;
+    CheckBox*       type_createNoInhibit(QWidget* parent) override  { return createNoInhibit(parent); }
     bool            checkText(QString& result, bool showErrorMessage = true) const override;
 
 protected Q_SLOTS:

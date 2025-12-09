@@ -94,11 +94,12 @@ MessageDisplay::~MessageDisplay()
 * Normally, these alarms will have been displayed by session restoration, but
 * if the program crashed or was killed, we can redisplay them here so that
 * they won't be lost.
+* Reply = false if alarms remain to be displayed because notifications are inhibited.
 */
-void MessageDisplay::redisplayAlarms()
+bool MessageDisplay::redisplayAlarms(bool notificationsInhibited)
 {
     if (mRedisplayed)
-        return;
+        return true;
     qCDebug(KALARM_LOG) << "MessageDisplay::redisplayAlarms";
     mRedisplayed = true;
     if (DisplayCalendar::isOpen())
@@ -111,6 +112,11 @@ void MessageDisplay::redisplayAlarms()
             bool showDeferBtn, showEditBtn;
             if (!reinstateFromDisplaying(kcalEvent, event, resource, showEditBtn, showDeferBtn))
                 continue;
+            if (notificationsInhibited  &&  !event.noInhibit())
+            {
+                mRedisplayed = false;
+                continue;
+            }
             const EventId eventId(event);
             if (findEvent(eventId))
                 qCDebug(KALARM_LOG) << "MessageDisplay::redisplayAlarms: Message display already exists:" << eventId;
@@ -137,6 +143,7 @@ void MessageDisplay::redisplayAlarms()
             }
         }
     }
+    return mRedisplayed;
 }
 
 /******************************************************************************

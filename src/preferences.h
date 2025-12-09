@@ -70,8 +70,6 @@ public:
     static Backend          previousBackend()                { return mPreviousBackend; }
     static RunMode          runMode()                        { return self()->base_RunMode(); }
     static void             setRunMode(RunMode);
-    static bool             modalMessages();
-    static void             setModalMessages(bool yes);
     static int              messageButtonDelay();
     static void             setMessageButtonDelay(int seconds)  { self()->setBase_MessageButtonDelay(seconds); }
     static KAlarmCal::KADateTime::Spec timeSpec();

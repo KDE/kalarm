@@ -37,11 +37,11 @@ public:
     static void           terminate();
 
     /** Return the active alarm with the earliest trigger time.
-     *  @param nextTriggerTime       The next trigger time of the earliest alarm.
-     *  @param excludeDisplayAlarms  Ignore display alarms.
+     *  @param nextTriggerTime         The next trigger time of the earliest alarm.
+     *  @param notificationsInhibited  Ignore display and audio alarms unless they have NoInhibit status.
      *  @return  The earliest alarm.
      */
-    static KAEvent        earliestAlarm(KADateTime& nextTriggerTime, bool excludeDisplayAlarms = false);
+    static KAEvent        earliestAlarm(KADateTime& nextTriggerTime, bool notificationsInhibited = false);
 
     static void           setAlarmPending(const KAEvent&, bool pending = true);
     static bool           haveDisabledAlarms()       { return mHaveDisabledAlarms; }
@@ -108,7 +108,7 @@ private:
 
     static ResourceMap    mResourceMap;
     static EarliestMap    mEarliestAlarm;        // alarm with earliest trigger time, by resource
-    static EarliestMap    mEarliestNonDispAlarm; // non-display alarm with earliest trigger time, by resource
+    static EarliestMap    mEarliestNoInhibitAlarm; // non-inhibitable alarm with earliest trigger time, by resource
     static QSet<QString>  mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
     static QSet<QString>  mInactiveEvents;     // IDs of alarms which have triggered but aren't writable
     static bool           mIgnoreAtLogin;      // ignore new/updated repeat-at-login alarms

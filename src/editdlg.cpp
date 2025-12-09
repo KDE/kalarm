@@ -84,6 +84,7 @@ QList<EditAlarmDlg*> EditAlarmDlg::mWindowList;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
+QString EditAlarmDlg::i18n_chk_NoInhibit()          { return i18nc("@option:check", "Never inhibit alarm"); }
 QString EditAlarmDlg::i18n_chk_ShowInKOrganizer()   { return i18nc("@option:check", "Show in KOrganizer"); }
 
 
@@ -382,6 +383,14 @@ void EditAlarmDlg::init(const KAEvent& event)
     playout->setVerticalSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     moreLayout->addLayout(playout);
 
+    // Always execute checkbox
+    mNoInhibit = type_createNoInhibit(mMoreOptions);
+    if (mNoInhibit)
+    {
+        connect(mNoInhibit, &CheckBox::toggled, this, &EditAlarmDlg::contentsChanged);
+        playout->addWidget(mNoInhibit);
+    }
+
     if (KernelWakeAlarm::isAvailable())
     {
         // Wake from suspend checkbox
@@ -544,6 +553,8 @@ void EditAlarmDlg::initValues(const KAEvent& event)
 
         mLateCancel->setMinutes(event.lateCancel(), event.startDateTime().isDateOnly(),
                                 TimePeriod::HoursMinutes);
+        if (mNoInhibit)
+            mNoInhibit->setChecked(event.noInhibit());
         if (mWakeFromSuspend)
             mWakeFromSuspend->setChecked(event.wakeFromSuspend());
         if (mShowInKorganizer)
@@ -565,6 +576,8 @@ void EditAlarmDlg::initValues(const KAEvent& event)
         else
             mTimeWidget->setDateTime(defaultTime);
         mLateCancel->setMinutes((Preferences::defaultLateCancel() ? 1 : 0), false, TimePeriod::HoursMinutes);
+        if (mNoInhibit)
+            mNoInhibit->setChecked(Preferences::defaultNoInhibit());
         if (mWakeFromSuspend)
             mWakeFromSuspend->setChecked(false);
         if (mShowInKorganizer)
@@ -618,6 +631,11 @@ void EditAlarmDlg::setLateCancel(int minutes)
     mLateCancel->setMinutes(minutes, mTimeWidget->getDateTime(false, false).isDateOnly(),
                             TimePeriod::HoursMinutes);
 }
+void EditAlarmDlg::setNoInhibit(bool wake)
+{
+    if (mNoInhibit)
+        mNoInhibit->setChecked(wake);
+}
 void EditAlarmDlg::setWakeFromSuspend(bool wake)
 {
     if (mWakeFromSuspend)
@@ -646,6 +664,8 @@ void EditAlarmDlg::setReadOnly(bool readOnly)
         else
             mDeferChangeButton->show();
     }
+    if (mNoInhibit)
+        mNoInhibit->setReadOnly(readOnly);
     if (mWakeFromSuspend)
         mWakeFromSuspend->setReadOnly(readOnly);
     if (mShowInKorganizer)
@@ -673,6 +693,8 @@ void EditAlarmDlg::saveState(const KAEvent* event)
     if (mTimeWidget)
         mSavedDateTime = mTimeWidget->getDateTime(false, false);
     mSavedLateCancel = mLateCancel->minutes();
+    if (mNoInhibit)
+        mSavedNoInhibit = mNoInhibit->isChecked();
     if (mWakeFromSuspend)
         mSavedWakeFromSuspend = mWakeFromSuspend->isChecked();
     if (mShowInKorganizer)
@@ -712,6 +734,7 @@ bool EditAlarmDlg::stateChanged() const
             return true;
     }
     if (mSavedLateCancel       != mLateCancel->minutes()
+    ||  (mNoInhibit && mSavedNoInhibit != mNoInhibit->isChecked())
     ||  (mWakeFromSuspend && mSavedWakeFromSuspend != mWakeFromSuspend->isChecked())
     ||  (mShowInKorganizer && mSavedShowInKorganizer != mShowInKorganizer->isChecked())
     ||  textFileCommandMessage != mSavedTextFileCommandMessage
@@ -838,6 +861,8 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 KAEvent::Flags EditAlarmDlg::getAlarmFlags() const
 {
     KAEvent::Flags flags{};
+    if (mNoInhibit && mNoInhibit->isEnabled() && mNoInhibit->isChecked())
+        flags |= KAEvent::NO_INHIBIT;
     if (mWakeFromSuspend && mWakeFromSuspend->isEnabled() && mWakeFromSuspend->isChecked())
         flags |= KAEvent::WAKE_SUSPEND;
     if (mShowInKorganizer && mShowInKorganizer->isEnabled() && mShowInKorganizer->isChecked())
@@ -1497,6 +1522,19 @@ void EditAlarmDlg::setWakeFromSuspendEnabledStatus()
                    ||  (mTemplateAnyTime && mTemplateAnyTime->isChecked());
         mWakeFromSuspend->setEnabled(!atLogin && !anyTime);
     }
+}
+
+/******************************************************************************
+* Create an "always execute" checkbox.
+*/
+CheckBox* EditAlarmDlg::createNoInhibit(QWidget* parent)
+{
+    CheckBox* noInhibit = new CheckBox(i18n_chk_NoInhibit(), parent);
+    noInhibit->setToolTip(QLatin1String("<qt>")
+                        + i18nc("@info:tooltip", "Check to always execute the alarm when it is due, regardless of notification inhibition or active full screen applications")
+                        + QLatin1String("</qt>"));
+    noInhibit->setWhatsThis(i18nc("@info:whatsthis", "Check to always execute the alarm when it is due, regardless of notification inhibition or active full screen applications."));
+    return noInhibit;
 }
 
 bool EditAlarmDlg::isDateOnly() const

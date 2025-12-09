@@ -55,6 +55,7 @@ public:
 
     bool isValid() const   { return mHelper->isValid(); }
     KAAlarm::Type alarmType() const   { return mHelper->mAlarmType; }
+    KAEvent messageEvent() const   { return mHelper->mEvent; }
 
     /** Raise the alarm display, re-output any required audio notification, and
      *  reschedule the alarm in the calendar file.
@@ -77,8 +78,12 @@ public:
     static MessageDisplay* findEvent(const EventId& eventId, MessageDisplay* exclude = nullptr)
     { return MessageDisplayHelper::findEvent(eventId, exclude); }
 
-    /** Redisplay alarms which were being shown when the program last exited. */
-    static void redisplayAlarms();
+    /** Redisplay alarms which were being shown when the program last exited.
+     *  @param notificationsInhibited  Only redisplay alarms with 'no inhibit' status.
+     *  @return  true if all alarms have been displayed;
+     *           false if notification inhibition prevented some from being displayed.
+     */
+    static bool redisplayAlarms(bool notificationsInhibited);
 
     /** Retrieve the event with the current ID from the displaying calendar file,
      *  or if not found there, from the archive calendar.
@@ -191,7 +196,7 @@ protected:
 private:
     static bool reinstateFromDisplaying(const KCalendarCore::Event::Ptr&, KAEvent&, Resource&, bool& showEdit, bool& showDefer);
 
-    static bool     mRedisplayed;   // redisplayAlarms() was called
+    static bool     mRedisplayed;   // redisplayAlarms() displayed all alarms
 
 friend class MessageDisplayHelper;
 };

@@ -162,11 +162,6 @@ SPDX-License-Identifier: GPL-2.0-or-later
       <whatsthis context="@info:whatsthis">&lt;p>When saving a new alarm or alarm template, prompt for which calendar to store it in, if there is more than one active calendar.&lt;/p>&lt;p>Note that archived alarms are always stored in the default archived alarm calendar.&lt;/p></whatsthis>
       <default>true</default>
     </entry>
-    <entry name="Base_ModalMessages" key="ModalMessages" type="Bool">
-      <label context="@label">Message windows have a title bar and take keyboard focus</label>
-      <whatsthis context="@info:whatsthis">&lt;p>Specify the characteristics of alarm message windows:&lt;ul>&lt;li>If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.&lt;/li>&lt;li>If unchecked, the window does not interfere with your typing when it is displayed, but it has no title bar and cannot be moved or resized.&lt;/li>&lt;/ul>&lt;/p></whatsthis>
-      <default>true</default>
-    </entry>
     <entry name="Base_MessageButtonDelay" key="MessageButtonDelay" type="Int">
       <label context="@label">Delay before message window buttons are enabled</label>
       <whatsthis context="@info:whatsthis">&lt;p>Specify the positioning of alarm message windows, and the delay in seconds after a window shows until its buttons are enabled.
@@ -309,6 +304,11 @@ SPDX-License-Identifier: GPL-2.0-or-later
         <choice name="Notification"/>
       </choices>
       <default>Window</default>
+    </entry>
+    <entry name="DefaultNoInhibit" key="NoInhibit" type="Bool">
+      <label context="@label">Never inhibit alarm</label>
+      <whatsthis context="@info:whatsthis">Default value in the alarm edit dialog for "never inhibit alarm".</whatsthis>
+      <default>true</default>
     </entry>
     <entry name="DefaultLateCancel" key="LateCancel" type="Int">
       <label context="@label">Cancel if late (minutes)</label>

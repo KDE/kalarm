@@ -307,7 +307,8 @@ bool KAlarmApp::restoreSession()
             win->restore(i, false);
             if (win->isValid())
             {
-                if (Resources::allCreated()  &&  !mNotificationsInhibited)
+                if (Resources::allCreated()
+                &&  (!mNotificationsInhibited  ||  win->messageEvent().noInhibit()))
                     win->display();
                 else
                     mRestoredWindows += win;
@@ -353,20 +354,26 @@ bool KAlarmApp::restoreSession()
 */
 void KAlarmApp::showRestoredWindows()
 {
-    if (!mNotificationsInhibited  &&  Resources::allCreated())
+    if (Resources::allCreated())
     {
-        if (!mRestoredWindows.isEmpty())
+        qCDebug(KALARM_LOG) << "KAlarmApp::showRestoredWindows: notifications inhibited:" << mNotificationsInhibited;
+        // Display message windows restored at startup.
+        for (int i = 0;  i < mRestoredWindows.count(); )
         {
-            // Display message windows restored at startup.
-            for (MessageWindow* win : std::as_const(mRestoredWindows))
+            MessageWindow* win = mRestoredWindows.at(i);
+            if (!mNotificationsInhibited  ||  win->messageEvent().noInhibit())
+            {
                 win->display();
-            mRestoredWindows.clear();
+                mRestoredWindows.remove(i);
+            }
+            else
+                ++i;
         }
         if (mRedisplayAlarms)
         {
             // Display alarms which were showing when the program crashed or was killed.
-            mRedisplayAlarms = false;
-            MessageDisplay::redisplayAlarms();
+            if (MessageDisplay::redisplayAlarms(mNotificationsInhibited))
+                mRedisplayAlarms = false;
         }
     }
 }
@@ -531,6 +538,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     editDlg->setAction(options->editAction(), AlarmText(options->text()));
                     if (options->lateCancel())
                         editDlg->setLateCancel(options->lateCancel());
+                    if (options->flags() & KAEvent::NO_INHIBIT)
+                        editDlg->setNoInhibit(true);
                     if (options->flags() & KAEvent::WAKE_SUSPEND)
                         editDlg->setWakeFromSuspend(true);
                     if (options->flags() & KAEvent::COPY_KORGANIZER)
@@ -1605,7 +1614,7 @@ void KAlarmApp::slotFDOPropertiesChanged(const QString& interface,
         const bool inhibited = it.value().toBool();
         if (inhibited != mNotificationsInhibited)
         {
-            qCDebug(KALARM_LOG) << "KAlarmApp::slotFDOPropertiesChanged: Notifications inhibited ->" << inhibited;
+            qCDebug(KALARM_LOG) << "KAlarmApp::slotFDOPropertiesChanged: Notifications inhibited ->" << inhibited << QDateTime::currentDateTime().time();
             mNotificationsInhibited = inhibited;
             if (!mNotificationsInhibited)
             {
@@ -2212,7 +2221,7 @@ bool KAlarmApp::cancelReminderAndDeferral(KAEvent& event)
 *       = MessageWindow if an audio alarm
 *       != null if successful
 *       = -1 if execution has not completed
-*       = -2 if can't execute display event because notifications are inhibited.
+*       = -2 if can't execute display/audio event because notifications are inhibited.
 *       = null if the alarm is disabled, or if an error message was output.
 */
 void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags flags)
@@ -2226,8 +2235,8 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
         return nullptr;
     }
 
-    if (mNotificationsInhibited  &&  !(flags & NoNotifyInhibit)
-    &&  (event.actionTypes() & KAEvent::Action::Display))
+    if (mNotificationsInhibited  &&  !(flags & NoNotifyInhibit)  &&  !event.noInhibit()
+    &&  (event.actionTypes() & KAEvent::Action::Notification))
     {
         // It's a display event and notifications are inhibited.
         qCDebug(KALARM_LOG) << "KAlarmApp::execAlarm:" << event.id() << ": notifications inhibited";

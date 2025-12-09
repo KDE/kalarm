@@ -196,27 +196,28 @@ public:
     /** Flags for use in D-Bus calls, etc. Flags may be combined by OR'ing them together. */
     enum Flag
     {
-        BEEP            = 0x02,    //!< sound an audible beep when the alarm is displayed
-        REPEAT_AT_LOGIN = 0x04,    //!< repeat the alarm at every login
-        ANY_TIME        = 0x08,    //!< only a date is specified for the alarm, not a time
-        CONFIRM_ACK     = 0x10,    //!< closing the alarm message window requires a confirmation prompt
-        EMAIL_BCC       = 0x20,    //!< blind copy the email to the user
-        DEFAULT_FONT    = 0x40,    //!< use the default alarm message font. Overrides any specified font.
-        REPEAT_SOUND    = 0x80,    //!< repeat the sound file while the alarm is displayed
-        DISABLED        = 0x100,   //!< the alarm is currently disabled
-        AUTO_CLOSE      = 0x200,   //!< auto-close the alarm window after the late-cancel period
-        SCRIPT          = 0x400,   //!< the command is a script, not a shell command line
-        EXEC_IN_XTERM   = 0x800,   //!< execute the command in a terminal window
-        SPEAK           = 0x1000,  //!< speak the message when the alarm is displayed
-        COPY_KORGANIZER = 0x2000,  //!< KOrganizer should hold a copy of the event
-        EXCL_HOLIDAYS   = 0x4000,  //!< don't trigger the alarm on holidays. Only valid
-                                   //!< if a holiday region has been set by setHolidays().
-        WORK_TIME_ONLY  = 0x8000,  //!< trigger the alarm only during working hours
-        DISPLAY_COMMAND = 0x10000, //!< display command output in the alarm window
-        REMINDER_ONCE   = 0x20000, //!< only trigger the reminder on the first recurrence
-        DONT_SHOW_ERROR = 0x40000, //!< do not notify command alarm errors to user
-        NOTIFY          = 0x80000, //!< use the standard notification system instead of alarm message window
-        WAKE_SUSPEND    = 0x100000 //!< use kernel timer (not RTC) to wake-from-suspend when alarm due
+        BEEP            = 0x02,     //!< sound an audible beep when the alarm is displayed
+        REPEAT_AT_LOGIN = 0x04,     //!< repeat the alarm at every login
+        ANY_TIME        = 0x08,     //!< only a date is specified for the alarm, not a time
+        CONFIRM_ACK     = 0x10,     //!< closing the alarm message window requires a confirmation prompt
+        EMAIL_BCC       = 0x20,     //!< blind copy the email to the user
+        DEFAULT_FONT    = 0x40,     //!< use the default alarm message font. Overrides any specified font.
+        REPEAT_SOUND    = 0x80,     //!< repeat the sound file while the alarm is displayed
+        DISABLED        = 0x100,    //!< the alarm is currently disabled
+        AUTO_CLOSE      = 0x200,    //!< auto-close the alarm window after the late-cancel period
+        SCRIPT          = 0x400,    //!< the command is a script, not a shell command line
+        EXEC_IN_XTERM   = 0x800,    //!< execute the command in a terminal window
+        SPEAK           = 0x1000,   //!< speak the message when the alarm is displayed
+        COPY_KORGANIZER = 0x2000,   //!< KOrganizer should hold a copy of the event
+        EXCL_HOLIDAYS   = 0x4000,   //!< don't trigger the alarm on holidays. Only valid
+                                    //!< if a holiday region has been set by setHolidays().
+        WORK_TIME_ONLY  = 0x8000,   //!< trigger the alarm only during working hours
+        DISPLAY_COMMAND = 0x10000,  //!< display command output in the alarm window
+        REMINDER_ONCE   = 0x20000,  //!< only trigger the reminder on the first recurrence
+        DONT_SHOW_ERROR = 0x40000,  //!< do not notify command alarm errors to user
+        NOTIFY          = 0x80000,  //!< use the standard notification system instead of alarm message window
+        WAKE_SUSPEND    = 0x100000, //!< use kernel timer (not RTC) to wake-from-suspend when alarm due
+        NO_INHIBIT      = 0x200000  //!< execute alarm regardless of notification inhibition
 
                           // IMPORTANT: if any values are added to this list, ensure that the
                           //            additional enum values in KAEventPrivate are also adjusted.
@@ -233,6 +234,7 @@ public:
         Email          = 0x04,   //!< the alarm sends an email
         Audio          = 0x08,   //!< the alarm plays an audio file (without any display)
         DisplayCommand = Display | Command,  //!< the alarm displays command output
+        Notification   = Display | Audio,    //!< mask for a notification type alarm
         All            = Display | Command | Email | Audio   //!< all types mask
     };
 
@@ -1059,6 +1061,21 @@ public:
      *  @see setRepeatAtLogin()
      */
     bool repeatAtLogin(bool includeArchived = false) const;
+
+    /** Enable or disable the alarm to always execute when it is due, regardless
+     *  of any notification inhibition or active full screen application.
+     *  If disabled, the alarm's execution will be suspended until notifications
+     *  are enabled, and in the case of a display or audio alarm, execution will
+     *  be suspended while a full screen application is active.
+     *  @param exec  true to always execute, false to suspend execution
+     *  @see noInhibit()
+     */
+    void setNoInhibit(bool exec);
+
+    /** Return whether always-execute is enabled for the alarm.
+     *  @see setAlwaysExecute()
+     */
+    bool noInhibit() const;
 
     /** Enable or disable wake-from-suspend when the alarm is due.
      *  (Note that this option is used for kernel timer wake-from-suspend, not

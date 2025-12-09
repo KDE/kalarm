@@ -1,7 +1,7 @@
 /*
  *  messagewindow.h  -  displays an alarm message in a window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -109,13 +109,15 @@ private:
     PushButton*         mEditButton {nullptr};
     PushButton*         mDeferButton {nullptr};
     PushButton*         mSilenceButton {nullptr};
-    PushButton*         mKAlarmButton;
+    PushButton*         mKAlarmButton {nullptr};
     PushButton*         mKMailButton {nullptr};
+    PushButton*         mLastButton;              // last button in layout
     MessageText*        mCommandText {nullptr};   // shows output from command
     QCheckBox*          mDontShowAgainCheck {nullptr};
     DeferDlgData*       mDeferData {nullptr};     // defer dialog data
     int                 mButtonDelay;             // delay (ms) after window is shown before buttons are enabled
     int                 mScreenNumber;            // screen to display on, or -1 for default
+    bool                mFullScreenActive {false};  // displaying over an active full screen window
     bool                mInitialised {false};     // setUpDisplay() has been called to create the window's widgets
     bool                mShown {false};           // true once the window has been displayed
     bool                mPositioning {false};     // true when the window is being positioned initially

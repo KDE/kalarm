@@ -212,6 +212,7 @@ private Q_SLOTS:
 private:
     QTabWidget*     mTabs;
     QComboBox*      mDisplayMethod;
+    QCheckBox*      mNoInhibit;
     QCheckBox*      mAutoClose;
     QCheckBox*      mConfirmAck;
     QComboBox*      mReminderUnits;
@@ -277,7 +278,6 @@ private:
     ButtonGroup*  mWindowPosition {nullptr};
     QSpinBox*     mWindowButtonDelay;
     QLabel*       mWindowButtonDelayLabel;
-    QCheckBox*    mModalMessages {nullptr};
     int           mTabGeneral;    // index of General tab
     int           mTabWindows;    // index of Alarm Windows tab
 };
