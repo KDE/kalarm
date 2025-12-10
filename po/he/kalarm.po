@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-07 02:40+0000\n"
-"PO-Revision-Date: 2025-11-09 08:27+0200\n"
+"PO-Revision-Date: 2025-12-06 20:37+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 25.08.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2159,12 +2159,14 @@ msgid "Specify a start time for alarms based on this template."
 msgstr "הגדרת זמן התחלה לתזכורות על בסיס התבנית הזאת."
 
 #: editdlg.cpp:313
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>Enter the start time for alarms based on this template.</para><para>"
 "%1</para>"
-msgstr "הזן את השעה האחרונה שבה יש לחזור על התזכורת"
+msgstr ""
+"<para>נא לבחור את זמן התחלה לתזכורות על בסיס התבנית הזאת.</para><para>%1</"
+"para>"
 
 #: editdlg.cpp:320
 #, kde-format
@@ -4385,14 +4387,14 @@ msgid "Refresh Alarms"
 msgstr "ריענון התראות"
 
 #: mainwindow.cpp:814
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
-msgstr[0] "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
-msgstr[1] "האם אתה בטוח שברצונך למחוק את %1 התזכורות הנבחרות?"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "למחוק את התזכורת הנבחרת?"
+msgstr[1] "למחוק את שתי התזכורות הנבחרות?"
+msgstr[2] "למחוק את %1 התזכורות הנבחרות?"
+msgstr[3] "למחוק את %1 התזכורות הנבחרות?"
 
 #: mainwindow.cpp:816
 #, kde-format
@@ -4547,50 +4549,50 @@ msgstr "היום"
 msgctxt "@info"
 msgid "Tomorrow"
 msgid_plural "in %1 days' time"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "מחר"
+msgstr[1] "מחרתיים"
+msgstr[2] "בעוד %1 ימים"
+msgstr[3] "בעוד %1 ימים"
 
 #: messagedisplayhelper.cpp:488
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
 msgid_plural "in %1 weeks' time"
-msgstr[0] "דקה אחת"
-msgstr[1] "%1 דקות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "בעוד שבוע"
+msgstr[1] "בעוד שבועיים"
+msgstr[2] "בעוד %1 שבועות"
+msgstr[3] "בעוד %1 שבועות"
 
 #: messagedisplayhelper.cpp:502
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
 msgid_plural "in %1 minutes' time"
-msgstr[0] "דקה אחת"
-msgstr[1] "%1 דקות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "בעוד דקה"
+msgstr[1] "בעוד שתי דקות"
+msgstr[2] "בעוד %1 דקות"
+msgstr[3] "בעוד %1 דקות"
 
 #: messagedisplayhelper.cpp:504
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
 msgid_plural "in %1 hours' time"
-msgstr[0] "דקה אחת"
-msgstr[1] "%1 דקות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "בעוד שעה"
+msgstr[1] "בעוד שעתיים"
+msgstr[2] "בעוד %1 שעות"
+msgstr[3] "בעוד %1 שעות"
 
 #: messagedisplayhelper.cpp:507
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
 msgid_plural "%1 hours"
-msgstr[0] "שעה אחת"
-msgstr[1] "%1 שעות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "שעה"
+msgstr[1] "שעתיים"
+msgstr[2] "%1 שעות"
+msgstr[3] "%1 שעות"
 
 #: messagedisplayhelper.cpp:508
 #, fuzzy, kde-format
@@ -5928,13 +5930,13 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
-msgstr ""
+msgstr "למקם חלונות הרחק מסמן העכבר"
 
 #: prefdlg.cpp:2082
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
-msgstr ""
+msgstr "למרכז חלונות, להשהות את הפעלת כפתורי החלון"
 
 #: prefdlg.cpp:2091
 #, kde-format
@@ -5960,12 +5962,14 @@ msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
 "window is shown."
 msgstr ""
+"נא לבחור כמה זמן הכפתורים אמורים להישאר מושבתים אחרי שחלון הודעת התזכורת "
+"מופיע."
 
 #: prefdlg.cpp:2111
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
-msgstr ""
+msgstr "לחלונות הודעות יש שורת כותרת ומיקוד מקלדת"
 
 #: prefdlg.cpp:2114
 #, kde-kuit-format
@@ -7095,7 +7099,7 @@ msgstr "הפעולה שלאחר ההרצה נכשלה"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
-msgstr ""
+msgstr "הרצת הפעולות שלפני ואחרי התזכורת נכשלה"
 
 #: resources/resourcedatamodelbase.cpp:492
 #, kde-format
