@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-03 00:44+0000\n"
+"POT-Creation-Date: 2025-12-10 00:44+0000\n"
 "PO-Revision-Date: 2025-11-02 13:50+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-l10n-ta@kde.org>\n"
@@ -153,7 +153,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "இவ்வளவு நேரத்திற்கு ஒத்திவை:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:329
+#: alarmtimewidget.cpp:137 editdlg.cpp:330
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
@@ -173,7 +173,7 @@ msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "இப்போதிலிருந்து குறிப்பிட்ட இடைவெளிக்கு பிறகு அலாரம் தூண்டப்படுமாறு அமைக்கும்."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:340
+#: alarmtimewidget.cpp:149 editdlg.cpp:341
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -369,13 +369,13 @@ msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "KAddressBook-இலிருந்து பிறந்தநாட்களை இறக்குமதி செய்வது"
 
-#: birthdaydlg.cpp:65 editdlg.cpp:245
+#: birthdaydlg.cpp:65 editdlg.cpp:246
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "அலாரத்தின் பெயர்:"
 
-#: birthdaydlg.cpp:70 editdlg.cpp:253
+#: birthdaydlg.cpp:70 editdlg.cpp:254
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -397,7 +397,7 @@ msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "அலாரத்திற்கான உரை"
 
-#: birthdaydlg.cpp:83 prefdlg.cpp:2016
+#: birthdaydlg.cpp:83 prefdlg.cpp:2026
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
@@ -1117,45 +1117,15 @@ msgid ""
 "archived alarms are always stored in the default archived alarm calendar.</p>"
 msgstr ""
 
-#. i18n: ectx: label, entry (Base_ModalMessages), group (General)
-#: data/kalarmconfig.kcfg:166
-#, kde-format
-msgctxt "@label"
-msgid "Message windows have a title bar and take keyboard focus"
-msgstr "தகவல் சாளரங்கள் தலைப்புப்பட்டையை பெறும், மேலும் விசைப்பலகை குவியத்தை பிடுங்கும்"
-
-#. i18n: ectx: whatsthis, entry (Base_ModalMessages), group (General)
-#: data/kalarmconfig.kcfg:167
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify the characteristics of alarm message windows:\n"
-#| "- If checked, the window is a normal window with a title bar, which grabs "
-#| "keyboard input when it is displayed.\n"
-#| "- If unchecked, the window does not interfere with your typing when it is "
-#| "displayed, but it has no title bar and cannot be moved or resized."
-msgctxt "@info:whatsthis"
-msgid ""
-"<p>Specify the characteristics of alarm message windows:<ul><li>If checked, "
-"the window is a normal window with a title bar, which grabs keyboard input "
-"when it is displayed.</li><li>If unchecked, the window does not interfere "
-"with your typing when it is displayed, but it has no title bar and cannot be "
-"moved or resized.</li></ul></p>"
-msgstr ""
-"Specify the characteristics of alarm message windows:\n"
-"- If checked, the window is a normal window with a title bar, which grabs "
-"keyboard input when it is displayed.\n"
-"- If unchecked, the window does not interfere with your typing when it is "
-"displayed, but it has no title bar and cannot be moved or resized."
-
 #. i18n: ectx: label, entry (Base_MessageButtonDelay), group (General)
-#: data/kalarmconfig.kcfg:171
+#: data/kalarmconfig.kcfg:166
 #, kde-format
 msgctxt "@label"
 msgid "Delay before message window buttons are enabled"
 msgstr "அலார தகவல் சாளரங்களிலுள்ள பட்டன்களை இயக்குவதற்கான தாமதம்"
 
 #. i18n: ectx: whatsthis, entry (Base_MessageButtonDelay), group (General)
-#: data/kalarmconfig.kcfg:176
+#: data/kalarmconfig.kcfg:171
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1171,14 +1141,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (TooltipAlarmCount), group (General)
-#: data/kalarmconfig.kcfg:182
+#: data/kalarmconfig.kcfg:177
 #, kde-format
 msgctxt "@label"
 msgid "Number of alarms to show in system tray tooltip"
 msgstr "கணினித் தட்டு கருவித் துப்பில் எத்தனை அலாரங்களைக் காட்ட வேண்டும்"
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
-#: data/kalarmconfig.kcfg:187
+#: data/kalarmconfig.kcfg:182
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1191,14 +1161,14 @@ msgid ""
 msgstr "முடிவுகளிலும் அல்லது நீக்குதலிலும் அலாரத்தை சேர்க்க பரிசோதி"
 
 #. i18n: ectx: label, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:193
+#: data/kalarmconfig.kcfg:188
 #, kde-format
 msgctxt "@label"
 msgid "Show alarm times in system tray tooltip"
 msgstr "கணினித் தட்டு கருவித் துப்பில் அலாரங்களின் நேரத்தைக் காட்டு"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:194 prefdlg.cpp:2004
+#: data/kalarmconfig.kcfg:189 prefdlg.cpp:2014
 #, fuzzy, kde-format
 #| msgid ""
 #| "Specify whether to show in the system tray tooltip, the time at which "
@@ -1210,14 +1180,14 @@ msgid ""
 msgstr "அலார கெடு நேரத்தை, அமைப்பு தட்டின் உதவிக்குறிப்பில் காட்ட குறிப்பிடு"
 
 #. i18n: ectx: label, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:199
+#: data/kalarmconfig.kcfg:194
 #, kde-format
 msgctxt "@label"
 msgid "Show time to alarms in system tray tooltip"
 msgstr "கணினித் தட்டு கருவித் துப்பில் அலாரங்களுக்கு எவ்வளவு நேரம் மீதமென காட்டு"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:200 prefdlg.cpp:2010
+#: data/kalarmconfig.kcfg:195 prefdlg.cpp:2020
 #, fuzzy, kde-format
 #| msgid ""
 #| "Specify whether to show in the system tray tooltip, how long until each "
@@ -1229,14 +1199,14 @@ msgid ""
 msgstr "அலார கெடு எவ்வளவு நேரம் என்று அமைப்பு தட்டு உதவிக்குறிப்பில் காட்ட குறிப்பிடு"
 
 #. i18n: ectx: label, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:205
+#: data/kalarmconfig.kcfg:200
 #, kde-format
 msgctxt "@label"
 msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr "கணினித் தட்டில் அலாரம் வரைக்குமான நேரத்திற்கான முன்னொட்டு"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:206 prefdlg.cpp:2021
+#: data/kalarmconfig.kcfg:201 prefdlg.cpp:2031
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1245,14 +1215,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:211
+#: data/kalarmconfig.kcfg:206
 #, kde-format
 msgctxt "@label"
 msgid "Email client"
 msgstr "மின்னஞ்சல் செயலி"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:212
+#: data/kalarmconfig.kcfg:207
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1263,28 +1233,28 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:214
+#: data/kalarmconfig.kcfg:209
 #, kde-format
 msgctxt "@option"
 msgid "Sendmail"
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
-#: data/kalarmconfig.kcfg:215
+#: data/kalarmconfig.kcfg:210
 #, kde-format
 msgctxt "@option"
 msgid "KMail"
 msgstr "கேமெயில்"
 
 #. i18n: ectx: label, entry (Base_EmailCopyToKMail), group (General)
-#: data/kalarmconfig.kcfg:220
+#: data/kalarmconfig.kcfg:215
 #, kde-format
 msgctxt "@label"
 msgid "Whether to copy sent emails into KMail's Sent folder."
 msgstr "அனுப்பும் மின்னஞ்சல்களை கேமெயிலின் அனுப்பிய அஞ்சல்கள் அடைவிற்கு நகலெடுக்க வேண்டுமா."
 
 #. i18n: ectx: whatsthis, entry (Base_EmailCopyToKMail), group (General)
-#: data/kalarmconfig.kcfg:221
+#: data/kalarmconfig.kcfg:216
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1293,14 +1263,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailFrom), group (General)
-#: data/kalarmconfig.kcfg:225
+#: data/kalarmconfig.kcfg:220
 #, kde-format
 msgctxt "@label"
 msgid "'From' email address"
 msgstr "அனுப்புநரின் மின்னஞ்சல் முகவரி"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailFrom), group (General)
-#: data/kalarmconfig.kcfg:226
+#: data/kalarmconfig.kcfg:221
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1311,14 +1281,14 @@ msgid ""
 msgstr "உங்கள் மின்னஞ்சலின் முகவரி, மின்னஞ்சலை அப்படியே எடுத்த படிக்க உதவுகிறது."
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
-#: data/kalarmconfig.kcfg:230
+#: data/kalarmconfig.kcfg:225
 #, kde-format
 msgctxt "@label"
 msgid "'Bcc' email address"
 msgstr "மறைநகல் மின்னஞ்சல் முகவரி"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailBccAddress), group (General)
-#: data/kalarmconfig.kcfg:231
+#: data/kalarmconfig.kcfg:226
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1330,14 +1300,14 @@ msgid ""
 msgstr "உங்கள் மின்னஞ்சலின் முகவரி, மின்னஞ்சலை அப்படியே எடுத்த படிக்க உதவுகிறது."
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
-#: data/kalarmconfig.kcfg:235
+#: data/kalarmconfig.kcfg:230
 #, kde-format
 msgctxt "@label"
 msgid "Terminal for command alarms"
 msgstr "கட்டளை அலாரங்களுக்கான முனையம்"
 
 #. i18n: ectx: whatsthis, entry (Base_CmdXTermCommand), group (General)
-#: data/kalarmconfig.kcfg:236
+#: data/kalarmconfig.kcfg:231
 #, fuzzy, kde-format
 #| msgctxt "The parameter is a command line, e.g. 'xterm -e'"
 #| msgid "Check to execute command alarms in a terminal window by '%1'"
@@ -1348,14 +1318,14 @@ msgid ""
 msgstr "'%1'ஆல் முனைய சாளரத்தில் கட்டளை அலாரங்களை செயல்படுத்த தேர்ந்தெடுக்கவும்"
 
 #. i18n: ectx: label, entry (Base_StartOfDay), group (General)
-#: data/kalarmconfig.kcfg:239
+#: data/kalarmconfig.kcfg:234
 #, kde-format
 msgctxt "@label"
 msgid "Start of day for date-only alarms"
 msgstr "தேதிமட்டும் உள்ள அலாரங்கள் தூண்டப்படும் நேரம்"
 
 #. i18n: ectx: whatsthis, entry (Base_StartOfDay), group (General)
-#: data/kalarmconfig.kcfg:240
+#: data/kalarmconfig.kcfg:235
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "The earliest time of day at which a date-only alarm will be triggered."
@@ -1364,28 +1334,28 @@ msgstr ""
 "அலாரம்) துவங்கப்படும்."
 
 #. i18n: ectx: label, entry (Base_WorkDayStart), group (General)
-#: data/kalarmconfig.kcfg:245
+#: data/kalarmconfig.kcfg:240
 #, kde-format
 msgctxt "@label"
 msgid "Start time of working day"
 msgstr "வேலைநாள் துவங்கும் நேரம்"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayStart), group (General)
-#: data/kalarmconfig.kcfg:246
+#: data/kalarmconfig.kcfg:241
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "The start time of the working day."
 msgstr "காட்டுவதற்கு ஒரு ஒலிக்கோப்பின் வலைமனை அல்லது பெயரை உள்ளிடவும்"
 
 #. i18n: ectx: label, entry (Base_WorkDayEnd), group (General)
-#: data/kalarmconfig.kcfg:251
+#: data/kalarmconfig.kcfg:246
 #, kde-format
 msgctxt "@label"
 msgid "End time of working day"
 msgstr "வேலைநாள் முடியும் நேரம்"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayEnd), group (General)
-#: data/kalarmconfig.kcfg:252
+#: data/kalarmconfig.kcfg:247
 #, fuzzy, kde-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
@@ -1393,14 +1363,14 @@ msgid "The end time of the working day."
 msgstr "அலார மாதிரி உருவின் பெயரை உள்ளிடவும்"
 
 #. i18n: ectx: label, entry (Base_WorkDays), group (General)
-#: data/kalarmconfig.kcfg:257
+#: data/kalarmconfig.kcfg:252
 #, kde-format
 msgctxt "@label"
 msgid "Working days"
 msgstr "வேலைநாட்கள்"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDays), group (General)
-#: data/kalarmconfig.kcfg:258
+#: data/kalarmconfig.kcfg:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1409,14 +1379,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:263
+#: data/kalarmconfig.kcfg:258
 #, kde-format
 msgctxt "@label"
 msgid "Disabled alarm color"
 msgstr "முடக்கப்பட்டுள்ள அலாரங்களின் நிறம்"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:264 prefdlg.cpp:2043
+#: data/kalarmconfig.kcfg:259 prefdlg.cpp:2053
 #, fuzzy, kde-format
 #| msgid "Choose the text color in the alarm list for disabled alarms."
 msgctxt "@info:whatsthis"
@@ -1424,14 +1394,14 @@ msgid "Choose the text color in the alarm list for disabled alarms."
 msgstr "செயலிழந்த அலாரங்களுக்கு அலார பட்டியலில் உள்ள உரை வண்ணத்தைத் தேர்ந்தெடு."
 
 #. i18n: ectx: label, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:269
+#: data/kalarmconfig.kcfg:264
 #, kde-format
 msgctxt "@label"
 msgid "Archived alarm color"
 msgstr "காப்பகப்படுத்தப்பட்டுள்ள அலாரங்களின் நிறம்"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:270 prefdlg.cpp:2056
+#: data/kalarmconfig.kcfg:265 prefdlg.cpp:2066
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
@@ -1440,14 +1410,14 @@ msgstr ""
 "தேர்ந்தெடுக்கவும்."
 
 #. i18n: ectx: label, entry (ArchivedKeepDays), group (General)
-#: data/kalarmconfig.kcfg:275
+#: data/kalarmconfig.kcfg:270
 #, kde-format
 msgctxt "@label"
 msgid "Days to keep expired alarms"
 msgstr "அலாரங்கள் காலாவதியானபின் எத்தனை நாட்களுக்கு வைத்திருக்க வேண்டும்"
 
 #. i18n: ectx: whatsthis, entry (ArchivedKeepDays), group (General)
-#: data/kalarmconfig.kcfg:280
+#: data/kalarmconfig.kcfg:275
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1460,14 +1430,14 @@ msgid ""
 msgstr "முடிவுகளிலும் அல்லது நீக்குதலிலும் அலாரத்தை சேர்க்க பரிசோதி"
 
 #. i18n: ectx: label, entry (KOrgEventDuration), group (General)
-#: data/kalarmconfig.kcfg:286
+#: data/kalarmconfig.kcfg:281
 #, kde-format
 msgctxt "@label"
 msgid "KOrganizer event duration"
 msgstr "கேயார்கனைசரில் நிகழ்வு நீடிக்கும் காலம்"
 
 #. i18n: ectx: whatsthis, entry (KOrgEventDuration), group (General)
-#: data/kalarmconfig.kcfg:287
+#: data/kalarmconfig.kcfg:282
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1476,14 +1446,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (WakeFromSuspendAdvance), group (General)
-#: data/kalarmconfig.kcfg:291
+#: data/kalarmconfig.kcfg:286
 #, kde-format
 msgctxt "@label"
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "அலாரத்திற்கு எத்தனை நிமிடங்களுக்கு முன்பு உறக்கத்திலிருந்து கணினி எழ வேண்டும்"
 
 #. i18n: ectx: whatsthis, entry (WakeFromSuspendAdvance), group (General)
-#: data/kalarmconfig.kcfg:292
+#: data/kalarmconfig.kcfg:287
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1493,14 +1463,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (DefaultDisplayMethod), group (Defaults)
-#: data/kalarmconfig.kcfg:305
+#: data/kalarmconfig.kcfg:300
 #, kde-format
 msgctxt "@label"
 msgid "Alarm message display method"
 msgstr "அலார செய்தியை காட்டும் விதம்"
 
 #. i18n: ectx: whatsthis, entry (DefaultDisplayMethod), group (Defaults)
-#: data/kalarmconfig.kcfg:306
+#: data/kalarmconfig.kcfg:301
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1508,6 +1478,21 @@ msgid ""
 "determine whether to display alarm messages in windows or in system "
 "notifications."
 msgstr ""
+
+#. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
+#: data/kalarmconfig.kcfg:309
+#, fuzzy, kde-format
+#| msgid "Use highlighted alarm"
+msgctxt "@label"
+msgid "Never inhibit alarm"
+msgstr "தேர்ந்தெடுக்கப்பட்ட அலாரத்தை பயன்படுத்து"
+
+#. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
+#: data/kalarmconfig.kcfg:310
+#, fuzzy, kde-format
+msgctxt "@info:whatsthis"
+msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
+msgstr "\"%1\" அலாரத்தை தொகுப்பு உரையாடலின் முன்னிருப்பு அமைவு"
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -1722,7 +1707,7 @@ msgid "Recurrence period"
 msgstr "மறுநிகழ்வு இடைவெளி"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:387 prefdlg.cpp:1508
+#: data/kalarmconfig.kcfg:387 prefdlg.cpp:1514
 #, fuzzy, kde-format
 #| msgid ""
 #| "The default setting for the recurrence rule in the alarm edit dialog."
@@ -1752,7 +1737,7 @@ msgid "Hourly/minutely"
 msgstr "ஒவ்வொரு மணி/நிமிடம்"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:400 prefdlg.cpp:1515
+#: data/kalarmconfig.kcfg:400 prefdlg.cpp:1521
 #, kde-format
 msgctxt "@label"
 msgid "In non-leap years, repeat yearly February 29th alarms on:"
@@ -2109,114 +2094,121 @@ msgid "Recurrence - [%1]"
 msgstr "மறுநிகழ்வு - [%1]"
 
 #: editdlg.cpp:87
+#, fuzzy, kde-format
+#| msgid "Use highlighted alarm"
+msgctxt "@option:check"
+msgid "Never inhibit alarm"
+msgstr "தேர்ந்தெடுக்கப்பட்ட அலாரத்தை பயன்படுத்து"
+
+#: editdlg.cpp:88
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
 msgstr "கேயார்கனைசரில் காட்டு"
 
-#: editdlg.cpp:183
+#: editdlg.cpp:184
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Template [read-only]"
 msgstr "அலார வார்ப்புரு [படித்தல் மட்டும்]"
 
-#: editdlg.cpp:184
+#: editdlg.cpp:185
 #, kde-format
 msgctxt "@title:window"
 msgid "Archived Alarm [read-only]"
 msgstr "காப்பகப்படுத்திய அலாரம் [படித்தல் மட்டும்]"
 
-#: editdlg.cpp:185
+#: editdlg.cpp:186
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "அலாரம் [படித்தல் மட்டும்]"
 
-#: editdlg.cpp:196
+#: editdlg.cpp:197
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "அலாரத்தை குறிப்பிட்ட நேரத்திற்கு அமைக்கும்."
 
-#: editdlg.cpp:199
+#: editdlg.cpp:200
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
 msgstr "வார்ப்புருவை ஏற்று..."
 
-#: editdlg.cpp:201
+#: editdlg.cpp:202
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
 msgstr "அலாரத்திற்கு பயன்படுத்த வேண்டிய வார்ப்புருவை தேர்ந்தெடுங்கள்"
 
-#: editdlg.cpp:205
+#: editdlg.cpp:206
 #, kde-format
 msgctxt "@action:button"
 msgid "Try"
 msgstr "சோதி"
 
-#: editdlg.cpp:215
+#: editdlg.cpp:216
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "அலாரம்"
 
-#: editdlg.cpp:245
+#: editdlg.cpp:246
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "வார்ப்புருவின் பெயர்:"
 
-#: editdlg.cpp:252
+#: editdlg.cpp:253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "அலார வார்ப்புருவின் பெயரை உள்ளிடுங்கள்"
 
-#: editdlg.cpp:258
+#: editdlg.cpp:259
 #, kde-format
 msgctxt "@title:group"
 msgid "Action"
 msgstr "செயல்"
 
-#: editdlg.cpp:267
+#: editdlg.cpp:268
 #, kde-format
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "ஒத்திவைத்த அலாரம்"
 
-#: editdlg.cpp:270
+#: editdlg.cpp:271
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "இதற்கு ஒத்திவைக்கப்பட்டது:"
 
-#: editdlg.cpp:275
+#: editdlg.cpp:276
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "மாற்று..."
 
-#: editdlg.cpp:277
+#: editdlg.cpp:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "அலாரம் ஒத்திவைக்கப்பட்ட நேரத்தை மாற்றுங்கள், அல்லது ஒத்திவைத்ததை ரத்து செய்யுங்கள்"
 
-#: editdlg.cpp:288 editdlg.cpp:349
+#: editdlg.cpp:289 editdlg.cpp:350
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "நேரம்"
 
-#: editdlg.cpp:295
+#: editdlg.cpp:296
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "இயல்பிருப்பு நேரம்"
 
-#: editdlg.cpp:297
+#: editdlg.cpp:298
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2226,13 +2218,13 @@ msgstr ""
 "இவ்வார்ப்புருவின் அடிப்படையில் உருவாக்கப்படும் அலாரங்களுக்கு துவக்க நேரத்தை குறிப்பிட "
 "வேண்டாம். இயல்பிருப்பான துவக்க நேரமே பயன்படுத்தப்படும்."
 
-#: editdlg.cpp:305
+#: editdlg.cpp:306
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "நேரம்:"
 
-#: editdlg.cpp:307
+#: editdlg.cpp:308
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
@@ -2240,7 +2232,7 @@ msgstr ""
 "இவ்வார்ப்புருவின் அடிப்படையில் உருவாக்கப்படும் அலாரங்களுக்கான துவக்க நேரத்தை குறிப்பிட "
 "விடும்."
 
-#: editdlg.cpp:313
+#: editdlg.cpp:314
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2250,13 +2242,13 @@ msgstr ""
 "<para>இவ்வார்ப்புருவை பயன்படுத்தும் அலாரங்கள் தொடங்கும் நேரத்தை உள்ளிடுங்கள்.</para><para>"
 "%1</para>"
 
-#: editdlg.cpp:320
+#: editdlg.cpp:321
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "தேதி மட்டும்"
 
-#: editdlg.cpp:322
+#: editdlg.cpp:323
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2266,7 +2258,7 @@ msgstr ""
 "இவ்வார்ப்புருவின் அடிப்படையில் உருவாக்கப்படும் அலாரங்களுக்கு <interface>எந்த நேரமும்</"
 "interface> என்ற விருப்பத்தை இயக்கு."
 
-#: editdlg.cpp:332
+#: editdlg.cpp:333
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2276,13 +2268,13 @@ msgstr ""
 "இவ்வார்ப்புருவின் அடிப்படையில் உருவாக்கப்படும் அலாரங்களை குறிப்பிட்ட இடைவெளிக்கு பிறகு "
 "தூண்டப்படும்படி அமை."
 
-#: editdlg.cpp:388
+#: editdlg.cpp:397
 #, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "கணினியை உறக்கத்திலிருந்து எழுப்பு"
 
-#: editdlg.cpp:390
+#: editdlg.cpp:399
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2290,25 +2282,25 @@ msgid ""
 msgstr ""
 "கணினி உறக்கத்தில் இருக்கும்போது அலாரம் தூண்டப்பட்டால் கணினியை எழுப்ப இதைத் தேர்ந்தெடுக்கவும்"
 
-#: editdlg.cpp:407
+#: editdlg.cpp:416
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "கேயார்கனைசரின் நாள்காட்டியில் அலாரத்தை நகலெடுக்க இதை குறியுங்கள்"
 
-#: editdlg.cpp:1009
+#: editdlg.cpp:1034
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "அலார வார்ப்புருக்கு பெயரை உள்ளிட வேண்டும்"
 
-#: editdlg.cpp:1013
+#: editdlg.cpp:1038
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "இப்பெயரில் ஏற்கனவே ஒரு வார்ப்புரு உள்ளது"
 
-#: editdlg.cpp:1039
+#: editdlg.cpp:1064
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2319,7 +2311,7 @@ msgstr ""
 "<para>அதிதுல்லியமான அலாரங்களை கேயலாரம் ஆதரிக்காது.</para><para> அமைக்கப்பட்டுள்ள "
 "நேரத்துக்கு முந்தைய ஒரு நிமிடத்திற்குள் அலாரம் தூண்டப்படும்.</para>"
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1097
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2329,7 +2321,7 @@ msgstr ""
 "அலாரத்தின் மறுநிகழ்வு பாங்குக்கு துவக்க தேதி பொருந்தாத‍தால், அடுத்த மறுநிகழ்வுக்கு (%1) "
 "மாற்றப்படும்."
 
-#: editdlg.cpp:1076
+#: editdlg.cpp:1101
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2339,19 +2331,19 @@ msgstr ""
 "அலாரத்தின் மறுநிகழ்வு பாங்குக்கு துவக்க தேதி/நேரம் பொருந்தாத‍தால், அடுத்த மறுநிகழ்வுக்கு "
 "(%1) மாற்றப்படும்."
 
-#: editdlg.cpp:1099
+#: editdlg.cpp:1124
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "மறுநிகழ்வு ஏற்கனவே முடிந்துவிட்டது"
 
-#: editdlg.cpp:1110
+#: editdlg.cpp:1135
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "வேலை நேரத்தில் அலாரம் தூண்டப்படாது"
 
-#: editdlg.cpp:1139
+#: editdlg.cpp:1164
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2361,7 +2353,7 @@ msgstr ""
 "<interface>%1</interface> குறிக்கப்படாத பட்சத்தில், நினைவூட்டல்களுக்கான இடைவெளி "
 "மறுநிகழ்வுகளுக்கான இடைவெளியைவிட சிறியதாக இருக்க வேண்டும்."
 
-#: editdlg.cpp:1154
+#: editdlg.cpp:1179
 #, fuzzy, kde-format
 #| msgid ""
 #| "Simple alarm repetition duration must be less than the recurrence "
@@ -2372,7 +2364,7 @@ msgid ""
 "recurrence interval minus any reminder period"
 msgstr "மீதமுள்ள நேரம் மறுதோன்றல் இடைவெளியை விட குறைவானதாக இருக்க வேண்டும்"
 
-#: editdlg.cpp:1161
+#: editdlg.cpp:1186
 #, fuzzy, kde-format
 #| msgid ""
 #| "Simple alarm repetition period must be in units of days or weeks for a "
@@ -2385,35 +2377,51 @@ msgstr ""
 "தேதி-மட்டும் அலாரத்திற்கு திரும்ப திரும்ப நிகழும் அலாரம் நாட்களீல் அல்லது வாரங்களில் "
 "இருக்கவேண்டும்."
 
-#: editdlg.cpp:1192
+#: editdlg.cpp:1217
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "அலாரத்தை சேமிப்பதற்கான நாள்காட்டியை தேர்ந்தெடுக்க வேண்டும்"
 
-#: editdlg.cpp:1273
+#: editdlg.cpp:1298
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "குறைவான விருப்பங்கள் <<"
 
-#: editdlg.cpp:1274
+#: editdlg.cpp:1299
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "குறைவான விருப்பங்களையே காட்டு"
 
-#: editdlg.cpp:1279
+#: editdlg.cpp:1304
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "மேலும் விருப்பங்கள் >>"
 
-#: editdlg.cpp:1280
+#: editdlg.cpp:1305
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr "மேலும் விருப்பங்களை காட்டு"
+
+#: editdlg.cpp:1534
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Check to always execute the alarm when it is due, regardless of notification "
+"inhibition or active full screen applications"
+msgstr ""
+
+#: editdlg.cpp:1536
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Check to always execute the alarm when it is due, regardless of notification "
+"inhibition or active full screen applications."
+msgstr ""
 
 #: editdlgtypes.cpp:75
 #, kde-format
@@ -3419,7 +3427,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "அலார வார்ப்புருவை சேமிப்பதில் சிக்கல்"
 
-#: kalarmapp.cpp:821
+#: kalarmapp.cpp:830
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3427,32 +3435,32 @@ msgid ""
 msgstr ""
 "வெளியேறுதல் அலாரங்களை செயலிழக்க செய்யும் (திறந்திருக்கும் தகவல் சாளரங்களை மூடியபின்)"
 
-#: kalarmapp.cpp:831
+#: kalarmapp.cpp:840
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "கணினியை தூக்கத்திலிருந்து எழுப்ப வேண்டியதை வெளியேறுதல் ரத்து செய்யும்."
 
-#: kalarmapp.cpp:1048
+#: kalarmapp.cpp:1057
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "அலாரத்தை உருவாக்க முடியவில்லை: இயல்பிருப்பு நாள்காட்டி அமைக்கப்படவில்லை"
 
-#: kalarmapp.cpp:1062
+#: kalarmapp.cpp:1071
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "அலாரத்தை உருவாக்குவதில் சிக்கல்"
 
-#: kalarmapp.cpp:1118
+#: kalarmapp.cpp:1127
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr ""
 "%1: <resource>%2</resource> என்ற நிகழ்வு கண்டுபிடிக்கப்படவில்லை, அல்லது முரண்படுகிறது"
 
-#: kalarmapp.cpp:1430
+#: kalarmapp.cpp:1439
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3464,7 +3472,7 @@ msgstr ""
 "திருத்தவோ முடியாது.<nl/><nl/>இதை சரிசெய்ய, <interface>பார்வை | நாள்காட்டிகளை "
 "காட்டு</interface> என்பதன் மூலம் நாள்காட்டிகளை அமையுங்கள்."
 
-#: kalarmapp.cpp:1470
+#: kalarmapp.cpp:1479
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
@@ -3472,7 +3480,7 @@ msgstr ""
 "%1: <resource>%2</resource> நிகழ்வை கண்டுபிடிக்க முடியவில்லை, அல்லது திருத்த "
 "முடியவில்லை"
 
-#: kalarmapp.cpp:1498
+#: kalarmapp.cpp:1507
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3486,7 +3494,7 @@ msgstr ""
 "<interface>பார்வை | நாள்காட்டிகளை காட்டு</interface> என்பதன் மூலம் நாள்காட்டிகளை "
 "அமையுங்கள்."
 
-#: kalarmapp.cpp:1506
+#: kalarmapp.cpp:1515
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3502,7 +3510,7 @@ msgstr ""
 "ஏதாவதொரு நாள்காட்டியை தேர்ந்தெடுத்து, <interface>காப்பகப்படுத்திய அலாரங்களுக்கு "
 "இயல்பிருப்பாக பயன்படுத்து</interface> என்பதை குறியுங்கள்."
 
-#: kalarmapp.cpp:2465
+#: kalarmapp.cpp:2472
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3512,19 +3520,19 @@ msgstr ""
 "கட்டளையை இயக்கு முடியவில்லை\n"
 "(கட்டளை அலாரங்களுக்கு எந்த முனையமும் தேர்ந்தெடுக்கப்படவில்லை)"
 
-#: kalarmapp.cpp:2618
+#: kalarmapp.cpp:2625
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "தற்காலிக சிறுநிரல் கோப்பை உருவாக்குவதில் சிக்கல்"
 
-#: kalarmapp.cpp:2714
+#: kalarmapp.cpp:2721
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "அலாரத்திற்கு முந்தைய செயல்:"
 
-#: kalarmapp.cpp:2720
+#: kalarmapp.cpp:2727
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -3583,19 +3591,19 @@ msgstr "உரிய நேரம்:"
 msgid "KAlarm"
 msgstr "கேஅலாரம்"
 
-#: kalarmcalendar/kaevent.cpp:3241
+#: kalarmcalendar/kaevent.cpp:3265
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "நுழைவு"
 
-#: kalarmcalendar/kaevent.cpp:3241
+#: kalarmcalendar/kaevent.cpp:3265
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "அமர்வில் நுழையும்போது"
 
-#: kalarmcalendar/kaevent.cpp:3250 kalarmcalendar/kaevent.cpp:3343
+#: kalarmcalendar/kaevent.cpp:3274 kalarmcalendar/kaevent.cpp:3367
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3605,7 +3613,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 நிமிடம்"
 msgstr[1] "%1 நிமிடம்"
 
-#: kalarmcalendar/kaevent.cpp:3252 kalarmcalendar/kaevent.cpp:3345
+#: kalarmcalendar/kaevent.cpp:3276 kalarmcalendar/kaevent.cpp:3369
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3614,13 +3622,13 @@ msgid_plural "%1 Hours"
 msgstr[0] "1 மணிநேரம்"
 msgstr[1] "%1 மணிநேரம்"
 
-#: kalarmcalendar/kaevent.cpp:3254 kalarmcalendar/kaevent.cpp:3346
+#: kalarmcalendar/kaevent.cpp:3278 kalarmcalendar/kaevent.cpp:3370
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1ம %2நி"
 
-#: kalarmcalendar/kaevent.cpp:3257 kalarmcalendar/kaevent.cpp:3336
+#: kalarmcalendar/kaevent.cpp:3281 kalarmcalendar/kaevent.cpp:3360
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3629,7 +3637,7 @@ msgid_plural "%1 Days"
 msgstr[0] "1 நாள்"
 msgstr[1] "%1 நாட்கள்"
 
-#: kalarmcalendar/kaevent.cpp:3259 kalarmcalendar/kaevent.cpp:3337
+#: kalarmcalendar/kaevent.cpp:3283 kalarmcalendar/kaevent.cpp:3361
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3637,7 +3645,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 வாரம்"
 msgstr[1] "%1 வாரங்கள்"
 
-#: kalarmcalendar/kaevent.cpp:3261
+#: kalarmcalendar/kaevent.cpp:3285
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3645,7 +3653,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 மாதம்"
 msgstr[1] "%1 மாதங்கள்"
 
-#: kalarmcalendar/kaevent.cpp:3263
+#: kalarmcalendar/kaevent.cpp:3287
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3653,13 +3661,13 @@ msgid_plural "%1 Years"
 msgstr[0] "1 ஆண்டு"
 msgstr[1] "%1 ஆண்டுகள்"
 
-#: kalarmcalendar/kaevent.cpp:3269
+#: kalarmcalendar/kaevent.cpp:3293
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "ஏதுமில்லை"
 
-#: kalarmcalendar/kaevent.cpp:3349
+#: kalarmcalendar/kaevent.cpp:3373
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"
@@ -4640,7 +4648,7 @@ msgctxt "@action"
 msgid "Disable"
 msgstr "முடக்கு"
 
-#: messagedisplay.cpp:271
+#: messagedisplay.cpp:278
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"
@@ -4761,7 +4769,7 @@ msgctxt "@action:button"
 msgid "Defer"
 msgstr "ஒத்திவை"
 
-#: messagewindow.cpp:228
+#: messagewindow.cpp:231
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4769,79 +4777,79 @@ msgid ""
 "display)."
 msgstr "தகவலுக்காக அமைக்கப்பட்ட தேதி/நேரம் (காட்டப்படும் நேரத்திலிருந்து வேறுபடலாம்)"
 
-#: messagewindow.cpp:245
+#: messagewindow.cpp:248
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr "கீழே காட்ட வேண்டிய கோப்பு"
 
-#: messagewindow.cpp:279
+#: messagewindow.cpp:282
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr "காட்ட வேண்டிய கோப்பின் உள்ளடக்கம்"
 
-#: messagewindow.cpp:299
+#: messagewindow.cpp:302
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr "அலாரத்திற்கான தகவல்"
 
-#: messagewindow.cpp:326
+#: messagewindow.cpp:329
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr "அலாரத்திற்கான கட்டளையின் வெளியீடு"
 
-#: messagewindow.cpp:359
+#: messagewindow.cpp:362
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr "அனுப்ப வேண்டிய மின்னஞ்சல்"
 
-#: messagewindow.cpp:409
+#: messagewindow.cpp:412
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr "இந்த அலாரத்திற்கு இந்த சிக்கலை பற்றி இனிமேல் தெரிவிக்காதே"
 
-#: messagewindow.cpp:426
+#: messagewindow.cpp:429
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "அலாரத்தை பார்த்ததாக ஒப்புக்கொள்"
 
-#: messagewindow.cpp:431 resourceselector.cpp:77 templatedlg.cpp:81
+#: messagewindow.cpp:438 resourceselector.cpp:77 templatedlg.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "திருத்து..."
 
-#: messagewindow.cpp:435
+#: messagewindow.cpp:442
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "அலாரத்தை திருத்து"
 
-#: messagewindow.cpp:436
+#: messagewindow.cpp:443
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "அலாரத்தை திருத்து."
 
-#: messagewindow.cpp:440
+#: messagewindow.cpp:450
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
 msgstr "ஒத்திவை..."
 
-#: messagewindow.cpp:444
+#: messagewindow.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "குறிப்பிட்ட நேரம் வரை அலாரத்தை ஒத்திவை"
 
-#: messagewindow.cpp:445
+#: messagewindow.cpp:455
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4851,62 +4859,62 @@ msgstr ""
 "<para>அலாரத்தை ஒத்திவை.</para><para>அலாரத்தை மறுபடியும் எப்போது காட்ட வேண்டுமென "
 "கேட்கப்படுவீர்கள்.</para>"
 
-#: messagewindow.cpp:459 sounddlg.cpp:454
+#: messagewindow.cpp:471 sounddlg.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "ஒலியை நிறுத்து"
 
-#: messagewindow.cpp:460 sounddlg.cpp:455
+#: messagewindow.cpp:472 sounddlg.cpp:455
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "ஒலியை நிறுத்து"
 
-#: messagewindow.cpp:474
+#: messagewindow.cpp:487
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "<application>கேமெயிலில்</application> கண்டுபிடி"
 
-#: messagewindow.cpp:475
+#: messagewindow.cpp:488
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr ""
 "<application>கேமெயிலில்</application> இந்த மின்னஞ்சலை கண்டுபிடித்து முன்னிலைப்படுத்து"
 
-#: messagewindow.cpp:483
+#: messagewindow.cpp:499
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "<application>கேயலாரத்தை</application> காட்டு"
 
-#: messagewindow.cpp:484
+#: messagewindow.cpp:500
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "<application>கேயலாரத்தை</application> காட்டு"
 
-#: messagewindow.cpp:1076
+#: messagewindow.cpp:1096
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "இந்த அலாரத்தை பார்த்த‍தாக குறிக்க வேண்டுமா?"
 
-#: messagewindow.cpp:1077
+#: messagewindow.cpp:1097
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "அலாரத்தை பார்த்ததாக ஒப்புக்கொள்ளுங்கள்"
 
-#: messagewindow.cpp:1077
+#: messagewindow.cpp:1097
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "பார்த்துவிட்டேன்"
 
-#: messagewindow.cpp:1132
+#: messagewindow.cpp:1152
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -5789,7 +5797,7 @@ msgid ""
 "The default setting for <interface>%1</interface> in the alarm edit dialog."
 msgstr "அலார திருத்த சாளரத்தில் <interface>%1</interface> என்பதற்கான இயல்பிருப்பு."
 
-#: prefdlg.cpp:1443 prefdlg.cpp:1898
+#: prefdlg.cpp:1443 prefdlg.cpp:1908
 #, kde-format
 msgctxt "@title:tab"
 msgid "General"
@@ -5815,31 +5823,31 @@ msgid ""
 "dialog."
 msgstr "அலாரம் காட்டப்படும் வித‍த்திற்காக அலார திருத்த சாளரத்தில் இருக்கும் இயல்பிருப்பு."
 
-#: prefdlg.cpp:1495
+#: prefdlg.cpp:1501
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Recurrence:"
 msgstr "மறுநிகழ்வு:"
 
-#: prefdlg.cpp:1528
+#: prefdlg.cpp:1534
 #, kde-format
 msgctxt "@option:radio"
 msgid "February 28th"
 msgstr "பிப்ரவரி 28வது "
 
-#: prefdlg.cpp:1532
+#: prefdlg.cpp:1538
 #, kde-format
 msgctxt "@option:radio"
 msgid "March 1st"
 msgstr "மார்ச் 1வது"
 
-#: prefdlg.cpp:1536
+#: prefdlg.cpp:1542
 #, kde-format
 msgctxt "@option:radio"
 msgid "Do not repeat"
 msgstr "திரும்பச் செய்யாதே"
 
-#: prefdlg.cpp:1541
+#: prefdlg.cpp:1547
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5851,31 +5859,31 @@ msgstr ""
 "எப்போது நிகழ வேண்டுமென்பதை தேர்ந்தெடுங்கள்.<note>இத்தேர்வை மாற்றல், ஏற்கனவேயுள்ள அலாரங்களை "
 "பாதிக்காது.</note>"
 
-#: prefdlg.cpp:1547
+#: prefdlg.cpp:1553
 #, kde-format
 msgctxt "@title:group"
 msgid "Display Alarms"
 msgstr "காட்சி அலாரங்கள்"
 
-#: prefdlg.cpp:1565
+#: prefdlg.cpp:1571
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Reminder units:"
 msgstr "நினைவூட்டும் நேரத்திற்கான அலகுகள்:"
 
-#: prefdlg.cpp:1568
+#: prefdlg.cpp:1574
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Minutes"
 msgstr "நிமிடம்"
 
-#: prefdlg.cpp:1569
+#: prefdlg.cpp:1575
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
 msgstr "மணி/நிமிடம்"
 
-#: prefdlg.cpp:1572
+#: prefdlg.cpp:1578
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5885,19 +5893,19 @@ msgstr ""
 "அலார திருத்த சாளரத்தில், நிகழவிருக்கும் அலாரங்களுக்கான நினைவூட்டலுக்கு பயன்படுத்தப்படும் "
 "இயல்பிருப்பு அலகு."
 
-#: prefdlg.cpp:1578
+#: prefdlg.cpp:1584
 #, kde-format
 msgctxt "@title:group Audio options group"
 msgid "Sound"
 msgstr "ஒலி"
 
-#: prefdlg.cpp:1597
+#: prefdlg.cpp:1603
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat sound file"
 msgstr "ஒலிக்கோப்பை திரும்ப இயக்கு"
 
-#: prefdlg.cpp:1600
+#: prefdlg.cpp:1606
 #, kde-kuit-format
 msgctxt "@info:whatsthis sound file 'Repeat' checkbox"
 msgid ""
@@ -5907,26 +5915,26 @@ msgstr ""
 "ஒலிக்கோப்பு <interface>%1</interface> என்பதற்கு அலார திருத்த சாளரத்தில் "
 "பயன்படுத்தப்படும் இயல்பிருப்பு."
 
-#: prefdlg.cpp:1606
+#: prefdlg.cpp:1612
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Sound file:"
 msgstr "ஒலிக்கோப்பு:"
 
-#: prefdlg.cpp:1614
+#: prefdlg.cpp:1620
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a sound file"
 msgstr "ஒலிக்கோப்பை தேர்ந்தெடுங்கள்"
 
-#: prefdlg.cpp:1616
+#: prefdlg.cpp:1622
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
 msgstr ""
 "அலார திருத்த சாளரத்தில் இயல்பிருப்பாக பயன்படுத்த வேண்டிய ஒலிக்கோப்பை தேர்ந்தெடுங்கள்."
 
-#: prefdlg.cpp:1625
+#: prefdlg.cpp:1631
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5935,31 +5943,31 @@ msgstr ""
 "அலார திருத்த சாளரத்தில் ஒலிக்கோப்புகளுக்கு பயன்படுத்த வேண்டிய இயல்பிருப்பு ஒலியளவை "
 "தேர்ந்தெடுங்கள்."
 
-#: prefdlg.cpp:1629
+#: prefdlg.cpp:1635
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default volume for sound files in the alarm edit dialog."
 msgstr "அலார திருத்த சாளரத்தில் ஒலிக்கோப்புகளின் இயல்பிருப்பு ஒலியளவு."
 
-#: prefdlg.cpp:1639
+#: prefdlg.cpp:1645
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Alarms"
 msgstr "கட்டளை அலாரங்கள்"
 
-#: prefdlg.cpp:1658
+#: prefdlg.cpp:1664
 #, kde-format
 msgctxt "@title:group"
 msgid "Email Alarms"
 msgstr "மின்னஞ்சல் அலாரங்கள்"
 
-#: prefdlg.cpp:1671
+#: prefdlg.cpp:1677
 #, kde-format
 msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "தகவலின் எழுத்துரு && நிறம்"
 
-#: prefdlg.cpp:1877
+#: prefdlg.cpp:1887
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5969,19 +5977,19 @@ msgstr ""
 "இயல்பிருப்பு ஒலி வகையாக <interface>%1</interface> தேர்ந்தெடுக்கப்பட்டால் நீங்கள் "
 "ஒலிக்கோப்பை தேர்ந்தெடுக்க வேண்டும்"
 
-#: prefdlg.cpp:1904
+#: prefdlg.cpp:1914
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "அலார சாளரங்கள்"
 
-#: prefdlg.cpp:1907
+#: prefdlg.cpp:1917
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "கணினித் தட்டில் காட்டு"
 
-#: prefdlg.cpp:1909
+#: prefdlg.cpp:1919
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5993,13 +6001,13 @@ msgstr ""
 "குறியுங்கள். கணினித் தட்டில் காட்டுவதன் மூலம், கேயலாரத்தின் நிலையை அறிந்து அதை எளிதில் "
 "அணுகலாம்.</para>"
 
-#: prefdlg.cpp:1938
+#: prefdlg.cpp:1948
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr "எப்போதும் காட்டு"
 
-#: prefdlg.cpp:1942
+#: prefdlg.cpp:1952
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6009,13 +6017,13 @@ msgstr ""
 "அலாரங்கள் இல்லாதபோதும் <application>கேயலாரத்தின்</application> சின்னத்தை கணினித் "
 "தட்டில் காட்ட இதை குறியுங்கள்."
 
-#: prefdlg.cpp:1946
+#: prefdlg.cpp:1956
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr "அலாரங்கள் செயலில் இல்லாதபோது தானாக மறை"
 
-#: prefdlg.cpp:1950
+#: prefdlg.cpp:1960
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6027,7 +6035,7 @@ msgstr ""
 "application> சின்னத்தை மறைக்க இதை குறியுங்கள். சின்னம் மறைந்திருந்தாலும், கணினித் தட்டின் "
 "'மறைந்துள்ள சின்னங்களை காட்டு' என்ற தேர்வின் மூலம் அதை பார்க்கலாம்."
 
-#: prefdlg.cpp:1956
+#: prefdlg.cpp:1966
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6041,25 +6049,25 @@ msgstr ""
 "மறைந்திருந்தாலும், கணினித் தட்டின் 'மறைந்துள்ள சின்னங்களை காட்டு' என்ற தேர்வின் மூலம் அதை "
 "பார்க்கலாம்."
 
-#: prefdlg.cpp:1959
+#: prefdlg.cpp:1969
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr "இதற்குள் தூண்டப்பட வேண்டிய அலாரமேதும் இல்லாவிடில் மறை:"
 
-#: prefdlg.cpp:1971
+#: prefdlg.cpp:1981
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "கணினித்தட்டு கருவித்துப்பு"
 
-#: prefdlg.cpp:1978
+#: prefdlg.cpp:1988
 #, kde-format
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
 msgstr "அடுத்த 24 மணி நேரத்திற்கான அலாரங்களை காட்டு"
 
-#: prefdlg.cpp:1982
+#: prefdlg.cpp:1992
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6069,13 +6077,13 @@ msgstr ""
 "அடுத்த 24 மணிநேரத்தில் தூண்டப்படவிருக்கும் அலாரங்களை, கணினித்தட்டிலுள்ள சின்னத்தின் "
 "கருவித்துப்பில் காட்ட வேண்டுமா?"
 
-#: prefdlg.cpp:1988
+#: prefdlg.cpp:1998
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "காட்டவேண்டிய அலாரங்களின் அதிகபட்ச எண்ணிக்கை:"
 
-#: prefdlg.cpp:1997
+#: prefdlg.cpp:2007
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6085,43 +6093,43 @@ msgstr ""
 "அடுத்த 24 மணிநேரத்தில் வரவிருக்கும் அனைத்து அலாரங்களையும் கருவித்துப்பில் காட்ட இதை "
 "முடக்குங்கள். காட்டப்படுபவற்றின் அதிகபட்ச எண்ணிக்கையை அமைக்க இதை குறியுங்கள்."
 
-#: prefdlg.cpp:2001
+#: prefdlg.cpp:2011
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "அலாரத்தின் நேரத்தை காட்டு"
 
-#: prefdlg.cpp:2007
+#: prefdlg.cpp:2017
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "அலாரம் வரையுள்ள நேரத்தை காட்டு"
 
-#: prefdlg.cpp:2025
+#: prefdlg.cpp:2035
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "அலார பட்டியல்"
 
-#: prefdlg.cpp:2037
+#: prefdlg.cpp:2047
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "முடக்கப்பட்ட அலாரங்களின் நிறம்:"
 
-#: prefdlg.cpp:2050
+#: prefdlg.cpp:2060
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "காப்பகப்படுத்தப்பட்ட அலாரங்களின் நிறம்:"
 
-#: prefdlg.cpp:2063
+#: prefdlg.cpp:2073
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "அலார தகவல் சாளரங்கள்"
 
-#: prefdlg.cpp:2075
+#: prefdlg.cpp:2085
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6136,25 +6144,25 @@ msgstr ""
 "சாளரங்களை காட்ட வேண்டுமா, அல்லது</item><item>அலார சாளரங்களை திரையின் நடுவில் காட்டி, "
 "கொஞ்சம் நேரத்திற்கு அவற்றின் பட்டன்களை முடக்க வேண்டுமா?</item></list></para>"
 
-#: prefdlg.cpp:2078
+#: prefdlg.cpp:2088
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "சுட்டிக்குறியிலிருந்து தூரமாக சாளரங்களை வை"
 
-#: prefdlg.cpp:2082
+#: prefdlg.cpp:2092
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "சாளரங்களை நடுப்படுத்தி, பட்டன்களை தற்காலிகமாக முடக்கு"
 
-#: prefdlg.cpp:2091
+#: prefdlg.cpp:2101
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "பட்டன் முடக்க நேரம் (நொடிகள்):"
 
-#: prefdlg.cpp:2099
+#: prefdlg.cpp:2109
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6165,7 +6173,7 @@ msgstr ""
 "அலார சாளரம் காட்டப்பட்ட பின் எவ்வளவு நேரத்திற்கு அதன் பட்டன்களை முடக்க வேண்டுமென்பதை "
 "உள்ளிடவும். இத்தாமதம், அலாரங்களைத் தவறுதலாக விலக்குவதன் வாய்ப்பைக் குறைக்கும்."
 
-#: prefdlg.cpp:2103
+#: prefdlg.cpp:2113
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6174,28 +6182,6 @@ msgid ""
 msgstr ""
 "அலார சாளரம் காட்டப்பட்ட பின் எவ்வளவு நேரத்திற்கு அதன் பட்டன்களை முடக்க வேண்டுமென்பதை "
 "உள்ளிடுங்கள்."
-
-#: prefdlg.cpp:2111
-#, kde-format
-msgctxt "@option:check"
-msgid "Message windows have a title bar and take keyboard focus"
-msgstr "தகவல் சாளரங்கள் தலைப்புப்பட்டையை பெறும், மேலும் விசைப்பலகை குவியத்தை பிடுங்கும்"
-
-#: prefdlg.cpp:2114
-#, kde-kuit-format
-msgctxt "@info:whatsthis"
-msgid ""
-"<para>Specify the characteristics of alarm message windows:<list><item>If "
-"checked, the window is a normal window with a title bar, which grabs "
-"keyboard input when it is displayed.</item><item>If unchecked, the window "
-"does not interfere with your typing when it is displayed, but it has no "
-"title bar and cannot be moved or resized.</item></list></para>"
-msgstr ""
-"<para>அலார தகவல் சாளரங்களின் பண்புகளை தேர்ந்தெடுங்கள்:<list> <item>இத்தேர்வு "
-"குறிக்கப்பட்டிருந்தால், அலார சாளரம் சாதாரண சாளரத்தை போல் தலைப்புப்பட்டையை பெற்று, "
-"காட்டப்படும்போது விசைப்பலகை குவியத்தை பிடுங்கும்.</item> <item>இத்தேர்வு "
-"குறிக்கப்படவில்லையெனில், அலார சாளரம் நீங்கள் தட்டச்சிடும்போது காட்டப்பட்டால் தொந்தரவு "
-"செய்யாது, ஆனால் அதன் அளவை மாற்றவோ அதை நகர்த்தவோ முடியாது.</item></list></para>"
 
 #: recurrenceedit.cpp:56
 #, kde-format
@@ -6773,19 +6759,19 @@ msgctxt "@item:inlistbox"
 msgid "in advance"
 msgstr "முன்னர்"
 
-#: reminder.cpp:43
+#: reminder.cpp:42
 #, kde-format
 msgctxt "@option:check"
 msgid "Reminder:"
 msgstr "நினைவூட்டல்:"
 
-#: reminder.cpp:47
+#: reminder.cpp:46
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "afterwards"
 msgstr "பின்னர்"
 
-#: reminder.cpp:67
+#: reminder.cpp:66
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the reminder only for the first time the alarm is scheduled"
@@ -8736,6 +8722,49 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "அலாரத்திற்கு எத்தனை நிமிடங்களுக்கு முன்பு உறக்கத்திலிருந்து எழ வேண்டும்"
+
+#~ msgctxt "@label"
+#~ msgid "Message windows have a title bar and take keyboard focus"
+#~ msgstr "தகவல் சாளரங்கள் தலைப்புப்பட்டையை பெறும், மேலும் விசைப்பலகை குவியத்தை பிடுங்கும்"
+
+#, fuzzy
+#~| msgid ""
+#~| "Specify the characteristics of alarm message windows:\n"
+#~| "- If checked, the window is a normal window with a title bar, which "
+#~| "grabs keyboard input when it is displayed.\n"
+#~| "- If unchecked, the window does not interfere with your typing when it "
+#~| "is displayed, but it has no title bar and cannot be moved or resized."
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<p>Specify the characteristics of alarm message windows:<ul><li>If "
+#~ "checked, the window is a normal window with a title bar, which grabs "
+#~ "keyboard input when it is displayed.</li><li>If unchecked, the window "
+#~ "does not interfere with your typing when it is displayed, but it has no "
+#~ "title bar and cannot be moved or resized.</li></ul></p>"
+#~ msgstr ""
+#~ "Specify the characteristics of alarm message windows:\n"
+#~ "- If checked, the window is a normal window with a title bar, which grabs "
+#~ "keyboard input when it is displayed.\n"
+#~ "- If unchecked, the window does not interfere with your typing when it is "
+#~ "displayed, but it has no title bar and cannot be moved or resized."
+
+#~ msgctxt "@option:check"
+#~ msgid "Message windows have a title bar and take keyboard focus"
+#~ msgstr "தகவல் சாளரங்கள் தலைப்புப்பட்டையை பெறும், மேலும் விசைப்பலகை குவியத்தை பிடுங்கும்"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "<para>Specify the characteristics of alarm message windows:<list><item>If "
+#~ "checked, the window is a normal window with a title bar, which grabs "
+#~ "keyboard input when it is displayed.</item><item>If unchecked, the window "
+#~ "does not interfere with your typing when it is displayed, but it has no "
+#~ "title bar and cannot be moved or resized.</item></list></para>"
+#~ msgstr ""
+#~ "<para>அலார தகவல் சாளரங்களின் பண்புகளை தேர்ந்தெடுங்கள்:<list> <item>இத்தேர்வு "
+#~ "குறிக்கப்பட்டிருந்தால், அலார சாளரம் சாதாரண சாளரத்தை போல் தலைப்புப்பட்டையை பெற்று, "
+#~ "காட்டப்படும்போது விசைப்பலகை குவியத்தை பிடுங்கும்.</item> <item>இத்தேர்வு "
+#~ "குறிக்கப்படவில்லையெனில், அலார சாளரம் நீங்கள் தட்டச்சிடும்போது காட்டப்பட்டால் தொந்தரவு "
+#~ "செய்யாது, ஆனால் அதன் அளவை மாற்றவோ அதை நகர்த்தவோ முடியாது.</item></list></para>"
 
 #~ msgctxt "@info"
 #~ msgid ""
