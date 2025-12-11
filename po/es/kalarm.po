@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-10 00:44+0000\n"
-"PO-Revision-Date: 2025-11-22 19:10+0100\n"
+"PO-Revision-Date: 2025-12-10 10:57+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "First-Translator: Miguel Revilla <yo@miguelrevilla.com>\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 25.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -1571,22 +1571,19 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:309
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr "Usar alarma resaltada"
+msgstr "No inhibir nunca la alarma"
 
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
 msgstr ""
-"Opciones predeterminadas en el diálogo de edición de alarmas para «cerrar si "
-"ya es tarde»."
+"Valor predeterminado en el diálogo de edición de alarmas para «No inhibir "
+"nunca la alarma»."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -2211,11 +2208,10 @@ msgid "Recurrence - [%1]"
 msgstr "Repetición - [%1]"
 
 #: editdlg.cpp:87
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@option:check"
 msgid "Never inhibit alarm"
-msgstr "Usar alarma resaltada"
+msgstr "No inhibir nunca la alarma"
 
 #: editdlg.cpp:88
 #, kde-format
@@ -2528,6 +2524,9 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications"
 msgstr ""
+"Marque esta opción para ejecutar siempre la alarma cuando venza, sin tener "
+"en cuenta la inhibición de notificaciones ni las aplicaciones a pantalla "
+"completa activas"
 
 #: editdlg.cpp:1536
 #, kde-format
@@ -2536,6 +2535,9 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications."
 msgstr ""
+"Marque esta opción para ejecutar siempre la alarma cuando venza, sin tener "
+"en cuenta la inhibición de notificaciones ni las aplicaciones a pantalla "
+"completa activas."
 
 #: editdlgtypes.cpp:75
 #, kde-format
@@ -8899,45 +8901,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Número de minutos antes de la alarma para despertar desde suspendido"
-
-#~ msgctxt "@label"
-#~ msgid "Message windows have a title bar and take keyboard focus"
-#~ msgstr ""
-#~ "Las ventanas de mensajes tienen una barra de título y reciben el foco del "
-#~ "teclado"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid ""
-#~ "<p>Specify the characteristics of alarm message windows:<ul><li>If "
-#~ "checked, the window is a normal window with a title bar, which grabs "
-#~ "keyboard input when it is displayed.</li><li>If unchecked, the window "
-#~ "does not interfere with your typing when it is displayed, but it has no "
-#~ "title bar and cannot be moved or resized.</li></ul></p>"
-#~ msgstr ""
-#~ "<p>Indicar las características de las ventanas de mensajes de alarma:"
-#~ "<ul><li>Si está marcado, la ventana es una ventana normal, con una barra "
-#~ "de título y que captura la entrada del teclado cuando se muestra.</"
-#~ "li><li>Si no está marcado, la ventana no interfiere con su tecleo cuando "
-#~ "se muestra, pero no tiene barra de título y no se puede mover ni cambiar "
-#~ "de tamaño.</li></ul></p>"
-
-#~ msgctxt "@option:check"
-#~ msgid "Message windows have a title bar and take keyboard focus"
-#~ msgstr ""
-#~ "Las ventanas de mensajes tienen una barra de título y reciben el foco del "
-#~ "teclado"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid ""
-#~ "<para>Specify the characteristics of alarm message windows:<list><item>If "
-#~ "checked, the window is a normal window with a title bar, which grabs "
-#~ "keyboard input when it is displayed.</item><item>If unchecked, the window "
-#~ "does not interfere with your typing when it is displayed, but it has no "
-#~ "title bar and cannot be moved or resized.</item></list></para>"
-#~ msgstr ""
-#~ "<para>Indicar las características de las ventanas de mensajes de alarma:"
-#~ "<list><item>Si está marcado, la ventana es una ventana normal, con una "
-#~ "barra de título y que captura la entrada del teclado cuando se muestra.</"
-#~ "item><item>Si no está marcado, la ventana no interfiere con su tecleo "
-#~ "cuando se muestra, pero no tiene barra de título y no se puede mover ni "
-#~ "cambiar de tamaño.</item></list></para>"

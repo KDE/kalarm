@@ -18,14 +18,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-10 00:44+0000\n"
-"PO-Revision-Date: 2025-11-02 13:41+0100\n"
+"PO-Revision-Date: 2025-12-10 16:54+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 25.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -1601,23 +1601,20 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:309
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr "Het geaccentueerde alarm gebruiken"
+msgstr "Nooit alarm uitschakelen"
 
 # volgens mij een aanhalingstekens teveel.
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
 msgstr ""
-"De standaardinstelling voor \"automatisch sluiten\" in het bewerkvenster "
-"voor alarmen."
+"Standaardwaarde in de dialoog voor Alarm bewerken voor \"nooit alarm "
+"uitschakelen\"."
 
 # discussie is mogelijk..
 # als we over afspraken en de NS prateh is 'late' nmm 'te laat'
@@ -2268,11 +2265,10 @@ msgid "Recurrence - [%1]"
 msgstr "Herhaling - [%1]"
 
 #: editdlg.cpp:87
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@option:check"
 msgid "Never inhibit alarm"
-msgstr "Het geaccentueerde alarm gebruiken"
+msgstr "Nooit alarm uitschakelen"
 
 #: editdlg.cpp:88
 #, kde-format
@@ -2601,6 +2597,9 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications"
 msgstr ""
+"Controleer dat het alarm altijd wordt uitgevoerd wanneer het afloopt, "
+"ongeacht meldingen van uitschakelen of actieve toepassingen in volledig "
+"scherm"
 
 #: editdlg.cpp:1536
 #, kde-format
@@ -2609,6 +2608,9 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications."
 msgstr ""
+"Controleer dat het alarm altijd wordt uitgevoerd wanneer het afloopt, "
+"ongeacht meldingen van uitschakelen of actieve toepassingen in volledig "
+"scherm."
 
 #: editdlgtypes.cpp:75
 #, kde-format

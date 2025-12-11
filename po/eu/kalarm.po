@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-10 00:44+0000\n"
-"PO-Revision-Date: 2025-12-06 22:12+0100\n"
+"PO-Revision-Date: 2025-12-10 19:59+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -1546,22 +1546,19 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:309
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr "Erabili nabarmendutako alarma"
+msgstr "Alarma ez inoiz inhibitu"
 
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
 msgstr ""
-"Alarma editatzeko elkarrizketa-koadroan, \"berandu bada automatikoki itxi\" "
-"aukerarako ezarpen lehenetsia."
+"Alarma editatzeko elkarrizketa-koadroan \"alarma ez inoiz inhibitu\"ren "
+"balio lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -2189,11 +2186,10 @@ msgid "Recurrence - [%1]"
 msgstr "Errepikatzea - [%1]"
 
 #: editdlg.cpp:87
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@option:check"
 msgid "Never inhibit alarm"
-msgstr "Erabili nabarmendutako alarma"
+msgstr "Alarma ez inoiz inhibitu"
 
 #: editdlg.cpp:88
 #, kde-format
@@ -2505,6 +2501,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications"
 msgstr ""
+"Alarma behar denean beti exekutatzen dela egiaztatu, jakinarazpenen "
+"inhibizioa edo pantaila osoko aplikazioak kontuan hartu gabe"
 
 #: editdlg.cpp:1536
 #, kde-format
@@ -2513,6 +2511,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications."
 msgstr ""
+"Alarma behar denean beti exekutatzen dela egiaztatu, jakinarazpenen "
+"inhibizioa edo pantaila osoko aplikazioak kontuan hartu gabe."
 
 #: editdlgtypes.cpp:75
 #, kde-format
