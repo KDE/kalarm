@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-10 00:44+0000\n"
-"PO-Revision-Date: 2025-11-06 09:50+0400\n"
+"PO-Revision-Date: 2025-12-11 10:25+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1502,20 +1502,17 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:309
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr "استخدم المنبه المميز"
+msgstr "لا تمنع الإنذار أبدًا"
 
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
-msgstr "الإعداد المبدئي في مربع حوار تحرير المنبه لـ \"إغلاق آليّ إذا تأخرت\"."
+msgstr "القيمة المبدئية في مربع حوار تحرير التنبيه لـ ”لا تمنع الإنذار أبدًا“."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -2108,11 +2105,10 @@ msgid "Recurrence - [%1]"
 msgstr "التكرار - [%1]"
 
 #: editdlg.cpp:87
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@option:check"
 msgid "Never inhibit alarm"
-msgstr "استخدم المنبه المميز"
+msgstr "لا تمنع الإنذار أبدًا"
 
 #: editdlg.cpp:88
 #, kde-format
@@ -2419,6 +2415,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications"
 msgstr ""
+"تحقق من تنفيذ التنبيه دائمًا في الوقت المحدد، بغض النظر عن منع الإشعارات أو "
+"التطبيقات النشطة التي تشغل الشاشة بالكامل"
 
 #: editdlg.cpp:1536
 #, kde-format
@@ -2427,6 +2425,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications."
 msgstr ""
+"تحقق من تنفيذ التنبيه دائمًا في الوقت المحدد، بغض النظر عن منع الإشعارات أو "
+"التطبيقات النشطة التي تشغل الشاشة بالكامل."
 
 #: editdlgtypes.cpp:75
 #, kde-format
