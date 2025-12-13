@@ -60,9 +60,9 @@ bool parseAddress(const char* & scursor, const char* const send,
 
 namespace
 {
-void                        initHeaders(KMime::Message&, JobData&);
-KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalidItem);
-QString                     extractEmailAndNormalize(const QString& emailAddress);
+void                         initHeaders(KMime::Message&, JobData&);
+QList<KMime::Types::Mailbox> parseAddresses(const QString& text, QString& invalidItem);
+QString                      extractEmailAndNormalize(const QString& emailAddress);
 }
 
 QString KAMail::i18n_NeedFromEmailAddress()
@@ -397,7 +397,7 @@ QString KAMail::convertAddresses(const QString& items, KCalendarCore::Person::Li
 {
     list.clear();
     QString invalidItem;
-    const KMime::Types::Mailbox::List mailboxes = parseAddresses(items, invalidItem);
+    const QList<KMime::Types::Mailbox> mailboxes = parseAddresses(items, invalidItem);
     if (!invalidItem.isEmpty())
         return invalidItem;
     for (const KMime::Types::Mailbox& mailbox : mailboxes)
@@ -604,9 +604,9 @@ QString extractEmailAndNormalize(const QString& emailAddress)
 * Note that this only needs to parse strings input into KAlarm, so it only
 * needs to accept the common syntax for email addresses, not obsolete syntax.
 */
-KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalidItem)
+QList<KMime::Types::Mailbox> parseAddresses(const QString& text, QString& invalidItem)
 {
-    KMime::Types::Mailbox::List list;
+    QList<KMime::Types::Mailbox> list;
     int state     = 0;
     int start     = 0;  // start of this item
     int endName   = 0;  // character after end of name
