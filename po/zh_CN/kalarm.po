@@ -1452,20 +1452,17 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:309
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr "使用高亮的闹钟"
+msgstr ""
 
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
-msgstr "编辑闹钟对话框中，“超时自动关闭窗口”的默认设置。"
+msgstr ""
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -2046,11 +2043,10 @@ msgid "Recurrence - [%1]"
 msgstr "重复 - [%1]"
 
 #: editdlg.cpp:87
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@option:check"
 msgid "Never inhibit alarm"
-msgstr "使用高亮的闹钟"
+msgstr ""
 
 #: editdlg.cpp:88
 #, kde-format
@@ -8409,36 +8405,3 @@ msgstr "输入闹钟响铃前唤醒系统的分钟数，此项可确保系统在
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "闹钟唤醒睡眠前的分钟数"
-
-#~ msgctxt "@label"
-#~ msgid "Message windows have a title bar and take keyboard focus"
-#~ msgstr "消息窗口显示标题栏，并捕获键盘焦点"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid ""
-#~ "<p>Specify the characteristics of alarm message windows:<ul><li>If "
-#~ "checked, the window is a normal window with a title bar, which grabs "
-#~ "keyboard input when it is displayed.</li><li>If unchecked, the window "
-#~ "does not interfere with your typing when it is displayed, but it has no "
-#~ "title bar and cannot be moved or resized.</li></ul></p>"
-#~ msgstr ""
-#~ "<p>指定闹钟消息窗口的特征：<ul><li>选中后，该窗口会如普通窗口一样带有标题"
-#~ "栏，并在显示时捕捉键盘输入。</li><li>反之，窗口在显示时不会影响您的键盘操"
-#~ "作，但窗口没有标题栏，也无法移动窗口或更改窗口大小。</li></ul></p>"
-
-#~ msgctxt "@option:check"
-#~ msgid "Message windows have a title bar and take keyboard focus"
-#~ msgstr "消息窗口显示标题栏，并捕获键盘焦点"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid ""
-#~ "<para>Specify the characteristics of alarm message windows:<list><item>If "
-#~ "checked, the window is a normal window with a title bar, which grabs "
-#~ "keyboard input when it is displayed.</item><item>If unchecked, the window "
-#~ "does not interfere with your typing when it is displayed, but it has no "
-#~ "title bar and cannot be moved or resized.</item></list></para>"
-#~ msgstr ""
-#~ "<para>指定闹钟消息窗口的特征：<list><item>选中后，该窗口会如普通窗口一样带"
-#~ "有标题栏，并在显示时捕捉键盘输入。</item><item>反之，窗口在显示时不会影响"
-#~ "您的键盘操作，但窗口没有标题栏，也无法移动窗口或更改窗口大小。</item></"
-#~ "list></para>"
