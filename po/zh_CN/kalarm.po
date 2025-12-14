@@ -1455,14 +1455,14 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr ""
+msgstr "从不抑制闹钟"
 
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
-msgstr ""
+msgstr "闹钟编辑对话框中“从不抑制闹钟”的默认值。"
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -2046,7 +2046,7 @@ msgstr "重复 - [%1]"
 #, kde-format
 msgctxt "@option:check"
 msgid "Never inhibit alarm"
-msgstr ""
+msgstr "从不抑制闹钟"
 
 #: editdlg.cpp:88
 #, kde-format
@@ -2339,6 +2339,7 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications"
 msgstr ""
+"选中以在闹钟到点时始终执行闹钟，无论通知是否被抑制，或存在活动的全屏应用程序"
 
 #: editdlg.cpp:1536
 #, kde-format
@@ -2347,6 +2348,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications."
 msgstr ""
+"选中以在闹钟到点时始终执行闹钟，无论通知是否被抑制，或存在活动的全屏应用程"
+"序。"
 
 #: editdlgtypes.cpp:75
 #, kde-format
