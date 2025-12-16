@@ -14,14 +14,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-10 00:44+0000\n"
-"PO-Revision-Date: 2025-11-29 17:14+0900\n"
+"PO-Revision-Date: 2025-12-16 22:14+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Lokalize 26.03.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -1463,20 +1463,17 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:309
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr "使用突顯的鬧鐘"
+msgstr "不要阻擋鬧鐘"
 
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
-msgstr "在鬧鐘編輯視窗中，「若延遲就自動關閉」的預設設定。"
+msgstr "在鬧鐘編輯視窗中，「不要阻擋鬧鐘」的預設值。"
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -2056,11 +2053,10 @@ msgid "Recurrence - [%1]"
 msgstr "重複─【%1】"
 
 #: editdlg.cpp:87
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@option:check"
 msgid "Never inhibit alarm"
-msgstr "使用突顯的鬧鐘"
+msgstr "不要阻擋鬧鐘"
 
 #: editdlg.cpp:88
 #, kde-format
@@ -2355,6 +2351,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications"
 msgstr ""
+"勾選以在鬧鐘時間到時總是執行它，無論通知阻擋或是是否有作用中的全螢幕應用程"
+"式。"
 
 #: editdlg.cpp:1536
 #, kde-format
@@ -2363,6 +2361,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications."
 msgstr ""
+"勾選以在鬧鐘時間到時總是執行它，無論通知阻擋或是是否有作用中的全螢幕應用程"
+"式。"
 
 #: editdlgtypes.cpp:75
 #, kde-format
