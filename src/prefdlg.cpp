@@ -7,7 +7,6 @@
  */
 
 #include "prefdlg.h"
-#include "config-kalarm.h"
 #include "prefdlg_p.h"
 
 #include "alarmtimewidget.h"
