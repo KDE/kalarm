@@ -34,7 +34,7 @@ public:
     /** Send an email using PIM libraries.
      *  @return  empty string if sending initiated successfully, else error message.
      */
-    QString sendMail(KMime::Message::Ptr message, const KIdentityManagementCore::Identity& identity,
+    QString sendMail(const std::shared_ptr<KMime::Message> &message, const KIdentityManagementCore::Identity& identity,
                      const QString& normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata) override;
 
     /** Extract dragged and dropped Akonadi RFC822 message data.
@@ -42,7 +42,7 @@ public:
      *  @param emailId  updated with the Akonadi email ID.
      *  @return the email message if an Akonadi email has been extracted, else null.
      */
-    KMime::Message::Ptr fetchAkonadiEmail(const QUrl& url, qint64& emailId) override;
+     std::shared_ptr<KMime::Message> fetchAkonadiEmail(const QUrl& url, qint64& emailId) override;
 
     /** Get a single selection from the address book. */
     bool getAddressBookSelection(KCalendarCore::Person& person, QWidget* parent = nullptr) override;

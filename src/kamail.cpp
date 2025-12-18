@@ -134,7 +134,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     qCDebug(KALARM_LOG) << "KAMail::send: To:" << jobdata.event.emailAddresses(QStringLiteral(","))
                         << "\nSubject:" << jobdata.event.emailSubject();
 
-    KMime::Message::Ptr message = KMime::Message::Ptr(new KMime::Message);
+    std::shared_ptr<KMime::Message> message = std::shared_ptr<KMime::Message>(new KMime::Message);
 
     if (Preferences::emailClient() == Preferences::sendmail)
     {
@@ -146,7 +146,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
             command += QStringLiteral(" -f ");
             command += extractEmailAndNormalize(jobdata.from);
             command += QStringLiteral(" -oi -t ");
-            initHeaders(*message, jobdata);
+            initHeaders(*message.get(), jobdata);
         }
         else
         {
@@ -265,7 +265,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
         if (!data.event.message().isEmpty())
         {
             // There is a message body
-            auto content = new KMime::Content();
+            auto content = std::unique_ptr<KMime::Content>(new KMime::Content());
             content->contentType()->setMimeType("text/plain");
             content->contentType()->setCharset("utf-8");
             content->fromUnicodeString(data.event.message());
@@ -273,7 +273,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             encodings.removeAll(KMime::Headers::CE8Bit);  // not handled by KMime
             content->contentTransferEncoding()->setEncoding(encodings.at(0));
             content->assemble();
-            message.appendContent(content);
+            message.appendContent(std::move(content));
         }
 
         // Append each attachment in turn
@@ -327,23 +327,23 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             }
 
             QByteArray coded = KCodecs::base64Encode(contents);
-            auto content = new KMime::Content();
+            auto content = std::unique_ptr<KMime::Content>(new KMime::Content());
             content->setEncodedBody(coded + "\n\n");
 
             // Set the content type
             QMimeDatabase mimeDb;
             QString typeName = mimeDb.mimeTypeForUrl(url).name();
-            auto ctype = new KMime::Headers::ContentType;
+            auto ctype = std::unique_ptr<KMime::Headers::ContentType>(new KMime::Headers::ContentType);
             ctype->fromUnicodeString(typeName);
             ctype->setName(attachment);
-            content->setHeader(ctype);
+            content->setHeader(std::move(ctype));
 
             // Set the encoding
-            auto cte = new KMime::Headers::ContentTransferEncoding;
+            auto cte = std::unique_ptr<KMime::Headers::ContentTransferEncoding>(new KMime::Headers::ContentTransferEncoding);
             cte->setEncoding(KMime::Headers::CEbase64);
-            content->setHeader(cte);
+            content->setHeader(std::move(cte));
             content->assemble();
-            message.appendContent(content);
+            message.appendContent(std::move(content));
             if (atterror)
                 return attachError;
         }
@@ -554,40 +554,40 @@ namespace
 */
 void initHeaders(KMime::Message& message, JobData& data)
 {
-    auto date = new KMime::Headers::Date;
+    auto date = std::unique_ptr<KMime::Headers::Date>(new KMime::Headers::Date);
     date->setDateTime(KADateTime::currentDateTime(Preferences::timeSpec()).qDateTime());
-    message.setHeader(date);
+    message.setHeader(std::move(date));
 
-    auto from = new KMime::Headers::From;
+    auto from = std::unique_ptr<KMime::Headers::From>(new KMime::Headers::From);
     from->fromUnicodeString(data.from);
-    message.setHeader(from);
+    message.setHeader(std::move(from));
 
-    auto to = new KMime::Headers::To;
+    auto to = std::unique_ptr<KMime::Headers::To>(new KMime::Headers::To);
     const KCalendarCore::Person::List toList = data.event.emailAddressees();
     for (const KCalendarCore::Person& who : toList)
         to->addAddress(who.email().toLatin1(), who.name());
-    message.setHeader(to);
+    message.setHeader(std::move(to));
 
     if (!data.bcc.isEmpty())
     {
-        auto bcc = new KMime::Headers::Bcc;
+        auto bcc = std::unique_ptr<KMime::Headers::Bcc>(new KMime::Headers::Bcc);
         bcc->fromUnicodeString(data.bcc);
-        message.setHeader(bcc);
+        message.setHeader(std::move(bcc));
     }
 
-    auto subject = new KMime::Headers::Subject;
+    auto subject = std::unique_ptr<KMime::Headers::Subject>(new KMime::Headers::Subject);
     const QString str = data.event.emailSubject();
     subject->fromUnicodeString(str);
-    message.setHeader(subject);
+    message.setHeader(std::move(subject));
 
-    auto agent = new KMime::Headers::UserAgent;
+    auto agent = std::unique_ptr<KMime::Headers::UserAgent>(new KMime::Headers::UserAgent);
     agent->fromUnicodeString(KAboutData::applicationData().displayName() + QLatin1StringView("/" KALARM_VERSION));
     agent->setRFC2047Charset("us-ascii");
-    message.setHeader(agent);
+    message.setHeader(std::move(agent));
 
-    auto id = new KMime::Headers::MessageID;
+    auto id = std::unique_ptr<KMime::Headers::MessageID>(new KMime::Headers::MessageID);
     id->generate(data.from.mid(data.from.indexOf('@'_L1) + 1).toLatin1());
-    message.setHeader(id);
+    message.setHeader(std::move(id));
 }
 
 /******************************************************************************
@@ -743,7 +743,7 @@ bool parseUserName(const char* & scursor, const char* const send, QString& resul
     if (scursor != send)
     {
         // first, eat any whitespace
-        eatCFWS(scursor, send, isCRLF);
+        eatCFWS(scursor, send, isCRLF ? NewlineType::CRLF : NewlineType::LF);
 
         char ch = *scursor++;
         switch (ch)
@@ -755,7 +755,7 @@ bool parseUserName(const char* & scursor, const char* const send, QString& resul
 
             default: // atom
                 scursor--; // re-set scursor to point to ch again
-                if (parseAtom(scursor, send, atom, false /* no 8bit */))
+                if (parseAtom(scursor, send, atom, ParsingPolicy::Allow7BitOnly /* no 8bit */))
                 {
                     //TODO FIXME on windows
 #ifndef WIN32
@@ -781,14 +781,14 @@ bool parseAddress(const char* & scursor, const char* const send, Address& result
 {
     // address       := mailbox / group
 
-    eatCFWS(scursor, send, isCRLF);
+    eatCFWS(scursor, send, isCRLF ? NewlineType::CRLF : NewlineType::LF);
     if (scursor == send)
         return false;
 
     // first try if it's a single mailbox:
     Mailbox maybeMailbox;
     const char * oldscursor = scursor;
-    if (parseMailbox(scursor, send, maybeMailbox, isCRLF))
+    if (parseMailbox(scursor, send, maybeMailbox, isCRLF ? NewlineType::CRLF : NewlineType::LF))
     {
         // yes, it is:
         result.setDisplayName({});
@@ -817,7 +817,7 @@ bool parseAddress(const char* & scursor, const char* const send, Address& result
     Address maybeAddress;
 
     // no, it's not a single mailbox. Try if it's a group:
-    if (!parseGroup(scursor, send, maybeAddress, isCRLF))
+    if (!parseGroup(scursor, send, maybeAddress, isCRLF ? NewlineType::CRLF : NewlineType::LF))
     {
         scursor = oldscursor;   // KAlarm: reinstate original scursor on error return
         return false;

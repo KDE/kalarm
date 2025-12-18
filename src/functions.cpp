@@ -1882,7 +1882,7 @@ bool dropAkonadiEmail(const QMimeData* data, QUrl& url, AlarmText& alarmText)
         if (akonadiPlugin)
         {
             KAEvent::EmailId emailId;
-            KMime::Message::Ptr message = akonadiPlugin->fetchAkonadiEmail(url, emailId);
+            std::shared_ptr<KMime::Message> message = akonadiPlugin->fetchAkonadiEmail(url, emailId);
             if (message)
             {
                 // It's an email held in Akonadi

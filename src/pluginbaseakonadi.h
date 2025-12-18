@@ -46,11 +46,11 @@ public:
     /** Send an email using PIM libraries.
      *  @return  empty string if sending initiated successfully, else error message.
      */
-    virtual QString sendMail(KMime::Message::Ptr message, const KIdentityManagementCore::Identity& identity,
+    virtual QString sendMail(const std::shared_ptr<KMime::Message> &message, const KIdentityManagementCore::Identity& identity,
                              const QString& normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata) = 0;
 
     /** Extract dragged and dropped Akonadi RFC822 message data. */
-    virtual KMime::Message::Ptr fetchAkonadiEmail(const QUrl&, qint64& emailId) = 0;
+    virtual std::shared_ptr<KMime::Message> fetchAkonadiEmail(const QUrl&, qint64& emailId) = 0;
 
     /** Get a single selection from the address book. */
     virtual bool getAddressBookSelection(KCalendarCore::Person&, QWidget* parent = nullptr) = 0;

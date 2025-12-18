@@ -84,7 +84,7 @@ int AkonadiPlugin::birthdayModelEnum(BirthdayModelValue value) const
 /******************************************************************************
 * Send an email via Akonadi.
 */
-QString AkonadiPlugin::sendMail(KMime::Message::Ptr message, const KIdentityManagementCore::Identity& identity,
+QString AkonadiPlugin::sendMail(const std::shared_ptr<KMime::Message> &message, const KIdentityManagementCore::Identity& identity,
                                 const QString& normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata)
 {
     if (!mSendAkonadiMail)
@@ -99,7 +99,7 @@ QString AkonadiPlugin::sendMail(KMime::Message::Ptr message, const KIdentityMana
 /******************************************************************************
 * Extract dragged and dropped Akonadi RFC822 message data.
 */
-KMime::Message::Ptr AkonadiPlugin::fetchAkonadiEmail(const QUrl& url, qint64& emailId)
+std::shared_ptr<KMime::Message> AkonadiPlugin::fetchAkonadiEmail(const QUrl& url, qint64& emailId)
 {
     static_assert(sizeof(Akonadi::Item::Id) == sizeof(emailId), "AkonadiPlugin::fetchAkonadiEmail: parameter is wrong type");
 
@@ -125,12 +125,12 @@ KMime::Message::Ptr AkonadiPlugin::fetchAkonadiEmail(const QUrl& url, qint64& em
     else
     {
         const Akonadi::Item& it = items.at(0);
-        if (!it.isValid()  ||  !it.hasPayload<KMime::Message::Ptr>())
+        if (!it.isValid()  ||  !it.hasPayload<std::shared_ptr<KMime::Message>>())
             qCWarning(AKONADIPLUGIN_LOG) << "AkonadiPlugin::fetchAkonadiEmail: invalid email";
         else
         {
             emailId = it.id();
-            return it.payload<KMime::Message::Ptr>();
+            return it.payload<std::shared_ptr<KMime::Message>>();
         }
     }
     return {};
