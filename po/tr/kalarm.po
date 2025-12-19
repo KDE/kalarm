@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-18 00:44+0000\n"
-"PO-Revision-Date: 2025-11-02 22:53+0300\n"
+"PO-Revision-Date: 2025-12-18 15:57+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1547,21 +1547,18 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:309
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr "Vurgulanmış alarm kullan"
+msgstr "Alarmı asla engelleme"
 
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
 msgstr ""
-"“Gecikmişse otomatik kapat” için alarm düzenleme penceresinde öntanımlı ayar."
+"“Alarmı asla engelleme” için alarm düzenleme penceresinde öntanımlı değer."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -2168,11 +2165,10 @@ msgid "Recurrence - [%1]"
 msgstr "Yinelenme — [%1]"
 
 #: editdlg.cpp:87
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@option:check"
 msgid "Never inhibit alarm"
-msgstr "Vurgulanmış alarm kullan"
+msgstr "Alarmı asla engelleme"
 
 #: editdlg.cpp:88
 #, kde-format
@@ -2482,6 +2478,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications"
 msgstr ""
+"Bildirim engelleme veya etkin tam ekran uygulamalarından bağımsız olarak, "
+"alarmın her zaman zamanında çalıştırılmasını sağlayın."
 
 #: editdlg.cpp:1536
 #, kde-format
@@ -2490,6 +2488,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications."
 msgstr ""
+"Bildirim engelleme veya etkin tam ekran uygulamalarından bağımsız olarak, "
+"alarmın her zaman zamanında çalıştırılmasını sağlayın."
 
 #: editdlgtypes.cpp:75
 #, kde-format
