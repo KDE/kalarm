@@ -110,7 +110,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->30/08/2025</date>
+>03/12/2025</date>
 <releaseinfo
 >3.12.0 (KDE Gear 25.12)</releaseinfo>
 
@@ -2381,6 +2381,9 @@
 
 <para
 >Se você desativar as notificações para a área de trabalho, a execução dos alarmes de exibição será suspensa até que as notificações sejam reativadas. Observe que isso se aplica a todos os alarmes de exibição, independentemente de serem exibidos em janelas ou como notificações.</para>
+
+<para
+>Observe que em um sistema de tela única, o gerenciador de janelas pode inibir notificações enquanto qualquer aplicativo estiver em execução em tela cheia, o que suspenderá automaticamente a exibição de alarmes.</para>
 
 <sect2 id="message-window">
 <title
