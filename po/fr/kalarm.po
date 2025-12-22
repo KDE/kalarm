@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-07 02:40+0000\n"
-"PO-Revision-Date: 2025-11-03 10:05+0100\n"
+"PO-Revision-Date: 2025-12-19 17:03+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -37,7 +37,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.11.90\n"
+"X-Generator: Lokalize 25.12.0\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -6313,7 +6313,7 @@ msgstr "Fenêtres d'alarme"
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
-msgstr "Afficher une icône dans la boî&te à miniatures"
+msgstr "Afficher une i&cône dans la boite à miniatures"
 
 #: prefdlg.cpp:1909
 #, kde-kuit-format
