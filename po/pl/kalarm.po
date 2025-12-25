@@ -1,6 +1,6 @@
 # translation of kalarm.po to
 # translation of alarmdaemonctrl.po to
-# Version: $Revision: 1724515 $
+# Version: $Revision: 1725805 $
 #
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2004, 2005, 2006.
@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-07 02:40+0000\n"
-"PO-Revision-Date: 2025-12-06 15:56+0100\n"
+"PO-Revision-Date: 2025-12-24 16:41+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
 "Language: pl\n"
@@ -69,7 +69,7 @@ msgid ""
 "Enter the length of time (in hours and minutes) after the current time to "
 "schedule the alarm."
 msgstr ""
-"Podaj długość czasu (w godzinach i minutach) od chwili obecnej,,, aby "
+"Podaj długość czasu (w godzinach i minutach) od chwili obecnej, aby "
 "zaplanować alarm."
 
 #: alarmtimewidget.cpp:68
@@ -112,7 +112,7 @@ msgstr "Zaplanuj ponownie alarm na określoną datę i czas."
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify the date, or date and time, to schedule the alarm."
-msgstr "Uściślij datę, lub datę i czas,,, aby zaplanować alarm"
+msgstr "Uściślij datę, lub datę i czas, aby zaplanować alarm"
 
 #: alarmtimewidget.cpp:103
 #, kde-kuit-format
@@ -468,7 +468,7 @@ msgstr "Ustawienia alarmu"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
-msgstr "Odhacz,,, aby wyświetlić przypomnienie przed lub po urodzinach."
+msgstr "Zaznacz to pole, aby wyświetlić przypomnienie przed lub po urodzinach."
 
 #: birthdaydlg.cpp:162
 #, kde-format
@@ -564,29 +564,29 @@ msgstr "Linia poleceń do wygenerowania tekstu alarmu"
 #: commandoptions.cpp:170
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
-msgstr "Wyświetl okno edycji alarmu,,, aby zmienić podany alarm"
+msgstr "Wyświetl okno edycji alarmu, aby zmienić podany alarm"
 
 #: commandoptions.cpp:174
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr ""
-"Wyświetl okno edycji alarmu,,, aby zmienić nowy alarm w postaci wiadomości"
+"Wyświetl okno edycji alarmu, aby zmienić nowy alarm w postaci wiadomości"
 
 #: commandoptions.cpp:177
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr ""
-"Wyświetl okno edycji alarmu,,, aby zmienić nowy alarm w postaci polecenia"
+"Wyświetl okno edycji alarmu, aby zmienić nowy alarm w postaci polecenia"
 
 #: commandoptions.cpp:180
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
-msgstr "Wyświetl okno edycji alarmu,,, aby zmienić nowy alarm pocztowy"
+msgstr "Wyświetl okno edycji alarmu, aby zmienić nowy alarm pocztowy"
 
 #: commandoptions.cpp:183
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
-msgstr "Wyświetl okno edycji alarmu,,, aby zmienić nowy alarm dźwiękowy"
+msgstr "Wyświetl okno edycji alarmu, aby zmienić nowy alarm dźwiękowy"
 
 #: commandoptions.cpp:186
 #, kde-format
@@ -1017,10 +1017,10 @@ msgid ""
 "alarms due within a set period of time, enter the time period in minutes.</"
 "p><p>Enter 0 to always show the system tray icon.</p>"
 msgstr ""
-"<p>Podaj -1,,, aby samoczynnie ukryć ikonę KAlarm na tacce systemowej, gdy "
-"nie ma aktywnych alarmów.</p><p> Podaj przedział czasowy w minutach,,, aby "
+"<p>Podaj -1, aby samoczynnie ukryć ikonę KAlarm na tacce systemowej, gdy nie "
+"ma aktywnych alarmów.</p><p> Podaj przedział czasowy w minutach, aby "
 "samoczynnie ukryć ikonę na tacce systemowej, gdy nie ma wyznaczonego alarmu "
-"w ustawionym przedziale czasowym, .</p><p>Podaj 0,,, aby zawsze pokazywać "
+"w ustawionym przedziale czasowym, .</p><p>Podaj 0, aby zawsze pokazywać "
 "ikonę na tacce systemowej.</p>"
 
 #. i18n: ectx: label, entry (NoAutoHideSystemTrayDesktops), group (General)
@@ -1347,9 +1347,9 @@ msgid ""
 "email address otherwise."
 msgstr ""
 "Twój adres pocztowy, używany do identyfikacji ciebie jako nadawcy wysyłanej "
-"wiadomości alarmowej. Wpisz \"@SystemSettings\",,, aby użyć domyślnego "
-"adresu ustawionego w KMailu, \"@KMail\" jeśli chcesz wybrać z listy "
-"tożsamości KMail, lub podaj aktualny adres e-mail."
+"wiadomości alarmowej. Wpisz \"@SystemSettings\", aby użyć domyślnego adresu "
+"ustawionego w KMailu, \"@KMail\" jeśli chcesz wybrać z listy tożsamości "
+"KMail, lub podaj aktualny adres e-mail."
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:230
@@ -1372,7 +1372,7 @@ msgstr ""
 "Twój adres pocztowy, używany do wysyłania ukrytej kopii wiadomości alarmowej "
 "do siebie. Jeśli chcesz, by KAlarm wysyłał kopie na konto na komputerze, na "
 "którym działa, wystarczy, że wpiszesz swoją nazwę użytkownika. Wpisz "
-"\"@SystemSettings\",, aby użyć domyślnego adresu podanego w KMailu, albo "
+"\"@SystemSettings\", aby użyć domyślnego adresu podanego w KMailu, albo "
 "wpisz pełny adres."
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
@@ -1978,8 +1978,7 @@ msgstr "Ostrzegaj przed wyjściem z programu"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Whether to suppress a warning prompt before quitting KAlarm."
-msgstr ""
-"Zaznacz tę opcję,,, aby wyświetlać ostrzeżenie przed wyjściem z KAlarm."
+msgstr "Zaznacz tę opcję, aby wyświetlać ostrzeżenie przed wyjściem z KAlarm."
 
 #. i18n: ectx: label, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
 #: data/kalarmconfig.kcfg:451
@@ -2211,7 +2210,7 @@ msgstr "Wczytaj wzorzec..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
-msgstr "Wybierz wzorzec alarmu,,, aby wypełnić alarm ustawieniami domyślnymi"
+msgstr "Wybierz wzorzec alarmu, aby wypełnić alarm ustawieniami domyślnymi"
 
 #: editdlg.cpp:205
 #, kde-format
@@ -2356,7 +2355,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
-msgstr "Zaznacz,,, aby skopiować alarm do kalendarza KOrganizer"
+msgstr "Zaznacz, aby skopiować alarm do kalendarza KOrganizer"
 
 #: editdlg.cpp:1009
 #, kde-format
@@ -2605,7 +2604,7 @@ msgid ""
 "Check to additionally display a reminder in advance of or after the main "
 "alarm time(s)."
 msgstr ""
-"Odhacz,,, aby dodatkowo wyświetlić przypomnienie przed lub po głównym czasie "
+"Odhacz, aby dodatkowo wyświetlić przypomnienie przed lub po głównym czasie "
 "alarmu (s)."
 
 #: editdlgtypes.cpp:275
@@ -2769,7 +2768,7 @@ msgid ""
 "Check to log the command output to a local file. The output will be appended "
 "to any existing contents of the file."
 msgstr ""
-"Zaznacz tę opcję,,, aby zapisywać wynik polecenia do lokalnego pliku. Wynik "
+"Zaznacz tę opcję, aby zapisywać wynik polecenia do lokalnego pliku. Wynik "
 "polecenia zostanie dopisany do istniejącej zawartości pliku."
 
 #: editdlgtypes.cpp:903
@@ -2782,7 +2781,7 @@ msgstr "Odrzuć"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
-msgstr "Zaznacz tę opcję,,, aby odrzucić wynik polecenia."
+msgstr "Zaznacz tę opcję, aby odrzucić wynik polecenia."
 
 #: editdlgtypes.cpp:1066
 #, kde-format
@@ -3535,7 +3534,7 @@ msgid ""
 msgstr ""
 "Nie można tworzyć, ani uaktualniać alarmów, bo nie ustawiono żadnego "
 "zapisywalnego kalendarza alarmów.<nl/><nl/>Aby to naprawić, przejdź do "
-"<interface> Widok | Wyświetlaj Kalendarze</interface>,,, aby sprawdzić lub "
+"<interface> Widok | Wyświetlaj Kalendarze</interface>, aby sprawdzić lub "
 "zmienić ustawienia kalendarzy."
 
 #: kalarmapp.cpp:1470
@@ -3558,7 +3557,7 @@ msgstr ""
 "Ustawiono archiwizowanie alarmów, lecz jest to niemożliwe, bo nie jest "
 "włączony żaden kalendarz do archiwizowania alarmów, do którego istnieje "
 "możliwość zapisywania.<nl/><nl/>Aby temu zaradzić, przejdź do <interface> "
-"Widok | Pokaż Kalendarze</interface>,,, aby sprawdzić lub zmienić stany "
+"Widok | Pokaż Kalendarze</interface>, aby sprawdzić lub zmienić stany "
 "kalendarzy."
 
 #: kalarmapp.cpp:1506
@@ -5229,7 +5228,7 @@ msgid ""
 "Check to display a warning prompt before quitting <application>KAlarm</"
 "application>."
 msgstr ""
-"Zaznacz tę opcję,,, aby wyświetlać ostrzeżenie przed wyjściem z "
+"Zaznacz tę opcję, aby wyświetlać ostrzeżenie przed wyjściem z "
 "<application>KAlarm</application>."
 
 #: prefdlg.cpp:497
@@ -5346,7 +5345,7 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
-"Włącz używanie Akonadi,,, aby umożliwić importowanie urodzin, dać możliwości "
+"Włącz używanie Akonadi, aby umożliwić importowanie urodzin, dać możliwości "
 "związane z obsługą poczty oraz wyszukiwanie w książce adresowej."
 
 #: prefdlg.cpp:604
@@ -5356,7 +5355,7 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
-"Włącz używanie Akonadi,,, aby umożliwić importowanie urodzin, dać możliwości "
+"Włącz używanie Akonadi, aby umożliwić importowanie urodzin, dać możliwości "
 "związane z obsługą poczty oraz wyszukiwanie w książce adresowej."
 
 #: prefdlg.cpp:677
@@ -5790,7 +5789,7 @@ msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, to identify you as the sender when sending email alarms."
 msgstr ""
-"Zaznacz to pole,,, aby użyć domyślnego adresu ustawionego w "
+"Zaznacz to pole, aby użyć domyślnego adresu ustawionego w "
 "<application>KMailu</application>. Adres ten będzie używany do rozpoznawania "
 "ciebie jako nadawcy poczty przy wysyłaniu alarmów jako wiadomość pocztowa."
 
@@ -6101,7 +6100,7 @@ msgid ""
 "Check to show <application>KAlarm</application>'s icon in the system tray "
 "regardless of whether alarms are due."
 msgstr ""
-"Odhacz to,,, aby pokazać ikonę <application>KAlarm</application> na tacce "
+"Odhacz to, aby pokazać ikonę <application>KAlarm</application> na tacce "
 "systemowej bez względu na to, że alarmy są już po czasie."
 
 #: prefdlg.cpp:1946
@@ -6118,10 +6117,10 @@ msgid ""
 "system tray if there are no active alarms. When hidden, the icon can always "
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
-"Zaznacz to,,, aby samoczynnie ukryć ikonę <application>KAlarm</application> "
-"na tacce systemowej, jeśli nie ma aktywnych alarmów. Gdy program będzie "
-"ukryty, to ikonę zawsze można uczynić widoczną poprzez użycie opcji tacki "
-"systemowej dotyczącej pokazywania ukrytych ikon."
+"Zaznacz to, aby samoczynnie ukryć ikonę <application>KAlarm</application> na "
+"tacce systemowej, jeśli nie ma aktywnych alarmów. Gdy program będzie ukryty, "
+"to ikonę zawsze można uczynić widoczną poprzez użycie opcji tacki systemowej "
+"dotyczącej pokazywania ukrytych ikon."
 
 #: prefdlg.cpp:1956
 #, kde-kuit-format
@@ -6132,8 +6131,8 @@ msgid ""
 "hidden, the icon can always be made visible by use of the system tray option "
 "to show hidden icons."
 msgstr ""
-"Zaznacz to,,, aby samoczynnie ukryć ikonę <application>KAlarm</application> "
-"na tacce systemowej, jeśli nie ma alarmów wyznaczonych na podany przedział "
+"Zaznacz to, aby samoczynnie ukryć ikonę <application>KAlarm</application> na "
+"tacce systemowej, jeśli nie ma alarmów wyznaczonych na podany przedział "
 "czasu. Gdy program będzie ukryty, to ikonę zawsze można uczynić widoczną "
 "poprzez użycie opcji tacki systemowej dotyczącej pokazywania ukrytych ikon."
 
@@ -6928,7 +6927,7 @@ msgid ""
 "Check to specify the number of times the alarm should repeat after each "
 "recurrence"
 msgstr ""
-"Zaznacz tę opcję,,, aby podać ile razy alarm powinien zostać wywołany przy "
+"Zaznacz tę opcję, aby podać ile razy alarm powinien zostać wywołany przy "
 "każdym powtórzeniu"
 
 #: repetitionbutton.cpp:165
@@ -7222,8 +7221,8 @@ msgid ""
 "within it."
 msgstr ""
 "Jeśli wolisz, to możesz zaimportować ten zasób katalogu kalendarza później, "
-"poprzez wybranie importowanie alarmów z menu,,, aby zaimportować zawarte w "
-"nim pliki kalendarza."
+"poprzez wybranie importowanie alarmów z menu, aby zaimportować zawarte w nim "
+"pliki kalendarza."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mergeRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:13
@@ -8107,7 +8106,7 @@ msgstr ""
 msgctxt "@text/plain"
 msgid "Could not run <command>%1</command> to set wake from suspend"
 msgstr ""
-"Nie można uruchomić <command>%1</command>,,, aby ustawić pobudkę z uśpienia"
+"Nie można uruchomić <command>%1</command>, aby ustawić pobudkę z uśpienia"
 
 #: rtcwakeaction.cpp:91
 #, kde-kuit-format
@@ -8218,7 +8217,7 @@ msgstr "Wycisz"
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
 msgstr ""
-"Zaznacz tę opcję,,, aby wyciszyć poziom głośności przy pierwszym odtworzeniu "
+"Zaznacz tę opcję, aby wyciszyć poziom głośności przy pierwszym odtworzeniu "
 "pliku."
 
 #: sounddlg.cpp:266
@@ -8730,7 +8729,7 @@ msgstr ""
 "zaplanować tylko pojedynczy czas pobudki.</para><para><note>Pobudka ze "
 "uśpienia nie jest obsługiwana w ogóle na pewnych komputerach, szczególnie na "
 "tych starych, a niektóre komputery obsługują ustawienie pobudki tylko do 24 "
-"godzin w przód. Możesz chcieć ustawić alarm testowy,,, aby sprawdzić "
+"godzin w przód. Możesz chcieć ustawić alarm testowy, aby sprawdzić "
 "możliwości swojego sprzętu.</note></para>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
