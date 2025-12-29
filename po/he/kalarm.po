@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-07 02:40+0000\n"
-"PO-Revision-Date: 2025-12-06 20:37+0200\n"
+"PO-Revision-Date: 2025-12-27 15:45+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Lokalize 25.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -79,7 +79,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
-msgstr ""
+msgstr "משתמש באזור הזמן כברירת המחדל של KAlarm, עוד פרטים בחלונית ההגדרות."
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -139,6 +139,8 @@ msgid ""
 "Check to specify only a date (without a time) for the alarm. The alarm will "
 "trigger at the first opportunity on the selected date."
 msgstr ""
+"לסמן כדי לציין תאריך בלבד (בלי שעה) להתראה. ההתראה תוזנק בהזדמנות הראשונה "
+"שיש בתאריך הנבחר."
 
 #: alarmtimewidget.cpp:137
 #, kde-format
@@ -588,7 +590,7 @@ msgstr "הפרש בין חזרות של התזכורת"
 #: commandoptions.cpp:202
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
-msgstr ""
+msgstr "הצגת תזכורות כאירועים ב־KOrganizer"
 
 #: commandoptions.cpp:205
 #, fuzzy, kde-format
@@ -633,7 +635,7 @@ msgstr "קובץ צליל להשמעה מחזורית"
 #: commandoptions.cpp:235
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
-msgstr ""
+msgstr "אפשר לציין חזרה על תזכורת באמצעות תחביר iCalendar"
 
 #: commandoptions.cpp:239
 #, kde-format
@@ -722,6 +724,8 @@ msgid ""
 "Invalid <icode>%1</icode> and <icode>%2</icode> parameters: repetition is "
 "longer than <icode>%3</icode> interval"
 msgstr ""
+"המשתנים <icode>%1</icode> ו־<icode>%2</icode> שגויים: החזרה ארוכה מהפרש במשך "
+"<icode>%3</icode>"
 
 #: commandoptions.cpp:786
 #, kde-format
