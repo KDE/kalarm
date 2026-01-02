@@ -2,7 +2,7 @@
    This file is part of kalarmcal library, which provides access to KAlarm
    calendar data.
 
-   SPDX-FileCopyrightText: 2018-2025 David Jarvie <djarvie@kde.org>
+   SPDX-FileCopyrightText: 2018-2026 David Jarvie <djarvie@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -42,7 +42,7 @@ void KAEventTest::constructors()
     const QColor fgColour(130, 110, 240);
     const QColor bgColour(20, 70, 140);
     const QFont  font(QStringLiteral("Helvetica"), 10, QFont::Bold, true);
-    const KAEvent::Flags flags(KAEvent::CONFIRM_ACK | KAEvent::AUTO_CLOSE);
+    const KAEvent::Flags flags(KAEvent::ConfirmAck | KAEvent::AutoClose);
     {
         // Display alarm
         KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
@@ -314,7 +314,7 @@ void KAEventTest::flags()
     const QColor bgColour(20, 70, 140);
     const QFont  font(QStringLiteral("Helvetica"), 10, QFont::Bold, true);
     {
-        const KAEvent::Flags flags(KAEvent::BEEP | KAEvent::DEFAULT_FONT);
+        const KAEvent::Flags flags(KAEvent::Beep | KAEvent::DefaultFont);
         KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
         QCOMPARE(event.flags(), flags);
         QVERIFY(!event.startDateTime().isDateOnly());
@@ -336,7 +336,7 @@ void KAEventTest::flags()
         QVERIFY(!event.emailBcc());
     }
     {
-        const KAEvent::Flags flags(KAEvent::REPEAT_AT_LOGIN | KAEvent::DISABLED);
+        const KAEvent::Flags flags(KAEvent::RepeatAtLogin | KAEvent::Disabled);
         KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
@@ -359,10 +359,10 @@ void KAEventTest::flags()
     }
     {
         const KADateTime dtDateOnly(QDate(2010,5,13), QTimeZone("Europe/London"));
-        const KAEvent::Flags flags(KAEvent::REPEAT_AT_LOGIN | KAEvent::DISABLED);
+        const KAEvent::Flags flags(KAEvent::RepeatAtLogin | KAEvent::Disabled);
         KAEvent event(dtDateOnly, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
         QVERIFY(event.startDateTime().isDateOnly());
-        QCOMPARE(event.flags(), flags | KAEvent::ANY_TIME);
+        QCOMPARE(event.flags(), flags | KAEvent::AnyTime);
         QVERIFY(event.repeatAtLogin());
         QVERIFY(!event.enabled());
         QVERIFY(!event.beep());
@@ -381,10 +381,10 @@ void KAEventTest::flags()
         QVERIFY(!event.emailBcc());
     }
     {
-        const KAEvent::Flags flags(KAEvent::REPEAT_AT_LOGIN | KAEvent::DISABLED);
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags | KAEvent::ANY_TIME);
+        const KAEvent::Flags flags(KAEvent::RepeatAtLogin | KAEvent::Disabled);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags | KAEvent::AnyTime);
         QVERIFY(event.startDateTime().isDateOnly());
-        QCOMPARE(event.flags(), flags | KAEvent::ANY_TIME);
+        QCOMPARE(event.flags(), flags | KAEvent::AnyTime);
         QVERIFY(event.repeatAtLogin());
         QVERIFY(!event.enabled());
         QVERIFY(!event.beep());
@@ -403,7 +403,7 @@ void KAEventTest::flags()
         QVERIFY(!event.emailBcc());
     }
     {
-        const KAEvent::Flags flags(KAEvent::CONFIRM_ACK | KAEvent::SPEAK | KAEvent::EXCL_HOLIDAYS);
+        const KAEvent::Flags flags(KAEvent::ConfirmAck | KAEvent::Speak | KAEvent::ExcludeHolidays);
         KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
@@ -427,7 +427,7 @@ void KAEventTest::flags()
     {
         static Holidays holidays;
         KAEvent::setHolidays(holidays);
-        const KAEvent::Flags flags(KAEvent::AUTO_CLOSE | KAEvent::EXCL_HOLIDAYS | KAEvent::REPEAT_SOUND);
+        const KAEvent::Flags flags(KAEvent::AutoClose | KAEvent::ExcludeHolidays | KAEvent::RepeatSound);
         KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
@@ -450,7 +450,7 @@ void KAEventTest::flags()
         KAEvent::setHolidays();
     }
     {
-        const KAEvent::Flags flags(KAEvent::COPY_KORGANIZER | KAEvent::WORK_TIME_ONLY);
+        const KAEvent::Flags flags(KAEvent::CopyKOrganizer | KAEvent::WorkTimeOnly);
         KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
@@ -472,7 +472,7 @@ void KAEventTest::flags()
         QVERIFY(!event.emailBcc());
     }
     {
-        const KAEvent::Flags flags(KAEvent::SCRIPT | KAEvent::EXEC_IN_XTERM);
+        const KAEvent::Flags flags(KAEvent::Script | KAEvent::ExecInXterm);
         KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Command, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
@@ -494,7 +494,7 @@ void KAEventTest::flags()
         QVERIFY(!event.emailBcc());
     }
     {
-        const KAEvent::Flags flags(KAEvent::DISPLAY_COMMAND | KAEvent::REMINDER_ONCE);
+        const KAEvent::Flags flags(KAEvent::DisplayCommand | KAEvent::ReminderOnce);
         KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Command, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
@@ -516,7 +516,7 @@ void KAEventTest::flags()
         QVERIFY(!event.emailBcc());
     }
     {
-        const KAEvent::Flags flags(KAEvent::EMAIL_BCC);
+        const KAEvent::Flags flags(KAEvent::EmailBcc);
         KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Email, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
@@ -1239,7 +1239,7 @@ void KAEventTest::toKCalEvent()
 
     {
         // Event category, UID, revision, start time using time zone, created time
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, KAEvent::CONFIRM_ACK);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, KAEvent::ConfirmAck);
         event.setEventId(uid);
         event.incrementRevision();
         event.incrementRevision();
@@ -1268,7 +1268,7 @@ void KAEventTest::toKCalEvent()
     {
         // Start time using LocalZone
         const KADateTime dtl(QDate(2010,5,13), QTime(3, 45, 0), KADateTime::LocalZone);
-        KAEvent event(dtl, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, KAEvent::CONFIRM_ACK);
+        KAEvent event(dtl, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, KAEvent::ConfirmAck);
         event.setEventId(uid);
         event.incrementRevision();
         event.setCategory(CalEvent::ACTIVE);
@@ -1303,7 +1303,7 @@ void KAEventTest::setNextOccurrence()
     // to standard time, for a daily recurrence at a clock time which occurs twice (once
     // before the time shift, and once an hour later when the clock time repeats).
     const KADateTime dt(QDate(2005, 10, 29), QTime(1, 30, 0), QTimeZone("Europe/London"));
-    KAEvent event(dt, QStringLiteral("name"), QStringLiteral("text"), Qt::black, Qt::white, QFont(), KAEvent::SubAction::Message, 0, KAEvent::DEFAULT_FONT);
+    KAEvent event(dt, QStringLiteral("name"), QStringLiteral("text"), Qt::black, Qt::white, QFont(), KAEvent::SubAction::Message, 0, KAEvent::DefaultFont);
     event.setRecurDaily(1, QBitArray(7, true), -1, QDate());
     KAEvent::OccurType type;
     bool updated = event.setNextOccurrence(dt, type);
@@ -1384,7 +1384,7 @@ void KAEventTest::nextDateTime()
 
     // Set event recurrence to start June 3, recur every 10 days,
     // with one sub-repetition 2 days later.
-    KAEvent event(dtMon_6_3, QStringLiteral("name"), QStringLiteral("text"), Qt::black, Qt::white, QFont(), KAEvent::SubAction::Message, 0, KAEvent::DEFAULT_FONT);
+    KAEvent event(dtMon_6_3, QStringLiteral("name"), QStringLiteral("text"), Qt::black, Qt::white, QFont(), KAEvent::SubAction::Message, 0, KAEvent::DefaultFont);
     event.setRecurDaily(10, QBitArray(7, true), -1, QDate());  // recur every 10 days
     event.setRepetition(Repetition(Duration(2, Duration::Days), 1));   // 1 sub-rep after 2 days
     DateTime next;

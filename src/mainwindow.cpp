@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -1471,9 +1471,9 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
             }
             if (todo->allDay())
                 start.setDateOnly(true);
-            KAEvent::Flags flags = KAEvent::DEFAULT_FONT;
+            KAEvent::Flags flags = KAEvent::DefaultFont;
             if (start.isDateOnly())
-                flags |= KAEvent::ANY_TIME;
+                flags |= KAEvent::AnyTime;
             KAEvent ev(start, todo->summary(), alarmText.displayText(), Preferences::defaultBgColour(), Preferences::defaultFgColour(),
                        QFont(), KAEvent::SubAction::Message, 0, flags, true);
             ev.startChanges();

@@ -1,7 +1,7 @@
 /*
  *  dbushandler.cpp  -  handler for D-Bus calls by other applications
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -390,7 +390,7 @@ bool DBusHandler::scheduleMessage(const QString& name, const QString& message, c
                                   const KCalendarCore::Duration& subRepeatDuration, int subRepeatCount)
 {
     KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
-    const KAEvent::SubAction action = (kaEventFlags & KAEvent::DISPLAY_COMMAND) ? KAEvent::SubAction::Command : KAEvent::SubAction::Message;
+    const KAEvent::SubAction action = (kaEventFlags & KAEvent::DisplayCommand) ? KAEvent::SubAction::Command : KAEvent::SubAction::Message;
     const QColor bg = convertBgColour(bgColor);
     if (!bg.isValid())
         return false;
@@ -408,7 +408,7 @@ bool DBusHandler::scheduleMessage(const QString& name, const QString& message, c
     }
     QFont font;
     if (fontStr.isEmpty())
-        kaEventFlags |= KAEvent::DEFAULT_FONT;
+        kaEventFlags |= KAEvent::DefaultFont;
     else
     {
         if (!font.fromString(fontStr))    // N.B. this doesn't do good validation
@@ -576,22 +576,22 @@ KADateTime DBusHandler::convertDateTime(const QString& dateTime, const KADateTim
 KAEvent::Flags DBusHandler::convertStartFlags(const KADateTime& start, unsigned flags)
 {
     KAEvent::Flags kaEventFlags = {};
-    if (flags & REPEAT_AT_LOGIN) kaEventFlags |= KAEvent::REPEAT_AT_LOGIN;
-    if (flags & BEEP)            kaEventFlags |= KAEvent::BEEP;
-    if (flags & SPEAK)           kaEventFlags |= KAEvent::SPEAK;
-    if (flags & CONFIRM_ACK)     kaEventFlags |= KAEvent::CONFIRM_ACK;
-    if (flags & REPEAT_SOUND)    kaEventFlags |= KAEvent::REPEAT_SOUND;
-    if (flags & AUTO_CLOSE)      kaEventFlags |= KAEvent::AUTO_CLOSE;
-    if (flags & EMAIL_BCC)       kaEventFlags |= KAEvent::EMAIL_BCC;
-    if (flags & DISPLAY_COMMAND) kaEventFlags |= KAEvent::DISPLAY_COMMAND;
-    if (flags & SCRIPT)          kaEventFlags |= KAEvent::SCRIPT;
-    if (flags & EXEC_IN_XTERM)   kaEventFlags |= KAEvent::EXEC_IN_XTERM;
-    if (flags & SHOW_IN_KORG)    kaEventFlags |= KAEvent::COPY_KORGANIZER;
-    if (flags & EXCL_HOLIDAYS)   kaEventFlags |= KAEvent::EXCL_HOLIDAYS;
-    if (flags & WORK_TIME_ONLY)  kaEventFlags |= KAEvent::WORK_TIME_ONLY;
-    if (flags & DISABLED)        kaEventFlags |= KAEvent::DISABLED;
-    if (flags & NOTIFY)          kaEventFlags |= KAEvent::NOTIFY;
-    if (start.isDateOnly())      kaEventFlags |= KAEvent::ANY_TIME;
+    if (flags & REPEAT_AT_LOGIN) kaEventFlags |= KAEvent::RepeatAtLogin;
+    if (flags & BEEP)            kaEventFlags |= KAEvent::Beep;
+    if (flags & SPEAK)           kaEventFlags |= KAEvent::Speak;
+    if (flags & CONFIRM_ACK)     kaEventFlags |= KAEvent::ConfirmAck;
+    if (flags & REPEAT_SOUND)    kaEventFlags |= KAEvent::RepeatSound;
+    if (flags & AUTO_CLOSE)      kaEventFlags |= KAEvent::AutoClose;
+    if (flags & EMAIL_BCC)       kaEventFlags |= KAEvent::EmailBcc;
+    if (flags & DISPLAY_COMMAND) kaEventFlags |= KAEvent::DisplayCommand;
+    if (flags & SCRIPT)          kaEventFlags |= KAEvent::Script;
+    if (flags & EXEC_IN_XTERM)   kaEventFlags |= KAEvent::ExecInXterm;
+    if (flags & SHOW_IN_KORG)    kaEventFlags |= KAEvent::CopyKOrganizer;
+    if (flags & EXCL_HOLIDAYS)   kaEventFlags |= KAEvent::ExcludeHolidays;
+    if (flags & WORK_TIME_ONLY)  kaEventFlags |= KAEvent::WorkTimeOnly;
+    if (flags & DISABLED)        kaEventFlags |= KAEvent::Disabled;
+    if (flags & NOTIFY)          kaEventFlags |= KAEvent::Notify;
+    if (start.isDateOnly())      kaEventFlags |= KAEvent::AnyTime;
     return kaEventFlags;
 }
 

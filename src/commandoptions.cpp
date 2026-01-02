@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -108,7 +108,7 @@ CommandOptions::CommandOptions()
     , mOptions(Num_Options, nullptr)
     , mBgColour(Preferences::defaultBgColour())
     , mFgColour(Preferences::defaultFgColour())
-    , mFlags(KAEvent::DEFAULT_FONT)
+    , mFlags(KAEvent::DefaultFont)
 {
     if (!mFirstInstance)
         mFirstInstance = this;
@@ -374,7 +374,7 @@ void CommandOptions::process()
         mEditType      = EditAlarmDlg::DISPLAY;
         mEditAction    = KAEvent::SubAction::Command;
         mEditActionSet = true;
-        mFlags        |= KAEvent::DISPLAY_COMMAND;
+        mFlags        |= KAEvent::DisplayCommand;
         mText          = mParser->value(*mOptions.at(d->mCommandOpt)) + " "_L1 + mExecArguments.join(' '_L1);
     }
     if (d->checkCommand(EXEC, NEW))
@@ -674,7 +674,7 @@ void CommandOptions::process()
                 if (after)
                     mReminderMinutes = -mReminderMinutes;
                 if (onceOnly)
-                    mFlags |= KAEvent::REMINDER_ONCE;
+                    mFlags |= KAEvent::ReminderOnce;
             }
 
             if (mParser->isSet(*mOptions.at(LATE_CANCEL)))
@@ -702,29 +702,29 @@ void CommandOptions::process()
             }
 
             if (mParser->isSet(*mOptions.at(ACK_CONFIRM)))
-                mFlags |= KAEvent::CONFIRM_ACK;
+                mFlags |= KAEvent::ConfirmAck;
             if (mParser->isSet(*mOptions.at(AUTO_CLOSE)))
-                mFlags |= KAEvent::AUTO_CLOSE;
+                mFlags |= KAEvent::AutoClose;
             if (mParser->isSet(*mOptions.at(BEEP)))
-                mFlags |= KAEvent::BEEP;
+                mFlags |= KAEvent::Beep;
 #if HAVE_TEXT_TO_SPEECH_SUPPORT
             if (mParser->isSet(*mOptions.at(SPEAK)))
-                mFlags |= KAEvent::SPEAK;
+                mFlags |= KAEvent::Speak;
 #endif
             if (mParser->isSet(*mOptions.at(NOTIFY)))
-                mFlags |= KAEvent::NOTIFY;
+                mFlags |= KAEvent::Notify;
             if (mParser->isSet(*mOptions.at(KORGANIZER)))
-                mFlags |= KAEvent::COPY_KORGANIZER;
+                mFlags |= KAEvent::CopyKOrganizer;
             if (mParser->isSet(*mOptions.at(DISABLE)))
-                mFlags |= KAEvent::DISABLED;
+                mFlags |= KAEvent::Disabled;
             if (audioRepeat)
-                mFlags |= KAEvent::REPEAT_SOUND;
+                mFlags |= KAEvent::RepeatSound;
             if (mParser->isSet(*mOptions.at(LOGIN)))
-                mFlags |= KAEvent::REPEAT_AT_LOGIN;
+                mFlags |= KAEvent::RepeatAtLogin;
             if (mParser->isSet(*mOptions.at(BCC)))
-                mFlags |= KAEvent::EMAIL_BCC;
+                mFlags |= KAEvent::EmailBcc;
             if (mAlarmTime.isDateOnly())
-                mFlags |= KAEvent::ANY_TIME;
+                mFlags |= KAEvent::AnyTime;
             break;
         }
         case NONE:

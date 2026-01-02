@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -304,11 +304,11 @@ void BirthdayDlg::slotOk()
     config.writeEntry("BirthdaySuffix", mSuffix->text());
     config.sync();
 
-    mFlags = KAEvent::ANY_TIME;
-    if (mSoundPicker->sound() == Preferences::Sound_Beep) mFlags |= KAEvent::BEEP;
-    if (mSoundPicker->repeatPause() >= 0)                 mFlags |= KAEvent::REPEAT_SOUND;
-    if (mConfirmAck->isChecked())                         mFlags |= KAEvent::CONFIRM_ACK;
-    if (mFontColourButton->defaultFont())                 mFlags |= KAEvent::DEFAULT_FONT;
+    mFlags = KAEvent::AnyTime;
+    if (mSoundPicker->sound() == Preferences::Sound_Beep) mFlags |= KAEvent::Beep;
+    if (mSoundPicker->repeatPause() >= 0)                 mFlags |= KAEvent::RepeatSound;
+    if (mConfirmAck->isChecked())                         mFlags |= KAEvent::ConfirmAck;
+    if (mFontColourButton->defaultFont())                 mFlags |= KAEvent::DefaultFont;
     QDialog::accept();
 }
 

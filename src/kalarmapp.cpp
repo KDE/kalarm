@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -533,16 +533,16 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                         editDlg->setTime(options->alarmTime());
                     if (options->recurrence())
                         editDlg->setRecurrence(*options->recurrence(), options->subRepeatInterval(), options->subRepeatCount());
-                    else if (options->flags() & KAEvent::REPEAT_AT_LOGIN)
+                    else if (options->flags() & KAEvent::RepeatAtLogin)
                         editDlg->setRepeatAtLogin();
                     editDlg->setAction(options->editAction(), AlarmText(options->text()));
                     if (options->lateCancel())
                         editDlg->setLateCancel(options->lateCancel());
-                    if (options->flags() & KAEvent::NO_INHIBIT)
+                    if (options->flags() & KAEvent::NoInhibit)
                         editDlg->setNoInhibit(true);
-                    if (options->flags() & KAEvent::WAKE_SUSPEND)
+                    if (options->flags() & KAEvent::WakeSuspend)
                         editDlg->setWakeFromSuspend(true);
-                    if (options->flags() & KAEvent::COPY_KORGANIZER)
+                    if (options->flags() & KAEvent::CopyKOrganizer)
                         editDlg->setShowInKOrganizer(true);
                     switch (options->editType())
                     {
@@ -555,21 +555,21 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                             if (options->bgColour().isValid())
                                 dlg->setBgColour(options->bgColour());
                             if (!options->audioFile().isEmpty()
-                            ||  options->flags() & (KAEvent::BEEP | KAEvent::SPEAK))
+                            ||  options->flags() & (KAEvent::Beep | KAEvent::Speak))
                             {
                                 const KAEvent::Flags flags = options->flags();
-                                const Preferences::SoundType type = (flags & KAEvent::BEEP) ? Preferences::Sound_Beep
-                                                                  : (flags & KAEvent::SPEAK) ? Preferences::Sound_Speak
+                                const Preferences::SoundType type = (flags & KAEvent::Beep) ? Preferences::Sound_Beep
+                                                                  : (flags & KAEvent::Speak) ? Preferences::Sound_Speak
                                                                   : Preferences::Sound_File;
-                                dlg->setAudio(type, options->audioFile(), options->audioVolume(), ((flags & KAEvent::REPEAT_SOUND) ? 0 : -1));
+                                dlg->setAudio(type, options->audioFile(), options->audioVolume(), ((flags & KAEvent::RepeatSound) ? 0 : -1));
                             }
                             if (options->reminderMinutes())
-                                dlg->setReminder(options->reminderMinutes(), (options->flags() & KAEvent::REMINDER_ONCE));
-                            if (options->flags() & KAEvent::NOTIFY)
+                                dlg->setReminder(options->reminderMinutes(), (options->flags() & KAEvent::ReminderOnce));
+                            if (options->flags() & KAEvent::Notify)
                                 dlg->setNotify(true);
-                            if (options->flags() & KAEvent::CONFIRM_ACK)
+                            if (options->flags() & KAEvent::ConfirmAck)
                                 dlg->setConfirmAck(true);
-                            if (options->flags() & KAEvent::AUTO_CLOSE)
+                            if (options->flags() & KAEvent::AutoClose)
                                 dlg->setAutoClose(true);
                             break;
                         }
@@ -584,7 +584,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                             ||  !options->subject().isEmpty()
                             ||  !options->attachments().isEmpty())
                                 dlg->setEmailFields(options->fromID(), options->addressees(), options->subject(), options->attachments());
-                            if (options->flags() & KAEvent::EMAIL_BCC)
+                            if (options->flags() & KAEvent::EmailBcc)
                                 dlg->setBcc(true);
                             break;
                         }
@@ -1741,11 +1741,11 @@ bool KAlarmApp::scheduleEvent(QueuedAction queuedActionFlags,
     KAEvent event(alarmTime, name, text, bg, fg, font, action, lateCancel, flags, true);
     if (reminderMinutes)
     {
-        const bool onceOnly = flags & KAEvent::REMINDER_ONCE;
+        const bool onceOnly = flags & KAEvent::ReminderOnce;
         event.setReminder(reminderMinutes, onceOnly);
     }
     if (!audioFile.isEmpty())
-        event.setAudioFile(audioFile, audioVolume, -1, 0, (flags & KAEvent::REPEAT_SOUND) ? 0 : -1);
+        event.setAudioFile(audioFile, audioVolume, -1, 0, (flags & KAEvent::RepeatSound) ? 0 : -1);
     if (!mailAddresses.isEmpty())
         event.setEmail(mailFromID, mailAddresses, mailSubject, mailAttachments);
     event.setRecurrence(recurrence);

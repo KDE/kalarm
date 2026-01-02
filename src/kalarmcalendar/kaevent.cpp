@@ -3,7 +3,7 @@
  *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -547,7 +547,7 @@ KAEventPrivate::KAEventPrivate(const KADateTime& dateTime, const QString& name, 
     , mLateCancel(lateCancel)     // do this before setting flags
     , mCategory(CalEvent::ACTIVE)
 {
-    if (flags & KAEvent::ANY_TIME)
+    if (flags & KAEvent::AnyTime)
         mStartDateTime.setDateOnly(true);
     mNextMainDateTime = mStartDateTime;
     switch (action)
@@ -567,28 +567,28 @@ KAEventPrivate::KAEventPrivate(const KADateTime& dateTime, const QString& name, 
                             : (mActionSubType == KAEvent::SubAction::Audio)   ? QString() : text;
     mAudioFile              = (mActionSubType == KAEvent::SubAction::Audio) ? text : QString();
     set_deferral((flags & DEFERRAL) ? DeferType::Normal : DeferType::None);
-    mRepeatAtLogin          = flags & KAEvent::REPEAT_AT_LOGIN;
-    mConfirmAck             = flags & KAEvent::CONFIRM_ACK;
-    mUseDefaultFont         = flags & KAEvent::DEFAULT_FONT;
-    mCommandScript          = flags & KAEvent::SCRIPT;
-    mCommandXterm           = flags & KAEvent::EXEC_IN_XTERM;
-    mCommandDisplay         = flags & KAEvent::DISPLAY_COMMAND;
-    mCommandHideError       = flags & KAEvent::DONT_SHOW_ERROR;
-    mCopyToKOrganizer       = flags & KAEvent::COPY_KORGANIZER;
-    mNoInhibit              = flags & KAEvent::NO_INHIBIT;
-    mWakeFromSuspend        = flags & KAEvent::WAKE_SUSPEND;
-    mExcludeHolidays        = flags & KAEvent::EXCL_HOLIDAYS;
+    mRepeatAtLogin          = flags & KAEvent::RepeatAtLogin;
+    mConfirmAck             = flags & KAEvent::ConfirmAck;
+    mUseDefaultFont         = flags & KAEvent::DefaultFont;
+    mCommandScript          = flags & KAEvent::Script;
+    mCommandXterm           = flags & KAEvent::ExecInXterm;
+    mCommandDisplay         = flags & KAEvent::DisplayCommand;
+    mCommandHideError       = flags & KAEvent::DontShowError;
+    mCopyToKOrganizer       = flags & KAEvent::CopyKOrganizer;
+    mNoInhibit              = flags & KAEvent::NoInhibit;
+    mWakeFromSuspend        = flags & KAEvent::WakeSuspend;
+    mExcludeHolidays        = flags & KAEvent::ExcludeHolidays;
     mExcludeHolidayRegion   = mHolidays->regionCode();
-    mWorkTimeOnly           = flags & KAEvent::WORK_TIME_ONLY;
-    mEmailBcc               = flags & KAEvent::EMAIL_BCC;
-    mEnabled                = !(flags & KAEvent::DISABLED);
+    mWorkTimeOnly           = flags & KAEvent::WorkTimeOnly;
+    mEmailBcc               = flags & KAEvent::EmailBcc;
+    mEnabled                = !(flags & KAEvent::Disabled);
     mDisplaying             = flags & DISPLAYING_;
-    mReminderOnceOnly       = flags & KAEvent::REMINDER_ONCE;
-    mAutoClose              = (flags & KAEvent::AUTO_CLOSE) && mLateCancel;
-    mNotify                 = flags & KAEvent::NOTIFY;
-    mRepeatSoundPause       = (flags & KAEvent::REPEAT_SOUND) ? 0 : -1;
-    mSpeak                  = (flags & KAEvent::SPEAK) && action != KAEvent::SubAction::Audio;
-    mBeep                   = (flags & KAEvent::BEEP) && action != KAEvent::SubAction::Audio && !mSpeak;
+    mReminderOnceOnly       = flags & KAEvent::ReminderOnce;
+    mAutoClose              = (flags & KAEvent::AutoClose) && mLateCancel;
+    mNotify                 = flags & KAEvent::Notify;
+    mRepeatSoundPause       = (flags & KAEvent::RepeatSound) ? 0 : -1;
+    mSpeak                  = (flags & KAEvent::Speak) && action != KAEvent::SubAction::Audio;
+    mBeep                   = (flags & KAEvent::Beep) && action != KAEvent::SubAction::Audio && !mSpeak;
     if (mRepeatAtLogin)
     {              // do this after setting other flags
         ++mAlarmCount;
@@ -1391,7 +1391,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction ui
     if (mDisplaying  &&  mCategory != CalEvent::TEMPLATE)
     {
         QStringList list(DISPLAYING_TYPE);
-        if (mDisplayingFlags & KAEvent::REPEAT_AT_LOGIN)
+        if (mDisplayingFlags & KAEvent::RepeatAtLogin)
             list += AT_LOGIN_TYPE;
         else if (mDisplayingFlags & DEFERRAL)
         {
@@ -1650,47 +1650,47 @@ KAEvent::Flags KAEventPrivate::flags() const
 {
     KAEvent::Flags result{};
     if (mBeep)
-        result |= KAEvent::BEEP;
+        result |= KAEvent::Beep;
     if (mRepeatSoundPause >= 0)
-        result |= KAEvent::REPEAT_SOUND;
+        result |= KAEvent::RepeatSound;
     if (mEmailBcc)
-        result |= KAEvent::EMAIL_BCC;
+        result |= KAEvent::EmailBcc;
     if (mStartDateTime.isDateOnly())
-        result |= KAEvent::ANY_TIME;
+        result |= KAEvent::AnyTime;
     if (mSpeak)
-        result |= KAEvent::SPEAK;
+        result |= KAEvent::Speak;
     if (mRepeatAtLogin)
-        result |= KAEvent::REPEAT_AT_LOGIN;
+        result |= KAEvent::RepeatAtLogin;
     if (mConfirmAck)
-        result |= KAEvent::CONFIRM_ACK;
+        result |= KAEvent::ConfirmAck;
     if (mUseDefaultFont)
-        result |= KAEvent::DEFAULT_FONT;
+        result |= KAEvent::DefaultFont;
     if (mCommandScript)
-        result |= KAEvent::SCRIPT;
+        result |= KAEvent::Script;
     if (mCommandXterm)
-        result |= KAEvent::EXEC_IN_XTERM;
+        result |= KAEvent::ExecInXterm;
     if (mCommandDisplay)
-        result |= KAEvent::DISPLAY_COMMAND;
+        result |= KAEvent::DisplayCommand;
     if (mCommandHideError)
-        result |= KAEvent::DONT_SHOW_ERROR;
+        result |= KAEvent::DontShowError;
     if (mCopyToKOrganizer)
-        result |= KAEvent::COPY_KORGANIZER;
+        result |= KAEvent::CopyKOrganizer;
     if (mNoInhibit)
-        result |= KAEvent::NO_INHIBIT;
+        result |= KAEvent::NoInhibit;
     if (mWakeFromSuspend)
-        result |= KAEvent::WAKE_SUSPEND;
+        result |= KAEvent::WakeSuspend;
     if (mExcludeHolidays)
-        result |= KAEvent::EXCL_HOLIDAYS;
+        result |= KAEvent::ExcludeHolidays;
     if (mWorkTimeOnly)
-        result |= KAEvent::WORK_TIME_ONLY;
+        result |= KAEvent::WorkTimeOnly;
     if (mReminderOnceOnly)
-        result |= KAEvent::REMINDER_ONCE;
+        result |= KAEvent::ReminderOnce;
     if (mAutoClose)
-        result |= KAEvent::AUTO_CLOSE;
+        result |= KAEvent::AutoClose;
     if (mNotify)
-        result |= KAEvent::NOTIFY;
+        result |= KAEvent::Notify;
     if (!mEnabled)
-        result |= KAEvent::DISABLED;
+        result |= KAEvent::Disabled;
     return result;
 }
 
@@ -3675,7 +3675,7 @@ bool KAEventPrivate::setDisplaying(const KAEventPrivate& event, KAAlarm::Type al
             mDisplayingTime     = (alarmType == KAAlarm::Type::AtLogin) ? repeatAtLoginTime : al.dateTime().kDateTime();
             switch (al.type())
             {
-                case KAAlarm::Type::AtLogin:            mDisplayingFlags = KAEvent::REPEAT_AT_LOGIN;  break;
+                case KAAlarm::Type::AtLogin:            mDisplayingFlags = KAEvent::RepeatAtLogin;  break;
                 case KAAlarm::Type::Reminder:           mDisplayingFlags = REMINDER;  break;
                 case KAAlarm::Type::DeferredReminder:   mDisplayingFlags = al.timedDeferral() ? (REMINDER | TIME_DEFERRAL) : (REMINDER | DATE_DEFERRAL);  break;
                 case KAAlarm::Type::Deferred:           mDisplayingFlags = al.timedDeferral() ? TIME_DEFERRAL : DATE_DEFERRAL;  break;
@@ -3723,7 +3723,7 @@ KAAlarm KAEvent::convertDisplayingAlarm() const
     KAAlarm al = alarm(KAAlarm::Type::Displaying);
     KAAlarm::Private* const al_d = al.d;
     const int displayingFlags = d->mDisplayingFlags;
-    if (displayingFlags & REPEAT_AT_LOGIN)
+    if (displayingFlags & RepeatAtLogin)
     {
         al_d->mRepeatAtLogin = true;
         al_d->mType = KAAlarm::Type::AtLogin;
@@ -4609,7 +4609,7 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool au
         if (data.type == MAIN_ALARM)
             data.type = AT_LOGIN_ALARM;
         else if (data.type == DISPLAYING_ALARM)
-            data.displayingFlags = KAEvent::REPEAT_AT_LOGIN;
+            data.displayingFlags = KAEvent::RepeatAtLogin;
     }
 //qCDebug(KALARMCAL_LOG)<<"text="<<alarm->text()<<", time="<<alarm->time().toString()<<", valid time="<<alarm->time().isValid();
 }

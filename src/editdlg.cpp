@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -862,15 +862,15 @@ KAEvent::Flags EditAlarmDlg::getAlarmFlags() const
 {
     KAEvent::Flags flags{};
     if (mNoInhibit && mNoInhibit->isEnabled() && mNoInhibit->isChecked())
-        flags |= KAEvent::NO_INHIBIT;
+        flags |= KAEvent::NoInhibit;
     if (mWakeFromSuspend && mWakeFromSuspend->isEnabled() && mWakeFromSuspend->isChecked())
-        flags |= KAEvent::WAKE_SUSPEND;
+        flags |= KAEvent::WakeSuspend;
     if (mShowInKorganizer && mShowInKorganizer->isEnabled() && mShowInKorganizer->isChecked())
-        flags |= KAEvent::COPY_KORGANIZER;
+        flags |= KAEvent::CopyKOrganizer;
     if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
-        flags |= KAEvent::REPEAT_AT_LOGIN;
+        flags |= KAEvent::RepeatAtLogin;
     if (mTemplate ? mTemplateAnyTime->isChecked() : mAlarmDateTime.isDateOnly())
-        flags |= KAEvent::ANY_TIME;
+        flags |= KAEvent::AnyTime;
     return flags;
 }
 
