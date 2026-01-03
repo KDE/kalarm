@@ -1343,7 +1343,7 @@ void EditAlarmDlg::slotEditDeferral()
                 mTimeWidget->getDateTime();    // output the appropriate error message
                 return;
             }
-            start = KADateTime(repetition.duration(repeatNum).end(start.qDateTime()));
+            start = repetition.repeatTime(start.kDateTime(), repeatNum);
         }
     }
 
