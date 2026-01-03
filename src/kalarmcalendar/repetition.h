@@ -3,7 +3,7 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2009-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -116,6 +116,14 @@ public:
      *  @return repetition interval in seconds, or -1 if the interval is defined in days.
      */
     int intervalSeconds() const;
+
+    /** Return the end time of a repetition, after its full count.
+     *  This takes account of whether the repetition is specified by days or minutes,
+     *  which makes a difference over seasonal time transitions.
+     *  @param start   the date/time of the start of the repetition.
+     *  @param factor  the number of full repetitions.
+     */
+    KADateTime end(const KADateTime& start, int factor = 1) const;
 
     /** Return the time of a repetition given its count.
      *  This takes account of whether the repetition is specified by days or minutes,

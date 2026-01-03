@@ -3,7 +3,7 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2009-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -134,6 +134,11 @@ int Repetition::intervalMinutes() const
 int Repetition::intervalSeconds() const
 {
     return d->mInterval.isDaily() ? -1 : d->mInterval.asSeconds();
+}
+
+KADateTime Repetition::end(const KADateTime& start, int factor) const
+{
+    return repeatTime(start, d->mCount * factor);
 }
 
 KADateTime Repetition::repeatTime(const KADateTime& start, int count) const

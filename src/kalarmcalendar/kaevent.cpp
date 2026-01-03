@@ -207,11 +207,11 @@ public:
     DateTime           mainDateTime(bool withRepeats = false) const
     {
         return (withRepeats && mNextRepeat && mRepetition)
-               ? DateTime(mRepetition.duration(mNextRepeat).end(mNextMainDateTime.qDateTime())) : mNextMainDateTime;
+               ? DateTime(mRepetition.repeatTime(mNextMainDateTime.kDateTime(), mNextRepeat)) : mNextMainDateTime;
     }
     DateTime           mainEndRepeatTime() const
     {
-        return mRepetition ? DateTime(mRepetition.duration().end(mNextMainDateTime.qDateTime())) : mNextMainDateTime;
+        return mRepetition ? DateTime(mRepetition.end(mNextMainDateTime.kDateTime())) : mNextMainDateTime;
     }
     DateTime           deferralLimit(KAEvent::DeferLimit* = nullptr) const;
     KAEvent::Flags     flags() const;
@@ -2525,7 +2525,7 @@ KAEvent::TriggerType KAEventPrivate::nextDateTime(const KADateTime& preDateTime,
         pre = pre.addSecs(mReminderMinutes * 60);
     if (type & KAEvent::NextRepeat)
     {
-        const KADateTime preRep((-mRepetition.duration()).end(preDateTime.qDateTime()));
+        const KADateTime preRep(mRepetition.end(preDateTime, -1));
         if (preRep < pre)
             pre = preRep;
     }
@@ -2885,7 +2885,7 @@ KAEvent::SubRepExclude KAEventPrivate::repExcludedByWorkTimeOrHoliday(const KADa
     if (excludedByWorkTimeOrHoliday(recurDt))
         return KAEvent::SubRepExclude::Recur;
     // Check the sub-repetition
-    KADateTime repDt(mRepetition.duration(count).end(recurDt.qDateTime()));
+    KADateTime repDt(mRepetition.repeatTime(recurDt, count));
     return excludedByWorkTimeOrHoliday(repDt) ? KAEvent::SubRepExclude::Repeat : KAEvent::SubRepExclude::Ok;
 }
 
@@ -3407,7 +3407,7 @@ bool KAEventPrivate::occursAfter(const KADateTime& preDateTime, bool includeRepe
 
     if (includeRepetitions  &&  mRepetition)
     {
-        if (preDateTime < KADateTime(mRepetition.duration().end(dt.qDateTime())))
+        if (preDateTime < mRepetition.end(dt))
             return true;
     }
     return false;
@@ -3444,7 +3444,7 @@ bool KAEventPrivate::setNextOccurrence(const KADateTime& preDateTime, KAEvent::O
     // we find the earliest recurrence which has a repetition falling after
     // the specified preDateTime.
     if (mRepetition)
-        pre = KADateTime((-mRepetition.duration()).end(preDateTime.qDateTime()));
+        pre = mRepetition.end(preDateTime, -1);
 
     DateTime afterPre;          // next recurrence after 'pre'
     if (pre < mNextMainDateTime.effectiveKDateTime())
@@ -3548,7 +3548,7 @@ KAEvent::OccurType KAEventPrivate::nextOccurrence(const KADateTime& preDateTime,
     KAEvent::OccurType type          = KAEvent::OccurType::None;
     KAEvent::OccurType lastRecurType = KAEvent::OccurType::None;
     DateTime lastRecurDt;
-    KADateTime pre = KADateTime((-mRepetition.duration()).end(preDateTime.qDateTime()));
+    KADateTime pre = mRepetition.end(preDateTime, -1);
     for (;;)
     {
         DateTime next;
@@ -3570,7 +3570,7 @@ KAEvent::OccurType KAEventPrivate::nextOccurrence(const KADateTime& preDateTime,
         // We've found a recurrence before the specified date/time.
         // Check if the next occurrence is a sub-repetition.
         int repetition = mRepetition.nextRepeatCount(lastRecurDt.kDateTime(), preDateTime);
-        DateTime repDt = DateTime(mRepetition.duration(repetition).end(lastRecurDt.qDateTime()));
+        DateTime repDt = mRepetition.repeatTime(lastRecurDt.kDateTime(), repetition);
         if (type != KAEvent::OccurType::None  &&  repDt >= result)
             return type;    // the sub-repetition is later than the next recurrence
         // The next occurrence is a sub-repetition.
@@ -3630,7 +3630,7 @@ KAEvent::OccurType KAEventPrivate::previousOccurrence(const KADateTime& afterDat
         {
             if (repetition > mRepetition.count())
                 repetition = mRepetition.count();
-            result = DateTime(mRepetition.duration(repetition).end(result.qDateTime()));
+            result = mRepetition.repeatTime(result.kDateTime(), repetition);
             return KAEvent::setRepeatNum(type, repetition);
         }
     }
@@ -6437,7 +6437,7 @@ KAAlarm::Type KAAlarm::type() const
 DateTime KAAlarm::dateTime(bool withRepeats) const
 {
     return (withRepeats && d->mNextRepeat && d->mRepetition)
-           ? DateTime(d->mRepetition.duration(d->mNextRepeat).end(d->mNextMainDateTime.qDateTime()))
+           ? DateTime(d->mRepetition.repeatTime(d->mNextMainDateTime.kDateTime(), d->mNextRepeat))
            : d->mNextMainDateTime;
 }
 
