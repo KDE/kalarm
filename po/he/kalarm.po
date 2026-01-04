@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-07 02:40+0000\n"
-"PO-Revision-Date: 2025-12-27 15:45+0200\n"
+"PO-Revision-Date: 2025-12-31 14:24+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -593,9 +593,9 @@ msgid "Show alarm as an event in KOrganizer"
 msgstr "הצגת תזכורות כאירועים ב־KOrganizer"
 
 #: commandoptions.cpp:205
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
-msgstr "ביטול התזכורת אם אין אפשרות להציג אותה במועדה"
+msgstr "ביטול התזכורת אם עבר יותר מ‚פרק זמן’ כאשר הוזנקה"
 
 #: commandoptions.cpp:210
 #, kde-format
