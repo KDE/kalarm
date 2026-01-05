@@ -9,13 +9,13 @@
 #
 # Ambalam <tamilpc@ambalam.com>, 2004.
 # root <root@localhost.localdomain>, 2004.
-# SPDX-FileCopyrightText: 2021, 2022, 2023, 2024, 2025 Kishore G <kishore96@gmail.com>
+# SPDX-FileCopyrightText: 2021, 2022, 2023, 2024, 2025, 2026 Kishore G <kishore96@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-07 02:40+0000\n"
-"PO-Revision-Date: 2025-11-02 13:50+0530\n"
+"PO-Revision-Date: 2026-01-04 14:52+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-l10n-ta@kde.org>\n"
 "Language: ta\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1026,7 +1026,7 @@ msgstr "கணினித் தட்டிலுள்ளவற்றை ம�
 msgctxt "@info:whatsthis"
 msgid ""
 "Desktops for which the auto-hide in system tray option is not available."
-msgstr ""
+msgstr "கணினித் தட்டிலுள்ள பதிவுகளைத் தானாக மறைப்பதை ஆதரிக்காத இயங்குதளங்கள்."
 
 #. i18n: ectx: label, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:141
@@ -1116,6 +1116,9 @@ msgid ""
 "store it in, if there is more than one active calendar.</p><p>Note that "
 "archived alarms are always stored in the default archived alarm calendar.</p>"
 msgstr ""
+"<p>பல நாள்காட்டிகள் இருந்தால், புதிய அலாரத்தையோ அலார வார்ப்புருவையோ எதில் சேமிக்க "
+"வேண்டுமென்று கேட்கும்.</p><p>இது குறிக்கப்பட்டிருந்தாலும், காப்பகப்படுத்தப்படும் அலாரங்கள் "
+"எப்போதும் இயல்பிருப்பு காப்பக நாள்காட்டியிலேயே சேமிக்கப்படும்.</p>"
 
 #. i18n: ectx: label, entry (Base_ModalMessages), group (General)
 #: data/kalarmconfig.kcfg:166
@@ -1179,7 +1182,7 @@ msgstr "கணினித் தட்டு கருவித் துப்
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
 #: data/kalarmconfig.kcfg:187
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>How many alarms due in the next 24 hours to show in the system tray "
@@ -1188,7 +1191,14 @@ msgid ""
 "        <li>-1 to display all</li>\n"
 "        <li>>0 to set a limit.</li></ul></p>\n"
 "      "
-msgstr "முடிவுகளிலும் அல்லது நீக்குதலிலும் அலாரத்தை சேர்க்க பரிசோதி"
+msgstr ""
+"<p>கணினித் தட்டிலுள்ள சின்னத்தின் கருவித்துப்பில் எத்தனை அலாரங்களை (அடுத்த 24 மணிநேரத்தில் "
+"தூண்டப்படவிருப்பவற்றிலிருந்து) காட்ட வேண்டும்:\n"
+"        <ul><li>0 என்றால் எதுவும் காட்டப்படாது</li>\n"
+"        <li>-1 என்றால் அனைத்தும் காட்டப்படும்</li>\n"
+"        <li>0-வை விட அதிகமாக அமைத்தால் அதிகபட்சம் அத்தனையே காட்டப்படும்.</li></ul></"
+"p>\n"
+"      "
 
 #. i18n: ectx: label, entry (ShowTooltipAlarmTime), group (General)
 #: data/kalarmconfig.kcfg:193
@@ -1199,15 +1209,14 @@ msgstr "கணினித் தட்டு கருவித் துப்
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
 #: data/kalarmconfig.kcfg:194 prefdlg.cpp:2004
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify whether to show in the system tray tooltip, the time at which "
-#| "each alarm is due"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Specify whether to show in the system tray tooltip, the time at which each "
 "alarm is due."
-msgstr "அலார கெடு நேரத்தை, அமைப்பு தட்டின் உதவிக்குறிப்பில் காட்ட குறிப்பிடு"
+msgstr ""
+"கணினித் தட்டிலுள்ள சின்னத்தின் கருவித்துப்பில் ஒவ்வொரு அலாரத்திற்குரிய நேரத்தைக் காட்ட "
+"வேண்டுமா."
 
 #. i18n: ectx: label, entry (ShowTooltipTimeToAlarm), group (General)
 #: data/kalarmconfig.kcfg:199
@@ -1218,15 +1227,14 @@ msgstr "கணினித் தட்டு கருவித் துப்
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
 #: data/kalarmconfig.kcfg:200 prefdlg.cpp:2010
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify whether to show in the system tray tooltip, how long until each "
-#| "alarm is due"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Specify whether to show in the system tray tooltip, how long until each "
 "alarm is due."
-msgstr "அலார கெடு எவ்வளவு நேரம் என்று அமைப்பு தட்டு உதவிக்குறிப்பில் காட்ட குறிப்பிடு"
+msgstr ""
+"கணினித் தட்டிலுள்ள கருவித்துப்பில், ஒவ்வொரு அலாரம் தூண்டப்படுவதற்கு எவ்வளவு நேரம் "
+"மீதமுள்ளது என்பதைக் காட்ட வேண்டுமா."
 
 #. i18n: ectx: label, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:205
@@ -5227,12 +5235,10 @@ msgid "Audio Backend"
 msgstr "ஒலி பின்நிரல்"
 
 #: prefdlg.cpp:585
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Choose the volume for playing the sound file."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which audio backend to use to play sound files"
-msgstr "ஒலிக்கோப்பை இயக்குவதற்கான ஒலியளவை தேர்ந்தெடுங்கள்."
+msgstr "ஒலிக்கோப்பை இயக்குவதற்கான பின்நிரலைத் தேர்ந்தெடுக்கவும்."
 
 #: prefdlg.cpp:600
 #, kde-format
@@ -5300,6 +5306,8 @@ msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
 msgstr ""
+"இது, <application>கேயலாரம்</application> கைமுறையாக துவக்கப்படும்போது மட்டும் "
+"இயங்குமாறு அமைக்கும்."
 
 #: prefdlg.cpp:812
 #, kde-kuit-format
@@ -5471,6 +5479,9 @@ msgid ""
 "that archived alarms are always stored in the default archived alarm "
 "calendar.</para>"
 msgstr ""
+"<para>பல நாள்காட்டிகள் இருந்தால், புதிய அலாரத்தையோ அலார வார்ப்புருவையோ எதில் சேமிக்க "
+"வேண்டுமென்று கேட்கும்.</para><para>இது குறிக்கப்பட்டிருந்தாலும், காப்பகப்படுத்தப்படும் "
+"அலாரங்கள் எப்போதும் இயல்பிருப்பு காப்பக நாள்காட்டியிலேயே சேமிக்கப்படும்.</para>"
 
 #: prefdlg.cpp:1057
 #, kde-format
