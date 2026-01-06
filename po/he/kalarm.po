@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-07 02:40+0000\n"
-"PO-Revision-Date: 2025-12-31 14:24+0200\n"
+"PO-Revision-Date: 2026-01-05 12:45+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -7229,12 +7229,7 @@ msgid "Choose Calendar"
 msgstr "בחירת לוח שנה"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7244,17 +7239,20 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para>לוח השנה <resource>%1</resource> הוסב לקריאה בלבד. זה היה לוח השנה "
-"כברירת המחדל עבור:%2</para><para>נא לבחור לוחות שנה חדשים כברירת מחדל.</para>"
+"<para>לוח השנה <resource>%2</resource> הוסב לקריאה בלבד. זה היה לוח השנה "
+"כברירת המחדל עבור %3.</para><para>נא לבחור לוח שנה חדש כברירת מחדל.</para>"
 msgstr[1] ""
-"<para>לוח השנה <resource>%1</resource> הוסב לקריאה בלבד. זה היה לוח השנה "
-"כברירת המחדל עבור:%2</para><para>נא לבחור לוחות שנה חדשים כברירת מחדל.</para>"
+"<para>לוח השנה <resource>%2</resource> הוסב לקריאה בלבד. זה היה לוח השנה "
+"כברירת המחדל עבור %3.</para><para>נא לבחור לוחות שנה חדשים כברירת מחדל.</"
+"para>"
 msgstr[2] ""
-"<para>לוח השנה <resource>%1</resource> הוסב לקריאה בלבד. זה היה לוח השנה "
-"כברירת המחדל עבור:%2</para><para>נא לבחור לוחות שנה חדשים כברירת מחדל.</para>"
+"<para>לוח השנה <resource>%2</resource> הוסב לקריאה בלבד. זה היה לוח השנה "
+"כברירת המחדל עבור %3.</para><para>נא לבחור לוחות שנה חדשים כברירת מחדל.</"
+"para>"
 msgstr[3] ""
-"<para>לוח השנה <resource>%1</resource> הוסב לקריאה בלבד. זה היה לוח השנה "
-"כברירת המחדל עבור:%2</para><para>נא לבחור לוחות שנה חדשים כברירת מחדל.</para>"
+"<para>לוח השנה <resource>%2</resource> הוסב לקריאה בלבד. זה היה לוח השנה "
+"כברירת המחדל עבור %3.</para><para>נא לבחור לוחות שנה חדשים כברירת מחדל.</"
+"para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7577,17 +7575,13 @@ msgid "It also contains %1"
 msgstr "הוא מכיל גם: %1"
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> לוח השנה כברירת המחדל עבור:%2</para>"
+"<para><resource>%1</resource> הוא לוח השנה כברירת המחדל עבור %2</para>"
 "%3<para>להסיר אותו מכל רשימות לוחות השנה?</para>"
 
 #: resourceselector.cpp:258
@@ -7599,17 +7593,13 @@ msgid ""
 msgstr "להסיר את לוח השנה כברירת המחדל שלך (<resource>%1</resource>) מהרשימה?"
 
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> מכיל:%2</para><para>להסיר אותו מכל רשימות "
+"<para><resource>%1</resource> מכיל את %2</para><para>להסיר אותו מכל רשימות "
 "לוחות השנה?</para>"
 
 #: resourceselector.cpp:264
