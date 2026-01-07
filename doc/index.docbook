@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2026-1-6</date>
-<releaseinfo>3.12.0 (KDE Gear 25.12)</releaseinfo>
+<date>2026-1-7</date>
+<releaseinfo>3.13.0 (KDE Gear 26.04)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -364,7 +364,7 @@ various sources:</para>
 <itemizedlist>
 <listitem>
 <para>To preset the alarm's date in the
-<link linkend="alarm-edit-dlg">Alarm Edit dialog</link>,
+<link linkend="alarm-edit-dlg-time">Alarm Edit dialog</link>,
 <mousebutton>right</mousebutton> click on the desired date in the alarm
 date selector (see <link linkend="datepicker">Filtering the Alarm List
 by Date</link>) and select the appropriate alarm type from the context
@@ -1611,7 +1611,7 @@ change the deferred time or to cancel the deferral.</para>
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-time">
 <title>Time</title>
 
 <para>In the <guilabel>Time</guilabel> group box, select either</para>
@@ -1691,7 +1691,7 @@ than the recurrence or sub-repetition interval.</para>
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-cancel">
 <title>Cancelation</title>
 
 <para>The late-cancelation options determine how an alarm is treated
@@ -1731,7 +1731,7 @@ showing at the expiry of the late-cancelation time.</para>
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-recur">
 <title>Recurrence</title>
 
 <para>Specify whether or how the alarm should be repeated using the
@@ -1953,7 +1953,7 @@ cancelled.</para></note>
 </sect3>
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-other">
 <title>Other Controls</title>
 
 <para>If the system configuration allows multiple alarms to wake the
@@ -1969,6 +1969,15 @@ information.</para>
 whether you will be prompted for confirmation when you close the alarm
 message window. This may be used as a safeguard against accidental
 acknowledgment of alarms.</para>
+
+<para>Display alarms are normally suspended while notifications are
+inhibited for the desktop, and do not display on top of full screen
+applications. To override these restrictions and always display the
+alarm if at all possible, select the
+<guilabel>Never inhibit alarms</guilabel> check box. Note that the
+ability to display messages over full screen applications may depend
+on your window manager, and currently only the X11 windowing system
+allows this.</para>
 
 <para>Select <guilabel>Show in &korganizer;</guilabel> to add the
 alarm to &korganizer;'s active calendar, where it will appear as an
@@ -2008,9 +2017,11 @@ depending on the option chosen in the
 display options are described below.</para>
 
 <para>If you inhibit notifications for the desktop, the execution of
-display alarms will be suspended until notifications are re-enabled.
-Note that this applies to all display alarms, regardless of whether
-they are displayed in windows or as notifications.</para>
+display alarms will be suspended until notifications are re-enabled,
+except for alarms which you have specified in the <link
+linkend="alarm-edit-dlg-other">Alarm Edit dialog</link> should never be
+inhibited. Note that this applies to all display alarms, regardless
+of whether they are displayed in windows or as notifications.</para>
 
 <para>Note that on a single screen system, the window manager may
 inhibit notifications while any application is running full screen,
@@ -2036,7 +2047,7 @@ time, and the window title is <quote>Reminder</quote>.)</para>
 <para>Alarm message windows remain visible until you acknowledge them,
 unless <guilabel>Auto-close window after late-cancelation
 time</guilabel> was checked in the <link
-linkend="alarm-edit-dlg">Alarm Edit dialog</link>. In the case of a
+linkend="alarm-edit-dlg-cancel">Alarm Edit dialog</link>. In the case of a
 recurring alarm, if an unacknowledged message window remains from a
 previous occurrence of the alarm, the existing window is simply popped
 up when the alarm recurs. This avoids having to acknowledge multiple
@@ -2549,7 +2560,7 @@ possibilities:</para>
 (<literal>cap_wake_alarm</literal>) capability, any number of alarms
 can be set to wake from suspend. In this case, wake from suspend is
 configured for each individual alarm in the
-<link linkend="alarm-edit-dlg">Alarm Edit dialog</link> using its
+<link linkend="alarm-edit-dlg-other">Alarm Edit dialog</link> using its
 <guilabel>Wake from suspend</guilabel> option.</para>
 
 <para>You can configure how long before the alarm to wake from suspend,
@@ -2838,7 +2849,7 @@ such alarms will be output at the earliest opportunity during the
 options let you define your working hours, needed when the
 <guilabel>Only during working hours</guilabel> option is selected for
 a recurrence in the
-<link linkend="alarm-edit-dlg">Alarm Edit dialog</link>.</para>
+<link linkend="alarm-edit-dlg-recur">Alarm Edit dialog</link>.</para>
 
 <itemizedlist>
 <listitem><para>Check each day which is a working day.</para>
