@@ -1130,7 +1130,7 @@ bool EditAlarmDlg::validate()
                     // The next occurrence is a sub-repetition. Find the last recurrence.
                     mAlarmDateTime = event.repetition().startTime(mAlarmDateTime.kDateTime(), repeatNum);
                 }
-                if (event.workTimeOnly()  &&  !event.nextTrigger(KAEvent::Trigger::Display).isValid())
+                if (event.workTimeOnly()  &&  !event.nextTrigger(KAEvent::Trigger::Actual).isValid())
                 {
                     if (KAMessageBox::warningContinueCancel(this, i18nc("@info", "The alarm will never occur during working hours"))
                         != KMessageBox::Continue)

@@ -409,8 +409,11 @@ public:
          *  holiday restrictions, this is equivalent to All. */
         AllWork,
 
-        /** Next trigger time for display purposes (i.e. excluding reminders). */
-        Display
+        /** Next time the alarm will actually trigger, i.e. the next recurrence
+         *  or sub-repetition, taking account of working hours and holiday
+         *  restrictions and skipping, but excluding reminders except if it is
+         *  a reminder which occurs AFTER the last recurrence and sub-repetition. */
+        Actual
     };
 
     /** Command execution error type for last time the alarm was triggered. */

@@ -1,7 +1,7 @@
 /*
  *  resourcedatamodelbase.cpp  -  base for models containing calendars and events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -271,11 +271,11 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                     case Qt::DisplayRole:
                         if (event.expired())
                             return alarmTimeText(event.startDateTime(), '0');
-                        return alarmTimeText(event.nextTrigger(KAEvent::Trigger::Display), '0');
+                        return alarmTimeText(event.nextTrigger(KAEvent::Trigger::Actual), '0');
                     case TimeDisplayRole:
                         if (event.expired())
                             return alarmTimeText(event.startDateTime(), '~');
-                        return alarmTimeText(event.nextTrigger(KAEvent::Trigger::Display), '~');
+                        return alarmTimeText(event.nextTrigger(KAEvent::Trigger::Actual), '~');
                     case Qt::TextAlignmentRole:
                         return Qt::AlignLeft;
                     case SortRole:
@@ -284,7 +284,7 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                         if (event.expired())
                             due = event.startDateTime();
                         else
-                            due = event.nextTrigger(KAEvent::Trigger::Display);
+                            due = event.nextTrigger(KAEvent::Trigger::Actual);
                         return due.isValid() ? due.effectiveKDateTime().toUtc().qDateTime()
                                              : QDateTime(QDate(9999,12,31), QTime(0,0,0));
                     }
@@ -301,14 +301,14 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                     case Qt::DisplayRole:
                         if (event.expired())
                             return QString();
-                        return timeToAlarmText(event.nextTrigger(KAEvent::Trigger::Display));
+                        return timeToAlarmText(event.nextTrigger(KAEvent::Trigger::Actual));
                     case Qt::TextAlignmentRole:
                         return Qt::AlignRight;
                     case SortRole:
                     {
                         if (event.expired())
                             return -1;
-                        const DateTime due = event.nextTrigger(KAEvent::Trigger::Display);
+                        const DateTime due = event.nextTrigger(KAEvent::Trigger::Actual);
                         const KADateTime now = KADateTime::currentUtcDateTime();
                         if (due.isDateOnly())
                             return now.date().daysTo(due.date()) * 1440;

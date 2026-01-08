@@ -1634,7 +1634,7 @@ QStringList KAlarmApp::scheduledAlarmList()
     const QList<KAEvent> events = KAlarm::getSortedActiveEvents(this);
     for (const KAEvent& event : events)
     {
-        const KADateTime dateTime = event.nextTrigger(KAEvent::Trigger::Display).effectiveKDateTime().toLocalZone();
+        const KADateTime dateTime = event.nextTrigger(KAEvent::Trigger::Actual).effectiveKDateTime().toLocalZone();
         const Resource resource = Resources::resource(event.resourceId());
         QString text(resource.configName() + ":"_L1);
         text += event.id() + ' '_L1

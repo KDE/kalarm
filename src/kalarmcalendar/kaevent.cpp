@@ -4647,7 +4647,7 @@ DateTime KAEvent::nextTrigger(Trigger type) const
         case Trigger::Main:     return d->mBaseTriggers.main;
         case Trigger::AllWork:  return d->mWorkTriggers.all;
         case Trigger::Work:     return d->mWorkTriggers.main;
-        case Trigger::Display:
+        case Trigger::Actual:
         {
             const bool reminderAfter = d->mMainExpired && d->mReminderActive != KAEventPrivate::ReminderType::None && d->mReminderMinutes < 0;
             return d->checkRecur() != KARecurrence::NO_RECUR  && (d->mWorkTimeOnly || d->mExcludeHolidays)
