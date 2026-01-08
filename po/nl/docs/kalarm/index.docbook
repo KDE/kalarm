@@ -85,7 +85,9 @@
 ><year
 >2024</year
 ><year
->2025</year>
+>2025</year
+><year
+>2026</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -96,7 +98,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2025-12-3</date>
+>2026-1-6</date>
 <releaseinfo
 >3.12.0 (KDE Gear 25.12)</releaseinfo>
 
@@ -2117,17 +2119,33 @@
 <itemizedlist>
 <listitem>
 <para
+>Voor een dagelijkse herhaling, activeer elke dag in de week waarop het alarm zal afgaan. Het alarm zal verschijnen op de gespecificeerde frequentie, maar wanneer het afgaat op een niet geselecteerde dag van de week zal het worden onderdrukt.</para>
+</listitem>
+
+<listitem>
+<para
 >Selecteer, voor een wekelijkse herhaling, elke dag van de week waarop u het alarm wilt uitvoeren.</para>
 </listitem>
 
 <listitem>
 <para
->Voor een maandelijkse herhaling kunt u ofwel een vaste datum of een positie(&eg; de tweede dinsdag) selecteren.</para>
+>Voor een maandelijkse herhaling kunt u selecteren ofwel:</para>
+<itemizedlist>
+<listitem
+><para
+>Een vaste dag in de maand of de laatste dag van de maand. Merk op dat als u bijvoorbeeld de 31ste dag van de maand selecteert, het alarm not zal afgaan trigger in elke maand met minder dan 31 dagen.</para>
+</listitem>
+
+<listitem
+><para
+>Een positie in de maand, &eg; de tweede dinsdag or de laatste vrijdag van de maand.</para>
+</listitem>
+</itemizedlist>
 </listitem>
 
 <listitem>
 <para
->Voor een jaarlijkse herhaling kunt u ofwel een vaste dag in de maand of een positie in een maand (&eg; de laatste zaterdag in mei) selecteren. Activeer elke maand van het jaar waarin u het alarm wilt starten.</para>
+>Voor een jaarlijkse herhaling kunt u ofwel een vaste dag in de maand of een positie in de maand, zoals beschreven in de maandelijkse herhalingen. Activeer elke maand van het jaar waarin u het alarm wilt laten afgaan.</para>
 
 <para
 >Als u een jaarlijkse herhaling instelt voor 29 februari kunt u specificeren hoe het behandeld wordt in niet-schrikkeljaren door de van toepassing zijnde optie <guilabel
@@ -7009,10 +7027,10 @@
 <para
 >&kalarm; </para>
 <para
->Programma copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
+>Programma copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Documentatie copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
+>Documentatie copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 &David.Jarvie; &David.Jarvie.mail; </para>
 
 &meld.fouten;&vertaling.niels;&vertaling.freek; &underFDL; &underGPL; <para
 >Dank aan de auteur van de &kde; 1 KAlarm applicatie, Stefan Nikolaus <email

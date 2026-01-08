@@ -85,7 +85,9 @@
 ><year
 >2024</year
 ><year
->2025</year>
+>2025</year
+><year
+>2026</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -96,7 +98,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->3 de desembre de 2025</date>
+>6 de gener de 2026</date>
 <releaseinfo
 >3.12.0 (KDE Gear 25.12)</releaseinfo>
 
@@ -2113,17 +2115,33 @@
 <itemizedlist>
 <listitem>
 <para
+>Per a una recurrència diària, marqueu cada dia de la setmana en què es permetrà activar l'alarma. L'alarma es repetirà amb la freqüència especificada, però sempre que s'activi en un dia de la setmana no seleccionat se suprimirà.</para>
+</listitem>
+
+<listitem>
+<para
 >Per a una recurrència setmanal, marqueu tots els dies de la setmana en els que voleu activar l'alarma.</para>
 </listitem>
 
 <listitem>
 <para
->Per a una recurrència mensual, podeu seleccionar una data fixa, o una posició (&pex;, el segon dimarts).</para>
+>Per a una recurrència mensual, podeu seleccionar:</para>
+<itemizedlist>
+<listitem
+><para
+>Un dia fix en el mes o l'últim dia del mes. Tingueu en compte que si, per exemple, seleccioneu el dia 31 del mes, l'alarma no s'activarà en cap mes amb menys de 31 dies.</para>
+</listitem>
+
+<listitem
+><para
+>Una posició al mes, &pex;, el segon dimarts o l'últim divendres del mes.</para>
+</listitem>
+</itemizedlist>
 </listitem>
 
 <listitem>
 <para
->Per a una recurrència anual, podeu seleccionar un dia fix al mes, o una posició en un mes (&pex;, l'últim dissabte de maig). Marqueu cada mes de l'any en què voleu activar l'alarma.</para>
+>Per a una recurrència anual, podeu seleccionar un dia fix al mes, o una posició en un mes, com es descriu a la recurrència mensual. Marqueu cada mes de l'any en què voleu activar l'alarma.</para>
 
 <para
 >Si definiu una recurrència anual per al 29 de febrer, podreu especificar com s'haurà de manejar en anys que no siguin de traspàs, seleccionant l'opció corresponent <guilabel
@@ -6972,10 +6990,10 @@
 <para
 >&kalarm; </para>
 <para
->Copyright del programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright del programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Copyright de la documentació 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright de la documentació 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
 >Traductor/Revisor de la documentació: &credits.Antoni.Bella;</para

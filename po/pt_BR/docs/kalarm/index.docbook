@@ -46,7 +46,7 @@
 ><affiliation
 ><address
 ><email
->marcus.gama@gmail.com</email
+>marcus.gama@kde.org</email
 ></address
 ></affiliation
 ><contrib
@@ -99,7 +99,9 @@
 ><year
 >2024</year
 ><year
->2025</year>
+>2025</year
+><year
+>2026</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -110,7 +112,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->03/12/2025</date>
+>06/01/2026</date>
 <releaseinfo
 >3.12.0 (KDE Gear 25.12)</releaseinfo>
 
@@ -2131,17 +2133,33 @@
 <itemizedlist>
 <listitem>
 <para
+>Para uma recorrência diária, verifique cada dia da semana em que o alarme poderá ser acionado. O alarme se repetirá na frequência especificada, mas sempre que for acionado em um dia da semana não selecionado, será suprimido.</para>
+</listitem>
+
+<listitem>
+<para
 >Para uma recorrência semanal, assinale cada dia da semana em que deseja ativar o alarme.</para>
 </listitem>
 
 <listitem>
 <para
->Para uma recorrência mensal, você poderá tanto indicar uma data fixa como uma posição (&eg; a segunda terça-feira).</para>
+>Para uma recorrência mensal, você poderá tanto indicar:</para>
+<itemizedlist>
+<listitem
+><para
+>Um dia fixo do mês ou o último dia do mês. Observe que, se você selecionar, por exemplo, o dia 31 do mês, o alarme não será acionado em nenhum mês com menos de 31 dias.</para>
+</listitem>
+
+<listitem
+><para
+>Uma posição no mês, &eg;, a segunda terça-feira ou a última sexta-feira do mês.</para>
+</listitem>
+</itemizedlist>
 </listitem>
 
 <listitem>
 <para
->Para uma recorrência anual, tanto poderá escolher um dia fixo do mês ou uma posição dentro de um mês (&eg; o último Sábado de Maio). Assinale cada mês do ano em que deseja ativar o alarme.</para>
+>Para uma recorrência anual, você pode selecionar um dia fixo do mês ou uma posição no mês, conforme descrito para recorrências mensais. Marque cada mês do ano em que deseja ativar o alarme.</para>
 
 <para
 >Se você tiver configurado repetições anuais para o 29 de Fevereiro, indique como elas serão tratadas nos anos não-bissextos, selecionando a opção apropriada em <guilabel
@@ -7008,14 +7026,14 @@
 <para
 >&kalarm; </para>
 <para
->Direitos autorais do programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
+>Direitos autorais do programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Direitos autorais da documentação 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
+>Direitos autorais da documentação 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
 >Tradução de Marcus Gama <email
->marcus.gama@gmail.com</email
+>marcus.gama@kde.org</email
 ></para
 > &underFDL; &underGPL; <para
 >Os agradecimentos vão para o autor do aplicativo KAlarm do &kde;1, o Stefan Nikolaus <email
