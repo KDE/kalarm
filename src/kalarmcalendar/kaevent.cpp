@@ -3998,7 +3998,7 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
         ||  *mRecurrence     != *other.mRecurrence
         ||  mExcludeHolidays != other.mExcludeHolidays
         ||  mWorkTimeOnly    != other.mWorkTimeOnly
-        ||  mRepetition      != mRepetition)
+        ||  mRepetition      != other.mRepetition)
             return false;
     }
     else
