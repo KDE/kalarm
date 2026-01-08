@@ -3,7 +3,7 @@
  *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -3973,7 +3973,7 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
         ||  *mRecurrence     != *other.mRecurrence
         ||  mExcludeHolidays != other.mExcludeHolidays
         ||  mWorkTimeOnly    != other.mWorkTimeOnly
-        ||  mRepetition      != mRepetition)
+        ||  mRepetition      != other.mRepetition)
             return false;
     }
     else
