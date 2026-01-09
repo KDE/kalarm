@@ -112,9 +112,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->06/01/2026</date>
+>07/01/2026</date>
 <releaseinfo
->3.12.0 (KDE Gear 25.12)</releaseinfo>
+>3.13.0 (KDE Gear 26.04)</releaseinfo>
 
 <abstract>
 <para
@@ -471,7 +471,7 @@
 <itemizedlist>
 <listitem>
 <para
->Para pré-definir a data do alarme na caixa de diálogo <link linkend="alarm-edit-dlg"
+>Para pré-definir a data do alarme na caixa de diálogo <link linkend="alarm-edit-dlg-time"
 >Editar alarme</link
 >, clique com o botão direito do mouse na data desejada no seletor de data do alarme (consulte <link linkend="datepicker"
 >Filtrando a lista de alarmes por data</link
@@ -1955,7 +1955,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-time">
 <title
 >Hora</title>
 
@@ -2037,7 +2037,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-cancel">
 <title
 >Cancelamento</title>
 
@@ -2080,7 +2080,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-recur">
 <title
 >Recorrência</title>
 
@@ -2338,7 +2338,7 @@
 </sect3>
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-other">
 <title
 >Outros Controles</title>
 
@@ -2353,6 +2353,11 @@
 >Para os alarmes visíveis, a opção <guilabel
 >Confirmar a recepção</guilabel
 > permite-lhe indicar se será notificado da confirmação quando fechar a janela da mensagem de alarme. Isto poderá ser usado como segurança para uma confirmação acidental dos alarmes.</para>
+
+<para
+>Os alarmes de exibição são normalmente suspensos enquanto as notificações são inibidas para a área de trabalho e não são exibidos sobre aplicativos em tela cheia. Para ignorar essas restrições e sempre exibir o alarme, se possível, selecione a caixa de seleção <guilabel
+>Nunca inibir alarmes</guilabel
+>. Observe que a capacidade de exibir mensagens sobre aplicativos em tela cheia pode depender do seu gerenciador de janelas e, atualmente, apenas o sistema de janelas X11 permite isso.</para>
 
 <para
 >Selecione a opção <guilabel
@@ -2398,7 +2403,9 @@
 >. Essas duas opções de exibição são descritas abaixo.</para>
 
 <para
->Se você desativar as notificações para a área de trabalho, a execução dos alarmes de exibição será suspensa até que as notificações sejam reativadas. Observe que isso se aplica a todos os alarmes de exibição, independentemente de serem exibidos em janelas ou como notificações.</para>
+>Se você desativar as notificações para a área de trabalho, a execução dos alarmes de exibição será suspensa até que as notificações sejam reativadas, exceto para os alarmes que você especificou, na <link linkend="alarm-edit-dlg-other"
+>janela de Edição de alarmes</link
+>, que nunca devem ser desativados. Observe que isso se aplica a todos os alarmes de exibição, independentemente de serem exibidos em janelas ou como notificações.</para>
 
 <para
 >Observe que em um sistema de tela única, o gerenciador de janelas pode inibir notificações enquanto qualquer aplicativo estiver em execução em tela cheia, o que suspenderá automaticamente a exibição de alarmes.</para>
@@ -2418,8 +2425,8 @@
 <para
 >As mensagens de alarmes ficam visíveis até que você as confirme, a menos que a opção <guilabel
 >Fechar automaticamente a janela após o período de cancelamento</guilabel
-> esteja assinalada no <link linkend="alarm-edit-dlg"
->diálogo de Edição de Alarmes</link
+> esteja assinalada na <link linkend="alarm-edit-dlg-cancel"
+>janela de Edição de Alarmes</link
 >. No caso de um alarme recorrente, se permanecer alguma janela de mensagem de uma ocorrência anterior do alarme, a janela existente simplesmente aparece quando o alarme se repetir. Isto evita ter que confirmar várias cópias da mesma mensagem no caso de não desejar ou não conseguir confirmar uma mensagem na hora em que ela aparecer.</para>
 
 <para
@@ -3027,8 +3034,8 @@
 <para
 >Em sistemas Linux, se o usuário tiver a capacidade de temporizador de alarme do kernel (<literal
 >cap_wake_alarm</literal
->), qualquer número de alarmes pode ser configurado para despertar do modo de suspensão. Nesse caso, o despertar do modo de suspensão é configurado para cada alarme individual na <link linkend="alarm-edit-dlg"
->janela Editar alarme</link
+>), qualquer número de alarmes pode ser configurado para despertar do modo de suspensão. Nesse caso, o despertar do modo de suspensão é configurado para cada alarme individual na <link linkend="alarm-edit-dlg-other"
+>janela de edição de alarme</link
 > usando a opção <guilabel
 >Despertar do modo de suspensão</guilabel
 >.</para>
@@ -3364,8 +3371,8 @@
 >Horário de Trabalho</guilabel
 >: Estas opções permitem-lhe definir o seu horário de trabalho, que é necessário quando a opção <guilabel
 >Apenas durante o horário de trabalho</guilabel
-> for selecionada para uma recorrência na <link linkend="alarm-edit-dlg"
->janela de Edição do Alarme</link
+> for selecionada para uma recorrência na <link linkend="alarm-edit-dlg-recur"
+>janela de Edição de alarme</link
 >.</para>
 
 <itemizedlist>

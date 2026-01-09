@@ -98,9 +98,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2026-1-6</date>
+>2026-1-7</date>
 <releaseinfo
->3.12.0 (KDE Gear 25.12)</releaseinfo>
+>3.13.0 (KDE Gear 26.04)</releaseinfo>
 
 <abstract>
 <para
@@ -451,7 +451,7 @@
 <itemizedlist>
 <listitem>
 <para
->Om de datum van het alarm vooraf in te stellen in de <link linkend="alarm-edit-dlg"
+>Om de datum van het alarm vooraf in te stellen in de <link linkend="alarm-edit-dlg-time"
 >Alarmbewerkingsdialoog</link
 >, klik <mousebutton
 >rechts</mousebutton
@@ -1943,7 +1943,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-time">
 <title
 >Tijd</title>
 
@@ -2025,7 +2025,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-cancel">
 <title
 >Afbreking</title>
 
@@ -2068,7 +2068,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-recur">
 <title
 >Herhaling</title>
 
@@ -2324,7 +2324,7 @@
 </sect3>
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-other">
 <title
 >Andere besturing</title>
 
@@ -2339,6 +2339,11 @@
 >Voor alarmen die worden getoond laat het keuzevakje <guilabel
 >Om bevestiging vragen</guilabel
 > u specificeren of u om bevestiging moet worden gevraagd wanneer u het berichtenvenster sluit of niet. Dit kan worden gebruikt als beveiliging tegen het per ongeluk bevestigen van alarmen.</para>
+
+<para
+>Alarmen worden normaal gesproken uitgeschakeld wanneer meldingen voor het bureaublad zijn geblokkeerd en worden niet weergegeven boven toepassingen in volledig scherm. Om deze beperkingen te omzeilen en het alarm altijd weer te geven wanneer dat mogelijk is, schakelt u het selectievakje <guilabel
+>Nooit alarmen blokkeren</guilabel
+> in. Houd er rekening mee dat de mogelijkheid om berichten boven toepassingen in volledig scherm weer te geven afhankelijk kan zijn van uw vensterbeheerder en dat dit momenteel alleen mogelijk is met het X11-venstersysteem.</para>
 
 <para
 >Selecteer <guilabel
@@ -2384,7 +2389,9 @@
 >. Deze twee opties voor tonen worden onderstaand beschreven.</para>
 
 <para
->Als u meldingen voor het bureaublad uitzet zal het uitvoeren van te tonen alarmen worden onderbroken totdat meldingen opnieuw worden ingeschakeld. Merk op dat dit van toepassing is op alle te tonen alarmen, ongeacht of ze getoond worden in vensters of als meldingen.</para>
+>Als u meldingen voor het bureaublad uitzet zal het uitvoeren van te tonen alarmen worden onderbroken totdat meldingen opnieuw worden ingeschakeld, behalve voor alarmen die u hebt gespecificeerd in de <link linkend="alarm-edit-dlg-other"
+>Dialoog Alarm bewerken</link
+> deze zouden nooit be onderdrukt mogen worden. Merk op dat dit van toepassing is op alle te tonen alarmen, ongeacht of ze getoond worden in vensters of als meldingen.</para>
 
 <para
 >Houd er rekening mee dat op een systeem met één scherm de vensterbeheerder meldingen kan blokkeren terwijl een applicatie op volledig scherm draait, waardoor de uitvoering van weergavealarmen automatisch wordt onderbroken.</para>
@@ -2404,7 +2411,7 @@
 <para
 >Vensters met alarmberichten blijven zichtbaar totdat u ze bevestigt, tenzij <guilabel
 >Venster automatisch sluiten na de late annuleringstijd</guilabel
-> was geactiveerd in de <link linkend="alarm-edit-dlg"
+> was geactiveerd in de <link linkend="alarm-edit-dlg-cancel"
 >Dialoogvenster om alarmen te bewerken</link
 >. In het geval van een zich herhalend alarm, als een niet bevestigd berichtvenster overblijft van een vorig afgaan van het alarm, dan blijft het bestaande venster eenvoudig zichtbaar wanneer het alarm zich herhaald. Dit vermijdt het hebben van meerdere kopieën van bevestigingen van hetzelfde bericht als u niet wilt of niet in staat bent een bericht te bevestigen op het moment dat het verschijnt.</para>
 
@@ -3023,7 +3030,7 @@
 <para
 >Op Linux systemen, als de gebruiker de mogelijkheid heeft van de alarmtimer van de kernel (<literal
 >cap_wake_alarm</literal
->), dan kan elk aantal alarmen ingesteld worden om uit onderbreking te ontwaken. In dat geval, wordt ontwaken uit onderbreking geconfigureerd voor elk individueel alarm in de <link linkend="alarm-edit-dlg"
+>), dan kan elk aantal alarmen ingesteld worden om uit onderbreking te ontwaken. In dat geval, wordt ontwaken uit onderbreking geconfigureerd voor elk individueel alarm in de <link linkend="alarm-edit-dlg-other"
 >Dialoog voor bewerken van alarmen</link
 > met de optie <guilabel
 >Ontwaken uit onderbreking</guilabel
@@ -3360,8 +3367,8 @@
 >Werkuren</guilabel
 >-groepsvak: Deze opties laten u uw werkuren, nodig wanneer de optie <guilabel
 >Alleen tijdens werkuren</guilabel
-> is geselecteerd voor een herhaling in de <link linkend="alarm-edit-dlg"
->Dialoogvenster om alarmen te bewerken</link
+> is geselecteerd voor een herhaling in de <link linkend="alarm-edit-dlg-recur"
+>Dialoog Alarmen bewerken</link
 >.</para>
 
 <itemizedlist>

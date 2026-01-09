@@ -98,9 +98,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->6 de gener de 2026</date>
+>7 de gener de 2026</date>
 <releaseinfo
->3.12.0 (KDE Gear 25.12)</releaseinfo>
+>3.13.0 (KDE Gear 26.04)</releaseinfo>
 
 <abstract>
 <para
@@ -453,7 +453,7 @@
 <itemizedlist>
 <listitem>
 <para
->Per a preestablir la data de l'alarma en el <link linkend="alarm-edit-dlg"
+>Per a preestablir la data de l'alarma en el <link linkend="alarm-edit-dlg-time"
 >diàleg Edició de l'alarma</link
 >, feu clic <mousebutton
 >dret</mousebutton
@@ -1939,7 +1939,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-time">
 <title
 >Hora</title>
 
@@ -2021,7 +2021,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-cancel">
 <title
 >Cancel·lar</title>
 
@@ -2064,7 +2064,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-recur">
 <title
 >Recurrència</title>
 
@@ -2320,7 +2320,7 @@
 </sect3>
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-other">
 <title
 >Altres controls</title>
 
@@ -2335,6 +2335,11 @@
 >Per a les alarmes visuals, la casella de selecció <guilabel
 >Confirma el reconeixement</guilabel
 > permet especificar si se us demanarà confirmació en tancar la finestra del missatge de l'alarma. Això es pot utilitzar com a salvaguarda contra el reconeixement accidental de les alarmes.</para>
+
+<para
+>La visualització d'alarmes normalment se suspèn mentre que les notificacions estan inhibides a l'escriptori, i no es mostren a sobre de les aplicacions a pantalla completa. Per a anul·lar aquestes restriccions i mostrar sempre l'alarma si és possible, seleccioneu la casella de selecció <guilabel
+>No inhibeixis mai les alarmes</guilabel
+>. Tingueu en compte que la capacitat de mostrar missatges a través d'aplicacions a pantalla completa pot dependre del gestor de finestres, i actualment només ho permet el sistema de finestres X11.</para>
 
 <para
 >Seleccioneu <guilabel
@@ -2380,7 +2385,9 @@
 >. Aquestes dues opcions de visualització es descriuen a continuació.</para>
 
 <para
->Si inhibiu les notificacions per a l'escriptori, l'execució de les alarmes visuals se suspendrà fins que es tornin a habilitar les notificacions. Recordeu que això s'aplica a totes les alarmes visuals, independentment de si es mostren en finestres o com a notificacions.</para>
+>Si inhibiu les notificacions per a l'escriptori, l'execució de les alarmes visuals se suspendrà fins que es tornin a habilitar les notificacions, excepte per a les alarmes que heu especificat que no s'han d'inhibir mai al <link linkend="alarm-edit-dlg-other"
+>diàleg d'edició de l'alarma</link
+>. Recordeu que això s'aplica a totes les alarmes visuals, independentment de si es mostren en finestres o com a notificacions.</para>
 
 <para
 >Tingueu en compte que en un sistema de pantalla única, el gestor de finestres pot inhibir les notificacions mentre qualsevol aplicació s'està executant a pantalla completa, la qual cosa suspendrà automàticament l'execució de la visualització d'alarmes.</para>
@@ -2398,7 +2405,7 @@
 <para
 >Les finestres dels missatges d'alarma romandran visibles fins que es reconeguin, llevat que <guilabel
 >Tanca la finestra automàticament després d'una cancel·lació retardada</guilabel
-> estigui marcada en el <link linkend="alarm-edit-dlg"
+> estigui marcada en el <link linkend="alarm-edit-dlg-cancel"
 >diàleg d'edició de l'alarma</link
 >. En el cas d'una alarma que es repeteix, si romà una finestra de missatge no reconeguda d'una activació anterior de l'alarma, simplement apareixerà la finestra existent quan l'alarma sigui recurrent. Això evitarà haver de reconèixer diverses còpies del mateix missatge, cas que potser no voldreu.</para>
 
@@ -3015,7 +3022,7 @@
 <para
 >En els sistemes Linux, si l'usuari té la capacitat de temporitzador d'alarma del nucli (<literal
 >cap_wake_alarm</literal
->), es pot configurar qualsevol nombre d'alarmes per a activar-se des de la suspensió. En aquest cas, l'activació des de la suspensió es configura per a cada alarma individual en el <link linkend="alarm-edit-dlg"
+>), es pot configurar qualsevol nombre d'alarmes per a activar-se des de la suspensió. En aquest cas, l'activació des de la suspensió es configura per a cada alarma individual en el <link linkend="alarm-edit-dlg-other"
 >diàleg d'edició d'alarma</link
 > utilitzant l'opció <guilabel
 >Activa des de la suspensió</guilabel
@@ -3352,7 +3359,7 @@
 >Horari de treball</guilabel
 >: Aquestes opcions permeten definir les vostres hores de treball, és necessari quan se selecciona l'opció <guilabel
 >Només durant l'horari de treball</guilabel
-> per a una repetició en el <link linkend="alarm-edit-dlg"
+> per a una repetició en el <link linkend="alarm-edit-dlg-recur"
 >diàleg d'edició de l'alarma</link
 >.</para>
 
