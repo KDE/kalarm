@@ -552,7 +552,7 @@ private:
 public:
     mutable QDateTime     ut;          // cached UTC equivalent of 'mDt'
 private:
-    mutable QDateTime     converted;   // cached conversion to another time zone (if 'tz' is valid)
+    mutable QDateTime     converted;   // cached conversion to another time zone
 public:
     KADateTime::SpecType  specType          : 4; // time spec type (N.B. need 3 bits + sign bit, since enums are signed on some platforms)
     mutable bool          utcCached         : 1; // true if 'ut' is valid

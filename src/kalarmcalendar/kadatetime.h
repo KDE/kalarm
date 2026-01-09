@@ -3,7 +3,7 @@
  *  calendar data.
  *  This is the Qt5 version of KDE 4 kdelibs/kdecore/date/kdatetime.h.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -627,6 +627,7 @@ public:
      * - @c OffsetFromUTC : the offset from UTC is returned.
      * - @c LocalZone     : a "local time" instance is returned, NOT the
      *                      system time zone.
+     * Note that an invalid instance can have a valid time zone.
      *
      * @return time zone as defined above, or invalid in all other cases
      * @see isUtc(), isLocal()
@@ -1393,6 +1394,9 @@ public:
      * other. (Both start and end of day times need to be considered in case a
      * daylight saving change occurs during that day.)
      *
+     * If both instances are invalid, they are considered equal, even if they
+     * have different time zones.
+
      * @return @c true if the two instances represent the same time, @c false otherwise
      * @see compare()
      */
