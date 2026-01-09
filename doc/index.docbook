@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2026-1-7</date>
+<date>2026-1-9</date>
 <releaseinfo>3.13.0 (KDE Gear 26.04)</releaseinfo>
 
 <abstract>
@@ -538,7 +538,8 @@ from the context menu.</para>
 <title>Enabling/Disabling an Alarm</title>
 
 <para>See <link linkend="enable-disable">Enabling and Disabling Alarms</link>
-for how to enable and disable alarms, either individually or as a whole.</para>
+for how to enable and disable alarms, either individually or as a
+whole, or temporarily skip individual alarms.</para>
 
 </sect2>
 
@@ -2536,6 +2537,57 @@ alarm list. Then choose <menuchoice>
 <para><mousebutton>Right</mousebutton> click on the desired entries in
 the alarm list and choose
 <menuchoice><guimenuitem>Disable</guimenuitem></menuchoice>
+from the context menu.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title>Skipping Individual Alarms</title>
+
+<para>You can choose to skip the next few (1 - 10) activations of an
+alarm. This temporarily disables the alarm until that number of
+recurrences or sub-repetitions have passed without activation. The
+alarm will resume triggering as normal after that.</para>
+
+<note><para>No reminders will be displayed for skipped activations.</para>
+<para>Skipping does not affect any outstanding deferral of the
+alarm.</para></note>
+
+<para>To skip the next activation(s) of individual alarms, do one of the
+following, and then enter the number of activations to skip:</para>
+
+<itemizedlist>
+<listitem>
+<para>Select one or more alarms by clicking on their entries in the
+alarm list. Then choose <menuchoice>
+<guimenu>Actions</guimenu><guimenuitem>Skip</guimenuitem>
+</menuchoice>.</para>
+</listitem>
+
+<listitem>
+<para><mousebutton>Right</mousebutton> click on the desired entries in
+the alarm list and choose
+<menuchoice><guimenuitem>Skip</guimenuitem></menuchoice>
+from the context menu.</para>
+</listitem>
+</itemizedlist>
+
+<para>To cancel skipping individual alarms, do one of the following:</para>
+
+<itemizedlist>
+<listitem>
+<para>Select one or more alarms by clicking on their entries in the
+alarm list. Then choose <menuchoice>
+<guimenu>Actions</guimenu><guimenuitem>Cancel skip</guimenuitem>
+</menuchoice>.</para>
+</listitem>
+
+<listitem>
+<para><mousebutton>Right</mousebutton> click on the desired entries in
+the alarm list and choose
+<menuchoice><guimenuitem>Cancel skip</guimenuitem></menuchoice>
 from the context menu.</para>
 </listitem>
 </itemizedlist>

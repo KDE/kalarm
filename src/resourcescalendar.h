@@ -1,7 +1,7 @@
 /*
  *  resourcescalendar.h  -  KAlarm calendar resources access
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -36,7 +36,8 @@ public:
     static void           initialise(const QByteArray& appName, const QByteArray& appVersion);
     static void           terminate();
 
-    /** Return the active alarm with the earliest trigger time.
+    /** Return the active alarm with the earliest trigger time, taking account of
+     *  skipping but ignoring any working hours or holiday restrictions.
      *  @param nextTriggerTime         The next trigger time of the earliest alarm.
      *  @param notificationsInhibited  Ignore display and audio alarms unless they have NoInhibit status.
      *  @return  The earliest alarm.

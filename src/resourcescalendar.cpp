@@ -1,7 +1,7 @@
 /*
  *  resourcescalendar.cpp  -  KAlarm calendar resources access
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -208,13 +208,13 @@ void ResourcesCalendar::slotEventUpdated(Resource& resource, const KAEvent& even
             findEarliestAlarm(resource);
         else
         {
-            const KADateTime dt = event.nextTrigger(KAEvent::Trigger::All).effectiveKDateTime();
+            const KADateTime dt = event.nextTrigger(KAEvent::Trigger::All, true).effectiveKDateTime();
             if (dt.isValid())
             {
                 bool changed = false;
                 DateTime next;
                 if (!earliestId.isEmpty())
-                    next = resource.event(earliestId).nextTrigger(KAEvent::Trigger::All);
+                    next = resource.event(earliestId).nextTrigger(KAEvent::Trigger::All, true);
                 if (earliestId.isEmpty()  ||  dt < next)
                 {
                     mEarliestAlarm[key] = event.id();
@@ -226,7 +226,7 @@ void ResourcesCalendar::slotEventUpdated(Resource& resource, const KAEvent& even
                     // It is not a display or audio event, or it is never inhibited.
                     DateTime nextNoInhibit;
                     if (!earliestNoInhibitId.isEmpty())
-                        nextNoInhibit = (earliestId == earliestNoInhibitId) ? next : resource.event(earliestNoInhibitId).nextTrigger(KAEvent::Trigger::All);
+                        nextNoInhibit = (earliestId == earliestNoInhibitId) ? next : resource.event(earliestNoInhibitId).nextTrigger(KAEvent::Trigger::All, true);
                     if (earliestNoInhibitId.isEmpty()  ||  dt < nextNoInhibit)
                     {
                         mEarliestNoInhibitAlarm[key] = event.id();
@@ -836,7 +836,7 @@ void ResourcesCalendar::findEarliestAlarm(const Resource& resource)
         ||  mPendingAlarms.contains(evnt.id())
         ||  isInactive(evnt, resource))
             continue;
-        const KADateTime dt = evnt.nextTrigger(KAEvent::Trigger::All).effectiveKDateTime();
+        const KADateTime dt = evnt.nextTrigger(KAEvent::Trigger::All, true).effectiveKDateTime();
         if (dt.isValid())
         {
             if (!earliest.isValid() || dt < earliestTime)
@@ -884,7 +884,7 @@ KAEvent ResourcesCalendar::earliestAlarm(KADateTime& nextTriggerTime, bool notif
             return earliestAlarm(nextTriggerTime, notificationsInhibited);
         }
 //TODO: use next trigger calculated in findEarliestAlarm() (allowing for it being out of date)?
-        const KADateTime dt = evnt.nextTrigger(KAEvent::Trigger::All).effectiveKDateTime();
+        const KADateTime dt = evnt.nextTrigger(KAEvent::Trigger::All, true).effectiveKDateTime();
         if (dt.isValid()  &&  (!earliest.isValid() || dt < earliestTime))
         {
             earliestTime = dt;

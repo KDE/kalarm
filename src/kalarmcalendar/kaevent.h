@@ -374,6 +374,7 @@ public:
      *  of NextType.
      *  Reminders are never returned if the recurrence to which they relate is excluded by working
      *  hours or holiday restrictions, regardless of whether or not NextWorkHoliday is specified.
+     *  Reminders are never returned for skipped occurrences, if NextSkip is specified.
      */
     enum NextType
     {
@@ -381,7 +382,8 @@ public:
         NextRepeat      = 0x01,   //!< check for sub-repetitions
         NextReminder    = 0x02,   //!< check for reminders
         NextWorkHoliday = 0x04,   //!< take account of any working hours or holiday restrictions
-        NextDeferral    = 0x08    //!< return the event deferral time, or reminder deferral time if NextReminder set
+        NextDeferral    = 0x08,   //!< return the event deferral time, or reminder deferral time if NextReminder set
+        NextSkip        = 0x10    //!< take account of skipping
     };
     Q_DECLARE_FLAGS(NextTypes, NextType)
 
@@ -389,24 +391,25 @@ public:
     enum class Trigger
     {
 
-        /** Next trigger, including reminders. No account is taken of any
-         *  working hours or holiday restrictions when evaluating this. */
+        /** Next trigger, including reminders. No account is taken of any working
+         *  hours or holiday restrictions, or skipping, when evaluating this. */
         All,
 
         /** Next trigger of the main alarm, i.e. excluding reminders. No
-         *  account is taken of any working hours or holiday restrictions when
-         *  evaluating this. */
+         *  account is taken of any working hours or holiday restrictions, or
+         *  skipping, when evaluating this. */
         Main,
 
         /** Next trigger of the main alarm, i.e. excluding reminders, taking
-         *  account of any working hours or holiday restrictions. If the event
-         *  has no working hours or holiday restrictions, this is equivalent to
-         *  Main. */
+         *  account of any working hours or holiday restrictions. No account is
+         *  taken of skipping. If the event has no working hours or holiday
+         *  restrictions, this is equivalent to Main. */
         Work,
 
         /** Next trigger, including reminders, taking account of any working
-         *  hours or holiday restrictions. If the event has no working hours or
-         *  holiday restrictions, this is equivalent to All. */
+         *  hours or holiday restrictions. No account is taken of skipping. If
+         *  the event has no working hours or holiday restrictions, this is
+         *  equivalent to All. */
         AllWork,
 
         /** Next time the alarm will actually trigger, i.e. the next recurrence
@@ -447,7 +450,7 @@ public:
     KAEvent();
 
     /** Construct an event and initialise with the specified parameters.
-     *  @param dt    start date/time. If @p dt is date-only, or if #AnyTime flag
+     *  @param dt    start date/time. If @p dt is date-only, or if #ANY_TIME flag
      *               is specified, the event will be date-only.
      *  @param name  name of the alarm.
      *  @param text  alarm message (@p action = #Message);
@@ -956,10 +959,62 @@ public:
     /** Return the default date-only setting used in the deferral dialog. */
     bool deferDefaultDateOnly() const;
 
+    /** Return the maximum skip count.
+     *  A limit is set in order to prevent excessive processing.
+     */
+    static int maxSkipCount();
+
+    /** Set a number of times for the event to be skipped.
+     *  This is the count of recurrences and sub-repetitions to skip.
+     *  Do not include reminders in the count; these will automatically be
+     *  skipped if their related recurrence or sub-repetition is skipped.
+     *  Skipping does not affect any outstanding deferral of the alarm.
+     *
+     *  Note that the date/time that triggering of the event will resume
+     *  is calculated when this function is called. If the alarm is
+     *  subject to working hours or holiday restrictions and a change is
+     *  later made to working hours or holiday settings, the date/time
+     *  that triggering of the event will resume will not be recalculated
+     *  to comply with the new settings.
+     *
+     *  @param count  number of times to skip the event trigger. If zero,
+     *                skipping will be cancelled.
+     *  @return true if the event is now skipping, false if not.
+     *
+     *  @see cancelSkip(), skipping(), skipCount(), skipDateTime()
+     */
+    bool skip(int count);
+
+    /** Cancel any skipping which is currently set.
+     *  @see skip()
+     */
+    void cancelSkip();
+
+    /** Return whether the event is currently being skipped.
+     *  @see skip(), skipDateTime(), skipCount()
+     */
+    bool skipping() const;
+
+    /** Return whether the event is currently being skipped, and if so how
+     *  many occurrences remain to be skipped.
+     *  @return  number of event triggers remaining to be skipped. Reminders
+     *           are not included in this count.
+     *  @see skip(), skipDateTime(), skipping()
+     */
+    int skipCount() const;
+
+    /** Return the time at which the event should resume normal triggering.
+     *  The next trigger for the alarm will occur at or after this time.
+     *  @return  time when triggers will resume, or invalid if not currently
+     *           being skipped.
+     *  @see skip(), skipping(), skipCount()
+     */
+    DateTime skipDateTime() const;
+
     /** Return the start time for the event. If the event recurs, this is the
      *  time of the first recurrence. If the event is date-only, this returns a
      *  date-only value.
-     *  @note No account is taken of any working hours or holiday restrictions.
+     *  @note No account is taken of any working hours or holiday restrictions
      *        when determining the start date/time.
      *
      *  @see mainDateTime()
@@ -987,6 +1042,8 @@ public:
      *                                     returns the deferral time.
      *                                     If a reminder has been deferred AND @p type
      *                                     contains NextReminder, returns the deferral time.
+     * - @p type contains NextSkip:        ignores all skipped occurrences, and their
+     *                                     reminders.
      *
      *  @param preDateTime  the date/time after which to find the next trigger/display.
      *  @param result       date/time of next trigger/display, or invalid date/time if none.
@@ -997,8 +1054,8 @@ public:
     TriggerType nextDateTime(const KADateTime& preDateTime, DateTime& result, NextTypes type, const KADateTime& endTime = {}) const;
 
     /** Return the next time the main alarm will trigger.
-     *  @note No account is taken of any working hours or holiday restrictions.
-     *        when determining the next trigger date/time.
+     *  @note No account is taken of any working hours or holiday restrictions,
+     *        or skipping, when determining the next trigger date/time.
      *
      *  @param withRepeats  true to include sub-repetitions, false to exclude them.
      *  @see mainTime(), startDateTime(), setTime()
@@ -1007,15 +1064,15 @@ public:
 
     /** Return the time at which the main alarm will next trigger.
      *  Sub-repetitions are ignored.
-     *  @note No account is taken of any working hours or holiday restrictions.
-     *        when determining the next trigger time.
+     *  @note No account is taken of any working hours or holiday restrictions,
+     *        or skipping, when determining the next trigger time.
      */
     QTime mainTime() const;
 
     /** Return the time at which the last sub-repetition of the current
      *  recurrence of the main alarm will occur.
-     *  @note No account is taken of any working hours or holiday restrictions
-     *        when determining the last sub-repetition time.
+     *  @note No account is taken of any working hours or holiday restrictions,
+     *        or skipping, when determining the last sub-repetition time.
      *
      *  @return last sub-repetition time, or main alarm time if no
      *          sub-repetitions are configured.
@@ -1036,10 +1093,12 @@ public:
     static void adjustStartOfDay(const KAEvent::List& events);
 
     /** Return the next time the alarm will trigger.
-     *  @param type specifies whether to ignore reminders, working time
-     *              restrictions, etc.
+     *  @param type  specifies whether to ignore reminders, working time
+     *               restrictions, etc.
+     *  @param skip  whether to take account of skipping.
+     *  @return next trigger time, or invalid if none.
      */
-    DateTime nextTrigger(Trigger type) const;
+    DateTime nextTrigger(Trigger type, bool skip = false) const;
 
     /** Set the date/time the event was created, or saved in the archive calendar.
      *  @see createdDateTime()
@@ -1308,8 +1367,8 @@ public:
     int recurInterval() const;
 
     /** Return the longest interval which can occur between consecutive recurrences.
-     *  @note No account is taken of any working hours or holiday restrictions
-     *        when evaluating consecutive recurrence dates/times.
+     *  @note No account is taken of any working hours or holiday restrictions,
+     *        or skipping, when evaluating consecutive recurrence dates/times.
      *  @see recurInterval()
      */
     KCalendarCore::Duration longestRecurrenceInterval() const;
@@ -1317,8 +1376,8 @@ public:
     /** Adjust the event date/time to the first recurrence of the event, on or after
      *  the event start date/time. The event start date may not be a recurrence date,
      *  in which case a later date will be set.
-     *  @note No account is taken of any working hours or holiday restrictions
-     *        when determining the first recurrence of the event.
+     *  @note No account is taken of any working hours or holiday restrictions,
+     *        or skipping, when determining the first recurrence of the event.
      */
     void setFirstRecurrence();
 
@@ -1339,8 +1398,8 @@ public:
     Repetition repetition() const;
 
     /** Return the count of the next sub-repetition which is due.
-     *  @note No account is taken of any working hours or holiday restrictions
-     *        when determining the next event sub-repetition.
+     *  @note No account is taken of any working hours or holiday restrictions,
+     *        or skipping, when determining the next event sub-repetition.
      *
      *  @return sub-repetition count (>=1), or 0 for the main recurrence.
      *  @see nextDateTime()
@@ -1352,8 +1411,8 @@ public:
 
     /** Determine whether the event will occur strictly after the specified
      *  date/time. Reminders are ignored.
-     *  @note No account is taken of any working hours or holiday restrictions
-     *        when determining event occurrences.
+     *  @note No account is taken of any working hours or holiday restrictions,
+     *        or skipping, when determining event occurrences.
      *  @note If the event is date-only, its occurrences are considered to occur
      *        at the start-of-day time when comparing with @p preDateTime.
      *
@@ -1371,8 +1430,8 @@ public:
      *  If the alarm has a sub-repetition, and a sub-repetition of a previous
      *  recurrence occurs after the specified date/time, that sub-repetition is
      *  set as the next occurrence.
-     *  @note No account is taken of any working hours or holiday restrictions
-     *        when determining and setting the next occurrence date/time.
+     *  @note No account is taken of any working hours or holiday restrictions, or
+     *        skipping, when determining and setting the next occurrence date/time.
      *  @note If the event is date-only, its occurrences are considered to occur
      *        at the start-of-day time when comparing with @p preDateTime.
      *
@@ -1388,8 +1447,8 @@ public:
 
     /** Get the date/time of the last previous occurrence of the event,
      *  strictly before the specified date/time. Reminders are ignored.
-     *  @note No account is taken of any working hours or holiday restrictions
-     *        when determining the previous event occurrence.
+     *  @note No account is taken of any working hours or holiday restrictions,
+     *        or skipping, when determining the previous event occurrence.
      *  @note If the event is date-only, its occurrences are considered to occur
      *        at the start-of-day time when comparing with @p preDateTime.
      *

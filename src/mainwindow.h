@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -96,6 +96,7 @@ private Q_SLOTS:
     void           slotDeleteForce()  { slotDelete(true); }
     void           slotReactivate();
     void           slotEnable();
+    void           slotSkip();
     void           slotToggleTrayIcon();
     void           slotRefreshAlarms();
     void           slotImportAlarms();
@@ -145,6 +146,7 @@ private:
     void            initActions();
     void            selectionCleared();
     void            setEnableText(bool enable);
+    void            setSkipText(bool skip);
     void            arrangePanel();
     void            setSplitterSizes();
     void            initUndoMenu(QMenu*, Undo::Type);
@@ -181,6 +183,7 @@ private:
     QAction*             mActionDeleteForce;
     QAction*             mActionReactivate;
     QAction*             mActionEnable;
+    QAction*             mActionSkip;
     QAction*             mActionFindNext;
     QAction*             mActionFindPrev;
     KToolBarPopupAction* mActionUndo;
@@ -201,6 +204,7 @@ private:
     bool                 mShowArchived;            // include archived alarms in the displayed list
     bool                 mShown{false};            // true once the window has been displayed
     bool                 mActionEnableEnable;      // Enable/Disable action is set to "Enable"
+    bool                 mActionSkipSkip;          // Skip/Cancel Skip action is set to "Skip"
     bool                 mMenuError;               // error occurred creating menus: need to show error message
     bool                 mResizing{false};         // window resize is in progress
 };

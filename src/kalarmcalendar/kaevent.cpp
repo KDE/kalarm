@@ -20,6 +20,20 @@
 
 using namespace KCalendarCore;
 
+namespace
+{
+const int MAX_SKIP_COUNT = 10;   // maximum value of KAEvent skip count
+
+// Which trigger times need to be recalculated and cached (bitmask).
+enum TriggerChange
+{
+    TriggerChangeNone = 0,       // no recalculation needed
+    TriggerChangeMain = 0x01,    // recalculate main trigger times
+    TriggerChangeSkip = 0x02,    // recalculate only skip trigger times
+    TriggerChangeAll  = TriggerChangeMain | TriggerChangeSkip
+};
+}
+
 namespace KAlarmCal
 {
 
@@ -157,11 +171,15 @@ public:
         Return,        // return a sub-repetition if it's the next occurrence
     };
 
+    // Details of the next recurrence or sub-repetition, and its reminder.
+    // Note that the reminder is for the same occurrence, never for a previous
+    // occurrence.
     struct Triggers
     {
-        DateTime main;   // the next trigger time (recurrence or sub-repetition), ignoring reminders
-        DateTime all;    // the next trigger time (recurrence or sub-repetition), including reminders
+        DateTime main;     // the next trigger time (recurrence or sub-repetition), ignoring reminders
+        DateTime all;      // the next trigger time (recurrence or sub-repetition), including reminders
         int repeatNum;     // 0 = main is a recurrence, >0 = main sub-repetition number
+        void clear()  { main = all = DateTime();  repeatNum = 0; }
     };
 
     KAEventPrivate();
@@ -191,6 +209,9 @@ public:
     void               activateReminderAfter(const DateTime& mainAlarmTime);
     void               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
     void               cancelDefer();
+    bool               skip(int count);
+    int                skipCount() const;
+    DateTime           skipDateTime() const;
     bool               setDisplaying(const KAEventPrivate&, KAAlarm::Type, ResourceId, const KADateTime& dt, bool showEdit, bool showDefer);
     void               reinstateFromDisplaying(const KCalendarCore::Event::Ptr&, ResourceId&, bool& showEdit, bool& showDefer);
     void               startChanges()
@@ -228,6 +249,7 @@ public:
     bool               setRecur(KCalendarCore::RecurrenceRule::PeriodType, int freq, int count, const KADateTime& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
     KARecurrence::Type checkRecur() const;
     void               clearRecur();
+    void               setSkipTime(const DateTime& = {}) const;
     void               calcTriggerTimes() const;
 #ifdef KDE_NO_DEBUG_OUTPUT
     void               dumpDebug() const  { }
@@ -237,6 +259,8 @@ public:
     static bool        convertRepetition(const KCalendarCore::Event::Ptr&);
     static bool        convertStartOfDay(const KCalendarCore::Event::Ptr&);
     static DateTime    readDateTime(const KCalendarCore::Event::Ptr&, bool localZone, bool dateOnly, DateTime& start);
+    static DateTime    readDateTime(const QString& param, const DateTime& eventStart);
+    static QString     writeDateTime(const QDateTime& dt, bool dateOnly);
     static void        readAlarms(const KCalendarCore::Event::Ptr&, AlarmMap*, bool cmdDisplay = false);
     static void        readAlarm(const KCalendarCore::Alarm::Ptr&, AlarmData&, bool audioMain, bool cmdDisplay = false);
 
@@ -268,6 +292,8 @@ public:
     static int         mWorkTimeIndex;     // incremented every time working days/times are changed
     mutable Triggers   mBaseTriggers;      // next trigger time, ignoring working hours
     mutable Triggers   mWorkTriggers;      // next trigger time, taking account of working hours
+    mutable Triggers   mBaseSkipTriggers;  // next trigger time taking account of skipping, ignoring working hours
+    mutable Triggers   mWorkSkipTriggers;  // next trigger time taking account of skipping and working hours
     mutable KAEvent::CmdErr mCommandError{KAEvent::CmdErr::None}; // command execution error last time the alarm triggered
 
     QString            mEventID;           // UID: KCalendarCore::Event unique ID
@@ -284,6 +310,7 @@ public:
     DateTime           mNextMainDateTime;  // next time to display the alarm, excluding repetitions
     KADateTime         mAtLoginDateTime;   // repeat-at-login end time
     DateTime           mDeferralTime;      // extra time to trigger alarm (if alarm or reminder deferred)
+    mutable DateTime   mSkipTime;          // next time to trigger alarm if it's currently being skipped
     DateTime           mDisplayingTime;    // date/time shown in the alarm currently being displayed
     int                mDisplayingFlags;   // type of alarm which is currently being displayed (for display alarm)
     int                mReminderMinutes{0};// how long in advance reminder is to be, or 0 if none (<0 for reminder AFTER the alarm)
@@ -308,7 +335,7 @@ public:
     QStringList        mEmailAttachments;      // ATTACH: email attachment file names
     mutable QTime      mTriggerStartOfDay;     // start of day time used by calcTriggerTimes()
     mutable int        mChangeCount{0};        // >0 = inhibit calling calcTriggerTimes()
-    mutable bool       mTriggerChanged{false}; // true if need to recalculate trigger times
+    mutable TriggerChange mTriggerChanged{TriggerChangeNone}; // true if need to recalculate trigger times
     QString            mLogFile;               // alarm output is to be logged to this URL
     float              mSoundVolume{-1.0f};    // volume for sound file (range 0 - 1), or < 0 for unspecified
     float              mFadeVolume{-1.0f};     // initial volume for sound file (range 0 - 1), or < 0 for no fade
@@ -360,6 +387,7 @@ public:
     static const QString WORK_TIME_ONLY_FLAG;
     static const QString REMINDER_ONCE_FLAG;
     static const QString DEFER_FLAG;
+    static const QString SKIP_FLAG;
     static const QString LATE_CANCEL_FLAG;
     static const QString AUTO_CLOSE_FLAG;
     static const QString NOTIFY_FLAG;
@@ -430,6 +458,7 @@ const QString    KAEventPrivate::EXCLUDE_HOLIDAYS_FLAG = QStringLiteral("EXHOLID
 const QString    KAEventPrivate::WORK_TIME_ONLY_FLAG   = QStringLiteral("WORKTIME");
 const QString    KAEventPrivate::REMINDER_ONCE_FLAG    = QStringLiteral("ONCE");
 const QString    KAEventPrivate::DEFER_FLAG            = QStringLiteral("DEFER");   // default defer interval for this alarm
+const QString    KAEventPrivate::SKIP_FLAG             = QStringLiteral("SKIP");
 const QString    KAEventPrivate::LATE_CANCEL_FLAG      = QStringLiteral("LATECANCEL");
 const QString    KAEventPrivate::AUTO_CLOSE_FLAG       = QStringLiteral("LATECLOSE");
 const QString    KAEventPrivate::NOTIFY_FLAG           = QStringLiteral("NOTIFY");
@@ -597,7 +626,7 @@ KAEventPrivate::KAEventPrivate(const KADateTime& dateTime, const QString& name, 
 
     mMainExpired            = false;
     mChangeCount            = changesPending ? 1 : 0;
-    mTriggerChanged         = true;
+    mTriggerChanged         = TriggerChangeAll;
 }
 
 /******************************************************************************
@@ -622,7 +651,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
     mEnabled        = true;
     QString param;
     bool ok;
-    mCategory               = CalEvent::status(event, &param);
+    mCategory       = CalEvent::status(event, &param);
     if (mCategory == CalEvent::DISPLAYING)
     {
         // It's a displaying calendar event - set values specific to displaying alarms
@@ -653,6 +682,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
             ++it;
     }
 
+    QString skipParam;
     bool dateOnly = false;
     bool localZone = false;
     QStringList evFlags = event->customProperty(KACalendar::APPNAME, FLAGS_PROPERTY).split(SC, Qt::SkipEmptyParts);
@@ -727,6 +757,12 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
             mDeferDefaultMinutes = n;
             ++i;
         }
+        else if (flag == SKIP_FLAG)
+        {
+            // Note the skip date/time, and process once the start date/time
+            // has been fetched.
+            skipParam = evFlags.at(++i);
+        }
         else if (flag == TEMPL_AFTER_TIME_FLAG)
         {
             const int n = static_cast<int>(evFlags.at(i + 1).toUInt(&ok));
@@ -800,6 +836,9 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
         mRepetition.set(Duration(mRepetition.intervalMinutes() / 24*60, Duration::Days));
     if (event->customStatus() == DISABLED_STATUS)
         mEnabled = false;
+
+    if (!skipParam.isEmpty())
+        mSkipTime = readDateTime(skipParam, mStartDateTime);
 
     // Extract status from the event's alarms.
     // First set up defaults.
@@ -995,7 +1034,6 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
         else
             setRecur(RecurrenceRule::rMinutely, mRepetition.intervalMinutes(), mRepetition.count() + 1, KADateTime());
         mRepetition.set(0, 0);
-        mTriggerChanged = true;
     }
 
     if (mRepeatAtLogin)
@@ -1032,7 +1070,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
         if (setDeferralTime)
             mNextMainDateTime = mDeferralTime;
     }
-    mTriggerChanged = true;
+    mTriggerChanged = TriggerChangeAll;
     endChanges();
 }
 
@@ -1061,6 +1099,8 @@ void KAEventPrivate::copy(const KAEventPrivate& event)
 {
     mBaseTriggers            = event.mBaseTriggers;
     mWorkTriggers            = event.mWorkTriggers;
+    mBaseSkipTriggers        = event.mBaseSkipTriggers;
+    mWorkSkipTriggers        = event.mWorkSkipTriggers;
     mCommandError            = event.mCommandError;
     mEventID                 = event.mEventID;
     mCustomProperties        = event.mCustomProperties;
@@ -1075,6 +1115,7 @@ void KAEventPrivate::copy(const KAEventPrivate& event)
     mNextMainDateTime        = event.mNextMainDateTime;
     mAtLoginDateTime         = event.mAtLoginDateTime;
     mDeferralTime            = event.mDeferralTime;
+    mSkipTime                = event.mSkipTime;
     mDisplayingTime          = event.mDisplayingTime;
     mDisplayingFlags         = event.mDisplayingFlags;
     mReminderMinutes         = event.mReminderMinutes;
@@ -1231,6 +1272,8 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction ui
             ddparam += QLatin1Char('D');
         (evFlags += DEFER_FLAG) += ddparam;
     }
+    if (mSkipTime.isValid())
+        (evFlags += SKIP_FLAG) += writeDateTime(mSkipTime.qDateTime(), mStartDateTime.isDateOnly());
     if (mCategory == CalEvent::TEMPLATE  &&  mTemplateAfterTime >= 0)
         (evFlags += TEMPL_AFTER_TIME_FLAG) += QString::number(mTemplateAfterTime);
     if (mEmailId >= 0)
@@ -1286,7 +1329,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction ui
         {
             QDateTime dt = mNextMainDateTime.kDateTime().toTimeSpec(mStartDateTime.timeSpec()).qDateTime();
             ev->setCustomProperty(KACalendar::APPNAME, NEXT_RECUR_PROPERTY,
-                                  QLocale::c().toString(dt, mNextMainDateTime.isDateOnly() ? QStringLiteral("yyyyMMdd") : QStringLiteral("yyyyMMddThhmmss")));
+                                  writeDateTime(dt, mNextMainDateTime.isDateOnly()));
         }
         // Add the main alarm
         initKCalAlarm(ev, 0, QStringList(), MAIN_ALARM);
@@ -1604,6 +1647,8 @@ bool KAEvent::isValid() const
 void KAEvent::setEnabled(bool enable)
 {
     d->mEnabled = enable;
+    if (!enable)
+        d->setSkipTime();
 }
 
 bool KAEvent::enabled() const
@@ -1624,6 +1669,7 @@ bool KAEvent::isReadOnly() const
 void KAEvent::setArchive()
 {
     d->mArchive = true;
+    d->setSkipTime();
 }
 
 bool KAEvent::toBeArchived() const
@@ -1710,7 +1756,9 @@ void KAEventPrivate::setCategory(CalEvent::Type s)
         return;
     mEventID = CalEvent::uid(mEventID, s);
     mCategory = s;
-    mTriggerChanged = true;   // templates and archived don't have trigger times
+    if (mCategory != CalEvent::ACTIVE)
+        setSkipTime();        // not an active alarm, so cancel skipping
+    mTriggerChanged = TriggerChangeAll;   // templates and archived don't have trigger times
 }
 
 CalEvent::Type KAEvent::category() const
@@ -2082,7 +2130,7 @@ void KAEvent::setTemplate(const QString& name, int afterTime)
     d->setCategory(CalEvent::TEMPLATE);
     d->mName = name;
     d->mTemplateAfterTime = afterTime;
-    d->mTriggerChanged = true;   // templates and archived don't have trigger times
+    d->mTriggerChanged = TriggerChangeAll;   // templates and archived don't have trigger times
 }
 
 bool KAEvent::isTemplate() const
@@ -2146,7 +2194,7 @@ void KAEventPrivate::setReminder(int minutes, bool onceOnly)
             ++mAlarmCount;
         else if (mReminderActive == ReminderType::None  &&  oldReminderActive != ReminderType::None)
             --mAlarmCount;
-        mTriggerChanged = true;
+        mTriggerChanged = TriggerChangeAll;
     }
 }
 
@@ -2244,7 +2292,7 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
                 {
                     // Deferring past the main alarm time, so adjust any existing deferral
                     set_deferral(DeferType::None);
-                    mTriggerChanged = true;
+                    mTriggerChanged = TriggerChangeAll;
                 }
             }
             else if (reminder)
@@ -2253,12 +2301,12 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
             {
                 set_deferral(DeferType::Reminder);   // defer reminder alarm
                 mDeferralTime = dateTime;
-                mTriggerChanged = true;
+                mTriggerChanged = TriggerChangeAll;
             }
             if (mReminderActive == ReminderType::Active)
             {
                 activate_reminder(false);
-                mTriggerChanged = true;
+                mTriggerChanged = TriggerChangeAll;
             }
         }
         if (mDeferral != DeferType::Reminder)
@@ -2267,7 +2315,7 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
             // Main alarm has now expired.
             mNextMainDateTime = mDeferralTime = dateTime;
             set_deferral(DeferType::Normal);
-            mTriggerChanged = true;
+            mTriggerChanged = TriggerChangeAll;
             checkReminderAfter = true;
             if (!mMainExpired)
             {
@@ -2299,7 +2347,7 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
             mDeferralTime = dateTime;
             checkRepetition = true;
         }
-        mTriggerChanged = true;
+        mTriggerChanged = TriggerChangeAll;
     }
     else
     {
@@ -2307,7 +2355,7 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
         mDeferralTime = dateTime;
         if (mDeferral == DeferType::None)
             set_deferral(DeferType::Normal);
-        mTriggerChanged = true;
+        mTriggerChanged = TriggerChangeAll;
         checkReminderAfter = true;
         if (adjustRecurrence)
         {
@@ -2349,7 +2397,7 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
             mNextRepeat = 0;
         else
             mNextRepeat = mRepetition.nextRepeatCount(mNextMainDateTime.kDateTime(), mDeferralTime.kDateTime());
-        mTriggerChanged = true;
+        mTriggerChanged = TriggerChangeAll;
     }
     endChanges();
 }
@@ -2368,7 +2416,7 @@ void KAEventPrivate::cancelDefer()
     {
         mDeferralTime = DateTime();
         set_deferral(DeferType::None);
-        mTriggerChanged = true;
+        mTriggerChanged = TriggerChangeAll;
     }
 }
 
@@ -2455,6 +2503,154 @@ bool KAEvent::deferDefaultDateOnly() const
 {
     return d->mDeferDefaultDateOnly;
 }
+ 
+int KAEvent::maxSkipCount()
+{
+    return MAX_SKIP_COUNT;
+}
+
+/******************************************************************************
+* Set a number of times for the event to be skipped.
+* Note that it isn't reliable to simply suppress the next 'n' occurrences,
+* since if KAlarm isn't running when any of the skipped occurrences would
+* trigger, it would be difficult to keep track. Therefore instead of storing
+* the occurrence count to skip, we store the time when occurrences will resume
+* triggering.
+*/
+bool KAEvent::skip(int count)
+{
+    return d->skip(count);
+}
+bool KAEventPrivate::skip(int count)
+{
+    if (count <= 0  ||  mCategory != CalEvent::ACTIVE  ||  !mEnabled  ||  checkRecur() == KARecurrence::NO_RECUR)
+    {
+        setSkipTime();
+        return false;
+    }
+
+    if (count > MAX_SKIP_COUNT)
+        count = MAX_SKIP_COUNT;
+    KADateTime pre = KADateTime::currentDateTime(mStartDateTime.timeSpec());
+    // Find the next occurrence after the skip.
+    DateTime last;
+    DateTime next;
+    for (int i = 0;  i <= count;  ++i)
+    {
+        if (nextDateTime(pre, next, KAEvent::NextTypes(KAEvent::NextRepeat | KAEvent::NextWorkHoliday)) == KAEvent::TriggerType::None)
+        {
+            if (!i)
+            {
+                setSkipTime();   // no occurrences remain, so exit with skip time clear
+                return false;
+            }
+            // Skipping all remaining occurrences, so skip to AFTER the last occurrence.
+            next = pre;
+            if (mStartDateTime.isDateOnly())
+            {
+                next = next.addDays(1);
+                next.setDateOnly(true);
+            }
+            else
+                next.addSecs(1);
+            break;
+        }
+        last = next;
+        pre = next.effectiveKDateTime();
+    }
+
+    setSkipTime(next);
+    return mSkipTime.isValid();
+}
+
+/******************************************************************************
+* Cancel any skipping which is currently set.
+*/
+void KAEvent::cancelSkip()
+{
+    d->setSkipTime();
+}
+
+/******************************************************************************
+* Return whether the event is currently being skipped.
+*/
+bool KAEvent::skipping() const
+{
+    return d->skipDateTime().isValid();
+}
+
+/******************************************************************************
+* Return the number of triggers of the event remaining to be skipped, excluding
+* reminders.
+*/
+int KAEvent::skipCount() const
+{
+    return d->skipCount();
+}
+int KAEventPrivate::skipCount() const
+{
+    const DateTime skipTime = skipDateTime();
+    if (!skipTime.isValid())
+        return 0;
+
+    KADateTime pre = KADateTime::currentDateTime(mStartDateTime.timeSpec());
+    int count = 0;
+    for ( ;  count < MAX_SKIP_COUNT;  ++count)
+    {
+        DateTime next;
+        if (nextDateTime(pre, next, KAEvent::NextTypes(KAEvent::NextRepeat | KAEvent::NextWorkHoliday)) == KAEvent::TriggerType::None)
+        {
+            if (!count)
+            {
+                // There is no occurrence after the current time,
+                // so clear skipping.
+                setSkipTime();
+            }
+            return count;
+        }
+        if (next >= skipTime)
+            return count;
+        pre = next.effectiveKDateTime();
+    }
+    return count;
+}
+
+/******************************************************************************
+* Return the time at which the event should resume normal triggering.
+* If the skip time has already passed, it is cleared.
+*/
+DateTime KAEvent::skipDateTime() const
+{
+    return d->skipDateTime();
+}
+DateTime KAEventPrivate::skipDateTime() const
+{
+    if (mSkipTime.isValid())
+    {
+        if (mStartDateTime.isDateOnly())
+        {
+            KADateTime now = KADateTime::currentDateTime(mStartDateTime.timeSpec());
+            now.setDateOnly(true);
+            if (mSkipTime <= now)
+                setSkipTime();   // skip date has passed, so cancel it
+        }
+        else
+        {
+            if (mSkipTime <= KADateTime::currentUtcDateTime())
+                setSkipTime();   // skip date has passed, so cancel it
+        }
+    }
+    return mSkipTime;
+}
+
+void KAEventPrivate::setSkipTime(const DateTime& dt) const
+{
+    if (dt != mSkipTime)
+    {
+        mSkipTime = dt;
+        mTriggerChanged = TriggerChange(mTriggerChanged | TriggerChangeSkip);
+    }
+}
 
 DateTime KAEvent::startDateTime() const
 {
@@ -2464,7 +2660,7 @@ DateTime KAEvent::startDateTime() const
 void KAEvent::setTime(const KADateTime& dt)
 {
     d->mNextMainDateTime = dt;
-    d->mTriggerChanged = true;
+    d->mTriggerChanged = TriggerChangeAll;
 }
 
 /******************************************************************************
@@ -2476,26 +2672,11 @@ KAEvent::TriggerType KAEvent::nextDateTime(const KADateTime& preDateTime, DateTi
     return d->nextDateTime(preDateTime, result, type, endTime);
 }
 
-KAEvent::TriggerType KAEventPrivate::nextDateTime(const KADateTime& preDateTime, DateTime& result, KAEvent::NextTypes type, const KADateTime& endTime) const
+KAEvent::TriggerType KAEventPrivate::nextDateTime(const KADateTime& preDT, DateTime& result, KAEvent::NextTypes type, const KADateTime& endTime) const
 {
-    // No need for complicated code for the simple case of returning either the
-    // next recurrence or sub-repetition, when ignoring working time/holidays,
-    // reminders and deferrals.
-    if (!(type & (KAEvent::NextReminder | KAEvent::NextWorkHoliday | KAEvent::NextDeferral)))
-    {
-        Repeats option = (type & KAEvent::NextRepeat) ? Repeats::Return : Repeats::Ignore;
-        const KAEvent::OccurType ot = nextOccurrence(preDateTime, result, option);
-        if (endTime.isValid()  &&  result > endTime)
-        {
-            result = DateTime();
-            return KAEvent::TriggerType::None;
-        }
-        return static_cast<KAEvent::TriggerType>(ot);
-    }
-
     // Remove flags from 'type' which are inapplicable to this alarm.
     if (!mRepetition)
-        type &= ~KAEvent::NextRepeat;    // the alarm doesn't repeat
+        type &= ~KAEvent::NextRepeat;     // the alarm doesn't repeat
     if (!mReminderMinutes)
         type &= ~KAEvent::NextReminder;   // the alarm doesn't have a reminder
     if (checkRecur() == KARecurrence::NO_RECUR
@@ -2517,11 +2698,32 @@ KAEvent::TriggerType KAEventPrivate::nextDateTime(const KADateTime& preDateTime,
         type &= ~KAEvent::NextDeferral;
     }
 
-    // Find the next recurrence (not sub-repetition) after preDateTime.
+    if (!mSkipTime.isValid())
+        type &= ~KAEvent::NextSkip;       // the alarm isn't being skipped
+    const KADateTime preDateTime = (type & KAEvent::NextSkip) && mSkipTime > preDT ? mSkipTime.kDateTime().addSecs(-60) : preDT;
+
+    // No need for complicated code for the simple case of returning either the
+    // next recurrence or sub-repetition, when ignoring working time/holidays,
+    // reminders and deferrals.
+    if (!(type & (KAEvent::NextReminder | KAEvent::NextWorkHoliday | KAEvent::NextDeferral)))
+    {
+        const Repeats option = (type & KAEvent::NextRepeat) ? Repeats::Return : Repeats::Ignore;
+        const KAEvent::OccurType ot = nextOccurrence(preDateTime, result, option);
+        if (endTime.isValid()  &&  result > endTime)
+        {
+            result = DateTime();
+            return KAEvent::TriggerType::None;
+        }
+        return static_cast<KAEvent::TriggerType>(ot);
+    }
+
+    // Find the next recurrence (not sub-repetition) after preDateTime (or if taking
+    // account of skipping, at or after the skip time).
     // If looking for reminders AFTER the alarm, start from preDateTime - reminder period.
     // If looking for repetitions, start from preDateTime - total repetition duration.
     KADateTime pre = preDateTime;
-    if ((type & KAEvent::NextReminder)  &&  mReminderMinutes < 0)   // if reminder AFTER the alarm
+    if ((type & KAEvent::NextReminder)  &&  mReminderMinutes < 0    // if reminder AFTER the alarm
+    &&  !(type & KAEvent::NextSkip))        // but if skipping, the recurrence must after skipping
         pre = pre.addSecs(mReminderMinutes * 60);
     if (type & KAEvent::NextRepeat)
     {
@@ -2581,6 +2783,8 @@ KAEvent::TriggerType KAEventPrivate::nextDateTime(const KADateTime& preDateTime,
 
     // If desired, check for the first reminder after preDateTime.
     // Reminders only apply to recurrences, not sub-repetitions.
+    // Note that any skip time applies to the recurrence or sub-repetition,
+    // and a reminder only occurs if the recurrence/sub-repetition triggers.
     DateTime resultReminder;
     if (type & KAEvent::NextReminder)
     {
@@ -2604,9 +2808,10 @@ KAEvent::TriggerType KAEventPrivate::nextDateTime(const KADateTime& preDateTime,
             }
             else
             {
-                // Reminder is after the alarm. If the recurrence is before preDateTime,
-                // check if its reminder occurs after preDateTime.
-                if (offsetToRecur < 0  &&  -offsetToRecur < -reminderSecs)
+                // Reminder is after the alarm. If the recurrence is before preDateTime
+                // and is not skipped, check if its reminder occurs after preDateTime.
+                if (offsetToRecur < 0  &&  -offsetToRecur < -reminderSecs
+                &&  (!(type & KAEvent::NextSkip)  ||  nextRecur >= mSkipTime))
                     resultReminder = nextRecur.addSecs(-reminderSecs);
             }
 
@@ -2653,11 +2858,31 @@ KAEvent::TriggerType KAEventPrivate::nextDateTime(const KADateTime& preDateTime,
             // Find next recurrence/repetition which complies with working time/
             // holiday restrictions.
             // Find a subsequent sub-repetition or recurrence which is not excluded.
+            const bool wantRepeats = type & KAEvent::NextRepeat;
             Triggers nextRec;
             nextRec.main = nextRecur;
             nextRec.repeatNum = 0;
             Triggers nextWT;
             nextHolidayWorkingTime(nextRec, true, nextWT, (type & KAEvent::NextRepeat), endTime);
+            if (!nextWT.main.isValid())
+            {
+                result = DateTime();
+                return KAEvent::TriggerType::None;
+            }
+            if (type & KAEvent::NextSkip)
+            {
+                while (nextWT.main < mSkipTime)
+                {
+                    nextRec.main      = nextWT.main;
+                    nextRec.repeatNum = nextWT.repeatNum;
+                    nextHolidayWorkingTime(nextRec, wantRepeats, nextWT, wantRepeats, endTime);
+                    if (!nextWT.main.isValid())
+                    {
+                        result = DateTime();
+                        return KAEvent::TriggerType::None;
+                    }
+                }
+            }
             if (type & KAEvent::NextReminder)
             {
                 result = nextWT.all;
@@ -2741,7 +2966,7 @@ void KAEventPrivate::setRepeatAtLogin(bool rl)
     else if (!rl  &&  mRepeatAtLogin)
         --mAlarmCount;
     mRepeatAtLogin = rl;
-    mTriggerChanged = true;
+    mTriggerChanged = TriggerChangeAll;
 }
 
 /******************************************************************************
@@ -2796,7 +3021,9 @@ void KAEvent::setExcludeHolidays(bool ex)
         d->mExcludeHolidayRegion = KAEventPrivate::mHolidays->regionCode();
         // Option only affects recurring alarms
         if (d->checkRecur() != KARecurrence::NO_RECUR)
-            d->mTriggerChanged = true;
+        {
+            d->mTriggerChanged = TriggerChangeAll;
+        }
     }
 }
 
@@ -2827,7 +3054,9 @@ void KAEvent::setWorkTimeOnly(bool wto)
     d->mWorkTimeOnly = wto;
     // Option only affects recurring alarms
     if (d->checkRecur() != KARecurrence::NO_RECUR)
-        d->mTriggerChanged = true;
+    {
+        d->mTriggerChanged = TriggerChangeAll;
+    }
 }
 
 bool KAEvent::workTimeOnly() const
@@ -2922,7 +3151,7 @@ void KAEventPrivate::clearRecur()
         delete mRecurrence;
         mRecurrence = nullptr;
         mRepetition.set(0, 0);
-        mTriggerChanged = true;
+        mTriggerChanged = TriggerChangeAll;
     }
     mNextRepeat = 0;
 }
@@ -2944,7 +3173,7 @@ void KAEventPrivate::setRecurrence(const KARecurrence& recurrence)
         delete mRecurrence;
         mRecurrence = new KARecurrence(recurrence);
         mRecurrence->setStartDateTime(mStartDateTime.effectiveKDateTime(), mStartDateTime.isDateOnly());
-        mTriggerChanged = true;
+        mTriggerChanged = TriggerChangeAll;
 
         // Adjust sub-repetition values to fit the recurrence.
         setRepetition(mRepetition);
@@ -2968,7 +3197,7 @@ void KAEventPrivate::setRecurrence(const KARecurrence& recurrence)
 bool KAEvent::setRecurMinutely(int freq, int count, const KADateTime& end)
 {
     const bool success = d->setRecur(RecurrenceRule::rMinutely, freq, count, end);
-    d->mTriggerChanged = true;
+    d->mTriggerChanged = TriggerChangeAll;
     return success;
 }
 
@@ -2997,7 +3226,7 @@ bool KAEvent::setRecurDaily(int freq, const QBitArray& days, int count, QDate en
                 d->mRecurrence->addWeeklyDays(days);
         }
     }
-    d->mTriggerChanged = true;
+    d->mTriggerChanged = TriggerChangeAll;
     return success;
 }
 
@@ -3017,7 +3246,7 @@ bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, QDate e
     const bool success = d->setRecur(RecurrenceRule::rWeekly, freq, count, end);
     if (success)
         d->mRecurrence->addWeeklyDays(days);
-    d->mTriggerChanged = true;
+    d->mTriggerChanged = TriggerChangeAll;
     return success;
 }
 
@@ -3040,7 +3269,7 @@ bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int>& days, int count,
         for (int day : days)
             d->mRecurrence->addMonthlyDate(day);
     }
-    d->mTriggerChanged = true;
+    d->mTriggerChanged = TriggerChangeAll;
     return success;
 }
 
@@ -3064,7 +3293,7 @@ bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int c
         for (const MonthPos& posn : posns)
             d->mRecurrence->addMonthlyPos(posn.weeknum, posn.days);
     }
-    d->mTriggerChanged = true;
+    d->mTriggerChanged = TriggerChangeAll;
     return success;
 }
 
@@ -3093,7 +3322,7 @@ bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day,
         if (day)
             d->mRecurrence->addMonthlyDate(day);
     }
-    d->mTriggerChanged = true;
+    d->mTriggerChanged = TriggerChangeAll;
     return success;
 }
 
@@ -3121,7 +3350,7 @@ bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos>& posns,
         for (const MonthPos& posn : posns)
             d->mRecurrence->addYearlyPos(posn.weeknum, posn.days);
     }
-    d->mTriggerChanged = true;
+    d->mTriggerChanged = TriggerChangeAll;
     return success;
 }
 
@@ -3251,7 +3480,7 @@ void KAEventPrivate::setFirstRecurrence()
     {
         mRecurrence->setStartDateTime(next.effectiveKDateTime(), next.isDateOnly());
         mStartDateTime = mNextMainDateTime = next;
-        mTriggerChanged = true;
+        mTriggerChanged = TriggerChangeAll;
     }
     mRecurrence->setFrequency(frequency);    // restore the frequency
 }
@@ -3326,12 +3555,12 @@ bool KAEventPrivate::setRepetition(const Repetition& repetition)
         }
         else
             mRepetition = repetition;
-        mTriggerChanged = true;
+        mTriggerChanged = TriggerChangeAll;
     }
     else if (mRepetition)
     {
         mRepetition.set(0, 0);
-        mTriggerChanged = true;
+        mTriggerChanged = TriggerChangeAll;
     }
     return true;
 }
@@ -3469,7 +3698,7 @@ bool KAEventPrivate::setNextOccurrence(const KADateTime& preDateTime, KAEvent::O
             }
             if (mDeferral == DeferType::Reminder)
                 set_deferral(DeferType::None);
-            mTriggerChanged = true;
+            mTriggerChanged = TriggerChangeAll;
         }
     }
     else
@@ -3489,13 +3718,13 @@ bool KAEventPrivate::setNextOccurrence(const KADateTime& preDateTime, KAEvent::O
             activate_reminder(false);
             if (mDeferral == DeferType::Reminder)
                 set_deferral(DeferType::None);
-            mTriggerChanged = true;
+            mTriggerChanged = TriggerChangeAll;
         }
         else if (mNextRepeat)
         {
             // The next occurrence is the main occurrence, not a repetition
             mNextRepeat = 0;
-            mTriggerChanged = true;
+            mTriggerChanged = TriggerChangeAll;
         }
     }
     return !KAEvent::isFirstRecur(type);
@@ -3961,7 +4190,7 @@ void KAEventPrivate::removeExpiredAlarm(KAAlarm::Type type)
             break;
     }
     if (mAlarmCount != count)
-        mTriggerChanged = true;
+        mTriggerChanged = TriggerChangeAll;
 }
 
 /******************************************************************************
@@ -3998,7 +4227,8 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
         ||  *mRecurrence     != *other.mRecurrence
         ||  mExcludeHolidays != other.mExcludeHolidays
         ||  mWorkTimeOnly    != other.mWorkTimeOnly
-        ||  mRepetition      != other.mRepetition)
+        ||  mRepetition      != other.mRepetition
+        ||  mSkipTime        != other.mSkipTime)
             return false;
     }
     else
@@ -4186,6 +4416,12 @@ void KAEventPrivate::dumpDebug() const
     qCDebug(KALARMCAL_LOG) << "-- mWorkTriggers.all:" << mWorkTriggers.all.toString();
     qCDebug(KALARMCAL_LOG) << "-- mWorkTriggers.main:" << mWorkTriggers.main.toString();
     qCDebug(KALARMCAL_LOG) << "-- mWorkTriggers.repeatNum:" << mWorkTriggers.repeatNum;
+    qCDebug(KALARMCAL_LOG) << "-- mBaseSkipTriggers.all:" << mBaseSkipTriggers.all.toString();
+    qCDebug(KALARMCAL_LOG) << "-- mBaseSkipTriggers.main:" << mBaseSkipTriggers.main.toString();
+    qCDebug(KALARMCAL_LOG) << "-- mBaseSkipTriggers.repeatNum:" << mBaseSkipTriggers.repeatNum;
+    qCDebug(KALARMCAL_LOG) << "-- mWorkSkipTriggers.all:" << mWorkSkipTriggers.all.toString();
+    qCDebug(KALARMCAL_LOG) << "-- mWorkSkipTriggers.main:" << mWorkSkipTriggers.main.toString();
+    qCDebug(KALARMCAL_LOG) << "-- mWorkSkipTriggers.repeatNum:" << mWorkSkipTriggers.repeatNum;
     qCDebug(KALARMCAL_LOG) << "-- mCategory:" << mCategory;
     qCDebug(KALARMCAL_LOG) << "-- mName:" << mName;
     if (mCategory == CalEvent::TEMPLATE)
@@ -4277,6 +4513,8 @@ void KAEventPrivate::dumpDebug() const
         qCDebug(KALARMCAL_LOG) << "-- mDeferral:" << (mDeferral == DeferType::Normal ? "normal" : "reminder");
         qCDebug(KALARMCAL_LOG) << "-- mDeferralTime:" << mDeferralTime.toString();
     }
+    if (mSkipTime.isValid())
+        qCDebug(KALARMCAL_LOG) << "-- mSkipTime:" << mSkipTime.toString();
     qCDebug(KALARMCAL_LOG) << "-- mDeferDefaultMinutes:" << mDeferDefaultMinutes;
     if (mDeferDefaultMinutes)
         qCDebug(KALARMCAL_LOG) << "-- mDeferDefaultDateOnly:" << mDeferDefaultDateOnly;
@@ -4323,7 +4561,19 @@ DateTime KAEventPrivate::readDateTime(const Event::Ptr& event, bool localZone, b
         // stored correctly in the calendar file.
         start.setTimeSpec(KADateTime::LocalZone);
     }
-    DateTime next = start;
+    const QString prop = event->customProperty(KACalendar::APPNAME, KAEventPrivate::NEXT_RECUR_PROPERTY);
+    DateTime next = readDateTime(prop, start);
+    if (!next.isValid()  ||  next < start)
+        next = start;    // ensure next recurrence time is valid
+    return next;
+}
+
+/******************************************************************************
+* Read a date/time from a KCalendarCore::Event property or parameter.
+* 'eventStart' gives the date-only property and the time spec.
+*/
+DateTime KAEventPrivate::readDateTime(const QString& param, const DateTime& eventStart)
+{
     const int SZ_YEAR  = 4;                           // number of digits in year value
     const int SZ_MONTH = 2;                           // number of digits in month value
     const int SZ_DAY   = 2;                           // number of digits in day value
@@ -4333,33 +4583,43 @@ DateTime KAEventPrivate::readDateTime(const Event::Ptr& event, bool localZone, b
     const int SZ_MIN   = 2;                           // number of digits in minute value
     const int SZ_SEC   = 2;                           // number of digits in second value
     const int SZ_TIME  = SZ_HOUR + SZ_MIN + SZ_SEC;   // total size of time value
-    const QString prop = event->customProperty(KACalendar::APPNAME, KAEventPrivate::NEXT_RECUR_PROPERTY);
-    if (prop.length() >= SZ_DATE)
+    DateTime value;
+    if (param.length() >= SZ_DATE)
     {
         // The next due recurrence time is specified
-        const QDate d(QStringView(prop).left(SZ_YEAR).toInt(),
-                      QStringView(prop).mid(SZ_YEAR, SZ_MONTH).toInt(),
-                      QStringView(prop).mid(SZ_YEAR + SZ_MONTH, SZ_DAY).toInt());
+        const QDate d(QStringView(param).left(SZ_YEAR).toInt(),
+                      QStringView(param).mid(SZ_YEAR, SZ_MONTH).toInt(),
+                      QStringView(param).mid(SZ_YEAR + SZ_MONTH, SZ_DAY).toInt());
         if (d.isValid())
         {
-            if (dateOnly  &&  prop.length() == SZ_DATE)
-                next.setDate(d);
-            else if (!dateOnly  &&  prop.length() == IX_TIME + SZ_TIME  &&  prop[SZ_DATE] == QLatin1Char('T'))
+            if (eventStart.isDateOnly()  &&  param.length() == SZ_DATE)
             {
-                const QTime t(QStringView(prop).mid(IX_TIME, SZ_HOUR).toInt(),
-                              QStringView(prop).mid(IX_TIME + SZ_HOUR, SZ_MIN).toInt(),
-                              QStringView(prop).mid(IX_TIME + SZ_HOUR + SZ_MIN, SZ_SEC).toInt());
+                value = eventStart;
+                value.setDate(d);
+            }
+            else if (!eventStart.isDateOnly()  &&  param.length() == IX_TIME + SZ_TIME  &&  param[SZ_DATE] == QLatin1Char('T'))
+            {
+                const QTime t(QStringView(param).mid(IX_TIME, SZ_HOUR).toInt(),
+                              QStringView(param).mid(IX_TIME + SZ_HOUR, SZ_MIN).toInt(),
+                              QStringView(param).mid(IX_TIME + SZ_HOUR + SZ_MIN, SZ_SEC).toInt());
                 if (t.isValid())
                 {
-                    next.setDate(d);
-                    next.setTime(t);
+                    value = eventStart;
+                    value.setDate(d);
+                    value.setTime(t);
                 }
             }
-            if (next < start)
-                next = start;    // ensure next recurrence time is valid
         }
     }
-    return next;
+    return value;
+}
+
+/******************************************************************************
+* Write a date/time in the format of a KCalendarCore::Event property.
+*/
+QString KAEventPrivate::writeDateTime(const QDateTime& dt, bool dateOnly)
+{
+    return QLocale::c().toString(dt, dateOnly ? QStringLiteral("yyyyMMdd") : QStringLiteral("yyyyMMddThhmmss"));
 }
 
 /******************************************************************************
@@ -4633,26 +4893,29 @@ inline void KAEventPrivate::set_deferral(DeferType type)
 * Return the next time the alarm will trigger.
 * The value is cached to avoid recalculating unless changes have occurred.
 */
-DateTime KAEvent::nextTrigger(Trigger type) const
+DateTime KAEvent::nextTrigger(Trigger type, bool skip) const
 {
     if (d->mCategory == CalEvent::ARCHIVED  ||  d->mCategory == CalEvent::TEMPLATE)
         return {};   // it's a template or archived
     if (d->mDeferral == KAEventPrivate::DeferType::Normal)
         return d->mDeferralTime;   // for a deferred alarm, working time setting is ignored
 
+    const bool skipping = d->skipDateTime().isValid();
+    if (!skipping)
+        skip = false;
     d->calcTriggerTimes();
     switch (type)
     {
-        case Trigger::All:      return d->mBaseTriggers.all;
-        case Trigger::Main:     return d->mBaseTriggers.main;
-        case Trigger::AllWork:  return d->mWorkTriggers.all;
-        case Trigger::Work:     return d->mWorkTriggers.main;
+        case Trigger::All:      return skip ? d->mBaseSkipTriggers.all  : d->mBaseTriggers.all;
+        case Trigger::Main:     return skip ? d->mBaseSkipTriggers.main : d->mBaseTriggers.main;
+        case Trigger::AllWork:  return skip ? d->mWorkSkipTriggers.all  : d->mWorkTriggers.all;
+        case Trigger::Work:     return skip ? d->mWorkSkipTriggers.main : d->mWorkTriggers.main;
         case Trigger::Actual:
         {
-            const bool reminderAfter = d->mMainExpired && d->mReminderActive != KAEventPrivate::ReminderType::None && d->mReminderMinutes < 0;
+            const bool reminderAfter = !skipping && d->mMainExpired && d->mReminderActive != KAEventPrivate::ReminderType::None && d->mReminderMinutes < 0;
             return d->checkRecur() != KARecurrence::NO_RECUR  && (d->mWorkTimeOnly || d->mExcludeHolidays)
-                   ? (reminderAfter ? d->mWorkTriggers.all : d->mWorkTriggers.main)
-                   : (reminderAfter ? d->mBaseTriggers.all : d->mBaseTriggers.main);
+                   ? (reminderAfter ? d->mWorkTriggers.all : skipping ? d->mWorkSkipTriggers.main : d->mWorkTriggers.main)
+                   : (reminderAfter ? d->mBaseTriggers.all : skipping ? d->mBaseSkipTriggers.main : d->mBaseTriggers.main);
         }
         default:
             return {};
@@ -4669,14 +4932,19 @@ DateTime KAEvent::nextTrigger(Trigger type) const
 * mWorkTriggers.main is set to the next scheduled recurrence/sub-repetition
 *                  which occurs in working hours, if working-time-only is set.
 * mWorkTriggers.all is the same as mWorkTriggers.main, but takes account of reminders.
+* mBaseSkipTriggers is equivalent to mBaseTriggers, but set to the next
+*                   scheduled recurrence/sub-repetition after skipping.
+* mWorkSkipTriggers is equivalent to mWorkTriggers, but set to the next
+*                   scheduled recurrence/sub-repetition after skipping.
 */
 void KAEventPrivate::calcTriggerTimes() const
 {
     if (mChangeCount)
-        return;
+        return;   // don't evaluate when in the middle of a sequence of changes
     bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
-    if (!mTriggerChanged)
+    if (!(mTriggerChanged & TriggerChangeMain))
     {
+        // Probably no need to recalculate the main trigger times, but check.
         if ((recurs  &&  mWorkTimeOnly  &&  mWorkTimeOnly != mWorkTimeIndex)
         ||  (recurs  &&  mExcludeHolidays  &&  mExcludeHolidayRegion != mHolidays->regionCode())
         ||  (mStartDateTime.isDateOnly()  &&  mTriggerStartOfDay != DateTime::startOfDay()))
@@ -4684,58 +4952,80 @@ void KAEventPrivate::calcTriggerTimes() const
             // It's a work time alarm, and work days/times have changed, or
             // it excludes holidays, and the holidays definition has changed.
             // Need to recalculate trigger times.
+            mTriggerChanged = TriggerChangeAll;
         }
-        else
-            return;
     }
 
-    mTriggerChanged = false;
-    mTriggerStartOfDay = DateTime::startOfDay();   // note start of day time used in calculation
-    if (recurs  &&  mWorkTimeOnly)
-        mWorkTimeOnly = mWorkTimeIndex;    // note which work time definition was used in calculation
-    if (recurs  &&  mExcludeHolidays)
-        mExcludeHolidayRegion = mHolidays->regionCode();  // note which holiday definition was used in calculation
-    bool excludeHolidays = mExcludeHolidays && !mExcludeHolidayRegion.isEmpty();
-
-    mBaseTriggers.main = mainDateTime(true);   // next recurrence or sub-repetition
-    mBaseTriggers.repeatNum = mRepetition ? mNextRepeat : 0;
-    mBaseTriggers.all = (mDeferral == DeferType::Reminder)        ? mDeferralTime
-                      : (mReminderActive != ReminderType::Active) ? mBaseTriggers.main
-                      : (mReminderMinutes < 0)                    ? mReminderAfterTime
-                      :                                             mBaseTriggers.main.addMins(-mReminderMinutes);
-    // If only-during-working-time is set and it recurs, it won't actually trigger
-    // unless it falls during working hours.
-    bool excluded = false;   // whether next occurrence is excluded by working time/holidays
-    bool skipRepeats = false;   // whether next sub-rep is excluded by recurrence working time/holidays
-    if (recurs  &&  (mWorkTimeOnly || excludeHolidays))
+    if (mTriggerChanged & TriggerChangeMain)
     {
-        // Check if current recurrence is excluded by working time/holidays.
-        if (mNextRepeat && mRepetition)
+        mTriggerStartOfDay = DateTime::startOfDay();   // note start of day time used in calculation
+        if (recurs  &&  mWorkTimeOnly)
+            mWorkTimeOnly = mWorkTimeIndex;    // note which work time definition was used in calculation
+        if (recurs  &&  mExcludeHolidays)
+            mExcludeHolidayRegion = mHolidays->regionCode();  // note which holiday definition was used in calculation
+        bool excludeHolidays = mExcludeHolidays && !mExcludeHolidayRegion.isEmpty();
+
+        mBaseTriggers.main = mainDateTime(true);   // next recurrence or sub-repetition
+        mBaseTriggers.repeatNum = mRepetition ? mNextRepeat : 0;
+        mBaseTriggers.all = (mDeferral == DeferType::Reminder)        ? mDeferralTime
+                          : (mReminderActive != ReminderType::Active) ? mBaseTriggers.main
+                          : (mReminderMinutes < 0)                    ? mReminderAfterTime
+                          :                                             mBaseTriggers.main.addMins(-mReminderMinutes);
+
+        // If only-during-working-time is set and it recurs, it won't actually trigger
+        // unless it falls during working hours.
+        bool excluded = false;   // whether next occurrence is excluded by working time/holidays
+        bool skipRepeats = false;   // whether next sub-rep is excluded by recurrence working time/holidays
+        if (recurs  &&  (mWorkTimeOnly || excludeHolidays))
         {
-            // The next trigger is a sub-repetition.
-            KAEvent::SubRepExclude excl = repExcludedByWorkTimeOrHoliday(mainDateTime(false).kDateTime(), mNextRepeat);
-            skipRepeats = (excl == KAEvent::SubRepExclude::Recur);
-            excluded = (excl != KAEvent::SubRepExclude::Ok);
+            // Check if current recurrence is excluded by working time/holidays.
+            if (mNextRepeat && mRepetition)
+            {
+                // The next trigger is a sub-repetition.
+                KAEvent::SubRepExclude excl = repExcludedByWorkTimeOrHoliday(mainDateTime(false).kDateTime(), mNextRepeat);
+                skipRepeats = (excl == KAEvent::SubRepExclude::Recur);
+                excluded = (excl != KAEvent::SubRepExclude::Ok);
+            }
+            else
+            {
+                // The next trigger is a recurrence.
+                excluded = excludedByWorkTimeOrHoliday(mBaseTriggers.main.kDateTime());
+                skipRepeats = excluded;
+            }
+        }
+        if (!excluded)
+        {
+            // It only occurs once, or it complies with any working hours/holiday
+            // restrictions.
+            mWorkTriggers = mBaseTriggers;
         }
         else
         {
-            // The next trigger is a recurrence.
-            excluded = excludedByWorkTimeOrHoliday(mBaseTriggers.main.kDateTime());
-            skipRepeats = excluded;
+            // Find the next occurrence which complies with working time/holiday
+            // restrictions.
+            nextHolidayWorkingTime(mBaseTriggers, skipRepeats, mWorkTriggers, true, {});
         }
     }
-    if (!excluded)
+
+    if ((mTriggerChanged & TriggerChangeSkip)  &&  mSkipTime.isValid())
     {
-        // It only occurs once, or it complies with any working hours/holiday
-        // restrictions.
-        mWorkTriggers = mBaseTriggers;
+        // Find next times after skipping.
+        // N.B. Reminders can still occur before the skip end time if the
+        //      recurrence is at or after the skip end time.
+        if (mSkipTime <= mBaseTriggers.main)
+            mBaseSkipTriggers = mBaseTriggers;
+        else
+        {
+            const KAEvent::OccurType type = nextOccurrence(mSkipTime.kDateTime().addSecs(-60), mBaseSkipTriggers.main, Repeats::Return);
+            mBaseSkipTriggers.repeatNum = KAEvent::repeatNum(type);
+        }
+
+        if (mSkipTime <= mWorkTriggers.main)
+            mWorkSkipTriggers = mWorkTriggers;
+        else
+            nextHolidayWorkingTime(mBaseSkipTriggers, false, mWorkSkipTriggers, true, {});
     }
-    else
-    {
-        // Find the next occurrence which complies with working time/holiday
-        // restrictions.
-        nextHolidayWorkingTime(mBaseTriggers, skipRepeats, mWorkTriggers, true, {});
-    }
+    mTriggerChanged = TriggerChangeNone;
 }
 
 /******************************************************************************
@@ -6236,7 +6526,6 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
             {
                 // Append a time unit suffix to the event's REPEAT property interval parameter.
                 const QStringList list = prop.split(QLatin1Char(':'));
-qDebug()<<"convertKCalEvents: LIST:"<<list;
                 if (list.count() >= 2)
                 {
                     int interval = static_cast<int>(list[0].toUInt());

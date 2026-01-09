@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -272,6 +272,20 @@ UpdateResult reactivateEvents(QList<KAEvent>& events, QList<int>& ineligibleInde
  *           when its resource is reloaded.
  */
 UpdateResult enableEvents(QList<KAEvent>& events, bool enable, QWidget* msgParent = nullptr);
+
+/** Enable or disable skipping for alarms.
+ *  The new events will have the same event IDs as the old ones.
+ *  @param events     Events to be skipped/cancelled. Each one's resourceId()
+ *                    must give the ID of the resource which contains it.
+ *  @param skipCount  New skip count for the events (0 to cancel skipping).
+ *  @param msgParent  Parent widget for any calendar selection prompt or error
+ *                    message.
+ *  @return  Success status; if == UPDATE_FAILED, the skipping status of all
+ *           events is unchanged; if == SAVE_FAILED, the skipping status of at
+ *           least one event has been successfully changed, but will be lost
+ *           when its resource is reloaded.
+ */
+UpdateResult skipEvents(QList<KAEvent>& events, int skipCount, QWidget* msgParent = nullptr);
 
 /** Return whether an event is read-only.
  *  This depends on whether the event or its resource is read-only.

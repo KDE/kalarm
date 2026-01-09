@@ -505,6 +505,11 @@ void MainWindow::initActions()
     actions->setDefaultShortcut(mActionEnable, QKeySequence(Qt::CTRL | Qt::Key_B));
     connect(mActionEnable, &QAction::triggered, this, &MainWindow::slotEnable);
 
+    mActionSkip = new QAction(this);
+    actions->addAction(QStringLiteral("skip"), mActionSkip);
+    actions->setDefaultShortcut(mActionSkip, QKeySequence(Qt::CTRL | Qt::Key_S));
+    connect(mActionSkip, &QAction::triggered, this, &MainWindow::slotSkip);
+
 #if ENABLE_RTC_WAKE_FROM_SUSPEND
     if (!KernelWakeAlarm::isAvailable())
     {
@@ -658,6 +663,7 @@ void MainWindow::initActions()
     mActionDelete->setEnabled(false);
     mActionReactivate->setEnabled(false);
     mActionEnable->setEnabled(false);
+    mActionSkip->setEnabled(false);
     mActionCreateTemplate->setEnabled(false);
     mActionExport->setEnabled(false);
 
@@ -881,7 +887,7 @@ void MainWindow::slotReactivate()
 */
 void MainWindow::slotEnable()
 {
-    bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvent()
+    bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvents()
     const QList<KAEvent> events = mListView->selectedEvents();
     QList<KAEvent> eventCopies;
     eventCopies.reserve(events.count());
@@ -889,6 +895,31 @@ void MainWindow::slotEnable()
         eventCopies += event;
     KAlarm::enableEvents(eventCopies, enable, this);
     slotSelection();   // update Enable/Disable action text
+}
+
+/******************************************************************************
+* Called when the Skip/Cancel Skip button is clicked to enable or disable
+* skipping the currently highlighted alarms in the list.
+*/
+void MainWindow::slotSkip()
+{
+    int skipCount = 0;
+    if (mActionSkipSkip)
+    {
+        bool ok;
+        skipCount = QInputDialog::getInt(this, i18nc("@title:window", "Skip Alarm"),
+                                               i18nc("@label:textbox", "Number of activations to skip:"),
+                                               1, 1, KAEvent::maxSkipCount(), 1, &ok);
+        if (!ok)
+            return;
+    }
+    const QList<KAEvent> events = mListView->selectedEvents();
+    QList<KAEvent> eventCopies;
+    eventCopies.reserve(events.count());
+    for (const KAEvent& event : events)
+        eventCopies += event;
+    KAlarm::skipEvents(eventCopies, skipCount, this);
+    slotSelection();   // update Skip/Cancel Skip action text
 }
 
 /******************************************************************************
@@ -1609,6 +1640,9 @@ void MainWindow::slotSelection()
     bool enableEnableDisable = true;
     bool enableEnable = false;
     bool enableDisable = false;
+    bool enableSkipUnskip = true;
+    bool enableSkip = false;
+    bool enableUnskip = false;
     const KADateTime now = KADateTime::currentUtcDateTime();
     for (int i = 0;  i < evCount;  ++i)
     {
@@ -1634,6 +1668,18 @@ void MainWindow::slotSelection()
                     enableDisable = true;
             }
         }
+        if (enableSkipUnskip)
+        {
+            if (expired  ||  !event.enabled()  ||  !event.recurs())
+                enableSkipUnskip = enableUnskip = enableSkip = false;
+            else
+            {
+                if (!enableUnskip  &&  event.skipping())
+                    enableUnskip = true;
+                if (!enableSkip  &&  !event.skipping())
+                    enableSkip = true;
+            }
+        }
     }
 
     qCDebug(KALARM_LOG) << "MainWindow::slotSelection: true";
@@ -1647,6 +1693,9 @@ void MainWindow::slotSelection()
     mActionEnable->setEnabled(active && !readOnly && (enableEnable || enableDisable));
     if (enableEnable || enableDisable)
         setEnableText(enableEnable);
+    mActionSkip->setEnabled(active && !readOnly && (enableSkip || enableUnskip));
+    if (enableSkip || enableUnskip)
+        setSkipText(enableSkip);
 
     Q_EMIT selectionChanged();
 }
@@ -1678,6 +1727,7 @@ void MainWindow::selectionCleared()
     mActionDelete->setEnabled(false);
     mActionReactivate->setEnabled(false);
     mActionEnable->setEnabled(false);
+    mActionSkip->setEnabled(false);
 }
 
 /******************************************************************************
@@ -1687,6 +1737,15 @@ void MainWindow::setEnableText(bool enable)
 {
     mActionEnableEnable = enable;
     mActionEnable->setText(enable ? i18nc("@action", "Enable") : i18nc("@action", "Disable"));
+}
+
+/******************************************************************************
+* Set the text of the Skip/Cancel Skip menu action.
+*/
+void MainWindow::setSkipText(bool skip)
+{
+    mActionSkipSkip = skip;
+    mActionSkip->setText(skip ? i18nc("@action", "Skip...") : i18nc("@action", "Cancel skip"));
 }
 
 /******************************************************************************

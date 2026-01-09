@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -759,6 +759,74 @@ UpdateResult enableEvents(QList<KAEvent>& events, bool enable, QWidget* msgParen
                     delete win;
                 }
             }
+        }
+    }
+
+    if (status.failedCount())
+        status.setError(status.failedCount() == events.count() ? UPDATE_FAILED : UPDATE_ERROR, status.failedCount());
+    if (status.failedCount() < events.count())
+    {
+        QString msg;
+        for (ResourceId id : resourceIds)
+        {
+            Resource res = Resources::resource(id);
+            if (!res.save(&msg))
+            {
+                // Don't reload resource after failed save. It's better to
+                // keep the new enabled status of the alarms at least until
+                // KAlarm is restarted.
+                status.setError(SAVE_FAILED, status.failedCount(), msg);
+            }
+        }
+    }
+    if (status.status != UPDATE_OK  &&  msgParent)
+        displayUpdateError(msgParent, ERR_ADD, status);
+
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
+    // Remove any wake-from-suspend scheduled for a disabled alarm
+    if (deleteWakeFromSuspendAlarm  &&  !wakeFromSuspendId.isEmpty())
+        cancelRtcWake(msgParent, wakeFromSuspendId);
+#endif
+
+    return status.status;
+}
+
+/******************************************************************************
+* Enable or disable skipping of alarms.
+* The new events will have the same event IDs as the old ones.
+*/
+UpdateResult skipEvents(QList<KAEvent>& events, int skipCount, QWidget* msgParent)
+{
+    qCDebug(KALARM_LOG) << "KAlarm::skipEvents:" << events.count();
+    if (events.isEmpty())
+        return UpdateResult(UPDATE_OK);
+    UpdateStatusData status;
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
+    bool deleteWakeFromSuspendAlarm = false;
+    const QString wakeFromSuspendId = checkRtcWakeConfig().value(0);
+#endif
+    QSet<ResourceId> resourceIds;   // resources whose events have been updated
+    for (int i = 0, end = events.count();  i < end;  ++i)
+    {
+        KAEvent* event = &events[i];
+        const DateTime oldSkipTime = event->skipDateTime();
+        if (event->skip(skipCount)  &&  event->skipDateTime() != oldSkipTime)
+        {
+            qCDebug(KALARM_LOG) << "KAlarm::skipEvents: event skipped:" << event->id();
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
+            if (event->id() == wakeFromSuspendId)
+                deleteWakeFromSuspendAlarm = true;
+#endif
+
+            // Update the event in the calendar file
+            const KAEvent newev = ResourcesCalendar::updateEvent(*event);
+            if (!newev.isValid())
+            {
+                qCCritical(KALARM_LOG) << "KAlarm::skipEvents: Error updating event in calendar:" << event->id();
+                status.appendFailed(i);
+            }
+            else
+                resourceIds.insert(event->resourceId());
         }
     }
 
