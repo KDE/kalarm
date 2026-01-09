@@ -1396,7 +1396,7 @@ public:
      *
      * If both instances are invalid, they are considered equal, even if they
      * have different time zones.
-
+     *
      * @return @c true if the two instances represent the same time, @c false otherwise
      * @see compare()
      */

@@ -810,9 +810,10 @@ UpdateResult skipEvents(QList<KAEvent>& events, int skipCount, QWidget* msgParen
     {
         KAEvent* event = &events[i];
         const DateTime oldSkipTime = event->skipDateTime();
-        if (event->skip(skipCount)  &&  event->skipDateTime() != oldSkipTime)
+        event->skip(skipCount);
+        if (event->skipDateTime() != oldSkipTime)
         {
-            qCDebug(KALARM_LOG) << "KAlarm::skipEvents: event skipped:" << event->id();
+            qCDebug(KALARM_LOG) << "KAlarm::skipEvents: event" << (event->skipDateTime().isValid() ? "skipped:" : "skip cancelled:") << event->id();
 #if ENABLE_RTC_WAKE_FROM_SUSPEND
             if (event->id() == wakeFromSuspendId)
                 deleteWakeFromSuspendAlarm = true;
