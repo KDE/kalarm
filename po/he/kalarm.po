@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-18 00:44+0000\n"
+"POT-Creation-Date: 2026-01-10 00:43+0000\n"
 "PO-Revision-Date: 2026-01-05 12:45+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -1897,7 +1897,7 @@ msgid "Actions"
 msgstr "פעולות"
 
 #. i18n: ectx: Menu (settings)
-#: data/kalarmui.rc:68
+#: data/kalarmui.rc:69
 #, kde-format
 msgid "Settings"
 msgstr "הגדרות"
@@ -3140,115 +3140,115 @@ msgctxt "@action"
 msgid "Spread Windows"
 msgstr "פיזור חלונות"
 
-#: functions.cpp:879
+#: functions.cpp:948
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "ייבוא קובצי לוחות שנה"
 
-#: functions.cpp:940
+#: functions.cpp:1009
 #, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "קובצי לוח שנה"
 
-#: functions.cpp:941
+#: functions.cpp:1010
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr "בחירת לוח שנה לייצוא"
 
-#: functions.cpp:966
+#: functions.cpp:1035
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
 msgstr "שגיאה בטעינת לוח שנה להוסיף אליו:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1005
+#: functions.cpp:1074
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
 msgstr "נכשלה שמירת לוח השנה החדש אל:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1018
+#: functions.cpp:1087
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
 msgstr "לא ניתן להעלות את לוח השנה אל:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1037
+#: functions.cpp:1106
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "לא ניתן להציג תזכורות ב־KOrganizer"
 
-#: functions.cpp:1038
+#: functions.cpp:1107
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "לא ניתן להציג תזכורת ב־KOrganizer"
 
-#: functions.cpp:1041
+#: functions.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "לא ניתן לעדכן תזכורת ב־KOrganizer"
 
-#: functions.cpp:1044
+#: functions.cpp:1113
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "לא ניתן למחוק תזכורות מ־KOrganizer"
 
-#: functions.cpp:1045
+#: functions.cpp:1114
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "לא ניתן למחוק תזכורת מ־KOrganizer"
 
-#: functions.cpp:1055
+#: functions.cpp:1124
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
 msgstr "<para>%1</para><para>(לא ניתן להפעיל את KOrganizer)</para>"
 
-#: functions.cpp:1058
+#: functions.cpp:1127
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
 msgstr "<para>%1</para><para>(KOrganizer לא הופעל במלואו)</para>"
 
-#: functions.cpp:1061
+#: functions.cpp:1130
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
 msgstr "<para>%1</para><para>(שגיאת תקשורת מול KOrganizer)</para>"
 
-#: functions.cpp:1311
+#: functions.cpp:1380
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr "ההשכמה מההשהיה המתוזמנת בוטלה."
 
-#: functions.cpp:1345
+#: functions.cpp:1414
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr "שגיאה במשיכת אימות (%1)"
 
-#: functions.cpp:1394
+#: functions.cpp:1463
 #, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "יש להפעיל לוח שנה תבניתי כדי לשמור בו את התבנית"
 
-#: functions.cpp:1617
+#: functions.cpp:1686
 #, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
 msgstr "<para>%1</para><para>נא להגדיר אותו בחלונית ההגדרות.</para>"
 
-#: functions.cpp:1621
+#: functions.cpp:1690
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3256,61 +3256,61 @@ msgid ""
 "alarms now?</para>"
 msgstr "<para>תזכורות מושבתות כרגע.</para><para>להפעיל את התזכורות כעת?</para>"
 
-#: functions.cpp:1622
+#: functions.cpp:1691
 #, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "הפעלה"
 
-#: functions.cpp:1622
+#: functions.cpp:1691
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "להשאיר מושבתת"
 
-#: functions.cpp:1992
+#: functions.cpp:2061
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "שגיאה בשמירת תזכורות"
 
-#: functions.cpp:1993
+#: functions.cpp:2062
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "שגיאה בשמירת תזכורת"
 
-#: functions.cpp:1996
+#: functions.cpp:2065
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "שגיאה במחיקת תזכורות"
 
-#: functions.cpp:1997
+#: functions.cpp:2066
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "שגיאה במחיקת תזכורת"
 
-#: functions.cpp:2000
+#: functions.cpp:2069
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "שגיאה בשמירת תזכורות שהופעלו מחדש"
 
-#: functions.cpp:2001
+#: functions.cpp:2070
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "שגיאה בשמירת תזכורת שהופעלה מחדש"
 
-#: functions.cpp:2004
+#: functions.cpp:2073
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "שגיאה בשמירת תבניות תזכורת"
 
-#: functions.cpp:2005
+#: functions.cpp:2074
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -3465,19 +3465,19 @@ msgstr "יעד:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3265
+#: kalarmcalendar/kaevent.cpp:3494
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "כניסה"
 
-#: kalarmcalendar/kaevent.cpp:3265
+#: kalarmcalendar/kaevent.cpp:3494
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "בכניסה למערכת"
 
-#: kalarmcalendar/kaevent.cpp:3274 kalarmcalendar/kaevent.cpp:3367
+#: kalarmcalendar/kaevent.cpp:3503 kalarmcalendar/kaevent.cpp:3596
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3489,7 +3489,7 @@ msgstr[1] "שתי דקות"
 msgstr[2] "%1 דקות"
 msgstr[3] "%1 דקות"
 
-#: kalarmcalendar/kaevent.cpp:3276 kalarmcalendar/kaevent.cpp:3369
+#: kalarmcalendar/kaevent.cpp:3505 kalarmcalendar/kaevent.cpp:3598
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3500,13 +3500,13 @@ msgstr[1] "שעתיים"
 msgstr[2] "%1 שעות"
 msgstr[3] "%1 שעות"
 
-#: kalarmcalendar/kaevent.cpp:3278 kalarmcalendar/kaevent.cpp:3370
+#: kalarmcalendar/kaevent.cpp:3507 kalarmcalendar/kaevent.cpp:3599
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1 שע׳ %2 דק׳"
 
-#: kalarmcalendar/kaevent.cpp:3281 kalarmcalendar/kaevent.cpp:3360
+#: kalarmcalendar/kaevent.cpp:3510 kalarmcalendar/kaevent.cpp:3589
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3517,7 +3517,7 @@ msgstr[1] "יומיים"
 msgstr[2] "%1 ימים"
 msgstr[3] "%1 ימים"
 
-#: kalarmcalendar/kaevent.cpp:3283 kalarmcalendar/kaevent.cpp:3361
+#: kalarmcalendar/kaevent.cpp:3512 kalarmcalendar/kaevent.cpp:3590
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3527,7 +3527,7 @@ msgstr[1] "שבועיים"
 msgstr[2] "%1 שבועות"
 msgstr[3] "%1 שבועות"
 
-#: kalarmcalendar/kaevent.cpp:3285
+#: kalarmcalendar/kaevent.cpp:3514
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3537,7 +3537,7 @@ msgstr[1] "חודשיים"
 msgstr[2] "%1 חודשים"
 msgstr[3] "%1 חודשים"
 
-#: kalarmcalendar/kaevent.cpp:3287
+#: kalarmcalendar/kaevent.cpp:3516
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3547,13 +3547,13 @@ msgstr[1] "שנתיים"
 msgstr[2] "%1 שנה"
 msgstr[3] "%1 שנים"
 
-#: kalarmcalendar/kaevent.cpp:3293
+#: kalarmcalendar/kaevent.cpp:3522
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "בלי"
 
-#: kalarmcalendar/kaevent.cpp:3373
+#: kalarmcalendar/kaevent.cpp:3602
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"
@@ -4349,67 +4349,67 @@ msgctxt "@action"
 msgid "Reactivate"
 msgstr "הפעלה מחדש"
 
-#: mainwindow.cpp:512
+#: mainwindow.cpp:517
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "השכמה מהשהיה…"
 
-#: mainwindow.cpp:524
+#: mainwindow.cpp:529
 #, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "הצגת התראות בארכיון"
 
-#: mainwindow.cpp:529
+#: mainwindow.cpp:534
 #, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "הצגה בשורת המשימות"
 
-#: mainwindow.cpp:533
+#: mainwindow.cpp:538
 #, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "הצגת לוחות שנה"
 
-#: mainwindow.cpp:537
+#: mainwindow.cpp:542
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr "הצגת בורר תאריך"
 
-#: mainwindow.cpp:550
+#: mainwindow.cpp:555
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "ייבוא התראות…"
 
-#: mainwindow.cpp:556
+#: mainwindow.cpp:561
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "ייבוא ימי הולדת…"
 
-#: mainwindow.cpp:561
+#: mainwindow.cpp:566
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "ייצוא ההתראות הנבחרות…"
 
-#: mainwindow.cpp:565 resourceselector.cpp:319
+#: mainwindow.cpp:570 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "ייצוא…"
 
-#: mainwindow.cpp:569
+#: mainwindow.cpp:574
 #, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "ריענון התראות"
 
-#: mainwindow.cpp:814
+#: mainwindow.cpp:820
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4419,7 +4419,7 @@ msgstr[1] "למחוק את שתי התזכורות הנבחרות?"
 msgstr[2] "למחוק את %1 התזכורות הנבחרות?"
 msgstr[3] "למחוק את %1 התזכורות הנבחרות?"
 
-#: mainwindow.cpp:816
+#: mainwindow.cpp:822
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4429,95 +4429,125 @@ msgstr[1] "מחיקת תזכורות"
 msgstr[2] "מחיקת תזכורות"
 msgstr[3] "מחיקת תזכורות"
 
-#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:823 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "מחיקה"
 
+#: mainwindow.cpp:910
+#, fuzzy, kde-format
+#| msgctxt "@item:inlistbox"
+#| msgid "Display Alarm"
+msgctxt "@title:window"
+msgid "Skip Alarm"
+msgstr "התראת תצוגה"
+
 #: mainwindow.cpp:911
+#, fuzzy, kde-format
+#| msgctxt "@option:radio"
+#| msgid "Number of repetitions:"
+msgctxt "@label:textbox"
+msgid "Number of activations to skip:"
+msgstr "מספר החזרות:"
+
+#: mainwindow.cpp:942
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "הסתרת הודעות בארכיון"
 
-#: mainwindow.cpp:912
+#: mainwindow.cpp:943
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "הצגת התראות בארכיון"
 
-#: mainwindow.cpp:988
+#: mainwindow.cpp:1019
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "ייבוא ימי הולדת"
 
-#: mainwindow.cpp:1240
+#: mainwindow.cpp:1271
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1241
+#: mainwindow.cpp:1272
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1307
+#: mainwindow.cpp:1338
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1309
+#: mainwindow.cpp:1340
 #, kde-format
 msgid "Hide menu bar"
 msgstr "הסתרת סרגל תפריטים"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1580
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "התראת תצוגה"
 
-#: mainwindow.cpp:1551
+#: mainwindow.cpp:1582
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "התראת דוא״ל"
 
-#: mainwindow.cpp:1553
+#: mainwindow.cpp:1584
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "התראת פקודה"
 
-#: mainwindow.cpp:1555
+#: mainwindow.cpp:1586
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "סוג התראה"
 
-#: mainwindow.cpp:1556
+#: mainwindow.cpp:1587
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "נא לבחור סוג התראה ליצירה:"
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1739
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "הפעלה"
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1739
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
 msgstr "השבתה"
+
+#: mainwindow.cpp:1748
+#, kde-format
+msgctxt "@action"
+msgid "Skip..."
+msgstr ""
+
+#: mainwindow.cpp:1748
+#, fuzzy, kde-format
+#| msgctxt "@option:check"
+#| msgid "Cancel if late"
+msgctxt "@action"
+msgid "Cancel skip"
+msgstr "ביטול במקרה של איחור"
 
 #: messagedisplay.cpp:278
 #, kde-kuit-format

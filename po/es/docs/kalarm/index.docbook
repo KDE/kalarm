@@ -113,7 +113,9 @@
 ><year
 >2024</year
 ><year
->2025</year>
+>2025</year
+><year
+>2026</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -124,9 +126,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2025-12-3</date>
+>2026-1-7</date>
 <releaseinfo
->3.12.0 (KDE Gear 25.12)</releaseinfo>
+>3.13.0 (KDE Gear 26.04)</releaseinfo>
 
 <abstract>
 <para
@@ -485,7 +487,7 @@
 <itemizedlist>
 <listitem>
 <para
->Para preajustar la fecha de la alarma en el diálogo <link linkend="alarm-edit-dlg"
+>Para preajustar la fecha de la alarma en el diálogo <link linkend="alarm-edit-dlg-time"
 >Editar alarma</link
 >, pulse con el botón <mousebutton
 >derecho</mousebutton
@@ -1977,7 +1979,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-time">
 <title
 >Hora</title>
 
@@ -2059,7 +2061,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-cancel">
 <title
 >Cancelación</title>
 
@@ -2102,7 +2104,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-recur">
 <title
 >Repetición</title>
 
@@ -2153,17 +2155,33 @@
 <itemizedlist>
 <listitem>
 <para
+>Para una recurrencia diaria, marque cada día de la semana en que se permitirá que la alarma se active. La alarma se repetirá con la frecuencia indicada, pero se suprimirá si se activa en un día no seleccionado.</para>
+</listitem>
+
+<listitem>
+<para
 >Para una repetición diaria, marque cada día de la semana en el que desee que se desencadene la alarma.</para>
 </listitem>
 
 <listitem>
 <para
->Para una repetición mensual, puede seleccionar si se produce en una fecha fija o en una posición (&eg; el segundo martes).</para>
+>Para una repetición mensual, puede seleccionar:</para>
+<itemizedlist>
+<listitem
+><para
+>Un día fijo del mes o el último día del mes. Tenga en cuenta que si selecciona, por ejemplo, el día 31 del mes, la alarma no se activará en ningún mes con menos de 31 días.</para>
+</listitem>
+
+<listitem
+><para
+>Una posición del mes, como el segundo martes o el último viernes del mes.</para>
+</listitem>
+</itemizedlist>
 </listitem>
 
 <listitem>
 <para
->Para una repetición anual, puede seleccionar una fecha fija del año o una posición del mes (&eg; el último sábado de mayo). Marque cada mes del año en el que quiera que se desencadene la alarma.</para>
+>Para una recurrencia anual, puede seleccionar un día fijo del mes o una posición del mes, como se describe para las recurrencias mensuales. Marque cada mes del año en el que desee activar la alarma.</para>
 
 <para
 >Si configura repeticiones anuales para el 29 de febrero, especifique cómo se deben gestionar estas repeticiones en los años que no sean bisiestos seleccionando la opción apropiada en<guilabel
@@ -2342,7 +2360,7 @@
 </sect3>
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-other">
 <title
 >Otros controles</title>
 
@@ -2357,6 +2375,11 @@
 >Para mostrar las alarmas, la casilla de verificación <guilabel
 >Confirmar asentimiento</guilabel
 > le permite especificar si se le ha de pedir confirmación cuando cierre la ventana de mensaje de alarma. Esto se puede usar como salvaguarda en caso de reconocimiento accidental de alarmas.</para>
+
+<para
+>Las alarmas visibles se suelen suspender cuando las notificaciones están inhibidas en el escritorio, por lo que no se muestran sobre las aplicaciones que se ejecutan a pantalla completa. Para anular estas restricciones y mostrar la alarma siempre que sea posible, marque la casilla <guilabel
+>No inhibir nunca la alarma</guilabel
+>. Tenga en cuenta que la capacidad de mostrar mensajes sobre las aplicaciones a pantalla completa puede depender del gestor de ventanas, y actualmente solo el sistema de ventanas X11 lo permite.</para>
 
 <para
 >Seleccione <guilabel
@@ -2402,7 +2425,9 @@
 >. Estas dos opciones de visualización se describen a continuación.</para>
 
 <para
->Si inhibe las notificaciones para el escritorio, la ejecución de las alarmas visibles se suspenderá hasta que se vuelvan a activar las notificaciones. Tenga en cuenta que esto se aplica a todas las alarmas en pantalla, independientemente de si se muestran en ventanas o como notificaciones.</para>
+>Si inhibe las notificaciones para el escritorio, la ejecución de las alarmas visibles se suspenderá hasta que se vuelvan a activar las notificaciones, excepto para las alarmas que nunca se deban inhibir cuando lo haya indicado en el <link linkend="alarm-edit-dlg-other"
+>diálogo de edición de la alarma</link
+>. Tenga en cuenta que esto se aplica a todas las alarmas visibles, independientemente de si se muestran en ventanas o como notificaciones.</para>
 
 <para
 >Tenga en cuenta que en un sistema con una sola pantalla, el gestor de ventanas puede inhibir las notificaciones mientras alguna aplicación se esté ejecutando en pantalla completa, lo que suspenderá automáticamente la ejecución de las alarmas en pantalla.</para>
@@ -2420,7 +2445,7 @@
 <para
 >Las ventanas del mensaje de alarma permanecen visibles hasta que se asienten, a no ser que se haya marcado <guilabel
 >Cerrar automáticamente tras la hora de cancelación tardía</guilabel
-> en el <link linkend="alarm-edit-dlg"
+> en el <link linkend="alarm-edit-dlg-cancel"
 >diálogo «Editar alarma»</link
 >. En el caso de una alarma que se repite, si permanece alguna ventana de mensaje no asentida de una repetición previa de la alarma, la ventana existente se muestra cuando se repita la alarma. Esto evita tener varias copias del mismo mensaje, cosa que pudiera no desear, o ser incapaz de asentir a un mensaje cuando aparezca.</para>
 
@@ -3039,7 +3064,7 @@
 <para
 >En los sistemas Linux, si el usuario dispone de la capacidad de temporizador de alarmas del kernel (<literal
 >cap_wake_alarm</literal
->), puede definir cualquier número de alarmas para salir del modo de suspensión. En este caso, se puede configurar la reactivación del equipo para cada alarma individual en el <link linkend="alarm-edit-dlg"
+>), puede definir cualquier número de alarmas para salir del modo de suspensión. En este caso, se puede configurar la reactivación del equipo para cada alarma individual en el <link linkend="alarm-edit-dlg-other"
 >diálogo de edición de la alarma</link
 > usando la opción <guilabel
 >Despertar de suspensión</guilabel
@@ -3376,7 +3401,7 @@
 >Horario de trabajo</guilabel
 >: Estas opciones le permiten definir su horario de trabajo, lo que es necesario cuando se selecciona la opción <guilabel
 >Solo en horas de trabajo</guilabel
-> para una repetición en el diálogo <link linkend="alarm-edit-dlg"
+> para una repetición en el diálogo <link linkend="alarm-edit-dlg-recur"
 >Diálogo de edición de alarmas</link
 >.</para>
 
@@ -7038,10 +7063,10 @@
 <para
 >&kalarm; </para>
 <para
->Copyright del programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright del programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Copyright de la documentación 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright de la documentación 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
 >Traductores: Juan Manuel García Molina <email
