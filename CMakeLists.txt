@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.27)
 set(PIM_VERSION "6.6.40")
 set(PIM_VERSION ${PIM_VERSION})
 set(RELEASE_SERVICE_VERSION_MAJOR "26")
