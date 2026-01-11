@@ -11,13 +11,13 @@
 #
 # Diego Iastrubni <elcuco@kde.org>, 2005, 2007.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024, 2025 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-07 02:40+0000\n"
-"PO-Revision-Date: 2026-01-05 12:45+0200\n"
+"PO-Revision-Date: 2026-01-10 20:18+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -155,10 +155,10 @@ msgid "Time from now:"
 msgstr "זמן מעכשיו:"
 
 #: alarmtimewidget.cpp:138
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm for the specified time interval after now."
-msgstr "קביעה מחדש של מועד התזכורת למשך הזמן המצויין אחרי רגע זה."
+msgstr "תזמון תזכורת מחדש להפרש הזמן שצוין אחרי עכשיו."
 
 #: alarmtimewidget.cpp:139
 #, kde-format
@@ -452,7 +452,7 @@ msgstr "הגדרת תזכורת"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
-msgstr ""
+msgstr "יש לסמן כדי להציג תזכורת לפני או אחרי יום ההולדת."
 
 #: birthdaydlg.cpp:162
 #, kde-format
@@ -2187,12 +2187,14 @@ msgid ""
 msgstr "הזן את השעה האחרונה שבה יש לחזור על התזכורת"
 
 #: editdlg.cpp:332
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Set alarms based on this template to start after the specified time interval "
 "from when the alarm is created."
-msgstr "קביעה של מועד התזכורת למשך הזמן המצויין מרגע זה."
+msgstr ""
+"הגדרת תזכורות לפי התבנית הזאת כדי שתתחלנה לאחר הפרש הזמן שצוין כשהתזכורת "
+"נוצרת."
 
 #: editdlg.cpp:388
 #, kde-format
@@ -3586,13 +3588,13 @@ msgstr "זמן התחלה"
 #, kde-format
 msgctxt "@label Start delay configured in an alarm template"
 msgid "Template after time"
-msgstr ""
+msgstr "תבנית אחרי זמן"
 
 #: kalarmcalendar/kaeventformatter.cpp:54
 #, kde-format
 msgctxt "@label"
 msgid "Recurs"
-msgstr ""
+msgstr "חוזרת"
 
 #: kalarmcalendar/kaeventformatter.cpp:56
 #, kde-format
