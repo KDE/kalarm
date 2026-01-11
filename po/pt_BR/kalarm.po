@@ -8,7 +8,7 @@
 # Eduardo Habkost <ehabkost@conectiva.com.br>, 2005.
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2018, 2019, 2020.
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2009, 2010, 2012, 2018, 2019, 2020, 2021, 2022, 2023.
-# SPDX-FileCopyrightText: 2010, 2012, 2025 Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>
+# SPDX-FileCopyrightText: 2010, 2012, 2025, 2026 Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>
 # Aracele Torres <araceletorres@gmail.com>, 2010, 2011.
 # Frederico Gonçalves Guimarães <frederico@teia.bio.br>, 2021, 2022.
 # SPDX-FileCopyrightText: 2025 Guilherme Marçal Silva <guimarcalsilva@gmail.com>
@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-10 00:43+0000\n"
-"PO-Revision-Date: 2025-12-10 05:09-0300\n"
+"PO-Revision-Date: 2026-01-10 07:07-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Lokalize 25.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4680,20 +4680,16 @@ msgid "Delete"
 msgstr "Excluir"
 
 #: mainwindow.cpp:910
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Display Alarm"
+#, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
-msgstr "Alarme visual"
+msgstr "Ignorar alarme"
 
 #: mainwindow.cpp:911
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Number of repetitions:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
-msgstr "Número de repetições:"
+msgstr "Número de ativações a ignorar:"
 
 #: mainwindow.cpp:942
 #, kde-format
@@ -4785,15 +4781,13 @@ msgstr "Desabilitar"
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
-msgstr ""
+msgstr "Ignorar..."
 
 #: mainwindow.cpp:1748
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action"
 msgid "Cancel skip"
-msgstr "Cancelar se estiver atrasado"
+msgstr "Cancelar ignorar"
 
 #: messagedisplay.cpp:278
 #, kde-kuit-format

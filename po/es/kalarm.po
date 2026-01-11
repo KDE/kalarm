@@ -1,5 +1,5 @@
 # Spanish translations for kalarm.po package.
-# Copyright (C) 2001-2025 This file is copyright:
+# Copyright (C) 2001-2026 This file is copyright:
 # This file is distributed under the same license as the kalarm package.
 #
 # SPDX-FileCopyrightText: 2001 Miguel Revilla <yo@miguelrevilla.com>
@@ -7,7 +7,7 @@
 # SPDX-FileCopyrightText: 2006 Pablo de Vicente <pablo.devicente@gmail.com>
 # SPDX-FileCopyrightText: 2007 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
 # SPDX-FileCopyrightText: 2007 Jaime Robles <jaime@kde.org>
-# SPDX-FileCopyrightText: 2008, 2009, 2010, 2014, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2014, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Eloy Cuadra <ecuadra@eloihr.net>
 # SPDX-FileCopyrightText: 2008, 2009 Franco Mariluis <fmariluis@gmail.com>
 # SPDX-FileCopyrightText: 2009 Dario Andres Rodriguez <andrebajotierra@gmail.com>
 # SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Javier Viñal <fjvinal@gmail.com>
@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-10 00:43+0000\n"
-"PO-Revision-Date: 2025-12-10 10:57+0100\n"
+"PO-Revision-Date: 2026-01-11 00:26+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "First-Translator: Miguel Revilla <yo@miguelrevilla.com>\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Lokalize 25.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -4697,20 +4697,16 @@ msgid "Delete"
 msgstr "Borrar"
 
 #: mainwindow.cpp:910
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Display Alarm"
+#, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
-msgstr "Mostrar alarma"
+msgstr "Omitir alarma"
 
 #: mainwindow.cpp:911
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Number of repetitions:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
-msgstr "Número de repeticiones:"
+msgstr "Número de activaciones a omitir:"
 
 #: mainwindow.cpp:942
 #, kde-format
@@ -4802,15 +4798,13 @@ msgstr "Desactivar"
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
-msgstr ""
+msgstr "Omitir…"
 
 #: mainwindow.cpp:1748
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action"
 msgid "Cancel skip"
-msgstr "Cancelar si ya es tarde"
+msgstr "Cancelar omisión"
 
 #: messagedisplay.cpp:278
 #, kde-kuit-format

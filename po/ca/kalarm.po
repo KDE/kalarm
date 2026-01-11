@@ -1,17 +1,17 @@
 # Translation of kalarm.po to Catalan
-# Copyright (C) 2003-2025 This_file_is_part_of_KDE
+# Copyright (C) 2003-2026 This_file_is_part_of_KDE
 #
 # SPDX-FileCopyrightText: 2003, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022 Antoni Bella Pérez <antonibella5@yahoo.com>
 # SPDX-FileCopyrightText: 2004, 2006 Sebastià Pla i Sanz <sps@sastia.com>
 # SPDX-FileCopyrightText: 2004, 2005 Albert Astals Cid <aacid@kde.org>
 # SPDX-FileCopyrightText: 2009, 2010, 2011 Manuel Tortosa Moreno <manutortosa@chakra-project.org>
-# SPDX-FileCopyrightText: 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-10 00:43+0000\n"
-"PO-Revision-Date: 2025-12-10 09:52+0100\n"
+"PO-Revision-Date: 2026-01-10 12:47+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -4695,20 +4695,16 @@ msgid "Delete"
 msgstr "Suprimeix"
 
 #: mainwindow.cpp:910
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Display Alarm"
+#, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
-msgstr "Alarma visual"
+msgstr "Omet l'alarma"
 
 #: mainwindow.cpp:911
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Number of repetitions:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
-msgstr "Nombre de repeticions:"
+msgstr "Nombre d'activacions a ometre:"
 
 #: mainwindow.cpp:942
 #, kde-format
@@ -4800,15 +4796,13 @@ msgstr "Desactiva"
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
-msgstr ""
+msgstr "Omet..."
 
 #: mainwindow.cpp:1748
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action"
 msgid "Cancel skip"
-msgstr "Cancel·la si ja és tard"
+msgstr "Cancel·la l'omissió"
 
 #: messagedisplay.cpp:278
 #, kde-kuit-format

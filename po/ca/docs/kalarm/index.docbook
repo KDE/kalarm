@@ -98,7 +98,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->7 de gener de 2026</date>
+>9 de gener de 2026</date>
 <releaseinfo
 >3.13.0 (KDE Gear 26.04)</releaseinfo>
 
@@ -408,7 +408,7 @@
 >Crear una alarma nova</title>
 
 <para
->Per a crear una alarma nova, realitzeu una de les següents accions i, a continuació, seleccioneu el tipus d'alarma de la llista que apareix. Això mostrarà el <link linkend="alarm-edit-dlg"
+>Per a crear una alarma nova, realitzeu una de les accions següents i, a continuació, seleccioneu el tipus d'alarma de la llista que apareix. Això mostrarà el <link linkend="alarm-edit-dlg"
 >diàleg d'edició de l'alarma</link
 > a través del qual la configurareu.</para>
 
@@ -555,7 +555,7 @@
 >Modificar una alarma existent</title>
 
 <para
->Per a modificar una alarma pendent existent (les alarmes expirades no es poden modificar), realitzeu una de les següents accions:</para>
+>Per a modificar una alarma pendent existent (les alarmes expirades no es poden modificar), realitzeu una de les accions següents:</para>
 
 <itemizedlist>
 <listitem>
@@ -598,7 +598,7 @@
 >Suprimir/reactivar una alarma</title>
 
 <para
->Per a suprimir les alarmes existents, seleccioneu-ne una o més fent clic a les seves entrades a la llista d'alarmes. A continuació, realitzeu una de les següents accions:</para>
+>Per a suprimir les alarmes existents, seleccioneu-ne una o més fent clic a les seves entrades a la llista d'alarmes. A continuació, realitzeu una de les accions següents:</para>
 
 <itemizedlist>
 <listitem>
@@ -671,7 +671,7 @@
 <para
 >Vegeu <link linkend="enable-disable"
 >Habilitar i inhabilitar les alarmes</link
-> per a saber com habilitar i inhabilitar-les, sigui individualment o en conjunt.</para>
+> per a saber com habilitar i inhabilitar-les, sigui individualment o en conjunt, o temporalment ometre alarmes individuals.</para>
 
 </sect2>
 
@@ -759,7 +759,7 @@
 >Podeu crear, modificar o suprimir les plantilles mitjançant el diàleg Plantilles d'alarma, o podeu crear una plantilla d'alarma nova basada en una alarma existent.</para>
 
 <para
->Per a crear una plantilla d'alarma nova, realitzeu una de les següents accions:</para>
+>Per a crear una plantilla d'alarma nova, realitzeu una de les accions següents:</para>
 
 <itemizedlist>
 <listitem>
@@ -831,7 +831,7 @@
 <para
 >El diàleg d'edició de la plantilla és similar al <link linkend="alarm-edit-dlg"
 >diàleg d'edició de l'alarma</link
->. Els següents controls són diferents:</para>
+>. Els controls següents són diferents:</para>
 
 <itemizedlist>
 <listitem>
@@ -1629,7 +1629,7 @@
 <para
 ><guilabel
 >Notificació</guilabel
-> per a utilitzar el sistema de notificació estàndard per a mostrar el missatge de l'alarma. A causa de les limitacions del sistema de notificació, les següents opcions de configuració de l'alarma no es poden utilitzar amb les notificacions: establir la lletra i color, establir un fitxer d'àudio perquè es reprodueixi quan es mostra l'alarma, confirmació del reconeixement de l'alarma, tancament automàtic de la pantalla en expirar el temps de cancel·lació.</para>
+> per a utilitzar el sistema de notificació estàndard per a mostrar el missatge de l'alarma. A causa de les limitacions del sistema de notificació, les opcions següents de configuració de l'alarma no es poden utilitzar amb les notificacions: establir la lletra i color, establir un fitxer d'àudio perquè es reprodueixi quan es mostra l'alarma, confirmació del reconeixement de l'alarma, tancament automàtic de la pantalla en expirar el temps de cancel·lació.</para>
 </listitem>
 </itemizedlist>
 
@@ -1657,7 +1657,7 @@
 <para
 >Una acció de prealarma només s'executarà una vegada quan es mostri inicialment el missatge d'alarma, fins i tot quan un missatge de recordatori substitueix el missatge d'alarma real. <emphasis
 >No</emphasis
-> s'executarà en cap de les següents circumstàncies:</para>
+> s'executarà en cap de les circumstàncies següents:</para>
 
 <itemizedlist>
 <listitem
@@ -1708,7 +1708,7 @@
 >Tanca</guibutton
 > o utilitzeu el botó de tancar a la barra de títol de la finestra). <emphasis
 >No</emphasis
-> s'executarà en qualsevol de les següents circumstàncies:</para>
+> s'executarà en qualsevol de les circumstàncies següents:</para>
 
 <itemizedlist>
 <listitem
@@ -1836,7 +1836,7 @@
 >.</para>
 
 <para
->Establiu les següents opcions:</para>
+>Establiu les opcions següents:</para>
 
 <itemizedlist>
 <listitem>
@@ -1874,7 +1874,7 @@
 >Les alarmes d'àudio reprodueixen un fitxer d'àudio sense mostrar cap missatge d'alarma.</para>
 
 <para
->Establiu les següents opcions:</para>
+>Establiu les opcions següents:</para>
 
 <itemizedlist>
 <listitem>
@@ -2410,7 +2410,7 @@
 >. En el cas d'una alarma que es repeteix, si romà una finestra de missatge no reconeguda d'una activació anterior de l'alarma, simplement apareixerà la finestra existent quan l'alarma sigui recurrent. Això evitarà haver de reconèixer diverses còpies del mateix missatge, cas que potser no voldreu.</para>
 
 <para
->La finestra del missatge de l'alarma proporciona qualsevol de les següents opcions aplicables a l'alarma que es mostra:</para>
+>La finestra del missatge de l'alarma proporciona qualsevol de les opcions següents aplicables a l'alarma que es mostra:</para>
 
 <itemizedlist>
 <listitem>
@@ -2447,7 +2447,7 @@
 
 <note
 ><para
->L'hora a la qual s'ajorni l'alarma haurà de ser anterior a la pròxima activació programada o següent recordatori avançat. Per aquesta raó, el ​botó <guibutton
+>L'hora a la qual s'ajorni l'alarma haurà de ser anterior a la pròxima activació programada o recordatori avançat següent. Per aquesta raó, el ​ botó <guibutton
 >​Ajorna...</guibutton
 > a la finestra del missatge de l'alarma i el botó <guibutton
 >D'acord</guibutton
@@ -2580,7 +2580,7 @@
 >La notificació es tancarà automàticament després d'un breu temps d'espera. (Cal tenir en compte que el temps d'espera és comú per a totes les aplicacions, es pot canviar a l'&systemsettings;). Una vegada s'esgoti el temps d'espera d'una notificació, encara es podrà veure a l'historial de notificacions fins que l'elimineu o tanqueu la sessió. A causa que les aplicacions no tenen manera d'accedir a l'historial de notificacions, el &kalarm; no pot eliminar ni substituir les notificacions en l'historial com ho faria amb les finestres d'alarma. Per tant, l'historial pot contenir múltiples notificacions per a la mateixa alarma, inclosos els recordatoris i recurrències.</para>
 
 <para
->La notificació del missatge d'alarma ofereix les següents opcions. Recordeu que en seleccionar qualsevol opció, la notificació es tancarà immediatament i evitarà que es mostri a l'historial de notificacions. També cal tenir en compte que aquestes opcions només estaran disponibles mentre la notificació està activa, abans que s'esgoti el temps d'espera. Si posteriorment accediu a la notificació en l'historial de notificacions, a causa de les limitacions del sistema de notificacions, l'única interacció disponible serà eliminar-la de l'historial.</para>
+>La notificació del missatge d'alarma ofereix les opcions següents. Recordeu que en seleccionar qualsevol opció, la notificació es tancarà immediatament i evitarà que es mostri a l'historial de notificacions. També cal tenir en compte que aquestes opcions només estaran disponibles mentre la notificació està activa, abans que s'esgoti el temps d'espera. Si posteriorment accediu a la notificació en l'historial de notificacions, a causa de les limitacions del sistema de notificacions, l'única interacció disponible serà eliminar-la de l'historial.</para>
 
 <itemizedlist>
 <listitem>
@@ -2952,7 +2952,7 @@
 >Habilitar i inhabilitar individualment les alarmes</title>
 
 <para
->Per a habilitar individualment les alarmes que estan inhabilitades, realitzeu una de les següents accions:</para>
+>Per a habilitar individualment les alarmes que estan inhabilitades, realitzeu una de les accions següents:</para>
 
 <itemizedlist>
 <listitem>
@@ -2979,7 +2979,7 @@
 </itemizedlist>
 
 <para
->Per a inhabilitar individualment les alarmes que estan actualment habilitades, realitzeu una de les següents accions:</para>
+>Per a inhabilitar individualment les alarmes que estan actualment habilitades, realitzeu una de les accions següents:</para>
 
 <itemizedlist>
 <listitem>
@@ -3000,6 +3000,76 @@
 > sobre les entrades en qüestió a la llista d'alarmes i escolliu <menuchoice
 ><guimenuitem
 >Inhabilita</guimenuitem
+></menuchoice
+> des del menú contextual.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>Ometre alarmes individuals</title>
+
+<para
+>Podeu optar per ometre les activacions següents (1 - 10) d'una alarma. Això desactiva temporalment l'alarma fins que hagi passat aquest nombre de recurrències o subrepeticions sense activar-se. L'alarma es tornarà a activar amb normalitat després d'això.</para>
+
+<note
+><para
+>No es mostraran recordatoris de les activacions omeses.</para>
+<para
+>L'omissió no afecta cap ajornament pendent de l'alarma.</para
+></note>
+
+<para
+>Per a ometre les activacions següents d'alarmes individuals, feu una de les accions següents, i després introduïu el nombre d'activacions a ometre:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleccioneu-ne una o més fent clic a les seves entrades a la llista d'alarmes. A continuació escolliu <menuchoice
+> <guimenu
+>Accions</guimenu
+><guimenuitem
+>Omet</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Feu clic <mousebutton
+>dret</mousebutton
+> sobre les entrades en qüestió a la llista d'alarmes i escolliu <menuchoice
+><guimenuitem
+>Omet</guimenuitem
+></menuchoice
+> des del menú contextual.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Per a cancel·lar l'omissió d'alarmes individuals, realitzeu una de les accions següents:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleccioneu-ne una o més fent clic a les seves entrades a la llista d'alarmes. A continuació escolliu <menuchoice
+> <guimenu
+>Accions</guimenu
+><guimenuitem
+>Cancel·la l'omissió</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Feu clic <mousebutton
+>dret</mousebutton
+> sobre les entrades en qüestió a la llista d'alarmes i escolliu <menuchoice
+><guimenuitem
+>Cancel·la l'omissió</guimenuitem
 ></menuchoice
 > des del menú contextual.</para>
 </listitem>
@@ -3230,7 +3300,7 @@
 <para
 >Si voleu utilitzar una altra aplicació, o si voleu utilitzar una de les llistades, però amb diferents opcions per a l'ordre, seleccioneu <guilabel
 >Altres</guilabel
-> i introduïu l'ordre per a invocar la finestra de terminal. De manera predeterminada, la cadena d'ordre de l'alarma s'afegirà al que especifiqueu. També podeu especificar a on s'inserirà la cadena d'ordre de l'alarma, utilitzant els següents codis:</para>
+> i introduïu l'ordre per a invocar la finestra de terminal. De manera predeterminada, la cadena d'ordre de l'alarma s'afegirà al que especifiqueu. També podeu especificar a on s'inserirà la cadena d'ordre de l'alarma, utilitzant els codis següents:</para>
 
 <variablelist>
 <varlistentry>
@@ -3663,7 +3733,7 @@
 <para
 ><guilabel
 >Mostra el temps restant fins a l'alarma</guilabel
->: Seleccioneu aquesta opció per a mostrar el temps restant abans de la següent ocurrència programada de cada alarma. El període de temps es mostra en hores i minuts.</para>
+>: Seleccioneu aquesta opció per a mostrar el temps restant abans de l'ocurrència programada següent de cada alarma. El període de temps es mostra en hores i minuts.</para>
 
 <itemizedlist>
 <listitem>
@@ -3879,7 +3949,7 @@
 <para
 >Quan s'indiquen paràmetres de línia d'ordres, el &kalarm; no mostrarà la llista d'alarmes programades com s'ha descrit anteriorment a <link linkend="using-kalarm"
 >Usar el &kalarm;</link
->. Les opcions específiques de la línia d'ordres per al &kalarm; es poden utilitzar per a les següents operacions:</para>
+>. Les opcions específiques de la línia d'ordres per al &kalarm; es poden utilitzar per a les operacions següents:</para>
 
 <itemizedlist>
 <listitem
@@ -3909,7 +3979,7 @@
 >Programar una alarma nova</title>
 
 <para
->Les següents opcions s'utilitzen per a programar una alarma nova:</para>
+>Les opcions següents s'utilitzen per a programar una alarma nova:</para>
 
 <informaltable>
 <tgroup cols="2">
@@ -4028,7 +4098,7 @@
 >--disable-all</option
 ></entry>
   <entry
->Inhabilita el monitoratge d'alarmes. Això evita que les alarmes s'activin fins que torneu a habilitar les alarmes o reinicieu el &kalarm;, &pex;, en el següent inici de sessió. Amb aquesta opció no es pot especificar <option
+>Inhabilita el monitoratge d'alarmes. Això evita que les alarmes s'activin fins que torneu a habilitar les alarmes o reinicieu el &kalarm;, &pex;, en l'inici de sessió següent. Amb aquesta opció no es pot especificar <option
 >--triggerEvent</option
 >.</entry>
 </row>
@@ -4130,7 +4200,7 @@
 >n</replaceable
 > és un nombre i <replaceable
 >X</replaceable
-> és una de les següents lletres: A (any), M (mes), S (setmana), D (dia). Si també s'especifica <option
+> és una de les lletres següents: A (any), M (mes), S (setmana), D (dia). Si també s'especifica <option
 >--recurrence</option
 >, no estaran permesos A (anys) i M (mesos). Obligatori si s'especifica <option
 >--repeat</option
@@ -4170,7 +4240,7 @@
 >n</replaceable
 > és un número i <replaceable
 >X</replaceable
-> és una de les següents lletres: S (setmanes), D (dies). El valor predeterminat de <replaceable
+> és una de les lletres següents: S (setmanes), D (dies). El valor predeterminat de <replaceable
 >període</replaceable
 > és d'1 minut.</entry>
 </row>
@@ -4540,7 +4610,7 @@
 >Altres opcions</title>
 
 <para
->Les següents opcions s'utilitzen per a realitzar diverses funcions, incloent-hi mostrar el <link linkend="alarm-edit-dlg"
+>Les opcions següents s'utilitzen per a realitzar diverses funcions, incloent-hi mostrar el <link linkend="alarm-edit-dlg"
 >diàleg d'edició de l'alarma</link
 >.</para>
 
@@ -4617,7 +4687,7 @@
   <entry
 >Genera una llista de les alarmes programades a <filename
 >stdout</filename
->. La llista mostra una breu descripció de cadascuna de les alarmes pendents: el seu identificador de recurs, l'UID, següent hora programada i el text del missatge o fitxer.</entry>
+>. La llista mostra una breu descripció de cadascuna de les alarmes pendents: el seu identificador de recurs, l'UID, l'hora programada següent i el text del missatge o fitxer.</entry>
 </row>
 <row>
   <entry
@@ -4657,7 +4727,7 @@
 >Guia del &kalarm; per a desenvolupadors</title>
 
 <para
->El &kalarm; proporciona una interfície per a permetre que altres aplicacions requereixin les següents funcions:</para>
+>El &kalarm; proporciona una interfície per a permetre que altres aplicacions requereixin les funcions següents:</para>
 
 <itemizedlist>
 <listitem
@@ -4810,7 +4880,7 @@
 <refname
 >scheduleMessage</refname>
 <refpurpose
->programa un nou missatge d'alarma.</refpurpose>
+>programa un missatge d'alarma nou.</refpurpose>
 </refnamediv>
 <refsynopsisdiv>
 <synopsis
@@ -6626,7 +6696,7 @@
 ></term>
 <listitem>
 <para
->Especifica el nom d'una plantilla d'alarma com a base de la nova alarma activa.</para>
+>Especifica el nom d'una plantilla d'alarma com a base de l'alarma activa nova.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -6703,7 +6773,7 @@
 <para
 ><function
 >list()</function
-> és una crida de &DBus; per a retornar una cadena que conté un resum de les alarmes programades. La llista mostra una breu descripció de cadascuna de les alarmes pendents: el seu identificador de recurs, l'UID, següent hora programada i el text del missatge o fitxer.</para>
+> és una crida de &DBus; per a retornar una cadena que conté un resum de les alarmes programades. La llista mostra una breu descripció de cadascuna de les alarmes pendents: el seu identificador de recurs, l'UID, l'hora programada següent i el text del missatge o fitxer.</para>
 
 </refsect1>
 </refentry>
@@ -6824,7 +6894,7 @@
 </question>
 <answer>
 <para
->La configuració del &kalarm; es manté en els següents fitxers a la carpeta <command
+>La configuració del &kalarm; es manté en els fitxers següents a la carpeta <command
 >qtpaths --paths GenericConfigLocation</command
 > :</para>
 
@@ -6854,7 +6924,7 @@
 <answer>
 
 <para
->Quan s'executa per primera vegada el &kalarm;, crea els següents calendaris d'alarma a la carpeta <command
+>Quan s'executa per primera vegada el &kalarm;, crea els calendaris d'alarma següents a la carpeta <command
 >qtpaths --paths GenericDataLocation</command
 > :</para>
 

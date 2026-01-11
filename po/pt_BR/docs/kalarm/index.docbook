@@ -112,7 +112,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->07/01/2026</date>
+>09/01/2026</date>
 <releaseinfo
 >3.13.0 (KDE Gear 26.04)</releaseinfo>
 
@@ -685,7 +685,7 @@
 <para
 >Veja a <link linkend="enable-disable"
 >Ativação/Desativação dos Alarmes</link
-> para saber como ativar e desativar os alarmes, quer individualmente quer como um todo.</para>
+> para saber como ativar e desativar os alarmes, quer individualmente quer como um todo, ou ignorar temporariamente alarmes individuais.</para>
 
 </sect2>
 
@@ -3012,6 +3012,72 @@
 >Clique com o &RMB; nos itens desejados na lista de alarmes e escolha a opção <menuchoice
 ><guimenuitem
 >Desativar</guimenuitem
+></menuchoice
+> do menu de contexto.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>Ignorando alarmes individuais</title>
+
+<para
+>Você pode optar por ignorar as próximas (1 a 10) ativações de um alarme. Isso desativa temporariamente o alarme até que esse número de recorrências ou sub-repetições tenha ocorrido sem ativação. O alarme voltará a disparar normalmente depois disso.</para>
+
+<note
+><para
+>Não serão exibidos lembretes para ativações ignoradas.</para>
+<para
+>Ignorar o alarme não afeta nenhum adiamento pendente.</para
+></note>
+
+<para
+>Para ignorar a(s) próxima(s) ativação(ões) de alarmes individuais, faça um dos seguintes procedimentos e, em seguida, insira o número de ativações que deseja ignorar:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Selecione um ou mais alarmes, carregando nos itens respectivos na lista de alarmes. Depois, escolha a opção <menuchoice
+> <guimenu
+>Ações</guimenu
+><guimenuitem
+>Ignorar</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Clique com o &RMB; nos itens desejados na lista de alarmes e escolha a opção <menuchoice
+><guimenuitem
+>Ignorar</guimenuitem
+></menuchoice
+> do menu de contexto.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Para cancelar o ignorar de alarmes individuais ignorados, faça um dos seguintes procedimentos:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Selecione um ou mais alarmes, clicando nos itens respectivos na lista de alarmes. Depois, escolha a opção <menuchoice
+> <guimenu
+>Ações</guimenu
+><guimenuitem
+>Cancelar ignorar</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Clique com o &RMB; nos itens desejados na lista de alarmes e escolha a opção <menuchoice
+><guimenuitem
+>Cancelar ignorar</guimenuitem
 ></menuchoice
 > do menu de contexto.</para>
 </listitem>
