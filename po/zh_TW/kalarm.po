@@ -8,13 +8,13 @@
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2006, 2008, 2009, 2010.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007, 2008.
-# SPDX-FileCopyrightText: 2023, 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2023, 2024, 2025, 2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-10 00:43+0000\n"
-"PO-Revision-Date: 2025-12-16 22:14+0900\n"
+"PO-Revision-Date: 2026-01-13 01:14+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -4445,20 +4445,16 @@ msgid "Delete"
 msgstr "刪除"
 
 #: mainwindow.cpp:910
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Display Alarm"
+#, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
-msgstr "顯示鬧鐘"
+msgstr "跳過鬧鐘"
 
 #: mainwindow.cpp:911
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Number of repetitions:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
-msgstr "重複次數："
+msgstr "要跳過幾次啟用："
 
 #: mainwindow.cpp:942
 #, kde-format
@@ -4548,15 +4544,13 @@ msgstr "關閉"
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
-msgstr ""
+msgstr "跳過…"
 
 #: mainwindow.cpp:1748
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action"
 msgid "Cancel skip"
-msgstr "如果逾時就取消"
+msgstr "取消跳過"
 
 #: messagedisplay.cpp:278
 #, kde-kuit-format

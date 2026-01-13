@@ -4429,20 +4429,16 @@ msgid "Delete"
 msgstr "删除"
 
 #: mainwindow.cpp:910
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Display Alarm"
+#, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
-msgstr "显示闹钟"
+msgstr ""
 
 #: mainwindow.cpp:911
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Number of repetitions:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
-msgstr "重复次数："
+msgstr ""
 
 #: mainwindow.cpp:942
 #, kde-format
@@ -4535,12 +4531,10 @@ msgid "Skip..."
 msgstr ""
 
 #: mainwindow.cpp:1748
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action"
 msgid "Cancel skip"
-msgstr "超时自动关闭闹钟"
+msgstr ""
 
 #: messagedisplay.cpp:278
 #, kde-kuit-format
