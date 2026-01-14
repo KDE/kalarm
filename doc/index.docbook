@@ -1975,7 +1975,7 @@ acknowledgment of alarms.</para>
 inhibited for the desktop, and do not display on top of full screen
 applications. To override these restrictions and always display the
 alarm if at all possible, select the
-<guilabel>Never inhibit alarms</guilabel> check box. Note that the
+<guilabel>Never inhibit alarm</guilabel> check box. Note that the
 ability to display messages over full screen applications may depend
 on your window manager, and currently only the X11 windowing system
 allows this.</para>
