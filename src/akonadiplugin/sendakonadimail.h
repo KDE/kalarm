@@ -26,7 +26,7 @@ class SendAkonadiMail : public QObject
     Q_OBJECT
 public:
     static SendAkonadiMail* instance();
-    static QString send(const std::shared_ptr<KMime::Message> &message, const KIdentityManagementCore::Identity& identity,
+    static QString send(const std::shared_ptr<KMime::Message>& message, const KIdentityManagementCore::Identity& identity,
                         const QString& normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata);
 
 Q_SIGNALS:

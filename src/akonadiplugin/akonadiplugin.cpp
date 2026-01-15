@@ -84,7 +84,7 @@ int AkonadiPlugin::birthdayModelEnum(BirthdayModelValue value) const
 /******************************************************************************
 * Send an email via Akonadi.
 */
-QString AkonadiPlugin::sendMail(const std::shared_ptr<KMime::Message> &message, const KIdentityManagementCore::Identity& identity,
+QString AkonadiPlugin::sendMail(const std::shared_ptr<KMime::Message>& message, const KIdentityManagementCore::Identity& identity,
                                 const QString& normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata)
 {
     if (!mSendAkonadiMail)

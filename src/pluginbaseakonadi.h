@@ -46,7 +46,7 @@ public:
     /** Send an email using PIM libraries.
      *  @return  empty string if sending initiated successfully, else error message.
      */
-    virtual QString sendMail(const std::shared_ptr<KMime::Message> &message, const KIdentityManagementCore::Identity& identity,
+    virtual QString sendMail(const std::shared_ptr<KMime::Message>& message, const KIdentityManagementCore::Identity& identity,
                              const QString& normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata) = 0;
 
     /** Extract dragged and dropped Akonadi RFC822 message data. */

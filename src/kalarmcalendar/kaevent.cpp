@@ -6485,6 +6485,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
                     types[r] = KAEventPrivate::REMINDER_TYPE;
                     alarm_->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY, types.join(QChar::fromLatin1(',')));
                     reminderOnce = true;
+                    converted = true;
                 }
                 if (r >= 0  ||  types.contains(KAEventPrivate::REMINDER_TYPE))
                 {
@@ -6511,6 +6512,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
                         preFlags += KAEventPrivate::REMINDER_ONCE_FLAG;
                     preFlags += reminder;
                     event->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY, preFlags.join(KAEventPrivate::SC));
+                    converted = true;
                 }
             }
         }
@@ -6539,6 +6541,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
                     }
                     event->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::REPEAT_PROPERTY,
                                        QStringLiteral("%1%2:%3").arg(interval).arg(suffix).arg(list[1]));
+                    converted = true;
                 }
             }
         }

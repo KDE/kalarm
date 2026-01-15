@@ -41,7 +41,7 @@ SendAkonadiMail* SendAkonadiMail::instance()
 * Reply = empty string if the message is queued for sending,
 *       = error message if the message was not sent.
 */
-QString SendAkonadiMail::send(const std::shared_ptr<KMime::Message> &message, const KIdentityManagementCore::Identity& identity,
+QString SendAkonadiMail::send(const std::shared_ptr<KMime::Message>& message, const KIdentityManagementCore::Identity& identity,
                               const QString& normalizedFrom, bool keepSentMail, JobData& jobdata)
 {
     qCDebug(AKONADIPLUGIN_LOG) << "SendAkonadiMail::send: Sending via KDE";
