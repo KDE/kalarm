@@ -5472,10 +5472,21 @@ KAEvent::OccurType KAEventPrivate::nextRecurrence(const KADateTime& preDateTime,
 {
     const KADateTime recurStart = mRecurrence->startDateTime();
     KADateTime pre = preDateTime.toTimeSpec(mStartDateTime.timeSpec());
-    if (mStartDateTime.isDateOnly()  &&  !pre.isDateOnly()  &&  pre.time() < DateTime::startOfDay())
+    if (mStartDateTime.isDateOnly())
     {
-        pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
-        pre.setTime(DateTime::startOfDay());
+        if (pre.isDateOnly())
+        {
+            // The earliest recurrence we want is tomorrow.
+            pre = pre.addDays(1);
+            pre.setTime(DateTime::startOfDay());
+            pre.addSecs(-60);
+        }
+        else if (pre.time() < DateTime::startOfDay())
+        {
+            // Today's recurrence (if today recurs) is still to come
+            pre = pre.addDays(-1);
+            pre.setTime(DateTime::startOfDay());
+        }
     }
     const KADateTime dt = mRecurrence->getNextDateTime(pre);
     result = dt;
@@ -6210,7 +6221,6 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
             {
                 // Append a time unit suffix to the event's REPEAT property interval parameter.
                 const QStringList list = prop.split(QLatin1Char(':'));
-qDebug()<<"convertKCalEvents: LIST:"<<list;
                 if (list.count() >= 2)
                 {
                     int interval = static_cast<int>(list[0].toUInt());
