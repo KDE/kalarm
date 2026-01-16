@@ -6,6 +6,9 @@ KAlarm Change Log
 * Only show options for Late cancel/Reminder in Edit Alarm dialogue when they are enabled.
 * Fix date-only sub-repetition time calculations.
 
+=== Version 3.12.2 (KDE Gear 25.12.2) --- 16 January 2026 ===
+* Fix hang while loading the calendar during KAlarm startup [KDE Bug 514609]
+
 === Version 3.12.1 (KDE Gear 25.12.1) --- 2 December 2025 ===
 * Prevent multiple Defer Alarm dialogs for the same event [KDE Bug 512828]
 * If Defer is disabled for a notification alarm, don't show two Edit buttons.
