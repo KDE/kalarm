@@ -1,21 +1,21 @@
 /*
  *  latecancel.h  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #pragma once
 
-#include "timeselector.h"
 #include "lib/timeperiod.h"
 
 #include <QFrame>
 
-class QStackedWidget;
+class TimeSelector;
 class CheckBox;
-class QHBoxLayout;
+class QStackedWidget;
+class QVBoxLayout;
 
 
 class LateCancelSelector : public QFrame
@@ -46,6 +46,7 @@ private Q_SLOTS:
 
 private:
     void            updateAutoClose();
+    void            alignExtraWidget();
 
     QStackedWidget* mStack;             // contains mCheckboxFrame and mTimeSelectorFrame
     QFrame*         mCheckboxFrame;
@@ -53,7 +54,8 @@ private:
     QFrame*         mTimeSelectorFrame;
     TimeSelector*   mTimeSelector;      // displayed when late cancellation is selected
     CheckBox*       mAutoClose;
-    QHBoxLayout*    mAutoCloseLayout;   // layout containing auto-close checkbox
+    QWidget*        mExtraWidget {nullptr};  // extra widget
+    QVBoxLayout*    mExtraLayout;       // layout to contain extra widget
     bool            mDateOnly {false};  // hours/minutes units not allowed
     bool            mReadOnly {false};  // widget is read-only
     bool            mAutoCloseAllowed {false};  // auto-close checkbox can be used

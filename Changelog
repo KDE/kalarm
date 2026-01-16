@@ -1,10 +1,11 @@
 KAlarm Change Log
 
-=== Version 3.13.0 (KDE Gear 26.04) --- 9 January 2026 ===
+=== Version 3.13.0 (KDE Gear 26.04) --- 17 January 2026 ===
 * Provide facility to skip the next few recurrences/sub-repetitions of an alarm.
 * Provide Edit Alarm dialogue option to override notification inhibition or display over X11 full screen applications.
 * Only show options for Late cancel/Reminder in Edit Alarm dialogue when they are enabled.
 * Fix date-only sub-repetition time calculations.
+* Improve layout of late-cancel and other widgets at bottom of Edit Alarm dialogue.
 
 === Version 3.12.2 (KDE Gear 25.12.2) --- 16 January 2026 ===
 * Fix hang while loading the calendar during KAlarm startup [KDE Bug 514609]

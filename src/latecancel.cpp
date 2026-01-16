@@ -1,13 +1,14 @@
 /*
  *  latecancel.cpp  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "latecancel.h"
 
+#include "timeselector.h"
 #include "lib/checkbox.h"
 
 #include <KCalendarCore/Duration>
@@ -15,9 +16,10 @@ using namespace KCalendarCore;
 
 #include <KLocalizedString>
 
+#include <QGridLayout>
+#include <QHBoxLayout>
 #include <QStackedWidget>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 
 
 // Collect these widget labels together to ensure consistent wording and
@@ -37,12 +39,13 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
                              "<para>If unchecked, the alarm will be triggered at the first opportunity after "
                              "its scheduled time, regardless of how late it is.</para>");
 
-    auto topLayout = new QVBoxLayout(this);
+    auto topLayout = new QGridLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
 
     mStack = new QStackedWidget(this);
-    topLayout->addWidget(mStack, 0, Qt::AlignLeft);
+    topLayout->addWidget(mStack, 0, 0, Qt::AlignLeft);
     mCheckboxFrame = new QFrame();
+    mCheckboxFrame->setFrameStyle(QFrame::NoFrame);
     mStack->addWidget(mCheckboxFrame);
     auto hlayout = new QHBoxLayout(mCheckboxFrame);
     hlayout->setContentsMargins(0, 0, 0, 0);
@@ -52,7 +55,8 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
     mCheckbox->setWhatsThis(whatsThis);
     hlayout->addWidget(mCheckbox, 0, Qt::AlignLeft);
 
-    mTimeSelectorFrame = new QFrame();
+    mTimeSelectorFrame = new QFrame;
+    mTimeSelectorFrame->setFrameStyle(QFrame::NoFrame);
     mStack->addWidget(mTimeSelectorFrame);
     hlayout = new QHBoxLayout(mTimeSelectorFrame);
     hlayout->setContentsMargins(0, 0, 0, 0);
@@ -63,18 +67,26 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
     connect(mTimeSelector, &TimeSelector::valueChanged, this, &LateCancelSelector::changed);
     hlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
-    mAutoCloseLayout = new QHBoxLayout();
+    auto frame = new QFrame;
+    frame->setFrameStyle(QFrame::NoFrame);
+    topLayout->addWidget(frame, 1, 0, Qt::AlignLeft);
+    hlayout = new QHBoxLayout(frame);
     const int indent = CheckBox::textIndent(mCheckbox);
     if (layoutDirection() == Qt::LeftToRight)
-        mAutoCloseLayout->setContentsMargins(indent, 0, 0, 0);
+        hlayout->setContentsMargins(indent, 0, 0, 0);
     else
-        mAutoCloseLayout->setContentsMargins(0, 0, indent, 0);
-    topLayout->addLayout(mAutoCloseLayout);
-    mAutoClose = new CheckBox(i18n_chk_AutoCloseWin(), this);
+        hlayout->setContentsMargins(0, 0, indent, 0);
+    mAutoClose = new CheckBox(i18n_chk_AutoCloseWin(), frame);
     connect(mAutoClose, &CheckBox::toggled, this, &LateCancelSelector::changed);
     mAutoClose->setWhatsThis(i18nc("@info:whatsthis", "Automatically close the alarm window after the expiry of the late-cancellation period"));
-    mAutoCloseLayout->addWidget(mAutoClose);
-    mAutoCloseLayout->addStretch();
+    hlayout->addWidget(mAutoClose);
+    hlayout->addStretch();
+
+    // Layout to contain the extra widget set by addWidget().
+    mExtraLayout = new QVBoxLayout;
+    mExtraLayout->setContentsMargins(0, 0, 0, 0);
+    mExtraLayout->setStretch(0, 1);
+    topLayout->addLayout(mExtraLayout, 0, 1, 2, 1, Qt::AlignRight);
 
     mAutoClose->hide();
     mAutoClose->setEnabled(false);
@@ -99,7 +111,9 @@ void LateCancelSelector::setReadOnly(bool ro)
 */
 void LateCancelSelector::addWidget(QWidget* widget)
 {
-    mAutoCloseLayout->addWidget(widget);
+    mExtraWidget = widget;
+    mExtraLayout->addWidget(widget);
+    alignExtraWidget();
 }
 
 int LateCancelSelector::minutes() const
@@ -173,7 +187,14 @@ void LateCancelSelector::updateAutoClose()
             mAutoClose->hide();
         mAutoCloseShown = show;
         updateGeometry();
+        alignExtraWidget();
     }
+}
+
+void LateCancelSelector::alignExtraWidget()
+{
+    if (mExtraWidget)
+        mExtraLayout->setAlignment(mExtraWidget, (mAutoCloseShown ? Qt::AlignBottom : Qt::AlignCenter));
 }
 
 #include "moc_latecancel.cpp"
