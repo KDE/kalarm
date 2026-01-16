@@ -4432,13 +4432,13 @@ msgstr "删除"
 #, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
-msgstr ""
+msgstr "跳过闹钟"
 
 #: mainwindow.cpp:911
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
-msgstr ""
+msgstr "要跳过的激活次数："
 
 #: mainwindow.cpp:942
 #, kde-format
@@ -4528,13 +4528,13 @@ msgstr "禁用"
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
-msgstr ""
+msgstr "跳过..."
 
 #: mainwindow.cpp:1748
 #, kde-format
 msgctxt "@action"
 msgid "Cancel skip"
-msgstr ""
+msgstr "取消跳过"
 
 #: messagedisplay.cpp:278
 #, kde-kuit-format

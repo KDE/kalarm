@@ -98,7 +98,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2026-1-7</date>
+>2026-1-9</date>
 <releaseinfo
 >3.13.0 (KDE Gear 26.04)</releaseinfo>
 
@@ -671,7 +671,7 @@
 <para
 >Zie <link linkend="enable-disable"
 >Alarmen in- of uitschakelen</link
->om te weten te komen hoe alarmen in- of uitgeschakeld moeten worden, zowel totaal als individueel.</para>
+>om te weten te komen hoe alarmen in- of uitgeschakeld moeten worden, ofwel individueel of als geheel of tijdelijk individuele alarmen overslaan.</para>
 
 </sect2>
 
@@ -2342,7 +2342,7 @@
 
 <para
 >Alarmen worden normaal gesproken uitgeschakeld wanneer meldingen voor het bureaublad zijn geblokkeerd en worden niet weergegeven boven toepassingen in volledig scherm. Om deze beperkingen te omzeilen en het alarm altijd weer te geven wanneer dat mogelijk is, schakelt u het selectievakje <guilabel
->Nooit alarmen blokkeren</guilabel
+>Nooit alarm blokkeren</guilabel
 > in. Houd er rekening mee dat de mogelijkheid om berichten boven toepassingen in volledig scherm weer te geven afhankelijk kan zijn van uw vensterbeheerder en dat dit momenteel alleen mogelijk is met het X11-venstersysteem.</para>
 
 <para
@@ -3008,6 +3008,76 @@
 > op de gewenste items in de lijst met alarmen en kies <menuchoice
 ><guimenuitem
 >Uitschakelen</guimenuitem
+></menuchoice
+> uit het contextmenu.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>Individuele alarmen overslaan</title>
+
+<para
+>U kunt kiezen om de volgende paar (1 - 10) actieveringen van een alarm over te slaan. Dit tijdelijk uitschakelen van het alarm totdat er een aantal herhalingen of sub-herhalingen zijn gepasseerd zonder activatie. Het alarm zal daarna afgaan herpakken zoals normaal.</para>
+
+<note
+><para
+>Geen herinneringen zullen getoond worden voor overgeslagen actieveringen.</para>
+<para
+>Overslaan heeft geen invloed op een uitstaande uitstel van het alarm.</para
+></note>
+
+<para
+>Om de volgende activatie(s) van individuele alarmen over te slaan, doe een van het volgende en voer daarna het aantal over te slaan actieveringen in:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Selecteer een of meer alarmen uit de alarmenlijst door erop te klikken. Kies daarna <menuchoice
+> <guimenu
+>Acties</guimenu
+><guimenuitem
+>Overslaan</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Klik <mousebutton
+>Rechts</mousebutton
+> op de gewenste items in de lijst met alarmen en kies <menuchoice
+><guimenuitem
+>Overslaan</guimenuitem
+></menuchoice
+> uit het contextmenu.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Om overslaan van individuele alarmen te annuleren, zijn er volgende mogelijkheden:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Selecteer een of meer alarmen uit de alarmenlijst door erop te klikken. Kies daarna <menuchoice
+> <guimenu
+>Acties</guimenu
+><guimenuitem
+>Annuleren</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Klik <mousebutton
+>Rechts</mousebutton
+> op de gewenste items in de lijst met alarmen en kies <menuchoice
+><guimenuitem
+>Overslaan annuleren</guimenuitem
 ></menuchoice
 > uit het contextmenu.</para>
 </listitem>

@@ -126,7 +126,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2026-1-7</date>
+>2026-1-9</date>
 <releaseinfo
 >3.13.0 (KDE Gear 26.04)</releaseinfo>
 
@@ -702,18 +702,18 @@
 
 <sect2>
 <title
->Activando/desactivando una alarma</title>
+>Activación/desactivación de alarmas</title>
 
 <para
->Vea <link linkend="enable-disable"
->Activando y desactivando las alarmas</link
-> para saber cómo activar y desactivar alarmas, bien individualmente o en conjunto.</para>
+>Consulte <link linkend="enable-disable"
+>Activación y desactivación de las alarmas</link
+> para saber cómo activarlas y desactivarlas, ya sea de forma individual o en conjunto, o cómo omitir determinadas alarmas de temporalmente.</para>
 
 </sect2>
 
 <sect2>
 <title
->Establecer una alarma para despertar desde suspendido</title>
+>Definir una alarma para despertar desde suspendido</title>
 
 <para
 >Consulte <link linkend="wake-suspend"
@@ -2866,7 +2866,7 @@
 
 <sect1 id="enable-disable">
 <title
->Activando y desactivando alarmas</title>
+>Activación y desactivación de alarmas</title>
 
 <para
 >Las alarmas se pueden activar y desactivar en conjunto o individualmente:</para>
@@ -2901,7 +2901,7 @@
 
 <sect2>
 <title
->Activando la monitorización de alarmas</title>
+>Activación de la monitorización de alarmas</title>
 
 <para
 >Para que suceda la monitorización de una alarma, se debe estar ejecutando &kalarm;. Una vez que ejecute &kalarm; este se iniciará automáticamente cada vez que inicie sesión, salvo que lo desactive más tarde en la pestaña <link linkend="preferences-general"
@@ -2991,7 +2991,7 @@
 
 <sect2>
 <title
->Activando y desactivando las alarmas individuales</title>
+>Activación y desactivación de alarmas individuales</title>
 
 <para
 >Para activar las alarmas individuales que están desactivadas en ese momento, haga una de las siguientes acciones:</para>
@@ -3042,6 +3042,76 @@
 > sobre las entradas que desee en la lista de alarmas y elija <menuchoice
 ><guimenuitem
 >Desactivar</guimenuitem
+></menuchoice
+> en el menú de contexto.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>Omisión de alarmas individuales</title>
+
+<para
+>Puede elegir si se omiten las siguientes activaciones (1 a 10) de una alarma. Esto desactiva la alarma temporalmente hasta que se alcance dicho número de repeticiones sin que se active. Tras dicho período, la alarma se volverá a activar de forma normal.</para>
+
+<note
+><para
+>No se mostrarán recordatorios para las activaciones que se omitan.</para>
+<para
+>La omisión no afecta a ningún aplazamiento pendiente de la alarma.</para
+></note>
+
+<para
+>Para omitir las siguientes activaciones de alarmas individuales, realice una de las siguientes acciones e introduzca a continuación el número de activaciones que desea omitir:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleccione una o más alarmas pulsando sobre sus entradas en la lista de alarmas. Luego elija <menuchoice
+> <guimenu
+>Acciones</guimenu
+><guimenuitem
+>Omitir</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Pulse con el botón <mousebutton
+>derecho</mousebutton
+> sobre las entradas que desee en la lista de alarmas y elija <menuchoice
+><guimenuitem
+>Omitir</guimenuitem
+></menuchoice
+> en el menú de contexto.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Para cancelar la omisión de alarmas individuales, realice una de las siguientes acciones:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleccione una o más alarmas pulsando sobre sus entradas en la lista de alarmas. Luego elija <menuchoice
+> <guimenu
+>Cancelar omisión</guimenu
+><guimenuitem
+>Activar</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Pulse con el botón <mousebutton
+>derecho</mousebutton
+> sobre las entradas que desee en la lista de alarmas y elija <menuchoice
+><guimenuitem
+>Cancelar omisión</guimenuitem
 ></menuchoice
 > en el menú de contexto.</para>
 </listitem>

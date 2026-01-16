@@ -2356,7 +2356,7 @@
 
 <para
 >Os alarmes de exibição são normalmente suspensos enquanto as notificações são inibidas para a área de trabalho e não são exibidos sobre aplicativos em tela cheia. Para ignorar essas restrições e sempre exibir o alarme, se possível, selecione a caixa de seleção <guilabel
->Nunca inibir alarmes</guilabel
+>Nunca inibir alarme</guilabel
 >. Observe que a capacidade de exibir mensagens sobre aplicativos em tela cheia pode depender do seu gerenciador de janelas e, atualmente, apenas o sistema de janelas X11 permite isso.</para>
 
 <para

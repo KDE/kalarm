@@ -2338,7 +2338,7 @@
 
 <para
 >La visualització d'alarmes normalment se suspèn mentre que les notificacions estan inhibides a l'escriptori, i no es mostren a sobre de les aplicacions a pantalla completa. Per a anul·lar aquestes restriccions i mostrar sempre l'alarma si és possible, seleccioneu la casella de selecció <guilabel
->No inhibeixis mai les alarmes</guilabel
+>No inhibeixis mai l'alarma</guilabel
 >. Tingueu en compte que la capacitat de mostrar missatges a través d'aplicacions a pantalla completa pot dependre del gestor de finestres, i actualment només ho permet el sistema de finestres X11.</para>
 
 <para
