@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-10 00:43+0000\n"
+"POT-Creation-Date: 2026-01-17 00:44+0000\n"
 "PO-Revision-Date: 2025-01-11 12:07+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -4281,25 +4281,25 @@ msgctxt "@info"
 msgid "Error sending email"
 msgstr "Fel när e-post skulle skickas"
 
-#: latecancel.cpp:25
+#: latecancel.cpp:27
 #, kde-format
 msgctxt "@option:check"
 msgid "Cancel if late"
 msgstr "Hoppa över om sent"
 
-#: latecancel.cpp:26
+#: latecancel.cpp:28
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after this time"
 msgstr "Stäng fönstret automatiskt efter den här tiden"
 
-#: latecancel.cpp:27
+#: latecancel.cpp:29
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after late-cancellation time"
 msgstr "Stäng fönstret automatiskt efter perioden för att avbryta sent"
 
-#: latecancel.cpp:34
+#: latecancel.cpp:36
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4317,19 +4317,19 @@ msgstr ""
 "alarmet att visas vid det första tillfället efter den angivna tiden, oavsett "
 "hur sent det är.</para>"
 
-#: latecancel.cpp:59
+#: latecancel.cpp:63
 #, kde-format
 msgctxt "@option:check Cancel if late by 10 minutes"
 msgid "Cancel if late by"
 msgstr "Avbryt om senare än"
 
-#: latecancel.cpp:60
+#: latecancel.cpp:64
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how late will cause the alarm to be canceled"
 msgstr "Ange hur sent som orsakar att alarmet avbryts"
 
-#: latecancel.cpp:75
+#: latecancel.cpp:81
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""

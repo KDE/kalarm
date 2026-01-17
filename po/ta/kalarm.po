@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-10 00:43+0000\n"
+"POT-Creation-Date: 2026-01-17 00:44+0000\n"
 "PO-Revision-Date: 2026-01-04 14:52+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-l10n-ta@kde.org>\n"
@@ -4227,25 +4227,25 @@ msgctxt "@info"
 msgid "Error sending email"
 msgstr "மின்னஞ்சலை அனுப்புவதில் சிக்கல்"
 
-#: latecancel.cpp:25
+#: latecancel.cpp:27
 #, kde-format
 msgctxt "@option:check"
 msgid "Cancel if late"
 msgstr "தாமதமானால் ரத்து செய்"
 
-#: latecancel.cpp:26
+#: latecancel.cpp:28
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after this time"
 msgstr "இவ்வளவு நேரத்திற்கு பிறகு சாளரத்தை தானாக மூடு"
 
-#: latecancel.cpp:27
+#: latecancel.cpp:29
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after late-cancellation time"
 msgstr "குறிப்பிட்ட நேரத்திற்கு பிறகு சாளரத்தை தானாக மூடு"
 
-#: latecancel.cpp:34
+#: latecancel.cpp:36
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "If checked, the alarm will be canceled if it cannot be triggered within "
@@ -4271,19 +4271,19 @@ msgstr ""
 "தேர்ந்தெடுக்காவிட்டால், எவ்வளவு நேரத்திற்குப் பின் என்றாலும்,  குறிப்பிட்ட நேரத்திற்கு பின் "
 "வரும் முதல் வாய்ப்பிலேயே அலாரம் தூண்டப்பட்டுவிடும்."
 
-#: latecancel.cpp:59
+#: latecancel.cpp:63
 #, kde-format
 msgctxt "@option:check Cancel if late by 10 minutes"
 msgid "Cancel if late by"
 msgstr "இவ்வளவு தாமதமானால் ரத்து செய்"
 
-#: latecancel.cpp:60
+#: latecancel.cpp:64
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how late will cause the alarm to be canceled"
 msgstr "அலாரம் தூண்டப்படுவது எவ்வளவு தாமதமானால் கைவிட வேண்டுமென்பதை உள்ளிடுங்கள்"
 
-#: latecancel.cpp:75
+#: latecancel.cpp:81
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-10 00:43+0000\n"
+"POT-Creation-Date: 2026-01-17 00:44+0000\n"
 "PO-Revision-Date: 2007-08-22 18:39+0330\n"
 "Last-Translator: Nazanin Kazemi <kazemi@itland.ir>\n"
 "Language-Team: Persian <kde-i18n-fa@kde.org>\n"
@@ -4797,25 +4797,25 @@ msgctxt "@info"
 msgid "Error sending email"
 msgstr "خطای ذخیره هشدار"
 
-#: latecancel.cpp:25
+#: latecancel.cpp:27
 #, kde-format
 msgctxt "@option:check"
 msgid "Cancel if late"
 msgstr "لغو در صورت تأخیر"
 
-#: latecancel.cpp:26
+#: latecancel.cpp:28
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after this time"
 msgstr "بستن خودکار پنجره پس از این زمان"
 
-#: latecancel.cpp:27
+#: latecancel.cpp:29
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after late-cancellation time"
 msgstr "بستن خودکار پنجره پس از زمان لغو با تأخیر"
 
-#: latecancel.cpp:34
+#: latecancel.cpp:36
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -4841,13 +4841,13 @@ msgstr ""
 "اگر علامت نزنید، هشدار در اولین فرصت پس از زمان زمان‌بندی خود، صرف‌نظر از این "
 "که چقدر بگذرد، تلنگر زده می‌شود."
 
-#: latecancel.cpp:59
+#: latecancel.cpp:63
 #, kde-format
 msgctxt "@option:check Cancel if late by 10 minutes"
 msgid "Cancel if late by"
 msgstr "&لغو در صورت تأخیر توسط‌"
 
-#: latecancel.cpp:60
+#: latecancel.cpp:64
 #, fuzzy, kde-format
 #| msgctxt "@label:whatsthis"
 #| msgid "Enter how late will cause the alarm to be canceled"
@@ -4855,7 +4855,7 @@ msgctxt "@info:whatsthis"
 msgid "Enter how late will cause the alarm to be canceled"
 msgstr "وارد کردن این که چقدر تأخیر منجر به لغو هشدار می‌شود"
 
-#: latecancel.cpp:75
+#: latecancel.cpp:81
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""

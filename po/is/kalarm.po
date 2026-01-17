@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-10 00:43+0000\n"
+"POT-Creation-Date: 2026-01-17 00:44+0000\n"
 "PO-Revision-Date: 2005-12-29 22:18+0100\n"
 "Last-Translator: Arnar Leosson <leosson@frisurf.no>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -4517,27 +4517,27 @@ msgctxt "@info"
 msgid "Error sending email"
 msgstr "Gat ekki kallað á KMail"
 
-#: latecancel.cpp:25
+#: latecancel.cpp:27
 #, fuzzy, kde-format
 #| msgid "Cancel if late"
 msgctxt "@option:check"
 msgid "Cancel if late"
 msgstr "Sleppa ef of seint"
 
-#: latecancel.cpp:26
+#: latecancel.cpp:28
 #, fuzzy, kde-format
 #| msgid "Auto-close window after this time"
 msgctxt "@option:check"
 msgid "Auto-close window after this time"
 msgstr "Loka gluggum sjálfkrafa eftir þennan tíma"
 
-#: latecancel.cpp:27
+#: latecancel.cpp:29
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after late-cancellation time"
 msgstr "Loka gluggum sjálfkrafa eftir þennan tíma"
 
-#: latecancel.cpp:34
+#: latecancel.cpp:36
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4555,7 +4555,7 @@ msgstr ""
 "Ef ekki valið, þá mun uppkallið verða framkvæmt við fyrsta mögulega "
 "tækifæri, hversu seint sem það kann að verða."
 
-#: latecancel.cpp:59
+#: latecancel.cpp:63
 #, fuzzy, kde-format
 #| msgctxt "Cancel if late by 10 minutes"
 #| msgid "Ca&ncel if late by"
@@ -4563,13 +4563,13 @@ msgctxt "@option:check Cancel if late by 10 minutes"
 msgid "Cancel if late by"
 msgstr "&Hætta við ef seinkun er"
 
-#: latecancel.cpp:60
+#: latecancel.cpp:64
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how late will cause the alarm to be canceled"
 msgstr "Skrifið inn texta uppkalls-skeytis.  Það mega vera margar línur."
 
-#: latecancel.cpp:75
+#: latecancel.cpp:81
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""

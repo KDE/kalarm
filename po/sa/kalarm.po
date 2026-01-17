@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-10 00:43+0000\n"
+"POT-Creation-Date: 2026-01-17 00:44+0000\n"
 "PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -4197,25 +4197,25 @@ msgctxt "@info"
 msgid "Error sending email"
 msgstr "ईमेल प्रेषयितुं त्रुटिः"
 
-#: latecancel.cpp:25
+#: latecancel.cpp:27
 #, kde-format
 msgctxt "@option:check"
 msgid "Cancel if late"
 msgstr "विलम्बेन रद्दं कुर्वन्तु"
 
-#: latecancel.cpp:26
+#: latecancel.cpp:28
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after this time"
 msgstr "अस्य समयस्य अनन्तरं विण्डो स्वयमेव बन्दं कुर्वन्तु"
 
-#: latecancel.cpp:27
+#: latecancel.cpp:29
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after late-cancellation time"
 msgstr "विलम्बेन रद्दीकरणसमयस्य अनन्तरं विण्डो स्वयमेव बन्दं कुर्वन्तु"
 
-#: latecancel.cpp:34
+#: latecancel.cpp:36
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4232,19 +4232,19 @@ msgstr ""
 "para><para>यदि अनिरीक्षितः अस्ति तर्हि अलार्मः तस्य निर्धारितसमयानन्तरं प्रथमे अवसरे "
 "प्रवर्तते , कियत् विलम्बं न कृत्वा।</para>"
 
-#: latecancel.cpp:59
+#: latecancel.cpp:63
 #, kde-format
 msgctxt "@option:check Cancel if late by 10 minutes"
 msgid "Cancel if late by"
 msgstr "यदि विलम्बेन रद्दं कुर्वन्तु"
 
-#: latecancel.cpp:60
+#: latecancel.cpp:64
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how late will cause the alarm to be canceled"
 msgstr "कियत् विलम्बेन अलार्मस्य रद्दीकरणं भविष्यति इति प्रविशन्तु"
 
-#: latecancel.cpp:75
+#: latecancel.cpp:81
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""

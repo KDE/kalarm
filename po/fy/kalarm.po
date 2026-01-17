@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-10 00:43+0000\n"
+"POT-Creation-Date: 2026-01-17 00:44+0000\n"
 "PO-Revision-Date: 2007-04-24 00:52+0200\n"
 "Last-Translator: Rinse de Vries <rinsedevries@kde.nl>\n"
 "Language-Team: Frysk <kde-i18n-fry@kde.org>\n"
@@ -4896,28 +4896,28 @@ msgctxt "@info"
 msgid "Error sending email"
 msgstr "Fout by it opslaan fan it alaarm"
 
-#: latecancel.cpp:25
+#: latecancel.cpp:27
 #, fuzzy, kde-format
 #| msgid "Cancel if late"
 msgctxt "@option:check"
 msgid "Cancel if late"
 msgstr "Annulearje, as it te let is"
 
-#: latecancel.cpp:26
+#: latecancel.cpp:28
 #, fuzzy, kde-format
 #| msgid "Auto-close window after this time"
 msgctxt "@option:check"
 msgid "Auto-close window after this time"
 msgstr "Finster tenei automatysk slute"
 
-#: latecancel.cpp:27
+#: latecancel.cpp:29
 #, fuzzy, kde-format
 #| msgid "Auto-close window after late-cancelation time"
 msgctxt "@option:check"
 msgid "Auto-close window after late-cancellation time"
 msgstr "Finster tenei automatysk slute nei 'annulearje as it te let is'"
 
-#: latecancel.cpp:34
+#: latecancel.cpp:36
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "If checked, the alarm will be canceled if it cannot be triggered within "
@@ -4943,7 +4943,7 @@ msgstr ""
 "At dizze opsje de-selektearre is, wurdt it alaarm útfierd sa gau as dit "
 "mooglik is nei it plande tiidstip."
 
-#: latecancel.cpp:59
+#: latecancel.cpp:63
 #, fuzzy, kde-format
 #| msgctxt "Cancel if late by 10 minutes"
 #| msgid "Ca&ncel if late by"
@@ -4951,14 +4951,14 @@ msgctxt "@option:check Cancel if late by 10 minutes"
 msgid "Cancel if late by"
 msgstr "&Annulearje at it te let is nei "
 
-#: latecancel.cpp:60
+#: latecancel.cpp:64
 #, fuzzy, kde-format
 #| msgid "Enter how late will cause the alarm to be canceled"
 msgctxt "@info:whatsthis"
 msgid "Enter how late will cause the alarm to be canceled"
 msgstr "Jou ynterfal wêrnei't it alaarm anulearre wurdt"
 
-#: latecancel.cpp:75
+#: latecancel.cpp:81
 #, fuzzy, kde-format
 #| msgid ""
 #| "Automatically close the alarm window after the expiry of the late-"

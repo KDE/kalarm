@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-10 00:43+0000\n"
+"POT-Creation-Date: 2026-01-17 00:44+0000\n"
 "PO-Revision-Date: 2007-10-28 14:03+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -4281,25 +4281,25 @@ msgctxt "@info"
 msgid "Error sending email"
 msgstr "Памылка паўторнага стварэння напамінку"
 
-#: latecancel.cpp:25
+#: latecancel.cpp:27
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Cancel if late"
 msgstr "Адмена пры немагчымасці паказу"
 
-#: latecancel.cpp:26
+#: latecancel.cpp:28
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after this time"
 msgstr "Аўтаматычна зачыніць напамінак"
 
-#: latecancel.cpp:27
+#: latecancel.cpp:29
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after late-cancellation time"
 msgstr "Зачыніць напамінак пасля заканчэння перыяду спазнення"
 
-#: latecancel.cpp:34
+#: latecancel.cpp:36
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4321,19 +4321,19 @@ msgstr ""
 "паказанага часу па-за залежнасцю ад таго, колькі часу прайшло з гэтага "
 "моманту."
 
-#: latecancel.cpp:59
+#: latecancel.cpp:63
 #, fuzzy, kde-format
 msgctxt "@option:check Cancel if late by 10 minutes"
 msgid "Cancel if late by"
 msgstr "Не паказваць напамінак з мінулым тэрмінам"
 
-#: latecancel.cpp:60
+#: latecancel.cpp:64
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how late will cause the alarm to be canceled"
 msgstr "Увядзіце час, па заканчэнні якога напамінак не будзе паказана"
 
-#: latecancel.cpp:75
+#: latecancel.cpp:81
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""

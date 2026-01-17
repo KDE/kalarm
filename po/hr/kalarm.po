@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-10 00:43+0000\n"
+"POT-Creation-Date: 2026-01-17 00:44+0000\n"
 "PO-Revision-Date: 2011-03-28 17:53+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -4253,26 +4253,26 @@ msgctxt "@info"
 msgid "Error sending email"
 msgstr "Greška pri pozivu KMail-a"
 
-#: latecancel.cpp:25
+#: latecancel.cpp:27
 #, fuzzy, kde-format
 #| msgid "Cancel if late"
 msgctxt "@option:check"
 msgid "Cancel if late"
 msgstr "Otkaži ako je zakasnio"
 
-#: latecancel.cpp:26
+#: latecancel.cpp:28
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after this time"
 msgstr ""
 
-#: latecancel.cpp:27
+#: latecancel.cpp:29
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after late-cancellation time"
 msgstr ""
 
-#: latecancel.cpp:34
+#: latecancel.cpp:36
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4291,14 +4291,14 @@ msgstr ""
 "Ako je opcija isključena, alarm će biti oglašen prvom prilikom poslije "
 "naznačenog vremena, bez obzira koliko kasni."
 
-#: latecancel.cpp:59
+#: latecancel.cpp:63
 #, fuzzy, kde-format
 #| msgid "Ca&ncel if late"
 msgctxt "@option:check Cancel if late by 10 minutes"
 msgid "Cancel if late by"
 msgstr "Otkaži ako jeza&kasnio"
 
-#: latecancel.cpp:60
+#: latecancel.cpp:64
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how late will cause the alarm to be canceled"
@@ -4306,7 +4306,7 @@ msgstr ""
 "Unesite ime ili URL tekstualnog datotekaa ili datotekaa slike koji treba "
 "prikazati."
 
-#: latecancel.cpp:75
+#: latecancel.cpp:81
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
