@@ -2,7 +2,7 @@
  *  kernelwakealarm.cpp  -  kernel alarm to wake from suspend
  *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2023 one-d-wide <one-d-wide@protonmail.com>
- *  SPDX-FileCopyrightText: 2023,2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2023-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -29,7 +29,7 @@ KernelWakeAlarm::KernelWakeAlarm()
 
     if (ret >= 0)
     {
-        qCWarning(KALARM_LOG) << "Wake from suspend: use kernel alarm timer";
+        qCWarning(KALARM_LOG) << "Wake from suspend: using kernel alarm timer";
         mTimerFd = ret;
         mAvailable = 2;
     }
@@ -39,10 +39,10 @@ KernelWakeAlarm::KernelWakeAlarm()
         switch (errno)
         {
             case EPERM:
-                qCWarning(KALARM_LOG) << "Wake from suspend: use RTC (no CAP_WAKE_ALARM capability)";
+                qCWarning(KALARM_LOG) << "Wake from suspend: using RTC (no CAP_WAKE_ALARM capability)";
                 break;
             case EINVAL:
-                qCWarning(KALARM_LOG) << "Wake from suspend: use RTC (CLOCK_REALTIME_ALARM not supported)";
+                qCWarning(KALARM_LOG) << "Wake from suspend: using RTC (CLOCK_REALTIME_ALARM not supported)";
                 break;
             default:
                 qCWarning(KALARM_LOG) << "KernelWakeAlarm: Error creating kernel alarm timer:" << strerror(errno);
