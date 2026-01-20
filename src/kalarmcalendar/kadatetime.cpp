@@ -2816,7 +2816,13 @@ QDebug operator<<(QDebug dbg, const KADateTime& dt)
     QDebugStateSaver saver(dbg);
     dbg.noquote() << dt.date().toString(QStringLiteral("yyyy-MM-dd"));
     if (!dt.isDateOnly())
-        dbg.noquote() << dt.time().toString(QStringLiteral("HH:mm:ss.zzz"));
+    {
+        // Omit seconds/milliseconds if zero.
+        static const QString format = QStringLiteral("HH:mm:ss.zzz");
+        const QTime t = dt.time();
+        const int n = t.msec() ? 12 : t.second() ? 8 : 5;
+        dbg.noquote() << dt.time().toString(QStringView(format.constData(), n));
+    }
     const KADateTime::Spec spec = dt.timeSpec();
     switch (spec.type())
     {

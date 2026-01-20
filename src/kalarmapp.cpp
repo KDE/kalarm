@@ -1874,7 +1874,7 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                     ||  nextDT > now.toTimeSpec(KADateTime::LocalZone))
                     {
                         // This alarm is definitely not due yet
-                        qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent: Alarm" << alarm.type() << "at" << nextDT.qDateTime() << ": not due";
+                        qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent: Alarm" << alarm.type() << "at" << nextDT << ": not due";
                         continue;
                     }
                 }
@@ -1895,7 +1895,7 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                         reschedule = event.excludedByWorkTimeOrHoliday(nextDT);
                     rescheduleWork = reschedule;
                     if (reschedule)
-                        qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent: Alarm" << alarm.type() << "at" << nextDT.qDateTime() << ": not during working hours";
+                        qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent: Alarm" << alarm.type() << "at" << nextDT << ": not during working hours";
                 }
                 if (!reschedule  &&  alarm.repeatAtLogin())
                 {

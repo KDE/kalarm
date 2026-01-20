@@ -98,7 +98,7 @@ bool KernelWakeAlarm::arm(const KAlarmCal::KADateTime& triggerTime)
         if (arm(triggerSeconds))
         {
             mTriggerTime = triggerSeconds;
-            qCDebug(KALARM_LOG) << "KernelWakeAlarm::arm: Kernel timer set to:" << triggerTime.qDateTime();
+            qCDebug(KALARM_LOG) << "KernelWakeAlarm::arm: Kernel timer set to:" << triggerTime;
             return true;
         }
     }
