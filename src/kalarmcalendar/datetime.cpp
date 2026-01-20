@@ -3,7 +3,7 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -378,6 +378,12 @@ bool operator<(const DateTime& dt1, const DateTime& dt2)
         return dt1.d->mDateTime < dt;
     }
     return dt1.d->mDateTime < dt2.d->mDateTime;
+}
+
+QDebug operator<<(QDebug dbg, const DateTime& dt)
+{
+    dbg << dt.kDateTime();
+    return dbg;
 }
 
 } // namespace KAlarmCal

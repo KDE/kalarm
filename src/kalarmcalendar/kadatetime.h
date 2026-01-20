@@ -22,6 +22,7 @@
 #include <QSharedDataPointer>
 
 class QDataStream;
+class QDebug;
 
 namespace KAlarmCal
 {
@@ -1502,15 +1503,17 @@ private:
     QSharedDataPointer<KADateTimePrivate> d;
 };
 
+KALARMCAL_EXPORT QDebug operator<<(QDebug dbg, const KADateTime& dt);
+
 /** Write @p spec to the datastream @p out, in binary format. */
 KALARMCAL_EXPORT QDataStream& operator<<(QDataStream& out, const KADateTime::Spec& spec);
 /** Read a KADateTime::Spec object into @p spec from @p in, in binary format. */
 KALARMCAL_EXPORT QDataStream& operator>>(QDataStream& in, KADateTime::Spec& spec);
 
-/** Write @p dateTime to the datastream @p out, in binary format. */
-KALARMCAL_EXPORT QDataStream& operator<<(QDataStream& out, const KADateTime& dateTime);
-/** Read a KADateTime object into @p dateTime from @p in, in binary format. */
-KALARMCAL_EXPORT QDataStream& operator>>(QDataStream& in, KADateTime& dateTime);
+/** Write @p dt to the datastream @p out, in binary format. */
+KALARMCAL_EXPORT QDataStream& operator<<(QDataStream& out, const KADateTime& dt);
+/** Read a KADateTime object into @p dt from @p in, in binary format. */
+KALARMCAL_EXPORT QDataStream& operator>>(QDataStream& in, KADateTime& dt);
 
 } // namespace KAlarmCal
 

@@ -2811,6 +2811,39 @@ KADateTime KADateTime::realCurrentLocalDateTime()
     return KADateTime(QDateTime::currentDateTime(), Spec(QTimeZone::systemTimeZone()));
 }
 
+QDebug operator<<(QDebug dbg, const KADateTime& dt)
+{
+    QDebugStateSaver saver(dbg);
+    dbg.noquote() << dt.date().toString(QStringLiteral("yyyy-MM-dd"));
+    if (!dt.isDateOnly())
+        dbg.noquote() << dt.time().toString(QStringLiteral("HH:mm:ss.zzz"));
+    const KADateTime::Spec spec = dt.timeSpec();
+    switch (spec.type())
+    {
+        case KADateTime::UTC:
+            dbg.noquote() << "UTC";
+            break;
+        case KADateTime::OffsetFromUTC:
+            dbg.noquote() << spec.qTimeZone().id();
+            break;
+        case KADateTime::TimeZone:
+        {
+            const QTimeZone tz = spec.qTimeZone();
+            const QString abbr = tz.abbreviation(dt.qDateTime());
+            if (!abbr.isEmpty())
+                dbg.noquote() << abbr;
+            dbg.noquote() << tz.id();
+            break;
+        }
+        case KADateTime::LocalZone:
+            break;
+        case KADateTime::Invalid:
+        default:
+            break;
+    }
+    return dbg;
+}
+
 QDataStream& operator<<(QDataStream& s, const KADateTime& dt)
 {
     s << dt.date() << dt.time() << dt.timeSpec() << quint8(dt.isDateOnly() ? 0x01 : 0x00);
