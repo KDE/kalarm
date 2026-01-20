@@ -8,7 +8,7 @@
 # Ilpo Kantonen <ilpo@iki.fi>, 2005, 2006.
 # Mikko Piippo <piippo@cc.helsinki.fi>, 2007, 2008.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2010, 2012, 2013, 2014, 2015, 2016.
-# SPDX-FileCopyrightText: 2011, 2012, 2013, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Tommi Nieminen <translator@legisign.org>
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Tommi Nieminen <translator@legisign.org>
 # Niklas Laxström <niklas.laxstrom+kdetrans@gmail.com>, 2012.
 # Jiri Grönroos <jiri.gronroos+kde@iki.fi>, 2012.
 #
@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-07 02:40+0000\n"
-"PO-Revision-Date: 2025-05-29 15:08+0300\n"
+"PO-Revision-Date: 2026-01-05 15:51+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1897,7 +1897,7 @@ msgstr "Oletuskomento, joka suoritetaan ennen hälytyksen näyttämistä"
 #, kde-format
 msgctxt "@label"
 msgid "Execute pre-alarm action for deferred alarms"
-msgstr "Suorita esitoiminto viivästetyille hälytyksille"
+msgstr "Suorita viivästettyjen hälytysten esitoiminto"
 
 #. i18n: ectx: whatsthis, entry (DefaultExecPreActionOnDeferral), group (Defaults)
 #: data/kalarmconfig.kcfg:425
@@ -7293,13 +7293,13 @@ msgstr "Hälytysmallit"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7521,12 +7521,7 @@ msgid "Choose Calendar"
 msgstr "Valitse kalenteri"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7536,13 +7531,13 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para>Kalenterista <resource>%1</resource> on tehty vain luettava. Se oli "
-"oletuskalenteri seuraaville: %2</para><para>Valitse uudet oletuskalenterit.</"
-"para>"
+"<para>Kalenterista <resource>%2</resource> on tehty vain luettava.</"
+"para><para>Se oli oletuskalenteri seuraavalle: %3</para><para>Valitse uudet "
+"oletuskalenteri.</para>"
 msgstr[1] ""
-"<para>Kalenterista <resource>%1</resource> on tehty vain luettava. Se oli "
-"oletuskalenteri seuraaville: %2</para><para>Valitse uudet oletuskalenterit.</"
-"para>"
+"<para>Kalenterista <resource>%2</resource> on tehty vain luettava.</"
+"para><para>Se oli oletuskalenteri seuraaville: %3</para><para>Valitse uudet "
+"oletuskalenterit.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7869,27 +7864,22 @@ msgstr ""
 "hälytykset on asetettu säilytettäviksi."
 
 #: resourceselector.cpp:253
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>Se sisältää myös: %1</para>"
+msgstr "Se sisältää myös: %1"
 
 # Yksi kalenteri voi ilmeisesti kuulua useampaan kalenteriluetteloon, ja jokaista luetteloa vastaa jokin hälytystyyppi. Vahvistus johtuu siitä, että kalenteri kuuluu useampaan tällaiseen luetteloon.
 #: resourceselector.cpp:254
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> on oletuskalenteri kohteelle: %2</para>"
-"%3<para>Haluatko varmasti poistaa sen kaikista kalenteriluetteloista?</para>"
+"<para><resource>%1</resource> on oletuskalenteri kohteelle: %2</para><para>"
+"%3</para><para>Haluatko varmasti poistaa sen kaikista kalenteriluetteloista?"
+"</para>"
 
 #: resourceselector.cpp:258
 #, kde-kuit-format
@@ -7903,11 +7893,7 @@ msgstr ""
 
 # Yksi kalenteri voi ilmeisesti kuulua useampaan kalenteriluetteloon, ja jokaista luetteloa vastaa jokin hälytystyyppi. Vahvistus johtuu siitä, että kalenteri kuuluu useampaan tällaiseen luetteloon.
 #: resourceselector.cpp:261
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
