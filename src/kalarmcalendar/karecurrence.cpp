@@ -3,7 +3,7 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -1347,8 +1347,10 @@ QDateTime msecs0(const KAlarmCal::KADateTime& kdt)
 {
     QDateTime qdt = kdt.qDateTime();
     const QTime t = qdt.time();
-    qdt.setTime(QTime(t.hour(), t.minute(), t.second()));
-    return qdt;
+    // Note that setting the time component of qdt can change its daylight savings
+    // setting, so don't use:
+    //    qdt.setTime(QTime(t.hour(), t.minute(), t.second()));
+    return t.msec() ? qdt.addMSecs(-t.msec()) : qdt;
 }
 
 }

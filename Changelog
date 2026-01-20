@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 3.12.2 (KDE Gear 25.12.2) --- 16 January 2026 ===
+=== Version 3.12.2 (KDE Gear 25.12.2) --- 20 January 2026 ===
 * Fix hang evaluating recurring date-only alarms when start-of-day time is non-zero [KDE Bug 514609]
+* Fix hang evaluating next recurrence time for time zones with daylight savings time [KDE Bug 514804]
 
 === Version 3.12.1 (KDE Gear 25.12.1) --- 2 December 2025 ===
 * Prevent multiple Defer Alarm dialogs for the same event [KDE Bug 512828]
