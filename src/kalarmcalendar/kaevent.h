@@ -985,6 +985,28 @@ public:
      */
     bool skip(int count);
 
+    /** Set a time up until when the event should be skipped.
+     *  The event will resume normal activation at the first recurrence
+     *  or sub-repetition on or after this time.
+     *  Any reminder for the first activation after skipping will be
+     *  output even if this is before the time specified.
+     *  Skipping does not affect any outstanding deferral of the alarm.
+     *
+     *  Note that the date/time that triggering of the event will resume
+     *  is set when this function is called. If the alarm is
+     *  subject to working hours or holiday restrictions and a change is
+     *  later made to working hours or holiday settings, the date/time
+     *  that triggering of the event will resume will not be recalculated
+     *  to comply with the new settings.
+     *
+     *  @param dt  date/time on or after which skipping will cease.
+     *             If invalid, skipping will be cancelled.
+     *  @return true if the event is now skipping, false if not.
+     *
+     *  @see cancelSkip(), skipping(), skipCount(), skipDateTime()
+     */
+    bool skip(const KADateTime& dt);
+
     /** Cancel any skipping which is currently set.
      *  @see skip()
      */

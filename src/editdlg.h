@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -133,6 +133,7 @@ private Q_SLOTS:
     void            slotRecurTypeChange(int repeatType);
     void            slotRecurFrequencyChange();
     void            slotEditDeferral();
+    void            slotCancelSkip();
     void            slotShowMainPage();
     void            slotShowRecurrenceEdit();
     void            slotAnyTimeToggled(bool anyTime);
@@ -177,8 +178,12 @@ private:
     TimeSpinBox*        mTemplateTimeAfter {nullptr};    // the specified offset from the current time
     TimeEdit*           mTemplateTime {nullptr};         // the alarm time which is specified
     QGroupBox*          mDeferGroup {nullptr};
+    QLabel*             mDeferLabel {nullptr};
     QLabel*             mDeferTimeLabel {nullptr};
     QPushButton*        mDeferChangeButton {nullptr};
+    QLabel*             mSkipLabel {nullptr};
+    QLabel*             mSkipTimeLabel {nullptr};
+    QPushButton*        mSkipCancelButton {nullptr};
 
     QLineEdit*          mName {nullptr};
     AlarmTimeWidget*    mTimeWidget {nullptr};
@@ -194,18 +199,21 @@ private:
 
     QString             mAlarmMessage;         // message text/file name/command/email message
     DateTime            mAlarmDateTime;
-    DateTime            mDeferDateTime;
+    DateTime            mDeferDateTime {};
+    DateTime            mSkipDateTime {};
     bool                mUseResourceEventId;   // whether to use mResourceEventId
     QString             mResourceEventId;      // if non-null, save alarm in resource containing this event ID
     Resource            mResource;             // resource to save event into, or invalid
-    int                 mDeferGroupHeight {0}; // height added by deferred time widget
+    int                 mDeferGroupHeight {0}; // height added by deferred/skipped time widget
     int                 mDesktop;              // virtual desktop to display the dialog in
     QString             mEventId;              // UID of event being edited, or blank for new event
     bool                mTemplate;             // editing an alarm template
     bool                mNewAlarm;             // editing a new alarm
     bool                mExpiredRecurrence;    // initially a recurrence which has expired
     mutable bool        mChanged;              // controls other than deferral have changed since dialog was displayed
-    mutable bool        mOnlyDeferred;         // the only change made in the dialog was to the existing deferral
+    mutable bool        mTimeChanged;          // start time or recurrence has changed since dialog was displayed
+    mutable bool        mDeferChanged;         // the existing deferral was changed in the dialog
+    mutable bool        mSkipChanged;          // skipping was changed in the dialog
     bool                mDesiredReadOnly;      // the specified read-only status of the dialog
     bool                mReadOnly;             // the actual read-only status of the dialog
     bool                mShowingMore {true};   // the More Options button has been clicked
@@ -219,6 +227,7 @@ private:
     QString             mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCmdCommandEdit/mEmailMessageEdit value
     KADateTime          mSavedDateTime;         // mTimeWidget value
     KADateTime          mSavedDeferTime;        // mDeferDateTime value
+    KADateTime          mSavedSkipTime;         // mSkipDateTime value
     int                 mSavedRecurrenceType;   // RecurrenceEdit::RepeatType value
     int                 mSavedLateCancel;       // mLateCancel value
     bool                mSavedNoInhibit;        // mNoInhibit status

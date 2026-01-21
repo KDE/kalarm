@@ -265,18 +265,32 @@ void EditAlarmDlg::init(const KAEvent& event)
     if (!mTemplate)
     {
         // Deferred date/time: visible only for a deferred recurring event.
-        mDeferGroup = new QGroupBox(i18nc("@title:group", "Deferred Alarm"), mainPage);
+        mDeferGroup = new QGroupBox(i18nc("@title:group", "Deferred / Skipped Alarm"), mainPage);
         topLayout->addWidget(mDeferGroup);
-        auto hlayout = new QHBoxLayout(mDeferGroup);
-        QLabel* label = new QLabel(i18nc("@label", "Deferred to:"), mDeferGroup);
-        hlayout->addWidget(label);
+        auto gridLayout = new QGridLayout(mDeferGroup);
+        mDeferLabel = new QLabel(i18nc("@label", "Deferred to:"), mDeferGroup);
+        gridLayout->addWidget(mDeferLabel, 0, 0, Qt::AlignLeft);
         mDeferTimeLabel = new QLabel(mDeferGroup);
-        hlayout->addWidget(mDeferTimeLabel);
+        gridLayout->addWidget(mDeferTimeLabel, 0, 1, Qt::AlignLeft);
 
         mDeferChangeButton = new QPushButton(i18nc("@action:button", "Change..."), mDeferGroup);
         connect(mDeferChangeButton, &QPushButton::clicked, this, &EditAlarmDlg::slotEditDeferral);
         mDeferChangeButton->setWhatsThis(i18nc("@info:whatsthis", "Change the alarm's deferred time, or cancel the deferral"));
-        hlayout->addWidget(mDeferChangeButton);
+        gridLayout->addWidget(mDeferChangeButton, 0, 2, Qt::AlignRight);
+
+        // Skip date/time: visible only for a skipped recurring event.
+        mSkipLabel = new QLabel(i18nc("@label When the alarm will next trigger after being skipped", "Skipping until:"), mDeferGroup);
+        gridLayout->addWidget(mSkipLabel, 1, 0, Qt::AlignLeft);
+        mSkipTimeLabel = new QLabel(mDeferGroup);
+        mSkipTimeLabel->setToolTip(QLatin1String("<qt>")
+                                 + i18nc("@info:tooltip", "The next time the alarm will trigger, when it will resume normal activation.")
+                                 + QLatin1String("</qt>"));
+        gridLayout->addWidget(mSkipTimeLabel, 1, 1, Qt::AlignLeft);
+
+        mSkipCancelButton = new QPushButton(i18nc("@action:button", "Cancel skip"), mDeferGroup);
+        connect(mSkipCancelButton, &QPushButton::clicked, this, &EditAlarmDlg::slotCancelSkip);
+        mSkipCancelButton->setWhatsThis(i18nc("@info:whatsthis", "Cancel skipping of the alarm"));
+        gridLayout->addWidget(mSkipCancelButton, 1, 2, Qt::AlignRight);
     }
 
     auto hlayout = new QHBoxLayout();
@@ -479,7 +493,9 @@ void EditAlarmDlg::initValues(const KAEvent& event)
     setReadOnly(mDesiredReadOnly);
 
     mChanged           = false;
-    mOnlyDeferred      = false;
+    mTimeChanged       = false;
+    mDeferChanged      = false;
+    mSkipChanged       = false;
     mExpiredRecurrence = false;
     mLateCancel->allowAutoClose(false);
     bool deferGroupVisible = false;
@@ -489,12 +505,42 @@ void EditAlarmDlg::initValues(const KAEvent& event)
         if (mName)
             mName->setText(event.name());
         bool recurs = event.recurs();
-        if ((recurs || event.repetition())  &&  !mTemplate  &&  event.deferred())
+        if (!mTemplate  &&  recurs)
         {
-            deferGroupVisible = true;
-            mDeferDateTime = event.deferDateTime();
-            mDeferTimeLabel->setText(mDeferDateTime.formatLocale());
-            mDeferGroup->show();
+            if (event.deferred())
+            {
+                deferGroupVisible = true;
+                mDeferDateTime = event.deferDateTime();
+                mDeferTimeLabel->setText(mDeferDateTime.formatLocale());
+                mDeferLabel->show();
+                mDeferTimeLabel->show();
+                if (!mReadOnly)
+                    mDeferChangeButton->show();
+            }
+            else
+            {
+                mDeferLabel->hide();
+                mDeferTimeLabel->hide();
+                mDeferChangeButton->hide();
+            }
+            if (event.skipping())
+            {
+                deferGroupVisible = true;
+                mSkipDateTime = event.skipDateTime();
+                mSkipTimeLabel->setText(mSkipDateTime.formatLocale());
+                mSkipLabel->show();
+                mSkipTimeLabel->show();
+                if (!mReadOnly)
+                    mSkipCancelButton->show();
+            }
+            else
+            {
+                mSkipLabel->hide();
+                mSkipTimeLabel->hide();
+                mSkipCancelButton->hide();
+            }
+            if (deferGroupVisible)
+                mDeferGroup->show();
         }
         if (mTemplate)
         {
@@ -664,6 +710,13 @@ void EditAlarmDlg::setReadOnly(bool readOnly)
         else
             mDeferChangeButton->show();
     }
+    if (mSkipCancelButton)
+    {
+        if (readOnly)
+            mSkipCancelButton->hide();
+        else
+            mSkipCancelButton->show();
+    }
     if (mNoInhibit)
         mNoInhibit->setReadOnly(readOnly);
     if (mWakeFromSuspend)
@@ -701,22 +754,25 @@ void EditAlarmDlg::saveState(const KAEvent* event)
         mSavedShowInKorganizer = mShowInKorganizer->isChecked();
     mSavedRecurrenceType = mRecurrenceEdit->repeatType();
     mSavedDeferTime      = mDeferDateTime.kDateTime();
+    mSavedSkipTime       = mSkipDateTime.kDateTime();
 }
 
 /******************************************************************************
 * Check whether any of the controls has changed state since the dialog was
 * first displayed.
-* Reply = true if any non-deferral controls have changed, or if it's a new event.
-*       = false if no non-deferral controls have changed. In this case,
-*         mOnlyDeferred indicates whether deferral controls may have changed.
+* Reply = true if any non-deferral/skip controls have changed, or if it's a new event.
+*       = false if no non-deferral/skip controls have changed. In this case,
+*         mDeferChanged indicates whether deferral controls may have changed.
+*         mSkipChanged indicates whether skipping controls may have changed.
+*         mTimeChanged indicates whether the start time or recurrence has changed.
 */
 bool EditAlarmDlg::stateChanged() const
 {
-    mChanged      = true;
-    mOnlyDeferred = false;
+    mChanged = true;
+    mTimeChanged = false;
+    mDeferChanged = mSavedDeferTime != mDeferDateTime.kDateTime();
+    mSkipChanged  = mSavedSkipTime != mSkipDateTime.kDateTime();
     if (!mSavedEvent)
-        return true;
-    if (mName  &&  mSavedName != mName->text())
         return true;
     QString textFileCommandMessage;
     checkText(textFileCommandMessage, false);
@@ -731,21 +787,26 @@ bool EditAlarmDlg::stateChanged() const
     {
         const KADateTime dt = mTimeWidget->getDateTime(false, false);
         if (mSavedDateTime.timeSpec() != dt.timeSpec()  ||  mSavedDateTime != dt)
+        {
+            mTimeChanged = true;
             return true;
+        }
     }
-    if (mSavedLateCancel       != mLateCancel->minutes()
+    if (mSavedRecurrenceType   != mRecurrenceEdit->repeatType()
+    ||  mRecurrenceEdit->stateChanged())
+    {
+        mTimeChanged = true;
+        return true;
+    }
+    if ((mName  &&  mSavedName != mName->text())
+    ||  mSavedLateCancel != mLateCancel->minutes()
     ||  (mNoInhibit && mSavedNoInhibit != mNoInhibit->isChecked())
     ||  (mWakeFromSuspend && mSavedWakeFromSuspend != mWakeFromSuspend->isChecked())
     ||  (mShowInKorganizer && mSavedShowInKorganizer != mShowInKorganizer->isChecked())
-    ||  textFileCommandMessage != mSavedTextFileCommandMessage
-    ||  mSavedRecurrenceType   != mRecurrenceEdit->repeatType())
+    ||  textFileCommandMessage != mSavedTextFileCommandMessage)
         return true;
     if (type_stateChanged())
         return true;
-    if (mRecurrenceEdit->stateChanged())
-        return true;
-    if (mSavedEvent  &&  mSavedEvent->deferred())
-        mOnlyDeferred = true;
     mChanged = false;
     return false;
 }
@@ -760,13 +821,21 @@ void EditAlarmDlg::contentsChanged()
     // Don't do anything if it's a new alarm or we're still initialising
     // (i.e. mSavedEvent null).
     if (mSavedEvent  &&  mButtonBox  &&  mButtonBox->button(QDialogButtonBox::Ok))
-        mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(stateChanged() || mDeferDateTime.kDateTime() != mSavedDeferTime);
+    {
+        mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(stateChanged() || mDeferChanged || mSkipChanged);
+        // If the start time or recurrence details have changed, hide the
+        // skip time to indicate to the user that any skip will be cancelled.
+        if (mTimeChanged)
+            mSkipTimeLabel->hide();
+        else if (mSkipDateTime.isValid())
+            mSkipTimeLabel->show();
+    }
 }
 
 /******************************************************************************
 * Get the currently entered dialog data.
 * The data is returned in the supplied KAEvent instance.
-* Reply = false if the only change has been to an existing deferral.
+* Reply = false if the only change has been to an existing deferral or skip.
 */
 bool EditAlarmDlg::getEvent(KAEvent& event, Resource& resource)
 {
@@ -778,9 +847,9 @@ bool EditAlarmDlg::getEvent(KAEvent& event, Resource& resource)
         return true;
     }
 
-    // Only the deferral time may have changed
+    // Only the deferral or skip time may have changed
     event = *mSavedEvent;
-    if (mOnlyDeferred)
+    if (mDeferChanged)
     {
         // Just modify the original event, to avoid expired recurring events
         // being returned as rubbish.
@@ -788,6 +857,12 @@ bool EditAlarmDlg::getEvent(KAEvent& event, Resource& resource)
             event.defer(mDeferDateTime, event.reminderDeferral(), false);
         else
             event.cancelDefer();
+    }
+    if (mSkipChanged  ||  mTimeChanged)
+    {
+        // Just modify the original event, to avoid expired recurring events
+        // being returned as rubbish.
+        event.cancelSkip();
     }
     return false;
 }
@@ -845,6 +920,8 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
                 if (deferral)
                     event.defer(mDeferDateTime, deferReminder, false);
             }
+            if (mSkipDateTime.isValid()  &&  mSkipDateTime > mAlarmDateTime  &&  !mTimeChanged)
+                event.skip(mSkipDateTime.kDateTime());
         }
         if (mTemplate)
         {
@@ -1015,10 +1092,11 @@ bool EditAlarmDlg::validate()
 {
     if (!stateChanged())
     {
-        // No changes have been made except possibly to an existing deferral
-        if (!mOnlyDeferred)
+        // No changes have been made except possibly to an existing deferral or skip.
+        const bool ok = mDeferChanged || mSkipChanged;
+        if (!ok)
             reject();
-        return mOnlyDeferred;
+        return ok;
     }
     RecurrenceEdit::RepeatType recurType = mRecurrenceEdit->repeatType();
     if (mTimeWidget
@@ -1050,7 +1128,7 @@ bool EditAlarmDlg::validate()
         mAlarmDateTime = mTimeWidget->getDateTime(!timedRecurrence, false, &errWidget);
         if (errWidget)
         {
-            // It's more than just an existing deferral being changed, so the time matters
+            // It's more than just an existing deferral or skip being changed, so the time matters
             mTabs->setCurrentIndex(mMainPageIndex);
             errWidget->setFocus();
             mTimeWidget->getDateTime();   // display the error message now
@@ -1357,7 +1435,7 @@ void EditAlarmDlg::slotEditDeferral()
     if (limit)
     {
         // Don't allow deferral past the next recurrence
-        int reminderTime = mReminder ? mReminder->minutes() : 0;
+        const int reminderTime = mReminder ? mReminder->minutes() : 0;
         if (reminderTime)
         {
             DateTime remindTime = start.addMins(-reminderTime);
@@ -1372,6 +1450,17 @@ void EditAlarmDlg::slotEditDeferral()
         mDeferTimeLabel->setText(mDeferDateTime.isValid() ? mDeferDateTime.formatLocale() : QString());
         contentsChanged();
     }
+}
+
+/******************************************************************************
+* Called when the Cancel skip button is clicked.
+*/
+void EditAlarmDlg::slotCancelSkip()
+{
+    mSkipDateTime = DateTime();
+    mSkipTimeLabel->setText(QString());
+    contentsChanged();
+    mSkipCancelButton->setEnabled(false);
 }
 
 /******************************************************************************

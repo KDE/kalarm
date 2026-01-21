@@ -1514,15 +1514,16 @@ void editAlarm(KAEvent& event, QWidget* parent)
         }
         KAEvent newEvent;
         Resource resource;
-        bool changeDeferral = !editDlg->getEvent(newEvent, resource);
+        bool changeDeferSkip = !editDlg->getEvent(newEvent, resource);
 
         // Update the event in the displays and in the calendar file
         const Undo::Event undo(event, resource);
-        if (changeDeferral)
+        if (changeDeferSkip)
         {
-            // The only change has been to an existing deferral
+            // The only change has been to an existing deferral or skip
             if (updateEvent(newEvent, editDlg, true, true) != UPDATE_OK)   // keep the same event ID
                 return;   // failed to save event
+            MainWindow::skipCancelled();    // notify possible skip cancellation, to update menu text
         }
         else
         {

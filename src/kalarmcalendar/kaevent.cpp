@@ -210,6 +210,7 @@ public:
     void               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
     void               cancelDefer();
     bool               skip(int count);
+    bool               skip(const KADateTime&);
     int                skipCount() const;
     DateTime           skipDateTime() const;
     bool               setDisplaying(const KAEventPrivate&, KAAlarm::Type, ResourceId, const KADateTime& dt, bool showEdit, bool showDefer);
@@ -2552,11 +2553,41 @@ bool KAEventPrivate::skip(int count)
                 next.setDateOnly(true);
             }
             else
-                next.addSecs(1);
+                next.addSecs(60);
             break;
         }
         last = next;
         pre = next.effectiveKDateTime();
+    }
+
+    setSkipTime(next);
+    return mSkipTime.isValid();
+}
+
+/******************************************************************************
+* Set a time for the event to be skipped until.
+*/
+bool KAEvent::skip(const KADateTime& dt)
+{
+    return d->skip(dt);
+}
+bool KAEventPrivate::skip(const KADateTime& dt)
+{
+    if (mCategory != CalEvent::ACTIVE  ||  !mEnabled  ||  checkRecur() == KARecurrence::NO_RECUR
+    ||  !dt.isValid()
+    ||  dt <= KADateTime::currentDateTime(mStartDateTime.timeSpec()))
+    {
+        setSkipTime();
+        return false;
+    }
+
+    // Find the next occurrence after the skip.
+    DateTime next;
+    const KADateTime pre = dt.isDateOnly() ? dt.addDays(-1) : dt.addSecs(-60);
+    if (nextDateTime(pre, next, KAEvent::NextTypes(KAEvent::NextRepeat | KAEvent::NextWorkHoliday)) == KAEvent::TriggerType::None)
+    {
+        setSkipTime();   // no occurrences remain, so exit with skip time clear
+        return false;
     }
 
     setSkipTime(next);

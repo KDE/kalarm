@@ -64,6 +64,7 @@ public:
     QMenu*             resourceContextMenu();
     bool               eventFilter(QObject*, QEvent*) override;
 
+    static void        skipCancelled();
     static void        executeDragEnterEvent(QDragEnterEvent*);
     static void        executeDropEvent(MainWindow*, QDropEvent*);
     static void        closeAll();
@@ -146,7 +147,7 @@ private:
     void            initActions();
     void            selectionCleared();
     void            setEnableText(bool enable);
-    void            setSkipText(bool skip);
+    void            setSkipText();
     void            arrangePanel();
     void            setSplitterSizes();
     void            initUndoMenu(QMenu*, Undo::Type);

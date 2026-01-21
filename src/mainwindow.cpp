@@ -758,7 +758,8 @@ QMenu* MainWindow::resourceContextMenu()
 }
 
 /******************************************************************************
-* Called when the New button is clicked to edit a new alarm to add to the list.
+* Called when the New menu action is selected to edit a new alarm to add to the
+* list.
 */
 void MainWindow::slotNew(EditAlarmDlg::Type type)
 {
@@ -775,7 +776,7 @@ void MainWindow::slotNewFromTemplate(const KAEvent& tmplate)
 }
 
 /******************************************************************************
-* Called when the New Template button is clicked to create a new template
+* Called when the New Template menu action is selected to create a new template
 * based on the currently selected alarm.
 */
 void MainWindow::slotNewTemplate()
@@ -786,8 +787,8 @@ void MainWindow::slotNewTemplate()
 }
 
 /******************************************************************************
-* Called when the Copy button is clicked to edit a copy of an existing alarm,
-* to add to the list.
+* Called when the Copy menu action is selected to edit a copy of an existing
+* alarm, to add to the list.
 */
 void MainWindow::slotCopy()
 {
@@ -797,8 +798,8 @@ void MainWindow::slotCopy()
 }
 
 /******************************************************************************
-* Called when the Modify button is clicked to edit the currently highlighted
-* alarm in the list.
+* Called when the Modify menu action is selected to edit the currently
+* highlighted alarm in the list.
 */
 void MainWindow::slotModify()
 {
@@ -808,8 +809,8 @@ void MainWindow::slotModify()
 }
 
 /******************************************************************************
-* Called when the Delete button is clicked to delete the currently highlighted
-* alarms in the list.
+* Called when the Delete menu action is selected to delete the currently
+* highlighted alarms in the list.
 */
 void MainWindow::slotDelete(bool force)
 {
@@ -856,7 +857,7 @@ void MainWindow::slotDelete(bool force)
 }
 
 /******************************************************************************
-* Called when the Reactivate button is clicked to reinstate the currently
+* Called when the Reactivate menu action is selected to reinstate the currently
 * highlighted archived alarms in the list.
 */
 void MainWindow::slotReactivate()
@@ -882,8 +883,8 @@ void MainWindow::slotReactivate()
 }
 
 /******************************************************************************
-* Called when the Enable/Disable button is clicked to enable or disable the
-* currently highlighted alarms in the list.
+* Called when the Enable/Disable menu action is selected to enable or disable
+* the currently highlighted alarms in the list.
 */
 void MainWindow::slotEnable()
 {
@@ -898,7 +899,7 @@ void MainWindow::slotEnable()
 }
 
 /******************************************************************************
-* Called when the Skip/Cancel Skip button is clicked to enable or disable
+* Called when the Skip/Cancel Skip menu action is selected to enable or disable
 * skipping the currently highlighted alarms in the list.
 */
 void MainWindow::slotSkip()
@@ -919,7 +920,7 @@ void MainWindow::slotSkip()
     for (const KAEvent& event : events)
         eventCopies += event;
     KAlarm::skipEvents(eventCopies, skipCount, this);
-    slotSelection();   // update Skip/Cancel Skip action text
+    setSkipText();   // update Skip/Cancel Skip action text
 }
 
 /******************************************************************************
@@ -1622,7 +1623,7 @@ void MainWindow::slotCalendarStatusChanged()
 void MainWindow::slotSelection()
 {
     // Find which events have been selected
-    QList<KAEvent> events = mListView->selectedEvents();
+    const QList<KAEvent> events = mListView->selectedEvents();
     const int evCount = events.count();
     if (!evCount)
     {
@@ -1631,18 +1632,13 @@ void MainWindow::slotSelection()
         return;
     }
 
-    // Find whether there are any writable resources
-    bool active = mActionNew->isEnabled();
-
+    bool active = mActionNew->isEnabled();   // find whether there are any writable resources
     bool readOnly = false;
     bool allArchived = true;
     bool enableReactivate = true;
     bool enableEnableDisable = true;
     bool enableEnable = false;
     bool enableDisable = false;
-    bool enableSkipUnskip = true;
-    bool enableSkip = false;
-    bool enableUnskip = false;
     const KADateTime now = KADateTime::currentUtcDateTime();
     for (int i = 0;  i < evCount;  ++i)
     {
@@ -1668,18 +1664,6 @@ void MainWindow::slotSelection()
                     enableDisable = true;
             }
         }
-        if (enableSkipUnskip)
-        {
-            if (expired  ||  !event.enabled()  ||  !event.recurs())
-                enableSkipUnskip = enableUnskip = enableSkip = false;
-            else
-            {
-                if (!enableUnskip  &&  event.skipping())
-                    enableUnskip = true;
-                if (!enableSkip  &&  !event.skipping())
-                    enableSkip = true;
-            }
-        }
     }
 
     qCDebug(KALARM_LOG) << "MainWindow::slotSelection: true";
@@ -1693,9 +1677,7 @@ void MainWindow::slotSelection()
     mActionEnable->setEnabled(active && !readOnly && (enableEnable || enableDisable));
     if (enableEnable || enableDisable)
         setEnableText(enableEnable);
-    mActionSkip->setEnabled(active && !readOnly && (enableSkip || enableUnskip));
-    if (enableSkip || enableUnskip)
-        setSkipText(enableSkip);
+    setSkipText();
 
     Q_EMIT selectionChanged();
 }
@@ -1711,6 +1693,7 @@ void MainWindow::slotContextMenuRequested(const QPoint& globalPos)
     // toolbar is edited).
     if (!mContextMenu)
         mContextMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("listContext"), this));
+    setSkipText();
     mContextMenu->popup(globalPos);
 }
 
@@ -1727,7 +1710,7 @@ void MainWindow::selectionCleared()
     mActionDelete->setEnabled(false);
     mActionReactivate->setEnabled(false);
     mActionEnable->setEnabled(false);
-    mActionSkip->setEnabled(false);
+    setSkipText();
 }
 
 /******************************************************************************
@@ -1740,12 +1723,63 @@ void MainWindow::setEnableText(bool enable)
 }
 
 /******************************************************************************
+* To be called when skipping has been cancelled for one or more alarms, to
+* change the skip menu text.
+*/
+void MainWindow::skipCancelled()
+{
+    MainWindow* main = mainMainWindow();
+    if (main)
+        main->setSkipText();
+}
+
+/******************************************************************************
 * Set the text of the Skip/Cancel Skip menu action.
 */
-void MainWindow::setSkipText(bool skip)
+void MainWindow::setSkipText()
 {
-    mActionSkipSkip = skip;
-    mActionSkip->setText(skip ? i18nc("@action", "Skip...") : i18nc("@action", "Cancel skip"));
+    bool setSkip = true;   // default text = "Skip..."
+    bool enableAction = mActionNew->isEnabled();   // find whether there are any writable resources
+    if (enableAction)
+    {
+        // Find which events have been selected
+        const QList<KAEvent> events = mListView->selectedEvents();
+        const int evCount = events.count();
+        if (!evCount)
+            enableAction = false;
+        else
+        {
+            bool enableSkip = false;
+            bool enableUnskip = false;
+            for (int i = 0;  i < evCount;  ++i)
+            {
+                const KAEvent ev = ResourcesCalendar::event(EventId(events.at(i)));   // get up-to-date status
+                const KAEvent& event = ev.isValid() ? ev : events[i];
+                if (!event.enabled()  ||  event.expired()  ||  !event.recurs()  ||  KAlarm::eventReadOnly(event.id()))
+                {
+                    enableAction = false;   // skipping not possible for this event
+                    break;
+                }
+                if (!enableUnskip  &&  event.skipping())
+                    enableUnskip = true;
+                if (!enableSkip  &&  !event.skipping())
+                    enableSkip = true;
+                if (enableSkip  &&  enableUnskip)
+                {
+                    enableAction = false;   // contradictory skip statuses for multiple events
+                    break;
+                }
+            }
+            if (!enableSkip  &&  !enableUnskip)
+                enableAction = false;   // no events selected which can be skipped/unskipped
+            else if (enableUnskip)
+                setSkip = false;   // set text to "Cancel skip"
+        }
+    }
+
+    mActionSkipSkip = setSkip;
+    mActionSkip->setText(setSkip ? i18nc("@action", "Skip...") : i18nc("@action", "Cancel skip"));
+    mActionSkip->setEnabled(enableAction);
 }
 
 /******************************************************************************
