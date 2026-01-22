@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2026-1-9</date>
+<date>2026-1-22</date>
 <releaseinfo>3.13.0 (KDE Gear 26.04)</releaseinfo>
 
 <abstract>
@@ -1602,13 +1602,27 @@ in the <guilabel>Fade time</guilabel> field, and adjust the
 </sect2>
 
 <sect2>
-<title>Deferral</title>
+<title>Deferral and Skipping</title>
 
 <para>If the alarm is a recurring alarm and it was deferred after it
-was last displayed, the <guilabel>Deferred Alarm</guilabel> group box
-shows the time the alarm was deferred to.
+was last displayed, the <guilabel>Deferred / Skipped Alarm</guilabel>
+group box shows the time the alarm was deferred to.
 <guibutton>Change...</guibutton> displays a dialog which allows you to
 change the deferred time or to cancel the deferral.</para>
+
+<para>If the alarm is a recurring alarm and it is currently being
+skipped (see <link linkend="skipping">Skipping Individual Alarms</link>),
+the <guilabel>Deferred / Skipped Alarm</guilabel> group box shows the
+next time the alarm will trigger after being skipped, &ie; the time at
+which it will resume normal operation.
+<guibutton>Cancel skip</guibutton> will cancel skipping the alarm.</para>
+
+<note><para>If you make any changes to the alarm's start time or
+recurrence details, skipping is automatically canceled and the
+skip time is no longer displayed.</para></note>
+
+<para>Note that changes to deferral and skipping take effect when
+<guibutton>OK</guibutton> is clicked.</para>
 
 </sect2>
 
@@ -2543,7 +2557,7 @@ from the context menu.</para>
 
 </sect2>
 
-<sect2>
+<sect2 id="skipping">
 <title>Skipping Individual Alarms</title>
 
 <para>You can choose to skip the next few (1 - 10) activations of an
