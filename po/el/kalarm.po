@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-17 00:44+0000\n"
+"POT-Creation-Date: 2026-01-22 00:59+0000\n"
 "PO-Revision-Date: 2024-09-19 15:13+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -159,7 +159,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Αναβλήθηκε σε:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:330
+#: alarmtimewidget.cpp:137 editdlg.cpp:344
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
@@ -180,7 +180,7 @@ msgid "Schedule the alarm after the specified time interval from now."
 msgstr ""
 "Προγραμματισμός του συναγερμού στο καθορισμένο χρονικό διάστημα από τώρα."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:341
+#: alarmtimewidget.cpp:149 editdlg.cpp:355
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -2352,9 +2352,11 @@ msgid "Action"
 msgstr "Ενέργεια"
 
 #: editdlg.cpp:268
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:group"
+#| msgid "Deferred Alarm"
 msgctxt "@title:group"
-msgid "Deferred Alarm"
+msgid "Deferred / Skipped Alarm"
 msgstr "Αναβολή συναγερμού"
 
 #: editdlg.cpp:271
@@ -2375,19 +2377,46 @@ msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "Τροποποίηση της ώρας αναβολής, ή ακύρωσή της"
 
-#: editdlg.cpp:289 editdlg.cpp:350
+#: editdlg.cpp:282
+#, kde-format
+msgctxt "@label When the alarm will next trigger after being skipped"
+msgid "Skipping until:"
+msgstr ""
+
+#: editdlg.cpp:286
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The next time the alarm will trigger, when it will resume normal activation."
+msgstr ""
+
+#: editdlg.cpp:290
+#, fuzzy, kde-format
+#| msgctxt "@option:check"
+#| msgid "Cancel if late"
+msgctxt "@action:button"
+msgid "Cancel skip"
+msgstr "Ακύρωση αν καθυστερήσει"
+
+#: editdlg.cpp:292
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid "Cancel skipping of the alarm"
+msgstr ""
+
+#: editdlg.cpp:303 editdlg.cpp:364
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Ώρα"
 
-#: editdlg.cpp:296
+#: editdlg.cpp:310
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "Προκαθορισμένη ώρα"
 
-#: editdlg.cpp:298
+#: editdlg.cpp:312
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2397,13 +2426,13 @@ msgstr ""
 "Να μην οριστεί ώρα έναρξης για τους συναγερμούς με βάση αυτό το πρότυπο. Θα "
 "χρησιμοποιηθεί η κανονική προκαθορισμένη ώρα έναρξης."
 
-#: editdlg.cpp:306
+#: editdlg.cpp:320
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Ώρα:"
 
-#: editdlg.cpp:308
+#: editdlg.cpp:322
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
@@ -2411,7 +2440,7 @@ msgstr ""
 "Καθορισμός μιας ώρας έναρξης για συναγερμούς που βασίζονται σε αυτό το "
 "πρότυπο."
 
-#: editdlg.cpp:314
+#: editdlg.cpp:328
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2421,13 +2450,13 @@ msgstr ""
 "<para>Εισάγετε την ώρα έναρξης για συναγερμούς που βασίζονται σε αυτό το "
 "πρότυπο.</para><para>%1</para>"
 
-#: editdlg.cpp:321
+#: editdlg.cpp:335
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Μόνο ημερομηνία"
 
-#: editdlg.cpp:323
+#: editdlg.cpp:337
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2437,7 +2466,7 @@ msgstr ""
 "Καθορίστε την επιλογή <interface>κάθε ώρα</interface> για συναγερμούς που "
 "βασίζονται σε αυτό το πρότυπο."
 
-#: editdlg.cpp:333
+#: editdlg.cpp:347
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2447,39 +2476,39 @@ msgstr ""
 "Ορίστε οι βασισμένοι σε αυτό το πρότυπο συναγερμοί να ξεκινάνε μετά το "
 "καθορισμένο χρονικό διάστημα από την ώρα δημιουργίας του συναγερμού."
 
-#: editdlg.cpp:397
+#: editdlg.cpp:411
 #, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "Αφύπνιση από αναστολή"
 
-#: editdlg.cpp:399
+#: editdlg.cpp:413
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
 
-#: editdlg.cpp:416
+#: editdlg.cpp:430
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr ""
 "Κάντε κλικ για να αντιγράψετε το συναγερμό στο ημερολόγιο του KOrganizer"
 
-#: editdlg.cpp:1034
+#: editdlg.cpp:1112
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Πρέπει να εισάγετε ένα όνομα για το πρότυπο συναγερμού"
 
-#: editdlg.cpp:1038
+#: editdlg.cpp:1116
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Το όνομα προτύπου χρησιμοποιείται ήδη"
 
-#: editdlg.cpp:1064
+#: editdlg.cpp:1142
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2488,7 +2517,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1097
+#: editdlg.cpp:1175
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2499,7 +2528,7 @@ msgstr ""
 "συναγερμού. Για αυτό θα ρυθμιστεί στην ημερομηνία της επόμενης επανάληψης "
 "(%1)."
 
-#: editdlg.cpp:1101
+#: editdlg.cpp:1179
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2510,19 +2539,19 @@ msgstr ""
 "συναγερμού. Για αυτό θα ρυθμιστεί στην ημερομηνία της επόμενης επανάληψης "
 "(%1)."
 
-#: editdlg.cpp:1124
+#: editdlg.cpp:1202
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Η επανεμφάνιση έχει ήδη λήξει"
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1213
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Ο συναγερμός δε θα εμφανίζεται κατά τις ώρες εργασίας"
 
-#: editdlg.cpp:1164
+#: editdlg.cpp:1242
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2532,7 +2561,7 @@ msgstr ""
 "Η περίοδος της υπενθύμισης πρέπει να είναι μικρότερη από το διάστημα της "
 "επανεμφάνισης, εκτός και αν το <interface>%1</interface> είναι επιλεγμένο."
 
-#: editdlg.cpp:1179
+#: editdlg.cpp:1257
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2542,7 +2571,7 @@ msgstr ""
 "Η διάρκεια της απλής επανάληψης συναγερμού πρέπει να είναι μικρότερη από το "
 "διάστημα επανεμφάνισης μείον οποιαδήποτε περίοδο υπενθύμισης"
 
-#: editdlg.cpp:1186
+#: editdlg.cpp:1264
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2552,38 +2581,38 @@ msgstr ""
 "Η περίοδος της απλής επανάληψης συναγερμού πρέπει να είναι σε μονάδες ημερών "
 "ή εβδομάδων για έναν μόνο συναγερμό ημέρας"
 
-#: editdlg.cpp:1217
+#: editdlg.cpp:1295
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr ""
 "Πρέπει να επιλέξτε ένα ημερολόγιο στο οποίο θα αποθηκευτεί ο συναγερμός"
 
-#: editdlg.cpp:1298
+#: editdlg.cpp:1376
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Λιγότερες επιλογές <<"
 
-#: editdlg.cpp:1299
+#: editdlg.cpp:1377
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Εμφάνιση λιγότερων επιλογών"
 
-#: editdlg.cpp:1304
+#: editdlg.cpp:1382
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Περισσότερες επιλογές >>"
 
-#: editdlg.cpp:1305
+#: editdlg.cpp:1383
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr "Εμφάνιση περισσότερων επιλογών"
 
-#: editdlg.cpp:1534
+#: editdlg.cpp:1623
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -2591,7 +2620,7 @@ msgid ""
 "inhibition or active full screen applications"
 msgstr ""
 
-#: editdlg.cpp:1536
+#: editdlg.cpp:1625
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3545,14 +3574,14 @@ msgstr ""
 "Πρέπει να ενεργοποιήσετε ένα ημερολόγιο προτύπων για να αποθηκευτεί εκεί το  "
 "πρότυπο"
 
-#: functions.cpp:1686
+#: functions.cpp:1687
 #, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
 msgstr ""
 "<para>%1</para><para>Παρακαλώ εισάγετέ την στο διάλογο διαμόρφωσης.</para>"
 
-#: functions.cpp:1690
+#: functions.cpp:1691
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3562,61 +3591,61 @@ msgstr ""
 "<para>Οι συναγερμοί είναι απενεργοποιημένες.</para><para>Επιθυμείτε την "
 "ενεργοποίησή τους τώρα;</para>"
 
-#: functions.cpp:1691
+#: functions.cpp:1692
 #, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Ενεργοποίηση"
 
-#: functions.cpp:1691
+#: functions.cpp:1692
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Να διατηρηθούν απενεργοποιημένες"
 
-#: functions.cpp:2061
+#: functions.cpp:2062
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Σφάλμα αποθήκευσης συναγερμών"
 
-#: functions.cpp:2062
+#: functions.cpp:2063
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Σφάλμα αποθήκευσης του συναγερμού"
 
-#: functions.cpp:2065
+#: functions.cpp:2066
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Σφάλμα διαγραφής των συναγερμών"
 
-#: functions.cpp:2066
+#: functions.cpp:2067
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Σφάλμα διαγραφής του συναγερμού"
 
-#: functions.cpp:2069
+#: functions.cpp:2070
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Σφάλμα αποθήκευσης των επανενεργοποιημένων συναγερμών"
 
-#: functions.cpp:2070
+#: functions.cpp:2071
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Σφάλμα αποθήκευσης του επανενεργοποιημένου συναγερμού"
 
-#: functions.cpp:2073
+#: functions.cpp:2074
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Σφάλμα αποθήκευσης των προτύπων συναγερμού"
 
-#: functions.cpp:2074
+#: functions.cpp:2075
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -3792,19 +3821,19 @@ msgstr "Λήξη:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3494
+#: kalarmcalendar/kaevent.cpp:3525
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Σύνδεση"
 
-#: kalarmcalendar/kaevent.cpp:3494
+#: kalarmcalendar/kaevent.cpp:3525
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "Στη σύνδεση"
 
-#: kalarmcalendar/kaevent.cpp:3503 kalarmcalendar/kaevent.cpp:3596
+#: kalarmcalendar/kaevent.cpp:3534 kalarmcalendar/kaevent.cpp:3627
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
@@ -3814,7 +3843,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 λεπτό"
 msgstr[1] "%1 λεπτά"
 
-#: kalarmcalendar/kaevent.cpp:3505 kalarmcalendar/kaevent.cpp:3598
+#: kalarmcalendar/kaevent.cpp:3536 kalarmcalendar/kaevent.cpp:3629
 #: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
@@ -3823,13 +3852,13 @@ msgid_plural "%1 Hours"
 msgstr[0] "1 ώρα"
 msgstr[1] "%1 ώρες"
 
-#: kalarmcalendar/kaevent.cpp:3507 kalarmcalendar/kaevent.cpp:3599
+#: kalarmcalendar/kaevent.cpp:3538 kalarmcalendar/kaevent.cpp:3630
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1ω %2λ"
 
-#: kalarmcalendar/kaevent.cpp:3510 kalarmcalendar/kaevent.cpp:3589
+#: kalarmcalendar/kaevent.cpp:3541 kalarmcalendar/kaevent.cpp:3620
 #: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
@@ -3838,7 +3867,7 @@ msgid_plural "%1 Days"
 msgstr[0] "1 ημέρα"
 msgstr[1] "%1 ημέρες"
 
-#: kalarmcalendar/kaevent.cpp:3512 kalarmcalendar/kaevent.cpp:3590
+#: kalarmcalendar/kaevent.cpp:3543 kalarmcalendar/kaevent.cpp:3621
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3846,7 +3875,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 εβδομάδα"
 msgstr[1] "%1 εβδομάδες"
 
-#: kalarmcalendar/kaevent.cpp:3514
+#: kalarmcalendar/kaevent.cpp:3545
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3854,7 +3883,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 μήνας"
 msgstr[1] "%1 μήνες"
 
-#: kalarmcalendar/kaevent.cpp:3516
+#: kalarmcalendar/kaevent.cpp:3547
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3862,13 +3891,13 @@ msgid_plural "%1 Years"
 msgstr[0] "1 έτος"
 msgstr[1] "%1 έτη"
 
-#: kalarmcalendar/kaevent.cpp:3522
+#: kalarmcalendar/kaevent.cpp:3553
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Καμία"
 
-#: kalarmcalendar/kaevent.cpp:3602
+#: kalarmcalendar/kaevent.cpp:3633
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"
@@ -4753,7 +4782,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Ανανέωση συναγερμών"
 
-#: mainwindow.cpp:820
+#: mainwindow.cpp:821
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4762,7 +4791,7 @@ msgstr[0] "Επιθυμείτε πραγματικά να διαγράψετε �
 msgstr[1] ""
 "Επιθυμείτε πραγματικά να διαγράψετε τους %1 επιλεγμένους συναγερμούς;"
 
-#: mainwindow.cpp:822
+#: mainwindow.cpp:823
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4770,13 +4799,13 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Διαγραφή συναγερμού"
 msgstr[1] "Διαγραφή συναγερμών"
 
-#: mainwindow.cpp:823 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:824 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Διαγραφή"
 
-#: mainwindow.cpp:910
+#: mainwindow.cpp:911
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Display Alarm"
@@ -4784,7 +4813,7 @@ msgctxt "@title:window"
 msgid "Skip Alarm"
 msgstr "Εμφάνιση συναγερμού"
 
-#: mainwindow.cpp:911
+#: mainwindow.cpp:912
 #, fuzzy, kde-format
 #| msgctxt "@option:radio"
 #| msgid "Number of repetitions:"
@@ -4792,37 +4821,37 @@ msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
 msgstr "Αριθμός επαναλήψεων:"
 
-#: mainwindow.cpp:942
+#: mainwindow.cpp:943
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Απόκρυψη αρχειοθετημένων συναγερμών"
 
-#: mainwindow.cpp:943
+#: mainwindow.cpp:944
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Εμφάνιση αρχειοθετημένων συναγερμών"
 
-#: mainwindow.cpp:1019
+#: mainwindow.cpp:1020
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Εισαγωγή γενεθλίων"
 
-#: mainwindow.cpp:1271
+#: mainwindow.cpp:1272
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1272
+#: mainwindow.cpp:1273
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1338
+#: mainwindow.cpp:1339
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4831,60 +4860,60 @@ msgstr ""
 "<qt>Αυτό θα αποκρύψει το μενού πλήρως. Μπορείτε να το εμφανίσετε ξανά "
 "πληκτρολογώντας %1.</qt>"
 
-#: mainwindow.cpp:1340
+#: mainwindow.cpp:1341
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Απόκρυψη γραμμής μενού"
 
-#: mainwindow.cpp:1580
+#: mainwindow.cpp:1581
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Εμφάνιση συναγερμού"
 
-#: mainwindow.cpp:1582
+#: mainwindow.cpp:1583
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Συναγερμός ηλ. αλληλογραφίας"
 
-#: mainwindow.cpp:1584
+#: mainwindow.cpp:1585
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Συναγερμός εντολής"
 
-#: mainwindow.cpp:1586
+#: mainwindow.cpp:1587
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Τύπος συναγερμού"
 
-#: mainwindow.cpp:1587
+#: mainwindow.cpp:1588
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Επιλογή τύπου συναγερμού για δημιουργία:"
 
-#: mainwindow.cpp:1739
+#: mainwindow.cpp:1722
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Ενεργοποίηση"
 
-#: mainwindow.cpp:1739
+#: mainwindow.cpp:1722
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
 msgstr "Απενεργοποίηση"
 
-#: mainwindow.cpp:1748
+#: mainwindow.cpp:1781
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
 msgstr ""
 
-#: mainwindow.cpp:1748
+#: mainwindow.cpp:1781
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Cancel if late"
