@@ -276,6 +276,16 @@ void DateTime::setSecsSinceEpoch(qint64 secs)
     d->mDateTime.setSecsSinceEpoch(secs);
 }
 
+DateTime DateTime::clearMSecs() const
+{
+    return DateTime(d->mDateTime.clearMSecs());
+}
+
+DateTime DateTime::clearSecs() const
+{
+    return DateTime(d->mDateTime.clearSecs());
+}
+
 DateTime DateTime::addSecs(qint64 n) const
 {
     return DateTime(d->mDateTime.addSecs(n));

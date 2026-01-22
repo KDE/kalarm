@@ -906,6 +906,26 @@ public:
     void setSecondOccurrence(bool second);
 
     /**
+     * Returns a date/time with the milliseconds component of the supplied
+     * date/time set to zero.
+     * This does not change the daylight savings status of the value.
+     * If the value is date-only, no change is made.
+     *
+     * @see clearSecs()
+     */
+    [[nodiscard]] KADateTime clearMSecs() const;
+
+    /**
+     * Returns a date/time with the seconds and milliseconds components of the
+     * supplied date/time set to zero.
+     * This does not change the daylight savings status of the value.
+     * If the value is date-only, no change is made.
+     *
+     * @see clearMSecs()
+     */
+    [[nodiscard]] KADateTime clearSecs() const;
+
+    /**
      * Returns a date/time @p msecs milliseconds later than the stored date/time.
      *
      * The calculation is done in UTC to ensure that the result takes proper
@@ -919,7 +939,7 @@ public:
      * @return resultant date/time
      * @see addSecs(), addDays(), addMonths(), addYears(), secsTo()
      */
-    KADateTime addMSecs(qint64 msecs) const;
+    [[nodiscard]] KADateTime addMSecs(qint64 msecs) const;
 
     /**
      * Returns a date/time @p secs seconds later than the stored date/time.
@@ -935,7 +955,7 @@ public:
      * @return resultant date/time
      * @see addMSecs(), addDays(), addMonths(), addYears(), secsTo()
      */
-    KADateTime addSecs(qint64 secs) const;
+    [[nodiscard]] KADateTime addSecs(qint64 secs) const;
 
     /**
      * Returns a date/time @p days days later than the stored date/time.
@@ -945,7 +965,7 @@ public:
      * @return resultant date/time
      * @see addSecs(), addMonths(), addYears(), daysTo()
      */
-    KADateTime addDays(qint64 days) const;
+    [[nodiscard]] KADateTime addDays(qint64 days) const;
 
     /**
      * Returns a date/time @p months months later than the stored date/time.
@@ -955,7 +975,7 @@ public:
      * @return resultant date/time
      * @see addSecs(), addDays(), addYears(), daysTo()
      */
-    KADateTime addMonths(int months) const;
+    [[nodiscard]] KADateTime addMonths(int months) const;
 
     /**
      * Returns a date/time @p years years later than the stored date/time.
@@ -965,7 +985,7 @@ public:
      * @return resultant date/time
      * @see addSecs(), addDays(), addMonths(), daysTo()
      */
-    KADateTime addYears(int years) const;
+    [[nodiscard]] KADateTime addYears(int years) const;
 
     /**
      * Returns the number of milliseconds from this date/time to the @p other date/time.

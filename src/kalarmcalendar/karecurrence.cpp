@@ -1345,12 +1345,7 @@ namespace
 */
 QDateTime msecs0(const KAlarmCal::KADateTime& kdt)
 {
-    QDateTime qdt = kdt.qDateTime();
-    const QTime t = qdt.time();
-    // Note that setting the time component of qdt can change its daylight savings
-    // setting, so don't use:
-    //    qdt.setTime(QTime(t.hour(), t.minute(), t.second()));
-    return t.msec() ? qdt.addMSecs(-t.msec()) : qdt;
+    return kdt.clearMSecs().qDateTime();
 }
 
 }

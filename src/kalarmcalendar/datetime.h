@@ -184,20 +184,26 @@ public:
      */
     void setSecsSinceEpoch(qint64 secs);
 
+    /** Returns a DateTime with the milliseconds component of the instance set to zero. */
+    [[nodiscard]] DateTime clearMSecs() const;
+
+    /** Returns a DateTime with the seconds and milliseconds components of the instance set to zero. */
+    [[nodiscard]] DateTime clearSecs() const;
+
     /** Returns a DateTime value @p secs seconds later than the value of this object. */
-    DateTime addSecs(qint64 n) const;
+    [[nodiscard]] DateTime addSecs(qint64 n) const;
 
     /** Returns a DateTime value @p mins minutes later than the value of this object. */
-    DateTime addMins(qint64 n) const;
+    [[nodiscard]] DateTime addMins(qint64 n) const;
 
     /** Returns a DateTime value @p n days later than the value of this object. */
-    DateTime addDays(int n) const;
+    [[nodiscard]] DateTime addDays(int n) const;
 
     /** Returns a DateTime value @p n months later than the value of this object. */
-    DateTime addMonths(int n) const;
+    [[nodiscard]] DateTime addMonths(int n) const;
 
     /** Returns a DateTime value @p n years later than the value of this object. */
-    DateTime addYears(int n) const;
+    [[nodiscard]] DateTime addYears(int n) const;
 
     /** Returns the number of days from this date or date-time to @p dt. */
     int daysTo(const DateTime& dt) const;

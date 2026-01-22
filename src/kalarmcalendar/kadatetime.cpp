@@ -496,6 +496,8 @@ public:
     }
     void setSpec(const KADateTime::Spec&);
     void setDateOnly(bool d);
+    void clearMSecs();
+    void clearSecs();
     QTimeZone timeZone() const
     {
         return specType == KADateTime::TimeZone ? mDt.timeZone() : QTimeZone();
@@ -667,6 +669,39 @@ bool KADateTimePrivate::equalSpec(const KADateTimePrivate& other) const
     ||  (specType == KADateTime::OffsetFromUTC && mDt.offsetFromUtc() != other.mDt.offsetFromUtc()))
         return false;
     return true;
+}
+
+void KADateTimePrivate::clearMSecs()
+{
+    if (!mDateOnly)
+    {
+        const int ms = -mDt.time().msec();
+        if (ms)
+        {
+            mDt = mDt.addMSecs(ms);
+            if (utcCached)
+                ut = ut.addMSecs(ms);
+            if (convertedCached)
+                converted = converted.addMSecs(ms);
+        }
+    }
+}
+
+void KADateTimePrivate::clearSecs()
+{
+    if (!mDateOnly)
+    {
+        const QTime t = mDt.time();
+        const int ms = -(t.msec() + 1000 * t.second());
+        if (ms)
+        {
+            mDt = mDt.addMSecs(ms);
+            if (utcCached)
+                ut = ut.addMSecs(ms);
+            if (convertedCached)
+                converted = converted.addMSecs(ms);
+        }
+    }
 }
 
 /******************************************************************************
@@ -1340,6 +1375,24 @@ void KADateTime::setSecondOccurrence(bool second)
     {
         d->setTzTransitionOccurrence(second);
     }
+}
+
+KADateTime KADateTime::clearMSecs() const
+{
+    if (!isValid())
+        return {};
+    KADateTime result(*this);
+    result.d->clearMSecs();
+    return result;
+}
+
+KADateTime KADateTime::clearSecs() const
+{
+    if (!isValid())
+        return {};
+    KADateTime result(*this);
+    result.d->clearSecs();
+    return result;
 }
 
 KADateTime KADateTime::addMSecs(qint64 msecs) const

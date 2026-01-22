@@ -2553,7 +2553,7 @@ bool KAEventPrivate::skip(int count)
                 next.setDateOnly(true);
             }
             else
-                next.addSecs(60);
+                next = next.addSecs(60);
             break;
         }
         last = next;
@@ -5826,7 +5826,7 @@ KAEvent::OccurType KAEventPrivate::nextRecurrence(const KADateTime& preDateTime,
             // The earliest recurrence we want is tomorrow.
             pre = pre.addDays(1);
             pre.setTime(DateTime::startOfDay());
-            pre.addSecs(-60);
+            pre = pre.addSecs(-60);
         }
         else if (pre.time() < DateTime::startOfDay())
         {
