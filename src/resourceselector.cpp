@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  calendar resource selection widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2006-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2006-2026 David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  SPDX-FileCopyrightText: 2003, 2004 Cornelius Schumacher <schumacher@kde.org>
  *  SPDX-FileCopyrightText: 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -24,6 +24,7 @@
 #include "resources/resources.h"
 #include "lib/messagebox.h"
 #include "lib/packedlayout.h"
+#include "lib/tooltip.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -79,9 +80,9 @@ ResourceSelector::ResourceSelector(MainWindow* parentWindow, QWidget* parent)
     blayout->addWidget(mAddButton);
     blayout->addWidget(mEditButton);
     blayout->addWidget(mDeleteButton);
-    mEditButton->setToolTip(i18nc("@info:tooltip", "Reconfigure the selected calendar"));
+    KAlarm::setToolTip(mEditButton, i18nc("@info:tooltip", "Reconfigure the selected calendar"));
     mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the highlighted calendar's configuration"));
-    mDeleteButton->setToolTip(i18nc("@info:tooltip", "Remove the selected calendar from the list"));
+    KAlarm::setToolTip(mDeleteButton, i18nc("@info:tooltip", "Remove the selected calendar from the list"));
     mDeleteButton->setWhatsThis(xi18nc("@info:whatsthis", "<para>Remove the highlighted calendar from the list.</para>"
                                      "<para>The calendar itself is left intact, and may subsequently be reinstated in the list if desired.</para>"));
     mEditButton->setDisabled(true);

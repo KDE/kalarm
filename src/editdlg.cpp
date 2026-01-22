@@ -282,9 +282,7 @@ void EditAlarmDlg::init(const KAEvent& event)
         mSkipLabel = new QLabel(i18nc("@label When the alarm will next trigger after being skipped", "Skipping until:"), mDeferGroup);
         gridLayout->addWidget(mSkipLabel, 1, 0, Qt::AlignLeft);
         mSkipTimeLabel = new QLabel(mDeferGroup);
-        mSkipTimeLabel->setToolTip(QLatin1String("<qt>")
-                                 + i18nc("@info:tooltip", "The next time the alarm will trigger, when it will resume normal activation.")
-                                 + QLatin1String("</qt>"));
+        KAlarm::setToolTip(mSkipTimeLabel, i18nc("@info:tooltip", "The next time the alarm will trigger, when it will resume normal activation."));
         gridLayout->addWidget(mSkipTimeLabel, 1, 1, Qt::AlignLeft);
 
         mSkipCancelButton = new QPushButton(i18nc("@action:button", "Cancel skip"), mDeferGroup);
@@ -1619,9 +1617,7 @@ void EditAlarmDlg::setWakeFromSuspendEnabledStatus()
 CheckBox* EditAlarmDlg::createNoInhibit(QWidget* parent)
 {
     CheckBox* noInhibit = new CheckBox(i18n_chk_NoInhibit(), parent);
-    noInhibit->setToolTip(QLatin1String("<qt>")
-                        + i18nc("@info:tooltip", "Check to always execute the alarm when it is due, regardless of notification inhibition or active full screen applications")
-                        + QLatin1String("</qt>"));
+    KAlarm::setToolTip(noInhibit, i18nc("@info:tooltip", "Check to always execute the alarm when it is due, regardless of notification inhibition or active full screen applications"));
     noInhibit->setWhatsThis(i18nc("@info:whatsthis", "Check to always execute the alarm when it is due, regardless of notification inhibition or active full screen applications."));
     return noInhibit;
 }

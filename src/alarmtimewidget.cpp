@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -19,6 +19,7 @@
 #include "lib/timeperiod.h"
 #include "lib/timespinbox.h"
 #include "lib/timezonecombo.h"
+#include "lib/tooltip.h"
 
 #include <KDateComboBox>
 #include <KLocalizedString>
@@ -128,7 +129,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         mAnyTimeCheckBox = new CheckBox(i18nc("@option:check", "Any time"), timeBox);
         timeBoxHLayout->addWidget(mAnyTimeCheckBox);
         connect(mAnyTimeCheckBox, &CheckBox::toggled, this, &AlarmTimeWidget::slotAnyTimeToggled);
-        mAnyTimeCheckBox->setToolTip(i18nc("@info:tooltip", "Set only a date (without a time) for the alarm"));
+        KAlarm::setToolTip(mAnyTimeCheckBox, i18nc("@info:tooltip", "Set only a date (without a time) for the alarm"));
         mAnyTimeCheckBox->setWhatsThis(i18nc("@info:whatsthis",
               "Check to specify only a date (without a time) for the alarm. The alarm will trigger at the first opportunity on the selected date."));
     }
@@ -166,7 +167,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         mPresetsCombo->addItem(i18nc("@item:inlistbox", "1 week"), 7*1440);
         mPresetsCombo->setCurrentIndex(-1);
         connect(mPresetsCombo, &ComboBox::activated, this, &AlarmTimeWidget::slotPresetSelected);
-        mPresetsCombo->setToolTip(i18nc("@info:tooltip", "Select time delay from a list of preset values"));
+        KAlarm::setToolTip(mPresetsCombo, i18nc("@info:tooltip", "Select time delay from a list of preset values"));
     }
     else
     {
@@ -208,7 +209,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         // Time zone selection push button
         mTimeZoneButton = new PushButton(i18nc("@action:button", "Time Zone..."), topWidget);
         connect(mTimeZoneButton, &PushButton::clicked, this, &AlarmTimeWidget::showTimeZoneSelector);
-        mTimeZoneButton->setToolTip(i18nc("@info:tooltip", "Choose a time zone for this alarm"));
+        KAlarm::setToolTip(mTimeZoneButton, i18nc("@info:tooltip", "Choose a time zone for this alarm"));
         mTimeZoneButton->setWhatsThis(i18nc("@info:whatsthis",
               "Choose a time zone for this alarm which is different from the default time zone set in KAlarm's configuration dialog."));
         grid->addWidget(mTimeZoneButton, 2, 2, 1, 2, Qt::AlignRight);
