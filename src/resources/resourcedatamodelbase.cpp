@@ -78,9 +78,9 @@ QString ResourceDataModelBase::typeListForDisplay(CalEvent::Types alarmTypes)
 }
 
 /******************************************************************************
-* Return the read-only status tooltip for a collection, determined by the
+* Return the read-only status tooltip for a calendar, determined by the
 * read-write permissions and the KAlarm calendar format compatibility.
-* A null string is returned if the collection is read-write and compatible.
+* A null string is returned if the calendar is read-write and compatible.
 */
 QString ResourceDataModelBase::readOnlyTooltip(const Resource& resource)
 {
@@ -90,10 +90,10 @@ QString ResourceDataModelBase::readOnlyTooltip(const Resource& resource)
             return resource.readOnly() ? i18nc("@item:intext Calendar status", "Read-only") : QString();
         case KACalendar::Converted:
         case KACalendar::Convertible:
-            return i18nc("@item:intext Calendar status", "Read-only (old format)");
+            return i18nc("@item:intext Calendar status, parameter is KAlarm version", "Read-only (KAlarm pre-%1 format)", QLatin1StringView(KAEvent::currentCalendarVersionString()));
         case KACalendar::Incompatible:
         default:
-            return i18nc("@item:intext Calendar status", "Read-only (other format)");
+            return i18nc("@item:intext Calendar status", "Read-only (not a KAlarm calendar)");
     }
 }
 
