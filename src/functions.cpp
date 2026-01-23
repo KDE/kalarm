@@ -1076,13 +1076,21 @@ bool exportAlarms(const QList<KAEvent>& events, QWidget* parent)
         }
         else if (!local)
         {
+            bool ok = false;
             QFile qFile(file);
-            qFile.open(QIODevice::ReadOnly);
-            auto uploadJob = KIO::storedPut(&qFile, url, -1);
-            KJobWidgets::setWindow(uploadJob, parent);
-            if (!uploadJob->exec())
+            if (!qFile.open(QIODevice::ReadOnly))
+                qCCritical(KALARM_LOG) << "KAlarm::exportAlarms:" << file << ": open failed";
+            else
             {
-                qCCritical(KALARM_LOG) << "KAlarm::exportAlarms:" << file << ": upload failed";
+                auto uploadJob = KIO::storedPut(&qFile, url, -1);
+                KJobWidgets::setWindow(uploadJob, parent);
+                if (!uploadJob->exec())
+                    qCCritical(KALARM_LOG) << "KAlarm::exportAlarms:" << file << ": upload failed";
+                else
+                    ok = true;
+            }
+            if (!ok)
+            {
                 KAMessageBox::error(MainWindow::mainMainWindow(),
                                     xi18nc("@info", "Cannot upload new calendar to:<nl/><filename>%1</filename>", url.toDisplayString()));
                 success = false;
