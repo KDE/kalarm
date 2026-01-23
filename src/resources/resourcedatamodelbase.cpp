@@ -90,7 +90,8 @@ QString ResourceDataModelBase::readOnlyTooltip(const Resource& resource)
             return resource.readOnly() ? i18nc("@item:intext Calendar status", "Read-only") : QString();
         case KACalendar::Converted:
         case KACalendar::Convertible:
-            return i18nc("@item:intext Calendar status, parameter is KAlarm version", "Read-only (KAlarm pre-%1 format)", QLatin1StringView(KAEvent::currentCalendarVersionString()));
+            return i18nc("@item:intext Calendar status, parameter is KAlarm version", "Read-only (KAlarm pre-%1 format)",
+                         QLatin1StringView(KAEvent::currentCalendarVersionString()));
         case KACalendar::Incompatible:
         default:
             return i18nc("@item:intext Calendar status", "Read-only (not a KAlarm calendar)");

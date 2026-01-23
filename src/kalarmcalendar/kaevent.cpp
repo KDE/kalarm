@@ -2207,7 +2207,6 @@ void KAEvent::activateReminderAfter(const DateTime& mainAlarmTime)
 {
     d->activateReminderAfter(mainAlarmTime);
 }
-
 void KAEventPrivate::activateReminderAfter(const DateTime& mainAlarmTime)
 {
     if (mReminderMinutes >= 0  ||  mReminderActive == ReminderType::Active  ||  !mainAlarmTime.isValid())
@@ -2532,7 +2531,7 @@ bool KAEventPrivate::skip(int count)
 
     if (count > MAX_SKIP_COUNT)
         count = MAX_SKIP_COUNT;
-    KADateTime pre = KADateTime::currentDateTime(mStartDateTime.timeSpec());
+    KADateTime pre = KADateTime::currentDateTime(mStartDateTime.timeSpec()).clearSecs();
     // Find the next occurrence after the skip.
     DateTime last;
     DateTime next;
@@ -2583,7 +2582,8 @@ bool KAEventPrivate::skip(const KADateTime& dt)
 
     // Find the next occurrence after the skip.
     DateTime next;
-    const KADateTime pre = dt.isDateOnly() ? dt.addDays(-1) : dt.addSecs(-60);
+    const KADateTime pre = dt.isDateOnly() ? dt.addDays(-1)
+                                           : dt.time().second() ? dt.clearSecs() : dt.addSecs(-60);
     if (nextDateTime(pre, next, KAEvent::NextTypes(KAEvent::NextRepeat | KAEvent::NextWorkHoliday)) == KAEvent::TriggerType::None)
     {
         setSkipTime();   // no occurrences remain, so exit with skip time clear
@@ -4931,10 +4931,19 @@ DateTime KAEvent::nextTrigger(Trigger type, bool skip) const
     if (d->mDeferral == KAEventPrivate::DeferType::Normal)
         return d->mDeferralTime;   // for a deferred alarm, working time setting is ignored
 
-    const bool skipping = d->skipDateTime().isValid();
-    if (!skipping)
-        skip = false;
+    // mSkipTime must be updated before calling calcTriggerTimes(), but avoid
+    // overhead of skipDateTime() if not necessary.
+    bool checkedSkip = false;
+    bool skipping = false;
+    if (skip)
+    {
+        skipping = d->skipDateTime().isValid();
+        if (!skipping)
+            skip = false;
+        checkedSkip = true;
+    }
     d->calcTriggerTimes();
+
     switch (type)
     {
         case Trigger::All:      return skip ? d->mBaseSkipTriggers.all  : d->mBaseTriggers.all;
@@ -4943,6 +4952,8 @@ DateTime KAEvent::nextTrigger(Trigger type, bool skip) const
         case Trigger::Work:     return skip ? d->mWorkSkipTriggers.main : d->mWorkTriggers.main;
         case Trigger::Actual:
         {
+            if (!checkedSkip)
+                skipping = d->skipDateTime().isValid();
             const bool reminderAfter = !skipping && d->mMainExpired && d->mReminderActive != KAEventPrivate::ReminderType::None && d->mReminderMinutes < 0;
             return d->checkRecur() != KARecurrence::NO_RECUR  && (d->mWorkTimeOnly || d->mExcludeHolidays)
                    ? (reminderAfter ? d->mWorkTriggers.all : skipping ? d->mWorkSkipTriggers.main : d->mWorkTriggers.main)
@@ -4957,6 +4968,7 @@ DateTime KAEvent::nextTrigger(Trigger type, bool skip) const
 * Calculate the next trigger times of the alarm.
 * This should only be called when changes have actually occurred which might
 * affect the event's trigger times.
+* Note: mSkipTime should be updated before calling.
 * mBaseTriggers.main is set to the next scheduled recurrence/sub-repetition
 * mBaseTriggers.all is the same as mBaseTriggers.main, but takes account of
 *                   reminders and deferred reminders.
