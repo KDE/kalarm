@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-22 00:59+0000\n"
+"POT-Creation-Date: 2026-01-23 00:44+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -51,7 +51,7 @@ msgctxt "@info"
 msgid "Program error"
 msgstr "កំហុស​កម្មវិធី"
 
-#: alarmtimewidget.cpp:42
+#: alarmtimewidget.cpp:43
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "បញ្ចូល​រយៈពេល​ដែល (គិត​ជា​ម៉ោង និង​នាទី) បន្ទាប់ពីពេលវេលា​បច្ចុប្បន្ន​ដែលត្រូវ​កំណត់​ពេល​ការ​ជូនដំណឹង ។"
 
-#: alarmtimewidget.cpp:68
+#: alarmtimewidget.cpp:69
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -78,7 +78,7 @@ msgstr ""
 "ប្រសិន​បើ​បាន​កំណត់​រចនា​សម្ព័ន្ធ​ការ​កើតឡើង​វិញ កាលបរិច្ឆេទ​/​ពេលវេលា នឹង​ត្រូវបាន​លៃតម្រូវ​ទៅ​ជា​ការ​"
 "កើតឡើងវិញ​នៅ ឬ​បន្ទាប់​កាលបរិច្ឆេទ​/​ពេលវេលា​ដែលបាន​បញ្ចូល ។"
 
-#: alarmtimewidget.cpp:71
+#: alarmtimewidget.cpp:72
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -87,7 +87,7 @@ msgctxt "@info"
 msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
 msgstr "វា​ប្រើ​តំបន់​ពេលវេលា​លំនាំដើម​របស់ KAlarm ដែល​កំណត់​នៅ​ក្នុង​ប្រអប់​កំណត់​រចនា​សម្ព័ន្ធ ។"
 
-#: alarmtimewidget.cpp:92
+#: alarmtimewidget.cpp:93
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Deferred to:"
@@ -95,31 +95,31 @@ msgctxt "@option:radio"
 msgid "Defer until:"
 msgstr "ពន្យារពេល​ទៅ ៖"
 
-#: alarmtimewidget.cpp:92
+#: alarmtimewidget.cpp:93
 #, kde-format
 msgctxt "@option:radio"
 msgid "At date/time:"
 msgstr "នៅ​កាលបរិច្ឆេទ/ពេលវេលា ៖"
 
-#: alarmtimewidget.cpp:93
+#: alarmtimewidget.cpp:94
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm to the specified date and time."
 msgstr "កំណត់​ពេលវេលា​ការជូនដំណឹង ទៅកាលបរិច្ឆេទ និង​​ពេលវេលា​ជាក់លាក់​ឡើងវិញ ។"
 
-#: alarmtimewidget.cpp:94
+#: alarmtimewidget.cpp:95
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify the date, or date and time, to schedule the alarm."
 msgstr "បញ្ជាក់​កាលបរិច្ឆេទ ឬ​កាលបរិច្ឆេទ និង​ពេលវេលា ដើម្បី​កំណត់​ពេល​ការ​ជូនដំណឹង ។"
 
-#: alarmtimewidget.cpp:103
+#: alarmtimewidget.cpp:104
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the date to schedule the alarm.</para><para>%1</para>"
 msgstr "<para>បញ្ចូល​កាលបរិច្ឆេទ ដើម្បី​កំណត់​ពេល​ការ​ជូនដំណឹង ។</para><para>%1</para>"
 
-#: alarmtimewidget.cpp:115
+#: alarmtimewidget.cpp:116
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -128,13 +128,13 @@ msgid ""
 msgstr ""
 "<para>បញ្ចូល​ពេលវេលា ដើម្បី​កំណត់​ពេល​ការ​ជូនដំណឹង ។</para><para>%1</para><para>%2</para>"
 
-#: alarmtimewidget.cpp:128 recurrenceedit.cpp:251
+#: alarmtimewidget.cpp:129 recurrenceedit.cpp:251
 #, kde-format
 msgctxt "@option:check"
 msgid "Any time"
 msgstr "ពេល​ណា​ក៏​ដោយ"
 
-#: alarmtimewidget.cpp:131
+#: alarmtimewidget.cpp:132
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Next scheduled date and time of the alarm"
@@ -142,7 +142,7 @@ msgctxt "@info:tooltip"
 msgid "Set only a date (without a time) for the alarm"
 msgstr "កាលបរិច្ឆេទ និង​ពេល​វេលា​ដែល​បាន​របស់​ការ​ជូន​ដំណឹង"
 
-#: alarmtimewidget.cpp:133
+#: alarmtimewidget.cpp:134
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -152,7 +152,7 @@ msgstr ""
 "ធីក ដើម្បី​បញ្ជាក់​តែ​កាលបរិច្ឆេទ (ដោយ​គ្មាន​ពេលវេលា) សម្រាប់​ការ​ជូនដំណឹង ។ ការ​ជូនដំណឹង​នឹង​កេះ​នៅ​​ឱកាស​"
 "ដំបូង​ ពេលដែល​បាន​ជ្រើស​កាលបរិច្ឆេទ ។"
 
-#: alarmtimewidget.cpp:137
+#: alarmtimewidget.cpp:138
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Deferred to:"
@@ -160,37 +160,37 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "ពន្យារពេល​ទៅ ៖"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:344
+#: alarmtimewidget.cpp:138 editdlg.cpp:342
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
 msgstr "ពេលវេលា​ចាប់​ពី​ឥឡូវ ៖"
 
-#: alarmtimewidget.cpp:138
+#: alarmtimewidget.cpp:139
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm for the specified time interval after now."
 msgstr "កំណត់ពេល​ការ​ជូនដំណឹង​ឡើងវិញ​សម្រាប់​ចន្លោះ​ពេល​ដែល​បាន​បញ្ជាក់​បន្ទាប់​ពី​ឥឡូវ​នេះ ។"
 
-#: alarmtimewidget.cpp:139
+#: alarmtimewidget.cpp:140
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "កំណត់​ពេល​ការជូនដំណឹង​បន្ទាប់ពី​ចន្លោះពេល​ដែលបាន​បញ្ជាក់​ពី​ឥឡូវ​នេះ ។"
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:355
+#: alarmtimewidget.cpp:150 editdlg.cpp:353
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
 msgstr "<para>%1</para><para>%2</para>"
 
-#: alarmtimewidget.cpp:155
+#: alarmtimewidget.cpp:156
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
 msgstr ""
 
-#: alarmtimewidget.cpp:156
+#: alarmtimewidget.cpp:157
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Minutes"
@@ -199,7 +199,7 @@ msgid "1 minute"
 msgid_plural "%1 minutes"
 msgstr[0] "នាទី"
 
-#: alarmtimewidget.cpp:157
+#: alarmtimewidget.cpp:158
 #, fuzzy, kde-format
 #| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 #| msgid "1 hour"
@@ -209,7 +209,7 @@ msgid "1 hour"
 msgid_plural "%1 hours"
 msgstr[0] "%1 ម៉ោង​"
 
-#: alarmtimewidget.cpp:165
+#: alarmtimewidget.cpp:166
 #, fuzzy, kde-format
 #| msgctxt "@option:radio On day number in the month"
 #| msgid "O&n day"
@@ -217,7 +217,7 @@ msgctxt "@item:inlistbox"
 msgid "1 day"
 msgstr "នៅ​ថ្ងៃ"
 
-#: alarmtimewidget.cpp:166
+#: alarmtimewidget.cpp:167
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Time units"
 #| msgid "weeks"
@@ -225,7 +225,7 @@ msgctxt "@item:inlistbox"
 msgid "1 week"
 msgstr "សប្តាហ៍"
 
-#: alarmtimewidget.cpp:169
+#: alarmtimewidget.cpp:170
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select a template to base the new alarm on."
@@ -233,19 +233,19 @@ msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
 msgstr "ជ្រើស​ពុម្ព​ដើម្បី​ជាមូលដ្ឋាន​សម្រាប់​ដាក់​ការ​ជូនដំណឹង​ថ្មី ។"
 
-#: alarmtimewidget.cpp:177
+#: alarmtimewidget.cpp:178
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
 msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 
-#: alarmtimewidget.cpp:209
+#: alarmtimewidget.cpp:210
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
 msgstr "តំបន់​ពេលវេលា..."
 
-#: alarmtimewidget.cpp:211
+#: alarmtimewidget.cpp:212
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select the time zone to use for this alarm."
@@ -253,7 +253,7 @@ msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
 msgstr "ជ្រើស​តំបន់ពេលវេលា ដែលត្រូវ​ប្រើ​សម្រាប់​ការ​ជូនដំណឹងនេះ ។"
 
-#: alarmtimewidget.cpp:213
+#: alarmtimewidget.cpp:214
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -263,37 +263,37 @@ msgstr ""
 "ជ្រើស​តំបន់​ពេលវេលា​សម្រាប់ការ​ជូនដំណឹង​នេះ ដែល​ខុស​ពី​តំបន់ពេលវេលា​លំនាំដើម បានកំណត់ក្នុង​ប្រអប់កំណត់​"
 "រចនាសម្ព័ន្ធ KAlarm ។"
 
-#: alarmtimewidget.cpp:227 prefdlg.cpp:804
+#: alarmtimewidget.cpp:228 prefdlg.cpp:804
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
 msgstr "តំបន់​ពេលវេលា ៖"
 
-#: alarmtimewidget.cpp:233
+#: alarmtimewidget.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
 msgstr "ជ្រើស​តំបន់ពេលវេលា ដែលត្រូវ​ប្រើ​សម្រាប់​ការ​ជូនដំណឹងនេះ ។"
 
-#: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
+#: alarmtimewidget.cpp:314 alarmtimewidget.cpp:341
 #, kde-format
 msgctxt "@info"
 msgid "Invalid time"
 msgstr "ពេលវេលា​មិន​ត្រឹមត្រូវ"
 
-#: alarmtimewidget.cpp:333
+#: alarmtimewidget.cpp:334
 #, kde-format
 msgctxt "@info"
 msgid "Invalid date"
 msgstr "​កាលបរិច្ឆេទ​មិន​ត្រឹម​ត្រូវ"
 
-#: alarmtimewidget.cpp:354
+#: alarmtimewidget.cpp:355
 #, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
 msgstr "កាលបរិច្ឆេទ​ការជូនដំណឹង​​បាន​ផុត​កំណត់"
 
-#: alarmtimewidget.cpp:366
+#: alarmtimewidget.cpp:367
 #, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"
@@ -2362,14 +2362,14 @@ msgctxt "@label When the alarm will next trigger after being skipped"
 msgid "Skipping until:"
 msgstr ""
 
-#: editdlg.cpp:286
+#: editdlg.cpp:285
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The next time the alarm will trigger, when it will resume normal activation."
 msgstr ""
 
-#: editdlg.cpp:290
+#: editdlg.cpp:288
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Cancel if late"
@@ -2377,25 +2377,25 @@ msgctxt "@action:button"
 msgid "Cancel skip"
 msgstr "បោះបង់​បើ​យឺត"
 
-#: editdlg.cpp:292
+#: editdlg.cpp:290
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel skipping of the alarm"
 msgstr ""
 
-#: editdlg.cpp:303 editdlg.cpp:364
+#: editdlg.cpp:301 editdlg.cpp:362
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "ពេល​វេលា​"
 
-#: editdlg.cpp:310
+#: editdlg.cpp:308
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "ពេល​​វេលា​​លំនាំ​​ដើម​"
 
-#: editdlg.cpp:312
+#: editdlg.cpp:310
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2405,19 +2405,19 @@ msgstr ""
 "កុំ​បញ្ជាក់​លម្អិត​ពេលវេលា​ចាប់ផ្ដើម​របស់​ការជូនដំណឹង​ដែល​មាន​មូលដ្ឋាន​លើ​ពុម្ព​នេះ ។ ពេលវេលា​ចាប់ផ្ដើម​"
 "លំនាំដើម​ទូទៅ​នឹង​ត្រូវ​បាន​ប្រើ ។"
 
-#: editdlg.cpp:320
+#: editdlg.cpp:318
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "ពេលវេលា ៖"
 
-#: editdlg.cpp:322
+#: editdlg.cpp:320
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "បញ្ជាក់​ពេលវេលា​ចាប់ផ្ដើម​មួយ សម្រាប់​ការជូនដំណឹង​ដែល​មាន​មូលដ្ឋាន​លើ​​ពុម្ព​នេះ ។"
 
-#: editdlg.cpp:328
+#: editdlg.cpp:326
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2427,13 +2427,13 @@ msgstr ""
 "<para>​បញ្ចូល​ពេលវេលា​ចាប់ផ្ដើម​មួយ សម្រាប់ការជូនដំណឹង​ដែល​មាន​មូលដ្ឋាន​​លើ​ពុម្ព​នេះ ។</para><para>"
 "%1</para>"
 
-#: editdlg.cpp:335
+#: editdlg.cpp:333
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "តែ​កាលបរិច្ឆេទ​ប៉ុណ្ណោះ"
 
-#: editdlg.cpp:337
+#: editdlg.cpp:335
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2442,7 +2442,7 @@ msgid ""
 msgstr ""
 "កំណត់​ជម្រើស​​<interface>ពេល​ណាមួយ</interface>សម្រាប់​ការ​ជូន​ដំណឹង​ដែល​មាន​មូលដ្ឋាន​លើ​ពុម្ព​នេះ ។"
 
-#: editdlg.cpp:347
+#: editdlg.cpp:345
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2452,7 +2452,7 @@ msgstr ""
 "កំណត់​ការជូនដំណឹង​ដែល​មានមូលដ្ឋាន​លើ​ពុម្ព​នេះ ដើម្បី​ចាប់ផ្តើម​បន្ទាប់ពី​ចន្លោះពេល​ដែល​បាន​បញ្ជាក់ ពី​ពេល​ដែល​"
 "បង្កើត​ការជូនដំណឹង ។"
 
-#: editdlg.cpp:411
+#: editdlg.cpp:409
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Wake From Suspend"
@@ -2460,32 +2460,32 @@ msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "ជូនដំណឹង​ពី​ការ​រោទ៍​ដែល​បាន​ផ្អាក"
 
-#: editdlg.cpp:413
+#: editdlg.cpp:411
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
 
-#: editdlg.cpp:430
+#: editdlg.cpp:428
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "ធីក ដើម្បី​​ចម្លង​ការ​ជូនដំណឹង​ទៅ​ក្នុង​ប្រតិទិន​របស់ KOrganizer"
 
-#: editdlg.cpp:1112
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "អ្នក​ត្រូវតែ​បញ្ចូល​ឈ្មោះ​មួយ សម្រាប់​ពុម្ពការជូនដំណឹង"
 
-#: editdlg.cpp:1116
+#: editdlg.cpp:1114
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "ឈ្មោះ​ពុម្ព​កំពុង​ស្ថិត​ក្នុង​ការប្រើប្រាស់"
 
-#: editdlg.cpp:1142
+#: editdlg.cpp:1140
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2494,7 +2494,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1175
+#: editdlg.cpp:1173
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2504,7 +2504,7 @@ msgstr ""
 "កាលបរិច្ឆេទ​ចាប់ផ្ដើម​មិនផ្គូផ្គង​នឹង​លំនាំ​កើតឡើង​ដដែល​​នៃ​ការជូនដំណឹង​ទេ ដូច្នេះ​វា​នឹង​ត្រូវ​បាន​កែសម្រួល​"
 "ទៅកាលបរិច្ឆេទ​នៃការ​កើត​ឡើង​បន្ទាប់ (%1) ។"
 
-#: editdlg.cpp:1179
+#: editdlg.cpp:1177
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2514,19 +2514,19 @@ msgstr ""
 "ពេលវេលា/កាលបរិច្ឆេទ​ចាប់ផ្ដើម​មិន​ផ្គូផ្គង​នឹង​លំនាំដើម​កើតឡើង​​របស់​ការ​រោទិ៍​ទេ ដូច្នេះ​វា​នឹង​ត្រូវបាន​"
 "កែសម្រួល​ទៅ​ពេលវេលា/កាលបរិច្ឆេទ​នៃ​ការ​កើត​ឡើង​បន្ទាប់ (%1) ។"
 
-#: editdlg.cpp:1202
+#: editdlg.cpp:1200
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "ការកើតឡើង​ដដែលៗ​បាន​ផុតកំណត់​រួច​ហើយ"
 
-#: editdlg.cpp:1213
+#: editdlg.cpp:1211
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "ការ​ជូនដំណឹង​នឹង​មិន​កើតឡើង​នៅ​​អំឡុង​ម៉ោង​ធ្វើការ​ទេ"
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1240
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2536,7 +2536,7 @@ msgstr ""
 "អំឡុងពេល​កម្មវិធី​រំលឹង ត្រូវ​តែ​តិច​ជាង​ចន្លោះ​ពេល​កើតឡើង​វិញ យ៉ាងហោចណាស់​បាន​ធីក <interface>%1</"
 "interface> ។"
 
-#: editdlg.cpp:1257
+#: editdlg.cpp:1255
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2546,7 +2546,7 @@ msgstr ""
 "ថិរវេលា​នៃ​ការ​ធ្វើឡើងវិញ​នៅ​ក្នុង​ការ​កើតឡើង​ដដែលៗ ត្រូវតែ​តិច​ជាង​ចន្លោះ​ពេល​កើតឡើង​ដដែលៗ ដក​​អំឡុងពេល​"
 "កម្មវិធី​រំលឹក"
 
-#: editdlg.cpp:1264
+#: editdlg.cpp:1262
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2556,13 +2556,13 @@ msgstr ""
 "ចំពោះ​ការ​ធ្វើ​ឡើង​វិញ​នៅ​ក្នុង​ការ​កើតឡើង​ដដែល ថិរវេលា​របស់​វា​ត្រូវតែ​ជា​ឯកតា​នៃ​ថ្ងៃ ឬ​សប្ដាហ៍​សម្រាប់​ការ​"
 "ជូនដំណឹង​តែ​កាលបរិច្ឆេទ"
 
-#: editdlg.cpp:1295
+#: editdlg.cpp:1293
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "អ្នកត្រូវតែ​ជ្រើស​ប្រតិទិន​ដែលត្រូវ​រក្សាទុក​ការ​ជូនដំណឹង"
 
-#: editdlg.cpp:1376
+#: editdlg.cpp:1374
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2570,7 +2570,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "ជម្រើស​តិច <<"
 
-#: editdlg.cpp:1377
+#: editdlg.cpp:1375
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2578,13 +2578,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "ជម្រើស​តិច <<"
 
-#: editdlg.cpp:1382
+#: editdlg.cpp:1380
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "ជម្រើស​ច្រើន >>"
 
-#: editdlg.cpp:1383
+#: editdlg.cpp:1381
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
@@ -2592,7 +2592,7 @@ msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr "ជម្រើស​ច្រើន >>"
 
-#: editdlg.cpp:1623
+#: editdlg.cpp:1620
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -2600,7 +2600,7 @@ msgid ""
 "inhibition or active full screen applications"
 msgstr ""
 
-#: editdlg.cpp:1625
+#: editdlg.cpp:1621
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3067,7 +3067,7 @@ msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "ឯកសារ​ដែល​ត្រូវ​ផ្ញើ​ជា​ឯកសារ​ភ្ជាប់​ទៅ​អ៊ីមែល ។"
 
-#: editdlgtypes.cpp:1257 resourceselector.cpp:76
+#: editdlgtypes.cpp:1257 resourceselector.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
@@ -3079,7 +3079,7 @@ msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "បន្ថែម​ឯកសារ​ភ្ជាប់​ទៅ​អ៊ីមែល ។"
 
-#: editdlgtypes.cpp:1262 resourceselector.cpp:78
+#: editdlgtypes.cpp:1262 resourceselector.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
@@ -4793,7 +4793,7 @@ msgctxt "@action"
 msgid "Copy..."
 msgstr "ចម្លង..."
 
-#: mainwindow.cpp:482 resourceselector.cpp:301
+#: mainwindow.cpp:482 resourceselector.cpp:302
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Edit..."
@@ -4883,7 +4883,7 @@ msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "នាំចេញ​ការ​ជូន​ដំណឹង​ដែល​បាន​ជ្រើស..."
 
-#: mainwindow.cpp:570 resourceselector.cpp:319
+#: mainwindow.cpp:570 resourceselector.cpp:320
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "E&xport..."
@@ -5205,7 +5205,7 @@ msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "ទទួល​ស្គាល់​ការជូនដំណឹង"
 
-#: messagewindow.cpp:438 resourceselector.cpp:77 templatedlg.cpp:81
+#: messagewindow.cpp:438 resourceselector.cpp:78 templatedlg.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -8276,37 +8276,37 @@ msgid ""
 "access."
 msgstr ""
 
-#: resourceselector.cpp:50
+#: resourceselector.cpp:51
 #, kde-format
 msgctxt "@title:group"
 msgid "Calendars"
 msgstr "ប្រតិទិន"
 
-#: resourceselector.cpp:54
+#: resourceselector.cpp:55
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Active Alarms"
 msgstr "ការ​ជូនដំណឹង​សកម្ម"
 
-#: resourceselector.cpp:55
+#: resourceselector.cpp:56
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Archived Alarms"
 msgstr "ការ​ជូនដំណឹង​ដែល​ដាក់​ក្នុង​ប័ណ្ណសារ"
 
-#: resourceselector.cpp:56
+#: resourceselector.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Alarm Templates"
 msgstr "ពុម្ព​ការជូនដំណឹង"
 
-#: resourceselector.cpp:57
+#: resourceselector.cpp:58
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which type of data to show alarm calendars for"
 msgstr "ជ្រើស​ប្រភេទ​ទិន្នន័យ​ដែល​ត្រូវ​បង្ហាញ​ប្រតិទិន​ការ​ជូនដំណឹង"
 
-#: resourceselector.cpp:68
+#: resourceselector.cpp:69
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8317,7 +8317,7 @@ msgstr ""
 "បញ្ជី​ប្រតិទិន​ដែលមាន​នៃ​ប្រភេទ​ដែលបាន​ជ្រើស ។ ស្ថានភាព​ដែលបាន​ធីក បង្ហាញ​ថាតើ​ប្រតិទិន​ត្រូវ​បានអនុញ្ញាត "
 "(បាន​ធីក) ឬ​មិនបាន​អនុញាត (មិនបានធីក) ។ ធនធាន​លំនាំដើម​គឺ​ត្រូវបាន​បង្ហាញ​ដិត ។"
 
-#: resourceselector.cpp:82
+#: resourceselector.cpp:83
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Choose Calendar"
@@ -8325,7 +8325,7 @@ msgctxt "@info:tooltip"
 msgid "Reconfigure the selected calendar"
 msgstr "ជ្រើស​​ប្រតិទិន"
 
-#: resourceselector.cpp:83
+#: resourceselector.cpp:84
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the highlighted calendar"
@@ -8333,7 +8333,7 @@ msgctxt "@info:whatsthis"
 msgid "Edit the highlighted calendar's configuration"
 msgstr "កែសម្រួល​ប្រតិទិន​ដែល​បាន​បន្លិច"
 
-#: resourceselector.cpp:84
+#: resourceselector.cpp:85
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Remove the highlighted attachment from the email."
@@ -8341,7 +8341,7 @@ msgctxt "@info:tooltip"
 msgid "Remove the selected calendar from the list"
 msgstr "យក​ឯកសារ​ភ្ជាប់​ដែល​បាន​បន្លិច​ចេញ​ពី​អ៊ីមែល ។"
 
-#: resourceselector.cpp:85
+#: resourceselector.cpp:86
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8352,31 +8352,31 @@ msgstr ""
 "<para>យក​ប្រតិទិន​ដែល​បាន​បន្លិច​ចេញ​ពី​បញ្ជី ។</para><para>ប្រតិទិន​ខ្លួនវា​គឺ​ទុក​ឲ្យ​នៅ​ដដែល ហើយ​ត្រូវបាន​"
 "ដាក់​នោ​ក្នុង​បញ្ជី​តៗ​គ្នា​តាម​ដែល​ចង់បាន ។</para>"
 
-#: resourceselector.cpp:111
+#: resourceselector.cpp:112
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new active alarm calendar"
 msgstr "បន្ថែម​ប្រតិទិន​ការ​ជូន​ដំណឹង​សកម្ម​ថ្មី"
 
-#: resourceselector.cpp:115
+#: resourceselector.cpp:116
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new archived alarm calendar"
 msgstr "បន្ថែម​ប្រតិទិន​ការ​ជូនដំណឹង​ដែល​បាន​ដាក់​ក្នុង​ប័ណ្ណសារ​ថ្មី"
 
-#: resourceselector.cpp:119
+#: resourceselector.cpp:120
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new alarm template calendar"
 msgstr "បន្ថែម​ប្រតិទិន​ពុម្ព​ការជូន​ដំណឹង​ថ្មី"
 
-#: resourceselector.cpp:231
+#: resourceselector.cpp:232
 #, kde-format
 msgctxt "@info"
 msgid "You cannot remove your default active alarm calendar."
 msgstr "អ្នកមិនអាច​យក​ប្រតិទិន​ការជូន​ដំណឹង​សកម្ម​លំនាំដើម​ចេញ​បានទេ ។"
 
-#: resourceselector.cpp:238
+#: resourceselector.cpp:239
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -8386,7 +8386,7 @@ msgstr ""
 "អ្នក​មិនអាច​យក​ប្រតិទិន​ការ​ជូនដំណឹង​ដែលបាន​ដាក់ក្នុង​ប័ណ្ណសារ​លំនាំដើម​ចេញ នៅពេល​ដែល​ការ​ជូនដំណឹង​ដែល​ផុត​កំណត់​"
 "ត្រូវបាន​កំណត់រចនា​សម្ព័ន្ធ​ឲ្យ​ទុក ។"
 
-#: resourceselector.cpp:253
+#: resourceselector.cpp:254
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "<para>It also contains:%1</para>"
@@ -8394,7 +8394,7 @@ msgctxt "@info"
 msgid "It also contains %1"
 msgstr "<para>វា​ក៏មាន ៖%1</para>"
 
-#: resourceselector.cpp:254
+#: resourceselector.cpp:255
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -8408,7 +8408,7 @@ msgstr ""
 "<para><resource>%1</resource> ជា​ប្រតិទិន​លំនាំដើម​សម្រាប់ ៖%2</para>%3<para>តើ​អ្នក​ពិតជា​"
 "ចង់​យក​វា​ចេញ​ពី​បញ្ជី​ប្រតិទិន​ទាំងអស់​ឬ ?</para>"
 
-#: resourceselector.cpp:258
+#: resourceselector.cpp:259
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -8416,7 +8416,7 @@ msgid ""
 "from the list?"
 msgstr "តើ​អ្នក​ពិតជា​ចង់​យក​ប្រតិទិន​លំនាំដើម​របស់​អ្នក​ (<resource>%1</resource>) ចេញ​ពី​បញ្ជី​ឬ ?"
 
-#: resourceselector.cpp:261
+#: resourceselector.cpp:262
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -8430,7 +8430,7 @@ msgstr ""
 "<para><resource>%1</resource> មាន ៖%2</para><para>តើ​អ្នក​ពិតជា​ចង់​យក​វា​ចេញ​ពី​បញ្ជី​ប្រតិទិន​"
 "ទាំងអស់​ឬ ?</para>"
 
-#: resourceselector.cpp:264
+#: resourceselector.cpp:265
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -8438,7 +8438,7 @@ msgid ""
 "list?"
 msgstr "តើ​អ្នកពិតជា​ចង់​យកប្រតិទិន <resource>%1</resource> ចេញ​ពី​បញ្ជីឬ ?"
 
-#: resourceselector.cpp:289
+#: resourceselector.cpp:290
 #, fuzzy, kde-format
 #| msgctxt "@action Reload calendar"
 #| msgid "Re&load"
@@ -8446,7 +8446,7 @@ msgctxt "@action Reload calendar"
 msgid "Reload"
 msgstr "ផ្ទុក​ឡើងវិញ"
 
-#: resourceselector.cpp:292
+#: resourceselector.cpp:293
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show &Details"
@@ -8454,7 +8454,7 @@ msgctxt "@action"
 msgid "Show Details"
 msgstr "បង្ហាញ​សេចក្ដី​លម្អិត"
 
-#: resourceselector.cpp:295
+#: resourceselector.cpp:296
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Set &Color..."
@@ -8462,7 +8462,7 @@ msgctxt "@action"
 msgid "Set Color..."
 msgstr "កំណត់​ពណ៌..."
 
-#: resourceselector.cpp:298
+#: resourceselector.cpp:299
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Clear C&olor"
@@ -8470,7 +8470,7 @@ msgctxt "@action"
 msgid "Clear Color"
 msgstr "សម្អាត​​ពណ៌"
 
-#: resourceselector.cpp:304
+#: resourceselector.cpp:305
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Update Calendar Format"
@@ -8478,7 +8478,7 @@ msgctxt "@action"
 msgid "Update Calendar Format"
 msgstr "ធ្វើ​បច្ចុប្បន្នភាព​ទ្រង់ទ្រាយ​ប្រតិទិន"
 
-#: resourceselector.cpp:307
+#: resourceselector.cpp:308
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Remove"
@@ -8486,7 +8486,7 @@ msgctxt "@action"
 msgid "Remove"
 msgstr "យកចេញ"
 
-#: resourceselector.cpp:313
+#: resourceselector.cpp:314
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Add..."
@@ -8494,7 +8494,7 @@ msgctxt "@action"
 msgid "Add..."
 msgstr "បន្ថែម..."
 
-#: resourceselector.cpp:316
+#: resourceselector.cpp:317
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Im&port..."
@@ -8502,7 +8502,7 @@ msgctxt "@action"
 msgid "Import..."
 msgstr "នាំចូល..."
 
-#: resourceselector.cpp:372
+#: resourceselector.cpp:373
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Use as &Default for Active Alarms"
@@ -8510,7 +8510,7 @@ msgctxt "@action"
 msgid "Use as Default for Active Alarms"
 msgstr "ប្រើ​ជា​លំនាំដើម​សម្រាប់​ការជូនដំណឹង​សកម្ម"
 
-#: resourceselector.cpp:373
+#: resourceselector.cpp:374
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Use as &Default for Archived Alarms"
@@ -8518,7 +8518,7 @@ msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
 msgstr "ប្រើ​ជា​លំនាំដើម​សម្រាប់​ការ​ជូន​ដំណឹង​ដែល​បាន​ដាក់​ក្នុង​ប័ណ្ណសារ"
 
-#: resourceselector.cpp:374
+#: resourceselector.cpp:375
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Use as &Default for Alarm Templates"
@@ -8526,7 +8526,7 @@ msgctxt "@action"
 msgid "Use as Default for Alarm Templates"
 msgstr "ប្រើ​ជា​លំនាំដើម​សម្រាប់​ពុម្ព​ការ​ជូនដំណឹង"
 
-#: resourceselector.cpp:503
+#: resourceselector.cpp:504
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Active alarms"
@@ -8534,7 +8534,7 @@ msgctxt "@info"
 msgid "Active alarms"
 msgstr "ការ​ជូនដំណឹង​សកម្ម"
 
-#: resourceselector.cpp:505
+#: resourceselector.cpp:506
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Archived alarms"
@@ -8542,7 +8542,7 @@ msgctxt "@info"
 msgid "Archived alarms"
 msgstr "ការ​ជូនដំណឹង​ដែល​បាន​ដាក់​ក្នុង​ប័ណ្ណសារ"
 
-#: resourceselector.cpp:507
+#: resourceselector.cpp:508
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Alarm templates"
@@ -8550,7 +8550,7 @@ msgctxt "@info"
 msgid "Alarm templates"
 msgstr "ពុម្ព​ការ​ជូនដំណឹង"
 
-#: resourceselector.cpp:508
+#: resourceselector.cpp:509
 #, fuzzy, kde-format
 #| msgctxt "@info/plain List separator"
 #| msgid ", "
@@ -8558,7 +8558,7 @@ msgctxt "@info List separator"
 msgid ", "
 msgstr ", "
 
-#: resourceselector.cpp:511
+#: resourceselector.cpp:512
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Read-write"
@@ -8566,7 +8566,7 @@ msgctxt "@info"
 msgid "Read-write"
 msgstr "អាន-សរសេរ"
 
-#: resourceselector.cpp:513
+#: resourceselector.cpp:514
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Enabled"
@@ -8574,14 +8574,14 @@ msgctxt "@info"
 msgid "Enabled"
 msgstr "​បើក"
 
-#: resourceselector.cpp:514
+#: resourceselector.cpp:515
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@info"
 msgid "Disabled"
 msgstr "បិទ​"
 
-#: resourceselector.cpp:516
+#: resourceselector.cpp:517
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
 #| msgid "Yes"
@@ -8589,7 +8589,7 @@ msgctxt "@info Parameter in 'Default calendar: Yes/No'"
 msgid "Yes"
 msgstr "បាទ/ចាស"
 
-#: resourceselector.cpp:517
+#: resourceselector.cpp:518
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
 #| msgid "No"
@@ -8597,7 +8597,7 @@ msgctxt "@info Parameter in 'Default calendar: Yes/No'"
 msgid "No"
 msgstr "ទេ"
 
-#: resourceselector.cpp:519
+#: resourceselector.cpp:520
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

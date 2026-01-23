@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-22 00:59+0000\n"
+"POT-Creation-Date: 2026-01-23 00:44+0000\n"
 "PO-Revision-Date: 2022-04-25 19:18+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -51,7 +51,7 @@ msgctxt "@info"
 msgid "Program error"
 msgstr "Chyba v programe"
 
-#: alarmtimewidget.cpp:42
+#: alarmtimewidget.cpp:43
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -61,7 +61,7 @@ msgstr ""
 "Zadajte dĺžku času (v hodinách a minútach) od aktuálneho času pre "
 "naplánovanie alarmu."
 
-#: alarmtimewidget.cpp:68
+#: alarmtimewidget.cpp:69
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -71,7 +71,7 @@ msgstr ""
 "Ak je nastavené opakovanie, počiatočný dátum/čas budú upravené na prvé "
 "opakovanie na alebo po zadanom dátume a čase."
 
-#: alarmtimewidget.cpp:71
+#: alarmtimewidget.cpp:72
 #, kde-format
 msgctxt "@info"
 msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
@@ -79,7 +79,7 @@ msgstr ""
 "Toto používa predvolené časové pásmo z KAlarm, nastavené v dialógu "
 "Nastavenia."
 
-#: alarmtimewidget.cpp:92
+#: alarmtimewidget.cpp:93
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Deferred to:"
@@ -87,31 +87,31 @@ msgctxt "@option:radio"
 msgid "Defer until:"
 msgstr "Pozdržať do:"
 
-#: alarmtimewidget.cpp:92
+#: alarmtimewidget.cpp:93
 #, kde-format
 msgctxt "@option:radio"
 msgid "At date/time:"
 msgstr "V deň/čas:"
 
-#: alarmtimewidget.cpp:93
+#: alarmtimewidget.cpp:94
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm to the specified date and time."
 msgstr "Preplánovať alarm na zadaný dátum a čas."
 
-#: alarmtimewidget.cpp:94
+#: alarmtimewidget.cpp:95
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify the date, or date and time, to schedule the alarm."
 msgstr "Zadať dátum alebo dátum a čas pre naplánovanie alarmu."
 
-#: alarmtimewidget.cpp:103
+#: alarmtimewidget.cpp:104
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the date to schedule the alarm.</para><para>%1</para>"
 msgstr "<para>Zadajte dátum pre naplánovanie alarmu.</para><para>%1</para>"
 
-#: alarmtimewidget.cpp:115
+#: alarmtimewidget.cpp:116
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -121,13 +121,13 @@ msgstr ""
 "<para>Zadajte čas pre naplánovanie alarmu.</para><para>%1</para><para>%2</"
 "para>"
 
-#: alarmtimewidget.cpp:128 recurrenceedit.cpp:251
+#: alarmtimewidget.cpp:129 recurrenceedit.cpp:251
 #, kde-format
 msgctxt "@option:check"
 msgid "Any time"
 msgstr "Kedykoľvek"
 
-#: alarmtimewidget.cpp:131
+#: alarmtimewidget.cpp:132
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Next scheduled date and time of the alarm"
@@ -135,7 +135,7 @@ msgctxt "@info:tooltip"
 msgid "Set only a date (without a time) for the alarm"
 msgstr "Ďalší naplánovaný dátum a čas alarmu"
 
-#: alarmtimewidget.cpp:133
+#: alarmtimewidget.cpp:134
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -145,7 +145,7 @@ msgstr ""
 "Zaškrtnúť pre zadanie iba dátumu (bez času) pre alarm. Alarm sa spustí hneď "
 "pri prvej príležitosti pre vybraný dátum."
 
-#: alarmtimewidget.cpp:137
+#: alarmtimewidget.cpp:138
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Deferred to:"
@@ -153,38 +153,38 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Pozdržať do:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:344
+#: alarmtimewidget.cpp:138 editdlg.cpp:342
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
 msgstr "Čas od teraz:"
 
-#: alarmtimewidget.cpp:138
+#: alarmtimewidget.cpp:139
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm for the specified time interval after now."
 msgstr "Znovu naplánovať alarm na zadaný časový interval od teraz."
 
-#: alarmtimewidget.cpp:139
+#: alarmtimewidget.cpp:140
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr ""
 "Naplánovať alarm od aktuálneho času na zadaný časový interval od teraz."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:355
+#: alarmtimewidget.cpp:150 editdlg.cpp:353
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
 msgstr "<para>%1</para><para>%2</para>"
 
-#: alarmtimewidget.cpp:155
+#: alarmtimewidget.cpp:156
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
 msgstr ""
 
-#: alarmtimewidget.cpp:156
+#: alarmtimewidget.cpp:157
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "1 Minute"
@@ -196,7 +196,7 @@ msgstr[0] "1 minúta"
 msgstr[1] "%1 minúty"
 msgstr[2] "%1 minút"
 
-#: alarmtimewidget.cpp:157
+#: alarmtimewidget.cpp:158
 #, fuzzy, kde-format
 #| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 #| msgid "1 hour"
@@ -208,7 +208,7 @@ msgstr[0] "1 hodina"
 msgstr[1] "%1 hodiny"
 msgstr[2] "%1 hodín"
 
-#: alarmtimewidget.cpp:165
+#: alarmtimewidget.cpp:166
 #, fuzzy, kde-format
 #| msgctxt "@option:radio On day number in the month"
 #| msgid "O&n day"
@@ -216,7 +216,7 @@ msgctxt "@item:inlistbox"
 msgid "1 day"
 msgstr "&Dňa"
 
-#: alarmtimewidget.cpp:166
+#: alarmtimewidget.cpp:167
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Time units"
 #| msgid "weeks"
@@ -224,7 +224,7 @@ msgctxt "@item:inlistbox"
 msgid "1 week"
 msgstr "týždňov"
 
-#: alarmtimewidget.cpp:169
+#: alarmtimewidget.cpp:170
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select a template to base the new alarm on."
@@ -232,19 +232,19 @@ msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
 msgstr "Vyberte šablónu, na ktorej chcete založiť nový alarm."
 
-#: alarmtimewidget.cpp:177
+#: alarmtimewidget.cpp:178
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
 msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 
-#: alarmtimewidget.cpp:209
+#: alarmtimewidget.cpp:210
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
 msgstr "Časové pásmo..."
 
-#: alarmtimewidget.cpp:211
+#: alarmtimewidget.cpp:212
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select the time zone to use for this alarm."
@@ -252,7 +252,7 @@ msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
 msgstr "Vyberte časové pásmo pre tento alarm."
 
-#: alarmtimewidget.cpp:213
+#: alarmtimewidget.cpp:214
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -262,37 +262,37 @@ msgstr ""
 "Vybrať časové pásmo pre tento alarm, ktoré sa líši od predvoleného časového "
 "pásma nastaveného v dialógu nastavenia v KAlarm."
 
-#: alarmtimewidget.cpp:227 prefdlg.cpp:804
+#: alarmtimewidget.cpp:228 prefdlg.cpp:804
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
 msgstr "Časové pásmo:"
 
-#: alarmtimewidget.cpp:233
+#: alarmtimewidget.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
 msgstr "Vyberte časové pásmo pre tento alarm."
 
-#: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
+#: alarmtimewidget.cpp:314 alarmtimewidget.cpp:341
 #, kde-format
 msgctxt "@info"
 msgid "Invalid time"
 msgstr "Neplatný čas"
 
-#: alarmtimewidget.cpp:333
+#: alarmtimewidget.cpp:334
 #, kde-format
 msgctxt "@info"
 msgid "Invalid date"
 msgstr "Neplatný dátum"
 
-#: alarmtimewidget.cpp:354
+#: alarmtimewidget.cpp:355
 #, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
 msgstr "Dátum alarmu už vypršal"
 
-#: alarmtimewidget.cpp:366
+#: alarmtimewidget.cpp:367
 #, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"
@@ -2337,14 +2337,14 @@ msgctxt "@label When the alarm will next trigger after being skipped"
 msgid "Skipping until:"
 msgstr ""
 
-#: editdlg.cpp:286
+#: editdlg.cpp:285
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The next time the alarm will trigger, when it will resume normal activation."
 msgstr ""
 
-#: editdlg.cpp:290
+#: editdlg.cpp:288
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Cancel if late"
@@ -2352,25 +2352,25 @@ msgctxt "@action:button"
 msgid "Cancel skip"
 msgstr "Zrušiť, ak neskoro"
 
-#: editdlg.cpp:292
+#: editdlg.cpp:290
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel skipping of the alarm"
 msgstr ""
 
-#: editdlg.cpp:303 editdlg.cpp:364
+#: editdlg.cpp:301 editdlg.cpp:362
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Čas"
 
-#: editdlg.cpp:310
+#: editdlg.cpp:308
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "Východzí čas"
 
-#: editdlg.cpp:312
+#: editdlg.cpp:310
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2380,19 +2380,19 @@ msgstr ""
 "Nezadávajte počiatočný čas pre alarmy založené na tejto šablóne. Použije sa "
 "východzí počiatočný čas."
 
-#: editdlg.cpp:320
+#: editdlg.cpp:318
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Čas:"
 
-#: editdlg.cpp:322
+#: editdlg.cpp:320
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "Zadajte počiatočný čas alarmov založených na tejto šablóne."
 
-#: editdlg.cpp:328
+#: editdlg.cpp:326
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2402,13 +2402,13 @@ msgstr ""
 "<para>Zadajte počiatočný čas alarmov založených na tejto šablóne.</"
 "para><para>%1</para>"
 
-#: editdlg.cpp:335
+#: editdlg.cpp:333
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Iba dátum"
 
-#: editdlg.cpp:337
+#: editdlg.cpp:335
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2418,7 +2418,7 @@ msgstr ""
 "Nastaviť voľbu <interface>Kedykoľvek</interface> pre alarmy založené na "
 "tejto šablóne."
 
-#: editdlg.cpp:347
+#: editdlg.cpp:345
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2428,7 +2428,7 @@ msgstr ""
 "Nastavte alarmy založené na tejto šablóne, aby sa spustili po určenom "
 "časovom intervale od vytvorenia alarmu."
 
-#: editdlg.cpp:411
+#: editdlg.cpp:409
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Wake From Suspend"
@@ -2436,32 +2436,32 @@ msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "Prebudenie z uspania"
 
-#: editdlg.cpp:413
+#: editdlg.cpp:411
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
 
-#: editdlg.cpp:430
+#: editdlg.cpp:428
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "Zapnite, ak chcete kopírovať alarm do kalendára KOrganizeru"
 
-#: editdlg.cpp:1112
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Musíte zadať meno pre šablónu alarmov"
 
-#: editdlg.cpp:1116
+#: editdlg.cpp:1114
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Meno šablóny sa už používa"
 
-#: editdlg.cpp:1142
+#: editdlg.cpp:1140
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2470,7 +2470,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1175
+#: editdlg.cpp:1173
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2480,7 +2480,7 @@ msgstr ""
 "Počiatočný dátum nezodpovedá opakovaciemu vzoru alarmu, preto bude upravený "
 "pre dátum nasledujúceho opakovania (%1)."
 
-#: editdlg.cpp:1179
+#: editdlg.cpp:1177
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2490,19 +2490,19 @@ msgstr ""
 "Počiatočný dátum/čas nezodpovedá opakovaciemu vzoru alarmu, preto bude "
 "upravený pre dátum/čas nasledujúceho opakovania (%1)."
 
-#: editdlg.cpp:1202
+#: editdlg.cpp:1200
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Opakovanie už vypršalo"
 
-#: editdlg.cpp:1213
+#: editdlg.cpp:1211
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarm nebude nikdy spustený počas pracovných hodín"
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1240
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2512,7 +2512,7 @@ msgstr ""
 "Perióda pripomenutia musí byť menšia než je interval opakovania, iba že by "
 "ste zapli <interface>%1</interface>."
 
-#: editdlg.cpp:1257
+#: editdlg.cpp:1255
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2522,7 +2522,7 @@ msgstr ""
 "Trvanie jednoduchého opakovania alarmu musí byť menšia než doba opakovania "
 "mínus ľubovoľná doba pripomenutia"
 
-#: editdlg.cpp:1264
+#: editdlg.cpp:1262
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2532,19 +2532,19 @@ msgstr ""
 "Pre opakovanie v rámci opakovania musí byť perióda pre alarmy založené iba "
 "na dátume zadaná v dňoch alebo týždňoch"
 
-#: editdlg.cpp:1295
+#: editdlg.cpp:1293
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Musíte vybrať kalendár, do ktorého sa uloží alarm"
 
-#: editdlg.cpp:1376
+#: editdlg.cpp:1374
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Menej možností <<"
 
-#: editdlg.cpp:1377
+#: editdlg.cpp:1375
 #, fuzzy, kde-format
 #| msgctxt "@action:Button"
 #| msgid "Fewer Options <<"
@@ -2552,13 +2552,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Menej možností <<"
 
-#: editdlg.cpp:1382
+#: editdlg.cpp:1380
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Viac možností >>"
 
-#: editdlg.cpp:1383
+#: editdlg.cpp:1381
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
@@ -2566,7 +2566,7 @@ msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr "Viac možností >>"
 
-#: editdlg.cpp:1623
+#: editdlg.cpp:1620
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -2574,7 +2574,7 @@ msgid ""
 "inhibition or active full screen applications"
 msgstr ""
 
-#: editdlg.cpp:1625
+#: editdlg.cpp:1621
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3040,7 +3040,7 @@ msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Súbory, ktoré sa majú poslať ako prílohy emailu."
 
-#: editdlgtypes.cpp:1257 resourceselector.cpp:76
+#: editdlgtypes.cpp:1257 resourceselector.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
@@ -3052,7 +3052,7 @@ msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Pridať prílohu k správe."
 
-#: editdlgtypes.cpp:1262 resourceselector.cpp:78
+#: editdlgtypes.cpp:1262 resourceselector.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
@@ -4664,7 +4664,7 @@ msgctxt "@action"
 msgid "Copy..."
 msgstr "&Kopírovať..."
 
-#: mainwindow.cpp:482 resourceselector.cpp:301
+#: mainwindow.cpp:482 resourceselector.cpp:302
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Edit..."
@@ -4752,7 +4752,7 @@ msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "E&xportovať vybrané alarmy..."
 
-#: mainwindow.cpp:570 resourceselector.cpp:319
+#: mainwindow.cpp:570 resourceselector.cpp:320
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "E&xport..."
@@ -5086,7 +5086,7 @@ msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Potvrdiť alarm"
 
-#: messagewindow.cpp:438 resourceselector.cpp:77 templatedlg.cpp:81
+#: messagewindow.cpp:438 resourceselector.cpp:78 templatedlg.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -8126,37 +8126,37 @@ msgid ""
 "access."
 msgstr ""
 
-#: resourceselector.cpp:50
+#: resourceselector.cpp:51
 #, kde-format
 msgctxt "@title:group"
 msgid "Calendars"
 msgstr "Kalendáre"
 
-#: resourceselector.cpp:54
+#: resourceselector.cpp:55
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Active Alarms"
 msgstr "Aktívne alarmy"
 
-#: resourceselector.cpp:55
+#: resourceselector.cpp:56
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Archived Alarms"
 msgstr "Archivované alarmy"
 
-#: resourceselector.cpp:56
+#: resourceselector.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Alarm Templates"
 msgstr "Šablóny alarmov"
 
-#: resourceselector.cpp:57
+#: resourceselector.cpp:58
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which type of data to show alarm calendars for"
 msgstr "Vybať, pre ktorý typ dát zobrazovať kalendáre alarmov"
 
-#: resourceselector.cpp:68
+#: resourceselector.cpp:69
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8168,7 +8168,7 @@ msgstr ""
 "kalendár zapnutý (zaškrtnuté) alebo zakázaný (nezaškrtnuté). Predvolený "
 "kalendár je zobrazený tučne."
 
-#: resourceselector.cpp:82
+#: resourceselector.cpp:83
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Choose Calendar"
@@ -8176,7 +8176,7 @@ msgctxt "@info:tooltip"
 msgid "Reconfigure the selected calendar"
 msgstr "Vybrať kalendár"
 
-#: resourceselector.cpp:83
+#: resourceselector.cpp:84
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the highlighted calendar"
@@ -8184,7 +8184,7 @@ msgctxt "@info:whatsthis"
 msgid "Edit the highlighted calendar's configuration"
 msgstr "Upraviť zvýraznený kalendár"
 
-#: resourceselector.cpp:84
+#: resourceselector.cpp:85
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Remove the highlighted attachment from the email."
@@ -8192,7 +8192,7 @@ msgctxt "@info:tooltip"
 msgid "Remove the selected calendar from the list"
 msgstr "Odstrániť zvýraznenú prílohu z emailu."
 
-#: resourceselector.cpp:85
+#: resourceselector.cpp:86
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8204,31 +8204,31 @@ msgstr ""
 "taký zostáva nedotknutý a môže byť opätovne načítaný do zoznamu, ak je to "
 "vyžadované.</para>"
 
-#: resourceselector.cpp:111
+#: resourceselector.cpp:112
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new active alarm calendar"
 msgstr "Pridať nový kalendár aktívnych alarmov"
 
-#: resourceselector.cpp:115
+#: resourceselector.cpp:116
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new archived alarm calendar"
 msgstr "Pridať nový kalendár archivovaných alarmov"
 
-#: resourceselector.cpp:119
+#: resourceselector.cpp:120
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new alarm template calendar"
 msgstr "Pridať novú šablónu kalendára alarmov"
 
-#: resourceselector.cpp:231
+#: resourceselector.cpp:232
 #, kde-format
 msgctxt "@info"
 msgid "You cannot remove your default active alarm calendar."
 msgstr "Nemôžete odstrániť váš predvolený kalendár aktívneho alarmu."
 
-#: resourceselector.cpp:238
+#: resourceselector.cpp:239
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -8238,7 +8238,7 @@ msgstr ""
 "Nemôžete odstrániť predvolený kalendár archivovaných alarmov, zatiaľ čo máte "
 "nastavené archivovanie vypršaných alarmov."
 
-#: resourceselector.cpp:253
+#: resourceselector.cpp:254
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "<para>It also contains:%1</para>"
@@ -8246,7 +8246,7 @@ msgctxt "@info"
 msgid "It also contains %1"
 msgstr "<para>Tiež obsahuje:%1</para>"
 
-#: resourceselector.cpp:254
+#: resourceselector.cpp:255
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -8260,7 +8260,7 @@ msgstr ""
 "<para><resource>%1</resource> je predvolený kalendár pre:%2</para>"
 "%3<para>Naozaj ho chcete odstrániť zo zoznamu všetkých kalendárov?</para>"
 
-#: resourceselector.cpp:258
+#: resourceselector.cpp:259
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -8270,7 +8270,7 @@ msgstr ""
 "Naozaj chcete odstrániť váš predvolený kalendár (<resource>%1</resource>) zo "
 "zoznamu?"
 
-#: resourceselector.cpp:261
+#: resourceselector.cpp:262
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -8284,7 +8284,7 @@ msgstr ""
 "<para><resource>%1</resource> obsahuje:%2</para><para>Naozaj ho chcete "
 "odstrániť zo zoznamu všetkých kalendárov?</para>"
 
-#: resourceselector.cpp:264
+#: resourceselector.cpp:265
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -8292,7 +8292,7 @@ msgid ""
 "list?"
 msgstr "Naozaj chcete odstrániť kalendár <resource>%1</resource> zo zoznamu?"
 
-#: resourceselector.cpp:289
+#: resourceselector.cpp:290
 #, fuzzy, kde-format
 #| msgctxt "@action Reload calendar"
 #| msgid "Re&load"
@@ -8300,7 +8300,7 @@ msgctxt "@action Reload calendar"
 msgid "Reload"
 msgstr "Znovu načítať"
 
-#: resourceselector.cpp:292
+#: resourceselector.cpp:293
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show &Details"
@@ -8308,7 +8308,7 @@ msgctxt "@action"
 msgid "Show Details"
 msgstr "Zobraziť &podrobnosti"
 
-#: resourceselector.cpp:295
+#: resourceselector.cpp:296
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Set &Color..."
@@ -8316,7 +8316,7 @@ msgctxt "@action"
 msgid "Set Color..."
 msgstr "Nastaviť farbu..."
 
-#: resourceselector.cpp:298
+#: resourceselector.cpp:299
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Clear C&olor"
@@ -8324,7 +8324,7 @@ msgctxt "@action"
 msgid "Clear Color"
 msgstr "&Vyčistiť farbu"
 
-#: resourceselector.cpp:304
+#: resourceselector.cpp:305
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Update Calendar Format"
@@ -8332,7 +8332,7 @@ msgctxt "@action"
 msgid "Update Calendar Format"
 msgstr "Akt&ualizovať formát kalendára "
 
-#: resourceselector.cpp:307
+#: resourceselector.cpp:308
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Remove"
@@ -8340,7 +8340,7 @@ msgctxt "@action"
 msgid "Remove"
 msgstr "Odstrániť"
 
-#: resourceselector.cpp:313
+#: resourceselector.cpp:314
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Add..."
@@ -8348,7 +8348,7 @@ msgctxt "@action"
 msgid "Add..."
 msgstr "Pridať..."
 
-#: resourceselector.cpp:316
+#: resourceselector.cpp:317
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Im&port..."
@@ -8356,7 +8356,7 @@ msgctxt "@action"
 msgid "Import..."
 msgstr "Im&portovať..."
 
-#: resourceselector.cpp:372
+#: resourceselector.cpp:373
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Use as &Default for Active Alarms"
@@ -8364,7 +8364,7 @@ msgctxt "@action"
 msgid "Use as Default for Active Alarms"
 msgstr "Použiť ako &východzí pre aktívne alarmy"
 
-#: resourceselector.cpp:373
+#: resourceselector.cpp:374
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Use as &Default for Archived Alarms"
@@ -8372,7 +8372,7 @@ msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
 msgstr "Použiť ako východzí pre &archivované alarmy"
 
-#: resourceselector.cpp:374
+#: resourceselector.cpp:375
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Use as &Default for Alarm Templates"
@@ -8380,61 +8380,61 @@ msgctxt "@action"
 msgid "Use as Default for Alarm Templates"
 msgstr "Použiť ako východzí p&re šablóny alarmov"
 
-#: resourceselector.cpp:503
+#: resourceselector.cpp:504
 #, kde-format
 msgctxt "@info"
 msgid "Active alarms"
 msgstr "Aktívne alarmy"
 
-#: resourceselector.cpp:505
+#: resourceselector.cpp:506
 #, kde-format
 msgctxt "@info"
 msgid "Archived alarms"
 msgstr "Archivované alarmy"
 
-#: resourceselector.cpp:507
+#: resourceselector.cpp:508
 #, kde-format
 msgctxt "@info"
 msgid "Alarm templates"
 msgstr "Šablóny alarmov"
 
-#: resourceselector.cpp:508
+#: resourceselector.cpp:509
 #, kde-format
 msgctxt "@info List separator"
 msgid ", "
 msgstr ", "
 
-#: resourceselector.cpp:511
+#: resourceselector.cpp:512
 #, kde-format
 msgctxt "@info"
 msgid "Read-write"
 msgstr "Čítanie aj zápis"
 
-#: resourceselector.cpp:513
+#: resourceselector.cpp:514
 #, kde-format
 msgctxt "@info"
 msgid "Enabled"
 msgstr "Povolené"
 
-#: resourceselector.cpp:514
+#: resourceselector.cpp:515
 #, kde-format
 msgctxt "@info"
 msgid "Disabled"
 msgstr "Zakázané"
 
-#: resourceselector.cpp:516
+#: resourceselector.cpp:517
 #, kde-format
 msgctxt "@info Parameter in 'Default calendar: Yes/No'"
 msgid "Yes"
 msgstr "Áno"
 
-#: resourceselector.cpp:517
+#: resourceselector.cpp:518
 #, kde-format
 msgctxt "@info Parameter in 'Default calendar: Yes/No'"
 msgid "No"
 msgstr "Nie"
 
-#: resourceselector.cpp:519
+#: resourceselector.cpp:520
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

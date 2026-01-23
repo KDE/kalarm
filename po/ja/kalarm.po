@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-22 00:59+0000\n"
+"POT-Creation-Date: 2026-01-23 00:44+0000\n"
 "PO-Revision-Date: 2011-08-14 14:09-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -50,7 +50,7 @@ msgctxt "@info"
 msgid "Program error"
 msgstr "プログラムエラー"
 
-#: alarmtimewidget.cpp:42
+#: alarmtimewidget.cpp:43
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -62,7 +62,7 @@ msgid ""
 "schedule the alarm."
 msgstr "今から何時間何分後にアラームを実行するかを指定します。"
 
-#: alarmtimewidget.cpp:68
+#: alarmtimewidget.cpp:69
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -76,7 +76,7 @@ msgstr ""
 "繰り返しを設定した場合は、開始日時は指定した日時以降の最初の繰り返しの日時に"
 "調整されます。"
 
-#: alarmtimewidget.cpp:71
+#: alarmtimewidget.cpp:72
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -87,7 +87,7 @@ msgstr ""
 "これは設定ダイアログで指定された KAlarm のデフォルトのタイムゾーンを使用しま"
 "す。"
 
-#: alarmtimewidget.cpp:92
+#: alarmtimewidget.cpp:93
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Deferred to:"
@@ -95,31 +95,31 @@ msgctxt "@option:radio"
 msgid "Defer until:"
 msgstr "次に延期:"
 
-#: alarmtimewidget.cpp:92
+#: alarmtimewidget.cpp:93
 #, kde-format
 msgctxt "@option:radio"
 msgid "At date/time:"
 msgstr "この日付/時刻に:"
 
-#: alarmtimewidget.cpp:93
+#: alarmtimewidget.cpp:94
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm to the specified date and time."
 msgstr "指定した日付/時刻にアラームを再セットします。"
 
-#: alarmtimewidget.cpp:94
+#: alarmtimewidget.cpp:95
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify the date, or date and time, to schedule the alarm."
 msgstr "アラームを実行する日付または日付と時刻を指定します。"
 
-#: alarmtimewidget.cpp:103
+#: alarmtimewidget.cpp:104
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the date to schedule the alarm.</para><para>%1</para>"
 msgstr "<para>アラームをセットする日付を指定します。</para><para>%1</para>"
 
-#: alarmtimewidget.cpp:115
+#: alarmtimewidget.cpp:116
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -129,13 +129,13 @@ msgstr ""
 "<para>アラームをセットする時刻を指定します。</para><para>%1</para><para>%2</"
 "para>"
 
-#: alarmtimewidget.cpp:128 recurrenceedit.cpp:251
+#: alarmtimewidget.cpp:129 recurrenceedit.cpp:251
 #, kde-format
 msgctxt "@option:check"
 msgid "Any time"
 msgstr "時刻指定なし"
 
-#: alarmtimewidget.cpp:131
+#: alarmtimewidget.cpp:132
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Next scheduled date and time of the alarm"
@@ -143,7 +143,7 @@ msgctxt "@info:tooltip"
 msgid "Set only a date (without a time) for the alarm"
 msgstr "次にアラームを実行する日付/時刻"
 
-#: alarmtimewidget.cpp:133
+#: alarmtimewidget.cpp:134
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -153,7 +153,7 @@ msgstr ""
 "アラームの日付のみを指定する場合 (時刻を指定しない場合) にチェックします。ア"
 "ラームは指定された日の最初の機会に実行されます。"
 
-#: alarmtimewidget.cpp:137
+#: alarmtimewidget.cpp:138
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Deferred to:"
@@ -161,37 +161,37 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "次に延期:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:344
+#: alarmtimewidget.cpp:138 editdlg.cpp:342
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
 msgstr "今からの時間:"
 
-#: alarmtimewidget.cpp:138
+#: alarmtimewidget.cpp:139
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm for the specified time interval after now."
 msgstr "今から指定した時間だけアラームを延期します。"
 
-#: alarmtimewidget.cpp:139
+#: alarmtimewidget.cpp:140
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "今から指定した時間後にアラームをセットします。"
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:355
+#: alarmtimewidget.cpp:150 editdlg.cpp:353
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
 msgstr "<para>%1</para><para>%2</para>"
 
-#: alarmtimewidget.cpp:155
+#: alarmtimewidget.cpp:156
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
 msgstr ""
 
-#: alarmtimewidget.cpp:156
+#: alarmtimewidget.cpp:157
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Minutes"
@@ -200,7 +200,7 @@ msgid "1 minute"
 msgid_plural "%1 minutes"
 msgstr[0] "分"
 
-#: alarmtimewidget.cpp:157
+#: alarmtimewidget.cpp:158
 #, fuzzy, kde-format
 #| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 #| msgid "1 hour"
@@ -210,7 +210,7 @@ msgid "1 hour"
 msgid_plural "%1 hours"
 msgstr[0] "%1 時間"
 
-#: alarmtimewidget.cpp:165
+#: alarmtimewidget.cpp:166
 #, fuzzy, kde-format
 #| msgctxt "@option:radio On day number in the month"
 #| msgid "O&n day"
@@ -218,7 +218,7 @@ msgctxt "@item:inlistbox"
 msgid "1 day"
 msgstr "日付(&N)"
 
-#: alarmtimewidget.cpp:166
+#: alarmtimewidget.cpp:167
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Time units"
 #| msgid "weeks"
@@ -226,7 +226,7 @@ msgctxt "@item:inlistbox"
 msgid "1 week"
 msgstr "週間"
 
-#: alarmtimewidget.cpp:169
+#: alarmtimewidget.cpp:170
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select a template to base the new alarm on."
@@ -234,19 +234,19 @@ msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
 msgstr "新しいアラームに流用するテンプレートを選択します。"
 
-#: alarmtimewidget.cpp:177
+#: alarmtimewidget.cpp:178
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
 msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 
-#: alarmtimewidget.cpp:209
+#: alarmtimewidget.cpp:210
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
 msgstr "タイムゾーン..."
 
-#: alarmtimewidget.cpp:211
+#: alarmtimewidget.cpp:212
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select the time zone to use for this alarm."
@@ -254,7 +254,7 @@ msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
 msgstr "このアラームに使用するタイムゾーンを選択します。"
 
-#: alarmtimewidget.cpp:213
+#: alarmtimewidget.cpp:214
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -264,37 +264,37 @@ msgstr ""
 "このアラームに KAlarm の設定ダイアログで設定されているものと異なるタイムゾー"
 "ンを使用する場合、ここでタイムゾーンを選択します。"
 
-#: alarmtimewidget.cpp:227 prefdlg.cpp:804
+#: alarmtimewidget.cpp:228 prefdlg.cpp:804
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
 msgstr "タイムゾーン:"
 
-#: alarmtimewidget.cpp:233
+#: alarmtimewidget.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
 msgstr "このアラームに使用するタイムゾーンを選択します。"
 
-#: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
+#: alarmtimewidget.cpp:314 alarmtimewidget.cpp:341
 #, kde-format
 msgctxt "@info"
 msgid "Invalid time"
 msgstr "無効な時間"
 
-#: alarmtimewidget.cpp:333
+#: alarmtimewidget.cpp:334
 #, kde-format
 msgctxt "@info"
 msgid "Invalid date"
 msgstr "無効な日付"
 
-#: alarmtimewidget.cpp:354
+#: alarmtimewidget.cpp:355
 #, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
 msgstr "アラームの日は既に過ぎています"
 
-#: alarmtimewidget.cpp:366
+#: alarmtimewidget.cpp:367
 #, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"
@@ -2371,14 +2371,14 @@ msgctxt "@label When the alarm will next trigger after being skipped"
 msgid "Skipping until:"
 msgstr ""
 
-#: editdlg.cpp:286
+#: editdlg.cpp:285
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The next time the alarm will trigger, when it will resume normal activation."
 msgstr ""
 
-#: editdlg.cpp:290
+#: editdlg.cpp:288
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Cancel if late"
@@ -2386,25 +2386,25 @@ msgctxt "@action:button"
 msgid "Cancel skip"
 msgstr "遅れた場合は取り消す"
 
-#: editdlg.cpp:292
+#: editdlg.cpp:290
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel skipping of the alarm"
 msgstr ""
 
-#: editdlg.cpp:303 editdlg.cpp:364
+#: editdlg.cpp:301 editdlg.cpp:362
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "時刻"
 
-#: editdlg.cpp:310
+#: editdlg.cpp:308
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "デフォルトの時間"
 
-#: editdlg.cpp:312
+#: editdlg.cpp:310
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2414,19 +2414,19 @@ msgstr ""
 "このテンプレートに基づくアラームには開始時間を指定しません。通常のデフォルト"
 "の開始時間が使用されます。"
 
-#: editdlg.cpp:320
+#: editdlg.cpp:318
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "時刻:"
 
-#: editdlg.cpp:322
+#: editdlg.cpp:320
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "このテンプレートに基づくアラームの開始時間を指定します。"
 
-#: editdlg.cpp:328
+#: editdlg.cpp:326
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2436,13 +2436,13 @@ msgstr ""
 "<para>このテンプレートに基づくアラームの開始時間を入力してください。</"
 "para><para>%1</para>"
 
-#: editdlg.cpp:335
+#: editdlg.cpp:333
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "日付のみ"
 
-#: editdlg.cpp:337
+#: editdlg.cpp:335
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2452,7 +2452,7 @@ msgstr ""
 "このテンプレートに基づくアラームに<interface>時刻指定なし</interface>オプショ"
 "ンを設定します。"
 
-#: editdlg.cpp:347
+#: editdlg.cpp:345
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2462,39 +2462,39 @@ msgstr ""
 "このテンプレートに基づくアラームを、作成時から指定した時間後に開始するように"
 "設定します。"
 
-#: editdlg.cpp:411
+#: editdlg.cpp:409
 #, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr ""
 
-#: editdlg.cpp:413
+#: editdlg.cpp:411
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
 
-#: editdlg.cpp:430
+#: editdlg.cpp:428
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr ""
 "アラームを KOrganizer のカレンダーにコピーするには、これをチェックします。"
 
-#: editdlg.cpp:1112
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "アラームテンプレートの名前を入力してください"
 
-#: editdlg.cpp:1116
+#: editdlg.cpp:1114
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "テンプレート名は既に使用されています"
 
-#: editdlg.cpp:1142
+#: editdlg.cpp:1140
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2503,7 +2503,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1175
+#: editdlg.cpp:1173
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2511,7 +2511,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1179
+#: editdlg.cpp:1177
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2519,19 +2519,19 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1202
+#: editdlg.cpp:1200
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "繰り返しの期間は既に終了しました"
 
-#: editdlg.cpp:1213
+#: editdlg.cpp:1211
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "勤務時間中はアラームは実行されません"
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1240
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2541,7 +2541,7 @@ msgstr ""
 "<interface>%1</interface>を選択していない場合、リマインダ期間は繰り返しの間隔"
 "よりも短くなければなりません。"
 
-#: editdlg.cpp:1257
+#: editdlg.cpp:1255
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2551,7 +2551,7 @@ msgstr ""
 "同一アラームの反復継続期間は、繰り返しの間隔からリマインダ期間を差し引いたも"
 "のより短くなければなりません。"
 
-#: editdlg.cpp:1264
+#: editdlg.cpp:1262
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2561,13 +2561,13 @@ msgstr ""
 "同一アラームの反復継続期間は、日付のみのアラームの場合、日か週の単位でなけれ"
 "ばなりません。"
 
-#: editdlg.cpp:1295
+#: editdlg.cpp:1293
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "アラームを保存するカレンダーを選択してください"
 
-#: editdlg.cpp:1376
+#: editdlg.cpp:1374
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2575,7 +2575,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "オプションを減らす <<"
 
-#: editdlg.cpp:1377
+#: editdlg.cpp:1375
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2583,13 +2583,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "オプションを減らす <<"
 
-#: editdlg.cpp:1382
+#: editdlg.cpp:1380
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "オプションを増やす >>"
 
-#: editdlg.cpp:1383
+#: editdlg.cpp:1381
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
@@ -2597,7 +2597,7 @@ msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr "オプションを増やす >>"
 
-#: editdlg.cpp:1623
+#: editdlg.cpp:1620
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -2605,7 +2605,7 @@ msgid ""
 "inhibition or active full screen applications"
 msgstr ""
 
-#: editdlg.cpp:1625
+#: editdlg.cpp:1621
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3077,7 +3077,7 @@ msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "メールに添付して送信するファイルを指定します。"
 
-#: editdlgtypes.cpp:1257 resourceselector.cpp:76
+#: editdlgtypes.cpp:1257 resourceselector.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
@@ -3089,7 +3089,7 @@ msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "メールに添付ファイルを追加します。"
 
-#: editdlgtypes.cpp:1262 resourceselector.cpp:78
+#: editdlgtypes.cpp:1262 resourceselector.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
@@ -4762,7 +4762,7 @@ msgctxt "@action"
 msgid "Copy..."
 msgstr "コピー(&C)..."
 
-#: mainwindow.cpp:482 resourceselector.cpp:301
+#: mainwindow.cpp:482 resourceselector.cpp:302
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Edit..."
@@ -4852,7 +4852,7 @@ msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "選択したアラームをエクスポート(&X)..."
 
-#: mainwindow.cpp:570 resourceselector.cpp:319
+#: mainwindow.cpp:570 resourceselector.cpp:320
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "E&xport..."
@@ -5177,7 +5177,7 @@ msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "アラームを了解します。"
 
-#: messagewindow.cpp:438 resourceselector.cpp:77 templatedlg.cpp:81
+#: messagewindow.cpp:438 resourceselector.cpp:78 templatedlg.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -8205,38 +8205,38 @@ msgid ""
 "access."
 msgstr ""
 
-#: resourceselector.cpp:50
+#: resourceselector.cpp:51
 #, kde-format
 msgctxt "@title:group"
 msgid "Calendars"
 msgstr "カレンダー"
 
-#: resourceselector.cpp:54
+#: resourceselector.cpp:55
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Active Alarms"
 msgstr "有効なアラーム"
 
-#: resourceselector.cpp:55
+#: resourceselector.cpp:56
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Archived Alarms"
 msgstr "アーカイブされたアラーム"
 
-#: resourceselector.cpp:56
+#: resourceselector.cpp:57
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Alarm Templates"
 msgstr "アラームテンプレート"
 
-#: resourceselector.cpp:57
+#: resourceselector.cpp:58
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which type of data to show alarm calendars for"
 msgstr "アラームカレンダーを表示するデータの種類を選択します。"
 
 # skip-rule: bold
-#: resourceselector.cpp:68
+#: resourceselector.cpp:69
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8248,7 +8248,7 @@ msgstr ""
 "ンダーが有効になっているか無効になっているかを示しています。デフォルトのカレ"
 "ンダーは太字で表示されます。"
 
-#: resourceselector.cpp:82
+#: resourceselector.cpp:83
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Choose Calendar"
@@ -8256,7 +8256,7 @@ msgctxt "@info:tooltip"
 msgid "Reconfigure the selected calendar"
 msgstr "カレンダーを選択"
 
-#: resourceselector.cpp:83
+#: resourceselector.cpp:84
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the highlighted calendar"
@@ -8264,7 +8264,7 @@ msgctxt "@info:whatsthis"
 msgid "Edit the highlighted calendar's configuration"
 msgstr "現在選択されているカレンダーを編集します。"
 
-#: resourceselector.cpp:84
+#: resourceselector.cpp:85
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Remove the highlighted attachment from the email."
@@ -8272,7 +8272,7 @@ msgctxt "@info:tooltip"
 msgid "Remove the selected calendar from the list"
 msgstr "選択されている添付ファイルをメールから削除します。"
 
-#: resourceselector.cpp:85
+#: resourceselector.cpp:86
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8284,31 +8284,31 @@ msgstr ""
 "ダーそのものは削除されないので、必要であれば後でまたリストに追加できます。</"
 "para>"
 
-#: resourceselector.cpp:111
+#: resourceselector.cpp:112
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new active alarm calendar"
 msgstr "有効なアラーム用の新しいカレンダーを追加"
 
-#: resourceselector.cpp:115
+#: resourceselector.cpp:116
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new archived alarm calendar"
 msgstr "アーカイブ用の新しいカレンダーを追加"
 
-#: resourceselector.cpp:119
+#: resourceselector.cpp:120
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new alarm template calendar"
 msgstr "アラームテンプレート用の新しいカレンダーを追加"
 
-#: resourceselector.cpp:231
+#: resourceselector.cpp:232
 #, kde-format
 msgctxt "@info"
 msgid "You cannot remove your default active alarm calendar."
 msgstr "有効なアラーム用のデフォルトのカレンダーを削除することはできません。"
 
-#: resourceselector.cpp:238
+#: resourceselector.cpp:239
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -8318,13 +8318,13 @@ msgstr ""
 "期限切れのアラームを保存しておくように設定している間は、アーカイブ用のデフォ"
 "ルトのカレンダーを削除することはできません。"
 
-#: resourceselector.cpp:253
+#: resourceselector.cpp:254
 #, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
 msgstr ""
 
-#: resourceselector.cpp:254
+#: resourceselector.cpp:255
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -8332,7 +8332,7 @@ msgid ""
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
 
-#: resourceselector.cpp:258
+#: resourceselector.cpp:259
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -8342,7 +8342,7 @@ msgstr ""
 "本当にデフォルトのカレンダー <resource>%1</resource> をリストから削除します"
 "か？"
 
-#: resourceselector.cpp:261
+#: resourceselector.cpp:262
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -8355,7 +8355,7 @@ msgid ""
 msgstr ""
 "<para>アラームは現在無効になっています。</para><para>有効にしますか？</para>"
 
-#: resourceselector.cpp:264
+#: resourceselector.cpp:265
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -8363,7 +8363,7 @@ msgid ""
 "list?"
 msgstr "本当にカレンダー <resource>%1</resource> をリストから削除しますか？"
 
-#: resourceselector.cpp:289
+#: resourceselector.cpp:290
 #, fuzzy, kde-format
 #| msgctxt "@action Reload calendar"
 #| msgid "Re&load"
@@ -8371,7 +8371,7 @@ msgctxt "@action Reload calendar"
 msgid "Reload"
 msgstr "再読み込み(&L)"
 
-#: resourceselector.cpp:292
+#: resourceselector.cpp:293
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show &Details"
@@ -8379,7 +8379,7 @@ msgctxt "@action"
 msgid "Show Details"
 msgstr "詳細を表示(&D)"
 
-#: resourceselector.cpp:295
+#: resourceselector.cpp:296
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Set &Color..."
@@ -8387,7 +8387,7 @@ msgctxt "@action"
 msgid "Set Color..."
 msgstr "色を設定(&C)..."
 
-#: resourceselector.cpp:298
+#: resourceselector.cpp:299
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Clear C&olor"
@@ -8395,7 +8395,7 @@ msgctxt "@action"
 msgid "Clear Color"
 msgstr "色設定を削除(&O)"
 
-#: resourceselector.cpp:304
+#: resourceselector.cpp:305
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Calendar Files"
@@ -8403,7 +8403,7 @@ msgctxt "@action"
 msgid "Update Calendar Format"
 msgstr "カレンダーファイル"
 
-#: resourceselector.cpp:307
+#: resourceselector.cpp:308
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Remove"
@@ -8411,7 +8411,7 @@ msgctxt "@action"
 msgid "Remove"
 msgstr "削除"
 
-#: resourceselector.cpp:313
+#: resourceselector.cpp:314
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Add..."
@@ -8419,7 +8419,7 @@ msgctxt "@action"
 msgid "Add..."
 msgstr "追加..."
 
-#: resourceselector.cpp:316
+#: resourceselector.cpp:317
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Im&port..."
@@ -8427,7 +8427,7 @@ msgctxt "@action"
 msgid "Import..."
 msgstr "インポート(&P)..."
 
-#: resourceselector.cpp:372
+#: resourceselector.cpp:373
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Use as &Default for Active Alarms"
@@ -8435,7 +8435,7 @@ msgctxt "@action"
 msgid "Use as Default for Active Alarms"
 msgstr "有効なアラームのデフォルトとして使う(&D)"
 
-#: resourceselector.cpp:373
+#: resourceselector.cpp:374
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Use as &Default for Archived Alarms"
@@ -8443,7 +8443,7 @@ msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
 msgstr "アーカイブのデフォルトとして使う(&D)"
 
-#: resourceselector.cpp:374
+#: resourceselector.cpp:375
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Use as &Default for Alarm Templates"
@@ -8451,7 +8451,7 @@ msgctxt "@action"
 msgid "Use as Default for Alarm Templates"
 msgstr "アラームテンプレートのデフォルトとして使う(&D)"
 
-#: resourceselector.cpp:503
+#: resourceselector.cpp:504
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Active alarms"
@@ -8459,7 +8459,7 @@ msgctxt "@info"
 msgid "Active alarms"
 msgstr "有効なアラーム"
 
-#: resourceselector.cpp:505
+#: resourceselector.cpp:506
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Archived alarms"
@@ -8467,7 +8467,7 @@ msgctxt "@info"
 msgid "Archived alarms"
 msgstr "アーカイブされたアラーム"
 
-#: resourceselector.cpp:507
+#: resourceselector.cpp:508
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Alarm templates"
@@ -8475,13 +8475,13 @@ msgctxt "@info"
 msgid "Alarm templates"
 msgstr "アラームテンプレート"
 
-#: resourceselector.cpp:508
+#: resourceselector.cpp:509
 #, kde-format
 msgctxt "@info List separator"
 msgid ", "
 msgstr ""
 
-#: resourceselector.cpp:511
+#: resourceselector.cpp:512
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Read-write"
@@ -8489,7 +8489,7 @@ msgctxt "@info"
 msgid "Read-write"
 msgstr "読み書き可能"
 
-#: resourceselector.cpp:513
+#: resourceselector.cpp:514
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Enabled"
@@ -8497,14 +8497,14 @@ msgctxt "@info"
 msgid "Enabled"
 msgstr "有効"
 
-#: resourceselector.cpp:514
+#: resourceselector.cpp:515
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@info"
 msgid "Disabled"
 msgstr "無効"
 
-#: resourceselector.cpp:516
+#: resourceselector.cpp:517
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
 #| msgid "Yes"
@@ -8512,7 +8512,7 @@ msgctxt "@info Parameter in 'Default calendar: Yes/No'"
 msgid "Yes"
 msgstr "はい"
 
-#: resourceselector.cpp:517
+#: resourceselector.cpp:518
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
 #| msgid "No"
@@ -8520,7 +8520,7 @@ msgctxt "@info Parameter in 'Default calendar: Yes/No'"
 msgid "No"
 msgstr "いいえ"
 
-#: resourceselector.cpp:519
+#: resourceselector.cpp:520
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
