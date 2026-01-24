@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-23 00:44+0000\n"
+"POT-Creation-Date: 2026-01-24 00:43+0000\n"
 "PO-Revision-Date: 2013-07-07 03:28+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -3553,43 +3553,43 @@ msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
 msgstr "Жаңа күнтізбе келесіге сақталмады:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1087
+#: functions.cpp:1095
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
 msgstr "Жаңа күнтізбе келесіге жүктеп берілмеді:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1106
+#: functions.cpp:1114
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "KOrganizer-де ескертулер көрсетілмейді"
 
-#: functions.cpp:1107
+#: functions.cpp:1115
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "KOrganizer-де ескерту көрсетілмейді"
 
-#: functions.cpp:1110
+#: functions.cpp:1118
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "KOrganizer-де ескерту жаңартылмайды"
 
-#: functions.cpp:1113
+#: functions.cpp:1121
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "KOrganizer-де ескертулер өшірілмейді"
 
-#: functions.cpp:1114
+#: functions.cpp:1122
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "KOrganizer-де ескерту өшірілмейді"
 
-#: functions.cpp:1124
+#: functions.cpp:1132
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
@@ -3597,43 +3597,43 @@ msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
 msgstr "<para>%1</para><para>(KOrganizer-бен байланысу қатесі)</para>"
 
-#: functions.cpp:1127
+#: functions.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
 msgstr "<para>%1</para><para>(KOrganizer толығымен жегілмеді)</para>"
 
-#: functions.cpp:1130
+#: functions.cpp:1138
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
 msgstr "<para>%1</para><para>(KOrganizer-бен байланысу қатесі)</para>"
 
-#: functions.cpp:1380
+#: functions.cpp:1388
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr "Аялдау режімінен оралу жоспарлағаны жойыды."
 
-#: functions.cpp:1414
+#: functions.cpp:1422
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr "Авторизация өткенде қате (%1)"
 
-#: functions.cpp:1463
+#: functions.cpp:1471
 #, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "Үлгіні сақтау үшін бір үлгі күнтізбені рұқсат ету керек"
 
-#: functions.cpp:1687
+#: functions.cpp:1695
 #, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
 msgstr "<para>%1</para><para>Бұны баптау диалогында орнатыңыз..</para>"
 
-#: functions.cpp:1691
+#: functions.cpp:1699
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3643,61 +3643,61 @@ msgstr ""
 "<para>Ескертулер рұқсат етілмеген.</para><para>Ескертулерді қазір рұқсат "
 "етпексіз бе?</para>"
 
-#: functions.cpp:1692
+#: functions.cpp:1700
 #, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Рұқсат ету"
 
-#: functions.cpp:1692
+#: functions.cpp:1700
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Рұқсатсыз қалдыру"
 
-#: functions.cpp:2062
+#: functions.cpp:2070
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Ескертулерді сақтау қатесі"
 
-#: functions.cpp:2063
+#: functions.cpp:2071
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Ескертуді сақтау қатесі"
 
-#: functions.cpp:2066
+#: functions.cpp:2074
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Ескертулерді өшіру қатесі"
 
-#: functions.cpp:2067
+#: functions.cpp:2075
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Ескертуді өшіру қатесі"
 
-#: functions.cpp:2070
+#: functions.cpp:2078
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Қайта белсендірілген ескертулерді сақтау қатесі"
 
-#: functions.cpp:2071
+#: functions.cpp:2079
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Қайта белсендірілген ескертуді сақтау қатесі"
 
-#: functions.cpp:2074
+#: functions.cpp:2082
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Ескерту үлгісін сақтау қатесі"
 
-#: functions.cpp:2075
+#: functions.cpp:2083
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -7950,49 +7950,49 @@ msgstr "Тек оқу үшін"
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Read-only (old format)"
-msgctxt "@item:intext Calendar status"
-msgid "Read-only (old format)"
+msgctxt "@item:intext Calendar status, parameter is KAlarm version"
+msgid "Read-only (KAlarm pre-%1 format)"
 msgstr "Тек оқу үшін (ескі пішім)"
 
-#: resources/resourcedatamodelbase.cpp:96
+#: resources/resourcedatamodelbase.cpp:97
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Read-only (other format)"
 msgctxt "@item:intext Calendar status"
-msgid "Read-only (other format)"
+msgid "Read-only (not a KAlarm calendar)"
 msgstr "Тек оқу үшін (басқа пішім)"
 
-#: resources/resourcedatamodelbase.cpp:118
+#: resources/resourcedatamodelbase.cpp:119
 #, kde-format
 msgctxt "@title:column"
 msgid "Time"
 msgstr "Уақыты"
 
-#: resources/resourcedatamodelbase.cpp:120
+#: resources/resourcedatamodelbase.cpp:121
 #, kde-format
 msgctxt "@title:column"
 msgid "Time To"
 msgstr "Қалған уақыт"
 
-#: resources/resourcedatamodelbase.cpp:122
+#: resources/resourcedatamodelbase.cpp:123
 #, kde-format
 msgctxt "@title:column"
 msgid "Repeat"
 msgstr "Қайталануы"
 
-#: resources/resourcedatamodelbase.cpp:124
+#: resources/resourcedatamodelbase.cpp:125
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:126
+#: resources/resourcedatamodelbase.cpp:127
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:128
+#: resources/resourcedatamodelbase.cpp:129
 #, fuzzy, kde-format
 #| msgctxt "@title:column Template name"
 #| msgid "Name"
@@ -8000,104 +8000,104 @@ msgctxt "@title:column"
 msgid "Name"
 msgstr "Атауы"
 
-#: resources/resourcedatamodelbase.cpp:130
+#: resources/resourcedatamodelbase.cpp:131
 #, kde-format
 msgctxt "@title:column"
 msgid "Message, File or Command"
 msgstr "Хабарлама, файл не команда"
 
-#: resources/resourcedatamodelbase.cpp:132
+#: resources/resourcedatamodelbase.cpp:133
 #, kde-format
 msgctxt "@title:column Template name"
 msgid "Name"
 msgstr "Атауы"
 
-#: resources/resourcedatamodelbase.cpp:144
+#: resources/resourcedatamodelbase.cpp:145
 #, kde-format
 msgctxt "@title:column"
 msgid "Calendars"
 msgstr "Күнтізбелер"
 
-#: resources/resourcedatamodelbase.cpp:455
+#: resources/resourcedatamodelbase.cpp:456
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
 msgstr "Команданы орындау жаңылысы"
 
-#: resources/resourcedatamodelbase.cpp:457
+#: resources/resourcedatamodelbase.cpp:458
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
 msgstr "Ескерту алдындағы әрекет жаңылды"
 
-#: resources/resourcedatamodelbase.cpp:459
+#: resources/resourcedatamodelbase.cpp:460
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
 msgstr "Ескерту кейінгі әрекет жаңылды"
 
-#: resources/resourcedatamodelbase.cpp:461
+#: resources/resourcedatamodelbase.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
 msgstr "Ескерту алдыңғы мен кейінгі әрекет жаңылды"
 
-#: resources/resourcedatamodelbase.cpp:492
+#: resources/resourcedatamodelbase.cpp:493
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
 msgstr "Бұғатталған"
 
-#: resources/resourcedatamodelbase.cpp:495
+#: resources/resourcedatamodelbase.cpp:496
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 msgstr "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 
-#: resources/resourcedatamodelbase.cpp:500
+#: resources/resourcedatamodelbase.cpp:501
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename>"
 msgstr "%1<nl/>%2: <filename>%3</filename>"
 
-#: resources/resourcedatamodelbase.cpp:561
+#: resources/resourcedatamodelbase.cpp:562
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
 msgstr "Келесі ескертуінің күні мен уақыты"
 
-#: resources/resourcedatamodelbase.cpp:563
+#: resources/resourcedatamodelbase.cpp:564
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
 msgstr "Келесі ескертуге қанша қалды"
 
-#: resources/resourcedatamodelbase.cpp:565
+#: resources/resourcedatamodelbase.cpp:566
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
 msgstr "Ескертуді қайталау аралығы"
 
-#: resources/resourcedatamodelbase.cpp:567
+#: resources/resourcedatamodelbase.cpp:568
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Background color of alarm message"
 msgstr "Ескерту хабарлама аясының түсі"
 
-#: resources/resourcedatamodelbase.cpp:569
+#: resources/resourcedatamodelbase.cpp:570
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm type (message, file, command or email)"
 msgstr "Ескертудің түрі (хабарлама, файл, команда немесе эл.пошта)"
 
-#: resources/resourcedatamodelbase.cpp:571
+#: resources/resourcedatamodelbase.cpp:572
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:573
+#: resources/resourcedatamodelbase.cpp:574
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8107,14 +8107,14 @@ msgstr ""
 "Ескерту хабрлама мәтіні, көрсетілетін мәтін файл атауы, орындалатын команда "
 "немесе эл.пошта хаттың тақырып жолы"
 
-#: resources/resourcedatamodelbase.cpp:575
+#: resources/resourcedatamodelbase.cpp:576
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
 msgstr "Ескерту үлгісінің атауы"
 
-#: resources/resourcedatamodelbase.cpp:667
-#: resources/resourcedatamodelbase.cpp:767
+#: resources/resourcedatamodelbase.cpp:668
+#: resources/resourcedatamodelbase.cpp:768
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Alarm never occurs"
 #| msgid "Never"
@@ -8122,7 +8122,7 @@ msgctxt "@info Alarm never occurs"
 msgid "Never"
 msgstr "Ешқашан"
 
-#: resources/resourcedatamodelbase.cpp:773
+#: resources/resourcedatamodelbase.cpp:774
 #, fuzzy, no-c-format, kde-format
 #| msgctxt "@info/plain n days"
 #| msgid "%1d"
@@ -8130,7 +8130,7 @@ msgctxt "@info n days"
 msgid "%1d"
 msgstr "%1к"
 
-#: resources/resourcedatamodelbase.cpp:783
+#: resources/resourcedatamodelbase.cpp:784
 #, fuzzy, kde-format
 #| msgctxt "@info/plain hours:minutes"
 #| msgid "%1:%2"
@@ -8138,7 +8138,7 @@ msgctxt "@info hours:minutes"
 msgid "%1:%2"
 msgstr "%1:%2"
 
-#: resources/resourcedatamodelbase.cpp:790
+#: resources/resourcedatamodelbase.cpp:791
 #, fuzzy, kde-format
 #| msgctxt "@info/plain days hours:minutes"
 #| msgid "%1d %2:%3"

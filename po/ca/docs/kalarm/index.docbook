@@ -98,7 +98,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->9 de gener de 2026</date>
+>22 de gener de 2026</date>
 <releaseinfo
 >3.13.0 (KDE Gear 26.04)</releaseinfo>
 
@@ -1928,14 +1928,33 @@
 
 <sect2>
 <title
->Ajornament</title>
+>Ajornament i omissió</title>
 
 <para
 >Si l'alarma és una alarma que es repeteix i que es va ajornar després de l'última vegada que es va mostrar, el grup de caselles <guilabel
->Alarma ajornada</guilabel
+>Alarma ajornada / Omesa</guilabel
 > mostrarà l'hora en què es va ajornar l'alarma. <guibutton
 >Canvia...</guibutton
 > mostrarà un diàleg que permet canviar l'hora d'ajornament o cancel·lar-la.</para>
+
+<para
+>Si l'alarma és una alarma recurrent i actualment s'està ometent (vegeu <link linkend="skipping"
+>Ometre alarmes individuals</link
+>), el grup de caselles <guilabel
+>Alarma ajornada / omesa</guilabel
+> mostra la pròxima vegada que l'alarma s'activarà després d'haver-se omès, &ead; l'hora en què es reprendrà el funcionament normal. <guibutton
+>Cancel·la l'omissió</guibutton
+> cancel·larà l'omissió de l'alarma.</para>
+
+<note
+><para
+>Si feu canvis en l'hora d'inici o en els detalls de la recurrència de l'alarma, l'omissió es cancel·la automàticament i ja no es mostrarà l'hora d'omissió.</para
+></note>
+
+<para
+>Tingueu en compte que els canvis a l'ajornament i l'omissió tenen efecte quan es fa clic a <guibutton
+>D'acord</guibutton
+>.</para>
 
 </sect2>
 
@@ -3007,7 +3026,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="skipping">
 <title
 >Ometre alarmes individuals</title>
 

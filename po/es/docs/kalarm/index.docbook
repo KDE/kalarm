@@ -126,7 +126,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2026-1-9</date>
+>2026-1-22</date>
 <releaseinfo
 >3.13.0 (KDE Gear 26.04)</releaseinfo>
 
@@ -1968,14 +1968,33 @@
 
 <sect2>
 <title
->Aplazar</title>
+>Aplazamiento y omisión</title>
 
 <para
 >Si la alarma se repite y se aplazó la última vez que fue mostrada, el grupo de opciones <guilabel
->Alarma aplazada</guilabel
+>Alarma aplazada/omitida</guilabel
 > muestra la hora a la que se aplazó la alarma. <guibutton
 >Cambiar…</guibutton
 > muestra un diálogo que le permite cambiar la hora de la alarma aplazada o cancelar el aplazamiento.</para>
+
+<para
+>Si la alarma se repite y se está ignorando en este momento (consulte <link linkend="skipping"
+>Omitir alarmas individuales</link
+>), el grupo <guilabel
+>Alarma aplazada/omitida</guilabel
+> muestra la próxima vez que se activará la alarma tras ser omitida (es decir, la hora a la continuará su operación normal). <guibutton
+>Cancelar omisión</guibutton
+> cancelará la omisión de la alarma.</para>
+
+<note
+><para
+>Si hace algún cambio en la hora de inicio de la alarma o en los detalles de la repetición, la omisión se cancela automáticamente y la hora de omisión dejará de mostrarse.</para
+></note>
+
+<para
+>Tenga en cuenta que los cambios del aplazamiento y de la omisión tendrán efecto tras pulsar el botón <guibutton
+>Aceptar</guibutton
+>.</para>
 
 </sect2>
 
@@ -3049,7 +3068,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="skipping">
 <title
 >Omisión de alarmas individuales</title>
 

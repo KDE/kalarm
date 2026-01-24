@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-23 00:44+0000\n"
+"POT-Creation-Date: 2026-01-24 00:43+0000\n"
 "PO-Revision-Date: 2007-09-07 11:50+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -3805,7 +3805,7 @@ msgstr ""
 "'%1' मा\n"
 "क्यालेन्डर बचत गर्न असफल"
 
-#: functions.cpp:1087
+#: functions.cpp:1095
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot upload calendar to\n"
@@ -3816,42 +3816,42 @@ msgstr ""
 "'%1'\n"
 "मा क्यालेन्डर अनलोड गर्न सकिँदैन"
 
-#: functions.cpp:1106
+#: functions.cpp:1114
 #, fuzzy, kde-format
 #| msgid "Unable to show alarms in KOrganizer"
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "केडीई आयोजकमा संसूचक देखाउन असमर्थ"
 
-#: functions.cpp:1107
+#: functions.cpp:1115
 #, fuzzy, kde-format
 #| msgid "Unable to show alarm in KOrganizer"
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "केडीई आयोजकमा संसूचक देखाउन असमर्थ"
 
-#: functions.cpp:1110
+#: functions.cpp:1118
 #, fuzzy, kde-format
 #| msgid "Unable to update alarm in KOrganizer"
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "केडीई आयोजकमा संसूचक अद्यावधिक गर्न असमर्थ"
 
-#: functions.cpp:1113
+#: functions.cpp:1121
 #, fuzzy, kde-format
 #| msgid "Unable to delete alarms from KOrganizer"
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "केडीई आयोजकबाट संसूचक मेट्न असमर्थ"
 
-#: functions.cpp:1114
+#: functions.cpp:1122
 #, fuzzy, kde-format
 #| msgid "Unable to delete alarm from KOrganizer"
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "केडीई आयोजकबाट संसूचक मेट्न असमर्थ"
 
-#: functions.cpp:1124
+#: functions.cpp:1132
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3862,7 +3862,7 @@ msgstr ""
 "%1\n"
 "तपाईँ परिवर्तन बचत गर्ने चाहानामा निश्चित हुनुहुन्छ ?"
 
-#: functions.cpp:1127
+#: functions.cpp:1135
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3873,7 +3873,7 @@ msgstr ""
 "%1\n"
 "तपाईँ परिवर्तन बचत गर्ने चाहानामा निश्चित हुनुहुन्छ ?"
 
-#: functions.cpp:1130
+#: functions.cpp:1138
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3884,26 +3884,26 @@ msgstr ""
 "%1\n"
 "तपाईँ परिवर्तन बचत गर्ने चाहानामा निश्चित हुनुहुन्छ ?"
 
-#: functions.cpp:1380
+#: functions.cpp:1388
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr ""
 
-#: functions.cpp:1414
+#: functions.cpp:1422
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr ""
 
-#: functions.cpp:1463
+#: functions.cpp:1471
 #, fuzzy, kde-format
 #| msgid "You must select a resource to save the alarm in"
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "तपाईँले संसूचकलाई बचत गर्न संसाधन चयन गर्नुपर्दछ"
 
-#: functions.cpp:1687
+#: functions.cpp:1695
 #, fuzzy, kde-kuit-format
 #| msgctxt "Please set the 'From' email address..."
 #| msgid ""
@@ -3915,7 +3915,7 @@ msgstr ""
 "%1\n"
 "कृपया यसलाई प्राथमिकता संवादमा सेट गर्नुहोस् ।"
 
-#: functions.cpp:1691
+#: functions.cpp:1699
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Alarms are currently disabled.\n"
@@ -3928,70 +3928,70 @@ msgstr ""
 "संसूचक हालै अक्षम पारिएका छन् ।\n"
 "तपाईँ संसूचक अहिले सक्षम पार्न चाहनुहुन्छ ?"
 
-#: functions.cpp:1692
+#: functions.cpp:1700
 #, fuzzy, kde-format
 #| msgid "Enable"
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "सक्षम पार्नुहोस्"
 
-#: functions.cpp:1692
+#: functions.cpp:1700
 #, fuzzy, kde-format
 #| msgid "Keep Disabled"
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "अक्षम राख्नुहोस्"
 
-#: functions.cpp:2062
+#: functions.cpp:2070
 #, fuzzy, kde-format
 #| msgid "Error saving alarms"
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "संसूचक बचत गर्दा त्रुटि"
 
-#: functions.cpp:2063
+#: functions.cpp:2071
 #, fuzzy, kde-format
 #| msgid "Error saving alarm"
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "संसूचक बचत गर्दा त्रुटि"
 
-#: functions.cpp:2066
+#: functions.cpp:2074
 #, fuzzy, kde-format
 #| msgid "Error deleting alarms"
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "संसूचक मेट्दा त्रुटि"
 
-#: functions.cpp:2067
+#: functions.cpp:2075
 #, fuzzy, kde-format
 #| msgid "Error deleting alarm"
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "संसूचक मेट्दा त्रुटि"
 
-#: functions.cpp:2070
+#: functions.cpp:2078
 #, fuzzy, kde-format
 #| msgid "Error saving reactivated alarms"
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "पुन: सक्रिय पारिएका संसूचक बचत गर्दा त्रुटि"
 
-#: functions.cpp:2071
+#: functions.cpp:2079
 #, fuzzy, kde-format
 #| msgid "Error saving reactivated alarm"
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "पुन: सक्रिय पारिएका संसूचक बचत गर्दा त्रुटि"
 
-#: functions.cpp:2074
+#: functions.cpp:2082
 #, fuzzy, kde-format
 #| msgid "Error saving alarm templates"
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "संसूचक टेम्प्लेट बचत गर्दा त्रुटि"
 
-#: functions.cpp:2075
+#: functions.cpp:2083
 #, fuzzy, kde-format
 #| msgid "Error saving alarm template"
 msgctxt "@info"
@@ -8405,112 +8405,113 @@ msgstr "पढ्ने मात्र"
 
 #: resources/resourcedatamodelbase.cpp:93
 #, kde-format
-msgctxt "@item:intext Calendar status"
-msgid "Read-only (old format)"
+msgctxt "@item:intext Calendar status, parameter is KAlarm version"
+msgid "Read-only (KAlarm pre-%1 format)"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:96
-#, kde-format
+#: resources/resourcedatamodelbase.cpp:97
+#, fuzzy, kde-format
+#| msgid "Please enter a resource name."
 msgctxt "@item:intext Calendar status"
-msgid "Read-only (other format)"
-msgstr ""
+msgid "Read-only (not a KAlarm calendar)"
+msgstr "कृपया संसाधन नाम प्रविष्ट गर्नुहोस् ।"
 
-#: resources/resourcedatamodelbase.cpp:118
+#: resources/resourcedatamodelbase.cpp:119
 #, fuzzy, kde-format
 #| msgid "Time"
 msgctxt "@title:column"
 msgid "Time"
 msgstr "समय"
 
-#: resources/resourcedatamodelbase.cpp:120
+#: resources/resourcedatamodelbase.cpp:121
 #, fuzzy, kde-format
 #| msgid "Time To"
 msgctxt "@title:column"
 msgid "Time To"
 msgstr "यससमय सम्म"
 
-#: resources/resourcedatamodelbase.cpp:122
+#: resources/resourcedatamodelbase.cpp:123
 #, fuzzy, kde-format
 #| msgid "Repeat"
 msgctxt "@title:column"
 msgid "Repeat"
 msgstr "दोहोर्याउनुहोस्"
 
-#: resources/resourcedatamodelbase.cpp:124
+#: resources/resourcedatamodelbase.cpp:125
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:126
+#: resources/resourcedatamodelbase.cpp:127
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:128
+#: resources/resourcedatamodelbase.cpp:129
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column"
 msgid "Name"
 msgstr "नाम"
 
-#: resources/resourcedatamodelbase.cpp:130
+#: resources/resourcedatamodelbase.cpp:131
 #, fuzzy, kde-format
 #| msgid "Message, File or Command"
 msgctxt "@title:column"
 msgid "Message, File or Command"
 msgstr "सन्देश, फाइल वा आदेश"
 
-#: resources/resourcedatamodelbase.cpp:132
+#: resources/resourcedatamodelbase.cpp:133
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "@title:column Template name"
 msgid "Name"
 msgstr "नाम"
 
-#: resources/resourcedatamodelbase.cpp:144
+#: resources/resourcedatamodelbase.cpp:145
 #, fuzzy, kde-format
 #| msgid "Calendar Files"
 msgctxt "@title:column"
 msgid "Calendars"
 msgstr "क्यालेन्डर फाइल"
 
-#: resources/resourcedatamodelbase.cpp:455
+#: resources/resourcedatamodelbase.cpp:456
 #, fuzzy, kde-format
 #| msgid "Command execution error:"
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
 msgstr "आदेश कार्यान्वयन त्रुटि:"
 
-#: resources/resourcedatamodelbase.cpp:457
+#: resources/resourcedatamodelbase.cpp:458
 #, fuzzy, kde-format
 #| msgid "Pre-alarm action"
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
 msgstr "संसूचक पुर्वको कार्य"
 
-#: resources/resourcedatamodelbase.cpp:459
+#: resources/resourcedatamodelbase.cpp:460
 #, fuzzy, kde-format
 #| msgid "Post-alarm action"
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
 msgstr "संसूचक पश्चातको कार्य"
 
-#: resources/resourcedatamodelbase.cpp:461
+#: resources/resourcedatamodelbase.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:492
+#: resources/resourcedatamodelbase.cpp:493
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
 msgstr "अक्षम"
 
-#: resources/resourcedatamodelbase.cpp:495
+#: resources/resourcedatamodelbase.cpp:496
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -8521,7 +8522,7 @@ msgstr ""
 "फाइल सङ्लग्न गर्दा त्रुटि:\n"
 "%1"
 
-#: resources/resourcedatamodelbase.cpp:500
+#: resources/resourcedatamodelbase.cpp:501
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -8532,48 +8533,48 @@ msgstr ""
 "फाइल सङ्लग्न गर्दा त्रुटि:\n"
 "%1"
 
-#: resources/resourcedatamodelbase.cpp:561
+#: resources/resourcedatamodelbase.cpp:562
 #, fuzzy, kde-format
 #| msgid "Next scheduled date and time of the alarm"
 msgctxt "@info:whatsthis"
 msgid "Next scheduled date and time of the alarm"
 msgstr "पछिल्लो संसूचकको तालिकावद्ध मिति र समय"
 
-#: resources/resourcedatamodelbase.cpp:563
+#: resources/resourcedatamodelbase.cpp:564
 #, fuzzy, kde-format
 #| msgid "How long until the next scheduled trigger of the alarm"
 msgctxt "@info:whatsthis"
 msgid "How long until the next scheduled trigger of the alarm"
 msgstr "पछिल्लो तालिकावद्ध संसूचकले कति लामो ट्रिगर गर्दछ"
 
-#: resources/resourcedatamodelbase.cpp:565
+#: resources/resourcedatamodelbase.cpp:566
 #, fuzzy, kde-format
 #| msgid "How often the alarm recurs"
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
 msgstr "संसूचक कतिबेला पुन: बज्दछ"
 
-#: resources/resourcedatamodelbase.cpp:567
+#: resources/resourcedatamodelbase.cpp:568
 #, fuzzy, kde-format
 #| msgid "Background color of alarm message"
 msgctxt "@info:whatsthis"
 msgid "Background color of alarm message"
 msgstr "संसूचको सन्देशको पृष्ठभूमि रङ"
 
-#: resources/resourcedatamodelbase.cpp:569
+#: resources/resourcedatamodelbase.cpp:570
 #, fuzzy, kde-format
 #| msgid "Alarm type (message, file, command or email)"
 msgctxt "@info:whatsthis"
 msgid "Alarm type (message, file, command or email)"
 msgstr "संसूचक प्रकार (सन्देश, फाइल, आदेश वा इमेल)"
 
-#: resources/resourcedatamodelbase.cpp:571
+#: resources/resourcedatamodelbase.cpp:572
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
 msgstr ""
 
-#: resources/resourcedatamodelbase.cpp:573
+#: resources/resourcedatamodelbase.cpp:574
 #, fuzzy, kde-format
 #| msgid ""
 #| "Alarm message text, URL of text file to display, command to execute, or "
@@ -8586,22 +8587,22 @@ msgstr ""
 "पाठ, प्रदर्शन गर्नका लागि पाठ फाइलको यूआरएल, कार्यान्वयनका लागि आदेश, वा इमेल विषय "
 "वस्तु लाइन संसूचक सन्देश"
 
-#: resources/resourcedatamodelbase.cpp:575
+#: resources/resourcedatamodelbase.cpp:576
 #, fuzzy, kde-format
 #| msgid "Name of the alarm template"
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
 msgstr "संसूचक टेम्प्लेटको नाम"
 
-#: resources/resourcedatamodelbase.cpp:667
-#: resources/resourcedatamodelbase.cpp:767
+#: resources/resourcedatamodelbase.cpp:668
+#: resources/resourcedatamodelbase.cpp:768
 #, fuzzy, kde-format
 #| msgid "Never"
 msgctxt "@info Alarm never occurs"
 msgid "Never"
 msgstr "कहिले पनि होइन"
 
-#: resources/resourcedatamodelbase.cpp:773
+#: resources/resourcedatamodelbase.cpp:774
 #, fuzzy, no-c-format, kde-format
 #| msgctxt "n days"
 #| msgid " %1d "
@@ -8609,7 +8610,7 @@ msgctxt "@info n days"
 msgid "%1d"
 msgstr " %1d "
 
-#: resources/resourcedatamodelbase.cpp:783
+#: resources/resourcedatamodelbase.cpp:784
 #, fuzzy, kde-format
 #| msgctxt "Undo-action: message"
 #| msgid "%1: %2"
@@ -8617,7 +8618,7 @@ msgctxt "@info hours:minutes"
 msgid "%1:%2"
 msgstr "%1: %2"
 
-#: resources/resourcedatamodelbase.cpp:790
+#: resources/resourcedatamodelbase.cpp:791
 #, fuzzy, kde-format
 #| msgctxt "days hours:minutes"
 #| msgid " %1d %2:%3 "
@@ -10299,11 +10300,6 @@ msgstr ""
 #~| msgid "Alarm Type"
 #~ msgid "Alarm types."
 #~ msgstr "संसूचक प्रकार"
-
-#, fuzzy
-#~| msgid "Please enter a resource name."
-#~ msgid "Path to KAlarm calendar file."
-#~ msgstr "कृपया संसाधन नाम प्रविष्ट गर्नुहोस् ।"
 
 #, fuzzy
 #~| msgid "am"
