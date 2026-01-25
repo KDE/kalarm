@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-24 00:43+0000\n"
-"PO-Revision-Date: 2026-01-14 07:52+0400\n"
+"PO-Revision-Date: 2026-01-24 11:48+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -2183,12 +2183,10 @@ msgid "Action"
 msgstr "الإجراء"
 
 #: editdlg.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Deferred Alarm"
+#, kde-format
 msgctxt "@title:group"
 msgid "Deferred / Skipped Alarm"
-msgstr "المنبّهات المؤجلة"
+msgstr "المنبّهات المؤجلة / المتخطاة"
 
 #: editdlg.cpp:271
 #, kde-format
@@ -2212,19 +2210,17 @@ msgstr "غيّر وقت تأجيل المنبه، أو ألغِ التأجيل"
 #, kde-format
 msgctxt "@label When the alarm will next trigger after being skipped"
 msgid "Skipping until:"
-msgstr ""
+msgstr "تخطي حتى:"
 
 #: editdlg.cpp:285
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The next time the alarm will trigger, when it will resume normal activation."
-msgstr ""
+msgstr "المرة التالية التي سيطلق فيها المنبه، عندما يستأنف التشغيل العادي."
 
 #: editdlg.cpp:288
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Cancel skip"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel skip"
 msgstr "ألغ التخطي"
@@ -2233,7 +2229,7 @@ msgstr "ألغ التخطي"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel skipping of the alarm"
-msgstr ""
+msgstr "ألغِ تخطي المنبه"
 
 #: editdlg.cpp:301 editdlg.cpp:362
 #, kde-format

@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-24 00:43+0000\n"
-"PO-Revision-Date: 2026-01-22 11:30+0100\n"
+"PO-Revision-Date: 2026-01-24 11:24+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -7488,20 +7488,16 @@ msgid "Read-only"
 msgstr "Solo lectura"
 
 #: resources/resourcedatamodelbase.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (old format)"
+#, kde-format
 msgctxt "@item:intext Calendar status, parameter is KAlarm version"
 msgid "Read-only (KAlarm pre-%1 format)"
-msgstr "Solo lectura (formato antiguo)"
+msgstr "Solo lectura (formato de KAlarm anterior a %1)"
 
 #: resources/resourcedatamodelbase.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (other format)"
+#, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (not a KAlarm calendar)"
-msgstr "Solo lectura (otro formato)"
+msgstr "Solo lectura (no es un calendario de KAlarm)"
 
 #: resources/resourcedatamodelbase.cpp:119
 #, kde-format

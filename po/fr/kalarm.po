@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-24 00:43+0000\n"
-"PO-Revision-Date: 2026-01-12 10:35+0100\n"
+"PO-Revision-Date: 2026-01-23 07:37+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -2369,12 +2369,10 @@ msgid "Action"
 msgstr "Action"
 
 #: editdlg.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Deferred Alarm"
+#, kde-format
 msgctxt "@title:group"
 msgid "Deferred / Skipped Alarm"
-msgstr "Alarme différée"
+msgstr "Alarme différée / ignorée"
 
 #: editdlg.cpp:271
 #, kde-format
@@ -2398,7 +2396,7 @@ msgstr "Modifier l'heure différée de l'alarme ou annuler le report"
 #, kde-format
 msgctxt "@label When the alarm will next trigger after being skipped"
 msgid "Skipping until:"
-msgstr ""
+msgstr "Ignorer jusqu'à :"
 
 #: editdlg.cpp:285
 #, kde-format
@@ -2406,11 +2404,11 @@ msgctxt "@info:tooltip"
 msgid ""
 "The next time the alarm will trigger, when it will resume normal activation."
 msgstr ""
+"La prochaine fois que l'alarme se déclenchera, elle reprendra son activation "
+"normale."
 
 #: editdlg.cpp:288
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Cancel skip"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel skip"
 msgstr "Annuler l'action d'ignorer"
@@ -2419,7 +2417,7 @@ msgstr "Annuler l'action d'ignorer"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel skipping of the alarm"
-msgstr ""
+msgstr "Annuler le contournement de l'alarme"
 
 #: editdlg.cpp:301 editdlg.cpp:362
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-24 00:43+0000\n"
-"PO-Revision-Date: 2026-01-22 06:25+0100\n"
+"PO-Revision-Date: 2026-01-24 04:22+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3889,7 +3889,7 @@ msgstr "ჩართულია"
 #, kde-format
 msgctxt "@label"
 msgid "Read-only"
-msgstr "მხოლოდ წაკითხვა"
+msgstr "მხოლოდ-კითხვადი"
 
 #: kalarmcalendar/kaeventformatter.cpp:82
 #, kde-format
@@ -7370,23 +7370,19 @@ msgstr "%1, %2, %3"
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only"
-msgstr "მხოლოდ წაკითხვა"
+msgstr "მხოლოდ-კითხვადი"
 
 #: resources/resourcedatamodelbase.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (old format)"
+#, kde-format
 msgctxt "@item:intext Calendar status, parameter is KAlarm version"
 msgid "Read-only (KAlarm pre-%1 format)"
-msgstr "მხოლოდ წაკითხვა (ძველი ფორმატი)"
+msgstr "მხოლოდ-წაკითხვადი (KAlarm-ის %1-მდელი ფორმატი)"
 
 #: resources/resourcedatamodelbase.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (other format)"
+#, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (not a KAlarm calendar)"
-msgstr "მხოლოდ წაკითხვა (სხვა ფორმატი)"
+msgstr "მხოლოდ-წაკითხვადი (KAlarm-ის კალენდარი არაა)"
 
 #: resources/resourcedatamodelbase.cpp:119
 #, kde-format
@@ -7812,7 +7808,7 @@ msgstr "წვდომები"
 #, kde-format
 msgctxt "@option:check"
 msgid "Read only"
-msgstr "მხოლოდ წაკითხვა"
+msgstr "მხოლოდ-კითხვადი"
 
 #. i18n: ectx: property (html), widget (KTextEdit, readOnlyDescription)
 #: resources/singlefileresourceconfigdialog.ui:254
