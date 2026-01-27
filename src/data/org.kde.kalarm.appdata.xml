@@ -461,7 +461,15 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
-    <release version="3.12.2" date="2026-02-05"/>
+    <release version="3.12.2" date="2026-02-05">
+      <description>
+        <p>Release description</p>
+        <ul>
+          <li>Fix hang evaluating recurring date-only alarms when start-of-day time is non-zero.</li>
+          <li>Fix hang evaluating next recurrence time for time zones with daylight savings time.</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.12.1" date="2026-01-08">
       <description>
         <p>Release description</p>
