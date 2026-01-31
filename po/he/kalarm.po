@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-07 02:40+0000\n"
-"PO-Revision-Date: 2026-01-10 20:18+0200\n"
+"PO-Revision-Date: 2026-01-30 08:36+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1699,7 +1699,7 @@ msgstr "לפי שעות/דקות"
 #, kde-format
 msgctxt "@label"
 msgid "In non-leap years, repeat yearly February 29th alarms on:"
-msgstr ""
+msgstr "בשנים לא מעוברות, לחזור על תזכורות מחזוריות ל־29 בפברואר ב־:"
 
 #. i18n: ectx: whatsthis, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:401
@@ -2179,12 +2179,14 @@ msgid "Date only"
 msgstr "תאריך בלבד"
 
 #: editdlg.cpp:322
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Set the <interface>Any time</interface> option for alarms based on this "
 "template."
-msgstr "הזן את השעה האחרונה שבה יש לחזור על התזכורת"
+msgstr ""
+"אפשר להגדיר את האפשרות <interface>בכל זמן</interface> לתזכורות שמבוססות על "
+"התבנית הזאת."
 
 #: editdlg.cpp:332
 #, kde-format
@@ -4899,10 +4901,10 @@ msgid "Alarm Defaults"
 msgstr "ברירות מחדל של התראות"
 
 #: prefdlg.cpp:167
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Default Alarm Edit Settings"
-msgstr "הגדרות ברירת המחדל של תזכורות"
+msgstr "הגדרות עריכת תזכורת כברירת מחדל"
 
 #: prefdlg.cpp:172
 #, kde-format
@@ -5030,18 +5032,18 @@ msgid "Confirm alarm deletions"
 msgstr "אישור מחיקת תזכורות"
 
 #: prefdlg.cpp:519
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Default defer time interval:"
-msgstr "דחה &למשך:"
+msgstr "משך זמן דחייה כברירת מחדל:"
 
 #: prefdlg.cpp:525
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter the default time interval (hours & minutes) to defer alarms, used by "
 "the Defer Alarm dialog."
-msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
+msgstr ""
 
 #: prefdlg.cpp:530
 #, kde-format
