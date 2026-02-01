@@ -2364,7 +2364,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications"
 msgstr ""
-"选中以在闹钟到点时始终执行闹钟，无论通知是否被抑制，或存在活动的全屏应用程序"
+"选中以在闹钟到点时始终执行闹钟，无论系统是否处于阻止通知状态，或存在活动的全"
+"屏应用程序"
 
 #: editdlg.cpp:1621
 #, kde-format
@@ -2373,8 +2374,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications."
 msgstr ""
-"选中以在闹钟到点时始终执行闹钟，无论通知是否被抑制，或存在活动的全屏应用程"
-"序。"
+"选中以在闹钟到点时始终执行闹钟，无论系统是否处于阻止通知状态，或存在活动的全"
+"屏应用程序。"
 
 #: editdlgtypes.cpp:75
 #, kde-format
