@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-24 00:43+0000\n"
-"PO-Revision-Date: 2026-01-19 22:40+0100\n"
+"PO-Revision-Date: 2026-01-29 23:19+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -2248,12 +2248,10 @@ msgid "Action"
 msgstr "Действие"
 
 #: editdlg.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Deferred Alarm"
+#, kde-format
 msgctxt "@title:group"
 msgid "Deferred / Skipped Alarm"
-msgstr "Отложена аларма"
+msgstr "Отложена / пропусната аларма"
 
 #: editdlg.cpp:271
 #, kde-format
@@ -2277,7 +2275,7 @@ msgstr "Променете времето на отлагане или отме�
 #, kde-format
 msgctxt "@label When the alarm will next trigger after being skipped"
 msgid "Skipping until:"
-msgstr ""
+msgstr "Пропускане до:"
 
 #: editdlg.cpp:285
 #, kde-format
@@ -2285,11 +2283,11 @@ msgctxt "@info:tooltip"
 msgid ""
 "The next time the alarm will trigger, when it will resume normal activation."
 msgstr ""
+"Следващият път алармата ще се задейства, когато възстанови нормалната си "
+"активност."
 
 #: editdlg.cpp:288
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Cancel skip"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel skip"
 msgstr "Отмяна на пропускането"
@@ -2298,7 +2296,7 @@ msgstr "Отмяна на пропускането"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel skipping of the alarm"
-msgstr ""
+msgstr "Отмяна на пропускането на алармата"
 
 #: editdlg.cpp:301 editdlg.cpp:362
 #, kde-format
@@ -7444,20 +7442,16 @@ msgid "Read-only"
 msgstr "Само за четене"
 
 #: resources/resourcedatamodelbase.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (old format)"
+#, kde-format
 msgctxt "@item:intext Calendar status, parameter is KAlarm version"
 msgid "Read-only (KAlarm pre-%1 format)"
-msgstr "Само за четене (стар формат)"
+msgstr "Само за четене (формат на KAlarm преди версия %1)"
 
 #: resources/resourcedatamodelbase.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (other format)"
+#, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (not a KAlarm calendar)"
-msgstr "Само за четене (друг формат)"
+msgstr "Само за четене (календар, който не е на KAlarm)"
 
 #: resources/resourcedatamodelbase.cpp:119
 #, kde-format
