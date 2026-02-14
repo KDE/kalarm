@@ -21,14 +21,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-24 00:43+0000\n"
-"PO-Revision-Date: 2026-01-28 19:20+0200\n"
+"PO-Revision-Date: 2026-02-13 21:48+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 25.12.2\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Environment: kde\n"
@@ -1559,22 +1559,19 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:309
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr "Использовать выделенное напоминание"
+msgstr "Никогда не блокировать сигнал"
 
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
 msgstr ""
-"Значение по умолчанию параметра «Закрыть напоминание после истечения периода "
-"опоздания» в диалоге настройки напоминания."
+"Значение по умолчанию в диалоге редактирования сигнала для «никогда не "
+"подавлять сигнал»."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -2193,11 +2190,10 @@ msgid "Recurrence - [%1]"
 msgstr "Повторение (%1)"
 
 #: editdlg.cpp:87
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@option:check"
 msgid "Never inhibit alarm"
-msgstr "Использовать выделенное напоминание"
+msgstr "Никогда не блокировать сигнал"
 
 #: editdlg.cpp:88
 #, kde-format
@@ -2272,12 +2268,10 @@ msgid "Action"
 msgstr "Действие"
 
 #: editdlg.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Deferred Alarm"
+#, kde-format
 msgctxt "@title:group"
 msgid "Deferred / Skipped Alarm"
-msgstr "Отсроченное напоминание"
+msgstr "Отложенное / пропущенное напоминание"
 
 #: editdlg.cpp:271
 #, kde-format
@@ -2301,7 +2295,7 @@ msgstr "Изменить время отсрочки напоминания ил
 #, kde-format
 msgctxt "@label When the alarm will next trigger after being skipped"
 msgid "Skipping until:"
-msgstr ""
+msgstr "Пропустить до:"
 
 #: editdlg.cpp:285
 #, kde-format
@@ -2309,20 +2303,19 @@ msgctxt "@info:tooltip"
 msgid ""
 "The next time the alarm will trigger, when it will resume normal activation."
 msgstr ""
+"Время следующего срабатывания сигнала при возобновлении обычной активации."
 
 #: editdlg.cpp:288
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel skip"
-msgstr "Отмена при невозможности показа"
+msgstr "Отменить пропуск"
 
 #: editdlg.cpp:290
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel skipping of the alarm"
-msgstr ""
+msgstr "Отменить пропуск сигнала"
 
 #: editdlg.cpp:301 editdlg.cpp:362
 #, kde-format
@@ -2537,6 +2530,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications"
 msgstr ""
+"Отметьте для выполнения сигнала в назначенное время независимо от блокировки "
+"уведомлений или активных полноэкранных приложений"
 
 #: editdlg.cpp:1621
 #, kde-format
@@ -2545,6 +2540,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications."
 msgstr ""
+"Отметьте для выполнения сигнала в назначенное время независимо от блокировки "
+"уведомлений или активных полноэкранных приложений."
 
 #: editdlgtypes.cpp:75
 #, kde-format
@@ -4704,20 +4701,16 @@ msgid "Delete"
 msgstr "Удалить"
 
 #: mainwindow.cpp:911
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Display Alarm"
+#, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
-msgstr "Визуальное напоминание"
+msgstr "Пропустить сигнал"
 
 #: mainwindow.cpp:912
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Number of repetitions:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
-msgstr "Количество дополнительных напоминаний:"
+msgstr "Пропустить срабатываний:"
 
 #: mainwindow.cpp:943
 #, kde-format
@@ -4809,15 +4802,13 @@ msgstr "Отключить"
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
-msgstr ""
+msgstr "Пропустить…"
 
 #: mainwindow.cpp:1781
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action"
 msgid "Cancel skip"
-msgstr "Отмена при невозможности показа"
+msgstr "Отменить пропуск"
 
 #: messagedisplay.cpp:278
 #, kde-kuit-format
@@ -7449,20 +7440,16 @@ msgid "Read-only"
 msgstr "Только для чтения"
 
 #: resources/resourcedatamodelbase.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (old format)"
+#, kde-format
 msgctxt "@item:intext Calendar status, parameter is KAlarm version"
 msgid "Read-only (KAlarm pre-%1 format)"
-msgstr "Только для чтения (старый формат)"
+msgstr "Только для чтения (формат KAlarm до версии %1)"
 
 #: resources/resourcedatamodelbase.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (other format)"
+#, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (not a KAlarm calendar)"
-msgstr "Только для чтения (другой формат)"
+msgstr "Только для чтения (не календарь KAlarm)"
 
 #: resources/resourcedatamodelbase.cpp:119
 #, kde-format
