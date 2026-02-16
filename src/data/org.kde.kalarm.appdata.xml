@@ -464,30 +464,42 @@
     <release version="3.12.2" date="2026-02-05">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Fix hang evaluating recurring date-only alarms when start-of-day time is non-zero.</li>
+          <li xml:lang="pt-BR">Corrigido o travamento na avaliação de alarmes recorrentes que consideram apenas a data quando o horário de início do dia é diferente de zero.</li>
           <li>Fix hang evaluating next recurrence time for time zones with daylight savings time.</li>
+          <li xml:lang="pt-BR">Corrigido o travamento na avaliação do próximo horário de recorrência para fusos horários com horário de verão.</li>
         </ul>
       </description>
     </release>
     <release version="3.12.1" date="2026-01-08">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Prevent multiple Defer Alarm dialogs for the same event.</li>
+          <li xml:lang="pt-BR">Impedir a exibição de várias caixas de diálogo "Adiar alarme" para o mesmo evento.</li>
           <li>If Defer is disabled for a notification alarm, don't show two Edit buttons.</li>
+          <li xml:lang="pt-BR">Se a opção Adiar estiver desativada para um alarme de notificação, não mostrar dois botões de Editar.</li>
         </ul>
       </description>
     </release>
     <release version="3.12.0" date="2025-12-11">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>If a recurrence is suppressed by work time/holidays/exception, suppress its sub-repetitions.</li>
+          <li xml:lang="pt-BR">Se uma recorrência for suprimida por horário de trabalho/feriados/exceção, suprima suas sub-repetições.</li>
           <li>Improvements and bug fixes to recurrence/work time/holidays calculations.</li>
+          <li xml:lang="pt-BR">Melhorias e correções de erros nos cálculos de recorrência/tempo de trabalho/feriados.</li>
           <li>Fix formatting of user messages which showed HTML tags.</li>
+          <li xml:lang="pt-BR">Corrigida a formatação das mensagens do usuário que exibiam tags HTML.</li>
           <li>Distinguish between daily and minutely sub-repetitions in alarm calendar.</li>
+          <li xml:lang="pt-BR">Diferenciar entre sub-repetições diárias e sub-repetições por minuto em um calendário de alarmes.</li>
           <li>Only mark calendars as 'KeepFormat' if the user declines to update them.</li>
+          <li xml:lang="pt-BR">Marcar os calendários como 'KeepFormat' somente se o usuário optar por não atualizá-los.</li>
         </ul>
       </description>
     </release>
@@ -495,10 +507,14 @@
     <release version="3.11.3" date="2025-10-09">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>If an alarm is late-cancelled, don't remove the event if a sub-repetition is still due.</li>
+          <li xml:lang="pt-BR">Se um alarme for cancelado com atraso, não remove o evento se uma sub-repetição ainda estiver pendente.</li>
           <li>Fix infinite loop when alarms trigger, if they are read-only or if the calendar is non-writable.</li>
+          <li xml:lang="pt-BR">Correção do loop infinito quando alarmes são acionados, se eles forem somente leitura ou se o calendário não for gravável.</li>
           <li>In edit dialog, don't display high accuracy warning if start time is before now.</li>
+          <li xml:lang="pt-BR">Na caixa de diálogo de edição, não exibir o aviso de alta precisão se a hora de início for anterior à hora atual.</li>
         </ul>
       </description>
     </release>
@@ -506,16 +522,20 @@
     <release version="3.11.2" date="2025-08-14">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Remove excess spacing in Preferences dialog.</li>
+          <li xml:lang="pt-BR">Remove o excesso de espaço na caixa de diálogo de Preferências.</li>
         </ul>
       </description>
     </release>
     <release version="3.11.1" date="2025-07-03">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Prevent message windows taking keyboard focus when they pop up.</li>
+          <li xml:lang="pt-BR">Impede que as janelas de mensagens ocupem o foco do teclado quando forem exibidas.</li>
         </ul>
       </description>
     </release>
@@ -524,47 +544,64 @@
     <release version="3.11.0" date="2025-04-17">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Implement audio backends as plugins to allow user selection.</li>
+          <li xml:lang="pt-BR">Implementa sistemas de áudio como plugins para permitir a seleção pelo usuário.</li>
           <li>Clean up time spin box appearance in some styles, e.g. Oxygen.</li>
+          <li xml:lang="pt-BR">Limpeza da aparência da caixa de seleção de tempo de limpeza em alguns estilos, por exemplo, Oxygen.</li>
         </ul>
       </description>
     </release>
     <release version="3.10.3" date="2025-03-06">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Fix KAlarm exiting before executing session restoration.</li>
+          <li xml:lang="pt-BR">Corrigido o problema que fazia com que o KAlarm fosse encerrado antes de executar a restauração da sessão.</li>
         </ul>
       </description>
     </release>
     <release version="3.10.2" date="2025-02-06">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Fix system tray showing blank KAlarm icon under XFCE.</li>
+          <li xml:lang="pt-BR">Corrigido o problema que mostra o ícone do KAlarm em branco na bandeja do sistema sob o XFCE.</li>
         </ul>
       </description>
     </release>
     <release version="3.10.1" date="2025-01-09">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Show normal decorated alarm windows over full screen applications on X11.</li>
+          <li xml:lang="pt-BR">Exibe janelas de alarme decoradas normais sobre aplicativos em tela cheia no X11.</li>
           <li>Fix Akonadi functionality not working.</li>
+          <li xml:lang="pt-BR">Corrigido problema com a funcionalidade do Akonadi.</li>
           <li>Make fade work each time a repeated sound alarm is played.</li>
+          <li xml:lang="pt-BR">Faz com que o efeito de fade funcione sempre que um alarme sonoro repetido for reproduzido.</li>
           <li>Fix Edit Alarm dialog error setting time if user's time zone is UTC.</li>
+          <li xml:lang="pt-BR">Corrigido o erro na caixa de diálogo para editar alarme ao definir a hora quando o fuso horário do usuário é UTC.</li>
           <li>Fix build on FreeBSD if using MPV audio.</li>
+          <li xml:lang="pt-BR">Corrigido problema de compilação no FreeBSD ao usar o áudio MPV.</li>
         </ul>
       </description>
     </release>
     <release version="3.10.0" date="2024-12-12">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Show all Run Mode options in Preferences dialog. </li>
+          <li xml:lang="pt-BR">Exibir todas as opções de modo de execução na caixa de diálogo de Preferências.</li>
           <li>Provide build option to use VLC or MPV to play sounds.</li>
+          <li xml:lang="pt-BR">Fornecer opção de compilação para usar o VLC ou o MPV para reproduzir sons.</li>
           <li>Convert to Qt 6.5 QDateTime/QTimeZone changes.</li>
+          <li xml:lang="pt-BR">Conversão para alterações de QDateTime/QTimeZone do Qt 6.5.</li>
         </ul>
       </description>
     </release>
@@ -572,35 +609,46 @@
     <release version="3.9.2" date="2024-10-10">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Fix crash if kernel alarm timers are supported.</li>
+          <li xml:lang="pt-BR">Corrigida falha quando os temporizadores de alarme do kernel são suportados.</li>
           <li>Fix Wake from Suspend not working when using RTC wake.</li>
+          <li xml:lang="pt-BR">Corrigido o problema de ativação a partir da suspensão que não funcionava ao usar a ativação por RTC.</li>
           <li>Display any audio error message immediately when using Try button while editing an alarm.</li>
+          <li xml:lang="pt-BR">Exibir imediatamente qualquer mensagem de erro de áudio ao usar o botão "Testar" durante a edição de um alarme.</li>
           <li>Fix failure to play sound files using VLC on some systems.</li>
+          <li xml:lang="pt-BR">Corrigido o problema que impedia a reprodução de arquivos de áudio usando o VLC em alguns sistemas.</li>
         </ul>
       </description>
     </release>
     <release version="3.9.1" date="2024-09-12">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Fix repeating audio alarms only playing once.</li>
+          <li xml:lang="pt-BR">Corrigido os alarmes de áudio repetidos que só tocam uma vez.</li>
         </ul>
       </description>
     </release>
     <release version="3.9.0" date="2024-08-22">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Use VLC instead of libcanberra to play sounds.</li>
+          <li xml:lang="pt-BR">Uso do VLC em vez do libcanberra para reproduzir sons.</li>
         </ul>
       </description>
     </release>
     <release version="3.8.2" date="2024-07-04">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Fix crash after editing new alarm if spell checking is enabled.</li>
+          <li xml:lang="pt-BR">Corrigido o problema que causava o fechamento inesperado do sistema após a edição de um novo alarme quando a verificação ortográfica estava ativada.</li>
         </ul>
       </description>
     </release>
@@ -609,28 +657,38 @@
     <release version="3.8.1" date="2024-04-11">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Display error message if error occurs trying to play an audio file.</li>
+          <li xml:lang="pt-BR">Exibir mensagem de erro caso ocorra algum problema ao tentar reproduzir um arquivo de áudio.</li>
         </ul>
       </description>
     </release>
     <release version="3.8.0" date="2024-03-21">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Use libcanberra instead of Phonon to play sounds, for thread safety.</li>
+          <li xml:lang="pt-BR">Para garantir a segurança das threads, usar o libcanberra em vez do Phonon para reproduzir sons.</li>
           <li>In Edit Alarm dialog, allow save if Set Volume checkbox is toggled.</li>
+          <li xml:lang="pt-BR">Na caixa de diálogo para editar alarme, permitir salvar se a caixa de seleção para definir volume estiver marcada.</li>
         </ul>
       </description>
     </release>
     <release version="3.7.0" date="2024-02-28">
       <description>
         <p>Release description</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
         <ul>
           <li>Convert to Qt6 / KDE Frameworks 6.</li>
+          <li xml:lang="pt-BR">Conversão para o Qt6 / KDE Frameworks 6.</li>
           <li>Enable wake-from-suspend for multiple alarms if user kernel alarm timers are supported (Linux only).</li>
+          <li xml:lang="pt-BR">Habilita a função de despertar a partir da suspensão para múltiplos alarmes se os temporizadores de alarme do kernel do usuário forem suportados (somente Linux).</li>
           <li>Set units for reminder and late-cancel depending on date-only selection in Edit Alarm Template dialog.</li>
+          <li xml:lang="pt-BR">Define as unidades para lembrete e cancelamento tardio com base na seleção de data na caixa de diálogo para editar modelo de alarme.</li>
           <li>Remove migration of pre-Akonadi KResources calendar configuration.</li>
+          <li xml:lang="pt-BR">Remove a migração da configuração de calendário KResources pré-Akonadi.</li>
         </ul>
       </description>
     </release>
