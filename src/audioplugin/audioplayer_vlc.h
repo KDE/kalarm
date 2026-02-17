@@ -1,7 +1,7 @@
 /*
  *  audioplayer_vlc.h  -  play an audio file using the VLC backend
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2024-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2024-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -29,13 +29,16 @@ public Q_SLOTS:
     void stop() override;
 
 private Q_SLOTS:
+    void playStarted(uint32_t event);
     void playFinished(uint32_t event);
+    void checkVolume() { setVolume(); }
     void checkPlay();
 
 protected:
     void setVolume() override;
 
 private:
+    static void playing_callback(const libvlc_event_t* event, void* data);
     static void finish_callback(const libvlc_event_t* event, void* data);
 
     static AudioPlayerVlc* mInstance;
@@ -43,6 +46,9 @@ private:
     libvlc_media_t*        mAudioMedia {nullptr};
     libvlc_media_player_t* mAudioPlayer {nullptr};
     QTimer*                mCheckPlayTimer {nullptr};
+    QTimer*                mStartVolumeTimer {nullptr};
+    int                    mStartVolumeCount {0};
+    bool                   mStartVolumeWrong;   // a wrong volume has been found after play start
 };
 
 // vim: et sw=4:

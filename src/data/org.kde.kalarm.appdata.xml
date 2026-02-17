@@ -461,6 +461,14 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
+    <release version="3.12.3" date="2026-03-05">
+      <description>
+        <p>Release description</p>
+        <ul>
+          <li>Fix sound files being played at the wrong volume when using VLC.</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.12.2" date="2026-02-05">
       <description>
         <p>Release description</p>

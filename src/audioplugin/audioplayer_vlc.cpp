@@ -1,7 +1,7 @@
 /*
  *  audioplayer_vlc.cpp  -  play an audio file using the VLC backend
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2024-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2024-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -123,6 +123,11 @@ bool AudioPlayerVlc::play()
         setVolume();
 
     libvlc_event_manager_t* eventManager = libvlc_media_player_event_manager(mAudioPlayer);
+    if (mVolume > 0)
+    {
+        if (libvlc_event_attach(eventManager, libvlc_MediaPlayerPlaying, &playing_callback, this))
+            qCWarning(AUDIOPLUGIN_LOG) << "AudioPlayerVlc: Error setting playing callback";
+    }
     if (libvlc_event_attach(eventManager, libvlc_MediaPlayerStopped, &finish_callback, this))
     {
         qCWarning(AUDIOPLUGIN_LOG) << "AudioPlayerVlc: Error setting completion callback";
@@ -158,8 +163,34 @@ bool AudioPlayerVlc::play()
 */
 void AudioPlayerVlc::setVolume()
 {
-    qCDebug(AUDIOPLUGIN_LOG) << "AudioPlayerVlc::setVolume" << mCurrentVolume;
-    libvlc_audio_set_volume(mAudioPlayer, static_cast<int>(mCurrentVolume * 100));
+    const int newVolume = static_cast<int>(mCurrentVolume * 100);
+    if (mStartVolumeTimer)
+    {
+        if (--mStartVolumeCount <= 0)
+        {
+            delete mStartVolumeTimer;
+            mStartVolumeTimer = nullptr;
+        }
+        const int oldVolume = libvlc_audio_get_volume(mAudioPlayer);
+        if (oldVolume == newVolume)
+        {
+            if (mStartVolumeWrong)
+            {
+                // The volume was wrong after start of play, but has now been set correctly.
+                qCDebug(AUDIOPLUGIN_LOG) << "AudioPlayerVlc::setVolume: now correct";
+                delete mStartVolumeTimer;
+                mStartVolumeTimer = nullptr;
+            }
+            return;
+        }
+        // The volume soon after start of play is wrong, so set it correctly.
+        qCDebug(AUDIOPLUGIN_LOG) << "AudioPlayerVlc::setVolume: resetting" << (float)oldVolume/100 << "to" << mCurrentVolume;
+        mStartVolumeWrong = true;
+    }
+    else
+        qCDebug(AUDIOPLUGIN_LOG) << "AudioPlayerVlc::setVolume" << mCurrentVolume;
+    if (libvlc_audio_set_volume(mAudioPlayer, newVolume) < 0)
+        qCWarning(AUDIOPLUGIN_LOG) << "AudioPlayerVlc::setVolume failed";
 }
 
 /******************************************************************************
@@ -169,6 +200,34 @@ void AudioPlayerVlc::checkPlay()
 {
     if (!libvlc_media_player_is_playing(mAudioPlayer))
         playFinished(libvlc_MediaPlayerStopped);
+}
+
+/******************************************************************************
+* Called by VLC to notify play start.
+*/
+void AudioPlayerVlc::playing_callback(const libvlc_event_t* event, void* userdata)
+{
+    QMetaObject::invokeMethod(static_cast<AudioPlayerVlc*>(userdata), "playStarted", Q_ARG(uint32_t, event->type));
+}
+
+/******************************************************************************
+* Called to notify play start.
+*/
+void AudioPlayerVlc::playStarted(uint32_t event)
+{
+    Q_UNUSED(event)
+    qCDebug(AUDIOPLUGIN_LOG) << "AudioPlayerVlc::playStarted";
+    if (mVolume > 0)
+    {
+        setVolume();
+        // The volume sometimes changes arbitrarily very soon after play starts.
+        // Check every 10ms, and correct it if it changes.
+        mStartVolumeCount = 20;   // maximum number of times to check volume at start
+        mStartVolumeWrong = false;
+        mStartVolumeTimer = new QTimer(this);
+        connect(mStartVolumeTimer, &QTimer::timeout, this, &AudioPlayerVlc::setVolume);
+        mStartVolumeTimer->start(10);
+    }
 }
 
 /******************************************************************************
