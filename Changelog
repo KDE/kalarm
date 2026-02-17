@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.12.3 (KDE Gear 25.12.3) --- 17 February 2026 ===
+* Fix sound files being played at the wrong volume when using VLC.
+
 === Version 3.12.2 (KDE Gear 25.12.2) --- 20 January 2026 ===
 * Fix hang evaluating recurring date-only alarms when start-of-day time is non-zero [KDE Bug 514609]
 * Fix hang evaluating next recurrence time for time zones with daylight savings time [KDE Bug 514804]
