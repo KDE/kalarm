@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-24 00:43+0000\n"
+"POT-Creation-Date: 2026-02-18 00:46+0000\n"
 "PO-Revision-Date: 2026-01-30 08:36+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -317,7 +317,7 @@ msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr "לא ניתן להפעיל את נגן השמע"
 
-#: audioplugin/audioplayer_vlc.cpp:140 audioplugin/audioplayer_vlc.cpp:208
+#: audioplugin/audioplayer_vlc.cpp:145 audioplugin/audioplayer_vlc.cpp:267
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"

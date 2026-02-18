@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-24 00:43+0000\n"
+"POT-Creation-Date: 2026-02-18 00:46+0000\n"
 "PO-Revision-Date: 2005-12-29 22:18+0100\n"
 "Last-Translator: Arnar Leosson <leosson@frisurf.no>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -361,7 +361,7 @@ msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr ""
 
-#: audioplugin/audioplayer_vlc.cpp:140 audioplugin/audioplayer_vlc.cpp:208
+#: audioplugin/audioplayer_vlc.cpp:145 audioplugin/audioplayer_vlc.cpp:267
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
