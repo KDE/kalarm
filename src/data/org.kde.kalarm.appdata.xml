@@ -464,6 +464,11 @@
     <release version="3.12.3" date="2026-03-05">
       <description>
         <p>Release description</p>
+        <p xml:lang="ar">وصف الإصدارة</p>
+        <p xml:lang="ca">Descripció de la versió</p>
+        <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
+        <p xml:lang="ru">Описание выпуска</p>
         <ul>
           <li>Fix sound files being played at the wrong volume when using VLC.</li>
         </ul>
