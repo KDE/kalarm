@@ -28,12 +28,10 @@ msgid "Your emails"
 msgstr "seoc@iolfree.ie,kscanne@gmail.com"
 
 #: akonadiplugin/sendakonadimail.cpp:54
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info/plain"
-#| msgid "Failed to update format of calendar <resource>%1</resource>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "No mail transport configured for email identity <resource>%1</resource>"
-msgstr "Níorbh fhéidir formáid fhéilire <resource>%1</resource> a nuashonrú."
+msgstr ""
 
 #: akonadiplugin/sendakonadimail.cpp:105
 #, kde-format
@@ -70,12 +68,10 @@ msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
 msgstr ""
 
 #: alarmtimewidget.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr "Am réamhshocraithe"
+msgstr ""
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -102,14 +98,12 @@ msgid "<para>Enter the date to schedule the alarm.</para><para>%1</para>"
 msgstr ""
 
 #: alarmtimewidget.cpp:115
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis"
-#| msgid "<para>%1</para><para>%2</para><para>%3</para>"
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>Enter the time to schedule the alarm.</para><para>%1</para><para>%2</"
 "para>"
-msgstr "<para>%1</para><para>%2</para><para>%3</para>"
+msgstr ""
 
 #: alarmtimewidget.cpp:128 recurrenceedit.cpp:251
 #, kde-format
@@ -132,12 +126,10 @@ msgid ""
 msgstr ""
 
 #: alarmtimewidget.cpp:137
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Defer Alarm"
+#, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "Cuir Aláram Siar"
+msgstr ""
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:329
 #, kde-format
@@ -170,47 +162,32 @@ msgid "Preset"
 msgstr ""
 
 #: alarmtimewidget.cpp:156
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Minutes"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
-msgstr[0] "Nóiméad"
-msgstr[1] "Nóiméad"
-msgstr[2] "Nóiméad"
-msgstr[3] "Nóiméad"
-msgstr[4] "Nóiméad"
+msgstr[0] ""
+msgstr[1] ""
 
 #: alarmtimewidget.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
-#| msgid "1 hour"
-#| msgid_plural "%1 hours"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
-msgstr[0] "1 uair"
-msgstr[1] "%1 uair"
-msgstr[2] "%1 huaire"
-msgstr[3] "%1 n-uaire"
-msgstr[4] "%1 uair"
+msgstr[0] ""
+msgstr[1] ""
 
 #: alarmtimewidget.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr "A&r lá"
+msgstr ""
 
 #: alarmtimewidget.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "weeks"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "seachtain"
+msgstr ""
 
 #: alarmtimewidget.cpp:169
 #, kde-format
@@ -293,17 +270,11 @@ msgid "Cannot initialize audio system: %1"
 msgstr ""
 
 #: audioplugin/audioplayer_mpv.cpp:119 audioplugin/audioplayer_mpv.cpp:184
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error loading calendar:</para><para><filename>%1</filename></"
-#| "para><para>Please fix or delete the file.</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
 msgstr ""
-"<para>Tharla earráid agus féilire á luchtú:</para><para><filename>%1</"
-"filename></para><para>Deisigh nó scrios an comhad, le do thoil.</para>"
 
 #: audioplugin/audioplayer_mpv.cpp:146
 #, kde-format
@@ -312,16 +283,10 @@ msgid "Cannot set the audio volume: %1"
 msgstr ""
 
 #: audioplugin/audioplayer_vlc.cpp:58
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error loading calendar:</para><para><filename>%1</filename></"
-#| "para><para>Please fix or delete the file.</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr ""
-"<para>Tharla earráid agus féilire á luchtú:</para><para><filename>%1</"
-"filename></para><para>Deisigh nó scrios an comhad, le do thoil.</para>"
 
 #: audioplugin/audioplayer_vlc.cpp:116
 #, kde-format
@@ -330,16 +295,10 @@ msgid "Cannot initialize audio player"
 msgstr ""
 
 #: audioplugin/audioplayer_vlc.cpp:145 audioplugin/audioplayer_vlc.cpp:267
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error loading calendar:</para><para><filename>%1</filename></"
-#| "para><para>Please fix or delete the file.</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
 msgstr ""
-"<para>Tharla earráid agus féilire á luchtú:</para><para><filename>%1</"
-"filename></para><para>Deisigh nó scrios an comhad, le do thoil.</para>"
 
 #: autostart/autostart.cpp:49
 #, kde-format
@@ -352,17 +311,15 @@ msgid "KAlarm autostart at login"
 msgstr "Tosaigh KAlarm go huathoibríoch ag am logála isteach"
 
 #: autostart/autostart.cpp:52
-#, fuzzy, kde-format
-#| msgid "Copyright 2001-2012, David Jarvie"
+#, kde-format
 msgid "Copyright 2001-%1, David Jarvie"
-msgstr "Cóipcheart 2001-2012, David Jarvie"
+msgstr ""
 
 #: autostart/autostart.cpp:53 main.cpp:46
-#, fuzzy, kde-format
-#| msgid "David Jarvie"
+#, kde-format
 msgctxt "@info:credit"
 msgid "David Jarvie"
-msgstr "David Jarvie"
+msgstr ""
 
 #: autostart/autostart.cpp:53 main.cpp:46
 #, kde-format
@@ -370,16 +327,14 @@ msgid "Author"
 msgstr "Údar"
 
 #: autostart/autostart.cpp:59
-#, fuzzy, kde-format
-#| msgid "Application to autostart"
+#, kde-format
 msgid "Application to run"
-msgstr "Feidhmchlár le tosú go huathoibríoch"
+msgstr ""
 
 #: autostart/autostart.cpp:60
-#, fuzzy, kde-format
-#| msgid "Command line arguments"
+#, kde-format
 msgid "Command line arguments to pass to application"
-msgstr "Argóintí ar líne na n-orduithe"
+msgstr ""
 
 #: birthdaydlg.cpp:51
 #, kde-format
@@ -388,11 +343,10 @@ msgid "Import Birthdays From KAddressBook"
 msgstr "Iompórtáil Breithlaethanta Ó KAddressBook"
 
 #: birthdaydlg.cpp:65 editdlg.cpp:245
-#, fuzzy, kde-format
-#| msgid "Alarm types."
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
-msgstr "Cineálacha aláraim."
+msgstr ""
 
 #: birthdaydlg.cpp:70 editdlg.cpp:253
 #, kde-format
@@ -403,12 +357,10 @@ msgid ""
 msgstr ""
 
 #: birthdaydlg.cpp:77
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Birthday: "
+#, kde-format
 msgctxt "@info"
 msgid "Birthday: "
-msgstr "Lá Breithe: "
+msgstr ""
 
 #: birthdaydlg.cpp:80
 #, kde-format
@@ -632,18 +584,14 @@ msgid "Send an email to the given address (repeat as needed)"
 msgstr ""
 
 #: commandoptions.cpp:220
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Action to create a new alarm"
-#| msgid "New alarm"
+#, kde-format
 msgid "Name of alarm"
-msgstr "Aláram nua"
+msgstr ""
 
 #: commandoptions.cpp:224
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the alarm message now"
+#, kde-format
 msgid "Display alarm message as a notification"
-msgstr "Taispeáin teachtaireacht an aláraim anois"
+msgstr ""
 
 #: commandoptions.cpp:227
 #, kde-format
@@ -741,14 +689,12 @@ msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "<icode>%1</icode> níos luaithe ná <icode>%2</icode>"
 
 #: commandoptions.cpp:605
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:shell"
-#| msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
+#, kde-kuit-format
 msgctxt "@info:shell"
 msgid ""
 "Invalid <icode>%1</icode> and <icode>%2</icode> parameters: repetition is "
 "longer than <icode>%3</icode> interval"
-msgstr "<icode>%2</icode> nó <icode>%3</icode> de dhíth ar <icode>%1</icode>"
+msgstr ""
 
 #: commandoptions.cpp:786
 #, kde-format
@@ -767,12 +713,10 @@ msgstr ""
 "Úsáid --help chun liosta roghanna an líne ordaithe a fháil.\n"
 
 #: commandoptions.cpp:852
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:shell"
-#| msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
+#, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
-msgstr "<icode>%1</icode> níos luaithe ná <icode>%2</icode>"
+msgstr ""
 
 #: commandoptions.cpp:854
 #, kde-kuit-format
@@ -836,12 +780,10 @@ msgstr "Akonadi"
 
 #. i18n: ectx: label, entry (Backend), group (General)
 #: data/kalarmconfig.kcfg:74
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "KResources"
+#, kde-format
 msgctxt "@option"
 msgid "File Resources"
-msgstr "KResources"
+msgstr ""
 
 #. i18n: ectx: label, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:78
@@ -948,12 +890,10 @@ msgstr "Dath réamhshocraithe cúlra na teachtaireachta aláraim."
 
 #. i18n: ectx: label, entry (UseAlarmName), group (General)
 #: data/kalarmconfig.kcfg:112
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "The alarm message"
+#, kde-format
 msgctxt "@label"
 msgid "Enable alarm names"
-msgstr "Teachtaireacht an aláraim"
+msgstr ""
 
 #. i18n: ectx: whatsthis, entry (UseAlarmName), group (General)
 #: data/kalarmconfig.kcfg:113
@@ -1045,12 +985,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:146
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Run Mode"
+#, kde-format
 msgctxt "@label"
 msgid "Run mode"
-msgstr "Mód Rite"
+msgstr ""
 
 #. i18n: ectx: whatsthis, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:147
@@ -1076,12 +1014,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:151
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option"
 msgid "Do not run"
-msgstr "Ná hathdhéan"
+msgstr ""
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:156
@@ -1911,41 +1847,33 @@ msgstr ""
 
 #. i18n: ectx: Menu (file)
 #: data/kalarmui.rc:19
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action = file display"
-#| msgid "File"
+#, kde-format
 msgid "File"
-msgstr "Comhad"
+msgstr ""
 
 #. i18n: ectx: Menu (edit)
 #: data/kalarmui.rc:31
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
-msgstr "Eagar"
+msgstr ""
 
 #. i18n: ectx: Menu (view)
 #: data/kalarmui.rc:46
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "View"
+#, kde-format
 msgid "View"
-msgstr "Amharc"
+msgstr ""
 
 #. i18n: ectx: Menu (actions)
 #: data/kalarmui.rc:56
-#, fuzzy, kde-format
-#| msgid "&Actions"
+#, kde-format
 msgid "Actions"
-msgstr "&Gníomhartha"
+msgstr ""
 
 #. i18n: ectx: Menu (settings)
 #: data/kalarmui.rc:68
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings"
-msgstr "&Socruithe"
+msgstr ""
 
 #: datepicker.cpp:50
 #, kde-format
@@ -1956,12 +1884,10 @@ msgid ""
 msgstr ""
 
 #: datepicker.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "Filedialog filter for *.ics *.ical"
-#| msgid "KAlarm Calendar File"
+#, kde-format
 msgctxt "@title:group"
 msgid "Alarm Date Selector"
-msgstr "Comhaid Fhéilire"
+msgstr ""
 
 #: datepicker.cpp:88
 #, kde-format
@@ -1976,11 +1902,10 @@ msgid "Show the previous month"
 msgstr ""
 
 #: datepicker.cpp:90
-#, fuzzy, kde-format
-#| msgid "Show current alarm"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next year"
-msgstr "Taispeáin an t-aláram reatha"
+msgstr ""
 
 #: datepicker.cpp:91
 #, kde-format
@@ -1989,12 +1914,10 @@ msgid "Show the next month"
 msgstr ""
 
 #: datepicker.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "today"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show today"
-msgstr "inniu"
+msgstr ""
 
 #: daymatrix.cpp:200
 #, kde-format
@@ -2358,29 +2281,23 @@ msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Roghnaigh Logchomhad"
 
-# not a verb, kind of alarm?
 #: editdlgtypes.cpp:88
-#, fuzzy, kde-format
-#| msgid "Display name."
+#, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
-msgstr "Ainm taispeána."
+msgstr ""
 
 #: editdlgtypes.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Alarm Windows"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Window"
-msgstr "Fuinneoga Aláraim"
+msgstr ""
 
 #: editdlgtypes.cpp:90
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Location:"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Notification"
-msgstr "Suíomh:"
+msgstr ""
 
 #: editdlgtypes.cpp:91
 #, kde-format
@@ -2512,12 +2429,10 @@ msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr ""
 
 #: editdlgtypes.cpp:295
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the alarm message now"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
-msgstr "Taispeáin teachtaireacht an aláraim anois"
+msgstr ""
 
 #: editdlgtypes.cpp:677
 #, kde-format
@@ -2592,12 +2507,10 @@ msgid "Execute the specified command now"
 msgstr "Rith an t-ordú sonraithe anois"
 
 #: editdlgtypes.cpp:848
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Execute the specified command now"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
-msgstr "Rith an t-ordú sonraithe anois"
+msgstr ""
 
 #: editdlgtypes.cpp:855 specialactions.cpp:182
 #, kde-format
@@ -2669,14 +2582,12 @@ msgid ""
 msgstr ""
 
 #: editdlgtypes.cpp:1076
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<para>%1</para><para>%2</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No terminal is selected for command alarms.</para><para>Please set it "
 "in the <application>KAlarm</application> Configuration dialog.</para>"
-msgstr "<para>%1</para><para>%2</para>"
+msgstr ""
 
 #: editdlgtypes.cpp:1096
 #, kde-kuit-format
@@ -2721,12 +2632,10 @@ msgid "Send the email to the specified addressees now"
 msgstr "Seol an ríomhphost chuig na seoltaí sonraithe anois"
 
 #: editdlgtypes.cpp:1177
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Sendmail"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
-msgstr "Sendmail"
+msgstr ""
 
 #: editdlgtypes.cpp:1188
 #, kde-format
@@ -2907,20 +2816,16 @@ msgid "Edit Audio Alarm"
 msgstr "Cuir Aláram Fuaime in Eagar"
 
 #: editdlgtypes.cpp:1630
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the file now"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
-msgstr "Taispeáin an comhad anois"
+msgstr ""
 
 #: editdlgtypes.cpp:1631
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the file now"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
-msgstr "Taispeáin an comhad anois"
+msgstr ""
 
 #: editdlgtypes.cpp:1633
 #, kde-format
@@ -3131,12 +3036,10 @@ msgid "Font && Color..."
 msgstr "Cló agus Dath..."
 
 #: fontcolourbutton.cpp:30
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Select the alarm message foreground color"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Set alarm message font and color"
-msgstr "Taispeáin dath tulra na teachtaireachta aláraim"
+msgstr ""
 
 #: fontcolourbutton.cpp:31
 #, kde-format
@@ -3158,12 +3061,10 @@ msgid "Stop Play"
 msgstr ""
 
 #: functions.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Enable &Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Enable Alarms"
-msgstr "Cumasaigh &Aláraim"
+msgstr ""
 
 #: functions.cpp:223
 #, kde-format
@@ -3172,20 +3073,16 @@ msgid "Spread Windows"
 msgstr ""
 
 #: functions.cpp:879
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import Calendar Files"
-msgstr "Comhaid Fhéilire"
+msgstr ""
 
 #: functions.cpp:940
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
-msgstr "Comhaid Fhéilire"
+msgstr ""
 
 #: functions.cpp:941
 #, kde-format
@@ -3194,12 +3091,10 @@ msgid "Choose Export Calendar"
 msgstr ""
 
 #: functions.cpp:966
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
-msgstr "Ní féidir féilire nua a uasluchtú go:<nl/><filename>%1</filename>"
+msgstr ""
 
 #: functions.cpp:1005
 #, kde-kuit-format
@@ -3244,28 +3139,22 @@ msgid "Unable to delete alarm from KOrganizer"
 msgstr ""
 
 #: functions.cpp:1055
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<para>%1</para><para>%2</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
-msgstr "<para>%1</para><para>%2</para>"
+msgstr ""
 
 #: functions.cpp:1058
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<para>%1</para><para>%2</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
-msgstr "<para>%1</para><para>%2</para>"
+msgstr ""
 
 #: functions.cpp:1061
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<para>%1</para><para>%2</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
-msgstr "<para>%1</para><para>%2</para>"
+msgstr ""
 
 #: functions.cpp:1311
 #, kde-format
@@ -3286,12 +3175,10 @@ msgid "You must enable a template calendar to save the template in"
 msgstr ""
 
 #: functions.cpp:1617
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<para>%1</para><para>%2</para>"
+#, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
-msgstr "<para>%1</para><para>%2</para>"
+msgstr ""
 
 #: functions.cpp:1621
 #, kde-kuit-format
@@ -3381,20 +3268,16 @@ msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
 #: kalarmapp.cpp:1062
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info/plain"
-#| msgid "Error recreating alarm"
+#, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
-msgstr "Tharla earráid agus aláram á athchruthú"
+msgstr ""
 
 #: kalarmapp.cpp:1118
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:shell"
-#| msgid "%1: Event <resource>%2</resource> not found"
+#, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
-msgstr "%1: Imeacht <resource>%2</resource> gan aimsiú"
+msgstr ""
 
 #: kalarmapp.cpp:1430
 #, kde-kuit-format
@@ -3406,12 +3289,10 @@ msgid ""
 msgstr ""
 
 #: kalarmapp.cpp:1470
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:shell"
-#| msgid "%1: Event <resource>%2</resource> not found"
+#, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
-msgstr "%1: Imeacht <resource>%2</resource> gan aimsiú"
+msgstr ""
 
 #: kalarmapp.cpp:1498
 #, kde-kuit-format
@@ -3461,12 +3342,10 @@ msgid "Post-alarm action:"
 msgstr ""
 
 #: kalarmcalendar/alarmtext.cpp:507
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox 'From' email address"
-#| msgid "From:"
+#, kde-format
 msgctxt "@info 'From' email address"
 msgid "From:"
-msgstr "Ó:"
+msgstr ""
 
 #: kalarmcalendar/alarmtext.cpp:508 messagedisplayhelper.cpp:339
 #, kde-format
@@ -3475,20 +3354,16 @@ msgid "To:"
 msgstr "Go:"
 
 #: kalarmcalendar/alarmtext.cpp:509
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Copy-to in email headers"
-#| msgid "Cc:"
+#, kde-format
 msgctxt "@info Copy-to in email headers"
 msgid "Cc:"
-msgstr "Cc:"
+msgstr ""
 
 #: kalarmcalendar/alarmtext.cpp:510
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Date:"
+#, kde-format
 msgctxt "@info"
 msgid "Date:"
-msgstr "Dáta:"
+msgstr ""
 
 #: kalarmcalendar/alarmtext.cpp:511 messagedisplayhelper.cpp:341
 #, kde-format
@@ -3497,28 +3372,22 @@ msgid "Subject:"
 msgstr "Ábhar:"
 
 #: kalarmcalendar/alarmtext.cpp:513
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Todo calendar item's title field"
-#| msgid "To-do:"
+#, kde-format
 msgctxt "@info Todo calendar item's title field"
 msgid "To-do:"
-msgstr "Tasc:"
+msgstr ""
 
 #: kalarmcalendar/alarmtext.cpp:514
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Todo calendar item's location field"
-#| msgid "Location:"
+#, kde-format
 msgctxt "@info Todo calendar item's location field"
 msgid "Location:"
-msgstr "Suíomh:"
+msgstr ""
 
 #: kalarmcalendar/alarmtext.cpp:515
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Todo calendar item's due date/time"
-#| msgid "Due:"
+#, kde-format
 msgctxt "@info Todo calendar item's due date/time"
 msgid "Due:"
-msgstr "Dlite:"
+msgstr ""
 
 #: kalarmcalendar/kacalendar.cpp:136
 #, kde-format
@@ -3526,129 +3395,86 @@ msgid "KAlarm"
 msgstr "KAlarm"
 
 #: kalarmcalendar/kaevent.cpp:3241
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Brief form of 'At Login'"
-#| msgid "Login"
+#, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
-msgstr "Logáil Isteach"
+msgstr ""
 
 #: kalarmcalendar/kaevent.cpp:3241
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "At login"
+#, kde-format
 msgctxt "@info"
 msgid "At login"
-msgstr "Ag am logála isteach"
+msgstr ""
 
 #: kalarmcalendar/kaevent.cpp:3250 kalarmcalendar/kaevent.cpp:3343
 #: kalarmcalendar/kaeventformatter.cpp:429
 #: kalarmcalendar/kaeventformatter.cpp:443
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Minutes"
+#, kde-format
 msgctxt "@info"
 msgid "1 Minute"
 msgid_plural "%1 Minutes"
-msgstr[0] "Nóiméad"
-msgstr[1] "Nóiméad"
-msgstr[2] "Nóiméad"
-msgstr[3] "Nóiméad"
-msgstr[4] "Nóiméad"
+msgstr[0] ""
+msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:3252 kalarmcalendar/kaevent.cpp:3345
 #: kalarmcalendar/kaeventformatter.cpp:445
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "1 Hour"
-#| msgid_plural "%1 Hours"
+#, kde-format
 msgctxt "@info"
 msgid "1 Hour"
 msgid_plural "%1 Hours"
-msgstr[0] "1 Uair"
-msgstr[1] "%1 Uair"
-msgstr[2] "%1 hUaire"
-msgstr[3] "%1 nUaire"
-msgstr[4] "%1 Uair"
+msgstr[0] ""
+msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:3254 kalarmcalendar/kaevent.cpp:3346
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Hours and minutes"
-#| msgid "%1h %2m"
+#, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
-msgstr "%1u %2n"
+msgstr ""
 
 #: kalarmcalendar/kaevent.cpp:3257 kalarmcalendar/kaevent.cpp:3336
 #: kalarmcalendar/kaeventformatter.cpp:447
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "1 Day"
-#| msgid_plural "%1 Days"
+#, kde-format
 msgctxt "@info"
 msgid "1 Day"
 msgid_plural "%1 Days"
-msgstr[0] "Lá amháin"
-msgstr[1] "%1 Lá"
-msgstr[2] "%1 Lá"
-msgstr[3] "%1 Lá"
-msgstr[4] "%1 Lá"
+msgstr[0] ""
+msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:3259 kalarmcalendar/kaevent.cpp:3337
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Weeks"
+#, kde-format
 msgctxt "@info"
 msgid "1 Week"
 msgid_plural "%1 Weeks"
-msgstr[0] "Seachtain"
-msgstr[1] "Seachtain"
-msgstr[2] "Seachtain"
-msgstr[3] "Seachtain"
-msgstr[4] "Seachtain"
+msgstr[0] ""
+msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:3261
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Recurrence type"
-#| msgid "Monthly"
+#, kde-format
 msgctxt "@info"
 msgid "1 Month"
 msgid_plural "%1 Months"
-msgstr[0] "Go Míosúil"
-msgstr[1] "Go Míosúil"
-msgstr[2] "Go Míosúil"
-msgstr[3] "Go Míosúil"
-msgstr[4] "Go Míosúil"
+msgstr[0] ""
+msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:3263
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "1 Year"
-#| msgid_plural "%1 Years"
+#, kde-format
 msgctxt "@info"
 msgid "1 Year"
 msgid_plural "%1 Years"
-msgstr[0] "1 Bhliain"
-msgstr[1] "%1 Bhliain"
-msgstr[2] "%1 Bliana"
-msgstr[3] "%1 mBliana"
-msgstr[4] "%1 Bliain"
+msgstr[0] ""
+msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:3269
-#, fuzzy, kde-format
-#| msgctxt "No holiday region"
-#| msgid "None"
+#, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
-msgstr "Neamhní"
+msgstr ""
 
 #: kalarmcalendar/kaevent.cpp:3349
-#, fuzzy, kde-format
-#| msgctxt "No holiday region"
-#| msgid "None"
+#, kde-format
 msgctxt "@info No repetition"
 msgid "None"
-msgstr "Neamhní"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:38
 #, kde-format
@@ -3657,58 +3483,46 @@ msgid "UID"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:40
-#, fuzzy, kde-format
-#| msgid "Alarm types."
+#, kde-format
 msgctxt "@label"
 msgid "Alarm type"
-msgstr "Cineálacha aláraim."
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:42
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm templates"
+#, kde-format
 msgctxt "@label"
 msgid "Alarm status"
-msgstr "Teimpléid aláraim"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:44
-#, fuzzy, kde-format
-#| msgid "Alarm types."
+#, kde-format
 msgctxt "@label"
 msgid "Alarm name"
-msgstr "Cineálacha aláraim."
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Template name:"
+#, kde-format
 msgctxt "@label"
 msgid "Template name"
-msgstr "Ainm an teimpléid:"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
+#, kde-format
 msgctxt "@label"
 msgid "Creation time"
-msgstr "Am réamhshocraithe"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:50
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Start at login"
+#, kde-format
 msgctxt "@label"
 msgid "Start time"
-msgstr "Tosaigh ag am logála isteach"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:52
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Template name:"
+#, kde-format
 msgctxt "@label Start delay configured in an alarm template"
 msgid "Template after time"
-msgstr "Ainm an teimpléid:"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:54
 #, kde-format
@@ -3717,12 +3531,10 @@ msgid "Recurs"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Recurrence:"
+#, kde-format
 msgctxt "@label"
 msgid "Recurrence"
-msgstr "Atarlú:"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:58
 #, kde-format
@@ -3749,12 +3561,10 @@ msgid "Next sub-repetition"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Date only"
+#, kde-format
 msgctxt "@label"
 msgid "Work time only"
-msgstr "Dáta amháin"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:68
 #, kde-format
@@ -3763,12 +3573,10 @@ msgid "Holidays excluded"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:70
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "No recurrence"
+#, kde-format
 msgctxt "@label"
 msgid "Next recurrence"
-msgstr "Gan atarlú"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:72
 #, kde-format
@@ -3783,36 +3591,28 @@ msgid "Auto close"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:76
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Show in KOrganizer"
+#, kde-format
 msgctxt "@label"
 msgid "Copy to KOrganizer"
-msgstr "Taispeáin i KOrganizer"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:78
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Enabled"
+#, kde-format
 msgctxt "@label"
 msgid "Enabled"
-msgstr "Cumasaithe"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:80
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Read-only"
+#, kde-format
 msgctxt "@label"
 msgid "Read-only"
-msgstr "Inléite Amháin"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Archived"
+#, kde-format
 msgctxt "@label Whether alarm should be archived"
 msgid "Archive"
-msgstr "Cartlannaithe"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:84
 #, kde-format
@@ -3827,20 +3627,16 @@ msgid "Custom properties"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Message"
+#, kde-format
 msgctxt "@label"
 msgid "Message text"
-msgstr "Teachtaireacht"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:91
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Message"
+#, kde-format
 msgctxt "@label File to provide text for message"
 msgid "Message file"
-msgstr "Teachtaireacht"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:97
 #, kde-format
@@ -3849,92 +3645,70 @@ msgid "Font"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Pre-Alarm Action"
+#, kde-format
 msgctxt "@label Shell command to execute before alarm"
 msgid "Pre-alarm action"
-msgstr "Gníomh Réamhaláraim"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:101
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Pre-Alarm Action"
+#, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action cancel"
-msgstr "Gníomh Réamhaláraim"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Pre-Alarm Action"
+#, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action no error"
-msgstr "Gníomh Réamhaláraim"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Post-Alarm Action"
+#, kde-format
 msgctxt "@label Shell command to execute after alarm"
 msgid "Post-alarm action"
-msgstr "Gníomh Iar-Aláraim"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:109
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Akonadi"
+#, kde-format
 msgctxt "@label"
 msgid "Akonadi Item ID"
-msgstr "Akonadi"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:111
-#, fuzzy, kde-format
-#| msgctxt "@label Label for audio options"
-#| msgid "Sound"
+#, kde-format
 msgctxt "@label Audio method"
 msgid "Sound"
-msgstr "Fuaim"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:113
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@label Whether audio should repeat"
 msgid "Sound repeat"
-msgstr "Ná hathdhéan"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:117
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Sound volume"
+#, kde-format
 msgctxt "@label"
 msgid "Sound fade volume"
-msgstr "Airde"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:119
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Sound file"
+#, kde-format
 msgctxt "@label"
 msgid "Sound fade time"
-msgstr "Comhad fuaime"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:121
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Reminder"
+#, kde-format
 msgctxt "@label Whether the alarm has a reminder"
 msgid "Reminder"
-msgstr "Meabhrúchán"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:123
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Reminder"
+#, kde-format
 msgctxt "@label Whether reminder is on first recurrence only"
 msgid "Reminder once only"
-msgstr "Meabhrúchán"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:125
 #, kde-format
@@ -3943,20 +3717,16 @@ msgid "Notify"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:127
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "&Defer..."
+#, kde-format
 msgctxt "@label Deferral type"
 msgid "Deferral"
-msgstr "&Cuir Siar..."
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:129
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
+#, kde-format
 msgctxt "@label"
 msgid "Deferral time"
-msgstr "Am réamhshocraithe"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:131
 #, kde-format
@@ -3971,20 +3741,16 @@ msgid "Deferral default date only"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:136
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Command"
+#, kde-format
 msgctxt "@label A shell command"
 msgid "Command"
-msgstr "Ordú"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Execute in terminal window"
+#, kde-format
 msgctxt "@label Execute in terminal window"
 msgid "Execute in terminal"
-msgstr "Rith i dteirminéal"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:142
 #, kde-format
@@ -3993,147 +3759,112 @@ msgid "Hide command error"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:145
-#, fuzzy, kde-format
-#| msgid "Email subject line"
+#, kde-format
 msgctxt "@label"
 msgid "Email subject"
-msgstr "Ábhar na teachtaireachta ríomhphoist"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:147
-#, fuzzy, kde-format
-#| msgid "Email subject line"
+#, kde-format
 msgctxt "@label Email address"
 msgid "Email sender ID"
-msgstr "Ábhar na teachtaireachta ríomhphoist"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:149
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
+#, kde-format
 msgctxt "@label Email address"
 msgid "Email to"
-msgstr "Ríomhphost"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:151
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
+#, kde-format
 msgctxt "@label true/false"
 msgid "Email bcc"
-msgstr "Ríomhphost"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:153
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
+#, kde-format
 msgctxt "@label"
 msgid "Email body"
-msgstr "Ríomhphost"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:155
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Email client"
+#, kde-format
 msgctxt "@label"
 msgid "Email attachments"
-msgstr "Cliant ríomhphoist"
+msgstr ""
 
-# not a verb, kind of alarm?
 #: kalarmcalendar/kaeventformatter.cpp:257
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Display type:"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (text)"
-msgstr "Cineál Taispeána:"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:259
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the file now"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (file)"
-msgstr "Taispeáin an comhad anois"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the command output now"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (command)"
-msgstr "Taispeáin aschur an ordaithe anois"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:263
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Command"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Command"
-msgstr "Ordú"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:265
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Email"
-msgstr "Ríomhphost"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:267
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Sound file"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Audio"
-msgstr "Comhad fuaime"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Active"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Active"
-msgstr "Gníomhach"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:276
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Archived"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Archived"
-msgstr "Cartlannaithe"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:278
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Templates..."
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Template"
-msgstr "&Teimpléid..."
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:297
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "At login"
+#, kde-format
 msgctxt "@info Repeat at login"
 msgid "At login until %1"
-msgstr "Ag am logála isteach"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:338
-#, fuzzy, kde-format
-#| msgctxt "@info/plain n days"
-#| msgid "%1d"
+#, kde-format
 msgctxt "@info"
 msgid "%1"
-msgstr "%1lá"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:350
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
+#, kde-format
 msgctxt "@info Using default font"
 msgid "Default"
-msgstr "Am réamhshocraithe"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:366 messagedisplayhelper.cpp:220
 #, kde-format
@@ -4142,20 +3873,16 @@ msgid "Reminder"
 msgstr "Meabhrúchán"
 
 #: kalarmcalendar/kaeventformatter.cpp:379
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Speak"
+#, kde-format
 msgctxt "@info"
 msgid "Speak"
-msgstr "Labhair"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:380
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Beep"
+#, kde-format
 msgctxt "@info"
 msgid "Beep"
-msgstr "Bíp"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:385
 #: kalarmcalendar/kaeventformatter.cpp:389
@@ -4165,41 +3892,30 @@ msgid "%1%%"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:393
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "seconds"
+#, kde-format
 msgctxt "@info"
 msgid "1 Second"
 msgid_plural "%1 Seconds"
-msgstr[0] "soicind"
-msgstr[1] "soicind"
-msgstr[2] "soicind"
-msgstr[3] "soicind"
-msgstr[4] "soicind"
+msgstr[0] ""
+msgstr[1] ""
 
 #: kalarmcalendar/kaeventformatter.cpp:418
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Error"
+#, kde-format
 msgctxt "@info Error indication"
 msgid "error!"
-msgstr "Earráid"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
-#| msgid "Yes"
+#, kde-format
 msgctxt "@info General purpose status indication: yes or no"
 msgid "Yes"
-msgstr "Tá"
+msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:424
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
-#| msgid "No"
+#, kde-format
 msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
-msgstr "Níl"
+msgstr ""
 
 #: kamail.cpp:69
 #, kde-format
@@ -4209,25 +3925,19 @@ msgid ""
 msgstr ""
 
 #: kamail.cpp:72
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@info/plain KMail folder name: this should be translated the same as in "
-#| "kmail"
-#| msgid "sent-mail"
+#, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
-msgstr "seolta"
+msgstr ""
 
 #: kamail.cpp:102
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:shell"
-#| msgid "%1: Event <resource>%2</resource> not found"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> not "
 "found"
-msgstr "%1: Imeacht <resource>%2</resource> gan aimsiú"
+msgstr ""
 
 #: kamail.cpp:108
 #, kde-kuit-format
@@ -4247,15 +3957,13 @@ msgid ""
 msgstr ""
 
 #: kamail.cpp:122
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<para>%1</para><para>%2</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No 'From' email address is configured.</para><para>Please set a "
 "default address in <application>KMail</application> or in the "
 "<application>KAlarm</application> Configuration dialog.</para>"
-msgstr "<para>%1</para><para>%2</para>"
+msgstr ""
 
 #: kamail.cpp:127
 #, kde-kuit-format
@@ -4389,12 +4097,10 @@ msgstr ""
 "<filename>%1</filename>: ní téacschomhad ná comhad íomhá é de réir cosúlachta"
 
 #: lib/file.cpp:179
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@item:inlistbox File type"
 msgid "All files"
-msgstr "Comhaid Fhéilire"
+msgstr ""
 
 #: lib/filedialog.cpp:56
 #, kde-format
@@ -4403,20 +4109,16 @@ msgid "Append to existing file"
 msgstr "Iarcheangail le comhad atá ann"
 
 #: lib/messagebox.h:105 lib/messagebox.h:114 lib/messagebox.h:151
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
-#| msgid "Yes"
+#, kde-format
 msgctxt "@action:button"
 msgid "Yes"
-msgstr "Tá"
+msgstr ""
 
 #: lib/messagebox.h:106 lib/messagebox.h:115 lib/messagebox.h:152
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
-#| msgid "No"
+#, kde-format
 msgctxt "@action:button"
 msgid "No"
-msgstr "Níl"
+msgstr ""
 
 #: lib/shellprocess.cpp:143
 #, kde-format
@@ -4481,11 +4183,9 @@ msgid ""
 msgstr ""
 
 #: lib/timezonecombo.cpp:19
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Ignore time zone"
+#, kde-format
 msgid "System time zone"
-msgstr "Déan neamhshuim ar chrios ama"
+msgstr ""
 
 #: main.cpp:43
 #, kde-format
@@ -4493,28 +4193,23 @@ msgid "Personal alarm message, command and email scheduler by KDE"
 msgstr ""
 
 #: main.cpp:45
-#, fuzzy, kde-format
-#| msgid "Copyright 2001-2012, David Jarvie"
+#, kde-format
 msgid "Copyright © 2001-%1, David Jarvie"
-msgstr "Cóipcheart 2001-2012, David Jarvie"
+msgstr ""
 
 #: mainwindow.cpp:443
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to save calendar to <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Failure to create menus (perhaps <filename>%1</filename> missing or "
 "corrupted)"
-msgstr "Theip ar shábhail an fhéilire i<filename>%1</filename>"
+msgstr ""
 
 #: mainwindow.cpp:463
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Templates..."
+#, kde-format
 msgctxt "@action"
 msgid "Templates..."
-msgstr "&Teimpléid..."
+msgstr ""
 
 #: mainwindow.cpp:467 templatedlg.cpp:74
 #, kde-format
@@ -4523,36 +4218,28 @@ msgid "New"
 msgstr "Nua"
 
 #: mainwindow.cpp:473
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Create Tem&plate..."
+#, kde-format
 msgctxt "@action"
 msgid "Create Template..."
-msgstr "Cruthaigh Teim&pléad..."
+msgstr ""
 
 #: mainwindow.cpp:477
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Copy..."
+#, kde-format
 msgctxt "@action"
 msgid "Copy..."
-msgstr "&Cóipeáil..."
+msgstr ""
 
 #: mainwindow.cpp:482 resourceselector.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Edit..."
+#, kde-format
 msgctxt "@action"
 msgid "Edit..."
-msgstr "Eagar..."
+msgstr ""
 
 #: mainwindow.cpp:487
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Delete"
+#, kde-format
 msgctxt "@action"
 msgid "Delete"
-msgstr "Scrios"
+msgstr ""
 
 #: mainwindow.cpp:493
 #, kde-format
@@ -4561,12 +4248,10 @@ msgid "Delete Without Confirmation"
 msgstr "Scrios Gan Deimhniú"
 
 #: mainwindow.cpp:498
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Reac&tivate"
+#, kde-format
 msgctxt "@action"
 msgid "Reactivate"
-msgstr "Gníomhach&taigh Arís"
+msgstr ""
 
 #: mainwindow.cpp:512
 #, kde-format
@@ -4575,12 +4260,10 @@ msgid "Wake From Suspend..."
 msgstr ""
 
 #: mainwindow.cpp:524
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Show Archived Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
-msgstr "Taispeáin Aláraim Chartlannaithe"
+msgstr ""
 
 #: mainwindow.cpp:529
 #, kde-format
@@ -4589,12 +4272,10 @@ msgid "Show in System Tray"
 msgstr ""
 
 #: mainwindow.cpp:533
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Calendars"
+#, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
-msgstr "Taispeáin &Féilirí"
+msgstr ""
 
 #: mainwindow.cpp:537
 #, kde-format
@@ -4603,44 +4284,34 @@ msgid "Show Date Selector"
 msgstr ""
 
 #: mainwindow.cpp:550
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Import &Alarms..."
+#, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
-msgstr "Iom&pórtáil Aláraim..."
+msgstr ""
 
 #: mainwindow.cpp:556
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Import &Birthdays..."
+#, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr "Iompórtáil &Breithlaethanta..."
+msgstr ""
 
 #: mainwindow.cpp:561
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "E&xport Selected Alarms..."
+#, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
-msgstr "Eas&pórtáil na hAláraim Roghnaithe..."
+msgstr ""
 
 #: mainwindow.cpp:565 resourceselector.cpp:319
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "E&xport..."
+#, kde-format
 msgctxt "@action"
 msgid "Export..."
-msgstr "Eas&pórtáil..."
+msgstr ""
 
 #: mainwindow.cpp:569
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Defer Alarm"
+#, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
-msgstr "Cuir Aláram Siar"
+msgstr ""
 
 #: mainwindow.cpp:814
 #, kde-format
@@ -4750,19 +4421,16 @@ msgid "Choose alarm type to create:"
 msgstr "Roghnaigh cineál an aláraim le cruthú:"
 
 #: mainwindow.cpp:1689
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Enable"
+#, kde-format
 msgctxt "@action"
 msgid "Enable"
-msgstr "Cumasaigh"
+msgstr ""
 
 #: mainwindow.cpp:1689
-#, fuzzy, kde-format
-#| msgid "Disabled"
+#, kde-format
 msgctxt "@action"
 msgid "Disable"
-msgstr "Díchumasaithe"
+msgstr ""
 
 #: messagedisplay.cpp:271
 #, kde-kuit-format
@@ -4891,20 +4559,16 @@ msgid "Text-to-speech subsystem is not available"
 msgstr ""
 
 #: messagenotification.cpp:519
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Edit"
+#, kde-format
 msgctxt "@action:button"
 msgid "Edit"
-msgstr "Eagar"
+msgstr ""
 
 #: messagenotification.cpp:528
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "&Defer..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Defer"
-msgstr "&Cuir Siar..."
+msgstr ""
 
 #: messagewindow.cpp:228
 #, kde-format
@@ -4963,12 +4627,10 @@ msgid "Edit..."
 msgstr "Eagar..."
 
 #: messagewindow.cpp:435
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Edit the alarm."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
-msgstr "Cuir an t-aláram in eagar."
+msgstr ""
 
 #: messagewindow.cpp:436
 #, kde-format
@@ -4977,20 +4639,16 @@ msgid "Edit the alarm."
 msgstr "Cuir an t-aláram in eagar."
 
 #: messagewindow.cpp:440
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "&Defer..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
-msgstr "&Cuir Siar..."
+msgstr ""
 
 #: messagewindow.cpp:444
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Name of the alarm template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
-msgstr "Ainm an teimpléid aláraim"
+msgstr ""
 
 #: messagewindow.cpp:445
 #, kde-kuit-format
@@ -5063,14 +4721,11 @@ msgid "Unable to locate this email in <application>KMail</application>"
 msgstr ""
 "Ní féidir an teachtaireacht seo a aimsiú i <application>KMail</application>"
 
-# not a verb
 #: newalarmaction.cpp:47
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Display Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Display Alarm Template"
-msgstr "&Teimpléad Aláraim Taispeána"
+msgstr ""
 
 #: newalarmaction.cpp:47
 #, kde-format
@@ -5079,12 +4734,10 @@ msgid "New Display Alarm"
 msgstr "Aláram Nua Taispeána"
 
 #: newalarmaction.cpp:50
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Command Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Command Alarm Template"
-msgstr "Teimpléad Aláraim &Ordaithe"
+msgstr ""
 
 #: newalarmaction.cpp:50
 #, kde-format
@@ -5093,12 +4746,10 @@ msgid "New Command Alarm"
 msgstr "Aláram Nua Ordaithe"
 
 #: newalarmaction.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Email Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Email Alarm Template"
-msgstr "Teimpléad Aláraim &Ríomhphoist"
+msgstr ""
 
 #: newalarmaction.cpp:53
 #, kde-format
@@ -5107,12 +4758,10 @@ msgid "New Email Alarm"
 msgstr "Aláram Nua Ríomhphoist"
 
 #: newalarmaction.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Audio Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Audio Alarm Template"
-msgstr "Teimpléad Aláraim &Fuaime"
+msgstr ""
 
 #: newalarmaction.cpp:56
 #, kde-format
@@ -5121,12 +4770,10 @@ msgid "New Audio Alarm"
 msgstr "Aláram Nua Fuaime"
 
 #: newalarmaction.cpp:71
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "New Alarm From &Template"
+#, kde-format
 msgctxt "@action"
 msgid "New Alarm From Template"
-msgstr "Aláram Nua Ó &Theimpléad"
+msgstr ""
 
 #: prefdlg.cpp:132
 #, kde-format
@@ -5184,12 +4831,10 @@ msgid "Email Alarm Settings"
 msgstr "Socruithe Aláram Ríomhphoist"
 
 #: prefdlg.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Defaults"
-msgstr "Am réamhshocraithe"
+msgstr ""
 
 #: prefdlg.cpp:167
 #, kde-format
@@ -5262,12 +4907,10 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:472
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Do not run"
-msgstr "Ná hathdhéan"
+msgstr ""
 
 #: prefdlg.cpp:475
 #, kde-format
@@ -5278,12 +4921,10 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:478
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Activate <application>KAlarm</application>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr "Gníomhachtaigh <application>KAlarm</application>"
+msgstr ""
 
 #: prefdlg.cpp:486
 #, kde-format
@@ -5292,24 +4933,18 @@ msgid "Warn before quitting"
 msgstr ""
 
 #: prefdlg.cpp:488
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Whether to suppress a warning prompt before quitting KAlarm."
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to display a warning prompt before quitting <application>KAlarm</"
 "application>."
 msgstr ""
-"Cé acu a thaispeánfar leid rabhaidh sula scoirfidh tú KAlarm, nó nach "
-"dtaispeánfar."
 
 #: prefdlg.cpp:497
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "The alarm message"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable alarm names"
-msgstr "Teachtaireacht an aláraim"
+msgstr ""
 
 #: prefdlg.cpp:499
 #, kde-format
@@ -5395,12 +5030,10 @@ msgid "Choose which audio backend to use to play sound files"
 msgstr ""
 
 #: prefdlg.cpp:600
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Akonadi"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable Akonadi"
-msgstr "Akonadi"
+msgstr ""
 
 #: prefdlg.cpp:602
 #, kde-format
@@ -5502,12 +5135,10 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:874
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "minutes"
+#, kde-format
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
-msgstr "nóiméad"
+msgstr ""
 
 #: prefdlg.cpp:888
 #, kde-format
@@ -5745,18 +5376,12 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:1214
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Unable to start <application>KMail</application><nl/>(<message>%1</"
-#| "message>)"
+#, kde-kuit-format
 msgctxt "@option:check"
 msgid ""
 "Copy sent emails into <application>KMail</application>'s <resource>%1</"
 "resource> folder"
 msgstr ""
-"Ní féidir <application>KMail</application> a thosú<nl/>(<message>%1</"
-"message>)"
 
 #: prefdlg.cpp:1215
 #, kde-kuit-format
@@ -5793,22 +5418,18 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:1257 prefdlg.cpp:1293
-#, fuzzy, kde-kuit-format
-#| msgctxt "@option:radio"
-#| msgid "Use <application>KMail</application> identities"
+#, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
-msgstr "Úsáid aitheantais <application>KMail</application>"
+msgstr ""
 
 #: prefdlg.cpp:1260
-#, fuzzy, kde-kuit-format
-#| msgctxt "@option:radio"
-#| msgid "Use <application>KMail</application> identities"
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, to identify you as the sender when sending email alarms."
-msgstr "Úsáid aitheantais <application>KMail</application>"
+msgstr ""
 
 #: prefdlg.cpp:1264
 #, kde-kuit-format
@@ -5844,50 +5465,40 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:1296
-#, fuzzy, kde-kuit-format
-#| msgctxt "@option:radio"
-#| msgid "Use <application>KMail</application> identities"
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, for blind copying email alarms to yourself."
-msgstr "Úsáid aitheantais <application>KMail</application>"
+msgstr ""
 
 #: prefdlg.cpp:1398
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "No valid 'Bcc' email address is specified."
+#, kde-format
 msgctxt "@info"
 msgid "No valid 'Bcc' email address is specified."
-msgstr "Níor sonraíodh seoladh bailí ríomhphoist mar 'Bcc'."
+msgstr ""
 
 #: prefdlg.cpp:1405
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>%1</para><para>%2</para>"
+#, kde-format
 msgctxt "@info"
 msgid "Are you sure you want to save your changes?"
-msgstr "<para>%1</para><para>%2</para>"
+msgstr ""
 
 #: prefdlg.cpp:1411
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis"
-#| msgid "<para>%1</para><para>%2</para><para>%3</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No default email address is currently set in <application>KMail</"
 "application>.</para><para>%1</para><para>%2</para>"
-msgstr "<para>%1</para><para>%2</para><para>%3</para>"
+msgstr ""
 
 #: prefdlg.cpp:1416
-#, fuzzy, kde-kuit-format
-#| msgctxt "@option:radio"
-#| msgid "Use <application>KMail</application> identities"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No <application>KMail</application> identities currently exist.</"
 "para><para>%1</para><para>%2</para>"
-msgstr "Úsáid aitheantais <application>KMail</application>"
+msgstr ""
 
 #: prefdlg.cpp:1434
 #, kde-kuit-format
@@ -5929,20 +5540,16 @@ msgid "Recurrence:"
 msgstr "Atarlú:"
 
 #: prefdlg.cpp:1528
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "February 28th"
+#, kde-format
 msgctxt "@option:radio"
 msgid "February 28th"
-msgstr "28 Feabhra"
+msgstr ""
 
 #: prefdlg.cpp:1532
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "March 1st"
+#, kde-format
 msgctxt "@option:radio"
 msgid "March 1st"
-msgstr "1 Márta"
+msgstr ""
 
 #: prefdlg.cpp:1536
 #, kde-format
@@ -6440,14 +6047,12 @@ msgid "<para>Enter the last date to repeat the alarm.</para><para>%1</para>"
 msgstr ""
 
 #: recurrenceedit.cpp:249
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis"
-#| msgid "<para>%1</para><para>%2</para><para>%3</para>"
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>Enter the last time to repeat the alarm.</para><para>%1</para><para>"
 "%2</para>"
-msgstr "<para>%1</para><para>%2</para><para>%3</para>"
+msgstr ""
 
 #: recurrenceedit.cpp:253
 #, kde-format
@@ -6557,12 +6162,10 @@ msgid "Date cannot be earlier than start date"
 msgstr ""
 
 #: recurrenceedit.cpp:1066
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Recur e&very"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Recur every"
-msgstr "Athdhéan &gach"
+msgstr ""
 
 #: recurrenceedit.cpp:1133
 #, kde-format
@@ -6577,12 +6180,10 @@ msgid "Enter the number of hours and minutes between repetitions of the alarm"
 msgstr ""
 
 #: recurrenceedit.cpp:1154
-#, fuzzy, kde-format
-#| msgctxt "@label On: Tuesday"
-#| msgid "O&n:"
+#, kde-format
 msgctxt "@label On: Tuesday"
 msgid "On:"
-msgstr "A&r:"
+msgstr ""
 
 #: recurrenceedit.cpp:1237
 #, kde-format
@@ -6627,12 +6228,10 @@ msgid "Select the days of the week on which to repeat the alarm"
 msgstr ""
 
 #: recurrenceedit.cpp:1303
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@option:radio On day number in the month"
 msgid "On day"
-msgstr "A&r lá"
+msgstr ""
 
 #: recurrenceedit.cpp:1307
 #, kde-format
@@ -6653,12 +6252,10 @@ msgid "Select the day of the month on which to repeat the alarm"
 msgstr ""
 
 #: recurrenceedit.cpp:1325
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On the 1st Tuesday"
-#| msgid "On t&he"
+#, kde-format
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
-msgstr "&Ar an"
+msgstr ""
 
 #: recurrenceedit.cpp:1329
 #, kde-format
@@ -6955,53 +6552,41 @@ msgid ""
 msgstr ""
 
 #: resources/fileresource.cpp:325 resources/fileresource.cpp:455
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is not configured."
-msgstr "Cumraíocht Fhéilire"
+msgstr ""
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to remove calendar <resource>%1</resource>."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar <resource>%1</resource>."
-msgstr "Níorbh fhéidir féilire <resource>%1</resource> a bhaint."
+msgstr ""
 
 #: resources/fileresource.cpp:432 resources/fileresource.cpp:472
 #: resources/fileresource.cpp:482
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to remove calendar <resource>%1</resource>."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Error saving calendar <resource>%1</resource>."
-msgstr "Níorbh fhéidir féilire <resource>%1</resource> a bhaint."
+msgstr ""
 
 #: resources/fileresource.cpp:462
-#, fuzzy, kde-format
-#| msgctxt "Filedialog filter for *.ics *.ical"
-#| msgid "KAlarm Calendar File"
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is read-only."
-msgstr "Comhaid Fhéilire"
+msgstr ""
 
 #: resources/fileresource.cpp:467
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to save calendar to <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Calendar file is in wrong format: <filename>%1</filename>."
-msgstr "Theip ar shábhail an fhéilire i<filename>%1</filename>"
+msgstr ""
 
 #: resources/fileresourcecalendarupdater.cpp:113
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info/plain"
-#| msgid "Failed to update format of calendar <resource>%1</resource>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to update format of calendar <resource>%1</resource>"
-msgstr "Níorbh fhéidir formáid fhéilire <resource>%1</resource> a nuashonrú."
+msgstr ""
 
 #: resources/fileresourcecreator.cpp:54
 #, kde-format
@@ -7010,12 +6595,10 @@ msgid "Calendar Configuration"
 msgstr "Cumraíocht Fhéilire"
 
 #: resources/fileresourcecreator.cpp:55
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Select storage type of new calendar:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Select storage type of new calendar:"
-msgstr "Roghnaigh cineál stórála an fhéilire nua:"
+msgstr ""
 
 #: resources/fileresourcecreator.cpp:137
 #, kde-kuit-format
@@ -7026,77 +6609,59 @@ msgid ""
 msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import Directory Resource"
-msgstr "Comhaid Fhéilire"
+msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Import Calendar Directory Resource"
-msgstr "Comhaid Fhéilire"
+msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Import Active Alarms"
-msgstr "Aláraim Ghníomhacha"
+msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:55
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Archived Alarms"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Import Archived Alarms"
-msgstr "Aláraim Chartlannaithe"
+msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Import Alarm Templates"
-msgstr "Teimpléid Aláraim"
+msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:191
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Active alarms"
+#, kde-format
 msgctxt "@item:intext"
 msgid "Active alarms"
-msgstr "Aláraim ghníomhacha"
+msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:193
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Archived alarms"
+#, kde-format
 msgctxt "@item:intext"
 msgid "Archived alarms"
-msgstr "Aláraim chartlannaithe"
+msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:195
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm templates"
+#, kde-format
 msgctxt "@item:intext"
 msgid "Alarm templates"
-msgstr "Teimpléid aláraim"
+msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:251
 #: resources/singlefileresourceconfigdialog.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar files"
-msgstr "Comhaid Fhéilire"
+msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:397
 #: resources/singlefileresourceconfigdialog.cpp:213
@@ -7158,33 +6723,28 @@ msgid ""
 "its alarm types into separate KAlarm calendar file resources."
 msgstr ""
 
-# not a verb, kind of alarm?
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
 #: resources/migration/dirresourceimportdialog_intro.ui:33
 #: resources/migration/dirresourceimportdialog_type.ui:99
-#, fuzzy, kde-format
-#| msgid "Display name."
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Display name:"
-msgstr "Ainm taispeána."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
 #: resources/migration/dirresourceimportdialog_intro.ui:47
-#, fuzzy, kde-format
-#| msgctxt "Filedialog filter for *.ics *.ical"
-#| msgid "KAlarm Calendar File"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Calendar directory:"
-msgstr "Comhaid Fhéilire"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label3)
 #: resources/migration/dirresourceimportdialog_intro.ui:61
-#, fuzzy, kde-format
-#| msgid "Alarm types."
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm types:"
-msgstr "Cineálacha aláraim."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, note)
 #: resources/migration/dirresourceimportdialog_intro.ui:78
@@ -7198,13 +6758,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, mergeRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:13
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Failed to create default calendar <resource>%1</resource>"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Import into existing calendar file resource"
 msgstr ""
-"Níorbh fhéidir an féilire réamhshocraithe <resource>%1</resource> a chruthú"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, mergeResource)
 #: resources/migration/dirresourceimportdialog_type.ui:26
@@ -7215,23 +6772,18 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, newRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Failed to create default calendar <resource>%1</resource>"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Import into new calendar file resource"
 msgstr ""
-"Níorbh fhéidir an féilire réamhshocraithe <resource>%1</resource> a chruthú"
 
 #. i18n: ectx: property (text), widget (QLabel, pathLabel)
 #: resources/migration/dirresourceimportdialog_type.ui:64
 #: resources/singlefileresourceconfigdialog.ui:29
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action = file display"
-#| msgid "File"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Filename:"
-msgstr "Comhad"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, pathRequester)
 #: resources/migration/dirresourceimportdialog_type.ui:74
@@ -7254,90 +6806,68 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:109
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Enter the name or URL of a text or image file to display."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the name used to identify this resource in displays."
 msgstr ""
-"Iontráil an t-ainm nó URL de théacschomhad nó comhad íomhá le taispeáint."
 
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:112
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Enter the name or URL of a text or image file to display."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name used to identify this resource in displays."
 msgstr ""
-"Iontráil an t-ainm nó URL de théacschomhad nó comhad íomhá le taispeáint."
 
 #. i18n: ectx: property (text), widget (QRadioButton, noRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:137
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Do not import"
-msgstr "Ná hathdhéan"
+msgstr ""
 
 #: resources/migration/fileresourcemigrator.cpp:256
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
-msgstr "Aláraim Ghníomhacha"
+msgstr ""
 
 #: resources/migration/fileresourcemigrator.cpp:258
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Archived Alarms"
+#, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
-msgstr "Aláraim Chartlannaithe"
+msgstr ""
 
 #: resources/migration/fileresourcemigrator.cpp:260
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
-msgstr "Teimpléid Aláraim"
+msgstr ""
 
 #: resources/migration/fileresourcemigrator.cpp:280
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info/plain"
-#| msgid "Failed to update format of calendar <resource>%1</resource>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Failed to create default calendar <resource>%1</resource></"
 "para><para>Location: <filename>%2</filename></para>"
-msgstr "Níorbh fhéidir formáid fhéilire <resource>%1</resource> a nuashonrú."
+msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@item:intext"
 msgid "Active Alarms"
-msgstr "Aláraim Ghníomhacha"
+msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Archived Alarms"
+#, kde-format
 msgctxt "@item:intext"
 msgid "Archived Alarms"
-msgstr "Aláraim Chartlannaithe"
+msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:70
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@item:intext"
 msgid "Alarm Templates"
-msgstr "Teimpléid Aláraim"
+msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:74
 #, kde-format
@@ -7352,12 +6882,10 @@ msgid "%1, %2, %3"
 msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:90
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Read-only"
+#, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only"
-msgstr "Inléite Amháin"
+msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:93
 #, kde-format
@@ -7402,12 +6930,10 @@ msgid "Type"
 msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "@title:column Template name"
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
-msgstr "Ainm"
+msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:130
 #, kde-format
@@ -7452,11 +6978,10 @@ msgid "Pre- and post-alarm action execution failed"
 msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:492
-#, fuzzy, kde-format
-#| msgid "Disabled"
+#, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
-msgstr "Díchumasaithe"
+msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:495
 #, kde-kuit-format
@@ -7522,36 +7047,28 @@ msgstr "Ainm an teimpléid aláraim"
 
 #: resources/resourcedatamodelbase.cpp:667
 #: resources/resourcedatamodelbase.cpp:767
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Alarm never occurs"
-#| msgid "Never"
+#, kde-format
 msgctxt "@info Alarm never occurs"
 msgid "Never"
-msgstr "Riamh"
+msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:773
-#, fuzzy, no-c-format, kde-format
-#| msgctxt "@info/plain n days"
-#| msgid "%1d"
+#, no-c-format, kde-format
 msgctxt "@info n days"
 msgid "%1d"
-msgstr "%1lá"
+msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:783
-#, fuzzy, kde-format
-#| msgctxt "@info/plain hours:minutes"
-#| msgid "%1:%2"
+#, kde-format
 msgctxt "@info hours:minutes"
 msgid "%1:%2"
-msgstr "%1:%2"
+msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:790
-#, fuzzy, kde-format
-#| msgctxt "@info/plain days hours:minutes"
-#| msgid "%1d %2:%3"
+#, kde-format
 msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
-msgstr "%1lá %2:%3"
+msgstr ""
 
 #: resources/resourcemodel.cpp:357
 #, kde-format
@@ -7592,57 +7109,42 @@ msgid_plural ""
 "new default calendars.</para>"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: resources/resourceselectdialog.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "@option:check Month of the year"
-#| msgid "March"
+#, kde-format
 msgctxt "@info A prompt for user to enter what to search for"
 msgid "Search"
-msgstr "Márta"
+msgstr ""
 
 #: resources/resourcetype.cpp:359
-#, fuzzy, kde-format
-#| msgctxt "Filedialog filter for *.ics *.ical"
-#| msgid "KAlarm Calendar File"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "KAlarm Calendar File"
-msgstr "Comhaid Fhéilire"
+msgstr ""
 
 #: resources/resourcetype.cpp:359
-#, fuzzy, kde-format
-#| msgctxt "Filedialog filter for *.ics *.ical"
-#| msgid "KAlarm Calendar File"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "KAlarm Calendar Directory"
-msgstr "Comhaid Fhéilire"
+msgstr ""
 
 #: resources/resourcetype.cpp:360
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action = file display"
-#| msgid "File"
+#, kde-format
 msgctxt "@item:intext What a resource is stored in"
 msgid "File"
-msgstr "Comhad"
+msgstr ""
 
 #: resources/resourcetype.cpp:361
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "URL"
+#, kde-format
 msgctxt "@item:intext What a resource is stored in"
 msgid "URL"
-msgstr "URL"
+msgstr ""
 
 #: resources/resourcetype.cpp:362
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Directory in filesystem"
-#| msgid "Directory"
+#, kde-format
 msgctxt "@item:intext What a resource is stored in (directory in filesystem)"
 msgid "Directory"
-msgstr "Comhadlann"
+msgstr ""
 
 #: resources/singlefileresource.cpp:177 resources/singlefileresource.cpp:351
 #, kde-format
@@ -7657,77 +7159,59 @@ msgid "A previous save is still in progress."
 msgstr ""
 
 #: resources/singlefileresource.cpp:232
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Could not load calendar <filename>%1</filename>."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create calendar file <filename>%1</filename>."
-msgstr "Ní féidir féilire <filename>%1</filename> a luchtú."
+msgstr ""
 
 #: resources/singlefileresource.cpp:247
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Could not load calendar <filename>%1</filename>."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create writable calendar file <filename>%1</filename>."
-msgstr "Ní féidir féilire <filename>%1</filename> a luchtú."
+msgstr ""
 
 #: resources/singlefileresource.cpp:602
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Could not load calendar <filename>%1</filename>."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
-msgstr "Ní féidir féilire <filename>%1</filename> a luchtú."
+msgstr ""
 
 #: resources/singlefileresource.cpp:635
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
-msgstr "Cumraíocht Fhéilire"
+msgstr ""
 
 #: resources/singlefileresource.cpp:648
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Could not load calendar <filename>%1</filename>."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
-msgstr "Ní féidir féilire <filename>%1</filename> a luchtú."
+msgstr ""
 
 #: resources/singlefileresource.cpp:740
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Could not load calendar <filename>%1</filename>."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr "Ní féidir féilire <filename>%1</filename> a luchtú."
+msgstr ""
 
 #: resources/singlefileresource.cpp:777
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Could not load calendar <filename>%1</filename>."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"
-msgstr "Ní féidir féilire <filename>%1</filename> a luchtú."
+msgstr ""
 
 #: resources/singlefileresourceconfigdialog.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Choose Calendar"
+#, kde-format
 msgctxt "@title:window"
 msgid "Configure Calendar"
-msgstr "Roghnaigh Féilire"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:21
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@title:group"
 msgid "Calendar File"
-msgstr "Comhaid Fhéilire"
+msgstr ""
 
 #. i18n: ectx: property (html), widget (KTextEdit, pathDescription)
 #: resources/singlefileresourceconfigdialog.ui:68
@@ -7740,30 +7224,24 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Active Alarms"
-msgstr "Aláraim Ghníomhacha"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, archivedRadio)
 #: resources/singlefileresourceconfigdialog.ui:99
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Archived Alarms"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Archived Alarms"
-msgstr "Aláraim Chartlannaithe"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, templateRadio)
 #: resources/singlefileresourceconfigdialog.ui:112
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Alarm Templates"
-msgstr "Teimpléid Aláraim"
+msgstr ""
 
 #. i18n: ectx: property (html), widget (KTextEdit, alarmTypeDescription)
 #: resources/singlefileresourceconfigdialog.ui:133
@@ -7773,65 +7251,51 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
-#, fuzzy, kde-format
-#| msgid "Alarm types."
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm type:"
-msgstr "Cineálacha aláraim."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLineEdit, activeAlarmsText)
 #: resources/singlefileresourceconfigdialog.ui:155
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@item"
 msgid "Active Alarms"
-msgstr "Aláraim Ghníomhacha"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLineEdit, archivedAlarmsText)
 #: resources/singlefileresourceconfigdialog.ui:168
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Archived Alarms"
+#, kde-format
 msgctxt "@item"
 msgid "Archived Alarms"
-msgstr "Aláraim Chartlannaithe"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLineEdit, templateAlarmsText)
 #: resources/singlefileresourceconfigdialog.ui:181
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@item"
 msgid "Alarm Templates"
-msgstr "Teimpléid Aláraim"
+msgstr ""
 
-# not a verb, kind of alarm?
 #. i18n: ectx: property (title), widget (QGroupBox, nameGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:193
-#, fuzzy, kde-format
-#| msgid "Display name."
+#, kde-format
 msgctxt "@title:group"
 msgid "Display Name"
-msgstr "Ainm taispeána."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_1)
 #: resources/singlefileresourceconfigdialog.ui:201
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox Calendar name"
-#| msgid "Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr "Ainm:"
+msgstr ""
 
 #. i18n: ectx: property (html), widget (KTextEdit, nameDescription)
 #: resources/singlefileresourceconfigdialog.ui:222
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Enter the name or URL of a text or image file to display."
+#, kde-format
 msgid "Enter the display name used to identify this calendar."
 msgstr ""
-"Iontráil an t-ainm nó URL de théacschomhad nó comhad íomhá le taispeáint."
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:232
@@ -7842,12 +7306,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, readOnlyCheckbox)
 #: resources/singlefileresourceconfigdialog.ui:238
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Read-only"
+#, kde-format
 msgctxt "@option:check"
 msgid "Read only"
-msgstr "Inléite Amháin"
+msgstr ""
 
 #. i18n: ectx: property (html), widget (KTextEdit, readOnlyDescription)
 #: resources/singlefileresourceconfigdialog.ui:254
@@ -7899,28 +7361,22 @@ msgid ""
 msgstr ""
 
 #: resourceselector.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Choose Calendar"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Reconfigure the selected calendar"
-msgstr "Roghnaigh Féilire"
+msgstr ""
 
 #: resourceselector.cpp:83
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Edit the highlighted calendar"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the highlighted calendar's configuration"
-msgstr "Cuir an féilire aibhsithe in eagar"
+msgstr ""
 
 #: resourceselector.cpp:84
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Remove the highlighted attachment from the email."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected calendar from the list"
-msgstr "Bain an t-iatán aibhsithe ón ríomhphost."
+msgstr ""
 
 #: resourceselector.cpp:85
 #, kde-kuit-format
@@ -7978,16 +7434,12 @@ msgid ""
 msgstr ""
 
 #: resourceselector.cpp:258
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Do you really want to make your default calendar read-only?"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Do you really want to remove your default calendar (<resource>%1</resource>) "
 "from the list?"
 msgstr ""
-"An bhfuil tú cinnte gur mian leat d'fhéilire réamhshocraithe a bheith "
-"inléite amháin?"
 
 #: resourceselector.cpp:261
 #, kde-kuit-format
@@ -7998,127 +7450,96 @@ msgid ""
 msgstr ""
 
 #: resourceselector.cpp:264
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Failed to remove calendar <resource>%1</resource>."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Do you really want to remove the calendar <resource>%1</resource> from the "
 "list?"
-msgstr "Níorbh fhéidir féilire <resource>%1</resource> a bhaint."
+msgstr ""
 
 #: resourceselector.cpp:289
-#, fuzzy, kde-format
-#| msgctxt "@action Reload calendar"
-#| msgid "Re&load"
+#, kde-format
 msgctxt "@action Reload calendar"
 msgid "Reload"
-msgstr "Ath&luchtaigh"
+msgstr ""
 
 #: resourceselector.cpp:292
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Details"
+#, kde-format
 msgctxt "@action"
 msgid "Show Details"
-msgstr "Taispeáin &Mionsonraí"
+msgstr ""
 
 #: resourceselector.cpp:295
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Set &Color..."
+#, kde-format
 msgctxt "@action"
 msgid "Set Color..."
-msgstr "Socraigh &Dath..."
+msgstr ""
 
 #: resourceselector.cpp:298
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove Color"
+#, kde-format
 msgctxt "@action"
 msgid "Clear Color"
-msgstr "Bain Dath"
+msgstr ""
 
 #: resourceselector.cpp:304
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@action"
 msgid "Update Calendar Format"
-msgstr "Comhaid Fhéilire"
+msgstr ""
 
 #: resourceselector.cpp:307
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action"
 msgid "Remove"
-msgstr "Bain"
+msgstr ""
 
 #: resourceselector.cpp:313
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Add..."
+#, kde-format
 msgctxt "@action"
 msgid "Add..."
-msgstr "Cuir Leis..."
+msgstr ""
 
 #: resourceselector.cpp:316
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Im&port..."
+#, kde-format
 msgctxt "@action"
 msgid "Import..."
-msgstr "Iom&pórtáil..."
+msgstr ""
 
 #: resourceselector.cpp:372
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Active Alarms"
-msgstr "Aláraim Ghníomhacha"
+msgstr ""
 
 #: resourceselector.cpp:373
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Clear Archived Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
-msgstr "Glan Aláraim Chartlannaithe"
+msgstr ""
 
 #: resourceselector.cpp:374
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Delete Alarm Template"
-#| msgid_plural "Delete Alarm Templates"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Alarm Templates"
-msgstr "Scrios Teimpléad Aláraim"
+msgstr ""
 
 #: resourceselector.cpp:503
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Active alarms"
+#, kde-format
 msgctxt "@info"
 msgid "Active alarms"
-msgstr "Aláraim ghníomhacha"
+msgstr ""
 
 #: resourceselector.cpp:505
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Archived alarms"
+#, kde-format
 msgctxt "@info"
 msgid "Archived alarms"
-msgstr "Aláraim chartlannaithe"
+msgstr ""
 
 #: resourceselector.cpp:507
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm templates"
+#, kde-format
 msgctxt "@info"
 msgid "Alarm templates"
-msgstr "Teimpléid aláraim"
+msgstr ""
 
 #: resourceselector.cpp:508
 #, kde-format
@@ -8127,43 +7548,34 @@ msgid ", "
 msgstr ""
 
 #: resourceselector.cpp:511
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Read-write"
+#, kde-format
 msgctxt "@info"
 msgid "Read-write"
-msgstr "Inléite-inscríofa"
+msgstr ""
 
 #: resourceselector.cpp:513
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Enabled"
+#, kde-format
 msgctxt "@info"
 msgid "Enabled"
-msgstr "Cumasaithe"
+msgstr ""
 
 #: resourceselector.cpp:514
-#, fuzzy, kde-format
-#| msgid "Disabled"
+#, kde-format
 msgctxt "@info"
 msgid "Disabled"
-msgstr "Díchumasaithe"
+msgstr ""
 
 #: resourceselector.cpp:516
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
-#| msgid "Yes"
+#, kde-format
 msgctxt "@info Parameter in 'Default calendar: Yes/No'"
 msgid "Yes"
-msgstr "Tá"
+msgstr ""
 
 #: resourceselector.cpp:517
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
-#| msgid "No"
+#, kde-format
 msgctxt "@info Parameter in 'Default calendar: Yes/No'"
 msgid "No"
-msgstr "Níl"
+msgstr ""
 
 #: resourceselector.cpp:519
 #, kde-kuit-format
@@ -8377,12 +7789,10 @@ msgid "Sound File"
 msgstr "Comhad Fuaime"
 
 #: soundpicker.cpp:317
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Sound file"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Audio files"
-msgstr "Comhad fuaime"
+msgstr ""
 
 #: soundpicker.cpp:340
 #, kde-format
@@ -8397,12 +7807,10 @@ msgid "Special Actions..."
 msgstr "Gníomhartha Speisialta..."
 
 #: specialactions.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Enter a shell command to execute."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Set commands to execute"
-msgstr "Iontráil ordú blaoisce le rith."
+msgstr ""
 
 #: specialactions.cpp:40
 #, kde-format
@@ -8510,12 +7918,10 @@ msgid "New"
 msgstr "Nua"
 
 #: templatedlg.cpp:77
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Create a new alarm template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
-msgstr "Cruthaigh teimpléad nua aláraim"
+msgstr ""
 
 #: templatedlg.cpp:78
 #, kde-format
@@ -8524,12 +7930,10 @@ msgid "Create a new alarm template"
 msgstr "Cruthaigh teimpléad nua aláraim"
 
 #: templatedlg.cpp:83
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Edit the currently highlighted alarm template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
-msgstr "Iontráil an t-ainm ar an teimpléad aláraim"
+msgstr ""
 
 #: templatedlg.cpp:84
 #, kde-format
@@ -8544,12 +7948,10 @@ msgid "Copy"
 msgstr "Cóipeáil"
 
 #: templatedlg.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Create a new alarm template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template based on the selected template"
-msgstr "Cruthaigh teimpléad nua aláraim"
+msgstr ""
 
 #: templatedlg.cpp:90
 #, kde-format
@@ -8560,21 +7962,16 @@ msgid ""
 msgstr ""
 
 #: templatedlg.cpp:95
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Do you really want to delete the selected alarm template?"
-#| msgid_plural "Do you really want to delete the %1 selected alarm templates?"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
-msgstr "An bhfuil tú cinnte gur mian leat an teimpléad roghnaithe a scriosadh?"
+msgstr ""
 
 #: templatedlg.cpp:96
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Edit the currently highlighted alarm template"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
-msgstr "Iontráil an t-ainm ar an teimpléad aláraim"
+msgstr ""
 
 #: templatedlg.cpp:178
 #, kde-format
@@ -8622,12 +8019,10 @@ msgid "Select a template to base the new alarm on."
 msgstr ""
 
 #: traywindow.cpp:74
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&New Alarm"
+#, kde-format
 msgctxt "@action"
 msgid "New Alarm"
-msgstr "Aláram &Nua"
+msgstr ""
 
 #: traywindow.cpp:299
 #, kde-format
@@ -8641,60 +8036,46 @@ msgid "(Some alarms disabled)"
 msgstr ""
 
 #: traywindow.cpp:364
-#, fuzzy, kde-format
-#| msgctxt "@info/plain prefix + hours:minutes"
-#| msgid "(%1%2:%3)"
+#, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "(%1%2:%3)"
-msgstr "(%1%2:%3)"
+msgstr ""
 
 #: traywindow.cpp:366
-#, fuzzy, kde-format
-#| msgctxt "@info/plain prefix + hours:minutes"
-#| msgid "%1%2:%3"
+#, kde-format
 msgctxt "@info prefix + hours:minutes"
 msgid "%1%2:%3"
-msgstr "%1%2:%3"
+msgstr ""
 
 #: undo.cpp:404
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm not found"
+#, kde-format
 msgctxt "@info"
 msgid "Alarm not found"
-msgstr "Aláram gan aimsiú"
+msgstr ""
 
 #: undo.cpp:405
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Error recreating alarm"
+#, kde-format
 msgctxt "@info"
 msgid "Error recreating alarm"
-msgstr "Tharla earráid agus aláram á athchruthú"
+msgstr ""
 
 #: undo.cpp:406
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Error recreating alarm template"
+#, kde-format
 msgctxt "@info"
 msgid "Error recreating alarm template"
-msgstr "Tharla earráid agus teimpléad aláraim á athchruthú"
+msgstr ""
 
 #: undo.cpp:407
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Cannot reactivate archived alarm"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot reactivate archived alarm"
-msgstr "Ní féidir aláram cartlannaithe a ghníomhachtú arís"
+msgstr ""
 
 #: undo.cpp:409
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Unknown error"
+#, kde-format
 msgctxt "@info"
 msgid "Unknown error"
-msgstr "Earráid anaithnid"
+msgstr ""
 
 #: undo.cpp:411
 #, kde-format
@@ -8703,108 +8084,82 @@ msgid "%1: %2"
 msgstr "%1: %2"
 
 #: undo.cpp:662
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Action to create a new alarm"
-#| msgid "New alarm"
+#, kde-format
 msgctxt "@info Action to create a new alarm"
 msgid "New alarm"
-msgstr "Aláram nua"
+msgstr ""
 
 #: undo.cpp:664
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Action to delete an alarm"
-#| msgid "Delete alarm"
+#, kde-format
 msgctxt "@info Action to delete an alarm"
 msgid "Delete alarm"
-msgstr "Scrios aláram"
+msgstr ""
 
 #: undo.cpp:667
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Action to create a new alarm template"
-#| msgid "New template"
+#, kde-format
 msgctxt "@info Action to create a new alarm template"
 msgid "New template"
-msgstr "Teimpléad nua"
+msgstr ""
 
 #: undo.cpp:669
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Action to delete an alarm template"
-#| msgid "Delete template"
+#, kde-format
 msgctxt "@info Action to delete an alarm template"
 msgid "Delete template"
-msgstr "Scrios teimpléad"
+msgstr ""
 
 #: undo.cpp:671
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Delete archived alarm"
+#, kde-format
 msgctxt "@info"
 msgid "Delete archived alarm"
-msgstr "Scrios aláram cartlannaithe"
+msgstr ""
 
 #: undo.cpp:944
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Delete multiple alarms"
+#, kde-format
 msgctxt "@info"
 msgid "Create multiple alarms"
-msgstr "Scrios aláram éagsúla"
+msgstr ""
 
 #: undo.cpp:1049
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Action to edit an alarm"
-#| msgid "Edit alarm"
+#, kde-format
 msgctxt "@info Action to edit an alarm"
 msgid "Edit alarm"
-msgstr "Cuir aláram in eagar"
+msgstr ""
 
 #: undo.cpp:1051
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Action to edit an alarm template"
-#| msgid "Edit template"
+#, kde-format
 msgctxt "@info Action to edit an alarm template"
 msgid "Edit template"
-msgstr "Cuir teimpléad in eagar"
+msgstr ""
 
 #: undo.cpp:1259
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Delete multiple alarms"
+#, kde-format
 msgctxt "@info"
 msgid "Delete multiple alarms"
-msgstr "Scrios aláram éagsúla"
+msgstr ""
 
 #: undo.cpp:1261
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Delete multiple templates"
+#, kde-format
 msgctxt "@info"
 msgid "Delete multiple templates"
-msgstr "Scrios teimpléid éagsúla"
+msgstr ""
 
 #: undo.cpp:1268
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Delete multiple archived alarms"
+#, kde-format
 msgctxt "@info"
 msgid "Delete multiple archived alarms"
-msgstr "Scrios aláram cartlannaithe éagsúla"
+msgstr ""
 
 #: undo.cpp:1321 undo.cpp:1375
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Reactivate alarm"
+#, kde-format
 msgctxt "@info"
 msgid "Reactivate alarm"
-msgstr "Gníomhachtaigh aláram arís"
+msgstr ""
 
 #: undo.cpp:1408
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Reactivate multiple alarms"
+#, kde-format
 msgctxt "@info"
 msgid "Reactivate multiple alarms"
-msgstr "Gníomhachtaigh aláraim éagsúla arís"
+msgstr ""
 
 #: wakedlg.cpp:40
 #, kde-format
@@ -8911,990 +8266,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
-
-#, fuzzy
-#~| msgctxt "@info"
-#~| msgid "<para>%1</para><para>%2</para>"
-#~ msgctxt "@info"
-#~ msgid "<para>%1</para><para>Please select a new default calendar.</para>"
-#~ msgstr "<para>%1</para><para>%2</para>"
-
-#~ msgctxt "@label"
-#~ msgid "Suppress autostart at login"
-#~ msgstr "Ná tosaigh go huathoibríoch ag am logála isteach"
-
-#~ msgctxt "@option:check"
-#~ msgid "Start at login"
-#~ msgstr "Tosaigh ag am logála isteach"
-
-#, fuzzy
-#~| msgctxt "@info"
-#~| msgid "Cannot open audio file: <filename>%1</filename>"
-#~ msgctxt "@info"
-#~ msgid "<para>Error opening audio file: <filename>%1</filename>"
-#~ msgstr "Ní féidir comhad fuaime a oscailt: <filename>%1</filename>"
-
-#, fuzzy
-#~| msgctxt "@info"
-#~| msgid ""
-#~| "<para>Error loading calendar:</para><para><filename>%1</filename></"
-#~| "para><para>Please fix or delete the file.</para>"
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
-#~ msgstr ""
-#~ "<para>Tharla earráid agus féilire á luchtú:</para><para><filename>%1</"
-#~ "filename></para><para>Deisigh nó scrios an comhad, le do thoil.</para>"
-
-#~ msgid "&File"
-#~ msgstr "&Comhad"
-
-#~ msgid "&Edit"
-#~ msgstr "&Eagar"
-
-#~ msgid "&View"
-#~ msgstr "&Amharc"
-
-#~ msgctxt "@action"
-#~ msgid "&New"
-#~ msgstr "&Nua"
-
-#~ msgctxt "@action"
-#~ msgid "&Edit..."
-#~ msgstr "&Eagar..."
-
-#~ msgctxt "@action"
-#~ msgid "&Delete"
-#~ msgstr "&Scrios"
-
-#~ msgctxt "@action"
-#~ msgid "Show Archi&ved Alarms"
-#~ msgstr "Taispeáin Aláraim &Chartlannaithe"
-
-#~ msgctxt "@action"
-#~ msgid "Ena&ble"
-#~ msgstr "Cum&asaigh"
-
-#~ msgctxt "@action"
-#~ msgid "Disa&ble"
-#~ msgstr "Díchumasaigh"
-
-#~ msgctxt "@action:button"
-#~ msgid "&Edit..."
-#~ msgstr "&Eagar..."
-
-#~ msgctxt "@option:radio"
-#~ msgid "February 2&8th"
-#~ msgstr "2&8 Feabhra"
-
-#~ msgctxt "@option:radio"
-#~ msgid "March &1st"
-#~ msgstr "&1 Márta"
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "Active Alarms"
-#~ msgctxt "@option:radio"
-#~ msgid "Acti&ve Alarms"
-#~ msgstr "Aláraim Ghníomhacha"
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "Alarm Templates"
-#~ msgctxt "@option:radio"
-#~ msgid "Alarm &Templates"
-#~ msgstr "Teimpléid Aláraim"
-
-#~ msgctxt "@action"
-#~ msgid "&Remove"
-#~ msgstr "&Bain"
-
-#~ msgctxt "@action"
-#~ msgid "&Add..."
-#~ msgstr "&Cuir Leis..."
-
-#, fuzzy
-#~| msgctxt "@option:radio"
-#~| msgid "Use <application>KMail</application> identities"
-#~ msgctxt "@option:radio"
-#~ msgid "Use default address from <application>KMail</application>"
-#~ msgstr "Úsáid aitheantais <application>KMail</application>"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "Unable to start <application>KMail</application><nl/>(<message>%1</"
-#~ "message>)"
-#~ msgstr ""
-#~ "Ní féidir <application>KMail</application> a thosú<nl/>(<message>%1</"
-#~ "message>)"
-
-#, fuzzy
-#~| msgctxt "@info"
-#~| msgid ""
-#~| "Unable to start <application>KMail</application><nl/>(<message>%1</"
-#~| "message>)"
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "Error copying sent email to <application>KMail</application> <resource>"
-#~ "%1</resource> folder"
-#~ msgstr ""
-#~ "Ní féidir <application>KMail</application> a thosú<nl/>(<message>%1</"
-#~ "message>)"
-
-# not a verb, kind of alarm?
-#~ msgid "Display name."
-#~ msgstr "Ainm taispeána."
-
-#~ msgid "Do not change the actual backend data."
-#~ msgstr "Ná hathraigh na sonraí féin."
-
-#~ msgid "Monitor directory for changes."
-#~ msgstr "Déan monatóireacht ar athruithe sa chomhadlann."
-
-#~ msgid "Alarm types."
-#~ msgstr "Cineálacha aláraim."
-
-#~ msgid "Monitor file for changes."
-#~ msgstr "Déan monatóireacht ar athruithe."
-
-#~ msgctxt "@item:inlistbox Morning, as in 2am"
-#~ msgid "am"
-#~ msgstr "am"
-
-#~ msgctxt "@item:inlistbox Afternoon, as in 2pm"
-#~ msgid "pm"
-#~ msgstr "pm"
-
-#~ msgctxt "@title:tab"
-#~ msgid "Alarm Types"
-#~ msgstr "Cineálacha Aláraim"
-
-#~ msgctxt "@title:tab"
-#~ msgid "Edit"
-#~ msgstr "Eagar"
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "Invalid collection"
-#~ msgctxt "@info"
-#~ msgid "Invalid collection"
-#~ msgstr "Bailiúchán neamhbhailí"
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "Failed to create alarm."
-#~ msgctxt "@info"
-#~ msgid "Failed to create alarm."
-#~ msgstr "Theip ar aláram a chruthú."
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "Failed to update alarm."
-#~ msgctxt "@info"
-#~ msgid "Failed to update alarm."
-#~ msgstr "Theip ar aláram a nuashonrú."
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "Failed to delete alarm."
-#~ msgctxt "@info"
-#~ msgid "Failed to delete alarm."
-#~ msgstr "Theip ar aláram a scriosadh."
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "Failed to update alarm."
-#~ msgctxt "@info"
-#~ msgid "Failed to update calendar \"%1\"."
-#~ msgstr "Theip ar aláram a nuashonrú."
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "Failed to create default calendar <resource>%1</resource>"
-#~ msgctxt "@info"
-#~ msgid "Failed to create new calendar resource"
-#~ msgstr ""
-#~ "Níorbh fhéidir an féilire réamhshocraithe <resource>%1</resource> a "
-#~ "chruthú"
-
-#~ msgctxt "@info"
-#~ msgid "%1<nl/>(%2)"
-#~ msgstr "%1<nl/>(%2)"
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "Active Alarms"
-#~ msgctxt "@info"
-#~ msgid "Active Alarms"
-#~ msgstr "Aláraim Ghníomhacha"
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "Archived Alarms"
-#~ msgctxt "@info"
-#~ msgid "Archived Alarms"
-#~ msgstr "Aláraim Chartlannaithe"
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "Alarm Templates"
-#~ msgctxt "@info"
-#~ msgid "Alarm Templates"
-#~ msgstr "Teimpléid Aláraim"
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "Failed to update format of calendar <resource>%1</resource>"
-#~ msgctxt "@info/plain"
-#~ msgid "Failed to create default calendar <resource>%1</resource>"
-#~ msgstr ""
-#~ "Níorbh fhéidir formáid fhéilire <resource>%1</resource> a nuashonrú."
-
-#, fuzzy
-#~| msgctxt "@info/plain File path or URL"
-#~| msgid "Location: %1"
-#~ msgctxt "@info File path or URL"
-#~ msgid "Location: %1"
-#~ msgstr "Suíomh: %1"
-
-#~ msgctxt "@info"
-#~ msgid "<para>%1</para><para>%2</para>"
-#~ msgstr "<para>%1</para><para>%2</para>"
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "Calendar Files"
-#~ msgctxt "@item:inlistbox"
-#~ msgid "Calendar Files"
-#~ msgstr "Comhaid Fhéilire"
-
-#, fuzzy
-#~| msgctxt "@info"
-#~| msgid ""
-#~| "Cannot upload calendar to\n"
-#~| "'%1'"
-#~ msgid "Error loading calendar '%1'."
-#~ msgstr ""
-#~ "Ní féidir an féilire a uasluchtú:\n"
-#~ "'%1'"
-
-#, fuzzy
-#~| msgctxt "@info"
-#~| msgid "Error saving alarm"
-#~ msgid "Error saving calendar '%1'."
-#~ msgstr "Tharla earráid agus aláram á shábháil"
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "File"
-#~ msgctxt "@info"
-#~ msgid "File"
-#~ msgstr "Comhad"
-
-#, fuzzy
-#~| msgctxt "@info"
-#~| msgid "Could not load calendar <filename>%1</filename>."
-#~ msgid "Could not create calendar file '%1'."
-#~ msgstr "Ní féidir féilire <filename>%1</filename> a luchtú."
-
-#, fuzzy
-#~| msgctxt "@info"
-#~| msgid ""
-#~| "Cannot upload calendar to\n"
-#~| "'%1'"
-#~ msgid "Could not load file '%1'."
-#~ msgstr ""
-#~ "Ní féidir an féilire a uasluchtú:\n"
-#~ "'%1'"
-
-#, fuzzy
-#~| msgctxt "@title:group"
-#~| msgid "Alarm Type"
-#~ msgid "Alarm Type"
-#~ msgstr "Cineál Aláraim"
-
-#~ msgctxt "@info"
-#~ msgid "Cannot upload calendar to <filename>%1</filename>"
-#~ msgstr "Ní féidir féilire a uasluchtú go <filename>%1</filename>"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "%1<nl/>%2: <filename>%3</filename><nl/>%4, %5"
-#~ msgstr "%1<nl/>%2: <filename>%3</filename><nl/>%4, %5"
-
-#~ msgctxt "@info"
-#~ msgid "<para>%1</para><para>%2<nl/>(%3)</para>"
-#~ msgstr "<para>%1</para><para>%2<nl/>(%3)</para>"
-
-#, fuzzy
-#~| msgctxt "Holiday region, region language"
-#~| msgid "%1 (%2)"
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "%1\n"
-#~ "(%2)"
-#~ msgstr "%1 (%2)"
-
-#~ msgid "Copyright 2001,2008 David Jarvie"
-#~ msgstr "Cóipcheart 2001,2008, David Jarvie"
-
-#~ msgid "Maintainer"
-#~ msgstr "Cothaitheoir"
-
-#, fuzzy
-#~| msgctxt "@action:button"
-#~| msgid "Delete"
-#~ msgctxt "@title:group"
-#~ msgid "Deletion"
-#~ msgstr "Scrios"
-
-#~ msgctxt "@info"
-#~ msgid "Failed to update calendar <resource>%1</resource>."
-#~ msgstr "Níorbh fhéidir féilire <resource>%1</resource> a nuashonrú."
-
-#~ msgctxt "@option Name of the weekday"
-#~ msgid "Monday"
-#~ msgstr "Luan"
-
-#~ msgctxt "@option Name of the weekday"
-#~ msgid "Tuesday"
-#~ msgstr "Máirt"
-
-#~ msgctxt "@option Name of the weekday"
-#~ msgid "Wednesday"
-#~ msgstr "Céadaoin"
-
-#~ msgctxt "@option Name of the weekday"
-#~ msgid "Thursday"
-#~ msgstr "Déardaoin"
-
-#~ msgctxt "@option Name of the weekday"
-#~ msgid "Friday"
-#~ msgstr "Aoine"
-
-#~ msgctxt "@option Name of the weekday"
-#~ msgid "Saturday"
-#~ msgstr "Satharn"
-
-#~ msgctxt "@option Name of the weekday"
-#~ msgid "Sunday"
-#~ msgstr "Domhnach"
-
-#~ msgctxt "@info/plain"
-#~ msgid "Disabled"
-#~ msgstr "Díchumasaithe"
-
-#~ msgctxt "@info/plain"
-#~ msgid "Program error"
-#~ msgstr "Earráid chláir"
-
-#~ msgctxt "@title:group"
-#~ msgid "General Settings"
-#~ msgstr "Socruithe Ginearálta"
-
-#~ msgctxt "@option:check"
-#~ msgid "Read-only"
-#~ msgstr "Inléite Amháin"
-
-#~ msgctxt "@title:group"
-#~ msgid "<resource>%1</resource> Calendar Settings"
-#~ msgstr "Socruithe Féilire <resource>%1</resource>"
-
-#~ msgctxt "@info"
-#~ msgid "Please enter a calendar name."
-#~ msgstr "Tabhair ainm ar an bhféilire."
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "<title>%1</title><para>Calendar type: %2<nl/>Contents: %3<nl/>%4: "
-#~ "<filename>%5</filename><nl/>Permissions: %6<nl/>Status: %7<nl/>Default "
-#~ "calendar: %8</para>"
-#~ msgstr ""
-#~ "<title>%1</title><para>Cineál an fhéilire: %2<nl/>Inneachar: %3<nl/>%4: "
-#~ "<filename>%5</filename><nl/>Ceadanna: %6<nl/>Stádas: %7<nl/> Féilire "
-#~ "réamhshocraithe: %8</para>"
-
-#~ msgctxt "@info"
-#~ msgid "No location specified.  The calendar will be invalid."
-#~ msgstr "Níor sonraíodh suíomh.  Beidh an féilire neamhbhailí."
-
-#~ msgctxt "@label:textbox"
-#~ msgid "Download from:"
-#~ msgstr "Íosluchtaigh ó:"
-
-#~ msgctxt "@label:textbox"
-#~ msgid "Upload to:"
-#~ msgstr "Uasluchtaigh chuig:"
-
-#~ msgctxt "@info"
-#~ msgid "Unable to create calendar of type <resource>%1</resource>."
-#~ msgstr "Ní féidir féilire den chineál <resource>%1</resource> a chruthú."
-
-#~ msgctxt "@action"
-#~ msgid "&Save"
-#~ msgstr "&Sábháil"
-
-#~ msgctxt "@info/plain 'From' email address"
-#~ msgid "From:"
-#~ msgstr "Ó:"
-
-#~ msgctxt "@info/plain Email addressee"
-#~ msgid "To:"
-#~ msgstr "Go:"
-
-#~ msgctxt "@info/plain Email subject"
-#~ msgid "Subject:"
-#~ msgstr "Ábhar:"
-
-#~ msgctxt "@info/plain"
-#~ msgid "At login"
-#~ msgstr "Ag am logála isteach"
-
-#~ msgctxt "@info/plain No recurrence"
-#~ msgid "None"
-#~ msgstr "Gan atarlú"
-
-#~ msgctxt "@info/plain No repetition"
-#~ msgid "None"
-#~ msgstr "Gan athdhéanamh"
-
-#~ msgctxt "@action"
-#~ msgid "New &From Template"
-#~ msgstr "Ceann Nua Ó &Theimpléad"
-
-#~ msgctxt "@info"
-#~ msgid "in 1 hour 1 minute's time"
-#~ msgid_plural "in %1 hours 1 minute's time"
-#~ msgstr[0] "faoi cheann uaire 1 nóiméad"
-#~ msgstr[1] "faoi cheann %1 uaire 1 nóiméad"
-#~ msgstr[2] "faoi cheann %1 huaire 1 nóiméad"
-#~ msgstr[3] "faoi cheann %1 n-uaire 1 nóiméad"
-#~ msgstr[4] "faoi cheann %1 uaire 1 nóiméad"
-
-#~ msgctxt "@info"
-#~ msgid "in 1 hour %2 minutes' time"
-#~ msgid_plural "in %1 hours %2 minutes' time"
-#~ msgstr[0] "faoi cheann uaire %2 nóiméad"
-#~ msgstr[1] "faoi cheann %1 uaire %2 nóiméad"
-#~ msgstr[2] "faoi cheann %1 huaire %2 nóiméad"
-#~ msgstr[3] "faoi cheann %1 n-uaire %2 nóiméad"
-#~ msgstr[4] "faoi cheann %1 uaire %2 nóiméad"
-
-#~ msgctxt "@info:tooltip 'KAlarm - disabled'"
-#~ msgid "%1 - disabled"
-#~ msgstr "%1 - díchumasaithe"
-
-#~ msgctxt "@title:column Name of person"
-#~ msgid "Name"
-#~ msgstr "Ainm"
-
-#~ msgctxt "@title:column"
-#~ msgid "Birthday"
-#~ msgstr "Lá Breithe"
-
-#~ msgctxt "@info"
-#~ msgid "Error reading address book"
-#~ msgstr "Tharla earráid agus an leabhar seoltaí á léamh"
-
-#~ msgctxt "@info:shell"
-#~ msgid "message incompatible with <icode>%1</icode>"
-#~ msgstr "teachtaireacht neamh-chomhoiriúnach do <icode>%1</icode>"
-
-#~ msgctxt "@action"
-#~ msgid "Show &Archived Alarms"
-#~ msgstr "Taispeáin &Aláraim Chartlannaithe"
-
-#~ msgctxt "@info/plain"
-#~ msgid "%1 resource"
-#~ msgstr "Acmhainn %1"
-
-#~ msgctxt "@info/plain Todo calendar item's title field"
-#~ msgid "Title:"
-#~ msgstr "Teideal:"
-
-# not a verb, kind of alarm?
-#~ msgctxt "@item:inmenu"
-#~ msgid "Display Alarm"
-#~ msgstr "Aláram Taispeána"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Command Alarm"
-#~ msgstr "Aláram Ordaithe"
-
-# not a verb, kind of alarm?
-#~ msgctxt "@item:inmenu"
-#~ msgid "Email Alarm"
-#~ msgstr "Aláram Ríomhphoist"
-
-#~ msgctxt "@item:inlistbox Time unit option"
-#~ msgid "Days"
-#~ msgstr "Lá"
-
-#~ msgctxt "@title:window"
-#~ msgid "Preferences"
-#~ msgstr "Sainroghanna"
-
-#~ msgctxt "@title"
-#~ msgid "Default Font and Color"
-#~ msgstr "Cló agus Dath Réamhshocraithe"
-
-#~ msgctxt "@action:button"
-#~ msgid "Add Color..."
-#~ msgstr "Cuir Dath Leis..."
-
-#~ msgid "The Quick Brown Fox Jumps Over The Lazy Dog"
-#~ msgstr ""
-#~ "Léim an sionnach tapa thar an madra leisciúil ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-#~ msgctxt "@info:shell"
-#~ msgid ""
-#~ "<icode>%1</icode>, <icode>%2</icode>, <icode>%3</icode> mutually exclusive"
-#~ msgstr "<icode>%1</icode>, <icode>%2</icode>, <icode>%3</icode> lena chéile"
-
-#~ msgid "KAlarm Daemon"
-#~ msgstr "Deamhan KAlarm"
-
-#~ msgid "KAlarm Alarm Daemon"
-#~ msgstr "Deamhan Aláraim KAlarm"
-
-#~ msgid ""
-#~ "Copyright 1997-1999 Preston Brown\n"
-#~ "Copyright 2000-2001 Cornelius Schumacher\n"
-#~ "Copyright 2001,2004-2007 David Jarvie"
-#~ msgstr ""
-#~ "Cóipcheart 1997-1999 Preston Brown\n"
-#~ "Cóipcheart 2000-2001 Cornelius Schumacher\n"
-#~ "Cóipcheart 2001,2004-2007 David Jarvie"
-
-#~ msgid "Cornelius Schumacher"
-#~ msgstr "Cornelius Schumacher"
-
-#~ msgid "Preston Brown"
-#~ msgstr "Preston Brown"
-
-#~ msgid "Original Author"
-#~ msgstr "An Chéad Údar"
-
-#~ msgid "kalarmd is being autostarted"
-#~ msgstr "kalarmd á thosú go huathoibríoch"
-
-#~ msgctxt "@option:check"
-#~ msgid "Autostart system tray icon at login"
-#~ msgstr ""
-#~ "Tosaigh deilbhín i dtráidire an chórais go huathoibríoch ag am logála "
-#~ "isteach"
-
-#~ msgctxt "@info"
-#~ msgid "Alarm daemon not found."
-#~ msgstr "Deamhan aláram gan aimsiú."
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "Cannot enable alarms.<nl/>Installation or configuration error: "
-#~ "<application>Alarm Daemon</application> (<command>%1</command>) version "
-#~ "is incompatible."
-#~ msgstr ""
-#~ "Ní féidir aláraim a chumasú.<nl/>Earráid suiteála nó cumraíochta: Leagan "
-#~ "neamh-chomhoiriúnach den <application>Deamhan Aláraim</application> "
-#~ "(<command>%1</command>)"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "Cannot enable alarms:<nl/>Failed to register with <application>Alarm "
-#~ "Daemon</application> (<command>%1</command>)(Possible installation or "
-#~ "configuration error)"
-#~ msgstr ""
-#~ "Ní féidir aláraim a chumasú:<nl/>Theip ar chlárú leis an "
-#~ "<application>Deamhan Aláraim</application> (<command>%1</command>) (Seans "
-#~ "go raibh earráid suiteála nó cumraíochta ann)"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "Cannot enable alarms:<nl/>Failed to start <application>Alarm Daemon</"
-#~ "application> (<command>%1</command>)"
-#~ msgstr ""
-#~ "Ní féidir aláraim a chumasú:<nl/>Theip ar an <application>Deamhan "
-#~ "Aláraim</application> a thosú (<command>%1</command>)"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid "Whether to start KAlarm in the system tray at login."
-#~ msgstr ""
-#~ "Cé acu a thosaítear KAlarm i dtráidire an chórais ag am logála isteach nó "
-#~ "nach dtosaítear."
-
-#~ msgctxt "@label first week of January"
-#~ msgid "of:"
-#~ msgstr "de:"
-
-#~ msgctxt "@option:check Month of the year"
-#~ msgid "January"
-#~ msgstr "Eanáir"
-
-#~ msgctxt "@option:check Month of the year"
-#~ msgid "February"
-#~ msgstr "Feabhra"
-
-#~ msgctxt "@option:check Month of the year"
-#~ msgid "April"
-#~ msgstr "Aibreán"
-
-#~ msgctxt "@option:check Month of the year"
-#~ msgid "May"
-#~ msgstr "Bealtaine"
-
-#~ msgctxt "@option:check Month of the year"
-#~ msgid "June"
-#~ msgstr "Meitheamh"
-
-#~ msgctxt "@option:check Month of the year"
-#~ msgid "July"
-#~ msgstr "Iúil"
-
-#~ msgctxt "@option:check Month of the year"
-#~ msgid "August"
-#~ msgstr "Lúnasa"
-
-#~ msgctxt "@option:check Month of the year"
-#~ msgid "September"
-#~ msgstr "Meán Fómhair"
-
-#~ msgctxt "@option:check Month of the year"
-#~ msgid "October"
-#~ msgstr "Deireadh Fómhair"
-
-#~ msgctxt "@option:check Month of the year"
-#~ msgid "November"
-#~ msgstr "Mí na Samhna"
-
-#~ msgctxt "@option:check Month of the year"
-#~ msgid "December"
-#~ msgstr "Mí na Nollag"
-
-#~ msgctxt "@label"
-#~ msgid "Sound"
-#~ msgstr "Fuaim"
-
-#~ msgctxt "@title"
-#~ msgid "General"
-#~ msgstr "Ginearálta"
-
-#~ msgctxt "@label"
-#~ msgid "days"
-#~ msgstr "lá"
-
-#~ msgctxt "@title:window"
-#~ msgid "View Alarm"
-#~ msgstr "Amharc ar Aláram"
-
-#~ msgctxt "@option:check"
-#~ msgid "Email"
-#~ msgstr "Ríomhphost"
-
-#~ msgctxt "@action"
-#~ msgid "&View"
-#~ msgstr "&Amharc"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid "Schedule the alarm at the specified date and time."
-#~ msgstr "Sceideal an t-aláram ag an dáta agus am sonraithe."
-
-#~ msgctxt "@option:radio"
-#~ msgid "Date"
-#~ msgstr "Dáta"
-
-#~ msgctxt "@info:whatsthis"
-#~ msgid "Schedule the alarm on the specified date."
-#~ msgstr "Sceideal an t-aláram ar an dáta sonraithe."
-
-#~ msgctxt "@info/plain hours:minutes"
-#~ msgid " %1:%2 "
-#~ msgstr " %1:%2 "
-
-#~ msgctxt "@option:check"
-#~ msgid "Show resources"
-#~ msgstr "Taispeáin acmhainní"
-
-#~ msgctxt "@label"
-#~ msgid "Show resources"
-#~ msgstr "Taispeáin acmhainní"
-
-#~ msgctxt "@label"
-#~ msgid "Show alarm time"
-#~ msgstr "Taispeáin am an aláraim"
-
-#~ msgctxt "@option:check"
-#~ msgid "Show Archived Alarms"
-#~ msgstr "Taispeáin Aláraim Chartlannaithe"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Message color"
-#~ msgstr "Dath na teachtaireachta"
-
-#~ msgctxt "@info:plain"
-#~ msgid "Hours and minutes"
-#~ msgstr "Uaire agus nóiméid"
-
-#~ msgctxt "@label:listbox"
-#~ msgid "&Background color:"
-#~ msgstr "Dath an &chúlra:"
-
-#~ msgctxt "@option:radio"
-#~ msgid "An&y time"
-#~ msgstr "&Am ar bith"
-
-#~ msgid "Any time"
-#~ msgstr "Am ar bith"
-
-#~ msgctxt "@action:button"
-#~ msgid "Remo&ve"
-#~ msgstr "&Bain"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "\n"
-#~ "Bcc: <email>%1</email>"
-#~ msgstr ""
-#~ "\n"
-#~ "Bcc: <email>%1</email>"
-
-#~ msgctxt "@info"
-#~ msgid "Cannot defer alarm:"
-#~ msgstr "Ní féidir an t-aláram a chur siar:"
-
-#~ msgctxt "@label"
-#~ msgid "da&ys"
-#~ msgstr "&lá"
-
-#~ msgctxt "@option:radio"
-#~ msgid "&KMail"
-#~ msgstr "&KMail"
-
-#~ msgctxt "@option:radio"
-#~ msgid "&Sendmail"
-#~ msgstr "&Sendmail"
-
-#~ msgctxt "@label:listbox"
-#~ msgid "&Recurrence:"
-#~ msgstr "Ata&rlú:"
-
-#~ msgctxt "@option:radio"
-#~ msgid "Do &not repeat"
-#~ msgstr "&Ná hathdhéan"
-
-#~ msgctxt "@option:check"
-#~ msgid "Show &resources"
-#~ msgstr "&Taispeáin acmhainní"
-
-#~ msgctxt "@label:textbox"
-#~ msgid "&Prefix:"
-#~ msgstr "&Réimír:"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Read-only"
-#~ msgstr "Inléite Amháin"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "Cannot download calendar:\n"
-#~ "%1"
-#~ msgstr ""
-#~ "Ní féidir an féilire a íosluchtú:\n"
-#~ "%1"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "%1\n"
-#~ "not found"
-#~ msgstr ""
-#~ "%1\n"
-#~ "gan aimsiú"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "%1\n"
-#~ "is a folder"
-#~ msgstr ""
-#~ "%1:\n"
-#~ "is fillteán é"
-
-#~ msgctxt ""
-#~ "@label:listbox\n"
-#~ "'From' email address"
-#~ msgid "From:"
-#~ msgstr "Ó:"
-
-#~ msgctxt ""
-#~ "@label:textbox\n"
-#~ "Email addressee"
-#~ msgid "To:"
-#~ msgstr "Go:"
-
-#~ msgctxt ""
-#~ "@label:textbox\n"
-#~ "Email subject"
-#~ msgid "Subject:"
-#~ msgstr "Ábhar:"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "\n"
-#~ "Bcc: %1"
-#~ msgstr ""
-#~ "\n"
-#~ "Bcc: %1"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "Unable to start KMail\n"
-#~ "(%1)"
-#~ msgstr ""
-#~ "Ní féidir KMail a thosú\n"
-#~ "(%1)"
-
-#~ msgctxt ""
-#~ "@info\n"
-#~ "Email addressee"
-#~ msgid "To:"
-#~ msgstr "Go:"
-
-#~ msgctxt ""
-#~ "@info\n"
-#~ "Email subject"
-#~ msgid "Subject:"
-#~ msgstr "Ábhar:"
-
-#~ msgctxt ""
-#~ "@label\n"
-#~ "'From' email address"
-#~ msgid "From:"
-#~ msgstr "Ó:"
-
-#~ msgctxt ""
-#~ "@item:inlistbox\n"
-#~ "No date"
-#~ msgid "None"
-#~ msgstr "Gan dáta"
-
-#~ msgctxt ""
-#~ "@item:inlistbox\n"
-#~ "No sound"
-#~ msgid "None"
-#~ msgstr "Gan Fuaim"
-
-#~ msgctxt "@action:button"
-#~ msgid "&New..."
-#~ msgstr "&Nua..."
-
-#~ msgctxt "@option:radio"
-#~ msgid "Te&xt"
-#~ msgstr "Téa&cs"
-
-#~ msgctxt "@option:radio"
-#~ msgid "&File"
-#~ msgstr "&Comhad"
-
-#~ msgctxt "Hours and Minutes"
-#~ msgid "%1H %2M"
-#~ msgstr "%1U %2N"
-
-#~ msgid "read-only"
-#~ msgstr "inléite amháin"
-
-#~ msgid "Fi&le"
-#~ msgstr "&Comhad"
-
-#~ msgid "&Email"
-#~ msgstr "&Ríomhphost"
-
-#~ msgid "%1, %2, %3 mutually exclusive"
-#~ msgstr "%1, %2, %3 comheisiatach"
-
-#~ msgid "%1 not found"
-#~ msgstr "%1 gan aimsiú"
-
-#~ msgid "Show alarm &time"
-#~ msgstr "&Taispeáin am an aláraim"
-
-#~ msgid "Show alarm ti&me"
-#~ msgstr "Taispeáin a&m an aláraim"
-
-#~ msgctxt "Locate this email in KMail"
-#~ msgid "Locate in KMail"
-#~ msgstr "Aimsigh i KMail"
-
-#~ msgid "&Daily"
-#~ msgstr "Go &Laethúil"
-
-#~ msgid "&Weekly"
-#~ msgstr "Go &Seachtainiúil"
-
-#~ msgid "&Monthly"
-#~ msgstr "Go &Míosúil"
-
-#~ msgid "&Yearly"
-#~ msgstr "Go &Bliantúil"
-
-#~ msgctxt "Last Monday in March"
-#~ msgid "Last"
-#~ msgstr "Ceann Deiridh"
-
-#~ msgctxt "No date"
-#~ msgid "None"
-#~ msgstr "Gan dáta"
-
-#~ msgid "Set &volume"
-#~ msgstr "Socraigh &airde"
-
-#~ msgid "Re&peat"
-#~ msgstr "Ar&ís"
-
-#~ msgctxt "An audio sound"
-#~ msgid "Sound"
-#~ msgstr "Fuaim"
-
-#~ msgctxt "@title"
-#~ msgid "Alarm Templates"
-#~ msgstr "Teimpléid Aláraim"
-
-#~ msgid "Enter a scri&pt"
-#~ msgstr "Iontráil scri&pt"
-
-#~ msgid "Execute in terminal &window"
-#~ msgstr "Rith i d&teirminéal"
-
-#~ msgid "Exec&ute in terminal window"
-#~ msgstr "&Rith i dteirminéal"
-
-#~ msgid "Copy &email to self"
-#~ msgstr "Cóip&eáil ríomhphost chugat féin"
-
-#~ msgid "Copy email to &self"
-#~ msgstr "Cóipeáil ríomhphost chugat &féin"
-
-#~ msgctxt "'From' email address"
-#~ msgid "&From:"
-#~ msgstr "&Ó:"
-
-#~ msgctxt "Email subject"
-#~ msgid "Sub&ject:"
-#~ msgstr "Á&bhar:"
-
-#~ msgid "&New Alarm..."
-#~ msgstr "Aláram &Nua..."
-
-#~ msgid "Custom..."
-#~ msgstr "Saincheaptha..."
-
-#~ msgid "&Reminder"
-#~ msgstr "&Meabhrúchán"
-
-#~ msgid "Confirm ac&knowledgment"
-#~ msgstr "Dearbhaigh a&dmháil"
-
-#~ msgid "Show in KOr&ganizer"
-#~ msgstr "Taispeáin i KOr&ganizer"
-
-#~ msgid "Invalid calendar file name: %1"
-#~ msgstr "Ainm neamhbhailí ar chomhad an fhéilire: %1"
-
-#~ msgid "Expired Alarm"
-#~ msgstr "Aláram ídithe"
