@@ -476,6 +476,14 @@
         <p xml:lang="uk">Опис випуску</p>
         <ul>
           <li>Fix sound files being played at the wrong volume when using VLC.</li>
+          <li xml:lang="ar">إصلاح مشكلة تشغيل ملفات الصوت بمستوى صوت غير صحيح عند استخدام VLC.</li>
+          <li xml:lang="ca">Corregeix els fitxers de so que es reprodueixen a un volum incorrecte quan s'utilitza el VLC.</li>
+          <li xml:lang="ia">Corrige files de sono que es reproducite al volumine errate quando  il es usante VLC.</li>
+          <li xml:lang="ka">გასწორდა ხმოვანი ფაილების არასწორი ხმის დონით დაკვრა VLC-ის გამოყენებისას.</li>
+          <li xml:lang="pt-BR">Corrigido problema de reprodução de arquivos de áudio com volume incorreto ao usar o VLC.</li>
+          <li xml:lang="ru">Исправлено воспроизведение звуковых файлов с неправильной громкостью при использовании VLC;</li>
+          <li xml:lang="sl">Odpravljena napaka, zaradi katere se zvočne datoteke pri uporabi VLC predvajajo z napačno glasnostjo.</li>
+          <li xml:lang="uk">Виправлено помилку, яку пов'язано із тим, що звукові файли відтворювалися із помилковою гучністю при використанні VLC.</li>
         </ul>
       </description>
     </release>
@@ -774,6 +782,7 @@
           <li xml:lang="pt-BR">Limpeza da aparência da caixa de seleção de tempo de limpeza em alguns estilos, por exemplo, Oxygen.</li>
           <li xml:lang="ru">Исправлено отображение поля ввода времени в некоторых стилях оформления, например Oxygen;</li>
           <li xml:lang="sl">Čas čiščenja videza vrtljivega polja v nekaterih slogih, npr. Oxygen.</li>
+          <li xml:lang="uk">Очищено вигляд лічильника часу у деяких стилях, наприклад Oxygen.</li>
         </ul>
       </description>
     </release>
@@ -801,6 +810,7 @@
           <li xml:lang="pt-BR">Corrigido o problema que fazia com que o KAlarm fosse encerrado antes de executar a restauração da sessão.</li>
           <li xml:lang="ru">Исправлено аварийное завершение KAlarm перед выполнением восстановления сеанса;</li>
           <li xml:lang="sl">Popravi je izhod KAlarma pred izvedbo obnovitve seje.</li>
+          <li xml:lang="uk">Виправлено вихід з KAlarm до виконання відновлення сеансу.</li>
         </ul>
       </description>
     </release>
@@ -828,6 +838,7 @@
           <li xml:lang="pt-BR">Corrigido o problema que mostra o ícone do KAlarm em branco na bandeja do sistema sob o XFCE.</li>
           <li xml:lang="ru">Исправлено отображение пустого значка KAlarm в системном лотке в XFCE;</li>
           <li xml:lang="sl">Popravi težavo, zaradi katere je bila v sistemski vrstici pod XFCE prikazana prazna ikona KAlarm.</li>
+          <li xml:lang="uk">Виправлено помилку, пов'язану із тим, що у системному лотку було показано порожню піктограму KAlarm у XFCE.</li>
         </ul>
       </description>
     </release>
@@ -855,6 +866,7 @@
           <li xml:lang="pt-BR">Exibe janelas de alarme decoradas normais sobre aplicativos em tela cheia no X11.</li>
           <li xml:lang="ru">Вывод обычных окон сигналов с оформлением поверх полноэкранных приложений в X11;</li>
           <li xml:lang="sl">Prikaži običajna okrašena okna alarmov čez celozaslonske aplikacije na X11.</li>
+          <li xml:lang="uk">Реалізовано показ звичайних декорованих вікон нагадувань у повноекранних програмах у X11.</li>
           <li>Fix Akonadi functionality not working.</li>
           <li xml:lang="ar">أُصلح عدم عمل وظائف Akonadi.</li>
           <li xml:lang="bg">Поправка на неработеща функционалност на Akonadi.</li>
@@ -876,6 +888,7 @@
           <li xml:lang="pt-BR">Faz com que o efeito de fade funcione sempre que um alarme sonoro repetido for reproduzido.</li>
           <li xml:lang="ru">Затухание звука при каждом воспроизведении повторяющегося сигнала;</li>
           <li xml:lang="sl">Naj se postopno utiša vsakič, ko se predvaja ponovljeni zvočni alarm.</li>
+          <li xml:lang="uk">Реалізовано притлумлення кожного разу, коли повторно відтворюється звукове нагадування.</li>
           <li>Fix Edit Alarm dialog error setting time if user's time zone is UTC.</li>
           <li xml:lang="ar">أُصلح خطأ حوار تحرير المنبّه عند ضبط الوقت إذا كانت المنطقة الزمنية للمستخدم هي UTC.</li>
           <li xml:lang="bg">Поправена е грешката при задаване на часа в диалоговия прозорец за редактиране на аларма, ако часовата зона на потребителя е UTC.</li>
@@ -886,6 +899,7 @@
           <li xml:lang="pt-BR">Corrigido o erro na caixa de diálogo para editar alarme ao definir a hora quando o fuso horário do usuário é UTC.</li>
           <li xml:lang="ru">Исправлена ошибка в диалоге «Редактирование будильника» при установке времени, если часовой пояс пользователя — UTC;</li>
           <li xml:lang="sl">Popravi napako pri nastavitvi časa v pogovornem oknu za urejanje alarma, če je časovni pas uporabnika UTC.</li>
+          <li xml:lang="uk">Виправлено помилку встановлення часу у вікні редагування нагадування, якщо часовий пояс користувача — UTC.</li>
           <li>Fix build on FreeBSD if using MPV audio.</li>
           <li xml:lang="ar">أُصلح البناء على FreeBSD عند استخدام صوت MPV.</li>
           <li xml:lang="bg">Поправка на компилацията на FreeBSD, ако се използва MPV аудио.</li>
@@ -896,6 +910,7 @@
           <li xml:lang="pt-BR">Corrigido problema de compilação no FreeBSD ao usar o áudio MPV.</li>
           <li xml:lang="ru">Исправлена сборка на FreeBSD при использовании звука MPV;</li>
           <li xml:lang="sl">Popravi gradnjo na FreeBSD, če uporablja MPV zvok.</li>
+          <li xml:lang="uk">Виправлено збирання у FreeBSD, якщо для відтворення використано MPV.</li>
         </ul>
       </description>
     </release>
@@ -923,6 +938,7 @@
           <li xml:lang="pt-BR">Exibir todas as opções de modo de execução na caixa de diálogo de Preferências.</li>
           <li xml:lang="ru">Отображение всех параметров режима запуска в диалоге «Параметры»;</li>
           <li xml:lang="sl">Prikaže vse možnosti načina delovanja v pogovornem oknu Nastavitve.</li>
+          <li xml:lang="uk">Реалізовано показ усіх варіантів режиму запуску у вікні налаштувань.</li>
           <li>Provide build option to use VLC or MPV to play sounds.</li>
           <li xml:lang="ar">وُفر خيار بناء لاستخدام VLC أو MPV لتشغيل الأصوات.</li>
           <li xml:lang="bg">Предоставя вградена възможност за използване на VLC или MPV за възпроизвеждане на звуци.</li>
@@ -933,6 +949,7 @@
           <li xml:lang="pt-BR">Fornecer opção de compilação para usar o VLC ou o MPV para reproduzir sons.</li>
           <li xml:lang="ru">Добавление параметра сборки для выбора VLC или MPV для воспроизведения звуков;</li>
           <li xml:lang="sl">Zagotovi možnost gradnje za uporabo VLC ali MPV za predvajanje zvokov.</li>
+          <li xml:lang="uk">Надано варіанти збирання з використанням VLC і MPV для відтворення звуків.</li>
           <li>Convert to Qt 6.5 QDateTime/QTimeZone changes.</li>
           <li xml:lang="ar">حُوّل إلى تغييرات Qt 6.5 QDateTime/QTimeZone.</li>
           <li xml:lang="bg">Конвертиране на промените в QDateTime/QTimeZone в Qt 6.5.</li>
@@ -943,6 +960,7 @@
           <li xml:lang="pt-BR">Conversão para alterações de QDateTime/QTimeZone do Qt 6.5.</li>
           <li xml:lang="ru">Адаптация к изменениям QDateTime/QTimeZone в Qt 6.5;</li>
           <li xml:lang="sl">Pretvori spremembe QDateTime/QTimeZone v Qt 6.5.</li>
+          <li xml:lang="uk">Виконано перетворення за змінами QDateTime/QTimeZone у Qt 6.5.</li>
         </ul>
       </description>
     </release>
@@ -971,6 +989,7 @@
           <li xml:lang="pt-BR">Corrigida falha quando os temporizadores de alarme do kernel são suportados.</li>
           <li xml:lang="ru">Исправлено аварийное завершение при поддержке таймеров ядра;</li>
           <li xml:lang="sl">Odpravljeno je sesutje, če so podprti časovniki alarmov jedra.</li>
+          <li xml:lang="uk">Усунено аварійне завершення роботи, якщо передбачено підтримку таймерів нагадування ядра.</li>
           <li>Fix Wake from Suspend not working when using RTC wake.</li>
           <li xml:lang="ar">أُصلح عدم عمل "الاستيقاظ من التعليق" عند استخدام استيقاظ RTC.</li>
           <li xml:lang="bg">Поправен е проблемът, при който „Събуждане от режим на задържане“ не работи при използване на RTC събуждане.</li>
@@ -981,6 +1000,7 @@
           <li xml:lang="pt-BR">Corrigido o problema de ativação a partir da suspensão que não funcionava ao usar a ativação por RTC.</li>
           <li xml:lang="ru">Исправлена неработающая функция пробуждения из режима ожидания при использовании пробуждения по RTC;</li>
           <li xml:lang="sl">Popravi napako, zaradi katere prebujanje iz stanja mirovanja ne deluje pri uporabi RTC wake.</li>
+          <li xml:lang="uk">Виправлено помилку, пов'язану із тим, що пробудження від сну не працювало при використанні пробудження RTC.</li>
           <li>Display any audio error message immediately when using Try button while editing an alarm.</li>
           <li xml:lang="ar">تُعرض أي رسالة خطأ صوتية فوراً عند استخدام زر "جرب" أثناء تحرير منبّه.</li>
           <li xml:lang="bg">Показвайте незабавно всяко аудио съобщение за грешка, когато използвате бутона „Опитай“ по време на редактиране на аларма.</li>
@@ -991,6 +1011,7 @@
           <li xml:lang="pt-BR">Exibir imediatamente qualquer mensagem de erro de áudio ao usar o botão "Testar" durante a edição de um alarme.</li>
           <li xml:lang="ru">Вывод сообщения об ошибках воспроизведения звука сразу при использовании кнопки «Проверить» во время редактирования будильника;</li>
           <li xml:lang="sl">Pri uporabi gumba Poskusi med urejanjem alarma takoj prikaže vsako zvočno sporočilo o napaki.</li>
+          <li xml:lang="uk">Реалізовано показ будь-яких звукових повідомлень про помилки при використання кнопки «Спробувати» при редагуванні нагадування.</li>
           <li>Fix failure to play sound files using VLC on some systems.</li>
           <li xml:lang="ar">أُصلح الفشل في تشغيل ملفات الصوت باستخدام VLC على بعض الأنظمة.</li>
           <li xml:lang="bg">Поправен е проблем с възпроизвеждането на звукови файлове чрез VLC на някои системи.</li>
@@ -1001,6 +1022,7 @@
           <li xml:lang="pt-BR">Corrigido o problema que impedia a reprodução de arquivos de áudio usando o VLC em alguns sistemas.</li>
           <li xml:lang="ru">Исправлена ошибка воспроизведения звуковых файлов с помощью VLC в некоторых системах;</li>
           <li xml:lang="sl">Popravi napako pri predvajanju zvočnih datotek z uporabo VLC na nekaterih sistemih.</li>
+          <li xml:lang="uk">Виправлено помилку з відтворенням звукових файлів при використанні VLC у деяких системах.</li>
         </ul>
       </description>
     </release>
@@ -1028,6 +1050,7 @@
           <li xml:lang="pt-BR">Corrigido os alarmes de áudio repetidos que só tocam uma vez.</li>
           <li xml:lang="ru">Исправлено воспроизведение повторяющихся звуковых сигналов только один раз;</li>
           <li xml:lang="sl">Popravi napako, zaradi katere se ponavljajoči zvočni alarmi predvajajo samo enkrat.</li>
+          <li xml:lang="uk">Виправлено помилку, пов'язану із тим, що повторювані звукові нагадування відтворювалися лише раз.</li>
         </ul>
       </description>
     </release>
@@ -1055,6 +1078,7 @@
           <li xml:lang="pt-BR">Uso do VLC em vez do libcanberra para reproduzir sons.</li>
           <li xml:lang="ru">Замена libcanberra на VLC для воспроизведения звуков;</li>
           <li xml:lang="sl">Za predvajanje zvokov uporabi VLC namesto libcanberre.</li>
+          <li xml:lang="uk">Реалізовано використання VLC замість libcanberra для відтворення звуків.</li>
         </ul>
       </description>
     </release>
@@ -1082,6 +1106,7 @@
           <li xml:lang="pt-BR">Corrigido o problema que causava o fechamento inesperado do sistema após a edição de um novo alarme quando a verificação ortográfica estava ativada.</li>
           <li xml:lang="ru">Исправлено аварийное завершение при редактировании нового будильника, если включена проверка орфографии;</li>
           <li xml:lang="sl">Popravi sesutje po urejanju novega alarma, če je omogočeno preverjanje črkovanja.</li>
+          <li xml:lang="uk">Усунено аварійне завершення роботи після редагування нового нагадування, якщо увімкнено перевірку правопису.</li>
         </ul>
       </description>
     </release>
@@ -1111,6 +1136,7 @@
           <li xml:lang="pt-BR">Exibir mensagem de erro caso ocorra algum problema ao tentar reproduzir um arquivo de áudio.</li>
           <li xml:lang="ru">Вывод сообщения об ошибке при неудачной попытке воспроизвести звуковой файл;</li>
           <li xml:lang="sl">Prikaže se sporočilo o napaki, če se pojavi napaka pri predvajanju zvočne datoteke.</li>
+          <li xml:lang="uk">Реалізовано показ повідомлення про помилку, якщо помилка сталася під час спроби відтворення звукового файла.</li>
         </ul>
       </description>
     </release>
@@ -1138,6 +1164,7 @@
           <li xml:lang="pt-BR">Para garantir a segurança das threads, usar o libcanberra em vez do Phonon para reproduzir sons.</li>
           <li xml:lang="ru">Для воспроизведения звуков используется libcanberra вместо Phonon, что обеспечивает безопасность потоков;</li>
           <li xml:lang="sl">Uporabi libcanberra za predvajanje zvokov namesto Phonona za varnost niti.</li>
+          <li xml:lang="uk">Реалізовано використання libcanberra замість Phonon для відтворення звуків для захисту потоків обробки.</li>
           <li>In Edit Alarm dialog, allow save if Set Volume checkbox is toggled.</li>
           <li xml:lang="ar">في حوار تحرير المنبّه، سُمح بالحفظ إذا بُدلت حالة خانة اختيار "ضبط مستوى الصوت".</li>
           <li xml:lang="bg">В диалоговия прозорец „Редактиране на аларма“ позволяване на запазването, ако е поставена отметка в квадратчето „Задаване на сила на звука“.</li>
@@ -1148,6 +1175,7 @@
           <li xml:lang="pt-BR">Na caixa de diálogo para editar alarme, permitir salvar se a caixa de seleção para definir volume estiver marcada.</li>
           <li xml:lang="ru">В диалоге «Редактирование будильника» разрешено сохранение при переключении флажка «Настроить громкость»;</li>
           <li xml:lang="sl">V pogovornem oknu Urejanje alarma dovoli shranjevanje, če je potrditveno polje Nastavi glasnost preklopljeno.</li>
+          <li xml:lang="uk">У вікні редагування нагадування уможливлено збереження, якщо позначено пункт «Встановити гучність».</li>
         </ul>
       </description>
     </release>
@@ -1175,6 +1203,7 @@
           <li xml:lang="pt-BR">Conversão para o Qt6 / KDE Frameworks 6.</li>
           <li xml:lang="ru">Переход на Qt6 и KDE Frameworks 6;</li>
           <li xml:lang="sl">Pretvori v Qt6 / KDE Frameworks 6.</li>
+          <li xml:lang="uk">Перехід на Qt6 / KDE Frameworks 6.</li>
           <li>Enable wake-from-suspend for multiple alarms if user kernel alarm timers are supported (Linux only).</li>
           <li xml:lang="ar">فُعّل الاستيقاظ من التعليق لعدة منبّهات إذا كانت مؤقتات منبّهات نواة المستخدم مدعومة (لينكس فقط).</li>
           <li xml:lang="bg">Активирайте събуждане от временно спиране за множество аларми, ако се поддържат таймери за аларми на потребителското ядро (само за Linux).</li>
@@ -1185,6 +1214,7 @@
           <li xml:lang="pt-BR">Habilita a função de despertar a partir da suspensão para múltiplos alarmes se os temporizadores de alarme do kernel do usuário forem suportados (somente Linux).</li>
           <li xml:lang="ru">Задействовано пробуждение из спящего режима для нескольких будильников при поддержке таймеров ядра пользователя (только для Linux).</li>
           <li xml:lang="sl">Omogoči wake-from-suspend za več alarmov, če so podprti časovniki alarmov uporabniškega jedra (samo za Linux).</li>
+          <li xml:lang="uk">Уможливлено пробудження зі сну для кількох нагадувань, якщо передбачено підтримку таймерів нагадувань ядра користувача (лише для Linux).</li>
           <li>Set units for reminder and late-cancel depending on date-only selection in Edit Alarm Template dialog.</li>
           <li xml:lang="ar">ضُبطت وحدات التذكير والإلغاء المتأخر بناءً على اختيار "التاريخ فقط" في حوار تحرير قالب المنبّه.</li>
           <li xml:lang="bg">Задаване на мерни единици за напомняне и късно отменяне в зависимост от избора само на дата в диалоговия прозорец „Редактиране на шаблон за аларма“.</li>
@@ -1195,6 +1225,7 @@
           <li xml:lang="pt-BR">Define as unidades para lembrete e cancelamento tardio com base na seleção de data na caixa de diálogo para editar modelo de alarme.</li>
           <li xml:lang="ru">Выбор единиц измерения для напоминания и отмены с опозданием в зависимости от выбора только даты в диалоге «Изменение шаблона будильника»;</li>
           <li xml:lang="sl">Nastavi enote za opomnik in pozni preklic glede na izbiro samo datuma v pogovornem oknu Urejanje predloge alarma.</li>
+          <li xml:lang="uk">Встановлення одиниці вимірювання для нагадування та пізнього скасування залежно від вибору лише дати в діалоговому вікні «Редагування шаблону нагадування».</li>
           <li>Remove migration of pre-Akonadi KResources calendar configuration.</li>
           <li xml:lang="ar">أُزيل ترحيل ضبط تقويم KResources ما قبل Akonadi.</li>
           <li xml:lang="bg">Премахване на мигрирането на конфигурации на календара от преди Akonadi KResources.</li>
@@ -1205,6 +1236,7 @@
           <li xml:lang="pt-BR">Remove a migração da configuração de calendário KResources pré-Akonadi.</li>
           <li xml:lang="ru">Удалена миграцию конфигурации календаря KResources, используемого до Akonadi;</li>
           <li xml:lang="sl">Odstrani selitev konfiguracije koledarja KResources pred Akonadijem.</li>
+          <li xml:lang="uk">Вилучено перенесення налаштувань календаря до Akonadi, KResources.</li>
         </ul>
       </description>
     </release>
