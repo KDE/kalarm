@@ -468,6 +468,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -481,6 +482,7 @@
           <li xml:lang="ar">إصلاح مشكلة تشغيل ملفات الصوت بمستوى صوت غير صحيح عند استخدام VLC.</li>
           <li xml:lang="ca">Corregeix els fitxers de so que es reprodueixen a un volum incorrecte quan s'utilitza el VLC.</li>
           <li xml:lang="ca-valencia">Corregix els fitxers de so que es reproduïxen a un volum incorrecte quan s'utilitza VLC.</li>
+          <li xml:lang="fr">Correction des fichiers audio joués à un volume incorrect lors de l'utilisation de VLC.</li>
           <li xml:lang="ia">Corrige files de sono que es reproducite al volumine errate quando  il es usante VLC.</li>
           <li xml:lang="it">Correzione della riproduzione di file audio con il volume sbagliato quando viene usato VLC.</li>
           <li xml:lang="ka">გასწორდა ხმოვანი ფაილების არასწორი ხმის დონით დაკვრა VLC-ის გამოყენებისას.</li>
@@ -499,6 +501,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -513,6 +516,7 @@
           <li xml:lang="bg">Поправено е засичане при оценката на повтарящи се аларми само за дата, когато началният час на деня е различен от нула.</li>
           <li xml:lang="ca">Corregeix un penjament en avaluar les alarmes de només data recurrents quan l'hora d'inici del dia no és zero.</li>
           <li xml:lang="ca-valencia">Corregix un penjament en avaluar les alarmes de només data recurrents quan l'hora d'inici del dia no és zero.</li>
+          <li xml:lang="fr">Correction du blocage lors de l'évaluation des alarmes récurrentes ne comportant que des dates lorsque l'heure de début de journée n'est pas à zéro.</li>
           <li xml:lang="ia">Corrige le bloco de evalutation del alarmas recurrente de solo data quando le tempore de initio del die es non zero.</li>
           <li xml:lang="it">Correzione del blocco durante la valutazione di avvisi ricorrenti senza orario quando l'ora di inizio della giornata non è zero.</li>
           <li xml:lang="ka">გასწორდა გაჭედვა მხოლოდ თარიღის მქონე განგაშებისთვის, როცა დაწყების დღე ნულოვანი არაა.</li>
@@ -544,6 +548,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -558,6 +563,7 @@
           <li xml:lang="bg">Предотвратяване на множество диалогови прозорци за отлагане на аларми за едно и също събитие.</li>
           <li xml:lang="ca">Evita diàlegs múltiples d'ajornament d'alarma per al mateix esdeveniment.</li>
           <li xml:lang="ca-valencia">Evita diàlegs múltiples d'ajornament d'alarma per al mateix esdeveniment.</li>
+          <li xml:lang="fr">Empêcher plusieurs boîtes de dialogue de report d'alarme pour le même évènement.</li>
           <li xml:lang="ia">Preveni multiple dialogos de Differe Alarmas per le mesme evento.</li>
           <li xml:lang="it">Prevenzione di finestre di rinvio avviso multiple per lo stesso evento.</li>
           <li xml:lang="ka">ერთი და იმავე მოვლენისთვის მაღვიძარას გადადების მრავალი დიალოგური ფანჯრის თავიდან აცილება.</li>
@@ -571,6 +577,7 @@
           <li xml:lang="bg">Ако „Отлагане“ е деактивирано за аларма за известие, не се показват два бутона „Редактиране“.</li>
           <li xml:lang="ca">Si l'ajornament està desactivat per a una alarma de notificació, no es mostren dos botons d'edició.</li>
           <li xml:lang="ca-valencia">Si l'ajornament està desactivat per a una alarma de notificació, no es mostren dos botons d'edició.</li>
+          <li xml:lang="fr">Si l'option « Reporter » est désactivée pour une alarme de notification, ne pas afficher deux boutons « Modifier ».</li>
           <li xml:lang="ia">Si Defere es dishabilitate per un alarma de notification,non monstra duo buttones de Editar.</li>
           <li xml:lang="it">Se il rinvio è disabilito per un avviso di notifica, non mostrare due pulsanti di modifica.</li>
           <li xml:lang="ka">თუ შეტყობინების განგაშისთვის გადადება გამორთულია, ორი ჩასწორების ღილაკი ნაჩვენები არ იქნება.</li>
@@ -589,6 +596,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -616,6 +624,7 @@
           <li xml:lang="bg">Подобрения и корекции на грешки в изчисленията за повторяемост/работно време/празници.</li>
           <li xml:lang="ca">Millores i correccions d'errors als càlculs de recurrència/horari laboral/festius.</li>
           <li xml:lang="ca-valencia">Millores i esmenes d'errors als càlculs de recurrència/horari laboral/festius.</li>
+          <li xml:lang="fr">Améliorations et corrections de bogues dans les calculs de récurrence / temps de travail / jours fériés.</li>
           <li xml:lang="ia">Melioramentos e correctiones de faltas per calculationes de recurrentia/tempore da labor/ ferias.</li>
           <li xml:lang="it">Miglioramenti e correzioni di bug nel calcolo di ricorrenze/orari lavorativi/festività.</li>
           <li xml:lang="ka">განმეორების, სამუშაო დროისა და უქმეების გამოთვლების გაუმჯობესება და შეცდომების გასწორება.</li>
@@ -629,6 +638,7 @@
           <li xml:lang="bg">Поправено е форматирането на потребителски съобщения, които показваха HTML тагове.</li>
           <li xml:lang="ca">Corregeix el format dels missatges d'usuari que mostren etiquetes HTML.</li>
           <li xml:lang="ca-valencia">Corregix el format dels missatges d'usuari que mostren etiquetes HTML.</li>
+          <li xml:lang="fr">Correction du formatage des messages des utilisateurs montrant des balises « HTML ».</li>
           <li xml:lang="ia">Corrige fnormatar de messages de usator que monstrava etiquettas (tags) HTML.</li>
           <li xml:lang="it">Correzione della formattazione di messaggi utente contenenti tag HTML.</li>
           <li xml:lang="ka">გასწორდა მომხმარებლის შეტყობინებების დაფორმატება, რომელიც HTML ჭდეებს აჩვენებდა.</li>
@@ -642,6 +652,7 @@
           <li xml:lang="bg">Разграничете ежедневните и минутните подповторения в календара на алармите.</li>
           <li xml:lang="ca">Distingeix entre les subrepeticions diàries i per minuts en el calendari d'alarmes.</li>
           <li xml:lang="ca-valencia">Distingix entre les subrepeticions diàries i per minuts en el calendari d'alarmes.</li>
+          <li xml:lang="fr">Distinguer les sous-répétitions quotidiennes et minutées dans le calendrier des alarmes.</li>
           <li xml:lang="ia">Distingue inter sub-repetitiones quotidian e de minutas in calendario de alarmas.</li>
           <li xml:lang="it">Vengono distinte le sotto-ripetizioni ogni giorno/ogni minuto nel calendario degli avvisi.</li>
           <li xml:lang="ka">განგაშის კალენდარში დღიური და წუთობრივი ქვე-გამეორებების გამიჯვნა.</li>
@@ -674,6 +685,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -714,6 +726,7 @@
           <li xml:lang="bg">В диалоговия прозорец за редактиране не се показва предупреждение за висока точност, ако началният час е преди сегашния.</li>
           <li xml:lang="ca">En el diàleg d'edició, no es mostra un avís d'alta precisió si el temps d'inici és abans d'ara.</li>
           <li xml:lang="ca-valencia">En el diàleg d'edició, no es mostra un avís d'alta precisió si el temps d'inici és abans d'ara.</li>
+          <li xml:lang="fr">Dans la boîte de dialogue de modification, ne pas afficher l'avertissement de haute précision si l'heure de début est antérieure à maintenant.</li>
           <li xml:lang="ia">In dialogo de editar, non monstra aviso de alte precision si le tempore  de initio es ante nunc.</li>
           <li xml:lang="it">Nelle finestra di modifica, non mostrare avvisi di alta previsione se l'ora di inizio è prima di adesso.</li>
           <li xml:lang="ka">ჩასწორების დიალოგში მაღალი სიზუსტის გაფრთხილების ჩვენების გაუქმება, თუ დაწყების დრო მიმდინარეზე ადრინდელია.</li>
@@ -733,6 +746,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -747,6 +761,7 @@
           <li xml:lang="bg">Премахване на излишните разстояния в диалоговия прозорец „Настройки“.</li>
           <li xml:lang="ca">Elimina l'espaiat excessiu al diàleg de preferències.</li>
           <li xml:lang="ca-valencia">Elimina l'espaiat excessiu al diàleg de preferències.</li>
+          <li xml:lang="fr">Supprimer les espaces excessifs dans la boîte de dialogue « Préférences ».</li>
           <li xml:lang="ia">Remove spatiar de excesso in dialogo de Preferentias.</li>
           <li xml:lang="it">Rimozione della spaziatura eccessiva nella finestra delle preferenze.</li>
           <li xml:lang="ka">წაიშალა ზედმეტი ჰარეები მორგების დიალოგში.</li>
@@ -765,6 +780,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -779,6 +795,7 @@
           <li xml:lang="bg">Предотвратяване на фокусирането на клавиатурата върху прозорците със съобщения при изскачане.</li>
           <li xml:lang="ca">Evita que les finestres de missatges prenguin el focus del teclat quan apareguin.</li>
           <li xml:lang="ca-valencia">Evita que les finestres de missatges prenguen el focus del teclat quan apareguen.</li>
+          <li xml:lang="fr">Empêcher les fenêtres de messages de recevoir le focus du clavier lors de leurs apparitions.</li>
           <li xml:lang="ia">Preveni que le fenestras de message prende le foco de claviero quando illos emerge como popup.</li>
           <li xml:lang="it">Viene impedito alle finestre dei messaggi di prendere il fuoco quando appaiono.</li>
           <li xml:lang="ka">შეტყობინების დიალოგებისთვის კლავიატურის ფოკუსის მიღების აკრძალვა მათი ამოხტომისას.</li>
@@ -799,6 +816,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -813,6 +831,7 @@
           <li xml:lang="bg">Имплементират се аудио бекендове като плъгини, за да се позволи избор от потребителя.</li>
           <li xml:lang="ca">Implementa els dorsals d'àudio com a connectors per a permetre la selecció de l'usuari.</li>
           <li xml:lang="ca-valencia">Implementa els dorsals d'àudio com a connectors per a permetre la selecció de l'usuari.</li>
+          <li xml:lang="fr">Implémentation de moteurs audio sous forme de modules externes pour permettre une sélection par l'utilisateur.</li>
           <li xml:lang="ia">Implementa retro administrationes audio como plugins per permitter selection de usator. </li>
           <li xml:lang="it">Implementazione di motori audio come estensioni per permettere all'utente di scegliere tra loto.</li>
           <li xml:lang="ka">განხორციელდა აუდიოს უკანაბოლოები დამატებების სახით, რომ მომხმარებელს არჩევა შეეძლოს.</li>
@@ -826,6 +845,7 @@
           <li xml:lang="bg">Външен вид на полето за въртене на времето за почистване в някои стилове, например Oxygen.</li>
           <li xml:lang="ca">Neteja l'aparença del botó de selecció de valors en alguns estils, p. ex. Oxygen.</li>
           <li xml:lang="ca-valencia">Neteja l'aparença del botó de selecció de valors en alguns estils, p. ex., Oxygen.</li>
+          <li xml:lang="fr">Nettoyer l'apparence de la zone de sélection de l'heure dans certains styles, par exemple Oxygen.</li>
           <li xml:lang="ia">Netta apparentia de cassa de selection in alcun stilos,p.ex. Oxygen.</li>
           <li xml:lang="it">Pulizia dell'aspetto della casella numerica dell'orario in alcuni stili, ad es Oxygen.</li>
           <li xml:lang="ka">გასწორდა დროის გადახვევის ველის გარეგნობა ზოგიერთ სტილში. მაგ: Oxygen.</li>
@@ -844,6 +864,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -858,6 +879,7 @@
           <li xml:lang="bg">Поправено е затваряне на KAlarm преди изпълнение на възстановяване на сесията.</li>
           <li xml:lang="ca">Corregeix la sortida del KAlarm abans d'executar la restauració de la sessió.</li>
           <li xml:lang="ca-valencia">Corregix l'eixida de KAlarm abans d'executar la restauració de la sessió.</li>
+          <li xml:lang="fr">Correction de la fermeture de KAlarm avant l'exécution de la restauration de session.</li>
           <li xml:lang="ia">Corrige que KAlarm exi ante executar le restauration de session.</li>
           <li xml:lang="it">Correzione della chiusura di KAlarm prima di eseguire il ripristino della sessione.</li>
           <li xml:lang="ka">გასწორდა KAlarm-ის გამოსვლა სესიის აღდგენის შესრულებამდე.</li>
@@ -876,6 +898,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -890,6 +913,7 @@
           <li xml:lang="bg">Поправена е грешка в системната област, показваща празна икона на KAlarm под XFCE.</li>
           <li xml:lang="ca">Corregeix la safata del sistema que mostra la icona del KAlarm en blanc al XFCE.</li>
           <li xml:lang="ca-valencia">Corregix la safata del sistema que mostra la icona de KAlarm en blanc al XFCE.</li>
+          <li xml:lang="fr">Correction de l'affichage de l'icône vide de KAlarm dans la boîte à miniatures sous XFCE.</li>
           <li xml:lang="ia">Corrige que le tabuliero de systema monstra icone vacue de KAlarm infra XFCE.</li>
           <li xml:lang="it">Correzione dell'icona vuota di KAlarm nel vassoio di sistema in XFCE.</li>
           <li xml:lang="ka">გასწორდა სისტემურ პანელში KAlarm-ის ცარიელი ხატულას გამოჩენა XFCE-ის გარემოში.</li>
@@ -908,6 +932,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -935,6 +960,7 @@
           <li xml:lang="bg">Поправка на неработеща функционалност на Akonadi.</li>
           <li xml:lang="ca">Corregeix una funcionalitat de l'Akonadi que no funcionava.</li>
           <li xml:lang="ca-valencia">Corregix una funcionalitat d'Akonadi que no funcionava.</li>
+          <li xml:lang="fr">Correction du fonctionnement de Akonadi ne fonctionnant pas.</li>
           <li xml:lang="ia">Corrige functionalitate de Akonadi non functiionante.</li>
           <li xml:lang="it">Correzione delle funzionalità Akonadi, non funzionanti.</li>
           <li xml:lang="ka">გასწორდა Akonadi-ის ფუნქციონალის შეფერხება.</li>
@@ -948,6 +974,7 @@
           <li xml:lang="bg">Постепенно отзвучаване всеки път, когато се възпроизведе повтарящ се звуков сигнал.</li>
           <li xml:lang="ca">Fa que l'esvaïment funcioni cada vegada que es reprodueix una alarma sonora repetida.</li>
           <li xml:lang="ca-valencia">Fa que l'esvaïment funcione cada vegada que es reproduïx una alarma sonora repetida.</li>
+          <li xml:lang="fr">Faire fonctionner l'atténuation à chaque fois qu'une alarme sonore répétée est émise.</li>
           <li xml:lang="ia">Face pallidir labor cata vice que un alarma de sono repetite es sonate.</li>
           <li xml:lang="it">La sfumatura del suono ora funziona quando un avviso sonoro ripetuto viene riprodotto.</li>
           <li xml:lang="ka">გასწორდა ხმის თანდათანობითი მომატების ფუნქციონალი განმეორებადი ხმოვანი განგაშის ყოველი დაკვრისას.</li>
@@ -974,6 +1001,7 @@
           <li xml:lang="bg">Поправка на компилацията на FreeBSD, ако се използва MPV аудио.</li>
           <li xml:lang="ca">Corregeix la construcció en el FreeBSD si s'utilitza àudio del MPV.</li>
           <li xml:lang="ca-valencia">Corregix la construcció en la FreeBSD si s'utilitza àudio del MPV.</li>
+          <li xml:lang="fr">Correction de la compilation sur FreeBSD lorsque l'audio « MPV » est utilisé.</li>
           <li xml:lang="ia">Corrige le construction sur FreeBSD si uante audio MPV.</li>
           <li xml:lang="it">Correzione della compilazione su FreeBSD se si usa l'audio via MPV.</li>
           <li xml:lang="ka">გასწორდა FreeBSD-ზე აგების პროცესი MPV აუდიოს გამოყენებისას.</li>
@@ -992,6 +1020,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -1006,6 +1035,7 @@
           <li xml:lang="bg">Показване на всички опции за режим на изпълнение в диалоговия прозорец „Предпочитания“.</li>
           <li xml:lang="ca">Mostra totes les opcions del mode d'execució al diàleg de preferències.</li>
           <li xml:lang="ca-valencia">Mostra totes les opcions del mode d'execució al diàleg de preferències.</li>
+          <li xml:lang="fr">Afficher toutes les options du mode « Exécution » dans la boîte de dialogue « Préférences ».</li>
           <li xml:lang="ia">Monstra omne optiones de Modo de Executar in dialogo de Preferentias.</li>
           <li xml:lang="it">Mostra tutte le opzioni delle Modalità di esecuzione nella finestra delle preferenze.</li>
           <li xml:lang="ka">გასწორდა პარამეტრების დიალოგში გაშვების რეჟიმის ყველა ვარიანტის ჩვენება.</li>
@@ -1019,6 +1049,7 @@
           <li xml:lang="bg">Предоставя вградена възможност за използване на VLC или MPV за възпроизвеждане на звуци.</li>
           <li xml:lang="ca">Proporciona una opció de construcció per a utilitzar el VLC o el MPV per a reproduir sons.</li>
           <li xml:lang="ca-valencia">Proporciona una opció de construcció per a utilitzar VLC o el MPV per a reproduir sons.</li>
+          <li xml:lang="fr">Fournir une option de compilation pour utiliser VLC ou MPV lors de la lecture de sons.</li>
           <li xml:lang="ia">Forni optiones de construer per usar VLC o MPV per reproducer sonos.</li>
           <li xml:lang="it">Fornita un'opzione di compilazione per usare VLC o MPV per riprodurre suoni.</li>
           <li xml:lang="ka">დაემატა აგების პარამეტრი ხმების დასაკვრელად VLC-ის, ან MPV-ის გამოსაყენებლად.</li>
@@ -1032,6 +1063,7 @@
           <li xml:lang="bg">Конвертиране на промените в QDateTime/QTimeZone в Qt 6.5.</li>
           <li xml:lang="ca">Converteix els canvis QDateTime/QTimeZone a les a Qt 6.5.</li>
           <li xml:lang="ca-valencia">Convertix els canvis QDateTime/QTimeZone a les a Qt 6.5.</li>
+          <li xml:lang="fr">Convertir vers les modifications de QDateTime / QTimeZone de Qt 6.5.</li>
           <li xml:lang="ia">Converte a Qt 6.5 modificationes de QDateTime/QTimeZone .</li>
           <li xml:lang="it">Conversione alle modifiche di QDateTime/QTimeZone in Qt 6.5.</li>
           <li xml:lang="ka">განხორციელდა გადასვლა Qt 6.5-ის QDateTime-ის, ან QTimeZone-ის ცვლილებებზე.</li>
@@ -1051,6 +1083,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -1065,6 +1098,7 @@
           <li xml:lang="bg">Поправен е сривът, ако се поддържат таймери за аларми на ядрото.</li>
           <li xml:lang="ca">Corregeix una fallada si es permeten temporitzadors d'alarma del nucli.</li>
           <li xml:lang="ca-valencia">Corregix una fallada si es permeten temporitzadors d'alarma del nucli.</li>
+          <li xml:lang="fr">Correction du plantage si les minuteurs d'alarme du noyau sont prises en charge.</li>
           <li xml:lang="ia">Corrige fracasso si chronometros (timers) de alarma de kernel es supportate.</li>
           <li xml:lang="it">Correzione di un blocco quando i timer di avviso del kernel sono supportati.</li>
           <li xml:lang="ka">გასწორდა პროგრამის ავარიული გათიშვა, თუ ბირთვის განგაშის ტაიმერების, ან მათი ფუნქციონალის მხარდაჭერა არსებობს.</li>
@@ -1078,6 +1112,7 @@
           <li xml:lang="bg">Поправен е проблемът, при който „Събуждане от режим на задържане“ не работи при използване на RTC събуждане.</li>
           <li xml:lang="ca">Corregeix el despertar des de la suspensió que no funcionava quan s'utilitza el despertar del RTC.</li>
           <li xml:lang="ca-valencia">Corregix el despertar des de la suspensió que no funcionava quan s'utilitza el despertar de RTC.</li>
+          <li xml:lang="fr">Correction du problème de réveil à partir de la suspension avec l'utilisation du réveil « RTC ».</li>
           <li xml:lang="ia">Corrige si Evelia ex Suspende non functiona quando on usa un evelia RTC.</li>
           <li xml:lang="it">Correzione della riattivazione dalla sospensione che non funzionava quando si usavano una riattivazione RTC.</li>
           <li xml:lang="ka">გასწორდა ძილის რეჟიმიდან გაღვიძების, ან RTC-ით გაღვიძების ფუნქციონალის შეფერხება.</li>
@@ -1104,6 +1139,7 @@
           <li xml:lang="bg">Поправен е проблем с възпроизвеждането на звукови файлове чрез VLC на някои системи.</li>
           <li xml:lang="ca">Corregeix la fallada en reproduir fitxers de so utilitzant el VLC en alguns sistemes.</li>
           <li xml:lang="ca-valencia">Corregix la fallada en reproduir fitxers de so utilitzant VLC en alguns sistemes.</li>
+          <li xml:lang="fr">Correction de l'échec de lecture des fichiers audio avec VLC sur certains systèmes.</li>
           <li xml:lang="ia">Corrige fallimento a reproducer files de sono usante VLC sur alcun systemas.</li>
           <li xml:lang="it">Correzione dell'impossibilità di riprodurre file audio usando VLC su alcuni sistemi.</li>
           <li xml:lang="ka">გასწორდა ზოგიერთ სისტემაზე ხმის ფაილების VLC-ის გამოყენებით დაკვრა.</li>
@@ -1122,6 +1158,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -1136,6 +1173,7 @@
           <li xml:lang="bg">Поправено е повтарящите се аудио аларми, които се възпроизвеждат само веднъж.</li>
           <li xml:lang="ca">Corregeix que les alarmes d'àudio que es repeteixen només es reprodueixin una vegada.</li>
           <li xml:lang="ca-valencia">Corregix que les alarmes d'àudio que es repetixen només es reproduïsquen una vegada.</li>
+          <li xml:lang="fr">Correction des alertes sonores répétitives ne se jouant qu'une seule fois.</li>
           <li xml:lang="ia">Corrige repeter alarmas audio solmente reproducente un vice.</li>
           <li xml:lang="it">Correzione della ripetizione di avvisi audio riprodotti una sola vola.</li>
           <li xml:lang="ka">გასწორდა განმეორებადი ხმოვანი განგაშის მხოლოდ ერთხელ დაკვრა.</li>
@@ -1154,6 +1192,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -1168,6 +1207,7 @@
           <li xml:lang="bg">Използване на VLC вместо libcanberra за възпроизвеждане на звуци.</li>
           <li xml:lang="ca">Utilitza el VLC en lloc de la «libcanberra» per a reproduir sons.</li>
           <li xml:lang="ca-valencia">Utilitza VLC en lloc de la «libcanberra» per a reproduir sons.</li>
+          <li xml:lang="fr">Utilisez VLC au lieu de la bibliothèque « libcanberra » pour la lecture des sons.</li>
           <li xml:lang="ia">Usa VLC in loco de libcanberra per reproducer sonos. </li>
           <li xml:lang="it">Usa VLC invece di libcanberra per riprodurre i suoni.</li>
           <li xml:lang="ka">დაემატა ხმების დასაკვრელად libcanberra-ს ნაცვლად VLC-ის გამოყენება.</li>
@@ -1186,6 +1226,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -1200,6 +1241,7 @@
           <li xml:lang="bg">Поправен е сривът след редактиране на нова аларма, ако е активирана проверката на правописа.</li>
           <li xml:lang="ca">Corregeix una fallada després d'editar una alarma nova si la verificació ortogràfica està activada.</li>
           <li xml:lang="ca-valencia">Corregix una fallada després d'editar una alarma nova si la verificació ortogràfica està activada.</li>
+          <li xml:lang="fr">Correction du plantage après la modification d'une nouvelle alarme si la vérification orthographique est activée.</li>
           <li xml:lang="ia">Corrige fracasso post editar nove alarma si controlo  orthographic es habilitate.</li>
           <li xml:lang="it">Correzione di un blocco dopo la modifica di un nuovo avviso se il correttore ortografico è abilitato.</li>
           <li xml:lang="ka">გასწორდა პროგრამის ავარიული გათიშვა ახალი განგაშის ჩასწორების შემდეგ, თუ მართლწერის შემოწმება ჩართულია.</li>
@@ -1220,6 +1262,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -1252,6 +1295,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -1279,6 +1323,7 @@
           <li xml:lang="bg">В диалоговия прозорец „Редактиране на аларма“ позволяване на запазването, ако е поставена отметка в квадратчето „Задаване на сила на звука“.</li>
           <li xml:lang="ca">Al diàleg d'edició d'alarma, permet desar si la casella de selecció estableix el volum està activada.</li>
           <li xml:lang="ca-valencia">En el diàleg d'edició d'una alarma, permet guardar si la casella de selecció establix el volum està activada.</li>
+          <li xml:lang="fr">Dans la boîte de dialogue « Modifier l'alarme », permettre l'enregistrement si la case « Régler le volume » est cochée.</li>
           <li xml:lang="ia">In dialogo de Edita Alarma, permitte salveguardar si le quadrato de selection de Assigna Volumine es commutate.</li>
           <li xml:lang="it">Nella finestra di dialogo Modifica avviso, è consentito il salvataggio se la casella Imposta volume è marcata.</li>
           <li xml:lang="ka">შენახვის ნებართვა განგაშის ჩასწორების დიალოგში, თუ ხმის სიმძლავრის დაყენების მოსანიშნი ღილაკი გადართულია.</li>
@@ -1297,6 +1342,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
         <p xml:lang="ka">რელიზის აღწერა</p>
@@ -1311,6 +1357,7 @@
           <li xml:lang="bg">Конвертирайте в Qt6 / KDE Frameworks 6.</li>
           <li xml:lang="ca">Converteix a les Qt6 / KDE Frameworks 6.</li>
           <li xml:lang="ca-valencia">Convertix a les Qt6 / Frameworks de KDE 6.</li>
+          <li xml:lang="fr">Convertir vers Qt6 / environnement de développement en version 6.</li>
           <li xml:lang="ia">Converte a Qt6/KDE Frameworks 6.</li>
           <li xml:lang="it">Conversione a Qt6 / KDE Frameworks 6.</li>
           <li xml:lang="ka">გადაყვანა Qt6 / KDE Frameworks 6-ზე.</li>
