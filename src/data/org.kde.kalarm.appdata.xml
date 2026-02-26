@@ -470,6 +470,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -482,6 +483,7 @@
           <li xml:lang="fr">Correction des fichiers audio joués à un volume incorrect lors de l'utilisation de VLC.</li>
           <li xml:lang="ia">Corrige files de sono que es reproducite al volumine errate quando  il es usante VLC.</li>
           <li xml:lang="it">Correzione della riproduzione di file audio con il volume sbagliato quando viene usato VLC.</li>
+          <li xml:lang="nl">Geluidsbestanden repareren die worden afgespeeld op het verkeerde volume bij gebruik van VLC.</li>
           <li xml:lang="pt-BR">Corrigido problema de reprodução de arquivos de áudio com volume incorreto ao usar o VLC.</li>
           <li xml:lang="ru">Исправлено воспроизведение звуковых файлов с неправильной громкостью при использовании VLC;</li>
           <li xml:lang="sl">Odpravljena napaka, zaradi katere se zvočne datoteke pri uporabi VLC predvajajo z napačno glasnostjo.</li>
@@ -498,6 +500,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -518,6 +521,7 @@
           <li xml:lang="ar">أُصلح التعليق عند تقييم وقت التكرار التالي للمناطق الزمنية ذات التوقيت الصيفي.</li>
           <li xml:lang="ca">Corregeix un penjament avaluant l'hora de recurrència següent per als fusos horaris amb hora d'estiu.</li>
           <li xml:lang="ca-valencia">Corregix un penjament avaluant l'hora de recurrència següent per als fusos horaris amb hora d'estiu.</li>
+          <li xml:lang="fr">Correction du problème d’évaluation de l’heure de prochaine récurrence pour les fuseaux horaires avec heure d’été.</li>
           <li xml:lang="ia">Corrige le bloco de evalutation del proxime tempore  de recurrentia per zonas de tempore con hora estive.</li>
           <li xml:lang="it">Correzione del blocco durante la valutazione del successivo orario di ricorrenza per i fusi orari con ora legale.</li>
           <li xml:lang="pt-BR">Corrigido o travamento na avaliação do próximo horário de recorrência para fusos horários com horário de verão.</li>
@@ -536,6 +540,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -575,6 +580,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -584,6 +590,7 @@
           <li xml:lang="ar">إذا كُبت التكرار بسبب وقت العمل/العطلات/الاستثناءات، تُكبت تكراراته الفرعية أيضاً.</li>
           <li xml:lang="ca">Si se suprimeix una recurrència per horari de treball/festius/excepció, suprimeix les seves subrepeticions.</li>
           <li xml:lang="ca-valencia">Si se suprimix una recurrència per horari de treball/festius/excepció, suprimix les seues subrepeticions.</li>
+          <li xml:lang="fr">Si une récurrence est supprimée à cause du temps de travail, des congés ou d'une exception, supprimez ses sous-répétitions.</li>
           <li xml:lang="ia">Si un recurrentia es supprimite per tempore de labor/ferias/exception, supprime su sub-repetitiones.</li>
           <li xml:lang="it">Se la ricorrenza è rimossa in base a orari di lavoro/festività/eccezioni, ne sono rimosse anche le sotto-ripetizioni.</li>
           <li xml:lang="pt-BR">Se uma recorrência for suprimida por horário de trabalho/feriados/exceção, suprima suas sub-repetições.</li>
@@ -627,6 +634,7 @@
           <li xml:lang="ar">تُوسم التقاويم كـ 'KeepFormat' فقط إذا رفض المستخدم تحديثها.</li>
           <li xml:lang="ca">Només marca els calendaris com a «KeepFormat» si l'usuari rebutja actualitzar-los.</li>
           <li xml:lang="ca-valencia">Només marca els calendaris com a «KeepFormat» si l'usuari rebutja actualitzar-los.</li>
+          <li xml:lang="fr">Ne marquez les agendas comme « Conserver le format » que si l'utilisateur refuse de les mettre à jour.</li>
           <li xml:lang="ia">Marca solmente como 'ManteneFormato' si le usator refusa actualisar los.</li>
           <li xml:lang="it">I calendari vengono marcati come «KeepFormat« solo se l'utente rifiuta di aggiornarli.</li>
           <li xml:lang="pt-BR">Marcar os calendários como 'KeepFormat' somente se o usuário optar por não atualizá-los.</li>
@@ -646,6 +654,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -655,6 +664,7 @@
           <li xml:lang="ar">إذا أُلغي المنبّه متأخراً، لا يُزال الحدث إذا كان هناك تكرار فرعي لا يزال مستحقاً.</li>
           <li xml:lang="ca">Si una alarma està cancel·lada tard, no elimina l'esdeveniment si encara hi ha pendent una subrepetició.</li>
           <li xml:lang="ca-valencia">Si una alarma està cancel·lada tard, no elimina l'esdeveniment si encara hi ha pendent una subrepetició.</li>
+          <li xml:lang="fr">Si une alarme est annulée tardivement, ne pas supprimer l'événement si une sous-répétition est encore prévue.</li>
           <li xml:lang="ia">Si un alarma es cancellate-en-retardo, non remove le evento si un sub repetition es ancora debite.</li>
           <li xml:lang="it">Se è un avviso viene annullato in ritardo, non viene rimosso l'evento se ci sono ancora sotto-ripetizioni che si devono attivare.</li>
           <li xml:lang="pt-BR">Se um alarme for cancelado com atraso, não remove o evento se uma sub-repetição ainda estiver pendente.</li>
@@ -665,6 +675,7 @@
           <li xml:lang="ar">أُصلحت الحلقة اللانهائية عند تحفيز المنبّهات، إذا كانت للقراءة فقط أو كان التقويم غير قابل للكتابة.</li>
           <li xml:lang="ca">Corregeix un bucle infinit quan s'activen les alarmes, si són de només lectura o si el calendari no es pot escriure.</li>
           <li xml:lang="ca-valencia">Corregix un bucle infinit quan s'activen les alarmes, si són de només lectura o si el calendari no es pot escriure.</li>
+          <li xml:lang="fr">Correction de la boucle infinie lorsque les alarmes se déclenchent, si elles sont en lecture seule ou si le calendrier est non modifiable.</li>
           <li xml:lang="ia">Corrige le loop infinite quando un alarma discatena,si illos es de sol lectura o si le calendario non es scribibile.</li>
           <li xml:lang="it">Correzione di un ciclo infinito quando si attivano degli avvisi in solo lettura o il cui calendario non è scrivibile.</li>
           <li xml:lang="pt-BR">Correção do loop infinito quando alarmes são acionados, se eles forem somente leitura ou se o calendário não for gravável.</li>
@@ -695,6 +706,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -723,6 +735,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -753,6 +766,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -792,6 +806,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -820,6 +835,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -848,6 +864,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -857,6 +874,7 @@
           <li xml:lang="ar">تُعرض نوافذ المنبّهات المزخرفة العادية فوق تطبيقات ملء الشاشة على X11.</li>
           <li xml:lang="ca">Mostra les finestres d'alarma normals decorades sobre aplicacions de pantalla completa a l'X11.</li>
           <li xml:lang="ca-valencia">Mostra les finestres d'alarma normals decorades sobre aplicacions de pantalla completa a X11.</li>
+          <li xml:lang="fr">Afficher des fenêtres normales d'alarme décorées sur des applications en plein écran sous X11.</li>
           <li xml:lang="ia">Monstra fenestras de alarma decorate normal sur applicationes de schermo plen sur X11.</li>
           <li xml:lang="it">Mostra finestre di avviso con decorazione normale sopra applicazioni a schermo intero su X11.</li>
           <li xml:lang="pt-BR">Exibe janelas de alarme decoradas normais sobre aplicativos em tela cheia no X11.</li>
@@ -889,6 +907,7 @@
           <li xml:lang="ar">أُصلح خطأ حوار تحرير المنبّه عند ضبط الوقت إذا كانت المنطقة الزمنية للمستخدم هي UTC.</li>
           <li xml:lang="ca">Corregeix l'error del diàleg d'edició d'alarma establint l'hora si el fus horari de l'usuari és UTC.</li>
           <li xml:lang="ca-valencia">Corregix l'error del diàleg d'edició d'una alarma establint l'hora si el fus horari de l'usuari és UTC.</li>
+          <li xml:lang="fr">Correction de l’erreur de réglage de l’heure dans la boîte de dialogue « Modifier l’alarme » si le fuseau horaire de l’utilisateur est « UTC ».</li>
           <li xml:lang="ia">Corrige error de dialogo de Modifica Alarma assignante tempore si le fuso horari del usator è UTC.</li>
           <li xml:lang="it">Correzione dell'errore nella finestra Modifica avviso all'impostazione dell'orario se il fuso orario dell'utente è UTC.</li>
           <li xml:lang="pt-BR">Corrigido o erro na caixa de diálogo para editar alarme ao definir a hora quando o fuso horário do usuário é UTC.</li>
@@ -918,6 +937,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -969,6 +989,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -1000,6 +1021,7 @@
           <li xml:lang="ar">تُعرض أي رسالة خطأ صوتية فوراً عند استخدام زر "جرب" أثناء تحرير منبّه.</li>
           <li xml:lang="ca">Mostra qualsevol missatge d'error d'àudio immediatament quan s'utilitza el botó Prova mentre s'edita una alarma.</li>
           <li xml:lang="ca-valencia">Mostra qualsevol missatge d'error d'àudio immediatament quan s'utilitza el botó Prova mentre s'edita una alarma.</li>
+          <li xml:lang="fr">Jouer immédiatement tout message d'erreur audio lors de l'utilisation du bouton « Tester » pendant la modification d'une alarme.</li>
           <li xml:lang="ia">Monstra ulle message de error audio immediatemente  quando on usa Essaya button durante editar un alarma.</li>
           <li xml:lang="it">Mostra un messaggio di errore audio immediatamente quando si usa il pulsante Prova mente si modifica un avviso.</li>
           <li xml:lang="pt-BR">Exibir imediatamente qualquer mensagem de erro de áudio ao usar o botão "Testar" durante a edição de um alarme.</li>
@@ -1029,6 +1051,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -1057,6 +1080,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -1085,6 +1109,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -1115,6 +1140,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -1124,6 +1150,7 @@
           <li xml:lang="ar">تُعرض رسالة خطأ في حال حدوث خطأ أثناء محاولة تشغيل ملف صوتي.</li>
           <li xml:lang="ca">Mostra un missatge d'error si hi ha un error intentant reproduir un fitxer d'àudio.</li>
           <li xml:lang="ca-valencia">Mostra un missatge d'error si hi ha un error intentant reproduir un fitxer d'àudio.</li>
+          <li xml:lang="fr">Afficher un message d'erreur si une erreur survient lors de la tentative de lecture d'un fichier audio.</li>
           <li xml:lang="ia">Monstra message de error si le error occurre essayante reproducer un file audio.</li>
           <li xml:lang="it">Mostra un messaggio di errore se si verifica un errore quando si tenta di riprodurre un file audio.</li>
           <li xml:lang="pt-BR">Exibir mensagem de erro caso ocorra algum problema ao tentar reproduzir um arquivo de áudio.</li>
@@ -1142,6 +1169,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -1151,6 +1179,7 @@
           <li xml:lang="ar">استُخدم libcanberra بدلاً من Phonon لتشغيل الأصوات، لضمان سلامة الخيوط (thread safety).</li>
           <li xml:lang="ca">Utilitza la «libcanberra» en lloc del Phonon per a reproduir sons, per a la seguretat dels fils.</li>
           <li xml:lang="ca-valencia">Utilitza la «libcanberra» en lloc de Phonon per a reproduir sons, per a la seguretat dels fils.</li>
+          <li xml:lang="fr">Utiliser la bibliothèque « libcanberra » au lieu de Phonon pour lire les sons, pour la sécurité des processus.</li>
           <li xml:lang="ia">Usa libcanberra in loco de Phonon per reproducer sonos,per securitate  de thread.</li>
           <li xml:lang="it">Uso di libcanberra invece di Phonon per la riproduzione di suoni, per assicurare thread safety.</li>
           <li xml:lang="pt-BR">Para garantir a segurança das threads, usar o libcanberra em vez do Phonon para reproduzir sons.</li>
@@ -1180,6 +1209,7 @@
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
@@ -1200,6 +1230,7 @@
           <li xml:lang="ar">فُعّل الاستيقاظ من التعليق لعدة منبّهات إذا كانت مؤقتات منبّهات نواة المستخدم مدعومة (لينكس فقط).</li>
           <li xml:lang="ca">Activa l'activació des de la suspensió per a alarmes múltiples si es permeten temporitzadors d'alarma d'usuari del nucli (només Linux).</li>
           <li xml:lang="ca-valencia">Activa l'activació des de la suspensió per a alarmes múltiples si es permeten temporitzadors d'alarma d'usuari del nucli (només Linux).</li>
+          <li xml:lang="fr">Activer le réveil à partir de la suspension pour plusieurs alarmes si les timers d'alarme du noyau utilisateur sont pris en charge (Linux uniquement).</li>
           <li xml:lang="ia">Habilita eveliar ex suspender per alarmas multiple si chronometros (timers) de alarmas de kernel de usator es supportate (solmente per Linux).</li>
           <li xml:lang="it">Abilita il risveglio dalla sospensione per avvisi multipli se i timer per gli avvisi a livello utente del kernel sono supportati (solo su Linux).</li>
           <li xml:lang="pt-BR">Habilita a função de despertar a partir da suspensão para múltiplos alarmes se os temporizadores de alarme do kernel do usuário forem suportados (somente Linux).</li>
@@ -1210,6 +1241,7 @@
           <li xml:lang="ar">ضُبطت وحدات التذكير والإلغاء المتأخر بناءً على اختيار "التاريخ فقط" في حوار تحرير قالب المنبّه.</li>
           <li xml:lang="ca">Estableix unitats per als recordatoris i el cancel·lat amb retard depenent de la selecció de només la data al diàleg d'edició de plantilla d'alarma.</li>
           <li xml:lang="ca-valencia">Establix unitats per als recordatoris i el cancel·lat amb retard depenent de la selecció de només la data en el diàleg d'edició de plantilla d'alarma.</li>
+          <li xml:lang="fr">Définir les unités pour le rappel et l'annulation tardive en fonction de la sélection de date uniquement dans la boîte de dialogue « Modifier le modèle d'alerte ».</li>
           <li xml:lang="ia">Assigna unitates per memento e cancellate-en-retardo dependente del selection de solo data in dialogo Modifica Patrono de Alarma.</li>
           <li xml:lang="it">Imposta le unità per i promemoria e annullamenti in ritardo in base allo sola selezione di date nella finestra di modifica dei modelli di avviso.</li>
           <li xml:lang="pt-BR">Define as unidades para lembrete e cancelamento tardio com base na seleção de data na caixa de diálogo para editar modelo de alarme.</li>
@@ -1220,6 +1252,7 @@
           <li xml:lang="ar">أُزيل ترحيل ضبط تقويم KResources ما قبل Akonadi.</li>
           <li xml:lang="ca">Elimina la migració de la configuració dels calendaris KResources pre-Akonadi.</li>
           <li xml:lang="ca-valencia">Elimina la migració de la configuració dels calendaris KResources pre-Akonadi.</li>
+          <li xml:lang="fr">Supprimer la migration de la configuration pré-Akonadi pour l'agenda de KResources.</li>
           <li xml:lang="ia">Remove migration de configuration de calendario de KResources pre-Akonadi.</li>
           <li xml:lang="it">Rimossa la migrazione della configurazione di calendari di tipo KResources precedenti ad Akonadi.</li>
           <li xml:lang="pt-BR">Remove a migração da configuração de calendário KResources pré-Akonadi.</li>
