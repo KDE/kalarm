@@ -481,6 +481,7 @@
         <ul>
           <li>Fix sound files being played at the wrong volume when using VLC.</li>
           <li xml:lang="ar">إصلاح مشكلة تشغيل ملفات الصوت بمستوى صوت غير صحيح عند استخدام VLC.</li>
+          <li xml:lang="bg">Поправена е грешка в звука, когато се възпроизвеждат звукови файлове с грешна сила на звука при използване на VLC.</li>
           <li xml:lang="ca">Corregeix els fitxers de so que es reprodueixen a un volum incorrecte quan s'utilitza el VLC.</li>
           <li xml:lang="ca-valencia">Corregix els fitxers de so que es reproduïxen a un volum incorrecte quan s'utilitza VLC.</li>
           <li xml:lang="fr">Correction des fichiers audio joués à un volume incorrect lors de l'utilisation de VLC.</li>
