@@ -468,6 +468,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -482,6 +483,7 @@
           <li xml:lang="bg">Поправена е грешка в звука, когато се възпроизвеждат звукови файлове с грешна сила на звука при използване на VLC.</li>
           <li xml:lang="ca">Corregeix els fitxers de so que es reprodueixen a un volum incorrecte quan s'utilitza el VLC.</li>
           <li xml:lang="ca-valencia">Corregix els fitxers de so que es reproduïxen a un volum incorrecte quan s'utilitza VLC.</li>
+          <li xml:lang="es">Se ha corregido el fallo de los archivos de sonido que se reproducían con el volumen incorrecto al usar VLC.</li>
           <li xml:lang="fr">Correction des fichiers audio joués à un volume incorrect lors de l'utilisation de VLC.</li>
           <li xml:lang="ia">Corrige files de sono que es reproducite al volumine errate quando  il es usante VLC.</li>
           <li xml:lang="it">Correzione della riproduzione di file audio con il volume sbagliato quando viene usato VLC.</li>
@@ -500,6 +502,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -514,6 +517,7 @@
           <li xml:lang="bg">Поправено е засичане при оценката на повтарящи се аларми само за дата, когато началният час на деня е различен от нула.</li>
           <li xml:lang="ca">Corregeix un penjament en avaluar les alarmes de només data recurrents quan l'hora d'inici del dia no és zero.</li>
           <li xml:lang="ca-valencia">Corregix un penjament en avaluar les alarmes de només data recurrents quan l'hora d'inici del dia no és zero.</li>
+          <li xml:lang="es">Se ha corregido el problema del bloqueo al evaluar alarmas repetitivas de solo fecha cuando la hora de inicio del día no es cero.</li>
           <li xml:lang="fr">Correction du blocage lors de l'évaluation des alarmes récurrentes ne comportant que des dates lorsque l'heure de début de journée n'est pas à zéro.</li>
           <li xml:lang="ia">Corrige le bloco de evalutation del alarmas recurrente de solo data quando le tempore de initio del die es non zero.</li>
           <li xml:lang="it">Correzione del blocco durante la valutazione di avvisi ricorrenti senza orario quando l'ora di inizio della giornata non è zero.</li>
@@ -526,6 +530,7 @@
           <li xml:lang="bg">Поправено е замръзване при оценката на времето за следващо повторение за часови зони с лятно часово време.</li>
           <li xml:lang="ca">Corregeix un penjament avaluant l'hora de recurrència següent per als fusos horaris amb hora d'estiu.</li>
           <li xml:lang="ca-valencia">Corregix un penjament avaluant l'hora de recurrència següent per als fusos horaris amb hora d'estiu.</li>
+          <li xml:lang="es">Se ha corregido el problema del bloqueo al evaluar la hora de la siguiente repetición para las zonas horarias con horario de verano.</li>
           <li xml:lang="fr">Correction du problème d’évaluation de l’heure de prochaine récurrence pour les fuseaux horaires avec heure d’été.</li>
           <li xml:lang="ia">Corrige le bloco de evalutation del proxime tempore  de recurrentia per zonas de tempore con hora estive.</li>
           <li xml:lang="it">Correzione del blocco durante la valutazione del successivo orario di ricorrenza per i fusi orari con ora legale.</li>
@@ -543,6 +548,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -557,6 +563,7 @@
           <li xml:lang="bg">Предотвратяване на множество диалогови прозорци за отлагане на аларми за едно и също събитие.</li>
           <li xml:lang="ca">Evita diàlegs múltiples d'ajornament d'alarma per al mateix esdeveniment.</li>
           <li xml:lang="ca-valencia">Evita diàlegs múltiples d'ajornament d'alarma per al mateix esdeveniment.</li>
+          <li xml:lang="es">Evitar múltiples diálogos de aplazamiento de alarmas para el mismo evento.</li>
           <li xml:lang="fr">Empêcher plusieurs boîtes de dialogue de report d'alarme pour le même évènement.</li>
           <li xml:lang="ia">Preveni multiple dialogos de Differe Alarmas per le mesme evento.</li>
           <li xml:lang="it">Prevenzione di finestre di rinvio avviso multiple per lo stesso evento.</li>
@@ -569,6 +576,7 @@
           <li xml:lang="bg">Ако „Отлагане“ е деактивирано за аларма за известие, не се показват два бутона „Редактиране“.</li>
           <li xml:lang="ca">Si l'ajornament està desactivat per a una alarma de notificació, no es mostren dos botons d'edició.</li>
           <li xml:lang="ca-valencia">Si l'ajornament està desactivat per a una alarma de notificació, no es mostren dos botons d'edició.</li>
+          <li xml:lang="es">Si la opción de aplazamiento está desactivada para una alarma de notificación, no se mostrarán dos botones de edición.</li>
           <li xml:lang="fr">Si l'option « Reporter » est désactivée pour une alarme de notification, ne pas afficher deux boutons « Modifier ».</li>
           <li xml:lang="ia">Si Defere es dishabilitate per un alarma de notification,non monstra duo buttones de Editar.</li>
           <li xml:lang="it">Se il rinvio è disabilito per un avviso di notifica, non mostrare due pulsanti di modifica.</li>
@@ -586,6 +594,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -600,6 +609,7 @@
           <li xml:lang="bg">Ако дадено повторение е прекъснато от работно време/празници/изключение, се прекъсват неговите подповторения.</li>
           <li xml:lang="ca">Si se suprimeix una recurrència per horari de treball/festius/excepció, suprimeix les seves subrepeticions.</li>
           <li xml:lang="ca-valencia">Si se suprimix una recurrència per horari de treball/festius/excepció, suprimix les seues subrepeticions.</li>
+          <li xml:lang="es">Si una repetición se suprime por tiempo de trabajo/vacaciones/excepción, se suprimen sus subrepeticiones.</li>
           <li xml:lang="fr">Si une récurrence est supprimée à cause du temps de travail, des congés ou d'une exception, supprimez ses sous-répétitions.</li>
           <li xml:lang="ia">Si un recurrentia es supprimite per tempore de labor/ferias/exception, supprime su sub-repetitiones.</li>
           <li xml:lang="it">Se la ricorrenza è rimossa in base a orari di lavoro/festività/eccezioni, ne sono rimosse anche le sotto-ripetizioni.</li>
@@ -612,6 +622,7 @@
           <li xml:lang="bg">Подобрения и корекции на грешки в изчисленията за повторяемост/работно време/празници.</li>
           <li xml:lang="ca">Millores i correccions d'errors als càlculs de recurrència/horari laboral/festius.</li>
           <li xml:lang="ca-valencia">Millores i esmenes d'errors als càlculs de recurrència/horari laboral/festius.</li>
+          <li xml:lang="es">Mejoras y corrección de fallos para los cálculos de repetición, horario de trabajo y festivos.</li>
           <li xml:lang="fr">Améliorations et corrections de bogues dans les calculs de récurrence / temps de travail / jours fériés.</li>
           <li xml:lang="ia">Melioramentos e correctiones de faltas per calculationes de recurrentia/tempore da labor/ ferias.</li>
           <li xml:lang="it">Miglioramenti e correzioni di bug nel calcolo di ricorrenze/orari lavorativi/festività.</li>
@@ -624,6 +635,7 @@
           <li xml:lang="bg">Поправено е форматирането на потребителски съобщения, които показваха HTML тагове.</li>
           <li xml:lang="ca">Corregeix el format dels missatges d'usuari que mostren etiquetes HTML.</li>
           <li xml:lang="ca-valencia">Corregix el format dels missatges d'usuari que mostren etiquetes HTML.</li>
+          <li xml:lang="es">Se ha corregido el formato de los mensajes de usuario que mostraban etiquetas HTML.</li>
           <li xml:lang="fr">Correction du formatage des messages des utilisateurs montrant des balises « HTML ».</li>
           <li xml:lang="ia">Corrige fnormatar de messages de usator que monstrava etiquettas (tags) HTML.</li>
           <li xml:lang="it">Correzione della formattazione di messaggi utente contenenti tag HTML.</li>
@@ -636,6 +648,7 @@
           <li xml:lang="bg">Разграничете ежедневните и минутните подповторения в календара на алармите.</li>
           <li xml:lang="ca">Distingeix entre les subrepeticions diàries i per minuts en el calendari d'alarmes.</li>
           <li xml:lang="ca-valencia">Distingix entre les subrepeticions diàries i per minuts en el calendari d'alarmes.</li>
+          <li xml:lang="es">Distinguir entre subrepeticiones diarias y detalladas en el calendario de alarmas.</li>
           <li xml:lang="fr">Distinguer les sous-répétitions quotidiennes et minutées dans le calendrier des alarmes.</li>
           <li xml:lang="ia">Distingue inter sub-repetitiones quotidian e de minutas in calendario de alarmas.</li>
           <li xml:lang="it">Vengono distinte le sotto-ripetizioni ogni giorno/ogni minuto nel calendario degli avvisi.</li>
@@ -648,6 +661,7 @@
           <li xml:lang="bg">Маркиране на календарите като „Запазен формат“ само ако потребителят откаже да ги актуализира.</li>
           <li xml:lang="ca">Només marca els calendaris com a «KeepFormat» si l'usuari rebutja actualitzar-los.</li>
           <li xml:lang="ca-valencia">Només marca els calendaris com a «KeepFormat» si l'usuari rebutja actualitzar-los.</li>
+          <li xml:lang="es">Marcar los calendarios como «mantener formato» solo si el usuario declina actualizarlos.</li>
           <li xml:lang="fr">Ne marquez les agendas comme « Conserver le format » que si l'utilisateur refuse de les mettre à jour.</li>
           <li xml:lang="ia">Marca solmente como 'ManteneFormato' si le usator refusa actualisar los.</li>
           <li xml:lang="it">I calendari vengono marcati come «KeepFormat« solo se l'utente rifiuta di aggiornarli.</li>
@@ -666,6 +680,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -680,6 +695,7 @@
           <li xml:lang="bg">Ако алармата е отменена късно, да не се премахва събитието, ако все още има подповторение.</li>
           <li xml:lang="ca">Si una alarma està cancel·lada tard, no elimina l'esdeveniment si encara hi ha pendent una subrepetició.</li>
           <li xml:lang="ca-valencia">Si una alarma està cancel·lada tard, no elimina l'esdeveniment si encara hi ha pendent una subrepetició.</li>
+          <li xml:lang="es">Si una alarma se cancela tarde, no eliminar el evento si aún queda alguna subrepetición pendiente.</li>
           <li xml:lang="fr">Si une alarme est annulée tardivement, ne pas supprimer l'événement si une sous-répétition est encore prévue.</li>
           <li xml:lang="ia">Si un alarma es cancellate-en-retardo, non remove le evento si un sub repetition es ancora debite.</li>
           <li xml:lang="it">Se è un avviso viene annullato in ritardo, non viene rimosso l'evento se ci sono ancora sotto-ripetizioni che si devono attivare.</li>
@@ -692,6 +708,7 @@
           <li xml:lang="bg">Поправен е безкраен цикъл при задействане на аларми, ако са само за четене или ако календарът е без разрешение за запис.</li>
           <li xml:lang="ca">Corregeix un bucle infinit quan s'activen les alarmes, si són de només lectura o si el calendari no es pot escriure.</li>
           <li xml:lang="ca-valencia">Corregix un bucle infinit quan s'activen les alarmes, si són de només lectura o si el calendari no es pot escriure.</li>
+          <li xml:lang="es">Se ha corregido un bucle sin retorno cuando se activan las alarmas, si son de solo lectura o si el calendario no permite escritura.</li>
           <li xml:lang="fr">Correction de la boucle infinie lorsque les alarmes se déclenchent, si elles sont en lecture seule ou si le calendrier est non modifiable.</li>
           <li xml:lang="ia">Corrige le loop infinite quando un alarma discatena,si illos es de sol lectura o si le calendario non es scribibile.</li>
           <li xml:lang="it">Correzione di un ciclo infinito quando si attivano degli avvisi in solo lettura o il cui calendario non è scrivibile.</li>
@@ -704,6 +721,7 @@
           <li xml:lang="bg">В диалоговия прозорец за редактиране не се показва предупреждение за висока точност, ако началният час е преди сегашния.</li>
           <li xml:lang="ca">En el diàleg d'edició, no es mostra un avís d'alta precisió si el temps d'inici és abans d'ara.</li>
           <li xml:lang="ca-valencia">En el diàleg d'edició, no es mostra un avís d'alta precisió si el temps d'inici és abans d'ara.</li>
+          <li xml:lang="es">En el diálogo de edición, no mostrar una advertencia de alta precisión si la hora de inicio es anterior a ahora.</li>
           <li xml:lang="fr">Dans la boîte de dialogue de modification, ne pas afficher l'avertissement de haute précision si l'heure de début est antérieure à maintenant.</li>
           <li xml:lang="ia">In dialogo de editar, non monstra aviso de alte precision si le tempore  de initio es ante nunc.</li>
           <li xml:lang="it">Nelle finestra di modifica, non mostrare avvisi di alta previsione se l'ora di inizio è prima di adesso.</li>
@@ -722,6 +740,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -736,6 +755,7 @@
           <li xml:lang="bg">Премахване на излишните разстояния в диалоговия прозорец „Настройки“.</li>
           <li xml:lang="ca">Elimina l'espaiat excessiu al diàleg de preferències.</li>
           <li xml:lang="ca-valencia">Elimina l'espaiat excessiu al diàleg de preferències.</li>
+          <li xml:lang="es">Se ha eliminado el espacio excesivo del diálogo de preferencias.</li>
           <li xml:lang="fr">Supprimer les espaces excessifs dans la boîte de dialogue « Préférences ».</li>
           <li xml:lang="ia">Remove spatiar de excesso in dialogo de Preferentias.</li>
           <li xml:lang="it">Rimozione della spaziatura eccessiva nella finestra delle preferenze.</li>
@@ -753,6 +773,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -767,6 +788,7 @@
           <li xml:lang="bg">Предотвратяване на фокусирането на клавиатурата върху прозорците със съобщения при изскачане.</li>
           <li xml:lang="ca">Evita que les finestres de missatges prenguin el focus del teclat quan apareguin.</li>
           <li xml:lang="ca-valencia">Evita que les finestres de missatges prenguen el focus del teclat quan apareguen.</li>
+          <li xml:lang="es">Impedir que las ventanas de mensajes capturen el foco del teclado cuando se muestran.</li>
           <li xml:lang="fr">Empêcher les fenêtres de messages de recevoir le focus du clavier lors de leurs apparitions.</li>
           <li xml:lang="ia">Preveni que le fenestras de message prende le foco de claviero quando illos emerge como popup.</li>
           <li xml:lang="it">Viene impedito alle finestre dei messaggi di prendere il fuoco quando appaiono.</li>
@@ -786,6 +808,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -800,6 +823,7 @@
           <li xml:lang="bg">Имплементират се аудио бекендове като плъгини, за да се позволи избор от потребителя.</li>
           <li xml:lang="ca">Implementa els dorsals d'àudio com a connectors per a permetre la selecció de l'usuari.</li>
           <li xml:lang="ca-valencia">Implementa els dorsals d'àudio com a connectors per a permetre la selecció de l'usuari.</li>
+          <li xml:lang="es">Implementar los motores de sonido como complementos para permitir la selección del usuario.</li>
           <li xml:lang="fr">Implémentation de moteurs audio sous forme de modules externes pour permettre une sélection par l'utilisateur.</li>
           <li xml:lang="ia">Implementa retro administrationes audio como plugins per permitter selection de usator. </li>
           <li xml:lang="it">Implementazione di motori audio come estensioni per permettere all'utente di scegliere tra loto.</li>
@@ -829,6 +853,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -860,6 +885,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -891,6 +917,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -970,6 +997,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -1026,6 +1054,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -1093,6 +1122,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -1124,6 +1154,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -1155,6 +1186,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -1188,6 +1220,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -1219,6 +1252,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
@@ -1262,6 +1296,7 @@
         <p xml:lang="bg">Описание на изданието</p>
         <p xml:lang="ca">Descripció de la versió</p>
         <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="es">Descripción de la versión</p>
         <p xml:lang="fr">Description de la version</p>
         <p xml:lang="ia">Description de version</p>
         <p xml:lang="it">Descrizione del rilascio</p>
