@@ -233,7 +233,7 @@
       <li xml:lang="sr-ijekavianlatin">Prikaz alarma sa ručno zadatim tekstom, tekstom kao izlazom naredbe, ili tekstualnog fajla ili slike.</li>
       <li xml:lang="sv">Visar alarm med dina egna textmeddelanden, text skapad av ett kommando samt en text- eller bildfil.</li>
       <li xml:lang="ta">விருப்பமான உரையையோ, குறிப்பிட்ட கட்டளையின் விளைவையோ, ஓர் கோப்பின் உள்ளடக்கத்தையோ அலாரங்களில் காட்டலாம்.</li>
-      <li xml:lang="tr">Alarmları kendi metin iletinizle, bir komut tarafından üretilen metinle, veya metin veya resim dosyasıyla gösterin.</li>
+      <li xml:lang="tr">Alarmları kendi metin iletinizle, bir komut tarafından üretilen metinle veya metin veya görsel dosyasıyla gösterin.</li>
       <li xml:lang="uk">показ нагадувань з визначеним вами текстовим повідомленням, текстом, який створюється вказаною вами командою, або файлом зображення;</li>
       <li xml:lang="zh-CN">显示自定义闹钟消息。消息可以是命令输出、一段文字或一张图片。</li>
       <li xml:lang="zh-TW">用您自己寫的文字訊息，或是某個指令的輸出，或是文字檔，或是影像檔來顯示鬧鐘。</li>
@@ -404,7 +404,7 @@
       <li xml:lang="sr-ijekavian">Подршка за више алармних календара, што на пример омогућава дељење аларма између преносног и стоног рачунара.</li>
       <li xml:lang="sr-ijekavianlatin">Podrška za više alarmnih kalendara, što na primer omogućava deljenje alarma između prenosnog i stonog računara.</li>
       <li xml:lang="sv">Stöd för flera alarmkalendrar, som exempelvis gör det möjligt att dela alarm mellan en bärbar dator och en skrivbordsdator.</li>
-      <li xml:lang="tr">Birden çok alarm takvimi desteği, örneğin diz üstü ve masaüstü bilgisayar arasında alarm paylaşımına izin verir.</li>
+      <li xml:lang="tr">Birden çok alarm takvimi desteği; örneğin dizüstü ve masaüstü bilgisayar arasında alarm paylaşımına olanak tanır.</li>
       <li xml:lang="uk">підтримка роботи з декількома календарями нагадувань, що, наприклад, уможливлює використання єдиного календаря на ноутбуці і робочій станції.</li>
       <li xml:lang="zh-CN">支持多个闹钟日历，可以让您在笔记本电脑和台式机之间共享闹钟。</li>
       <li xml:lang="zh-TW">支援多重鬧鐘行事曆，例如可以讓您在筆記型電腦與桌上型電腦間分享鬧鐘。</li>
@@ -449,7 +449,7 @@
       <caption xml:lang="sk">Konfiguračné okno KAlarm s testovacou správou alarmu</caption>
       <caption xml:lang="sl">Okno za nastavitev alarma s tesnim sporočilom ob alarmu</caption>
       <caption xml:lang="sv">Inställningsfönstret i Kalarm med test av ett meddelandealarm</caption>
-      <caption xml:lang="tr">Bir sınama ileti alarmlı K Alarm yapılandırma penceresi</caption>
+      <caption xml:lang="tr">Bir sınama iletisi alarmı içeren K Alarm yapılandırma penceresi</caption>
       <caption xml:lang="uk">Вікно налаштовування KAlarm із тестовим нагадуванням у форматі повідомлення</caption>
       <caption xml:lang="zh-CN">KAlarm 配置窗口，同时展示了一个测试闹钟</caption>
       <caption xml:lang="zh-TW">包含測試訊息通知的 KAlarm 設定視窗</caption>
@@ -478,7 +478,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -497,7 +497,7 @@
           <li xml:lang="pt-BR">Corrigido problema de reprodução de arquivos de áudio com volume incorreto ao usar o VLC.</li>
           <li xml:lang="ru">Исправлено воспроизведение звуковых файлов с неправильной громкостью при использовании VLC;</li>
           <li xml:lang="sl">Odpravljena napaka, zaradi katere se zvočne datoteke pri uporabi VLC predvajajo z napačno glasnostjo.</li>
-          <li xml:lang="tr">Fix sound files being played at the wrong volume when using VLC.</li>
+          <li xml:lang="tr">VLC kullanırken ses dosyalarının yanlış ses düzeyinde çalınması düzeltildi.</li>
           <li xml:lang="uk">Виправлено помилку, яку пов'язано із тим, що звукові файли відтворювалися із помилковою гучністю при використанні VLC.</li>
           <li xml:lang="zh-CN">修复使用 VLC 播放器时音量设置错误的问题。</li>
         </ul>
@@ -520,7 +520,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -538,7 +538,7 @@
           <li xml:lang="pt-BR">Corrigido o travamento na avaliação de alarmes recorrentes que consideram apenas a data quando o horário de início do dia é diferente de zero.</li>
           <li xml:lang="ru">Исправлено зависание при вычислении повторяющихся ежедневных сигналов с ненулевым временем начала дня;</li>
           <li xml:lang="sl">Odpravljena težava z zatikanjem pri ocenjevanju ponavljajočih se alarmov samo za datum, ko čas začetka dneva ni enak nič.</li>
-          <li xml:lang="tr">Fix hang evaluating recurring date-only alarms when start-of-day time is non-zero.</li>
+          <li xml:lang="tr">Gün başlangıcı zamanı sıfır olmadığında yalnızca tarih içeren yinelenen alarmlar değerlendirilirken oluşan takılma düzeltildi.</li>
           <li xml:lang="uk">Виправлено повисання при визначенні параметрів повторюваних за датою нагадувань, якщо час початку дня є ненульовим.</li>
           <li xml:lang="zh-CN">修复了在开始时间非零时评估仅日期重复的提醒时出现的卡顿问题。</li>
           <li>Fix hang evaluating next recurrence time for time zones with daylight savings time.</li>
@@ -554,7 +554,7 @@
           <li xml:lang="pt-BR">Corrigido o travamento na avaliação do próximo horário de recorrência para fusos horários com horário de verão.</li>
           <li xml:lang="ru">Исправлено зависание при вычислении времени следующего повторения для часовых поясов с переходом на летнее время;</li>
           <li xml:lang="sl">Odpravljeno je zatikanje pri ocenjevanju naslednjega časa ponovitve za časovne pasove z zimskim časom.</li>
-          <li xml:lang="tr">Fix hang evaluating next recurrence time for time zones with daylight savings time.</li>
+          <li xml:lang="tr">Yaz saati uygulaması olan saat dilimleri için bir sonraki yineleme zamanı değerlendirilirken oluşan takılma düzeltildi.</li>
           <li xml:lang="uk">Виправлено повисання при визначенні часу наступного повторення для часових поясів із літнім часом.</li>
           <li xml:lang="zh-CN">修复在夏令时时区评估下次重发时间时出现的挂起问题。</li>
         </ul>
@@ -577,7 +577,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -594,7 +594,7 @@
           <li xml:lang="pt-BR">Impedir a exibição de várias caixas de diálogo "Adiar alarme" para o mesmo evento.</li>
           <li xml:lang="ru">Запрещено появление нескольких окон отложенного сигнала для одного события;</li>
           <li xml:lang="sl">Prepreči več pogovornih oken za odložitev alarma za isti dogodek.</li>
-          <li xml:lang="tr">Prevent multiple Defer Alarm dialogs for the same event.</li>
+          <li xml:lang="tr">Aynı etkinlik için birden fazla Alarmı Ertele iletişim kutusunun açılması önlendi.</li>
           <li xml:lang="uk">Реалізовано запобігання появі декількох вікон відхилення нагадувань для однієї події.</li>
           <li xml:lang="zh-CN">防止针对同一事件出现多个“延迟提醒”对话框。</li>
           <li>If Defer is disabled for a notification alarm, don't show two Edit buttons.</li>
@@ -610,7 +610,7 @@
           <li xml:lang="pt-BR">Se a opção Adiar estiver desativada para um alarme de notificação, não mostrar dois botões de Editar.</li>
           <li xml:lang="ru">Если для оповещения отложенный запуск отключён, более вы выводятся две кнопки «Изменить»;</li>
           <li xml:lang="sl">Če je možnost Odloži za obvestilni alarm onemogočena, ne prikaže dveh gumbov za urejanje.</li>
-          <li xml:lang="tr">If Defer is disabled for a notification alarm, don't show two Edit buttons.</li>
+          <li xml:lang="tr">Bir bildirim alarmı için erteleme devre dışı bırakılmışsa iki düzenle düğmesi gösterilme sorunu düzeltildi.</li>
           <li xml:lang="uk">Якщо вимкнено відхилення для нагадування зі сповіщенням, у новій версії програма не показуватиме двох кнопок редагування.</li>
           <li xml:lang="zh-CN">如果禁用了通知提醒的“延迟”功能，则不要显示两个“编辑”按钮。</li>
         </ul>
@@ -633,7 +633,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -650,7 +650,7 @@
           <li xml:lang="pt-BR">Se uma recorrência for suprimida por horário de trabalho/feriados/exceção, suprima suas sub-repetições.</li>
           <li xml:lang="ru">Если повторение подавляется рабочим временем, праздниками или исключением, подавляются и его подповторы;</li>
           <li xml:lang="sl">Če je ponovitev izključena zaradi delovnega časa/praznikov/izjeme, izključi njene podponovitve.</li>
-          <li xml:lang="tr">If a recurrence is suppressed by work time/holidays/exception, suppress its sub-repetitions.</li>
+          <li xml:lang="tr">Bir yineleme, mesai saatleri/tatiller/istisnalar tarafından bastırılırsa alt yinelemeleri de bastırın.</li>
           <li xml:lang="uk">Якщо повторення придушено внаслідок збігу з параметрами робочого часу, вихідних та виключень, реалізовано придушення його проміжних повторень</li>
           <li xml:lang="zh-CN">如果通过工作时间/假期/例外情况抑制了重复事件，也抑制其子重复事件。</li>
           <li>Improvements and bug fixes to recurrence/work time/holidays calculations.</li>
@@ -666,7 +666,7 @@
           <li xml:lang="pt-BR">Melhorias e correções de erros nos cálculos de recorrência/tempo de trabalho/feriados.</li>
           <li xml:lang="ru">Улучшения и исправления ошибок в расчётах повторений, рабочего времени и праздников;</li>
           <li xml:lang="sl">Izboljšave in popravki napak pri izračunih ponavljanja/delovnega časa/praznikov.</li>
-          <li xml:lang="tr">Improvements and bug fixes to recurrence/work time/holidays calculations.</li>
+          <li xml:lang="tr">Yineleme/mesai saatleri/tatiller hesaplamalarında iyileştirmeler ve hata düzeltmeleri yapıldı.</li>
           <li xml:lang="uk">Удосконалення і виправлення вад при обчисленні повторень, робочого часу та вихідних.</li>
           <li xml:lang="zh-CN">改进了重复事件/工作时间/假期的计算功能，并修复了相关错误。</li>
           <li>Fix formatting of user messages which showed HTML tags.</li>
@@ -682,7 +682,7 @@
           <li xml:lang="pt-BR">Corrigida a formatação das mensagens do usuário que exibiam tags HTML.</li>
           <li xml:lang="ru">Исправлено форматирование пользовательских сообщений, в которых отображались HTML-теги;</li>
           <li xml:lang="sl">Popravljeno oblikovanje uporabniških sporočil, ki so prikazovala oznake HTML.</li>
-          <li xml:lang="tr">Fix formatting of user messages which showed HTML tags.</li>
+          <li xml:lang="tr">HTML künyelerini gösteren kullanıcı iletilerinin biçimlendirmesi düzeltildi.</li>
           <li xml:lang="uk">Виправлено форматування повідомлень користувача, у яких показано теґи HTML.</li>
           <li xml:lang="zh-CN">修复显示 HTML 标签的用户消息的格式。</li>
           <li>Distinguish between daily and minutely sub-repetitions in alarm calendar.</li>
@@ -698,7 +698,7 @@
           <li xml:lang="pt-BR">Diferenciar entre sub-repetições diárias e sub-repetições por minuto em um calendário de alarmes.</li>
           <li xml:lang="ru">Различия между ежедневными и ежеминутными подповторами в календаре будильников;</li>
           <li xml:lang="sl">V koledarju alarmov loči med dnevnimi in minutnimi podponovitvemi.</li>
-          <li xml:lang="tr">Distinguish between daily and minutely sub-repetitions in alarm calendar.</li>
+          <li xml:lang="tr">Alarm takviminde günlük ve dakikalık alt yinelemeler artık birbirinden ayrılıyor.</li>
           <li xml:lang="uk">Реалізовано відмінність між щоденними і щохвилинними проміжними повтореннями у календарі нагадувань.</li>
           <li xml:lang="zh-CN">在闹钟日历中区分每日和每分钟的子重复项。</li>
           <li>Only mark calendars as 'KeepFormat' if the user declines to update them.</li>
@@ -714,7 +714,7 @@
           <li xml:lang="pt-BR">Marcar os calendários como 'KeepFormat' somente se o usuário optar por não atualizá-los.</li>
           <li xml:lang="ru">Календари отмечаются как «Сохранить формат» только при отказе пользователя от их обновления;</li>
           <li xml:lang="sl">Koledarje označi kot "KeepFormat" samo, če uporabnik zavrne njihovo posodabljanje.</li>
-          <li xml:lang="tr">Only mark calendars as 'KeepFormat' if the user declines to update them.</li>
+          <li xml:lang="tr">Takvimleri yalnızca kullanıcı güncellemeyi reddederse “KeepFormat” (Biçimi Koru) olarak işaretleyin.</li>
           <li xml:lang="uk">Реалізовано позначення календарів як «KeepFormat», якщо користувач відхиляє їхнє оновлення.</li>
           <li xml:lang="zh-CN">只有在用户拒绝更新日历时，才将其标记为“保留格式”。</li>
         </ul>
@@ -738,7 +738,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -755,7 +755,7 @@
           <li xml:lang="pt-BR">Se um alarme for cancelado com atraso, não remove o evento se uma sub-repetição ainda estiver pendente.</li>
           <li xml:lang="ru">Если оповещение отменено с опозданием, не удалять событие, если подповторение ещё не наступило;</li>
           <li xml:lang="sl">Če je alarm preklican pozno, dogodka ne odstrani, če je še vedno treba izvesti podponovitev.</li>
-          <li xml:lang="tr">If an alarm is late-cancelled, don't remove the event if a sub-repetition is still due.</li>
+          <li xml:lang="tr">Bir alarm geç iptal edilirse bir alt yinelemenin zamanı henüz geçmemişse etkinliği kaldırmayın.</li>
           <li xml:lang="uk">Якщо нагадування скасовано пізно, програма не вилучатиме подію, якщо ще не прострочено проміжне повторення.</li>
           <li xml:lang="zh-CN">如果取消闹钟的时间较晚，且仍有子重复项应触发，则不要删除该事件。</li>
           <li>Fix infinite loop when alarms trigger, if they are read-only or if the calendar is non-writable.</li>
@@ -771,7 +771,7 @@
           <li xml:lang="pt-BR">Correção do loop infinito quando alarmes são acionados, se eles forem somente leitura ou se o calendário não for gravável.</li>
           <li xml:lang="ru">Исправлен бесконечный цикл при срабатывании будильников, если они доступны только для чтения или календарь защищён от записи;</li>
           <li xml:lang="sl">Odpravljena je neskončna zanka, ko se sprožijo alarmi, če so samo za branje ali če koledar ni mogoče zapisovati.</li>
-          <li xml:lang="tr">Fix infinite loop when alarms trigger, if they are read-only or if the calendar is non-writable.</li>
+          <li xml:lang="tr">Alarmlar saltokunur olduğunda veya takvim yazılamaz olduğunda tetiklenen alarmlardaki sonsuz döngü düzeltildi.</li>
           <li xml:lang="uk">Виправлено зациклювання при вмиканні нагадувань, якщо їхні записи призначено лише для читання або якщо запис до календарів неможливий.</li>
           <li xml:lang="zh-CN">修复在触发警报时出现的无限循环问题，这种情况发生在警报为只读或日历不可写时。</li>
           <li>In edit dialog, don't display high accuracy warning if start time is before now.</li>
@@ -787,7 +787,7 @@
           <li xml:lang="pt-BR">Na caixa de diálogo de edição, não exibir o aviso de alta precisão se a hora de início for anterior à hora atual.</li>
           <li xml:lang="ru">В диалоге редактирования не выводятся  предупреждение о высокой точности, если время начала раньше текущего;</li>
           <li xml:lang="sl">V pogovornem oknu za urejanje se opozorilo o visoki natančnosti ne prikaže, če je začetni čas pred zdajci.</li>
-          <li xml:lang="tr">In edit dialog, don't display high accuracy warning if start time is before now.</li>
+          <li xml:lang="tr">Düzenleme iletişim kutusunda, başlangıç zamanı şu andan önceyse yüksek doğruluk uyarısını göstermeyin.</li>
           <li xml:lang="uk">Усунено показ попередження про високу точність у вікні редагування, якщо час початку передує поточному.</li>
           <li xml:lang="zh-CN">在编辑对话框中，如果开始时间早于当前时间，则不要显示高精度警告。</li>
         </ul>
@@ -811,7 +811,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -828,7 +828,7 @@
           <li xml:lang="pt-BR">Remove o excesso de espaço na caixa de diálogo de Preferências.</li>
           <li xml:lang="ru">Удалены лишние пробелы в диалоге «Параметры»;</li>
           <li xml:lang="sl">Odstrani odvečni razmik v pogovornem oknu Nastavitve.</li>
-          <li xml:lang="tr">Remove excess spacing in Preferences dialog.</li>
+          <li xml:lang="tr">Tercihler iletişim kutusundaki aşırı boşluklar kaldırıldı.</li>
           <li xml:lang="uk">Вилучено зайві проміжки у вікні налаштувань.</li>
           <li xml:lang="zh-CN">在“首选项”对话框中移除多余的间距。</li>
         </ul>
@@ -851,7 +851,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -868,7 +868,7 @@
           <li xml:lang="pt-BR">Impede que as janelas de mensagens ocupem o foco do teclado quando forem exibidas.</li>
           <li xml:lang="ru">Запретить перехват фокуса ввода окнами сообщений при их появлении;</li>
           <li xml:lang="sl">Prepreči, da bi okna s sporočili prevzela fokus tipkovnice, ko se pojavijo.</li>
-          <li xml:lang="tr">Prevent message windows taking keyboard focus when they pop up.</li>
+          <li xml:lang="tr">Açılırken ileti pencerelerinin klavye odağını alması önlendi.</li>
           <li xml:lang="uk">Реалізовано запобігання перехопленню фокусування клавіатури при появі вікон повідомлень.</li>
           <li xml:lang="zh-CN">防止消息窗口弹出时获取键盘焦点。</li>
         </ul>
@@ -893,7 +893,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -910,7 +910,7 @@
           <li xml:lang="pt-BR">Implementa sistemas de áudio como plugins para permitir a seleção pelo usuário.</li>
           <li xml:lang="ru">Воспроизведение звука реализовано с использованием подключаемых модулей для их выбора пользователем;</li>
           <li xml:lang="sl">Implementira zvočne zaledne sisteme kot vtičnike, da omogoči uporabnikovo izbiro.</li>
-          <li xml:lang="tr">Implement audio backends as plugins to allow user selection.</li>
+          <li xml:lang="tr">Kullanıcı seçimine izin vermek için ses arka uçları eklenti olarak uygulandı.</li>
           <li xml:lang="uk">Реалізовано модулі обробки звуку як додатки, щоб їх міг вибирати користувач.</li>
           <li xml:lang="zh-CN">将音频后端实现为插件，以允许用户选择。</li>
           <li>Clean up time spin box appearance in some styles, e.g. Oxygen.</li>
@@ -925,7 +925,7 @@
           <li xml:lang="pt-BR">Limpeza da aparência da caixa de seleção de tempo de limpeza em alguns estilos, por exemplo, Oxygen.</li>
           <li xml:lang="ru">Исправлено отображение поля ввода времени в некоторых стилях оформления, например Oxygen;</li>
           <li xml:lang="sl">Čas čiščenja videza vrtljivega polja v nekaterih slogih, npr. Oxygen.</li>
-          <li xml:lang="tr">Clean up time spin box appearance in some styles, e.g. Oxygen.</li>
+          <li xml:lang="tr">Oksijen gibi bazı biçemlerde zaman değer değiştirici kutusunun görünümü temizlendi.</li>
           <li xml:lang="uk">Очищено вигляд лічильника часу у деяких стилях, наприклад Oxygen.</li>
           <li xml:lang="zh-CN">清理某些窗口样式 (例如 Oxygen 轻氧) 中时间微调框的外观。</li>
         </ul>
@@ -948,7 +948,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -964,7 +964,7 @@
           <li xml:lang="pt-BR">Corrigido o problema que fazia com que o KAlarm fosse encerrado antes de executar a restauração da sessão.</li>
           <li xml:lang="ru">Исправлено аварийное завершение KAlarm перед выполнением восстановления сеанса;</li>
           <li xml:lang="sl">Popravi je izhod KAlarma pred izvedbo obnovitve seje.</li>
-          <li xml:lang="tr">Fix KAlarm exiting before executing session restoration.</li>
+          <li xml:lang="tr">Oturum geri yüklemesi yürütülmeden K Alarm’ın kapanması düzeltildi.</li>
           <li xml:lang="uk">Виправлено вихід з KAlarm до виконання відновлення сеансу.</li>
           <li xml:lang="zh-CN">修复 KAlarm 在执行会话恢复前退出的问题。</li>
         </ul>
@@ -987,7 +987,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -1003,7 +1003,7 @@
           <li xml:lang="pt-BR">Corrigido o problema que mostra o ícone do KAlarm em branco na bandeja do sistema sob o XFCE.</li>
           <li xml:lang="ru">Исправлено отображение пустого значка KAlarm в системном лотке в XFCE;</li>
           <li xml:lang="sl">Popravi težavo, zaradi katere je bila v sistemski vrstici pod XFCE prikazana prazna ikona KAlarm.</li>
-          <li xml:lang="tr">Fix system tray showing blank KAlarm icon under XFCE.</li>
+          <li xml:lang="tr">XFCE altında sistem çekmecesinin boş K Alarm simgesi göstermesi düzeltildi.</li>
           <li xml:lang="uk">Виправлено помилку, пов'язану із тим, що у системному лотку було показано порожню піктограму KAlarm у XFCE.</li>
           <li xml:lang="zh-CN">修复在 XFCE 环境下系统托盘中 KAlarm 图标显示为空白的问题。</li>
         </ul>
@@ -1026,7 +1026,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -1042,7 +1042,7 @@
           <li xml:lang="pt-BR">Exibe janelas de alarme decoradas normais sobre aplicativos em tela cheia no X11.</li>
           <li xml:lang="ru">Вывод обычных окон сигналов с оформлением поверх полноэкранных приложений в X11;</li>
           <li xml:lang="sl">Prikaži običajna okrašena okna alarmov čez celozaslonske aplikacije na X11.</li>
-          <li xml:lang="tr">Show normal decorated alarm windows over full screen applications on X11.</li>
+          <li xml:lang="tr">X11 üzerinde tam ekran uygulamaların üzerinde normal pencereli alarm pencerelerini gösterin.</li>
           <li xml:lang="uk">Реалізовано показ звичайних декорованих вікон нагадувань у повноекранних програмах у X11.</li>
           <li xml:lang="zh-CN">在 X11 系统上，于全屏应用程序上方显示正常的装饰性警告窗口。</li>
           <li>Fix Akonadi functionality not working.</li>
@@ -1057,7 +1057,7 @@
           <li xml:lang="pt-BR">Corrigido problema com a funcionalidade do Akonadi.</li>
           <li xml:lang="ru">Исправлена неработающая функциональность Akonadi;</li>
           <li xml:lang="sl">Popravi napako, zaradi katere funkcionalnost Akonadija ne delujejo.</li>
-          <li xml:lang="tr">Fix Akonadi functionality not working.</li>
+          <li xml:lang="tr">Akonadi işlevselliğinin çalışmaması düzeltildi.</li>
           <li xml:lang="uk">Виправлено працездатність Akonadi.</li>
           <li xml:lang="zh-CN">修复 Akonadi 功能无法使用的问题。</li>
           <li>Make fade work each time a repeated sound alarm is played.</li>
@@ -1072,7 +1072,7 @@
           <li xml:lang="pt-BR">Faz com que o efeito de fade funcione sempre que um alarme sonoro repetido for reproduzido.</li>
           <li xml:lang="ru">Затухание звука при каждом воспроизведении повторяющегося сигнала;</li>
           <li xml:lang="sl">Naj se postopno utiša vsakič, ko se predvaja ponovljeni zvočni alarm.</li>
-          <li xml:lang="tr">Make fade work each time a repeated sound alarm is played.</li>
+          <li xml:lang="tr">Yinelenen sesli alarm her çalındığında sesin kademeli azalma/artma özelliğinin çalışmasını sağlayın.</li>
           <li xml:lang="uk">Реалізовано притлумлення кожного разу, коли повторно відтворюється звукове нагадування.</li>
           <li xml:lang="zh-CN">每次重复播放声音警报时，都让淡出效果生效。</li>
           <li>Fix Edit Alarm dialog error setting time if user's time zone is UTC.</li>
@@ -1087,7 +1087,7 @@
           <li xml:lang="pt-BR">Corrigido o erro na caixa de diálogo para editar alarme ao definir a hora quando o fuso horário do usuário é UTC.</li>
           <li xml:lang="ru">Исправлена ошибка в диалоге «Редактирование будильника» при установке времени, если часовой пояс пользователя — UTC;</li>
           <li xml:lang="sl">Popravi napako pri nastavitvi časa v pogovornem oknu za urejanje alarma, če je časovni pas uporabnika UTC.</li>
-          <li xml:lang="tr">Fix Edit Alarm dialog error setting time if user's time zone is UTC.</li>
+          <li xml:lang="tr">Kullanıcının saat dilimi UTC ise Alarmı Düzenle iletişim kutusundaki saat ayarlama hatası düzeltildi.</li>
           <li xml:lang="uk">Виправлено помилку встановлення часу у вікні редагування нагадування, якщо часовий пояс користувача — UTC.</li>
           <li xml:lang="zh-CN">修复“编辑提醒”对话框中，如果用户时区为协调世界时（UTC）时设置时间的错误。</li>
           <li>Fix build on FreeBSD if using MPV audio.</li>
@@ -1102,7 +1102,7 @@
           <li xml:lang="pt-BR">Corrigido problema de compilação no FreeBSD ao usar o áudio MPV.</li>
           <li xml:lang="ru">Исправлена сборка на FreeBSD при использовании звука MPV;</li>
           <li xml:lang="sl">Popravi gradnjo na FreeBSD, če uporablja MPV zvok.</li>
-          <li xml:lang="tr">Fix build on FreeBSD if using MPV audio.</li>
+          <li xml:lang="tr">MPV sesi kullanılıyorsa FreeBSD üzerindeki yapı düzeltildi.</li>
           <li xml:lang="uk">Виправлено збирання у FreeBSD, якщо для відтворення використано MPV.</li>
           <li xml:lang="zh-CN">修复使用 MPV 音频时 FreeBSD 上的构建问题。</li>
         </ul>
@@ -1125,7 +1125,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -1141,7 +1141,7 @@
           <li xml:lang="pt-BR">Exibir todas as opções de modo de execução na caixa de diálogo de Preferências.</li>
           <li xml:lang="ru">Отображение всех параметров режима запуска в диалоге «Параметры»;</li>
           <li xml:lang="sl">Prikaže vse možnosti načina delovanja v pogovornem oknu Nastavitve.</li>
-          <li xml:lang="tr">Show all Run Mode options in Preferences dialog.</li>
+          <li xml:lang="tr">Tercihler iletişim kutusunda tüm Çalıştırma Kipi seçeneklerini gösterin.</li>
           <li xml:lang="uk">Реалізовано показ усіх варіантів режиму запуску у вікні налаштувань.</li>
           <li xml:lang="zh-CN">在“首选项”对话框中显示所有运行模式选项。</li>
           <li>Provide build option to use VLC or MPV to play sounds.</li>
@@ -1156,7 +1156,7 @@
           <li xml:lang="pt-BR">Fornecer opção de compilação para usar o VLC ou o MPV para reproduzir sons.</li>
           <li xml:lang="ru">Добавление параметра сборки для выбора VLC или MPV для воспроизведения звуков;</li>
           <li xml:lang="sl">Zagotovi možnost gradnje za uporabo VLC ali MPV za predvajanje zvokov.</li>
-          <li xml:lang="tr">Provide build option to use VLC or MPV to play sounds.</li>
+          <li xml:lang="tr">Sesleri çalmak için VLC veya MPV kullanma yapı seçeneği sağlandı.</li>
           <li xml:lang="uk">Надано варіанти збирання з використанням VLC і MPV для відтворення звуків.</li>
           <li xml:lang="zh-CN">提供使用 VLC 或 MPV 播放声音的构建选项。</li>
           <li>Convert to Qt 6.5 QDateTime/QTimeZone changes.</li>
@@ -1171,7 +1171,7 @@
           <li xml:lang="pt-BR">Conversão para alterações de QDateTime/QTimeZone do Qt 6.5.</li>
           <li xml:lang="ru">Адаптация к изменениям QDateTime/QTimeZone в Qt 6.5;</li>
           <li xml:lang="sl">Pretvori spremembe QDateTime/QTimeZone v Qt 6.5.</li>
-          <li xml:lang="tr">Convert to Qt 6.5 QDateTime/QTimeZone changes.</li>
+          <li xml:lang="tr">Qt 6.5 QDateTime/QTimeZone değişikliklerine dönüştürüldü.</li>
           <li xml:lang="uk">Виконано перетворення за змінами QDateTime/QTimeZone у Qt 6.5.</li>
           <li xml:lang="zh-CN">转换为 Qt 6.5 的 QDateTime/QTimeZone 更改。</li>
         </ul>
@@ -1195,7 +1195,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -1211,7 +1211,7 @@
           <li xml:lang="pt-BR">Corrigida falha quando os temporizadores de alarme do kernel são suportados.</li>
           <li xml:lang="ru">Исправлено аварийное завершение при поддержке таймеров ядра;</li>
           <li xml:lang="sl">Odpravljeno je sesutje, če so podprti časovniki alarmov jedra.</li>
-          <li xml:lang="tr">Fix crash if kernel alarm timers are supported.</li>
+          <li xml:lang="tr">Çekirdek alarm zamanlayıcıları destekleniyorsa oluşan çökme düzeltildi.</li>
           <li xml:lang="uk">Усунено аварійне завершення роботи, якщо передбачено підтримку таймерів нагадування ядра.</li>
           <li xml:lang="zh-CN">修复内核支持提醒定时器时出现的崩溃问题。</li>
           <li>Fix Wake from Suspend not working when using RTC wake.</li>
@@ -1226,7 +1226,7 @@
           <li xml:lang="pt-BR">Corrigido o problema de ativação a partir da suspensão que não funcionava ao usar a ativação por RTC.</li>
           <li xml:lang="ru">Исправлена неработающая функция пробуждения из режима ожидания при использовании пробуждения по RTC;</li>
           <li xml:lang="sl">Popravi napako, zaradi katere prebujanje iz stanja mirovanja ne deluje pri uporabi RTC wake.</li>
-          <li xml:lang="tr">Fix Wake from Suspend not working when using RTC wake.</li>
+          <li xml:lang="tr">RTC uyanması kullanıldığında Uykudan Uyanmanın çalışmaması düzeltildi.</li>
           <li xml:lang="uk">Виправлено помилку, пов'язану із тим, що пробудження від сну не працювало при використанні пробудження RTC.</li>
           <li xml:lang="zh-CN">修复使用实时时钟唤醒时从挂起状态唤醒功能无法正常工作的问题。</li>
           <li>Display any audio error message immediately when using Try button while editing an alarm.</li>
@@ -1241,7 +1241,7 @@
           <li xml:lang="pt-BR">Exibir imediatamente qualquer mensagem de erro de áudio ao usar o botão "Testar" durante a edição de um alarme.</li>
           <li xml:lang="ru">Вывод сообщения об ошибках воспроизведения звука сразу при использовании кнопки «Проверить» во время редактирования будильника;</li>
           <li xml:lang="sl">Pri uporabi gumba Poskusi med urejanjem alarma takoj prikaže vsako zvočno sporočilo o napaki.</li>
-          <li xml:lang="tr">Display any audio error message immediately when using Try button while editing an alarm.</li>
+          <li xml:lang="tr">Bir alarmı düzenlerken Dene düğmesi kullanıldığında tüm ses hata iletilerini anında görüntüleyin.</li>
           <li xml:lang="uk">Реалізовано показ будь-яких звукових повідомлень про помилки при використання кнопки «Спробувати» при редагуванні нагадування.</li>
           <li xml:lang="zh-CN">在编辑闹钟时，如果使用“测试”按钮，应立即显示任何音频错误消息。</li>
           <li>Fix failure to play sound files using VLC on some systems.</li>
@@ -1256,7 +1256,7 @@
           <li xml:lang="pt-BR">Corrigido o problema que impedia a reprodução de arquivos de áudio usando o VLC em alguns sistemas.</li>
           <li xml:lang="ru">Исправлена ошибка воспроизведения звуковых файлов с помощью VLC в некоторых системах;</li>
           <li xml:lang="sl">Popravi napako pri predvajanju zvočnih datotek z uporabo VLC na nekaterih sistemih.</li>
-          <li xml:lang="tr">Fix failure to play sound files using VLC on some systems.</li>
+          <li xml:lang="tr">Bazı sistemlerde VLC kullanılarak ses dosyalarının çalınamaması hatası düzeltildi.</li>
           <li xml:lang="uk">Виправлено помилку з відтворенням звукових файлів при використанні VLC у деяких системах.</li>
           <li xml:lang="zh-CN">修复在某些系统上使用 VLC 播放声音文件失败的问题。</li>
         </ul>
@@ -1279,7 +1279,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -1295,7 +1295,7 @@
           <li xml:lang="pt-BR">Corrigido os alarmes de áudio repetidos que só tocam uma vez.</li>
           <li xml:lang="ru">Исправлено воспроизведение повторяющихся звуковых сигналов только один раз;</li>
           <li xml:lang="sl">Popravi napako, zaradi katere se ponavljajoči zvočni alarmi predvajajo samo enkrat.</li>
-          <li xml:lang="tr">Fix repeating audio alarms only playing once.</li>
+          <li xml:lang="tr">Yinelenen sesli alarmların yalnızca bir kez çalması düzeltildi.</li>
           <li xml:lang="uk">Виправлено помилку, пов'язану із тим, що повторювані звукові нагадування відтворювалися лише раз.</li>
           <li xml:lang="zh-CN">修复重复的音频提醒仅播放一次的问题。</li>
         </ul>
@@ -1318,7 +1318,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -1334,7 +1334,7 @@
           <li xml:lang="pt-BR">Uso do VLC em vez do libcanberra para reproduzir sons.</li>
           <li xml:lang="ru">Замена libcanberra на VLC для воспроизведения звуков;</li>
           <li xml:lang="sl">Za predvajanje zvokov uporabi VLC namesto libcanberre.</li>
-          <li xml:lang="tr">Use VLC instead of libcanberra to play sounds.</li>
+          <li xml:lang="tr">Sesleri çalmak için libcanberra yerine VLC kullanın.</li>
           <li xml:lang="uk">Реалізовано використання VLC замість libcanberra для відтворення звуків.</li>
           <li xml:lang="zh-CN">使用 VLC 而不是 libcanberra 来播放声音。</li>
         </ul>
@@ -1357,7 +1357,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -1373,7 +1373,7 @@
           <li xml:lang="pt-BR">Corrigido o problema que causava o fechamento inesperado do sistema após a edição de um novo alarme quando a verificação ortográfica estava ativada.</li>
           <li xml:lang="ru">Исправлено аварийное завершение при редактировании нового будильника, если включена проверка орфографии;</li>
           <li xml:lang="sl">Popravi sesutje po urejanju novega alarma, če je omogočeno preverjanje črkovanja.</li>
-          <li xml:lang="tr">Fix crash after editing new alarm if spell checking is enabled.</li>
+          <li xml:lang="tr">Yazım denetimi etkinleştirilmişse yeni alarm düzenlendikten sonraki çökme düzeltildi.</li>
           <li xml:lang="uk">Усунено аварійне завершення роботи після редагування нового нагадування, якщо увімкнено перевірку правопису.</li>
           <li xml:lang="zh-CN">修复在启用拼写检查的情况下编辑新闹钟后出现的崩溃问题。</li>
         </ul>
@@ -1398,7 +1398,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -1414,7 +1414,7 @@
           <li xml:lang="pt-BR">Exibir mensagem de erro caso ocorra algum problema ao tentar reproduzir um arquivo de áudio.</li>
           <li xml:lang="ru">Вывод сообщения об ошибке при неудачной попытке воспроизвести звуковой файл;</li>
           <li xml:lang="sl">Prikaže se sporočilo o napaki, če se pojavi napaka pri predvajanju zvočne datoteke.</li>
-          <li xml:lang="tr">Display error message if error occurs trying to play an audio file.</li>
+          <li xml:lang="tr">Bir ses dosyası çalınmaya çalışılırken hata oluşursa hata iletisi gösterin.</li>
           <li xml:lang="uk">Реалізовано показ повідомлення про помилку, якщо помилка сталася під час спроби відтворення звукового файла.</li>
           <li xml:lang="zh-CN">如果在尝试播放音频文件时发生错误，显示错误消息。</li>
         </ul>
@@ -1437,7 +1437,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -1453,7 +1453,7 @@
           <li xml:lang="pt-BR">Para garantir a segurança das threads, usar o libcanberra em vez do Phonon para reproduzir sons.</li>
           <li xml:lang="ru">Для воспроизведения звуков используется libcanberra вместо Phonon, что обеспечивает безопасность потоков;</li>
           <li xml:lang="sl">Uporabi libcanberra za predvajanje zvokov namesto Phonona za varnost niti.</li>
-          <li xml:lang="tr">Use libcanberra instead of Phonon to play sounds, for thread safety.</li>
+          <li xml:lang="tr">İş parçacığı güvenliği için sesleri çalarken Phonon yerine libcanberra kullanın.</li>
           <li xml:lang="uk">Реалізовано використання libcanberra замість Phonon для відтворення звуків для захисту потоків обробки.</li>
           <li xml:lang="zh-CN">为确保线程安全，使用 libcanberra 而非 Phonon 来播放声音。</li>
           <li>In Edit Alarm dialog, allow save if Set Volume checkbox is toggled.</li>
@@ -1468,7 +1468,7 @@
           <li xml:lang="pt-BR">Na caixa de diálogo para editar alarme, permitir salvar se a caixa de seleção para definir volume estiver marcada.</li>
           <li xml:lang="ru">В диалоге «Редактирование будильника» разрешено сохранение при переключении флажка «Настроить громкость»;</li>
           <li xml:lang="sl">V pogovornem oknu Urejanje alarma dovoli shranjevanje, če je potrditveno polje Nastavi glasnost preklopljeno.</li>
-          <li xml:lang="tr">In Edit Alarm dialog, allow save if Set Volume checkbox is toggled.</li>
+          <li xml:lang="tr">Alarmı Düzenle iletişim kutusunda, Ses Düzeyini Ayarla onay kutusu işaretlenmişse kaydetmeye izin verin.</li>
           <li xml:lang="uk">У вікні редагування нагадування уможливлено збереження, якщо позначено пункт «Встановити гучність».</li>
           <li xml:lang="zh-CN">在“编辑提醒”对话框中，如果“设置音量”复选框被切换，则允许保存。</li>
         </ul>
@@ -1491,7 +1491,7 @@
         <p xml:lang="pt-BR">Descrição da versão</p>
         <p xml:lang="ru">Описание выпуска</p>
         <p xml:lang="sl">Opis izdaje</p>
-        <p xml:lang="tr">Release description</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
@@ -1507,7 +1507,7 @@
           <li xml:lang="pt-BR">Conversão para o Qt6 / KDE Frameworks 6.</li>
           <li xml:lang="ru">Переход на Qt6 и KDE Frameworks 6;</li>
           <li xml:lang="sl">Pretvori v Qt6 / KDE Frameworks 6.</li>
-          <li xml:lang="tr">Convert to Qt6 / KDE Frameworks 6.</li>
+          <li xml:lang="tr">Qt6 / KDE Frameworks 6 geçişi yapıldı.</li>
           <li xml:lang="uk">Перехід на Qt6 / KDE Frameworks 6.</li>
           <li xml:lang="zh-CN">转换为 Qt6 / KDE 程序框架 6。</li>
           <li>Enable wake-from-suspend for multiple alarms if user kernel alarm timers are supported (Linux only).</li>
@@ -1522,7 +1522,7 @@
           <li xml:lang="pt-BR">Habilita a função de despertar a partir da suspensão para múltiplos alarmes se os temporizadores de alarme do kernel do usuário forem suportados (somente Linux).</li>
           <li xml:lang="ru">Задействовано пробуждение из спящего режима для нескольких будильников при поддержке таймеров ядра пользователя (только для Linux).</li>
           <li xml:lang="sl">Omogoči wake-from-suspend za več alarmov, če so podprti časovniki alarmov uporabniškega jedra (samo za Linux).</li>
-          <li xml:lang="tr">Enable wake-from-suspend for multiple alarms if user kernel alarm timers are supported (Linux only).</li>
+          <li xml:lang="tr">Kullanıcı çekirdek alarm zamanlayıcıları destekleniyorsa birden fazla alarm için uykudan uyanmayı etkinleştirin (yalnızca Linux).</li>
           <li xml:lang="uk">Уможливлено пробудження зі сну для кількох нагадувань, якщо передбачено підтримку таймерів нагадувань ядра користувача (лише для Linux).</li>
           <li xml:lang="zh-CN">如果用户内核定时器受支持 (仅限 Linux)，则为多个闹钟启用从挂起状态唤醒功能。</li>
           <li>Set units for reminder and late-cancel depending on date-only selection in Edit Alarm Template dialog.</li>
@@ -1537,7 +1537,7 @@
           <li xml:lang="pt-BR">Define as unidades para lembrete e cancelamento tardio com base na seleção de data na caixa de diálogo para editar modelo de alarme.</li>
           <li xml:lang="ru">Выбор единиц измерения для напоминания и отмены с опозданием в зависимости от выбора только даты в диалоге «Изменение шаблона будильника»;</li>
           <li xml:lang="sl">Nastavi enote za opomnik in pozni preklic glede na izbiro samo datuma v pogovornem oknu Urejanje predloge alarma.</li>
-          <li xml:lang="tr">Set units for reminder and late-cancel depending on date-only selection in Edit Alarm Template dialog.</li>
+          <li xml:lang="tr">Alarm Şablonunu Düzenle iletişim kutusunda yalnızca tarih seçimine bağlı olarak anımsatıcı ve geç iptal için birimler ayarlayın.</li>
           <li xml:lang="uk">Встановлення одиниці вимірювання для нагадування та пізнього скасування залежно від вибору лише дати в діалоговому вікні «Редагування шаблону нагадування».</li>
           <li xml:lang="zh-CN">在“编辑提醒模板”对话框中，根据仅日期选择设置提醒和逾期取消的单位。</li>
           <li>Remove migration of pre-Akonadi KResources calendar configuration.</li>
@@ -1552,7 +1552,7 @@
           <li xml:lang="pt-BR">Remove a migração da configuração de calendário KResources pré-Akonadi.</li>
           <li xml:lang="ru">Удалена миграцию конфигурации календаря KResources, используемого до Akonadi;</li>
           <li xml:lang="sl">Odstrani selitev konfiguracije koledarja KResources pred Akonadijem.</li>
-          <li xml:lang="tr">Remove migration of pre-Akonadi KResources calendar configuration.</li>
+          <li xml:lang="tr">Akonadi öncesi KResources takvim yapılandırması geçişi kaldırıldı.</li>
           <li xml:lang="uk">Вилучено перенесення налаштувань календаря до Akonadi, KResources.</li>
           <li xml:lang="zh-CN">移除 Akonadi 之前的 KResources 日历配置迁移。</li>
         </ul>
