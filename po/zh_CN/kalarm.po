@@ -383,7 +383,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Enter text to appear before the person's name in the alarm message, "
 "including any necessary trailing spaces."
-msgstr "可在闹钟消息中的人名前显示文字，包括尾部所有的必要空格。"
+msgstr "可在闹钟消息中的人名前显示文本，包括尾部所有的必要空格。"
 
 #: birthdaydlg.cpp:94
 #, kde-format
@@ -397,7 +397,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Enter text to appear after the person's name in the alarm message, including "
 "any necessary leading spaces."
-msgstr "可在闹钟消息中的人名后显示文字，包括首部所有的必要空格。"
+msgstr "可在闹钟消息中的人名后显示文本，包括首部所有的必要空格。"
 
 #: birthdaydlg.cpp:105
 #, kde-format
@@ -1164,7 +1164,7 @@ msgstr "在系统托盘提示中显示距离每个闹钟到期时间的所剩时
 #, kde-format
 msgctxt "@label"
 msgid "Time-to-alarm prefix in system tray tooltip"
-msgstr "在系统托盘提示中，为显示所剩时间的闹钟前添加文字"
+msgstr "在系统托盘提示中，为显示所剩时间的闹钟前添加文本"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:201 prefdlg.cpp:2030
@@ -1173,7 +1173,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Enter the text to be displayed in front of the time until the alarm, in the "
 "system tray tooltip."
-msgstr "输入在系统托盘提醒中，显示于闹钟所剩时间之前的文字。"
+msgstr "输入在系统托盘提醒中，显示于闹钟所剩时间之前的文本。"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:206
@@ -4662,7 +4662,7 @@ msgstr "无法读出消息"
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
-msgstr "文字转语音子系统不可用"
+msgstr "文本转语音子系统不可用"
 
 #: messagenotification.cpp:519
 #, kde-format
@@ -7955,7 +7955,7 @@ msgstr ""
 "静默显示。</item><item><interface>%2</interface>：发出简单的“哔”声。</"
 "item><item><interface>%3</interface>：播放音频文件，此项会弹出一个提示框让您"
 "选择文件并设置播放选项。(使用通知时无法选择此项) </item><item><interface>%4</"
-"interface>：语音播报信息文本。(此选项需安装 Qt 文字转语音功能)</item></"
+"interface>：语音播报信息文本。(此选项需安装 Qt 文本转语音功能)</item></"
 "list></para>"
 
 #: soundpicker.cpp:88
