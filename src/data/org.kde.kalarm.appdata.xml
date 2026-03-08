@@ -235,7 +235,7 @@
       <li xml:lang="ta">விருப்பமான உரையையோ, குறிப்பிட்ட கட்டளையின் விளைவையோ, ஓர் கோப்பின் உள்ளடக்கத்தையோ அலாரங்களில் காட்டலாம்.</li>
       <li xml:lang="tr">Alarmları kendi metin iletinizle, bir komut tarafından üretilen metinle veya metin veya görsel dosyasıyla gösterin.</li>
       <li xml:lang="uk">показ нагадувань з визначеним вами текстовим повідомленням, текстом, який створюється вказаною вами командою, або файлом зображення;</li>
-      <li xml:lang="zh-CN">显示自定义闹钟消息。消息可以是命令输出、一段文字或一张图片。</li>
+      <li xml:lang="zh-CN">显示自定义闹钟消息。消息可以是命令输出、一段文本或一张图片。</li>
       <li xml:lang="zh-TW">用您自己寫的文字訊息，或是某個指令的輸出，或是文字檔，或是影像檔來顯示鬧鐘。</li>
       <li>Audible alarm using a sound file</li>
       <li xml:lang="ar">المنبّهات الصّوتيّة باستخدام ملفّ صوت</li>
