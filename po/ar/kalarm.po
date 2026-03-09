@@ -2852,7 +2852,7 @@ msgid ""
 "Enter the addresses of the email recipients. Separate multiple addresses by "
 "commas or semicolons."
 msgstr ""
-"أدخِل عناوين مستلمي البريد الإلكتروني. افصل العناوين المتعددّة بفواصل أو فواصل "
+"أدخِل عناوين مستلمي البريد الإلكتروني. افصل العناوين المتعددة بفواصل أو فواصل "
 "منقوطة."
 
 #: editdlgtypes.cpp:1216
