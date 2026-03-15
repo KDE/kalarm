@@ -535,6 +535,7 @@
           <li xml:lang="ia">Corrige le bloco de evalutation del alarmas recurrente de solo data quando le tempore de initio del die es non zero.</li>
           <li xml:lang="it">Correzione del blocco durante la valutazione di avvisi ricorrenti senza orario quando l'ora di inizio della giornata non è zero.</li>
           <li xml:lang="ka">გასწორდა გაჭედვა მხოლოდ თარიღის მქონე განგაშებისთვის, როცა დაწყების დღე ნულოვანი არაა.</li>
+          <li xml:lang="nl">Los het probleem op dat de evaluatie van terugkerende alarmen met alleen een datum vastloopt wanneer de begintijd van de dag niet nul is.</li>
           <li xml:lang="pt-BR">Corrigido o travamento na avaliação de alarmes recorrentes que consideram apenas a data quando o horário de início do dia é diferente de zero.</li>
           <li xml:lang="ru">Исправлено зависание при вычислении повторяющихся ежедневных сигналов с ненулевым временем начала дня;</li>
           <li xml:lang="sl">Odpravljena težava z zatikanjem pri ocenjevanju ponavljajočih se alarmov samo za datum, ko čas začetka dneva ni enak nič.</li>
@@ -551,6 +552,7 @@
           <li xml:lang="ia">Corrige le bloco de evalutation del proxime tempore  de recurrentia per zonas de tempore con hora estive.</li>
           <li xml:lang="it">Correzione del blocco durante la valutazione del successivo orario di ricorrenza per i fusi orari con ora legale.</li>
           <li xml:lang="ka">გასწორდა გაჭედვა შემდეგი გაშვების დროისთვის იმ დროის სარტყლებისთვის, რომლებიც საათს სწევენ.</li>
+          <li xml:lang="nl">Los het probleem op dat vastloopt bij het evalueren van de volgende herhalingstijd voor tijdzones met zomertijd.</li>
           <li xml:lang="pt-BR">Corrigido o travamento na avaliação do próximo horário de recorrência para fusos horários com horário de verão.</li>
           <li xml:lang="ru">Исправлено зависание при вычислении времени следующего повторения для часовых поясов с переходом на летнее время;</li>
           <li xml:lang="sl">Odpravljeno je zatikanje pri ocenjevanju naslednjega časa ponovitve za časovne pasove z zimskim časom.</li>
@@ -591,6 +593,7 @@
           <li xml:lang="ia">Preveni multiple dialogos de Differe Alarmas per le mesme evento.</li>
           <li xml:lang="it">Prevenzione di finestre di rinvio avviso multiple per lo stesso evento.</li>
           <li xml:lang="ka">ერთი და იმავე მოვლენისთვის მაღვიძარას გადადების მრავალი დიალოგური ფანჯრის თავიდან აცილება.</li>
+          <li xml:lang="nl">Voorkom dat er meerdere dialoogvensters voor het uitstellen van een alarm voor dezelfde gebeurtenis worden weergegeven.</li>
           <li xml:lang="pt-BR">Impedir a exibição de várias caixas de diálogo "Adiar alarme" para o mesmo evento.</li>
           <li xml:lang="ru">Запрещено появление нескольких окон отложенного сигнала для одного события;</li>
           <li xml:lang="sl">Prepreči več pogovornih oken za odložitev alarma za isti dogodek.</li>
@@ -607,6 +610,7 @@
           <li xml:lang="ia">Si Defere es dishabilitate per un alarma de notification,non monstra duo buttones de Editar.</li>
           <li xml:lang="it">Se il rinvio è disabilito per un avviso di notifica, non mostrare due pulsanti di modifica.</li>
           <li xml:lang="ka">თუ შეტყობინების განგაშისთვის გადადება გამორთულია, ორი ჩასწორების ღილაკი ნაჩვენები არ იქნება.</li>
+          <li xml:lang="nl">Als 'Uitstellen' is uitgeschakeld voor een melding, toon dan geen twee knoppen Bewerken.</li>
           <li xml:lang="pt-BR">Se a opção Adiar estiver desativada para um alarme de notificação, não mostrar dois botões de Editar.</li>
           <li xml:lang="ru">Если для оповещения отложенный запуск отключён, более вы выводятся две кнопки «Изменить»;</li>
           <li xml:lang="sl">Če je možnost Odloži za obvestilni alarm onemogočena, ne prikaže dveh gumbov za urejanje.</li>
@@ -647,6 +651,7 @@
           <li xml:lang="ia">Si un recurrentia es supprimite per tempore de labor/ferias/exception, supprime su sub-repetitiones.</li>
           <li xml:lang="it">Se la ricorrenza è rimossa in base a orari di lavoro/festività/eccezioni, ne sono rimosse anche le sotto-ripetizioni.</li>
           <li xml:lang="ka">თუ განმეორება სამუშაო დროით, უქმეებით ან გამონაკლისით შეჩერებულია, მისი ქვე-გამეორებებიც შეჩერდება.</li>
+          <li xml:lang="nl">Als een herhaling wordt onderdrukt door werktijd/vakantie/uitzondering, onderdruk dan ook de bijbehorende subherhalingen.</li>
           <li xml:lang="pt-BR">Se uma recorrência for suprimida por horário de trabalho/feriados/exceção, suprima suas sub-repetições.</li>
           <li xml:lang="ru">Если повторение подавляется рабочим временем, праздниками или исключением, подавляются и его подповторы;</li>
           <li xml:lang="sl">Če je ponovitev izključena zaradi delovnega časa/praznikov/izjeme, izključi njene podponovitve.</li>
