@@ -938,6 +938,7 @@
           <li xml:lang="ia">Netta apparentia de cassa de selection in alcun stilos,p.ex. Oxygen.</li>
           <li xml:lang="it">Pulizia dell'aspetto della casella numerica dell'orario in alcuni stili, ad es Oxygen.</li>
           <li xml:lang="ka">გასწორდა დროის გადახვევის ველის გარეგნობა ზოგიერთ სტილში. მაგ: Oxygen.</li>
+          <li xml:lang="nl">Het uiterlijk van de draaischakelaar kan in sommige modellen, bijv. Oxygen, worden aangepast.</li>
           <li xml:lang="pt-BR">Limpeza da aparência da caixa de seleção de tempo de limpeza em alguns estilos, por exemplo, Oxygen.</li>
           <li xml:lang="ru">Исправлено отображение поля ввода времени в некоторых стилях оформления, например Oxygen;</li>
           <li xml:lang="sl">Čas čiščenja videza vrtljivega polja v nekaterih slogih, npr. Oxygen.</li>
@@ -978,6 +979,7 @@
           <li xml:lang="ia">Corrige que KAlarm exi ante executar le restauration de session.</li>
           <li xml:lang="it">Correzione della chiusura di KAlarm prima di eseguire il ripristino della sessione.</li>
           <li xml:lang="ka">გასწორდა KAlarm-ის გამოსვლა სესიის აღდგენის შესრულებამდე.</li>
+          <li xml:lang="nl">Los het probleem op dat KAlarm afsluit voordat de sessieherstelprocedure is uitgevoerd.</li>
           <li xml:lang="pt-BR">Corrigido o problema que fazia com que o KAlarm fosse encerrado antes de executar a restauração da sessão.</li>
           <li xml:lang="ru">Исправлено аварийное завершение KAlarm перед выполнением восстановления сеанса;</li>
           <li xml:lang="sl">Popravi je izhod KAlarma pred izvedbo obnovitve seje.</li>
@@ -1018,6 +1020,7 @@
           <li xml:lang="ia">Corrige que le tabuliero de systema monstra icone vacue de KAlarm infra XFCE.</li>
           <li xml:lang="it">Correzione dell'icona vuota di KAlarm nel vassoio di sistema in XFCE.</li>
           <li xml:lang="ka">გასწორდა სისტემურ პანელში KAlarm-ის ცარიელი ხატულას გამოჩენა XFCE-ის გარემოში.</li>
+          <li xml:lang="nl">Los het probleem op dat het KAlarm-pictogram in het systeemvak van XFCE leeg blijft.</li>
           <li xml:lang="pt-BR">Corrigido o problema que mostra o ícone do KAlarm em branco na bandeja do sistema sob o XFCE.</li>
           <li xml:lang="ru">Исправлено отображение пустого значка KAlarm в системном лотке в XFCE;</li>
           <li xml:lang="sl">Popravi težavo, zaradi katere je bila v sistemski vrstici pod XFCE prikazana prazna ikona KAlarm.</li>
@@ -1058,6 +1061,7 @@
           <li xml:lang="ia">Monstra fenestras de alarma decorate normal sur applicationes de schermo plen sur X11.</li>
           <li xml:lang="it">Mostra finestre di avviso con decorazione normale sopra applicazioni a schermo intero su X11.</li>
           <li xml:lang="ka">X11-ზე სრულეკრანიანი აპლიკაციების ზემოთ ჩვეულებრივი დეკორირებული განგაშის ფანჯრების ჩვენება.</li>
+          <li xml:lang="nl">Toon normale, gedecoreerde alarmvensters over toepassingen op volledig scherm in X11.</li>
           <li xml:lang="pt-BR">Exibe janelas de alarme decoradas normais sobre aplicativos em tela cheia no X11.</li>
           <li xml:lang="ru">Вывод обычных окон сигналов с оформлением поверх полноэкранных приложений в X11;</li>
           <li xml:lang="sl">Prikaži običajna okrašena okna alarmov čez celozaslonske aplikacije na X11.</li>
@@ -1074,6 +1078,7 @@
           <li xml:lang="ia">Corrige functionalitate de Akonadi non functiionante.</li>
           <li xml:lang="it">Correzione delle funzionalità Akonadi, non funzionanti.</li>
           <li xml:lang="ka">გასწორდა Akonadi-ის ფუნქციონალის შეფერხება.</li>
+          <li xml:lang="nl">Repareer de niet-werkende functionaliteit van Akonadi.</li>
           <li xml:lang="pt-BR">Corrigido problema com a funcionalidade do Akonadi.</li>
           <li xml:lang="ru">Исправлена неработающая функциональность Akonadi;</li>
           <li xml:lang="sl">Popravi napako, zaradi katere funkcionalnost Akonadija ne delujejo.</li>
@@ -1090,6 +1095,7 @@
           <li xml:lang="ia">Face pallidir labor cata vice que un alarma de sono repetite es sonate.</li>
           <li xml:lang="it">La sfumatura del suono ora funziona quando un avviso sonoro ripetuto viene riprodotto.</li>
           <li xml:lang="ka">გასწორდა ხმის თანდათანობითი მომატების ფუნქციონალი განმეორებადი ხმოვანი განგაშის ყოველი დაკვრისას.</li>
+          <li xml:lang="nl">Zorg ervoor dat het geluid van een alarm dat herhaaldelijk wordt afgespeeld, geleidelijk vervaagt.</li>
           <li xml:lang="pt-BR">Faz com que o efeito de fade funcione sempre que um alarme sonoro repetido for reproduzido.</li>
           <li xml:lang="ru">Затухание звука при каждом воспроизведении повторяющегося сигнала;</li>
           <li xml:lang="sl">Naj se postopno utiša vsakič, ko se predvaja ponovljeni zvočni alarm.</li>
@@ -1106,6 +1112,7 @@
           <li xml:lang="ia">Corrige error de dialogo de Modifica Alarma assignante tempore si le fuso horari del usator è UTC.</li>
           <li xml:lang="it">Correzione dell'errore nella finestra Modifica avviso all'impostazione dell'orario se il fuso orario dell'utente è UTC.</li>
           <li xml:lang="ka">გასწორდა განგაშის ჩასწორების დიალოგში დროის დაყენების შეცდომა, როდესაც მომხმარებლის დროის სარტყელი UTC-ია.</li>
+          <li xml:lang="nl">Los de fout op in het dialoogvenster 'Alarm bewerken' bij het instellen van de tijd als de tijdzone van de gebruiker UTC is.</li>
           <li xml:lang="pt-BR">Corrigido o erro na caixa de diálogo para editar alarme ao definir a hora quando o fuso horário do usuário é UTC.</li>
           <li xml:lang="ru">Исправлена ошибка в диалоге «Редактирование будильника» при установке времени, если часовой пояс пользователя — UTC;</li>
           <li xml:lang="sl">Popravi napako pri nastavitvi časa v pogovornem oknu za urejanje alarma, če je časovni pas uporabnika UTC.</li>
@@ -1122,6 +1129,7 @@
           <li xml:lang="ia">Corrige le construction sur FreeBSD si uante audio MPV.</li>
           <li xml:lang="it">Correzione della compilazione su FreeBSD se si usa l'audio via MPV.</li>
           <li xml:lang="ka">გასწორდა FreeBSD-ზე აგების პროცესი MPV აუდიოს გამოყენებისას.</li>
+          <li xml:lang="nl">Los het probleem op met het bouwsel op FreeBSD als MPV-audio wordt gebruikt.</li>
           <li xml:lang="pt-BR">Corrigido problema de compilação no FreeBSD ao usar o áudio MPV.</li>
           <li xml:lang="ru">Исправлена сборка на FreeBSD при использовании звука MPV;</li>
           <li xml:lang="sl">Popravi gradnjo na FreeBSD, če uporablja MPV zvok.</li>
@@ -1162,6 +1170,7 @@
           <li xml:lang="ia">Monstra omne optiones de Modo de Executar in dialogo de Preferentias.</li>
           <li xml:lang="it">Mostra tutte le opzioni delle Modalità di esecuzione nella finestra delle preferenze.</li>
           <li xml:lang="ka">გასწორდა პარამეტრების დიალოგში გაშვების რეჟიმის ყველა ვარიანტის ჩვენება.</li>
+          <li xml:lang="nl">Toon alle opties voor de uitvoeringsmodus in het dialoogvenster Voorkeuren.</li>
           <li xml:lang="pt-BR">Exibir todas as opções de modo de execução na caixa de diálogo de Preferências.</li>
           <li xml:lang="ru">Отображение всех параметров режима запуска в диалоге «Параметры»;</li>
           <li xml:lang="sl">Prikaže vse možnosti načina delovanja v pogovornem oknu Nastavitve.</li>
@@ -1178,6 +1187,7 @@
           <li xml:lang="ia">Forni optiones de construer per usar VLC o MPV per reproducer sonos.</li>
           <li xml:lang="it">Fornita un'opzione di compilazione per usare VLC o MPV per riprodurre suoni.</li>
           <li xml:lang="ka">დაემატა აგების პარამეტრი ხმების დასაკვრელად VLC-ის, ან MPV-ის გამოსაყენებლად.</li>
+          <li xml:lang="nl">Bied de bouwoptie om via VLC of MPV geluiden af ​​te spelen.</li>
           <li xml:lang="pt-BR">Fornecer opção de compilação para usar o VLC ou o MPV para reproduzir sons.</li>
           <li xml:lang="ru">Добавление параметра сборки для выбора VLC или MPV для воспроизведения звуков;</li>
           <li xml:lang="sl">Zagotovi možnost gradnje za uporabo VLC ali MPV za predvajanje zvokov.</li>
@@ -1194,6 +1204,7 @@
           <li xml:lang="ia">Converte a Qt 6.5 modificationes de QDateTime/QTimeZone .</li>
           <li xml:lang="it">Conversione alle modifiche di QDateTime/QTimeZone in Qt 6.5.</li>
           <li xml:lang="ka">განხორციელდა გადასვლა Qt 6.5-ის QDateTime-ის, ან QTimeZone-ის ცვლილებებზე.</li>
+          <li xml:lang="nl">Converteren naar wijzigingen in Qt 6.5 QDateTime/QTimeZone.</li>
           <li xml:lang="pt-BR">Conversão para alterações de QDateTime/QTimeZone do Qt 6.5.</li>
           <li xml:lang="ru">Адаптация к изменениям QDateTime/QTimeZone в Qt 6.5;</li>
           <li xml:lang="sl">Pretvori spremembe QDateTime/QTimeZone v Qt 6.5.</li>
@@ -1235,6 +1246,7 @@
           <li xml:lang="ia">Corrige fracasso si chronometros (timers) de alarma de kernel es supportate.</li>
           <li xml:lang="it">Correzione di un blocco quando i timer di avviso del kernel sono supportati.</li>
           <li xml:lang="ka">გასწორდა პროგრამის ავარიული გათიშვა, თუ ბირთვის განგაშის ტაიმერების, ან მათი ფუნქციონალის მხარდაჭერა არსებობს.</li>
+          <li xml:lang="nl">Verhelp de crash als kernel-alarmtimers worden ondersteund.</li>
           <li xml:lang="pt-BR">Corrigida falha quando os temporizadores de alarme do kernel são suportados.</li>
           <li xml:lang="ru">Исправлено аварийное завершение при поддержке таймеров ядра;</li>
           <li xml:lang="sl">Odpravljeno je sesutje, če so podprti časovniki alarmov jedra.</li>
@@ -1251,6 +1263,7 @@
           <li xml:lang="ia">Corrige si Evelia ex Suspende non functiona quando on usa un evelia RTC.</li>
           <li xml:lang="it">Correzione della riattivazione dalla sospensione che non funzionava quando si usavano una riattivazione RTC.</li>
           <li xml:lang="ka">გასწორდა ძილის რეჟიმიდან გაღვიძების, ან RTC-ით გაღვიძების ფუნქციონალის შეფერხება.</li>
+          <li xml:lang="nl">Het probleem dat het ontwaken uit de slaapstand niet werkt bij gebruik van RTC-wake is opgelost.</li>
           <li xml:lang="pt-BR">Corrigido o problema de ativação a partir da suspensão que não funcionava ao usar a ativação por RTC.</li>
           <li xml:lang="ru">Исправлена неработающая функция пробуждения из режима ожидания при использовании пробуждения по RTC;</li>
           <li xml:lang="sl">Popravi napako, zaradi katere prebujanje iz stanja mirovanja ne deluje pri uporabi RTC wake.</li>
@@ -1267,6 +1280,7 @@
           <li xml:lang="ia">Monstra ulle message de error audio immediatemente  quando on usa Essaya button durante editar un alarma.</li>
           <li xml:lang="it">Mostra un messaggio di errore audio immediatamente quando si usa il pulsante Prova mente si modifica un avviso.</li>
           <li xml:lang="ka">გამოჩნდება ნებისმიერი აუდიო შეცდომის შეტყობინება, „მოსინჯვის“ ღილაკის გამოყენებისას განგაშის ჩასწორების, ან მისი პარამეტრების შეცვლის დროს.</li>
+          <li xml:lang="nl">Geef eventuele audiofoutmeldingen direct weer wanneer u de knop 'Probeer' gebruikt tijdens het bewerken van een alarm.</li>
           <li xml:lang="pt-BR">Exibir imediatamente qualquer mensagem de erro de áudio ao usar o botão "Testar" durante a edição de um alarme.</li>
           <li xml:lang="ru">Вывод сообщения об ошибках воспроизведения звука сразу при использовании кнопки «Проверить» во время редактирования будильника;</li>
           <li xml:lang="sl">Pri uporabi gumba Poskusi med urejanjem alarma takoj prikaže vsako zvočno sporočilo o napaki.</li>
@@ -1283,6 +1297,7 @@
           <li xml:lang="ia">Corrige fallimento a reproducer files de sono usante VLC sur alcun systemas.</li>
           <li xml:lang="it">Correzione dell'impossibilità di riprodurre file audio usando VLC su alcuni sistemi.</li>
           <li xml:lang="ka">გასწორდა ზოგიერთ სისტემაზე ხმის ფაილების VLC-ის გამოყენებით დაკვრა.</li>
+          <li xml:lang="nl">Oplossing voor het probleem dat op sommige systemen geen geluidsbestanden meer afgespeeld konden worden met VLC.</li>
           <li xml:lang="pt-BR">Corrigido o problema que impedia a reprodução de arquivos de áudio usando o VLC em alguns sistemas.</li>
           <li xml:lang="ru">Исправлена ошибка воспроизведения звуковых файлов с помощью VLC в некоторых системах;</li>
           <li xml:lang="sl">Popravi napako pri predvajanju zvočnih datotek z uporabo VLC na nekaterih sistemih.</li>
@@ -1323,6 +1338,7 @@
           <li xml:lang="ia">Corrige repeter alarmas audio solmente reproducente un vice.</li>
           <li xml:lang="it">Correzione della ripetizione di avvisi audio riprodotti una sola vola.</li>
           <li xml:lang="ka">გასწორდა განმეორებადი ხმოვანი განგაშის მხოლოდ ერთხელ დაკვრა.</li>
+          <li xml:lang="nl">Los het probleem op dat herhaalde audioalarmen slechts één keer worden afgespeeld.</li>
           <li xml:lang="pt-BR">Corrigido os alarmes de áudio repetidos que só tocam uma vez.</li>
           <li xml:lang="ru">Исправлено воспроизведение повторяющихся звуковых сигналов только один раз;</li>
           <li xml:lang="sl">Popravi napako, zaradi katere se ponavljajoči zvočni alarmi predvajajo samo enkrat.</li>
@@ -1363,6 +1379,7 @@
           <li xml:lang="ia">Usa VLC in loco de libcanberra per reproducer sonos. </li>
           <li xml:lang="it">Usa VLC invece di libcanberra per riprodurre i suoni.</li>
           <li xml:lang="ka">დაემატა ხმების დასაკვრელად libcanberra-ს ნაცვლად VLC-ის გამოყენება.</li>
+          <li xml:lang="nl">Gebruik VLC in plaats van libcanberra om geluiden af ​​te spelen.</li>
           <li xml:lang="pt-BR">Uso do VLC em vez do libcanberra para reproduzir sons.</li>
           <li xml:lang="ru">Замена libcanberra на VLC для воспроизведения звуков;</li>
           <li xml:lang="sl">Za predvajanje zvokov uporabi VLC namesto libcanberre.</li>
@@ -1403,6 +1420,7 @@
           <li xml:lang="ia">Corrige fracasso post editar nove alarma si controlo  orthographic es habilitate.</li>
           <li xml:lang="it">Correzione di un blocco dopo la modifica di un nuovo avviso se il correttore ortografico è abilitato.</li>
           <li xml:lang="ka">გასწორდა პროგრამის ავარიული გათიშვა ახალი განგაშის ჩასწორების შემდეგ, თუ მართლწერის შემოწმება ჩართულია.</li>
+          <li xml:lang="nl">Los het probleem op dat de toepassing vastloopt na het bewerken van een nieuw alarm als de spellingcontrole is ingeschakeld.</li>
           <li xml:lang="pt-BR">Corrigido o problema que causava o fechamento inesperado do sistema após a edição de um novo alarme quando a verificação ortográfica estava ativada.</li>
           <li xml:lang="ru">Исправлено аварийное завершение при редактировании нового будильника, если включена проверка орфографии;</li>
           <li xml:lang="sl">Popravi sesutje po urejanju novega alarma, če je omogočeno preverjanje črkovanja.</li>
@@ -1445,6 +1463,7 @@
           <li xml:lang="ia">Monstra message de error si le error occurre essayante reproducer un file audio.</li>
           <li xml:lang="it">Mostra un messaggio di errore se si verifica un errore quando si tenta di riprodurre un file audio.</li>
           <li xml:lang="ka">შეცდომის შეტყობინების ჩვენება, თუ აუდიო ფაილის დაკვრის მცდელობისას ხარვეზი წარმოიქმნება.</li>
+          <li xml:lang="nl">Geef een foutmelding weer als er een fout optreedt tijdens het afspelen van een audiobestand.</li>
           <li xml:lang="pt-BR">Exibir mensagem de erro caso ocorra algum problema ao tentar reproduzir um arquivo de áudio.</li>
           <li xml:lang="ru">Вывод сообщения об ошибке при неудачной попытке воспроизвести звуковой файл;</li>
           <li xml:lang="sl">Prikaže se sporočilo o napaki, če se pojavi napaka pri predvajanju zvočne datoteke.</li>
@@ -1485,6 +1504,7 @@
           <li xml:lang="ia">Usa libcanberra in loco de Phonon per reproducer sonos,per securitate  de thread.</li>
           <li xml:lang="it">Uso di libcanberra invece di Phonon per la riproduzione di suoni, per assicurare thread safety.</li>
           <li xml:lang="ka">libcanberra-ის გამოყენება Phonon-ის ნაცვლად ხმების დასაკრავად ნაკადების უსაფრთხოებისთვის.</li>
+          <li xml:lang="nl">Gebruik libcanberra in plaats van Phonon om geluiden af ​​te spelen, voor threadveiligheid.</li>
           <li xml:lang="pt-BR">Para garantir a segurança das threads, usar o libcanberra em vez do Phonon para reproduzir sons.</li>
           <li xml:lang="ru">Для воспроизведения звуков используется libcanberra вместо Phonon, что обеспечивает безопасность потоков;</li>
           <li xml:lang="sl">Uporabi libcanberra za predvajanje zvokov namesto Phonona za varnost niti.</li>
@@ -1501,6 +1521,7 @@
           <li xml:lang="ia">In dialogo de Edita Alarma, permitte salveguardar si le quadrato de selection de Assigna Volumine es commutate.</li>
           <li xml:lang="it">Nella finestra di dialogo Modifica avviso, è consentito il salvataggio se la casella Imposta volume è marcata.</li>
           <li xml:lang="ka">შენახვის ნებართვა განგაშის ჩასწორების დიალოგში, თუ ხმის სიმძლავრის დაყენების მოსანიშნი ღილაკი გადართულია.</li>
+          <li xml:lang="nl">In de dialoog Alarm bewerken moet opslaan mogelijk zijn als het keuzevakje Volume instellen wordt omgeschakeld.</li>
           <li xml:lang="pt-BR">Na caixa de diálogo para editar alarme, permitir salvar se a caixa de seleção para definir volume estiver marcada.</li>
           <li xml:lang="ru">В диалоге «Редактирование будильника» разрешено сохранение при переключении флажка «Настроить громкость»;</li>
           <li xml:lang="sl">V pogovornem oknu Urejanje alarma dovoli shranjevanje, če je potrditveno polje Nastavi glasnost preklopljeno.</li>
@@ -1541,6 +1562,7 @@
           <li xml:lang="ia">Converte a Qt6/KDE Frameworks 6.</li>
           <li xml:lang="it">Conversione a Qt6 / KDE Frameworks 6.</li>
           <li xml:lang="ka">გადაყვანა Qt6 / KDE Frameworks 6-ზე.</li>
+          <li xml:lang="nl">Converteer naar Qt6 / KDE Frameworks 6.</li>
           <li xml:lang="pt-BR">Conversão para o Qt6 / KDE Frameworks 6.</li>
           <li xml:lang="ru">Переход на Qt6 и KDE Frameworks 6;</li>
           <li xml:lang="sl">Pretvori v Qt6 / KDE Frameworks 6.</li>
@@ -1557,6 +1579,7 @@
           <li xml:lang="ia">Habilita eveliar ex suspender per alarmas multiple si chronometros (timers) de alarmas de kernel de usator es supportate (solmente per Linux).</li>
           <li xml:lang="it">Abilita il risveglio dalla sospensione per avvisi multipli se i timer per gli avvisi a livello utente del kernel sono supportati (solo su Linux).</li>
           <li xml:lang="ka">მრავალი განგაშისთვის ძილის რეჟიმიდან გამოღვიძების ჩართვა, თუ მომხმარებლის ბირთვის განგაშის ტაიმერები მხარდაჭერილია (მხოლოდ Linux-ისთვის).</li>
+          <li xml:lang="nl">Schakel het ontwaken uit de slaapstand in voor meerdere alarmen als de alarmtimers van de gebruikerskernel worden ondersteund (alleen Linux).</li>
           <li xml:lang="pt-BR">Habilita a função de despertar a partir da suspensão para múltiplos alarmes se os temporizadores de alarme do kernel do usuário forem suportados (somente Linux).</li>
           <li xml:lang="ru">Задействовано пробуждение из спящего режима для нескольких будильников при поддержке таймеров ядра пользователя (только для Linux).</li>
           <li xml:lang="sl">Omogoči wake-from-suspend za več alarmov, če so podprti časovniki alarmov uporabniškega jedra (samo za Linux).</li>
@@ -1573,6 +1596,7 @@
           <li xml:lang="ia">Assigna unitates per memento e cancellate-en-retardo dependente del selection de solo data in dialogo Modifica Patrono de Alarma.</li>
           <li xml:lang="it">Imposta le unità per i promemoria e annullamenti in ritardo in base allo sola selezione di date nella finestra di modifica dei modelli di avviso.</li>
           <li xml:lang="ka">შეხსენებისა და დაგვიანებული გაუქმების ერთეულების დაყენება განგაშის შაბლონის ჩასწორების დიალოგში მხოლოდ თარიღის არჩევის მიხედვით.</li>
+          <li xml:lang="nl">Stel de eenheden voor herinnering en te late annulering in, afhankelijk van de datumselectie in het dialoogvenster Alarmsjabloon bewerken.</li>
           <li xml:lang="pt-BR">Define as unidades para lembrete e cancelamento tardio com base na seleção de data na caixa de diálogo para editar modelo de alarme.</li>
           <li xml:lang="ru">Выбор единиц измерения для напоминания и отмены с опозданием в зависимости от выбора только даты в диалоге «Изменение шаблона будильника»;</li>
           <li xml:lang="sl">Nastavi enote za opomnik in pozni preklic glede na izbiro samo datuma v pogovornem oknu Urejanje predloge alarma.</li>
@@ -1589,6 +1613,7 @@
           <li xml:lang="ia">Remove migration de configuration de calendario de KResources pre-Akonadi.</li>
           <li xml:lang="it">Rimossa la migrazione della configurazione di calendari di tipo KResources precedenti ad Akonadi.</li>
           <li xml:lang="ka">Akonadi-მდელი KResources-ის კალენდრის კონფიგურაციის მიგრაციის ამოღება.</li>
+          <li xml:lang="nl">Verwijder de migratie van de KResources-kalenderconfiguratie van vóór Akonadi.</li>
           <li xml:lang="pt-BR">Remove a migração da configuração de calendário KResources pré-Akonadi.</li>
           <li xml:lang="ru">Удалена миграцию конфигурации календаря KResources, используемого до Akonadi;</li>
           <li xml:lang="sl">Odstrani selitev konfiguracije koledarja KResources pred Akonadijem.</li>
