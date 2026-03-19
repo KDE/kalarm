@@ -2,7 +2,7 @@ include_directories(../  )
 
 ########### next target ###############
 
-add_executable(kalarmautostart ${kalarmautostart_SRCS})
+add_executable(kalarmautostart)
 target_sources(kalarmautostart PRIVATE
     autostart.cpp
     autostart.h
