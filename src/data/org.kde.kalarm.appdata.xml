@@ -976,6 +976,7 @@
           <li xml:lang="ca-valencia">Corregix l'eixida de KAlarm abans d'executar la restauració de la sessió.</li>
           <li xml:lang="es">Se ha corregido el problema que hacía que KAlarm se cerrara antes de ejecutar la restauración de la sesión.</li>
           <li xml:lang="fr">Correction de la fermeture de KAlarm avant l'exécution de la restauration de session.</li>
+          <li xml:lang="he">תוקנה בעיה ש־KAlarm נסגר לפני הרצת שחזור הפעלה.</li>
           <li xml:lang="ia">Corrige que KAlarm exi ante executar le restauration de session.</li>
           <li xml:lang="it">Correzione della chiusura di KAlarm prima di eseguire il ripristino della sessione.</li>
           <li xml:lang="ka">გასწორდა KAlarm-ის გამოსვლა სესიის აღდგენის შესრულებამდე.</li>
