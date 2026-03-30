@@ -1991,28 +1991,28 @@
 </itemizedlist>
 
 <para
->Si ho voleu, escolliu una zona horària per a aplicar a l'alarma. Aquesta s'utilitzarà per a totes les dates i hores en relació amb aquesta alarma, incloent-hi les dates i hores de recurrència i excepció. Normalment, haureu d'abandonar els controls de la zona horària sense canvis a menys que es tingui una bona raó per a canviar-ho.</para>
+>Si ho voleu, escolliu un fus horari per a aplicar a l'alarma. Aquest s'utilitzarà per a totes les dates i hores en relació amb aquesta alarma, incloent-hi les dates i hores de recurrència i excepció. Normalment, haureu de deixar els controls del fus horari sense canvis a menys que es tingui un motiu bo per a canviar-ho.</para>
 
 <para
->Els controls de la zona horària només es mostren quan la zona horària seleccionada és diferent de la zona horària predeterminada establerta al <link linkend="preferences-time"
+>Els controls del fus horari només es mostren quan el fus horari seleccionat és diferent del fus horari predeterminat establert al <link linkend="preferences-time"
 >diàleg de configuració</link
 >, o si feu clic al botó <guibutton
->Zona horària...</guibutton
+>Fus horari...</guibutton
 >.</para>
 
 <itemizedlist>
 <listitem>
 <para
->En el quadre combinat, escolliu la zona horària que ha d'utilitzar aquesta alarma. En crear una nova alarma, aquesta s'establirà inicialment a la zona horària seleccionada en el <link linkend="preferences-time"
+>En el quadre combinat, escolliu el fus horari que ha d'utilitzar aquesta alarma. En crear una alarma nova, aquesta s'establirà inicialment al fus horari seleccionat en el <link linkend="preferences-time"
 >diàleg de configuració</link
->, la qual serà la zona horària del vostre ordinador a menys que s'hagi canviat.</para>
+>, el qual serà el fus horari del vostre ordinador a menys que s'hagi canviat.</para>
 </listitem>
 
 <listitem>
 <para
 >Seleccioneu <guilabel
->Zona horària del sistema</guilabel
-> si voleu utilitzar l'hora local de l'ordinador (en qualsevol ordinador, el &kalarm; passarà a estar en execució en aquell moment).</para>
+>Fus horari del sistema</guilabel
+> si voleu utilitzar l'hora local de l'ordinador (en l'ordinador en el qual s'executi el &kalarm; en aquell moment).</para>
 </listitem>
 </itemizedlist>
 
@@ -2224,7 +2224,7 @@
 ><para
 >Seleccioneu <guilabel
 >Finalitza el</guilabel
-> per a especificar la data/hora fins que s'ha de repetir l'alarma. Cal tenir en compte que utilitza la mateixa zona horària que l'hora d'inici de l'alarma.</para>
+> per a especificar la data/hora fins que s'ha de repetir l'alarma. Cal tenir en compte que utilitza el mateix fus horari que l'hora d'inici de l'alarma.</para>
 
 <note
 ><para
@@ -2419,7 +2419,7 @@
 >Els missatges d'alarma que es mostren a les finestres proporcionen la màxima funcionalitat.</para>
 
 <para
->Quan venç un missatge d'alarma, es (si és possible) mostrarà a cada escriptori i no es pot cobrir per les finestres normals, per a assegurar que no us el perdeu. (Tingueu en compte que actualment només sistema de finestres X11 proporciona aquesta característica.) La finestra de missatges mostrarà el temps durant el qual s'ha programat l'alarma, de manera que podeu veure quan va sorgir si éreu fora de l'ordinador en aquell moment. Si el temps programat de l'alarma es troba en una zona horària diferent de la configuració del vostre ordinador local, també es mostrarà la zona horària. (Per als missatges de recordatori, la data/hora mostrada serà la prevista per a l'alarma principal o la seva recurrència, no la del missatge de recordatori, i el títol de la finestra serà «Recordatori»).</para>
+>Quan venç un missatge d'alarma, es (si és possible) mostrarà a cada escriptori i no es pot cobrir per les finestres normals, per a assegurar que no us el perdeu. (Tingueu en compte que actualment només sistema de finestres X11 proporciona aquesta característica.) La finestra de missatges mostrarà el temps durant el qual s'ha programat l'alarma, de manera que podeu veure quan va sorgir si éreu fora de l'ordinador en aquell moment. Si el temps programat de l'alarma es troba en un fus horari diferent de la configuració del vostre ordinador local, també es mostrarà el fus horari. (Per als missatges de recordatori, la data/hora mostrada serà la prevista per a l'alarma principal o la seva recurrència, no la del missatge de recordatori, i el títol de la finestra serà «Recordatori»).</para>
 
 <para
 >Les finestres dels missatges d'alarma romandran visibles fins que es reconeguin, llevat que <guilabel
@@ -2593,7 +2593,7 @@
 >Els missatges d'alarma que es mostren com a notificacions ofereixen menys funcionalitat que els que es mostren en finestres.</para>
 
 <para
->Quan venç un missatge d'alarma, es mostrarà com a una notificació. La notificació mostrarà el temps en el qual s'ha programat l'alarma. Si el temps programat de l'alarma es troba en una zona horària diferent de la configuració del vostre ordinador local, també es mostrarà la zona horària. (Per als missatges de recordatori, la data/hora mostrada serà la prevista per a l'alarma principal o la seva recurrència, no la del missatge de recordatori, i es mostrarà una capçalera «Recordatori»).</para>
+>Quan venç un missatge d'alarma, es mostrarà com a una notificació. La notificació mostrarà el temps en el qual s'ha programat l'alarma. Si el temps programat de l'alarma es troba en un fus horari diferent de la configuració del vostre ordinador local, també es mostrarà el fus horari. (Per als missatges de recordatori, la data/hora mostrada serà la prevista per a l'alarma principal o la seva recurrència, no la del missatge de recordatori, i es mostrarà una capçalera «Recordatori»).</para>
 
 <para
 >La notificació es tancarà automàticament després d'un breu temps d'espera. (Cal tenir en compte que el temps d'espera és comú per a totes les aplicacions, es pot canviar a l'&systemsettings;). Una vegada s'esgoti el temps d'espera d'una notificació, encara es podrà veure a l'historial de notificacions fins que l'elimineu o tanqueu la sessió. A causa que les aplicacions no tenen manera d'accedir a l'historial de notificacions, el &kalarm; no pot eliminar ni substituir les notificacions en l'historial com ho faria amb les finestres d'alarma. Per tant, l'historial pot contenir múltiples notificacions per a la mateixa alarma, inclosos els recordatoris i recurrències.</para>
@@ -3413,8 +3413,8 @@
 <listitem
 ><para
 ><guilabel
->Zona horària</guilabel
->: Seleccioneu la zona horària. El &kalarm; l'utilitza per a tot, excepte quan l'anul·leu per a les alarmes individuals.</para>
+>Fus horari</guilabel
+>: Seleccioneu el fus horari. El &kalarm; l'utilitza per a tot, excepte quan l'anul·leu per a les alarmes individuals.</para>
 </listitem>
 
 <listitem
@@ -4502,13 +4502,13 @@
 >aaaa-mm-dd[TZ]</replaceable
 >, especifica una data i hora amb <replaceable
 >[[[aaaa-]mm-]dd-]hh:mm[TZ]</replaceable
-> (on s'ometrà, de manera predeterminada els camps de data als valors per a avui). Si no s'especifica la zona horària, s'assumirà la del sistema local. Si és present un especificador de zona horària <replaceable
+> (on s'ometrà, de manera predeterminada els camps de data als valors per a avui). Si no s'especifica el fus horari, s'assumirà la del sistema local. Si és present un especificador de fus horari <replaceable
 >TZ</replaceable
->, aquest podrà ser el nom d'una zona horària del sistema (&pex; <userinput
+>, aquest podrà ser el nom d'un fus horari del sistema (&pex; <userinput
 >Europe/London</userinput
 >) o <userinput
 >UTC</userinput
->, la qual representa la zona horària UTC.</entry>
+>, el qual representa el fus horari UTC.</entry>
 </row>
 <row>
   <entry
@@ -4540,7 +4540,7 @@
 >--time</option
 >. Cal tenir en compte que si s'especifica <option
 >--time</option
->, la zona horària es prendrà del seu valor i no es podrà incloure en el valor de <option
+>, el fus horari es prendrà del seu valor i no es podrà incloure en el valor de <option
 >--until</option
 >. Hi haurà d'estar <option
 >--interval</option
@@ -5078,13 +5078,13 @@
 > ). Si no s'especifica una data, s'utilitzarà la data d'avui. Cal tenir en compte que qualsevol valor per als segons serà ignorat.</para>
 
 <para
->Si no s'especifica la zona horària, s'assumirà la del sistema local. Si és present un especificador de zona horària <replaceable
+>Si no s'especifica el fus horari, s'assumirà el del sistema local. Si és present un especificador de fus horari <replaceable
 >TZ</replaceable
->, aquest podrà ser el nom d'una zona horària del sistema (&pex; <userinput
+>, aquest podrà ser el nom d'un fus horari del sistema (&pex; <userinput
 >Europe/London</userinput
 >) o <userinput
 >UTC</userinput
->, la qual representa la zona horària UTC.</para>
+>, el qual representa el fus horari UTC.</para>
 </listitem>
 </varlistentry>
 
@@ -5242,7 +5242,7 @@
 >HoraDataInici</replaceable
 > inclou una hora, aquest paràmetre també inclourà una hora, si <replaceable
 >HoraDataInici</replaceable
-> conté només una data, aquest paràmetre també contindrà només una data. No ha de contenir un especificador de zona horària; s'utilitzarà la mateixa zona horària que per <replaceable
+> conté només una data, aquest paràmetre també contindrà només una data. No ha de contenir un especificador de fus horari; s'utilitzarà el mateix fus horari que per <replaceable
 >HoraDataInici</replaceable
 > per a interpretar el valor d'aquest paràmetre.</para>
 </listitem>
@@ -5454,13 +5454,13 @@
 > ). Si no s'especifica una data, s'utilitzarà la data d'avui. Cal tenir en compte que qualsevol valor per als segons serà ignorat.</para>
 
 <para
->Si no s'especifica la zona horària, s'assumirà la del sistema local. Si és present un especificador de zona horària <replaceable
+>Si no s'especifica el fus horari, s'assumirà el del sistema local. Si és present un especificador de fus horari <replaceable
 >TZ</replaceable
->, aquest podrà ser el nom d'una zona horària del sistema (&pex; <userinput
+>, aquest podrà ser el nom d'un fus horari del sistema (&pex; <userinput
 >Europe/London</userinput
 >) o <userinput
 >UTC</userinput
->, la qual representa la zona horària UTC.</para>
+>, el qual representa el fus horari UTC.</para>
 </listitem>
 </varlistentry>
 
@@ -5592,7 +5592,7 @@
 >HoraDataInici</replaceable
 > inclou una hora, aquest paràmetre també inclourà una hora, si <replaceable
 >HoraDataInici</replaceable
-> conté només una data, aquest paràmetre també contindrà només una data. No ha de contenir un especificador de zona horària; s'utilitzarà la mateixa zona horària que per <replaceable
+> conté només una data, aquest paràmetre també contindrà només una data. No ha de contenir un especificador de fus horari; s'utilitzarà el mateix fus horari que per <replaceable
 >HoraDataInici</replaceable
 > per a interpretar el valor d'aquest paràmetre.</para>
 </listitem>
@@ -5779,13 +5779,13 @@
 > ). Si no s'especifica una data, s'utilitzarà la data d'avui. Cal tenir en compte que qualsevol valor per als segons serà ignorat.</para>
 
 <para
->Si no s'especifica la zona horària, s'assumirà la del sistema local. Si és present un especificador de zona horària <replaceable
+>Si no s'especifica el fus horari, s'assumirà el del sistema local. Si és present un especificador de fus horari <replaceable
 >TZ</replaceable
->, aquest podrà ser el nom d'una zona horària del sistema (&pex; <userinput
+>, aquest podrà ser el nom d'un fus horari del sistema (&pex; <userinput
 >Europe/London</userinput
 >) o <userinput
 >UTC</userinput
->, la qual representa la zona horària UTC.</para>
+>, el qual representa el fus horari UTC.</para>
 </listitem>
 </varlistentry>
 
@@ -5880,7 +5880,7 @@
 >HoraDataInici</replaceable
 > inclou una hora, aquest paràmetre també inclourà una hora, si <replaceable
 >HoraDataInici</replaceable
-> conté només una data, aquest paràmetre també contindrà només una data. No ha de contenir un especificador de zona horària; s'utilitzarà la mateixa zona horària que per <replaceable
+> conté només una data, aquest paràmetre també contindrà només una data. No ha de contenir un especificador de fus horari; s'utilitzarà el mateix fus horari que per <replaceable
 >HoraDataInici</replaceable
 > per a interpretar el valor d'aquest paràmetre.</para>
 </listitem>
@@ -6147,13 +6147,13 @@
 > ). Si no s'especifica una data, s'utilitzarà la data d'avui. Cal tenir en compte que qualsevol valor per als segons serà ignorat.</para>
 
 <para
->Si no s'especifica la zona horària, s'assumirà la del sistema local. Si és present un especificador de zona horària <replaceable
+>Si no s'especifica el fus horari, s'assumirà el del sistema local. Si és present un especificador de fus horari <replaceable
 >TZ</replaceable
->, aquest podrà ser el nom d'una zona horària del sistema (&pex; <userinput
+>, aquest podrà ser el nom d'un fus horari del sistema (&pex; <userinput
 >Europe/London</userinput
 >) o <userinput
 >UTC</userinput
->, la qual representa la zona horària UTC.</para>
+>, el qual representa el fus horari UTC.</para>
 </listitem>
 </varlistentry>
 
@@ -6248,7 +6248,7 @@
 >HoraDataInici</replaceable
 > inclou una hora, aquest paràmetre també inclourà una hora, si <replaceable
 >HoraDataInici</replaceable
-> conté només una data, aquest paràmetre també contindrà només una data. No ha de contenir un especificador de zona horària; s'utilitzarà la mateixa zona horària que per <replaceable
+> conté només una data, aquest paràmetre també contindrà només una data. No ha de contenir un especificador de fus horari; s'utilitzarà el mateix fus horari que per <replaceable
 >HoraDataInici</replaceable
 > per a interpretar el valor d'aquest paràmetre.</para>
 </listitem>
@@ -6453,13 +6453,13 @@
 > ). Si no s'especifica una data, s'utilitzarà la data d'avui. Cal tenir en compte que qualsevol valor per als segons serà ignorat.</para>
 
 <para
->Si no s'especifica la zona horària, s'assumirà la del sistema local. Si és present un especificador de zona horària <replaceable
+>Si no s'especifica el fus horari, s'assumirà el del sistema local. Si és present un especificador de fus horari <replaceable
 >TZ</replaceable
->, aquest podrà ser el nom d'una zona horària del sistema (&pex; <userinput
+>, aquest podrà ser el nom d'un fus horari del sistema (&pex; <userinput
 >Europe/London</userinput
 >) o <userinput
 >UTC</userinput
->, la qual representa la zona horària UTC.</para>
+>, el qual representa el fus horari UTC.</para>
 </listitem>
 </varlistentry>
 
@@ -6554,7 +6554,7 @@
 >HoraDataInici</replaceable
 > inclou una hora, aquest paràmetre també inclourà una hora, si <replaceable
 >HoraDataInici</replaceable
-> conté només una data, aquest paràmetre també contindrà només una data. No ha de contenir un especificador de zona horària; s'utilitzarà la mateixa zona horària que per <replaceable
+> conté només una data, aquest paràmetre també contindrà només una data. No ha de contenir un especificador de fus horari; s'utilitzarà el mateix fus horari que per <replaceable
 >HoraDataInici</replaceable
 > per a interpretar el valor d'aquest paràmetre.</para>
 </listitem>

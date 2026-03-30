@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-18 00:46+0000\n"
-"PO-Revision-Date: 2026-01-24 10:04+0100\n"
+"PO-Revision-Date: 2026-03-29 12:49+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -77,8 +77,8 @@ msgstr ""
 msgctxt "@info"
 msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
 msgstr ""
-"Açò utilitza la zona horària predeterminada de KAlarm, establida en el "
-"diàleg de configuració."
+"Açò utilitza el fus horari predeterminat de KAlarm, establit en el diàleg de "
+"configuració."
 
 #: alarmtimewidget.cpp:93
 #, kde-format
@@ -224,13 +224,13 @@ msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
-msgstr "Zona horària…"
+msgstr "Fus horari…"
 
 #: alarmtimewidget.cpp:212
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
-msgstr "Trieu una zona horària per a esta alarma"
+msgstr "Trieu un fus horari per a esta alarma"
 
 #: alarmtimewidget.cpp:214
 #, kde-format
@@ -239,20 +239,20 @@ msgid ""
 "Choose a time zone for this alarm which is different from the default time "
 "zone set in KAlarm's configuration dialog."
 msgstr ""
-"Trieu una zona horària per a esta alarma que siga diferent de la zona "
-"horària predeterminada establida en el diàleg de configuració de KAlarm."
+"Trieu un fus horari per a esta alarma que siga diferent del fus horari "
+"predeterminat establit en el diàleg de configuració de KAlarm."
 
 #: alarmtimewidget.cpp:228 prefdlg.cpp:804
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
-msgstr "Zona horària:"
+msgstr "Fus horari:"
 
 #: alarmtimewidget.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
-msgstr "Trieu la zona horària que s'utilitzarà per a esta alarma."
+msgstr "Trieu el fus horari a utilitzar per a esta alarma."
 
 #: alarmtimewidget.cpp:314 alarmtimewidget.cpp:341
 #, kde-format
@@ -907,7 +907,7 @@ msgstr "VLC"
 #, kde-format
 msgctxt "@label"
 msgid "Time zone"
-msgstr "Zona horària"
+msgstr "Fus horari"
 
 #. i18n: ectx: whatsthis, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:93
@@ -917,8 +917,8 @@ msgid ""
 "Select the time zone which KAlarm should use as its default for displaying "
 "and entering dates and times."
 msgstr ""
-"Tria la zona horària que KAlarm hauria d'utilitzar com a predeterminada per "
-"a mostrar i introduir les dates i hores."
+"Tria el fus horari que KAlarm hauria d'utilitzar com a predeterminat per a "
+"mostrar i introduir les dates i hores."
 
 #. i18n: ectx: label, entry (Base_HolidayRegion), group (General)
 #: data/kalarmconfig.kcfg:97
@@ -1190,7 +1190,8 @@ msgstr ""
 msgctxt "@label"
 msgid "Number of alarms to show in system tray tooltip"
 msgstr ""
-"Nombre d'alarmes que s'han de mostrar en el consell de la safata del sistema"
+"Nombre d'alarmes que s'han de mostrar en el consell d'eina de la safata del "
+"sistema"
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
 #: data/kalarmconfig.kcfg:182
@@ -1205,7 +1206,7 @@ msgid ""
 "      "
 msgstr ""
 "<p>Quantes alarmes amb venciment en les pròximes 24 hores es mostraran al "
-"consell de la safata del sistema:\n"
+"consell d'eina de la safata del sistema:\n"
 "        <ul><li>0 per a no mostrar-ne cap</li>\n"
 "        <li>-1 per a mostrar-les totes</li>\n"
 "        <li>>0 per a fixar un límit.</li></ul></p>\n"
@@ -1216,7 +1217,8 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Show alarm times in system tray tooltip"
-msgstr "Mostra les hores de les alarmes en el consell de la safata del sistema"
+msgstr ""
+"Mostra les hores de les alarmes en el consell d'eina de la safata del sistema"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
 #: data/kalarmconfig.kcfg:189 prefdlg.cpp:2013
@@ -1226,8 +1228,8 @@ msgid ""
 "Specify whether to show in the system tray tooltip, the time at which each "
 "alarm is due."
 msgstr ""
-"Especifica si s'ha d'incloure en el consell de la safata del sistema, l'hora "
-"a la qual venç cadascuna."
+"Especifica si s'ha d'incloure en el consell d'eina de la safata del sistema, "
+"l'hora a la qual venç cadascuna."
 
 #. i18n: ectx: label, entry (ShowTooltipTimeToAlarm), group (General)
 #: data/kalarmconfig.kcfg:194
@@ -1235,8 +1237,8 @@ msgstr ""
 msgctxt "@label"
 msgid "Show time to alarms in system tray tooltip"
 msgstr ""
-"Mostra el temps restant fins a les alarmes en el consell de la safata del "
-"sistema"
+"Mostra el temps restant fins a les alarmes en el consell d'eina de la safata "
+"del sistema"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
 #: data/kalarmconfig.kcfg:195 prefdlg.cpp:2019
@@ -1246,8 +1248,8 @@ msgid ""
 "Specify whether to show in the system tray tooltip, how long until each "
 "alarm is due."
 msgstr ""
-"Especifica si s'ha d'incloure en el consell de la safata del sistema, quant "
-"temps falta perquè vença cadascuna."
+"Especifica si s'ha d'incloure en el consell d'eina de la safata del sistema, "
+"quant temps falta perquè vença cadascuna."
 
 #. i18n: ectx: label, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:200
@@ -1255,8 +1257,8 @@ msgstr ""
 msgctxt "@label"
 msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr ""
-"Prefix amb el temps restant fins a les alarmes en el consell de la safata "
-"del sistema"
+"Prefix amb el temps restant fins a les alarmes en el consell d'eina de la "
+"safata del sistema"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:201 prefdlg.cpp:2030
@@ -1266,8 +1268,8 @@ msgid ""
 "Enter the text to be displayed in front of the time until the alarm, in the "
 "system tray tooltip."
 msgstr ""
-"Introduïu el text que es mostrarà en el consell de la safata del sistema "
-"davant del temps que resta per a véncer l'alarma."
+"Introduïu el text que es mostrarà en el consell d'eina de la safata del "
+"sistema davant del temps que resta per a véncer l'alarma."
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:206
@@ -1704,7 +1706,7 @@ msgid ""
 "100 %"
 msgstr ""
 "Volum de so predeterminat en el diàleg d'edició d'una alarma. -1 per a "
-"desseleccionar el volum, o 0 - 100%"
+"desseleccionar el volum, o 0 – 100%"
 
 #. i18n: ectx: label, entry (DefaultSoundRepeat), group (Defaults)
 #: data/kalarmconfig.kcfg:357
@@ -2211,7 +2213,7 @@ msgstr "Ha fallat mentre es guardava el calendari a <filename>%1</filename>"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
-msgstr "Recurrència - [%1]"
+msgstr "Recurrència – [%1]"
 
 #: editdlg.cpp:87
 #, kde-format
@@ -4578,7 +4580,7 @@ msgstr ""
 #: lib/timezonecombo.cpp:19
 #, kde-format
 msgid "System time zone"
-msgstr "Zona horària del sistema"
+msgstr "Fus horari del sistema"
 
 #: main.cpp:43
 #, kde-format
@@ -5525,9 +5527,8 @@ msgid ""
 "Select the time zone which <application>KAlarm</application> should use as "
 "its default for displaying and entering dates and times."
 msgstr ""
-"Tria la zona horària que <application>KAlarm</application> hauria "
-"d'utilitzar com a predeterminades per a mostrar i introduir les dates i "
-"hores."
+"Tria el fus horari que <application>KAlarm</application> hauria d'utilitzar "
+"com a predeterminat per a mostrar i introduir les dates i hores."
 
 #: prefdlg.cpp:825
 #, kde-format
@@ -6278,7 +6279,7 @@ msgstr "Oculta automàticament si no vencen alarmes en el període de temps:"
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
-msgstr "Consell de la safata del sistema"
+msgstr "Consell d'eina de la safata del sistema"
 
 #: prefdlg.cpp:1987
 #, kde-format
@@ -6293,8 +6294,8 @@ msgid ""
 "Specify whether to include in the system tray tooltip, a summary of alarms "
 "due in the next 24 hours."
 msgstr ""
-"Especifica si s'ha d'incloure en el consell de la safata del sistema, un "
-"resum amb les alarmes que vencen en les pròximes 24 hores."
+"Especifica si s'ha d'incloure en el consell d'eina de la safata del sistema, "
+"un resum amb les alarmes que vencen en les pròximes 24 hores."
 
 #: prefdlg.cpp:1997
 #, kde-format
@@ -6310,7 +6311,7 @@ msgid ""
 "tooltip. Check to enter an upper limit on the number to be displayed."
 msgstr ""
 "Desmarqueu-la per a mostrar totes les alarmes de les pròximes 24 hores en el "
-"consell de la safata del sistema. Marqueu-la per a introduir un límit "
+"consell d'eina de la safata del sistema. Marqueu-la per a introduir un límit "
 "superior en el nombre d'alarmes que es mostraran."
 
 #: prefdlg.cpp:2010
@@ -6578,7 +6579,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "This uses the same time zone as the start time."
-msgstr "Utilitza la mateixa zona horària que l'hora d'inici."
+msgstr "Utilitza el mateix fus horari que l'hora d'inici."
 
 #: recurrenceedit.cpp:243
 #, kde-kuit-format

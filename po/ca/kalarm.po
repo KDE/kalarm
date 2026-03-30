@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-18 00:46+0000\n"
-"PO-Revision-Date: 2026-01-24 10:04+0100\n"
+"PO-Revision-Date: 2026-03-29 12:49+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -77,7 +77,7 @@ msgstr ""
 msgctxt "@info"
 msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
 msgstr ""
-"Això usa la zona horària predeterminada del KAlarm, definida al diàleg de "
+"Això usa el fus horari predeterminat del KAlarm, definit al diàleg de "
 "configuració."
 
 #: alarmtimewidget.cpp:93
@@ -225,13 +225,13 @@ msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
-msgstr "Zona horària..."
+msgstr "Fus horari..."
 
 #: alarmtimewidget.cpp:212
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
-msgstr "Escolliu una zona horària per a aquesta alarma"
+msgstr "Escolliu un fus horari per a aquesta alarma"
 
 #: alarmtimewidget.cpp:214
 #, kde-format
@@ -240,20 +240,20 @@ msgid ""
 "Choose a time zone for this alarm which is different from the default time "
 "zone set in KAlarm's configuration dialog."
 msgstr ""
-"Seleccioneu una zona horària per a aquesta alarma que sigui diferent de la "
-"zona horària predeterminada definida al diàleg de configuració del KAlarm."
+"Seleccioneu un fus horari per a aquesta alarma que sigui diferent del fus "
+"horari predeterminat definit al diàleg de configuració del KAlarm."
 
 #: alarmtimewidget.cpp:228 prefdlg.cpp:804
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
-msgstr "Zona horària:"
+msgstr "Fus horari:"
 
 #: alarmtimewidget.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
-msgstr "Seleccioneu la zona horària a usar per a aquesta alarma."
+msgstr "Seleccioneu el fus horari a usar per a aquesta alarma."
 
 #: alarmtimewidget.cpp:314 alarmtimewidget.cpp:341
 #, kde-format
@@ -902,7 +902,7 @@ msgstr "VLC"
 #, kde-format
 msgctxt "@label"
 msgid "Time zone"
-msgstr "Zona horària"
+msgstr "Fus horari"
 
 #. i18n: ectx: whatsthis, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:93
@@ -912,8 +912,8 @@ msgid ""
 "Select the time zone which KAlarm should use as its default for displaying "
 "and entering dates and times."
 msgstr ""
-"Selecciona la zona horària que el KAlarm hauria d'usar com a predeterminada "
-"per a mostrar i introduir les dates i hores."
+"Selecciona el fus horari que el KAlarm hauria d'usar com a predeterminat per "
+"a mostrar i introduir les dates i hores."
 
 #. i18n: ectx: label, entry (Base_HolidayRegion), group (General)
 #: data/kalarmconfig.kcfg:97
@@ -4567,7 +4567,7 @@ msgstr ""
 #: lib/timezonecombo.cpp:19
 #, kde-format
 msgid "System time zone"
-msgstr "Zona horària del sistema"
+msgstr "Fus horari del sistema"
 
 #: main.cpp:43
 #, kde-format
@@ -5517,8 +5517,8 @@ msgid ""
 "Select the time zone which <application>KAlarm</application> should use as "
 "its default for displaying and entering dates and times."
 msgstr ""
-"Selecciona la zona horària que el <application>KAlarm</application> hauria "
-"d'usar com a predeterminades per a mostrar i introduir les dates i hores."
+"Selecciona el fus horari que el <application>KAlarm</application> hauria "
+"d'usar com a predeterminat per a mostrar i introduir les dates i hores."
 
 #: prefdlg.cpp:825
 #, kde-format
@@ -6566,7 +6566,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "This uses the same time zone as the start time."
-msgstr "Usa la mateixa zona horària que l'hora d'inici."
+msgstr "Usa el mateix fus horari que l'hora d'inici."
 
 #: recurrenceedit.cpp:243
 #, kde-kuit-format
