@@ -2,7 +2,7 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Klára Cihlářová <koty@seznam.cz>, 2007.
-# SPDX-FileCopyrightText: 2009, 2021, 2022, 2023, 2024 Vit Pelcak <vit@pelcak.org>
+# SPDX-FileCopyrightText: 2009, 2021, 2022, 2023, 2024, 2026 Vit Pelcak <vit@pelcak.org>
 # Vít Pelčák <vit@pelcak.org>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2023.
 # Zdeněk Pech <dom.toretto@seznam.cz>, 2009, 2010.
 # Lukáš Tinkl <ltinkl@redhat.com>, 2010.
@@ -13,25 +13,25 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-18 00:46+0000\n"
-"PO-Revision-Date: 2024-09-19 07:53+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-03-30 11:29+0200\n"
+"Last-Translator:  Vít Pelčák <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.08.1\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Klára Cihlářová, Zdeněk Pech"
+msgstr "Klára Cihlářová,Zdeněk Pech,Libor Filípek"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "koty@seznam.cz, dom.toretto@seznam.cz"
+msgstr "koty@seznam.cz,dom.toretto@seznam.cz,libor.filipek@gmail.com"
 
 #: akonadiplugin/sendakonadimail.cpp:54
 #, kde-kuit-format
@@ -211,7 +211,7 @@ msgstr "1 týden"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr ""
+msgstr "Vybrat časové zpoždění ze seznamu přednastavených hodnot"
 
 #: alarmtimewidget.cpp:178
 #, kde-kuit-format
@@ -379,6 +379,8 @@ msgid ""
 "Enter a name to help you identify this alarm. This is optional and need not "
 "be unique."
 msgstr ""
+"Zadejte název, který vám pomůže tuto upomínku identifikovat. Toto pole je "
+"volitelné a název nemusí být jedinečný."
 
 #: birthdaydlg.cpp:77
 #, kde-format
@@ -457,6 +459,8 @@ msgstr "Nastavení upomínky"
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
 msgstr ""
+"Zaškrtněte toto políčko, chcete-li zobrazit připomenutí před nebo po "
+"narozeninách."
 
 #: birthdaydlg.cpp:162
 #, kde-format
@@ -474,7 +478,7 @@ msgstr ""
 msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the birthday."
-msgstr ""
+msgstr "Zvolit, zda se má připomenutí zobrazit před nebo po narozeninách."
 
 #: birthdaydlg.cpp:197 recurrenceedit.cpp:142
 #, kde-format
@@ -537,7 +541,7 @@ msgstr "Zakázat tuto upomínku"
 #: commandoptions.cpp:159
 #, kde-format
 msgid "Disable monitoring of all alarms"
-msgstr ""
+msgstr "Zakázat sledování všech upomínek"
 
 #: commandoptions.cpp:162
 #, kde-format
@@ -653,7 +657,7 @@ msgstr "Zobrazit připomenutí před a po upomínce"
 #: commandoptions.cpp:243
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
-msgstr ""
+msgstr "Zobrazit jednou připomenutí, před nebo po prvním opakování upomínky"
 
 #: commandoptions.cpp:247
 #, kde-format
@@ -824,7 +828,7 @@ msgstr "Akonadi"
 #, kde-format
 msgctxt "@option"
 msgid "File Resources"
-msgstr ""
+msgstr "Zdroje dat"
 
 #. i18n: ectx: label, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:78
@@ -842,34 +846,38 @@ msgid ""
 "provide features including birthday import, some email functions, email "
 "address book lookup, and Akonadi resource migration on first run."
 msgstr ""
+"Zvolte, zda chcete povolit modul Akonadi pro KAlarm, který využívá Akonadi k "
+"poskytování funkcí, jako je import dat narozenin, některé funkce pro práci s "
+"e-maily, vyhledávání v e-mailovém adresáři a migrace dat Akonadi při prvním "
+"spuštění."
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:83
 #, kde-format
 msgctxt "@label"
 msgid "Audio backend"
-msgstr ""
+msgstr "Podpůrná vrstva pro audio"
 
 #. i18n: ectx: whatsthis, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Which audio backend to prefer."
-msgstr ""
+msgstr "Kterou zvukovou podpůrnou vrstvu preferujete."
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:86
 #, kde-format
 msgctxt "@option"
 msgid "MPV"
-msgstr ""
+msgstr "MPV"
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:87
 #, kde-format
 msgctxt "@option"
 msgid "VLC"
-msgstr ""
+msgstr "VLC"
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:92
@@ -946,6 +954,8 @@ msgid ""
 "Choose whether to be able to give alarms a name. This is a convenience to "
 "help you to identify alarms."
 msgstr ""
+"Zvolte, zda chcete mít možnost pojmenovávat upomínky. Jedná se o užitečnou "
+"funkci, která vám usnadní jejich identifikaci."
 
 #. i18n: ectx: label, entry (MessageFont), group (General)
 #: data/kalarmconfig.kcfg:118
@@ -985,6 +995,8 @@ msgstr ""
 msgctxt "@label"
 msgid "Auto-hide in system tray if no alarms due within period"
 msgstr ""
+"Automaticky skrýt do systémové lišty, pokud v daném období nejsou "
+"naplánovány žádné upomínky"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoHideSystemTray), group (General)
 #: data/kalarmconfig.kcfg:131
@@ -996,13 +1008,19 @@ msgid ""
 "alarms due within a set period of time, enter the time period in minutes.</"
 "p><p>Enter 0 to always show the system tray icon.</p>"
 msgstr ""
+"<p>Zadejte hodnotu -1, aby se ikona programu KAlarm v oznamovací oblasti "
+"automaticky skryla, pokud nejsou aktivní žádné upomínky.</p><p>Chcete-li "
+"ikonu v oznamovací oblasti automaticky skrýt, pokud v nastaveném časovém "
+"intervalu nehrozí žádná upomínka, zadejte tento časový interval v minutách.</"
+"p><p>Zadejte hodnotu 0, aby se ikona v oznamovací oblasti zobrazovala vždy.</"
+"p>"
 
 #. i18n: ectx: label, entry (NoAutoHideSystemTrayDesktops), group (General)
 #: data/kalarmconfig.kcfg:136
 #, kde-format
 msgctxt "@label"
 msgid "Desktops without auto-hide in system tray"
-msgstr ""
+msgstr "Počítače bez automatického skrytí v systémové liště"
 
 #. i18n: ectx: whatsthis, entry (NoAutoHideSystemTrayDesktops), group (General)
 #: data/kalarmconfig.kcfg:137
@@ -1011,6 +1029,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Desktops for which the auto-hide in system tray option is not available."
 msgstr ""
+"Počítače, u nichž není k dispozici možnost automatického skrytí do "
+"oznamovací oblasti."
 
 #. i18n: ectx: label, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:141
@@ -1044,6 +1064,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
 msgstr ""
+"Zda se má KAlarm spouštět automaticky při přihlášení, pouze ručně, nebo "
+"vůbec."
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:149
@@ -1493,7 +1515,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Alarm message display method"
-msgstr ""
+msgstr "Způsob zobrazení upomínek"
 
 #. i18n: ectx: whatsthis, entry (DefaultDisplayMethod), group (Defaults)
 #: data/kalarmconfig.kcfg:301
@@ -1504,25 +1526,25 @@ msgid ""
 "determine whether to display alarm messages in windows or in system "
 "notifications."
 msgstr ""
+"Výchozí nastavení v dialogovém okně pro úpravu upomínek v části „Způsob "
+"zobrazení“, které určuje, zda se mají upomínky zobrazovat v oknech nebo v "
+"systémových oznámeních."
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:309
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr "Použít zvýrazněnou upomínku"
+msgstr "Upomínku nikdy neblokovat"
 
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
 msgstr ""
-"Výchozí nastavení \"Automaticky zrušit při zpoždění\" v dialogu pro úpravy "
-"upomínek."
+"Výchozí hodnota v dialogovém okně pro úpravy upomínek pro možnost „upomínku "
+"nikdy neblokovat“."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -1899,7 +1921,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Do not notify pre-alarm action errors"
-msgstr ""
+msgstr "Neoznamovat chyby předběžných akcí"
 
 #. i18n: ectx: whatsthis, entry (DefaultDontShowPreActionError), group (Defaults)
 #: data/kalarmconfig.kcfg:435
@@ -2016,6 +2038,8 @@ msgid ""
 "Select dates to show in the alarm list. Only alarms due on these dates will "
 "be shown."
 msgstr ""
+"Vyberte data, která se mají zobrazit v seznamu upomínek. Zobrazí se pouze "
+"upomínky, jejichž termín připadá na tato data."
 
 #: datepicker.cpp:56
 #, kde-format
@@ -2131,11 +2155,10 @@ msgid "Recurrence - [%1]"
 msgstr "Opakování - [%1]"
 
 #: editdlg.cpp:87
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@option:check"
 msgid "Never inhibit alarm"
-msgstr "Použít zvýrazněnou upomínku"
+msgstr "Upomínku nikdy neblokovat"
 
 #: editdlg.cpp:88
 #, kde-format
@@ -2177,7 +2200,7 @@ msgstr "Načíst šablonu..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
-msgstr ""
+msgstr "Vyberte šablonu upomínky a nastavte ji"
 
 #: editdlg.cpp:206
 #, kde-format
@@ -2210,12 +2233,10 @@ msgid "Action"
 msgstr "Činnost"
 
 #: editdlg.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Deferred Alarm"
+#, kde-format
 msgctxt "@title:group"
 msgid "Deferred / Skipped Alarm"
-msgstr "Pozdržená upomínka"
+msgstr "Odložená/přeskočená upomínka"
 
 #: editdlg.cpp:271
 #, kde-format
@@ -2239,28 +2260,26 @@ msgstr "Změní čas odložení upomínky, nebo odložení zruší"
 #, kde-format
 msgctxt "@label When the alarm will next trigger after being skipped"
 msgid "Skipping until:"
-msgstr ""
+msgstr "Přeskočit na:"
 
 #: editdlg.cpp:285
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The next time the alarm will trigger, when it will resume normal activation."
-msgstr ""
+msgstr "Příště se upomínka spustí, až se obnoví běžný režim."
 
 #: editdlg.cpp:288
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel skip"
-msgstr "Zrušit pokud je pozdě"
+msgstr "Zrušit přeskočení"
 
 #: editdlg.cpp:290
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel skipping of the alarm"
-msgstr ""
+msgstr "Zrušit přeskočení upomínky"
 
 #: editdlg.cpp:301 editdlg.cpp:362
 #, kde-format
@@ -2344,6 +2363,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
+"Zkontrolujte, zda se systém probudí, pokud se spustí upomínka v době, kdy je "
+"systém v režimu spánku"
 
 #: editdlg.cpp:428
 #, kde-format
@@ -2371,6 +2392,8 @@ msgid ""
 "will trigger at the minute boundary before the specified time from now.</"
 "para>"
 msgstr ""
+"<para>KAlarm neposkytuje vysoce přesné upomínky.</para><para>Upomínka se "
+"spustí odteď na začátku minuty před zadaným časem.</para>"
 
 #: editdlg.cpp:1173
 #, kde-format
@@ -2471,6 +2494,9 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications"
 msgstr ""
+"Zajistěte, aby se upomínka vždy spustila v nastavený čas, bez ohledu na to, "
+"zda je potlačování oznámení zapnuté nebo zda jsou spuštěny aplikace na celé "
+"obrazovce"
 
 #: editdlg.cpp:1621
 #, kde-format
@@ -2479,6 +2505,9 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications."
 msgstr ""
+"Zajistěte, aby se upomínka vždy spustila v nastavený čas, bez ohledu na to, "
+"zda je potlačování oznámení zapnuté nebo zda jsou spuštěny aplikace na celé "
+"obrazovce."
 
 #: editdlgtypes.cpp:75
 #, kde-format
@@ -2606,6 +2635,8 @@ msgid ""
 "Select whether to display the alarm in a window or by the notification "
 "system."
 msgstr ""
+"Zvolte, zda se má upomínka zobrazit v okně, nebo prostřednictvím systémových "
+"oznámení."
 
 #: editdlgtypes.cpp:274
 #, kde-format
@@ -2633,7 +2664,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Select whether the reminder should be triggered before or after the main "
 "alarm"
-msgstr ""
+msgstr "Zvolte, zda se má připomenutí spustit před nebo po hlavní upomínce"
 
 #: editdlgtypes.cpp:286
 #, kde-format
@@ -2646,7 +2677,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
-msgstr ""
+msgstr "Zobrazit upomínku"
 
 #: editdlgtypes.cpp:677
 #, kde-format
@@ -2856,7 +2887,7 @@ msgstr "Poslat e-mail na zadané adresy nyní"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
-msgstr ""
+msgstr "Odeslat e-mail"
 
 #: editdlgtypes.cpp:1188
 #, kde-format
@@ -3044,13 +3075,13 @@ msgstr "Upravit Zvukovou upomínku"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
-msgstr ""
+msgstr "Přehrát zvukový soubor"
 
 #: editdlgtypes.cpp:1631
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
-msgstr ""
+msgstr "Přehrát zvukový soubor"
 
 #: editdlgtypes.cpp:1633
 #, kde-format
@@ -3087,6 +3118,8 @@ msgid ""
 "<para>The command cannot set environment variables:</para><para><icode>%1</"
 "icode></para>"
 msgstr ""
+"<para>Příkaz nemůže nastavit proměnné prostředí:</para><para><icode>%1</"
+"icode></para>"
 
 #: editdlgtypes.cpp:1927
 #, kde-format
@@ -3397,7 +3430,7 @@ msgstr ""
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
-msgstr ""
+msgstr "Plánované probuzení z režimu spánku bylo zrušeno."
 
 #: functions.cpp:1422
 #, kde-format
@@ -3506,13 +3539,13 @@ msgstr "Ukončení zruší naplánované probuzení z uspání."
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
-msgstr ""
+msgstr "Nelze vytvořit upomínku: Není nastaven žádný výchozí kalendář"
 
 #: kalarmapp.cpp:1071
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
-msgstr ""
+msgstr "Chyba při vytváření upomínky"
 
 #: kalarmapp.cpp:1127
 #, kde-kuit-format
@@ -3529,6 +3562,10 @@ msgid ""
 "calendar is enabled.<nl/><nl/>To fix this, use <interface>View | Show "
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
+"Upomínky nelze vytvářet ani aktualizovat, protože není povolen žádný aktivní "
+"kalendář upomínek s právem k zápisu.<nl/><nl/>Chcete-li tento problém "
+"vyřešit, použijte <interface>Pohled | Zobrazit kalendáře </interface> a "
+"zkontrolujte nebo změňte stav kalendářů."
 
 #: kalarmapp.cpp:1479
 #, kde-kuit-format
@@ -3546,6 +3583,10 @@ msgid ""
 "<interface>View | Show Calendars</interface> to check or change calendar "
 "statuses."
 msgstr ""
+"Upomínky jsou nastaveny tak, aby se archivovaly, ale to není možné, protože "
+"není povolen žádný zapisovatelný kalendář archivovaných upomínek.<nl/><nl/"
+">Chcete-li tento problém vyřešit, použijte <interface>Pohled | Zobrazit "
+"kalendáře </interface> a zkontrolujte nebo změňte stav kalendářů."
 
 #: kalarmapp.cpp:1515
 #, kde-kuit-format
@@ -3557,6 +3598,11 @@ msgid ""
 "calendar, and check <interface>Use as Default for Archived Alarms</"
 "interface>."
 msgstr ""
+"Upomínky jsou nastaveny tak, aby se archivovaly, ale to není možné, protože "
+"jako výchozí není nastaven žádný kalendář archivovaných upomínek.<nl/><nl/"
+">Chcete-li tento problém vyřešit, použijte <interface>Pohled | Zobrazit "
+"kalendáře </interface>, vyberte kalendář archivovaných upomínek a zaškrtněte "
+"políčko <interface>Použít jako výchozí pro archivované upomínky</interface>."
 
 #: kalarmapp.cpp:2472
 #, kde-format
@@ -3773,7 +3819,7 @@ msgstr "Čas zahájení"
 #, kde-format
 msgctxt "@label Start delay configured in an alarm template"
 msgid "Template after time"
-msgstr ""
+msgstr "Šablona po čase"
 
 #: kalarmcalendar/kaeventformatter.cpp:54
 #, kde-format
@@ -3905,13 +3951,13 @@ msgstr "Činnost před upomínkou"
 #, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action cancel"
-msgstr ""
+msgstr "Činnost před upomínkou - zrušení"
 
 #: kalarmcalendar/kaeventformatter.cpp:103
 #, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action no error"
-msgstr ""
+msgstr "Činnost před upomínkou - bez chyby"
 
 #: kalarmcalendar/kaeventformatter.cpp:105
 #, kde-format
@@ -3941,13 +3987,13 @@ msgstr "Opakování zvuku"
 #, kde-format
 msgctxt "@label"
 msgid "Sound fade volume"
-msgstr ""
+msgstr "Hlasitost při ztlumení zvuku"
 
 #: kalarmcalendar/kaeventformatter.cpp:119
 #, kde-format
 msgctxt "@label"
 msgid "Sound fade time"
-msgstr ""
+msgstr "Doba ztlumení zvuku"
 
 #: kalarmcalendar/kaeventformatter.cpp:121
 #, kde-format
@@ -4408,7 +4454,7 @@ msgstr "Příkaz nelze spustit"
 #, kde-format
 msgctxt "@info"
 msgid "Failed to execute command (not found or not executable)"
-msgstr ""
+msgstr "Nepodařilo se provést příkaz (nebyl nalezen nebo není spustitelný)"
 
 #: lib/shellprocess.cpp:149
 #, kde-format
@@ -4614,20 +4660,16 @@ msgid "Delete"
 msgstr "Smazat"
 
 #: mainwindow.cpp:911
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Display Alarm"
+#, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
-msgstr "Upomínka zobrazením"
+msgstr "Přeskočit upomínku"
 
 #: mainwindow.cpp:912
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Number of repetitions:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
-msgstr "Počet opakování:"
+msgstr "Počet přeskočených aktivací:"
 
 #: mainwindow.cpp:943
 #, kde-format
@@ -4719,15 +4761,13 @@ msgstr "Zakázat"
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
-msgstr ""
+msgstr "Přeskočit..."
 
 #: mainwindow.cpp:1781
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action"
 msgid "Cancel skip"
-msgstr "Zrušit pokud je pozdě"
+msgstr "Zrušit přeskočení"
 
 #: messagedisplay.cpp:278
 #, kde-kuit-format
@@ -4828,9 +4868,9 @@ msgstr[2] "%1 hodin"
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
 msgid_plural "in %2 %1 minutes' time"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "za %2 minutu"
+msgstr[1] "za %2 %1 minuty"
+msgstr[2] "za %2 %1 minut"
 
 #: messagedisplayhelper.cpp:850
 #, kde-format
@@ -4842,7 +4882,7 @@ msgstr "Zprávu nelze přečíst"
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
-msgstr ""
+msgstr "Subsystém převodu textu na řeč není k dispozici"
 
 #: messagenotification.cpp:519
 #, kde-format
@@ -5177,6 +5217,8 @@ msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
 msgstr ""
+"Spustit KAlarm automaticky při přihlášení. Tuto možnost je nutné zaškrtnout, "
+"aby KAlarm fungoval správně."
 
 #: prefdlg.cpp:465
 #, kde-format
@@ -5191,6 +5233,8 @@ msgid ""
 "Only run KAlarm manually, never automatically. KAlarm will only function "
 "when you manually start it."
 msgstr ""
+"Spustit KAlarm pouze ručně, nikdy automaticky. KAlarm bude fungovat pouze "
+"tehdy, když jej spustíte ručně."
 
 #: prefdlg.cpp:471
 #, kde-format
@@ -5205,6 +5249,8 @@ msgid ""
 "Stop using KAlarm. If you later run it again, it will then resume normal "
 "functioning."
 msgstr ""
+"Ukončit používání programu KAlarm. Pokud jej později spustíte znovu, bude "
+"opět fungovat normálně."
 
 #: prefdlg.cpp:477
 #, kde-format
@@ -5232,7 +5278,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable alarm names"
-msgstr ""
+msgstr "Povolit názvy upomínek"
 
 #: prefdlg.cpp:498
 #, kde-format
@@ -5241,6 +5287,8 @@ msgid ""
 "Check to have the option to give alarms a name. This is a convenience to "
 "help you to identify alarms."
 msgstr ""
+"Zkontrolujte, zda máte možnost pojmenovat upomínky. Jedná se o užitečnou "
+"funkci, která vám usnadní jejich identifikaci."
 
 #: prefdlg.cpp:507
 #, kde-format
@@ -5319,13 +5367,15 @@ msgstr "Moduly"
 #, kde-format
 msgctxt "@title:group"
 msgid "Audio Backend"
-msgstr ""
+msgstr "Podpůrná vrstva zvuku"
 
 #: prefdlg.cpp:584
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which audio backend to use to play sound files"
 msgstr ""
+"Vyberte, která zvuková podpůrná vrstva se má použít k přehrávání zvukových "
+"souborů"
 
 #: prefdlg.cpp:599
 #, kde-format
@@ -5340,6 +5390,9 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
+"Povolit použití Akonadi, aby byly k dispozici funkce jako import dat "
+"narozenin, některé funkce pro práci s e-maily a vyhledávání v e-mailovém "
+"adresáři."
 
 #: prefdlg.cpp:603
 #, kde-format
@@ -5348,6 +5401,9 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
+"Povolit použití Akonadi, aby byly k dispozici funkce jako import dat "
+"narozenin, některé funkce pro práci s e-maily a vyhledávání v e-mailovém "
+"adresáři."
 
 #: prefdlg.cpp:676
 #, kde-kuit-format
@@ -5356,12 +5412,14 @@ msgid ""
 "<para>No command is specified to invoke a terminal window.</para><para>The "
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
+"<para>Není zadán žádný příkaz pro spuštění terminálového okna.</"
+"para><para>Bude použit výchozí příkaz (<command>%1</command>).</para>"
 
 #: prefdlg.cpp:684
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
-msgstr ""
+msgstr "Není zadán žádný příkaz pro spuštění terminálového okna"
 
 #: prefdlg.cpp:697
 #, kde-kuit-format
@@ -5387,6 +5445,8 @@ msgid ""
 "This will prevent <application>KAlarm</application> from functioning<nl/"
 ">except if you manually start it."
 msgstr ""
+"Tím se zabrání fungování <application>KAlarm</application><nl/>, pokud jej "
+"nespustíte ručně."
 
 #: prefdlg.cpp:811
 #, kde-kuit-format
@@ -5894,6 +5954,8 @@ msgid ""
 "The default setting for the alarm message display method in the alarm edit "
 "dialog."
 msgstr ""
+"Výchozí nastavení způsobu zobrazení upomínky v dialogovém okně pro jejich "
+"úpravy."
 
 #: prefdlg.cpp:1500
 #, kde-format
@@ -6011,12 +6073,15 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Select to set the default volume for sound files in the alarm edit dialog."
 msgstr ""
+"Zaškrtněte toto políčko, chcete-li nastavit výchozí hlasitost zvukových "
+"souborů v dialogovém okně pro úpravu upomínky."
 
 #: prefdlg.cpp:1634
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default volume for sound files in the alarm edit dialog."
 msgstr ""
+"Výchozí hlasitost zvukových souborů v dialogovém okně pro úpravu upomínky."
 
 #: prefdlg.cpp:1644
 #, kde-format
@@ -6100,6 +6165,10 @@ msgid ""
 "system tray if there are no active alarms. When hidden, the icon can always "
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
+"Zaškrtněte toto políčko, aby se ikona aplikace <application>KAlarm</"
+"application> automaticky skryla v oznamovací oblasti, pokud nejsou aktivní "
+"žádné upomínky. I když je ikona skrytá, lze ji kdykoli zobrazit pomocí "
+"možnosti v oznamovací oblasti, která umožňuje zobrazit skryté ikony."
 
 #: prefdlg.cpp:1965
 #, kde-kuit-format
@@ -6110,6 +6179,11 @@ msgid ""
 "hidden, the icon can always be made visible by use of the system tray option "
 "to show hidden icons."
 msgstr ""
+"Zaškrtněte toto políčko, aby se ikona aplikace <application>KAlarm</"
+"application> automaticky skryla v oznamovací oblasti, pokud v daném časovém "
+"období nejsou naplánovány žádné upomínky. Pokud je ikona skrytá, lze ji "
+"kdykoli zobrazit pomocí možnosti v oznamovací oblasti, která slouží k "
+"zobrazení skrytých ikon."
 
 #: prefdlg.cpp:1968
 #, kde-format
@@ -6647,7 +6721,7 @@ msgstr "Vyberte den v měsíci, kdy si přejete upomínku opakovat"
 #, kde-format
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
-msgstr ""
+msgstr "Na"
 
 #: recurrenceedit.cpp:1329
 #, kde-format
@@ -6966,14 +7040,14 @@ msgstr "Kalendář není nastaven."
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar <resource>%1</resource>."
-msgstr ""
+msgstr "Došlo k chybě při načítání kalendáře <resource>%1</resource>."
 
 #: resources/fileresource.cpp:432 resources/fileresource.cpp:472
 #: resources/fileresource.cpp:482
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error saving calendar <resource>%1</resource>."
-msgstr ""
+msgstr "Došlo k chybě při ukládání kalendáře <resource>%1</resource>."
 
 #: resources/fileresource.cpp:462
 #, kde-format
@@ -6985,7 +7059,7 @@ msgstr "Kalendář je pouze ke čtení."
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Calendar file is in wrong format: <filename>%1</filename>."
-msgstr ""
+msgstr "Soubor kalendáře má nesprávný formát: <filename>%1</filename>."
 
 #: resources/fileresourcecalendarupdater.cpp:113
 #, kde-kuit-format
@@ -7003,7 +7077,7 @@ msgstr "Nastavení kalendáře"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Select storage type of new calendar:"
-msgstr ""
+msgstr "Vyberte typ úložiště pro nový kalendář:"
 
 #: resources/fileresourcecreator.cpp:137
 #, kde-kuit-format
@@ -7018,13 +7092,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Directory Resource"
-msgstr ""
+msgstr "Importovat zdroj adresáře"
 
 #: resources/migration/dirresourceimportdialog.cpp:39
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Calendar Directory Resource"
-msgstr ""
+msgstr "Importovat zdroj kalendářového adresáře"
 
 #: resources/migration/dirresourceimportdialog.cpp:46
 #, kde-format
@@ -7036,13 +7110,13 @@ msgstr "Importovat aktivní upomínky"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Archived Alarms"
-msgstr ""
+msgstr "Importovat archivované upomínky"
 
 #: resources/migration/dirresourceimportdialog.cpp:64
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Alarm Templates"
-msgstr ""
+msgstr "Importovat archivované šablony"
 
 #: resources/migration/dirresourceimportdialog.cpp:191
 #, kde-format
@@ -7081,33 +7155,33 @@ msgstr "Kontroluji informace..."
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! File already exists."
-msgstr ""
+msgstr "Chyba! Soubor již existuje."
 
 #: resources/migration/dirresourceimportdialog.cpp:411
 #: resources/migration/dirresourceimportdialog.cpp:462
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory does not exist)."
-msgstr ""
+msgstr "Chyba! Nelze vytvořit soubor (adresář neexistuje)."
 
 #: resources/migration/dirresourceimportdialog.cpp:416
 #: resources/migration/dirresourceimportdialog.cpp:464
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory is not writable)."
-msgstr ""
+msgstr "Chyba! Nelze vytvořit soubor (adresář není zapisovatelný)."
 
 #: resources/migration/dirresourceimportdialog.cpp:470
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory does not exist)."
-msgstr ""
+msgstr "Chyba! Nelze vytvořit soubor (adresář neexistuje)."
 
 #: resources/migration/dirresourceimportdialog.cpp:472
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory is not writable)."
-msgstr ""
+msgstr "Chyba! Nelze vytvořit soubor (adresář není zapisovatelný)."
 
 #. i18n: ectx: property (text), widget (QLabel, warning1)
 #: resources/migration/dirresourceimportdialog_intro.ui:16
@@ -7118,6 +7192,9 @@ msgid ""
 "using the contents of the directory resource below, you must import it into "
 "a KAlarm calendar file resource."
 msgstr ""
+"KAlarm již nepodporuje zdroje kalendářových adresářů. Chcete-li i nadále "
+"využívat obsah níže uvedeného adresářového zdroje, musíte jej importovat do "
+"souboru kalendáře KAlarm."
 
 #. i18n: ectx: property (text), widget (QLabel, warning2)
 #: resources/migration/dirresourceimportdialog_intro.ui:26
@@ -7128,6 +7205,9 @@ msgid ""
 "using the contents of the directory resource below, you must import each of "
 "its alarm types into separate KAlarm calendar file resources."
 msgstr ""
+"KAlarm již nepodporuje zdroje kalendářových adresářů. Chcete-li i nadále "
+"využívat obsah níže uvedeného adresářového zdroje, musíte každou z jeho typů "
+"upomínek importovat do samostatných kalendářových souborových zdrojů KAlarm."
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
@@ -7161,13 +7241,16 @@ msgid ""
 "using the Import Alarms menu option to import the calendar files contained "
 "within it."
 msgstr ""
+"Pokud chcete, můžete tento kalendářový adresář importovat později pomocí "
+"možnosti nabídky Importovat upomínky, která slouží k importu kalendářových "
+"souborů v něm obsažených."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mergeRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:13
 #, kde-format
 msgctxt "@option:radio"
 msgid "Import into existing calendar file resource"
-msgstr ""
+msgstr "Importovat do stávajícího kalendářového souborového zdroje"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, mergeResource)
 #: resources/migration/dirresourceimportdialog_type.ui:26
@@ -7175,13 +7258,14 @@ msgstr ""
 msgctxt "@info:whatsthis"
 msgid "Select the resource to import the directory resource's alarms into."
 msgstr ""
+"Vyberte zdroj, do kterého chcete importovat upomínky adresářového zdroje."
 
 #. i18n: ectx: property (text), widget (QRadioButton, newRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:49
 #, kde-format
 msgctxt "@option:radio"
 msgid "Import into new calendar file resource"
-msgstr ""
+msgstr "Importovat do nového kalendářového souborového zdroje"
 
 #. i18n: ectx: property (text), widget (QLabel, pathLabel)
 #: resources/migration/dirresourceimportdialog_type.ui:64
@@ -7198,6 +7282,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Select the file to contain this resource. The file must not already exist."
 msgstr ""
+"Vyberte soubor, do kterého se má tento zdroj uložit. Soubor ještě nesmí "
+"existovat."
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, pathRequester)
 #: resources/migration/dirresourceimportdialog_type.ui:79
@@ -7209,6 +7295,10 @@ msgid ""
 "Note that if the URL of a remote file is specified, monitoring for file "
 "changes will not work."
 msgstr ""
+"Vyberte soubor, do kterého se má tento zdroj uložit.\n"
+"Soubor ještě nesmí existovat.\n"
+"Upozorňujeme, že pokud zadáte adresu URL vzdáleného souboru, sledování změn "
+"souboru nebude fungovat."
 
 #. i18n: ectx: property (toolTip), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:109
@@ -7216,6 +7306,7 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Enter the name used to identify this resource in displays."
 msgstr ""
+"Zadejte název, který se používá k označení tohoto zdroje v zobrazeních."
 
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:112
@@ -7223,6 +7314,7 @@ msgstr ""
 msgctxt "@info:whatsthis"
 msgid "Enter the name used to identify this resource in displays."
 msgstr ""
+"Zadejte název, který se používá k označení tohoto zdroje v zobrazeních."
 
 #. i18n: ectx: property (text), widget (QRadioButton, noRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:137
@@ -7256,6 +7348,8 @@ msgid ""
 "<para>Failed to create default calendar <resource>%1</resource></"
 "para><para>Location: <filename>%2</filename></para>"
 msgstr ""
+"<para>Vytvoření výchozího kalendáře <resource>%1</resource> se nezdařilo</"
+"para><para>Umístění: <filename>%2</filename></para>"
 
 #: resources/resourcedatamodelbase.cpp:66
 #, kde-format
@@ -7279,13 +7373,13 @@ msgstr "Šablony upomínek"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7294,20 +7388,16 @@ msgid "Read-only"
 msgstr "Pouze ke čtení"
 
 #: resources/resourcedatamodelbase.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (old format)"
+#, kde-format
 msgctxt "@item:intext Calendar status, parameter is KAlarm version"
 msgid "Read-only (KAlarm pre-%1 format)"
-msgstr "Pouze ke čtení (starý formát)"
+msgstr "Pouze pro čtení (formát KAlarm před %1)"
 
 #: resources/resourcedatamodelbase.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (other format)"
+#, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (not a KAlarm calendar)"
-msgstr "Pouze ke čtení (jiný formát)"
+msgstr "Pouze pro čtení (nejedná se o kalendář KAlarm)"
 
 #: resources/resourcedatamodelbase.cpp:119
 #, kde-format
@@ -7439,7 +7529,7 @@ msgstr "Typ upomínky (zpráva, soubor, příkaz nebo e-mail)"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
-msgstr ""
+msgstr "Název upomínky nebo text, pokud je název prázdný"
 
 #: resources/resourcedatamodelbase.cpp:574
 #, kde-format
@@ -7521,8 +7611,17 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
+"<para>Kalendář <resource>%2</resource> byl nastaven pouze pro čtení.</"
+"para><para>Tento kalendář byl výchozím kalendářem pro %3.</"
+"para><para>Vyberte prosím nový výchozí kalendář.</para>"
 msgstr[1] ""
+"<para>Kalendář <resource>%2</resource> byl nastaven jako pouze pro čtení.</"
+"para><para>Tento kalendář byl výchozím kalendářem pro %3.</"
+"para><para>Vyberte prosím nové výchozí kalendáře.</para>"
 msgstr[2] ""
+"<para>Kalendář <resource>%2</resource> byl nastaven jako pouze pro čtení.</"
+"para><para>Tento kalendář byl výchozím kalendářem pro %3.</"
+"para><para>Vyberte prosím nové výchozí kalendáře.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7564,19 +7663,19 @@ msgstr "Adresář"
 #, kde-format
 msgctxt "@info"
 msgid "A previous load is still in progress."
-msgstr ""
+msgstr "Předchozí načítání stále probíhá."
 
 #: resources/singlefileresource.cpp:183 resources/singlefileresource.cpp:357
 #, kde-format
 msgctxt "@info"
 msgid "A previous save is still in progress."
-msgstr ""
+msgstr "Předchozí ukládání stále probíhá."
 
 #: resources/singlefileresource.cpp:232
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create calendar file <filename>%1</filename>."
-msgstr ""
+msgstr "Nelze vytvořit soubor kalendáře <filename>%1</filename>."
 
 #: resources/singlefileresource.cpp:247
 #, kde-kuit-format
@@ -7594,7 +7693,7 @@ msgstr "Nelze načíst soubor <filename>%1</filename>."
 #, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
-msgstr ""
+msgstr "Kalendář není otevřený."
 
 #: resources/singlefileresource.cpp:648
 #, kde-kuit-format
@@ -7635,6 +7734,9 @@ msgid ""
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
+"Vyberte soubor, ve kterém bude tento kalendář uložen. Pokud soubor "
+"neexistuje, bude vytvořen. Lze zadat také adresu URL vzdáleného souboru, ale "
+"mějte na paměti, že v tomto případě nebude fungovat sledování změn v souboru."
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
@@ -7710,6 +7812,7 @@ msgstr "Název:"
 #, kde-format
 msgid "Enter the display name used to identify this calendar."
 msgstr ""
+"Zadejte zobrazovaný název, který slouží k identifikaci tohoto kalendáře."
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:232
@@ -7785,19 +7888,19 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reconfigure the selected calendar"
-msgstr ""
+msgstr "Změnit nastavení vybraného kalendáře"
 
 #: resourceselector.cpp:84
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the highlighted calendar's configuration"
-msgstr ""
+msgstr "Upravit nastavení zvýrazněného kalendáře"
 
 #: resourceselector.cpp:85
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected calendar from the list"
-msgstr ""
+msgstr "Odebrat vybraný kalendář ze seznamu"
 
 #: resourceselector.cpp:86
 #, kde-kuit-format
@@ -7849,7 +7952,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr ""
+msgstr "Obsahuje také %1"
 
 #: resourceselector.cpp:255
 #, kde-kuit-format
@@ -7858,6 +7961,8 @@ msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
+"<para><resource>%1</resource> je výchozí kalendář pro %2</para><para>%3</"
+"para><para>Opravdu jej chcete odstranit ze všech seznamů kalendářů?</para>"
 
 #: resourceselector.cpp:259
 #, kde-kuit-format
@@ -7876,6 +7981,8 @@ msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
+"<para><resource>%1</resource> obsahuje %2</para><para>Opravdu jej chcete "
+"odstranit ze všech kalendářů?</para>"
 
 #: resourceselector.cpp:265
 #, kde-kuit-format
@@ -8031,6 +8138,8 @@ msgid ""
 "Error setting wake from suspend.<nl/>Command was: <command>%1 %2</"
 "command><nl/>Error code: %3."
 msgstr ""
+"Došlo k chybě při nastavení probuzení z režimu spánku.<nl/>Příkaz byl: "
+"<command>%1 %2</command><nl/>Kód chyby: %3."
 
 #: sounddlg.cpp:43
 #, kde-format
@@ -8201,6 +8310,14 @@ msgid ""
 "is spoken. (Option requires working Qt text-to-speech installation.)</item></"
 "list></para>"
 msgstr ""
+"<para>Vyberte zvuk, který se má přehrát při zobrazení zprávy."
+"<list><item><interface>%1</interface>: zpráva se zobrazí bez zvuku.</"
+"item><item><interface>%2</interface>: ozve se jednoduchý zvukový signál.</"
+"item><item><interface>%3</interface>: přehraje se zvukový soubor. Budete "
+"vyzváni k výběru souboru a nastavení možností přehrávání. (Tato možnost není "
+"k dispozici při použití notifikace.)</item><item><interface>%4</interface>: "
+"text zprávy je přečten. (Tato možnost vyžaduje funkční instalaci funkce "
+"převodu textu na řeč v Qt.)</item></list></para>"
 
 #: soundpicker.cpp:88
 #, kde-format
@@ -8288,7 +8405,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute for deferred alarms"
-msgstr ""
+msgstr "Spustit u odložených upomínek"
 
 #: specialactions.cpp:174
 #, kde-kuit-format
@@ -8298,6 +8415,9 @@ msgid ""
 "displayed.</para><para>If checked, the pre-alarm command is also executed "
 "before a deferred alarm is displayed.</para>"
 msgstr ""
+"<para>Pokud není zaškrtnuto, příkaz se provede pouze před zobrazením "
+"upomínky.</para><para>Pokud je zaškrtnuto, příkaz se provede také před "
+"zobrazením odložené upomínky.</para>"
 
 #: specialactions.cpp:178
 #, kde-format
@@ -8321,6 +8441,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Do not show error status or error message if the pre-alarm command fails."
 msgstr ""
+"V případě selhání příkazu před upomínkou nezobrazovat stav chyby ani "
+"chybovou zprávu."
 
 #: specialactions.cpp:187
 #, kde-format
@@ -8376,7 +8498,7 @@ msgstr "Vytvořit novou šablonu upomínky"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
-msgstr ""
+msgstr "Upravit vybranou šablonu upomínky"
 
 #: templatedlg.cpp:84
 #, kde-format
@@ -8394,7 +8516,7 @@ msgstr "Kopírovat"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template based on the selected template"
-msgstr ""
+msgstr "Vytvořit novou šablonu upomínky na základě vybrané šablony"
 
 #: templatedlg.cpp:90
 #, kde-format
@@ -8409,13 +8531,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
-msgstr ""
+msgstr "Odstranit vybrané šablony upomínek"
 
 #: templatedlg.cpp:96
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
-msgstr ""
+msgstr "Odstranit aktuálně vybrané šablony upomínek"
 
 #: templatedlg.cpp:178
 #, kde-format
@@ -8619,6 +8741,13 @@ msgid ""
 "support setting a wakeup time up to 24 hours ahead. You may wish to set up a "
 "test alarm to check your system's capability.</note></para>"
 msgstr ""
+"<para>Toto probuzení zruší veškerá stávající probuzení nastavená aplikací "
+"KAlarm nebo jakoukoli jinou aplikací, protože počítač může naplánovat pouze "
+"jeden čas probuzení.</para><para><note>Funkce Probuzení z režimu spánku není "
+"na některých počítačích vůbec podporována, zejména na starších modelech, a "
+"některé počítače podporují nastavení času probuzení pouze s maximálním "
+"předstihem 24 hodin. Můžete si nastavit zkušební upomínku, abyste ověřili "
+"schopnosti svého systému.</note> </para>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: wakedlg.ui:21
@@ -8630,7 +8759,7 @@ msgstr "Upomínka pro probuzení z uspání"
 #: wakedlg.ui:42
 #, kde-format
 msgid "Show current wake-from-suspend alarm"
-msgstr ""
+msgstr "Zobrazit aktuální upomínku pro probuzení z režimu spánku"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, showWakeButton)
 #: wakedlg.ui:45
@@ -8639,6 +8768,8 @@ msgid ""
 "Highlight the current wake-from-suspend alarm in the alarm list. This button "
 "is disabled if no wake-from-suspend alarm is configured."
 msgstr ""
+"Zvýrazní aktuální upomínku pro probuzení z režimu spánku v seznamu. Toto "
+"tlačítko je deaktivováno, pokud není nastavena žádná taková upomínka."
 
 #. i18n: ectx: property (text), widget (QPushButton, showWakeButton)
 #: wakedlg.ui:48
