@@ -495,6 +495,7 @@
           <li xml:lang="ca-valencia">Proporciona una facilitat per a ometre les properes recurrències/subrepeticions d'una alarma.</li>
           <li xml:lang="es">Proporcionar la opción de omitir las siguientes repeticiones o subrepeticiones de una alarma.</li>
           <li xml:lang="fr">Fournir une fonctionnalité permettant d'ignorer les prochaines occurrences / sous-répétitions d'une alarme.</li>
+          <li xml:lang="ia">Provider le facilitate de omitter le proxime paucc recurrentias/sub-repetitiones de un alarma.</li>
           <li xml:lang="ka">დაემატა განგაშის შემდეგი რამდენიმე გამეორება/ქვეგამეორების გამოტოვების შესაძლებლობა.</li>
           <li xml:lang="nl">Bied de mogelijkheid om de volgende paar herhalingen van een alarm over te slaan.</li>
           <li xml:lang="pt-BR">Fornecer a possibilidade de ignorar as próximas recorrências/sub-repetições de um alarme.</li>
@@ -502,12 +503,14 @@
           <li xml:lang="sl">Omogoča zmožnost preskoka naslednjih nekaj ponovitev/podponovitev alarma.</li>
           <li xml:lang="tr">Bir alarmın tekrarlarını ve alt tekrarlarını atlama için altyapı</li>
           <li xml:lang="uk">Надано можливість пропустити наступні кілька повторень/підповторень нагадування.</li>
+          <li xml:lang="zh-CN">提供跳过提醒接下来几次重复/子重复的功能。</li>
           <li>Provide Edit Alarm dialog option to override notification inhibition or display over X11 full screen applications.</li>
           <li xml:lang="ar">توفير خيار في مربع حوار ”تحرير التنبيهات“ لتجاوز حظر الإشعارات أو عرضها فوق تطبيقات X11 التي تعمل بوضع ملء الشاشة.</li>
           <li xml:lang="ca">Proporciona una opció de diàleg d'edició d'alarma per a anul·lar la inhibició de notificacions o mostrar-les a través d'aplicacions de pantalla completa d'X11.</li>
           <li xml:lang="ca-valencia">Proporciona una opció de diàleg d'edició d'una alarma per a anul·lar la inhibició de notificacions o mostrar-les a través d'aplicacions de pantalla completa d'X11.</li>
           <li xml:lang="es">Proporcionar en el diálogo de edición de alarmas una opción para anular la inhibición de la notificación o mostrar sobre las aplicaciones de X11 a pantalla completa.</li>
           <li xml:lang="fr">Fourniture d'une option dans la boîte de dialogue « Modifier l'alarme » pour contourner l'inhibition des notifications ou d'affichage au-dessus des applications en mode « Plein écran » sous X11.</li>
+          <li xml:lang="ia">Provide un option in le dialogo de modification de alarmas pro superpassar le inhibition de notificationes o pro apparer sur applicationes X11 a schermo plen.</li>
           <li xml:lang="ka">განგაშის ჩასწორების დიალოგს დაემატა გაფრთხილების ჩახშობის გადაფარვის, ან X11-ის სრულეკრანიანი აპლიკაციების ზემოდან ჩვენების შესაძლებლობა.</li>
           <li xml:lang="nl">Voeg de optie 'Alarm bewerken' toe aan het dialoogvenster om de onderdrukking van meldingen op te heffen of om ze weer te geven in X11-toepassingen op volledig scherm.</li>
           <li xml:lang="pt-BR">Fornecer opção no diálogo para editar alarme para ignorar a inibição de notificações ou para exibir sobre aplicativos X11 em tela cheia.</li>
@@ -515,12 +518,14 @@
           <li xml:lang="sl">Omogoči zmožnost pogovornega okna za urejanje alarma, da preglasi blokiranje obvestil ali jih prikaže prek celozaslonskih aplikacij X11.</li>
           <li xml:lang="tr">X11 tam ekran uygulamalarının bildirim geçersiz kılma veya atlama durumu için alarm düzenleme seçeneği</li>
           <li xml:lang="uk">Додано пункт редагування діалогового вікна сповіщень для скасування блокування сповіщень або їх показу над повноекранних вікнами програм X11.</li>
+          <li xml:lang="zh-CN">提供“编辑提醒对话框选项，以覆盖通知抑制或在 X11 全屏应用程序上显示。</li>
           <li>Only show options for Late cancel/Reminder in Edit Alarm dialog when they are enabled.</li>
           <li xml:lang="ar">لا تُظهر خيارات ”الإلغاء المتأخر“ و”التذكير“ في مربع حوار ”تحرير التنبيه“ إلا إذا كانت مفعّلة.</li>
           <li xml:lang="ca">Mostra només les opcions de cancel·lació retardada/recordatori en el diàleg d'edició d'alarma quan estiguin habilitades.</li>
           <li xml:lang="ca-valencia">Mostra només les opcions de cancel·lació retardada/recordatori en el diàleg d'edició d'una alarma quan estiguen habilitades.</li>
           <li xml:lang="es">Mostrar solo las opciones para cancelación tardía y recordatorio en el diálogo de edición de alarmas cuando están activadas.</li>
           <li xml:lang="fr">Affichage uniquement des options pour « Annulation tardive / Rappel » dans la boîte de dialogue « Modifier l'alarme » lorsqu'elles sont activées.</li>
+          <li xml:lang="ia">Monstra optiones per Cancellation tardive/Rememoration in le dialogo  de Modificar Alarma solmente quando illos es activate.</li>
           <li xml:lang="ka">მხოლოდ, გვიანი გაუქმების/შეხსენების არჩევნის ჩვენება განგაშის ჩასწორების დიალოგში, როცა ისინი ჩართულია.</li>
           <li xml:lang="nl">Toon alleen de opties voor 'Annuleren indien te laat/Herinnering' in het dialoogvenster 'Alarm bewerken' als deze zijn ingeschakeld.</li>
           <li xml:lang="pt-BR">Exibir as opções de Cancelamento tardio/Lembrete na caixa de diálogo para editar alarme somente quando eles estiverem ativados.</li>
@@ -528,12 +533,14 @@
           <li xml:lang="sl">Možnosti za pozni preklic/opomnik v pogovornem oknu Urejanje alarma, če so omogočene.</li>
           <li xml:lang="tr">Etkinleştirildiğinde alarm düzenleme iletişim kutusunda yalnızca geç iptal/anımsatıcı seçeneklerini gösterme</li>
           <li xml:lang="uk">Реалізовано показ параметрів для пізнього скасування/нагадування у діалоговому вікні редагування нагадування лише тоді, коли вони увімкнені.</li>
+          <li xml:lang="zh-CN">仅在“编辑提醒”对话框中启用“延迟取消/提醒”选项时显示这些选项。</li>
           <li>Fix date-only sub-repetition time calculations.</li>
           <li xml:lang="ar">تصحيح حسابات وقت التكرار الفرعي في حالة ”التاريخ فقط“.</li>
           <li xml:lang="ca">Corregeix els càlculs d'hora de subrepetició de només data.</li>
           <li xml:lang="ca-valencia">Corregix els càlculs prompte de subrepetició de només data.</li>
           <li xml:lang="es">Corregir los cálculos de tiempo de subrepetición que solo tienen en cuenta la fecha.</li>
           <li xml:lang="fr">Correction des calculs de temps de sous-répétition uniquement pour les dates.</li>
+          <li xml:lang="ia">Corrige le calculationes de tempore de sub-repetition de sol data.</li>
           <li xml:lang="ka">გასწორდა მხოლოდ-თარიღიანი ქვეგამეორებების დროის გამოთვლა.</li>
           <li xml:lang="nl">Corrigeer de berekeningen van de herhalingstijd van subperioden die alleen op datum gebaseerd zijn.</li>
           <li xml:lang="pt-BR">Correção dos cálculos de tempo de sub-repetição que consideram apenas a data.</li>
@@ -541,12 +548,14 @@
           <li xml:lang="sl">Popravi izračune časa podponovitev samo na podlagi datuma.</li>
           <li xml:lang="tr">Alt tekrar zaman hesaplamalarında tarih ayarını onarım</li>
           <li xml:lang="uk">Виправлено обчислення часу підповторення лише на основі дати.</li>
+          <li xml:lang="zh-CN">修正仅日期子重复的时间计算。</li>
           <li>Improve layout of late-cancel and other widgets at bottom of Edit Alarm dialog.</li>
           <li xml:lang="ar">تحسين تصميم عنصر ”الإلغاء المتأخر“ والعناصر الأخرى الموجودة أسفل مربع حوار ”تحرير التنبيه“.</li>
           <li xml:lang="ca">Millora la disposició de la cancel·lació retardada i altres ginys a la part inferior del diàleg d'edició d'alarma.</li>
           <li xml:lang="ca-valencia">Millora la disposició de la cancel·lació retardada i altres ginys a la part inferior del diàleg d'edició d'una alarma.</li>
           <li xml:lang="es">Mejorar la disposición de los elementos gráficos de cancelación tardía y de otros elementos gráficos en la parte inferior del diálogo de edición de alarmas.</li>
           <li xml:lang="fr">Amélioration de la disposition des composants graphiques de retard de suppression et autres en bas de la boîte de dialogue « Modifier l'alarme ».</li>
+          <li xml:lang="ia">Meliorar le disposition del widgets de cancellation tardive e altere widgets  al basso del dialogo de modification de alarma.</li>
           <li xml:lang="ka">გაუმჯობესდა მოგვიანებით გაუქმების და სხვა ვიჯეტების განლაგება განგაშის ჩასწორების დიალოგში.</li>
           <li xml:lang="nl">Verbeter de lay-out van de widgets voor het annuleren indien te laat en andere widgets onderaan het dialoogvenster 'Alarm bewerken'.</li>
           <li xml:lang="pt-BR">Melhoria do layout do botão de cancelamento tardio e de outros widgets na parte inferior da caixa de diálogo para editar alarme.</li>
@@ -554,6 +563,7 @@
           <li xml:lang="sl">Izboljšana postavitev gradnikov za pozni preklic in drugih gradnikov na dnu pogovornega okna za urejanje alarma.</li>
           <li xml:lang="tr">Alarm düzenleme iletişim kutusunda geç iptal ve diğer araç takımlarının iyileştirilmiş yerleşimi</li>
           <li xml:lang="uk">Удосконалено компонування віджетів для пізнього скасування та інших віджетів у нижній частині діалогового вікна редагування нагадування.</li>
+          <li xml:lang="zh-CN">改进“编辑提醒”对话框底部“取消”及其他小部件的布局。</li>
         </ul>
       </description>
     </release>
