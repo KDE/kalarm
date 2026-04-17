@@ -33,7 +33,7 @@ target_link_libraries(kalarmplugin PRIVATE
     kalarmcalendar
     KF6::CoreAddons
     KF6::CalendarCore
-    KPim6::Mime
+    KF6::Mime
 )
 
 target_include_directories(kalarmplugin PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/kalarmcalendar>")
@@ -328,7 +328,7 @@ target_link_libraries(kalarm_bin
     KPim6::CalendarUtils
     KF6::Contacts
     KPim6::IdentityManagementWidgets
-    KPim6::Mime
+    KF6::Mime
 )
 
 if(TARGET KF6::GlobalAccel)

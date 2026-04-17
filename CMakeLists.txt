@@ -126,7 +126,11 @@ endif()
 # Find KDE PIM packages
 find_package(KPim6CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim6IdentityManagementWidgets ${IDENTITYMANAGEMENT_LIB_VERSION} CONFIG REQUIRED)
-find_package(KPim6Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
+find_package(KF6Mime ${KF_MIN_VERSION} CONFIG)
+if(NOT TARGET KF6::Mime)
+    find_package(KPim6Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
+    add_library(KF6::Mime ALIAS KPim6::Mime)
+endif()
 
 # Build support for audio backend plugins
 option(ENABLE_LIBVLC "Build support for LibVLC" ON)

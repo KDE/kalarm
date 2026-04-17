@@ -40,7 +40,7 @@ target_link_libraries(akonadiplugin
     KF6::CalendarCore
     KF6::I18n
     KF6::Codecs
-    KPim6::Mime
+    KF6::Mime
     KPim6::AkonadiCore
     KPim6::AkonadiMime
     KPim6::AkonadiContactWidgets
