@@ -841,9 +841,10 @@ msgid ""
 "provide features including birthday import, some email functions, email "
 "address book lookup, and Akonadi resource migration on first run."
 msgstr ""
-"Choose či sa má enable KAlarm's Akonadi plugin, which uses Akonadi to "
-"provide features including birthday import, some email functions, email "
-"address book lookup, and Akonadi resource migration on first run."
+"Vyberte, či sa má povoliť plugin Akonadi pre KAlarm, ktorý používa Akonadi "
+"na poskytovanie funkcií vrátane importu narodenín, niektorých e-mailových "
+"funkcií, vyhľadávania v adresári e-mailov a migrácie zdrojov Akonadi pri "
+"prvom spustení."
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:83
@@ -948,8 +949,8 @@ msgid ""
 "Choose whether to be able to give alarms a name. This is a convenience to "
 "help you to identify alarms."
 msgstr ""
-"Choose či sa má be schopný give alarms a name. Toto je a convenience to help "
-"you to identify alarms."
+"Vyberte, či mať možnosť pomenovať alarmy. Je to pomôcka na lepšiu "
+"identifikáciu alarmov."
 
 #. i18n: ectx: label, entry (MessageFont), group (General)
 #: data/kalarmconfig.kcfg:118
@@ -1057,7 +1058,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
 msgstr ""
-"Či sa má run KAlarm automatically on login, manually only, or not at all."
+"Určuje, či sa má KAlarm spúšťať automaticky pri prihlásení, len manuálne, "
+"alebo vôbec."
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:149
@@ -1517,9 +1519,9 @@ msgid ""
 "determine whether to display alarm messages in windows or in system "
 "notifications."
 msgstr ""
-"Default setting in the alarm edit dialog for \"display method\", to "
-"determine či sa má display alarm messages in windows or in system "
-"notifications."
+"Predvolené nastavenie v dialógu úpravy alarmu pre \"spôsob zobrazenia\", "
+"ktoré určuje, či sa majú hlásenia alarmov zobrazovať v oknách alebo v "
+"systémových upozorneniach."
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:309
@@ -2381,8 +2383,8 @@ msgid ""
 "will trigger at the minute boundary before the specified time from now.</"
 "para>"
 msgstr ""
-"<para>KAlarm does not provide high accuracy alarms.</para><para> The alarm "
-"will trigger at the minute boundary before zadaný time from now.</para>"
+"<para>KAlarm neposkytuje alarmy s vysokou presnosťou.</para><para>Alarm sa "
+"spustí na hranici minúty pred zadaným časom od teraz.</para>"
 
 #: editdlg.cpp:1173
 #, kde-format
@@ -2483,8 +2485,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications"
 msgstr ""
-"Check to always execute the alarm when it is due, bez ohľadu na notification "
-"inhibition or active full screen applications"
+"Začiarknite, aby sa alarm vždy vykonal, keď nastane jeho čas, bez ohľadu na "
+"potlačenie upozornení alebo aktívne celoobrazovkové aplikácie"
 
 #: editdlg.cpp:1621
 #, kde-format
@@ -2493,8 +2495,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications."
 msgstr ""
-"Check to always execute the alarm when it is due, bez ohľadu na notification "
-"inhibition or active full screen applications."
+"Začiarknite, aby sa alarm vždy vykonal, keď nastane jeho čas, bez ohľadu na "
+"potlačenie upozornení alebo aktívne celoobrazovkové aplikácie."
 
 #: editdlgtypes.cpp:75
 #, kde-format
@@ -2622,7 +2624,8 @@ msgid ""
 "Select whether to display the alarm in a window or by the notification "
 "system."
 msgstr ""
-"Select či sa má display the alarm in a window or by the notification system."
+"Vyberte, či sa má alarm zobrazovať v okne alebo prostredníctvom systému "
+"upozornení."
 
 #: editdlgtypes.cpp:274
 #, kde-format
@@ -3074,8 +3077,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
 msgstr ""
-"Ak je zaškrtnuté, the sound file will be played repeatedly until %1 is "
-"clicked."
+"Ak je zaškrtnuté, zvukový súbor sa bude hrať opakovane, kým nekliknete na %1."
 
 #: editdlgtypes.cpp:1849
 #, kde-format
@@ -4683,7 +4685,8 @@ msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
-"<qt>Toto skryje panel ponuky úplne. Môžete ju zobraziť zadaním %1.</qt>"
+"<qt>Toto úplne skryje panel ponuky. Môžete ho znova zobraziť stlačením %1.</"
+"qt>"
 
 #: mainwindow.cpp:1341
 #, kde-format
@@ -5191,8 +5194,8 @@ msgid ""
 "Start KAlarm automatically at login. This option must be checked to enable "
 "normal functioning of KAlarm."
 msgstr ""
-"Start KAlarm automatically at login. Táto voľba must be checked to enable "
-"normal functioning of KAlarm."
+"Spustiť KAlarm automaticky pri prihlásení. Táto voľba musí byť začiarknutá, "
+"aby KAlarm fungoval správne."
 
 #: prefdlg.cpp:465
 #, kde-format
@@ -5722,11 +5725,12 @@ msgid ""
 "if your system is configured to use <application>sendmail</application> or a "
 "sendmail compatible mail transport agent.</item></list></para>"
 msgstr ""
-"<para>%1<list><item><interface>%2</interface>: The email is sent "
-"automatically via <application>KMail</application>.</item><item><interface>"
-"%3</interface>: The email is sent automatically. Táto voľba will only work "
-"akr system is configured to use <application>sendmail</application> or a "
-"sendmail compatible mail transport agent.</item></list></para>"
+"<para>%1<list><item><interface>%2</interface>: E-mail sa odosiela "
+"automaticky prostredníctvom <application>KMail</application>.</"
+"item><item><interface>%3</interface>: E-mail sa odosiela automaticky. Táto "
+"voľba bude fungovať iba vtedy, ak je váš systém nakonfigurovaný na "
+"používanie <application>sendmail</application> alebo poštového agenta "
+"kompatibilného so sendmail.</item></list></para>"
 
 #: prefdlg.cpp:1202
 #, kde-kuit-format
@@ -7175,9 +7179,9 @@ msgid ""
 "using the contents of the directory resource below, you must import each of "
 "its alarm types into separate KAlarm calendar file resources."
 msgstr ""
-"KAlarm no longer supports calendar directory resources. Aby ste continue "
-"using the contents of the directory resource below, you must import každý z "
-"its alarm types into separate KAlarm calendar file resources."
+"KAlarm už nepodporuje zdroje adresára kalendára. Ak chcete naďalej používať "
+"obsah nižšie uvedeného zdroja adresára, musíte importovať každý z jeho typov "
+"alarmov do samostatných zdrojov súborov kalendára KAlarm."
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
@@ -7211,9 +7215,9 @@ msgid ""
 "using the Import Alarms menu option to import the calendar files contained "
 "within it."
 msgstr ""
-"Ak prefer, môžete import this calendar directory resource later, by using "
-"the Import Alarms menu option to import the calendar files contained within "
-"it."
+"Ak preferujete, môžete importovať tento zdroj adresára kalendára neskôr "
+"pomocou možnosti ponuky Importovať alarmy na import súborov kalendára, ktoré "
+"sú v ňom obsiahnuté."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mergeRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:13
@@ -7263,10 +7267,10 @@ msgid ""
 "Note that if the URL of a remote file is specified, monitoring for file "
 "changes will not work."
 msgstr ""
-"Select the file to contain this resource.\n"
-"The file must not already exist.\n"
-"Všimnite si, že if the URL of a remote file is specified, monitoring for "
-"file changes will not work."
+"Vyberte súbor, ktorý má obsahovať tento zdroj.\n"
+"Súbor ešte nesmie existovať.\n"
+"Všimnite si, že ak je zadaná adresa URL vzdialeného súboru, sledovanie zmien "
+"súboru nebude fungovať."
 
 #. i18n: ectx: property (toolTip), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:109
@@ -7702,9 +7706,9 @@ msgid ""
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
-"Select the file to hold this calendar. If the file does not exist, it will "
-"be created. The URL of a remote file can also be specified, but všimnite si, "
-"že monitoring for file changes will not work v tomto prípade."
+"Vyberte súbor, ktorý má obsahovať tento kalendár. Ak súbor neexistuje, "
+"vytvorí sa. Môžete tiež zadať adresu URL vzdialeného súboru, avšak všimnite "
+"si, že sledovanie zmien súboru v tomto prípade nebude fungovať."
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
