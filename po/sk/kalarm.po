@@ -129,7 +129,7 @@ msgstr "Kedykoľvek"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set only a date (without a time) for the alarm"
-msgstr "Ďalší naplánovaný dátum a čas alarmu"
+msgstr "Nastaviť iba dátum (bez času) pre alarm"
 
 #: alarmtimewidget.cpp:134
 #, kde-format
@@ -145,7 +145,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "Pozdržať do:"
+msgstr "Pozdržať o:"
 
 #: alarmtimewidget.cpp:138 editdlg.cpp:342
 #, kde-format
@@ -200,19 +200,19 @@ msgstr[2] "%1 hours"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr "&Dňa"
+msgstr "1 deň"
 
 #: alarmtimewidget.cpp:167
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "týždňov"
+msgstr "1 týždeň"
 
 #: alarmtimewidget.cpp:170
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr "Vyberte šablónu, na ktorej chcete založiť nový alarm."
+msgstr "Vyberte časové oneskorenie zo zoznamu prednastavených hodnôt"
 
 #: alarmtimewidget.cpp:178
 #, kde-kuit-format
@@ -623,12 +623,12 @@ msgstr "Poslať e-mail na zadanú adresu (opakovať podľa potreby)"
 #: commandoptions.cpp:220
 #, kde-format
 msgid "Name of alarm"
-msgstr "Nový alarm"
+msgstr "Názov alarmu"
 
 #: commandoptions.cpp:224
 #, kde-format
 msgid "Display alarm message as a notification"
-msgstr "Zobraziť správu alarmu teraz"
+msgstr "Zobrazovať správu alarmu ako upozornenie"
 
 #: commandoptions.cpp:227
 #, kde-format
@@ -823,7 +823,7 @@ msgstr "Akonadi"
 #, kde-format
 msgctxt "@option"
 msgid "File Resources"
-msgstr "KResources"
+msgstr "Súborové zdroje"
 
 #. i18n: ectx: label, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:78
@@ -939,7 +939,7 @@ msgstr "Východzia farba pozadia pre okná so správami alarmov."
 #, kde-format
 msgctxt "@label"
 msgid "Enable alarm names"
-msgstr "Správa alarmu"
+msgstr "Povoliť názvy alarmov"
 
 #. i18n: ectx: whatsthis, entry (UseAlarmName), group (General)
 #: data/kalarmconfig.kcfg:113
@@ -1080,7 +1080,7 @@ msgstr "Run manually only"
 #, kde-format
 msgctxt "@option"
 msgid "Do not run"
-msgstr "Neopakovať"
+msgstr "Nespúšťať"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:156
@@ -1508,7 +1508,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Alarm message display method"
-msgstr "Pípnuť pri zobrazení správy"
+msgstr "Spôsob zobrazenia správy alarmu"
 
 #. i18n: ectx: whatsthis, entry (DefaultDisplayMethod), group (Defaults)
 #: data/kalarmconfig.kcfg:301
@@ -1528,7 +1528,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr "Použiť zvýraznený alarm"
+msgstr "Nikdy nepotlačiť alarm"
 
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
@@ -1536,8 +1536,7 @@ msgstr "Použiť zvýraznený alarm"
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
 msgstr ""
-"Východzie nastavenie pre \"automaticky zavrieť, ak je neskoro\" v dialógu "
-"úprav alarmu."
+"Predvolená hodnota v dialógu úprav alarmu pre „nikdy nepotlačiť alarm“."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -2036,7 +2035,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Date Selector"
-msgstr "Adresár kalendára KAlarm"
+msgstr "Selektor dátumu alarmu"
 
 #: datepicker.cpp:88
 #, kde-format
@@ -2054,7 +2053,7 @@ msgstr "Show the previous month"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next year"
-msgstr "Zobrazovať čas &do alarmu"
+msgstr "Zobraziť nasledujúci rok"
 
 #: datepicker.cpp:91
 #, kde-format
@@ -2066,7 +2065,7 @@ msgstr "Show the next month"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show today"
-msgstr "Zobraziť &podrobnosti"
+msgstr "Zobraziť dnes"
 
 #: daymatrix.cpp:200
 #, kde-format
@@ -2191,7 +2190,7 @@ msgstr "Načítať šablónu..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
-msgstr "Vyberte šablónu, na ktorej chcete založiť nový alarm."
+msgstr "Vyberte šablónu alarmu na prednastavenie alarmu"
 
 #: editdlg.cpp:206
 #, kde-format
@@ -2233,7 +2232,7 @@ msgstr "Pozdržaný alarm"
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
-msgstr "Pozdržať do:"
+msgstr "Odložený do:"
 
 #: editdlg.cpp:276
 #, kde-format
@@ -2265,7 +2264,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Cancel skip"
-msgstr "Zrušiť, ak neskoro"
+msgstr "Zrušiť preskočenie"
 
 #: editdlg.cpp:290
 #, kde-format
@@ -2464,7 +2463,7 @@ msgstr "Menej možností <<"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
-msgstr "Menej možností <<"
+msgstr "Zobraziť menej možností"
 
 #: editdlg.cpp:1380
 #, kde-format
@@ -2476,7 +2475,7 @@ msgstr "Viac možností >>"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
-msgstr "Viac možností >>"
+msgstr "Zobraziť viac možností"
 
 #: editdlg.cpp:1620
 #, kde-format
@@ -2756,8 +2755,7 @@ msgstr "Neupozorňovať na chyby"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
-msgstr ""
-"Neukazovať chybový stav alebo chybovú správu, ak zlyhá príkaz pred alarmom."
+msgstr "Nezobrazovať chybovú správu, ak príkaz zlyhá."
 
 #: editdlgtypes.cpp:862
 #, kde-format
@@ -2876,7 +2874,7 @@ msgstr "Poslať e-mail na zadané adresy teraz"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
-msgstr "Sendmail"
+msgstr "Odoslať e-mail teraz"
 
 #: editdlgtypes.cpp:1188
 #, kde-format
@@ -3063,7 +3061,7 @@ msgstr "Upraviť zvukový alarm"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
-msgstr "Zobraziť súbor teraz"
+msgstr "Prehrať zvukový súbor teraz"
 
 #: editdlgtypes.cpp:1631
 #, kde-format
@@ -3206,7 +3204,7 @@ msgstr "Zaškrtnite pre zahrnutie e-mailových alarmov do vyhľadávania."
 #, kde-format
 msgctxt "@option:check Alarm action"
 msgid "Audio"
-msgstr "Audio"
+msgstr "Zvuk"
 
 #: find.cpp:139
 #, kde-format
@@ -3292,7 +3290,7 @@ msgstr "Písmo && farba..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set alarm message font and color"
-msgstr "Vyberte farbu popredia pre správu alarmu"
+msgstr "Nastaviť písmo a farbu správy alarmu"
 
 #: fontcolourbutton.cpp:31
 #, kde-format
@@ -3329,7 +3327,7 @@ msgstr "Roztiahnuť okná"
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Calendar Files"
-msgstr "Súbory kalendára"
+msgstr "Importovať súbory kalendára"
 
 #: functions.cpp:1009
 #, kde-format
@@ -3526,7 +3524,7 @@ msgstr "Cannot create alarm: No default calendar is defined"
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
-msgstr "Chyba pri znovuvytvorení alarmu"
+msgstr "Chyba pri vytváraní alarmu"
 
 #: kalarmapp.cpp:1127
 #, kde-kuit-format
@@ -3564,10 +3562,10 @@ msgid ""
 "<interface>View | Show Calendars</interface> to check or change calendar "
 "statuses."
 msgstr ""
-"Výstrahy sa nedajú vytvárať ani aktualizovať, pretože nie je povolený žiadny "
-"zapisovateľný kalendár výstrah. <nl/><nl/>Na opravu použite "
-"<interface>Zobraziť | Zobraziť kalendáre</interface> na kontrolu alebo zmenu "
-"stavov kalendára."
+"Alarmy sú nakonfigurované na archiváciu, ale to nie je možné, pretože nie je "
+"povolený žiadny zapisovateľný archivovaný kalendár alarmov.<nl/><nl/>Na "
+"opravu použite <interface>Zobraziť | Zobraziť kalendáre</interface> na "
+"kontrolu alebo zmenu stavov kalendára."
 
 #: kalarmapp.cpp:1515
 #, kde-kuit-format
@@ -3579,10 +3577,11 @@ msgid ""
 "calendar, and check <interface>Use as Default for Archived Alarms</"
 "interface>."
 msgstr ""
-"Výstrahy sa nedajú vytvárať ani aktualizovať, pretože nie je povolený žiadny "
-"zapisovateľný kalendár výstrah. <nl/><nl/>Na opravu použite "
-"<interface>Zobraziť | Zobraziť kalendáre</interface> na kontrolu alebo zmenu "
-"stavov kalendára."
+"Alarmy sú nakonfigurované na archiváciu, ale to nie je možné, pretože žiadny "
+"archivovaný kalendár alarmov nie je nastavený ako predvolený.<nl/><nl/>Na "
+"opravu použite <interface>Zobraziť | Zobraziť kalendáre</interface>, vyberte "
+"kalendár archivovaných alarmov a zaškrtnite <interface>Použiť ako predvolený "
+"pre archivované alarmy</interface>."
 
 #: kalarmapp.cpp:2472
 #, kde-format
@@ -3979,7 +3978,7 @@ msgstr "Čas zoslabenia zvuku"
 #, kde-format
 msgctxt "@label Whether the alarm has a reminder"
 msgid "Reminder"
-msgstr "Upozornenie"
+msgstr "Pripomienka"
 
 #: kalarmcalendar/kaeventformatter.cpp:123
 #, kde-format
@@ -4268,7 +4267,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
-msgstr "<filename>%1</filename> nenájdený"
+msgstr "<command>%1</command> nenájdený"
 
 #: kamail.cpp:284
 #, kde-kuit-format
@@ -4432,7 +4431,7 @@ msgstr "Nepodarilo sa vykonať príkaz"
 #, kde-format
 msgctxt "@info"
 msgid "Failed to execute command (not found or not executable)"
-msgstr "Nepodarilo sa vykonať príkaz (nepovolený prístup k príkazovému riadku)"
+msgstr "Nepodarilo sa vykonať príkaz (nenájdený alebo nespustiteľný)"
 
 #: lib/shellprocess.cpp:149
 #, kde-format
@@ -4641,13 +4640,13 @@ msgstr "Vymazať"
 #, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
-msgstr "Zobraziť alarm"
+msgstr "Preskočiť alarm"
 
 #: mainwindow.cpp:912
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
-msgstr "Počet opakovaní:"
+msgstr "Počet aktivácií na preskočenie:"
 
 #: mainwindow.cpp:943
 #, kde-format
@@ -4733,7 +4732,7 @@ msgstr "Povoliť"
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
-msgstr "Vypnuté"
+msgstr "Zakázať"
 
 #: mainwindow.cpp:1781
 #, kde-format
@@ -4951,7 +4950,7 @@ msgstr "&Pozdržať..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
-msgstr "Pozdržať alarm na zadanú dobu."
+msgstr "Pozdržať alarm na neskôr"
 
 #: messagewindow.cpp:455
 #, kde-kuit-format
@@ -5135,7 +5134,7 @@ msgstr "Nastavenie e-mailového alarmu"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Defaults"
-msgstr "Východzí čas"
+msgstr "Predvolené nastavenia alarmu"
 
 #: prefdlg.cpp:166
 #, kde-format
@@ -5233,7 +5232,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "To run <application>KAlarm</application> normally"
-msgstr "Aktivovať <application>KAlarm</application>"
+msgstr "Na normálne spustenie <application>KAlarm</application>"
 
 #: prefdlg.cpp:485
 #, kde-format
@@ -5350,13 +5349,13 @@ msgstr "Audio Backend"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which audio backend to use to play sound files"
-msgstr "Vyberte hlasitosť pre prehranie zvuku."
+msgstr "Vyberte zvukový backend na prehrávanie zvukových súborov"
 
 #: prefdlg.cpp:599
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Akonadi"
-msgstr "Akonadi"
+msgstr "Povoliť Akonadi"
 
 #: prefdlg.cpp:601
 #, kde-format
@@ -5459,7 +5458,7 @@ msgstr "Žiadne"
 #, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
-msgstr "Alarm prebudenia z uspania"
+msgstr "Prebudiť zo spánku pred alarmom:"
 
 #: prefdlg.cpp:872
 #, kde-format
@@ -5469,9 +5468,9 @@ msgid ""
 "alarms set to wake from suspend. This can be used to ensure that the system "
 "is fully restored by the time the alarm triggers."
 msgstr ""
-"Zadať koľko minút pred časom spustenia alarmu sa systém prebudí z uspania. "
-"Toto môže byť použité na zabezpečenie, že systém sa plne obnoví do doby, "
-"kedy sa spustí alarm."
+"Zadajte, koľko minút pred časom spustenia alarmu sa má systém prebudiť zo "
+"spánku, pre alarmy nastavené na prebudenie zo spánku. Tým sa zabezpečí, že "
+"systém bude plne obnovený v čase spustenia alarmu."
 
 #: prefdlg.cpp:873
 #, kde-format
@@ -5800,7 +5799,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
-msgstr "Používať identity <application>KMailu</application>"
+msgstr "Používať predvolenú identitu <application>KMailu</application>"
 
 #: prefdlg.cpp:1259
 #, kde-kuit-format
@@ -5930,7 +5929,9 @@ msgctxt "@info:whatsthis"
 msgid ""
 "The default setting for the alarm message display method in the alarm edit "
 "dialog."
-msgstr "Východzie nastavenie opakovania v dialógu úprav alarmu."
+msgstr ""
+"Predvolené nastavenie spôsobu zobrazenia správy alarmu v dialógu úprav "
+"alarmu."
 
 #: prefdlg.cpp:1500
 #, kde-format
@@ -6047,13 +6048,15 @@ msgstr "Zadajte východzí zvukový súbor pre použitie v dialógu úprav alarm
 msgctxt "@info:whatsthis"
 msgid ""
 "Select to set the default volume for sound files in the alarm edit dialog."
-msgstr "Zadajte východzí zvukový súbor pre použitie v dialógu úprav alarmu."
+msgstr ""
+"Vyberte na nastavenie predvolenej hlasitosti zvukových súborov v dialógu "
+"úprav alarmu."
 
 #: prefdlg.cpp:1634
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default volume for sound files in the alarm edit dialog."
-msgstr "Zadajte východzí zvukový súbor pre použitie v dialógu úprav alarmu."
+msgstr "Predvolená hlasitosť zvukových súborov v dialógu úprav alarmu."
 
 #: prefdlg.cpp:1644
 #, kde-format
@@ -6280,8 +6283,8 @@ msgid ""
 "window is shown, to reduce the chance of alarm messages being accidentally "
 "acknowledged."
 msgstr ""
-"Zadať, ako dlho by malo jeho tlačidlo zostať zakázané po zobrazení okna "
-"správy alarmu."
+"Zadajte, ako dlho by mali tlačidlá zostať zakázané po zobrazení okna správy "
+"alarmu, aby sa znížila šanca náhodného potvrdenia alarmových správ."
 
 #: prefdlg.cpp:2112
 #, kde-format
@@ -6669,7 +6672,7 @@ msgstr "Vyberte deň(ni) v týždni, kedy sa má alarm opakovať"
 #, kde-format
 msgctxt "@option:radio On day number in the month"
 msgid "On day"
-msgstr "&Dňa"
+msgstr "V deň"
 
 #: recurrenceedit.cpp:1307
 #, kde-format
@@ -6693,7 +6696,7 @@ msgstr "Vyberte deň v mesiaci, kedy sa má alarm opakovať"
 #, kde-format
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
-msgstr "&Dňa"
+msgstr "V"
 
 #: recurrenceedit.cpp:1329
 #, kde-format
@@ -7066,31 +7069,31 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Directory Resource"
-msgstr "Súbory kalendára"
+msgstr "Importovať zdroj adresára"
 
 #: resources/migration/dirresourceimportdialog.cpp:39
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Calendar Directory Resource"
-msgstr "Súbory kalendára"
+msgstr "Importovať zdroj adresára kalendára"
 
 #: resources/migration/dirresourceimportdialog.cpp:46
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Active Alarms"
-msgstr "Aktívne alarmy"
+msgstr "Importovať aktívne alarmy"
 
 #: resources/migration/dirresourceimportdialog.cpp:55
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Archived Alarms"
-msgstr "Archivované alarmy"
+msgstr "Importovať archivované alarmy"
 
 #: resources/migration/dirresourceimportdialog.cpp:64
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Alarm Templates"
-msgstr "Šablóny alarmov"
+msgstr "Importovať šablóny alarmov"
 
 #: resources/migration/dirresourceimportdialog.cpp:191
 #, kde-format
@@ -7197,7 +7200,7 @@ msgstr "Zobrazené meno:"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Calendar directory:"
-msgstr "Adresár kalendára KAlarm"
+msgstr "Adresár kalendára:"
 
 #. i18n: ectx: property (text), widget (QLabel, label3)
 #: resources/migration/dirresourceimportdialog_intro.ui:61
@@ -7224,7 +7227,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Import into existing calendar file resource"
-msgstr "Nepodarilo sa vytvoriť nový zdroj kalendára"
+msgstr "Importovať do existujúceho zdroja súboru kalendára"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, mergeResource)
 #: resources/migration/dirresourceimportdialog_type.ui:26
@@ -7238,7 +7241,7 @@ msgstr "Select the resource to import the directory resource's alarms into."
 #, kde-format
 msgctxt "@option:radio"
 msgid "Import into new calendar file resource"
-msgstr "Nepodarilo sa vytvoriť nový zdroj kalendára"
+msgstr "Importovať do nového zdroja súboru kalendára"
 
 #. i18n: ectx: property (text), widget (QLabel, pathLabel)
 #: resources/migration/dirresourceimportdialog_type.ui:64
@@ -7277,8 +7280,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the name used to identify this resource in displays."
-msgstr ""
-"Zadajte meno textového súboru, URL alebo obrázok, ktorý sa má zobraziť."
+msgstr "Zadajte názov na identifikáciu tohto zdroja v zobrazeniach."
 
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:112
@@ -7387,7 +7389,7 @@ msgstr "Čas do"
 #, kde-format
 msgctxt "@title:column"
 msgid "Repeat"
-msgstr "Opakovanie"
+msgstr "Zopakovať"
 
 #: resources/resourcedatamodelbase.cpp:125
 #, kde-format
@@ -7647,13 +7649,14 @@ msgstr "A previous save is still in progress."
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create calendar file <filename>%1</filename>."
-msgstr "Nepodarilo sa načítať kalendár <filename>%1</filename>."
+msgstr "Nepodarilo sa vytvoriť súbor kalendára <filename>%1</filename>."
 
 #: resources/singlefileresource.cpp:247
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create writable calendar file <filename>%1</filename>."
-msgstr "Nepodarilo sa načítať kalendár <filename>%1</filename>."
+msgstr ""
+"Nepodarilo sa vytvoriť zapisovateľný súbor kalendára <filename>%1</filename>."
 
 #: resources/singlefileresource.cpp:602
 #, kde-kuit-format
@@ -7665,7 +7668,7 @@ msgstr "Nedá sa nahrať súbor <filename>%1</filename>."
 #, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
-msgstr "Nastavenie kalendára"
+msgstr "Kalendár nie je otvorený."
 
 #: resources/singlefileresource.cpp:648
 #, kde-kuit-format
@@ -7696,7 +7699,7 @@ msgstr "Nastaviť kalendár"
 #, kde-format
 msgctxt "@title:group"
 msgid "Calendar File"
-msgstr "Súbory kalendára"
+msgstr "Súbor kalendára"
 
 #. i18n: ectx: property (html), widget (KTextEdit, pathDescription)
 #: resources/singlefileresourceconfigdialog.ui:68
@@ -7783,8 +7786,7 @@ msgstr "Názov:"
 #: resources/singlefileresourceconfigdialog.ui:222
 #, kde-format
 msgid "Enter the display name used to identify this calendar."
-msgstr ""
-"Zadajte meno textového súboru, URL alebo obrázok, ktorý sa má zobraziť."
+msgstr "Zadajte zobrazovaný názov na identifikáciu tohto kalendára."
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:232
@@ -7859,7 +7861,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reconfigure the selected calendar"
-msgstr "Vybrať kalendár"
+msgstr "Znovu nakonfigurovať vybraný kalendár"
 
 #: resourceselector.cpp:84
 #, kde-format
@@ -7871,7 +7873,7 @@ msgstr "Upraviť zvýraznený kalendár"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Remove the selected calendar from the list"
-msgstr "Odstrániť zvýraznenú prílohu z emailu."
+msgstr "Odstrániť vybraný kalendár zo zoznamu"
 
 #: resourceselector.cpp:86
 #, kde-kuit-format
@@ -8331,7 +8333,7 @@ msgstr "Špeciálne akcie..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set commands to execute"
-msgstr "Zadajte príkaz, ktorý sa má spustiť."
+msgstr "Nastaviť príkazy na spustenie"
 
 #: specialactions.cpp:40
 #, kde-format
