@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-18 00:46+0000\n"
-"PO-Revision-Date: 2026-02-18 18:02+0300\n"
+"PO-Revision-Date: 2026-05-02 19:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -25,14 +25,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.2\n"
+"X-Generator: Lokalize 25.12.3\n"
 "(http: //www.transifex.com/projects/p/kdepim-k-tr/language/tr/)\n"
 "X-POOTLE-MTIME: 1413131629.000000\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Serdar Soytetir, Görkem Çetin, Kaan Özdinçer, Emir SARI"
+msgstr "Serdar SOYTETİR, Görkem ÇETİN, Kaan ÖZDİNÇER, Emir SARI"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -277,13 +277,13 @@ msgstr "Geçersiz tarih"
 #, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
-msgstr "Alarm tarihi halihazırda geçmiş"
+msgstr "Alarm tarihi hâlihazırda geçmiş"
 
 #: alarmtimewidget.cpp:367
 #, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"
-msgstr "Alarm zamanı halihazırda geçmiş"
+msgstr "Alarm zamanı hâlihazırda geçmiş"
 
 #: audioplugin/audioplayer_mpv.cpp:53 audioplugin/audioplayer_vlc.cpp:48
 #, kde-format
@@ -7084,7 +7084,7 @@ msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
 msgstr ""
-"Hata! <filename>%1</filename> dosyası halihazırda var olan bir takvim "
+"Hata! <filename>%1</filename> dosyası hâlihazırda var olan bir takvim "
 "tarafından kullanılıyor."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
@@ -7154,7 +7154,7 @@ msgstr "Dosya bilgisi denetleniyor…"
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! File already exists."
-msgstr "Hata! Dosya halihazırda mevcut."
+msgstr "Hata! Dosya hâlihazırda mevcut."
 
 #: resources/migration/dirresourceimportdialog.cpp:411
 #: resources/migration/dirresourceimportdialog.cpp:462
@@ -8800,7 +8800,7 @@ msgid ""
 "cancel the alarm itself, which will still trigger in the normal way. This "
 "button is disabled if no wake-from-suspend alarm is configured."
 msgstr ""
-"Halihazırda yapılandırılmış Askıdan Uyandır’ı iptal edin. Bunun, normal "
+"Hâlihazırda yapılandırılmış Askıdan Uyandır’ı iptal edin. Bunun, normal "
 "şekilde tetiklenmeyi sürdürecek olan alarmın kendisini iptal etmediğini "
 "unutmayın. Askıdan Uyandır alarmı yapılandırılmadıysa bu düğme devre dışı "
 "bırakılır."
