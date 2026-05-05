@@ -33,7 +33,7 @@ Dependencies:
     'pim/kcalutils': '@same'
     'pim/kidentitymanagement': '@same'
     'pim/kmailtransport': '@same'
-    'pim/kmime': '@same'
+    'frameworks/kmime': '@same'
     'libraries/ktextaddons': '@latest-kf6'
 
  - 'on': ['Linux', 'FreeBSD']
