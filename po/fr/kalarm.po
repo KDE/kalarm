@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-18 00:46+0000\n"
-"PO-Revision-Date: 2026-04-02 21:09+0200\n"
+"PO-Revision-Date: 2026-05-04 18:04+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -748,7 +748,7 @@ msgstr "Sujet du courrier électronique"
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
-"Simuler le temps système [[[aaaa-] mm-] jj-]hh:mm [FH] (mode de débogage)"
+"Simuler le temps système [[[aaaa-] mm-] jj-]hh:mm [FH](mode de débogage)"
 
 #: commandoptions.cpp:266
 #, kde-format
