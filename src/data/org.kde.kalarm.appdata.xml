@@ -1489,6 +1489,7 @@
           <li xml:lang="cs">Opravena chyba, kvůli které se na některých systémech nepodařilo přehrát zvukové soubory v přehrávači VLC.</li>
           <li xml:lang="es">Se ha corregido un fallo al reproducir archivos de sonido cuando se usa VLC en algunos sistemas.</li>
           <li xml:lang="fr">Correction de l'échec de lecture des fichiers audio avec VLC sur certains systèmes.</li>
+          <li xml:lang="he">תוקן כשל להשמיע צלילים באמצעות VLC בחלק מהמערכות.</li>
           <li xml:lang="ia">Corrige fallimento a reproducer files de sono usante VLC sur alcun systemas.</li>
           <li xml:lang="it">Correzione dell'impossibilità di riprodurre file audio usando VLC su alcuni sistemi.</li>
           <li xml:lang="ka">გასწორდა ზოგიერთ სისტემაზე ხმის ფაილების VLC-ის გამოყენებით დაკვრა.</li>
@@ -1534,6 +1535,7 @@
           <li xml:lang="cs">Opravena chyba, kvůli které se opakující zvukové upomínky přehrávaly pouze jednou.</li>
           <li xml:lang="es">Se ha solucionado el problema de las alarmas de sonido repetitivas que solo se reproducen una vez.</li>
           <li xml:lang="fr">Correction des alertes sonores répétitives ne se jouant qu'une seule fois.</li>
+          <li xml:lang="he">תוקנה בעיה שהתראות שמע חוזרות מתנגנות רק פעם אחת.</li>
           <li xml:lang="ia">Corrige repeter alarmas audio solmente reproducente un vice.</li>
           <li xml:lang="it">Correzione della ripetizione di avvisi audio riprodotti una sola vola.</li>
           <li xml:lang="ka">გასწორდა განმეორებადი ხმოვანი განგაშის მხოლოდ ერთხელ დაკვრა.</li>
@@ -1579,6 +1581,7 @@
           <li xml:lang="cs">K přehrávání zvuků se používá VLC místo knihovny libcanberra.</li>
           <li xml:lang="es">Usar VLC en lugar de libcanberra para reproducir sonidos.</li>
           <li xml:lang="fr">Utilisez VLC au lieu de la bibliothèque « libcanberra » pour la lecture des sons.</li>
+          <li xml:lang="he">נעשה שימוש ב־VLC במקום ב־libcanberra כדי להשמיע צלילים.</li>
           <li xml:lang="ia">Usa VLC in loco de libcanberra per reproducer sonos. </li>
           <li xml:lang="it">Usa VLC invece di libcanberra per riprodurre i suoni.</li>
           <li xml:lang="ka">დაემატა ხმების დასაკვრელად libcanberra-ს ნაცვლად VLC-ის გამოყენება.</li>
@@ -1624,6 +1627,7 @@
           <li xml:lang="cs">Opravena chyba, která způsobovala pád aplikace po úpravě nové upomínky, pokud byla zapnutá kontrola pravopisu.</li>
           <li xml:lang="es">Se ha corregido un fallo de la aplicación tras editar una nueva alarma cuando estaba activada la comprobación ortográfica.</li>
           <li xml:lang="fr">Correction du plantage après la modification d'une nouvelle alarme si la vérification orthographique est activée.</li>
+          <li xml:lang="he">תוקנה קריסה לאחר עריכת תזכורת חדשה אם בדיקת איות מופעלת.</li>
           <li xml:lang="ia">Corrige fracasso post editar nove alarma si controlo  orthographic es habilitate.</li>
           <li xml:lang="it">Correzione di un blocco dopo la modifica di un nuovo avviso se il correttore ortografico è abilitato.</li>
           <li xml:lang="ka">გასწორდა პროგრამის ავარიული გათიშვა ახალი განგაშის ჩასწორების შემდეგ, თუ მართლწერის შემოწმება ჩართულია.</li>
@@ -1671,6 +1675,7 @@
           <li xml:lang="cs">V případě chyby při pokusu o přehrání zvukového souboru se zobrazí chybová zpráva.</li>
           <li xml:lang="es">Mostrar un mensaje de error si se produce un error al intentar reproducir un archivo de sonido.</li>
           <li xml:lang="fr">Afficher un message d'erreur si une erreur survient lors de la tentative de lecture d'un fichier audio.</li>
+          <li xml:lang="he">מוצגת הודעת שגיאה אם מתרחשת שגיאה בעת ניסיון לנגן קובץ שמע.</li>
           <li xml:lang="ia">Monstra message de error si le error occurre essayante reproducer un file audio.</li>
           <li xml:lang="it">Mostra un messaggio di errore se si verifica un errore quando si tenta di riprodurre un file audio.</li>
           <li xml:lang="ka">შეცდომის შეტყობინების ჩვენება, თუ აუდიო ფაილის დაკვრის მცდელობისას ხარვეზი წარმოიქმნება.</li>
@@ -1716,6 +1721,7 @@
           <li xml:lang="cs">K přehrávání zvuků použita místo Phononu knihovna libcanberra, aby byla zajištěna bezpečnost mezi vlákny.</li>
           <li xml:lang="es">Usar libcanberra en lugar de Phonon para reproducir sonidos, para seguridad del hilo.</li>
           <li xml:lang="fr">Utiliser la bibliothèque « libcanberra » au lieu de Phonon pour lire les sons, pour la sécurité des processus.</li>
+          <li xml:lang="he">נעשה שימוש ב־libcanberra במקום ב־Phonon, כדי להשמיע צלילים, כדי לשמור על בטיחות תהליכונים.</li>
           <li xml:lang="ia">Usa libcanberra in loco de Phonon per reproducer sonos,per securitate  de thread.</li>
           <li xml:lang="it">Uso di libcanberra invece di Phonon per la riproduzione di suoni, per assicurare thread safety.</li>
           <li xml:lang="ka">libcanberra-ის გამოყენება Phonon-ის ნაცვლად ხმების დასაკრავად ნაკადების უსაფრთხოებისთვის.</li>
@@ -1780,6 +1786,7 @@
           <li xml:lang="cs">Převedeno na Qt6 / KDE Frameworks 6.</li>
           <li xml:lang="es">Adaptación a Qt6/KDE Frameworks 6.</li>
           <li xml:lang="fr">Convertir vers Qt6 / environnement de développement en version 6.</li>
+          <li xml:lang="he">המרה ל־Qt6 / תשתיות KDE‏ 6.</li>
           <li xml:lang="ia">Converte a Qt6/KDE Frameworks 6.</li>
           <li xml:lang="it">Conversione a Qt6 / KDE Frameworks 6.</li>
           <li xml:lang="ka">გადაყვანა Qt6 / KDE Frameworks 6-ზე.</li>
