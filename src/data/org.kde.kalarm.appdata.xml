@@ -497,6 +497,7 @@
           <li xml:lang="ca-valencia">Proporciona una facilitat per ometre les properes recurrències/subrepeticions d'una alarma.</li>
           <li xml:lang="es">Proporcionar la opción de omitir las siguientes repeticiones o subrepeticiones de una alarma.</li>
           <li xml:lang="fr">Fournir une fonctionnalité permettant d'ignorer les prochaines occurrences / sous-répétitions d'une alarme.</li>
+          <li xml:lang="ia">Provide le facilitate de omitter le proxime pauc recurrentias/sub-repetitiones de un alarma.</li>
           <li xml:lang="it">È possibile saltare alcune prossime ricorrenze/sotto-ripetizioni di un avviso.</li>
           <li xml:lang="ka">დაემატა განგაშის შემდეგი რამდენიმე გამეორება/ქვეგამეორების გამოტოვების შესაძლებლობა.</li>
           <li xml:lang="nl">Bied de mogelijkheid om de volgende paar herhalingen van een alarm over te slaan.</li>
@@ -512,6 +513,7 @@
           <li xml:lang="ca-valencia">Proporciona una opció de diàleg d'edició d'una alarma per a anul·lar la inhibició de notificacions o mostrar-les a través d'aplicacions de pantalla completa d'X11.</li>
           <li xml:lang="es">Proporcionar en el diálogo de edición de alarmas una opción para anular la inhibición de la notificación o mostrar sobre las aplicaciones de X11 a pantalla completa.</li>
           <li xml:lang="fr">Fourniture d'une option dans la boîte de dialogue « Modifier l'alarme » pour contourner l'inhibition des notifications ou d'affichage au-dessus des applications en mode « Plein écran » sous X11.</li>
+          <li xml:lang="ia">Provide un option in le dialogo de modification de alarmas pro superpassar le inhibition de notificationes o pro apparer sur applicationes X11 a schermo plen.</li>
           <li xml:lang="it">È disponibile un'opzione della finestra di modifica avviso per annullare l'inibizione delle notifiche o mostrare applicazioni a schermo intero in ambiente X11.</li>
           <li xml:lang="ka">განგაშის ჩასწორების დიალოგს დაემატა გაფრთხილების ჩახშობის გადაფარვის, ან X11-ის სრულეკრანიანი აპლიკაციების ზემოდან ჩვენების შესაძლებლობა.</li>
           <li xml:lang="nl">Voeg de optie 'Alarm bewerken' toe aan het dialoogvenster om de onderdrukking van meldingen op te heffen of om ze weer te geven in X11-toepassingen op volledig scherm.</li>
@@ -527,6 +529,7 @@
           <li xml:lang="ca-valencia">Mostra només les opcions de cancel·lació retardada/recordatori en el diàleg d'edició d'una alarma quan estiguen habilitades.</li>
           <li xml:lang="es">Mostrar solo las opciones para cancelación tardía y recordatorio en el diálogo de edición de alarmas cuando están activadas.</li>
           <li xml:lang="fr">Affichage uniquement des options pour « Annulation tardive / Rappel » dans la boîte de dialogue « Modifier l'alarme » lorsqu'elles sont activées.</li>
+          <li xml:lang="ia">Monstra optiones per Cancellation tardive/Rememoration in le dialogo  de Modificar Alarma solmente quando illos es activate.</li>
           <li xml:lang="it">Mostra solo opzioni per Annullamento per il ritardo/Promemoria nella finestra di modifica dell'avviso quando sono abilitate.</li>
           <li xml:lang="ka">მხოლოდ, გვიანი გაუქმების/შეხსენების არჩევნის ჩვენება განგაშის ჩასწორების დიალოგში, როცა ისინი ჩართულია.</li>
           <li xml:lang="nl">Toon alleen de opties voor 'Annuleren indien te laat/Herinnering' in het dialoogvenster 'Alarm bewerken' als deze zijn ingeschakeld.</li>
@@ -542,6 +545,7 @@
           <li xml:lang="ca-valencia">Corregix els càlculs prompte de subrepetició de només data.</li>
           <li xml:lang="es">Corregir los cálculos de tiempo de subrepetición que solo tienen en cuenta la fecha.</li>
           <li xml:lang="fr">Correction des calculs de temps de sous-répétition uniquement pour les dates.</li>
+          <li xml:lang="ia">Corrige le calculationes de tempore de sub-repetition de sol data.</li>
           <li xml:lang="it">Corretto il calcolo dell'orario di sotto-ripetizioni con solo data.</li>
           <li xml:lang="ka">გასწორდა მხოლოდ-თარიღიანი ქვეგამეორებების დროის გამოთვლა.</li>
           <li xml:lang="nl">Corrigeer de berekeningen van de herhalingstijd van subperioden die alleen op datum gebaseerd zijn.</li>
@@ -557,6 +561,7 @@
           <li xml:lang="ca-valencia">Millora la disposició de la cancel·lació retardada i altres ginys a la part inferior del diàleg d'edició d'una alarma.</li>
           <li xml:lang="es">Mejorar la disposición de los elementos gráficos de cancelación tardía y de otros elementos gráficos en la parte inferior del diálogo de edición de alarmas.</li>
           <li xml:lang="fr">Amélioration de la disposition des composants graphiques de retard de suppression et autres en bas de la boîte de dialogue « Modifier l'alarme ».</li>
+          <li xml:lang="ia">Meliorar le disposition del widgets de cancellation tardive e altere widgets  al basso del dialogo de modification de alarma.</li>
           <li xml:lang="it">Miglioramento della disposizione dell'annullamento per il ritardo ed altri oggetti in basso nella finestra di modifica avviso.</li>
           <li xml:lang="ka">გაუმჯობესდა გვიანი გაუქმების და სხვა ვიჯეტები განგაშის ჩასწორების დიალოგის ბოლოში.</li>
           <li xml:lang="nl">Verbeter de lay-out van de widgets voor het annuleren indien te laat en andere widgets onderaan het dialoogvenster 'Alarm bewerken'.</li>
