@@ -1,29 +1,30 @@
-# SPDX-FileCopyrightText: 2024 Johannes Obermayr <johannesobermayr@gmx.de>
 # SPDX-FileCopyrightText: 2002 Thomas Diehl <thd@kde.org>
-# SPDX-FileCopyrightText: 2002, 2003, 2004, 2005, 2006 Stefan Winter <swinter@kde.org>
+# SPDX-FileCopyrightText: 2002-2006 Stefan Winter <swinter@kde.org>
 # SPDX-FileCopyrightText: 2003 Gregor Zumstein <zumstein@ssd.ethz.ch>
-# SPDX-FileCopyrightText: 2003, 2004, 2005, 2007 Stephan Johach <hunsum@gmx.de>
-# SPDX-FileCopyrightText: 2005, 2006, 2007, 2008, 2009 Thomas Reitelbach <tr@erdfunkstelle.de>
-# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2003-2005, 2007 Stephan Johach <hunsum@gmx.de>
+# SPDX-FileCopyrightText: 2005-2009 Thomas Reitelbach <tr@erdfunkstelle.de>
+# SPDX-FileCopyrightText: 2007-2021 Burkhard Lück <lueck@hube-lueck.de>
 # SPDX-FileCopyrightText: 2010 Markus Slopianka <markus.s@kdemail.net>
-# SPDX-FileCopyrightText: 2010, 2011, 2012, 2016, 2022, 2023 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2010-2012, 2016, 2022-2023 Frederik Schwarzer <schwarzer@kde.org>
 # SPDX-FileCopyrightText: 2011 Torbjörn Klatt <opensource@torbjoern-klatt.de>
 # SPDX-FileCopyrightText: 2022, 2025 Frank Steinmetzger <dev-kde@felsenfleischer.de>
+# SPDX-FileCopyrightText: 2024 Johannes Obermayr <johannesobermayr@gmx.de>
+# SPDX-FileCopyrightText: 2026 Philipp Kiemle <l10n.daphipz@fastmail.de>
 # Intevation GmbH, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-18 00:46+0000\n"
-"PO-Revision-Date: 2025-07-22 12:11+0200\n"
-"Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
+"PO-Revision-Date: 2026-05-12 22:28+0200\n"
+"Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -235,7 +236,7 @@ msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
-msgstr "Zeitzone ..."
+msgstr "Zeitzone …"
 
 #: alarmtimewidget.cpp:212
 #, kde-format
@@ -349,7 +350,7 @@ msgstr "Autostart von KAlarm bei der Anmeldung"
 #: autostart/autostart.cpp:52
 #, kde-format
 msgid "Copyright 2001-%1, David Jarvie"
-msgstr "Copyright © 2001-%1 David Jarvie"
+msgstr "© 2001–%1 David Jarvie"
 
 #: autostart/autostart.cpp:53 main.cpp:46
 #, kde-format
@@ -878,10 +879,11 @@ msgid ""
 "provide features including birthday import, some email functions, email "
 "address book lookup, and Akonadi resource migration on first run."
 msgstr ""
-"Wählen Sie hier aus, ob KAlarms Akonadi-Modul aktiviert werden soll, welches "
-"Akonadi benutzt, um u. a. folgende Funktionen bereitzustellen: Import von "
-"Geburtstagen, einige E-Mail-Funktionen, Nachschlagen von E-Mail-Adressen im "
-"Adressbuch, sowie die Migration von Akonadi-Ressourcen beim ersten Ausführen."
+"Wählen Sie hier aus, ob das Akonadi-Modul von KAlarm aktiviert werden soll, "
+"um mithilfe von Akonadi u. a. folgende Funktionen bereitzustellen: Import "
+"von Geburtstagen, einige E-Mail-Funktionen, Nachschlagen von E-Mail-Adressen "
+"im Adressbuch, sowie die Migration von Akonadi-Ressourcen beim ersten "
+"Ausführen."
 
 #. i18n: ectx: label, entry (Base_AudioBackend), group (General)
 #: data/kalarmconfig.kcfg:83
@@ -1467,7 +1469,7 @@ msgid ""
 "64 = Sunday."
 msgstr ""
 "Mit „OR“ verknüpfte Bits, die festlegen, bei welchen Tagen es sich um "
-"Arbeitstage handelt. 1=Montag ... 64=Sonntag."
+"Arbeitstage handelt. 1=Montag … 64=Sonntag."
 
 #. i18n: ectx: label, entry (DisabledColour), group (General)
 #: data/kalarmconfig.kcfg:258
@@ -1590,21 +1592,18 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:309
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr "Hervorgehobene Erinnerung nutzen"
+msgstr "Erinnerung niemals unterdrücken"
 
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
 msgstr ""
-"Die Standardeinstellung für „Ignorieren bei Überfälligkeit“ im Dialog "
+"Die Standardeinstellung für „Erinnerung niemals unterdrücken“ im Dialog "
 "„Erinnerung bearbeiten“."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
@@ -2239,11 +2238,10 @@ msgid "Recurrence - [%1]"
 msgstr "Wiederholung – [%1]"
 
 #: editdlg.cpp:87
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@option:check"
 msgid "Never inhibit alarm"
-msgstr "Hervorgehobene Erinnerung nutzen"
+msgstr "Erinnerung niemals unterdrücken"
 
 #: editdlg.cpp:88
 #, kde-format
@@ -2279,7 +2277,7 @@ msgstr "Setzt die Fälligkeit der Erinnerung auf den angegebenen Zeitpunkt."
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
-msgstr "Vorlage laden ..."
+msgstr "Vorlage laden …"
 
 #: editdlg.cpp:202
 #, kde-format
@@ -2320,12 +2318,10 @@ msgid "Action"
 msgstr "Aktion"
 
 #: editdlg.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Deferred Alarm"
+#, kde-format
 msgctxt "@title:group"
 msgid "Deferred / Skipped Alarm"
-msgstr "Verschobene Erinnerung"
+msgstr "Verschobene/Übersprungene Erinnerung"
 
 #: editdlg.cpp:271
 #, kde-format
@@ -2337,7 +2333,7 @@ msgstr "Verschoben auf:"
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
-msgstr "Ändern ..."
+msgstr "Ändern …"
 
 #: editdlg.cpp:278
 #, kde-format
@@ -2351,7 +2347,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label When the alarm will next trigger after being skipped"
 msgid "Skipping until:"
-msgstr ""
+msgstr "Überspringen bis:"
 
 #: editdlg.cpp:285
 #, kde-format
@@ -2361,18 +2357,16 @@ msgid ""
 msgstr ""
 
 #: editdlg.cpp:288
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel skip"
-msgstr "Ignorieren bei Überfälligkeit"
+msgstr "Überspringen abbrechen"
 
 #: editdlg.cpp:290
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel skipping of the alarm"
-msgstr ""
+msgstr "Überspringen der Erinnerung abbrechen"
 
 #: editdlg.cpp:301 editdlg.cpp:362
 #, kde-format
@@ -2523,7 +2517,7 @@ msgstr "Der Termin der Ereigniswiederholung wurde bereits überschritten."
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
-msgstr "Die Erinnerung wird während der Arbeits-/Bürozeiten ausgelöst"
+msgstr "Die Erinnerung wird nie während der Arbeits-/Bürozeiten ausgelöst"
 
 #: editdlg.cpp:1240
 #, kde-kuit-format
@@ -2740,8 +2734,8 @@ msgid ""
 "Check to additionally display a reminder in advance of or after the main "
 "alarm time(s)."
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, damit eine Erinnerung vorher oder nachher "
-"angezeigt wird."
+"Aktivieren Sie dieses Ankreuzfeld, um eine zusätzliche Erinnerung vor oder "
+"nach der eigentlichen Erinnerung(en) angezeigt wird."
 
 #: editdlgtypes.cpp:275
 #, kde-kuit-format
@@ -2878,7 +2872,7 @@ msgstr "Ausgabe des Befehls"
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, wenn Sie den Befehl in einem Terminal "
+"Aktivieren Sie dieses Ankreuzfeld, wenn Sie den Befehl in einem Terminal "
 "ausführen möchten."
 
 #: editdlgtypes.cpp:883
@@ -3070,7 +3064,7 @@ msgstr "Dateien, die als Anhang mit der E-Mail gesendet werden sollen."
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
-msgstr "Hinzufügen ..."
+msgstr "Hinzufügen …"
 
 #: editdlgtypes.cpp:1259
 #, kde-format
@@ -3258,7 +3252,7 @@ msgstr "Aktiv"
 msgctxt "@info:whatsthis"
 msgid "Check to include active alarms in the search."
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, wenn aktive Erinnerungen in die Suche "
+"Aktivieren Sie dieses Ankreuzfeld, wenn aktive Erinnerungen in die Suche "
 "einbezogen werden sollen."
 
 #: find.cpp:113
@@ -3274,9 +3268,9 @@ msgid ""
 "Check to include archived alarms in the search. This option is only "
 "available if archived alarms are currently being displayed."
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, wenn abgelaufene Erinnerungen in die Suche "
-"einbezogen werden sollen. Diese Einstellung ist nur verfügbar, wenn die "
-"Anzeige von abgelaufenen Erinnerungen eingeschaltet ist."
+"Aktivieren Sie dieses Ankreuzfeld, wenn abgelaufene Erinnerungen in die "
+"Suche einbezogen werden sollen. Diese Einstellung ist nur verfügbar, wenn "
+"gerade abgelaufene Erinnerungen angezeigt werden."
 
 #: find.cpp:122
 #, kde-format
@@ -3289,7 +3283,7 @@ msgstr "Text"
 msgctxt "@info:whatsthis"
 msgid "Check to include text message alarms in the search."
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, wenn der Text einer Erinnerung in die "
+"Aktivieren Sie dieses Ankreuzfeld, wenn der Text von Erinnerungen in die "
 "Suche einbezogen werden soll."
 
 #: find.cpp:126
@@ -3303,8 +3297,8 @@ msgstr "Datei"
 msgctxt "@info:whatsthis"
 msgid "Check to include file alarms in the search."
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, wenn Datei-Erinnerungen in die Suche "
-"einbezogen werden soll."
+"Aktivieren Sie dieses Ankreuzfeld, wenn Datei-Erinnerungen in die Suche "
+"einbezogen werden sollen."
 
 #: find.cpp:130
 #, kde-format
@@ -3317,8 +3311,8 @@ msgstr "Befehl"
 msgctxt "@info:whatsthis"
 msgid "Check to include command alarms in the search."
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, wenn Befehls-Erinnerungen in die Suche "
-"einbezogen werden soll."
+"Aktivieren Sie dieses Ankreuzfeld, wenn Befehls-Erinnerungen in die Suche "
+"einbezogen werden sollen."
 
 #: find.cpp:134
 #, kde-format
@@ -3331,8 +3325,8 @@ msgstr "E-Mail"
 msgctxt "@info:whatsthis"
 msgid "Check to include email alarms in the search."
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, wenn E-Mail-Erinnerungen in die Suche "
-"einbezogen werden soll."
+"Aktivieren Sie dieses Ankreuzfeld, wenn E-Mail-Erinnerungen in die Suche "
+"einbezogen werden sollen."
 
 #: find.cpp:138
 #, kde-format
@@ -3345,7 +3339,7 @@ msgstr "Audio"
 msgctxt "@info:whatsthis"
 msgid "Check to include audio alarms in the search."
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, wenn Audio-Erinnerungen in die Suche "
+"Aktivieren Sie dieses Ankreuzfeld, wenn Audio-Erinnerungen in die Suche "
 "einbezogen werden sollen."
 
 #: find.cpp:237
@@ -3402,7 +3396,7 @@ msgstr "Hintergrundfarbe für die Erinnerungsnachricht auswählen"
 #, kde-format
 msgctxt "@option:check"
 msgid "Use default font"
-msgstr "Standardschrift benutzen"
+msgstr "Standardschrift verwenden"
 
 #: fontcolour.cpp:86
 #, kde-format
@@ -3422,7 +3416,7 @@ msgstr "Angeforderte Schriftart"
 #, kde-format
 msgctxt "@action:button"
 msgid "Font && Color..."
-msgstr "Schriftart && Farbe ..."
+msgstr "Schriftart && Farbe …"
 
 #: fontcolourbutton.cpp:30
 #, kde-format
@@ -4654,7 +4648,7 @@ msgstr "Persönlicher Erinnerungsassistent, Programm- und E-Mail-Planer von KDE"
 #: main.cpp:45
 #, kde-format
 msgid "Copyright © 2001-%1, David Jarvie"
-msgstr "Copyright © 2001-%1 David Jarvie"
+msgstr "© 2001–%1 David Jarvie"
 
 #: mainwindow.cpp:443
 #, kde-kuit-format
@@ -4670,7 +4664,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
-msgstr "Vorlagen …"
+msgstr "Vorlagen …"
 
 #: mainwindow.cpp:467 templatedlg.cpp:74
 #, kde-format
@@ -4682,19 +4676,19 @@ msgstr "Neu"
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
-msgstr "Vorlage erstellen …"
+msgstr "Vorlage erstellen …"
 
 #: mainwindow.cpp:477
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
-msgstr "Kopieren …"
+msgstr "Kopieren …"
 
 #: mainwindow.cpp:482 resourceselector.cpp:302
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
-msgstr "Bearbeiten …"
+msgstr "Bearbeiten …"
 
 #: mainwindow.cpp:487
 #, kde-format
@@ -4718,7 +4712,7 @@ msgstr "Reaktivieren"
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
-msgstr "Aufwachen aus dem Standby-Modus ..."
+msgstr "Aus dem Standby-Modus aufwachen …"
 
 #: mainwindow.cpp:529
 #, kde-format
@@ -4748,25 +4742,25 @@ msgstr "Datumsauswahl anzeigen"
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
-msgstr "Erinnerungen importieren …"
+msgstr "Erinnerungen importieren …"
 
 #: mainwindow.cpp:561
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr "Geburtstage importieren ..."
+msgstr "Geburtstage importieren …"
 
 #: mainwindow.cpp:566
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
-msgstr "Ausgewählte Erinnerungen exportieren …"
+msgstr "Ausgewählte Erinnerungen exportieren …"
 
 #: mainwindow.cpp:570 resourceselector.cpp:320
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
-msgstr "Exportieren …"
+msgstr "Exportieren …"
 
 #: mainwindow.cpp:574
 #, kde-format
@@ -4797,20 +4791,16 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: mainwindow.cpp:911
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "View Alarm"
+#, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
-msgstr "Erinnerung anzeigen"
+msgstr "Erinnerung überspringen"
 
 #: mainwindow.cpp:912
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Number of repetitions:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
-msgstr "Anzahl der Erinnerungen:"
+msgstr "Anzahl der zu überspringenden Aktivierungen:"
 
 #: mainwindow.cpp:943
 #, kde-format
@@ -4902,15 +4892,13 @@ msgstr "Deaktivieren"
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
-msgstr ""
+msgstr "Überspringen …"
 
 #: mainwindow.cpp:1781
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action"
 msgid "Cancel skip"
-msgstr "Ignorieren bei Überfälligkeit"
+msgstr "Überspringen abbrechen"
 
 #: messagedisplay.cpp:278
 #, kde-kuit-format
@@ -5091,7 +5079,7 @@ msgstr "Zurkenntnisnahme der Erinnerung bestätigen"
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
-msgstr "Bearbeiten ..."
+msgstr "Bearbeiten …"
 
 #: messagewindow.cpp:442
 #, kde-format
@@ -5109,7 +5097,7 @@ msgstr "Erinnerung bearbeiten"
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
-msgstr "Zurückstellen …"
+msgstr "Zurückstellen …"
 
 #: messagewindow.cpp:454
 #, kde-format
@@ -5415,7 +5403,7 @@ msgid ""
 "Check to display a warning prompt before quitting <application>KAlarm</"
 "application>."
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, um eine Warnung beim Beenden von "
+"Aktivieren Sie dieses Ankreuzfeld, um eine Warnung beim Beenden von "
 "<application>KAlarm</application> anzuzeigen."
 
 #: prefdlg.cpp:496
@@ -5469,8 +5457,8 @@ msgid ""
 "Choose which application to use when a command alarm is executed in a "
 "terminal window"
 msgstr ""
-"Wählen Sie aus, welches Terminalprogramm benutzt werden soll, wenn bei einer "
-"Erinnerung ein Befehl in einem Terminal ausgeführt werden soll"
+"Wählen Sie aus, welches Terminalprogramm verwendet werden soll, wenn bei "
+"einer Erinnerung ein Befehl in einem Terminal ausgeführt werden soll"
 
 #: prefdlg.cpp:551
 #, kde-kuit-format
@@ -5478,7 +5466,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to execute command alarms in a terminal window by <icode>%1</icode>"
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, wenn Befehls-Erinnerungen mit dem "
+"Aktivieren Sie dieses Ankreuzfeld, wenn Befehls-Erinnerungen mit dem "
 "Terminalprogramm <icode>%1</icode> ausgeführt werden sollen."
 
 #: prefdlg.cpp:558
@@ -5796,7 +5784,7 @@ msgid ""
 "Check to archive alarms after expiry or deletion (except deleted alarms "
 "which were never triggered)."
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, um abgelaufene und gelöschte Erinnerungen "
+"Aktivieren Sie dieses Ankreuzfeld, um abgelaufene und gelöschte Erinnerungen "
 "aufzubewahren (ausgenommen sind Erinnerungen, die nie ausgelöst wurden)."
 
 #: prefdlg.cpp:1070
@@ -6013,11 +6001,11 @@ msgid ""
 "email alarms, you will be able to pick which of <application>KMail</"
 "application>'s identities to use."
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, wenn Sie als Absender von E-Mail-"
-"Erinnerungen die Identitäten von <application>KMail</application> verwenden "
-"möchten. Für bereits bestehende Erinnerungen wird die Standard-Identität von "
-"<application>KMail</application> benutzt. Bei neuen Erinnerungen können Sie "
-"auswählen, welche Identität verwendet werden soll."
+"Aktivieren Sie dieses Ankreuzfeld, wenn Sie als Absender von E-Mail-"
+"Erinnerungen die Identitäten aus <application>KMail</application> verwenden "
+"möchten. Für bereits bestehende Erinnerungen wird die Standard-Identität aus "
+"<application>KMail</application> verwendet. Bei neuen Erinnerungen können "
+"Sie auswählen, welche Identität verwendet werden soll."
 
 #: prefdlg.cpp:1273
 #, kde-format
@@ -7131,7 +7119,7 @@ msgid ""
 "Instead of the alarm triggering just once at each recurrence, checking this "
 "option makes the alarm trigger multiple times at each recurrence."
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, um die Erinnerung bei jedem Auftreten zu "
+"Aktivieren Sie dieses Ankreuzfeld, um die Erinnerung bei jedem Auftreten zu "
 "wiederholen. Statt die Erinnerung einmal bei jedem Auftreten auszulösen, "
 "führt diese Einstellung dazu, dass die Erinnerung mehrmals pro Auftreten "
 "ausgelöst wird."
@@ -7156,8 +7144,8 @@ msgid ""
 "Check to specify the number of times the alarm should repeat after each "
 "recurrence"
 msgstr ""
-"Markieren Sie dieses Ankreuzfeld, um festzulegen, wie oft pro Auftreten eine "
-"Erinnerung wiederholt werden soll"
+"Aktivieren Sie dieses Ankreuzfeld, um festzulegen, wie oft pro Auftreten "
+"eine Erinnerung wiederholt werden soll"
 
 #: repetitionbutton.cpp:165
 #, kde-format
@@ -7359,7 +7347,7 @@ msgstr "Kalender-Dateien"
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
-msgstr "Dateiinformationen werden überprüft ..."
+msgstr "Dateiinformationen werden überprüft …"
 
 #: resources/migration/dirresourceimportdialog.cpp:405
 #: resources/migration/dirresourceimportdialog.cpp:453
@@ -7410,7 +7398,7 @@ msgid ""
 "a KAlarm calendar file resource."
 msgstr ""
 "KAlarm unterstützt Kalender in Ordnerressourcen nicht mehr. Um weiterhin den "
-"Inhalt von Ordnerressourcen zu benutzen, müssen Sie diese Kalender in ein "
+"Inhalt von Ordnerressourcen zu verwenden, müssen Sie diese Kalender in eine "
 "Datei-Ressource für Erinnerungen importieren."
 
 #. i18n: ectx: property (text), widget (QLabel, warning2)
@@ -7423,7 +7411,7 @@ msgid ""
 "its alarm types into separate KAlarm calendar file resources."
 msgstr ""
 "KAlarm unterstützt Kalender in Ordnerressourcen nicht mehr. Um weiterhin den "
-"Inhalt von Ordnerressourcen zu benutzen, müssen Sie jeden der "
+"Inhalt von Ordnerressourcen zu verwenden, müssen Sie jeden der "
 "Erinnerungstypen in eine eigene Datei-Ressource für Erinnerungen importieren."
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
@@ -7458,8 +7446,8 @@ msgid ""
 "using the Import Alarms menu option to import the calendar files contained "
 "within it."
 msgstr ""
-"Sie können sie Erinnerungen dieser Ordner-Ressource später importieren, in "
-"dem Sie die Optionen im Menü „Erinnerungen importieren“ benutzen, um die "
+"Sie können sie Erinnerungen dieser Ordner-Ressource später importieren, "
+"indem Sie die Optionen im Menü „Erinnerungen importieren“ verwenden, um die "
 "darin enthaltenen Kalenderdateien zu importieren."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mergeRadio)
@@ -7593,13 +7581,13 @@ msgstr "Erinnerungsvorlagen"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7608,20 +7596,16 @@ msgid "Read-only"
 msgstr "Schreibgeschützt"
 
 #: resources/resourcedatamodelbase.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (old format)"
+#, kde-format
 msgctxt "@item:intext Calendar status, parameter is KAlarm version"
 msgid "Read-only (KAlarm pre-%1 format)"
-msgstr "Schreibgeschützt (altes Format)"
+msgstr "Schreibgeschützt (alt, vor KAlarm Version %1)"
 
 #: resources/resourcedatamodelbase.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (other format)"
+#, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (not a KAlarm calendar)"
-msgstr "Schreibgeschützt (anderes Format)"
+msgstr "Schreibgeschützt (kein KAlarm-Kalender)"
 
 #: resources/resourcedatamodelbase.cpp:119
 #, kde-format
@@ -7826,12 +7810,7 @@ msgid "Choose Calendar"
 msgstr "Kalender auswählen"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7841,13 +7820,13 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para>Der Kalender <resource>%1</resource> wurde schreibgeschützt. Es war "
-"der Standardkalender für: %2</para><para>Bitte wählen Sie einen neuen "
-"Standardkalender aus.</para>"
+"<para>Der Kalender <resource>%2</resource> wurde schreibgeschützt.</"
+"para><para>Er war der Standardkalender für %3.</para><para>Bitte wählen Sie "
+"einen neuen Standardkalender aus.</para>"
 msgstr[1] ""
-"<para>Der Kalender <resource>%1</resource> wurde schreibgeschützt. Es war "
-"der Standardkalender für: %2</para><para>Bitte wählen Sie einen neuen "
-"Standardkalender aus.</para>"
+"<para>Der Kalender <resource>%2</resource> wurde schreibgeschützt.</"
+"para><para>Er war der Standardkalender für %3.</para><para>Bitte wählen Sie "
+"neue Standardkalender aus.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -8180,26 +8159,21 @@ msgstr ""
 "wenn abgelaufene Erinnerungen aufbewahrt werden sollen."
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>Enthält ebenfalls:%1</para>"
+msgstr "Enthält ebenfalls %1"
 
 #: resourceselector.cpp:255
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> ist der Standardkalender für: %2</para>"
-"%3<para>Möchten Sie diesen wirklich aus der Kalenderliste entfernen?</para>"
+"<para><resource>%1</resource> ist der Standardkalender für %2</para><para>"
+"%3</para><para>Möchten Sie ihn wirklich aus allen Kalenderlisten entfernen?</"
+"para>"
 
 #: resourceselector.cpp:259
 #, kde-kuit-format
@@ -8212,18 +8186,14 @@ msgstr ""
 "Liste entfernen?"
 
 #: resourceselector.cpp:262
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> enthält: %2</para><para>Möchten Sie diesen "
-"wirklich aus der Kalenderliste entfernen?</para>"
+"<para><resource>%1</resource> enthält %2</para><para>Möchten Sie ihn "
+"wirklich aus allen Kalenderlisten entfernen?</para>"
 
 #: resourceselector.cpp:265
 #, kde-kuit-format
@@ -8251,7 +8221,7 @@ msgstr "Details anzeigen"
 #, kde-format
 msgctxt "@action"
 msgid "Set Color..."
-msgstr "&Farbe wählen …"
+msgstr "Farbe wählen …"
 
 #: resourceselector.cpp:299
 #, kde-format
@@ -8275,13 +8245,13 @@ msgstr "Entfernen"
 #, kde-format
 msgctxt "@action"
 msgid "Add..."
-msgstr "Hinzufügen …"
+msgstr "Hinzufügen …"
 
 #: resourceselector.cpp:317
 #, kde-format
 msgctxt "@action"
 msgid "Import..."
-msgstr "Importieren …"
+msgstr "Importieren …"
 
 #: resourceselector.cpp:373
 #, kde-format
@@ -8609,7 +8579,7 @@ msgstr "Klangdatei auswählen"
 #, kde-format
 msgctxt "@action:button"
 msgid "Special Actions..."
-msgstr "Besondere Aktionen ..."
+msgstr "Besondere Aktionen …"
 
 #: specialactions.cpp:39
 #, kde-format
