@@ -11,13 +11,13 @@
 #
 # Diego Iastrubni <elcuco@kde.org>, 2005, 2007.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024, 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024-2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-18 00:46+0000\n"
-"PO-Revision-Date: 2026-01-30 08:36+0200\n"
+"PO-Revision-Date: 2026-05-23 16:15+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -988,7 +988,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Desktops without auto-hide in system tray"
-msgstr ""
+msgstr "שולחנות עבודה ללא הסתרה אוטומטית בשורת המערכת"
 
 #. i18n: ectx: whatsthis, entry (NoAutoHideSystemTrayDesktops), group (General)
 #: data/kalarmconfig.kcfg:137
@@ -996,7 +996,7 @@ msgstr ""
 msgctxt "@info:whatsthis"
 msgid ""
 "Desktops for which the auto-hide in system tray option is not available."
-msgstr ""
+msgstr "שולחנות עבודה שבהם הסתרה אוטומטית בשורת המערכת לא זמינה."
 
 #. i18n: ectx: label, entry (Base_AutoStart), group (General)
 #: data/kalarmconfig.kcfg:141
@@ -1027,7 +1027,7 @@ msgstr "מצב הרצה"
 msgctxt "@info:whatsthis"
 msgid ""
 "Whether to run KAlarm automatically on login, manually only, or not at all."
-msgstr ""
+msgstr "האם להריץ את KAlarm אוטומטית עם הכניסה, ידנית בלבד או בכלל לא."
 
 #. i18n: ectx: label, entry (Base_RunMode), group (General)
 #: data/kalarmconfig.kcfg:149
@@ -1471,7 +1471,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Auto-close window after late-cancellation time"
-msgstr ""
+msgstr "לסגור את החלון אוטומטית לאחר זמן ביטול מאוחר"
 
 #. i18n: ectx: whatsthis, entry (DefaultAutoClose), group (Defaults)
 #: data/kalarmconfig.kcfg:321
@@ -1580,7 +1580,7 @@ msgstr "הגדרת ברירת מחדל בחלונית עריכת התזכורו�
 #, kde-format
 msgctxt "@label"
 msgid "Enter script"
-msgstr ""
+msgstr "נא למלא סקריפט"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdScript), group (Defaults)
 #: data/kalarmconfig.kcfg:363
@@ -1741,7 +1741,7 @@ msgstr "יחידות התראה"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default reminder time units in the alarm edit dialog."
-msgstr ""
+msgstr "יחידות זמן התזכורות כברירת מחדל בחלונית עריכת התזכורות."
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:415
@@ -2137,7 +2137,7 @@ msgstr "שינוי השעה שאליה נדחתה התזכורת, או ביטו�
 #, kde-format
 msgctxt "@label When the alarm will next trigger after being skipped"
 msgid "Skipping until:"
-msgstr ""
+msgstr "דילוג עד:"
 
 #: editdlg.cpp:285
 #, kde-format
@@ -2156,7 +2156,7 @@ msgstr "ביטול דילוג"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel skipping of the alarm"
-msgstr ""
+msgstr "ביטול דילוג על התזכורת"
 
 #: editdlg.cpp:301 editdlg.cpp:362
 #, kde-format
@@ -6707,6 +6707,8 @@ msgid ""
 "application> version %2), and will be read-only unless you choose to update "
 "it to the current format."
 msgstr ""
+"לוח השנה <resource>%1</resource> הוא בתסדיר ישן (<application>KAlarm</"
+"application> בגרסה %2), ויהיה לקריאה בלבד אלא אם כן יומר לתסדיר הנוכחי."
 
 #: resources/calendarupdater.cpp:89
 #, kde-kuit-format
