@@ -985,6 +985,7 @@
           <li xml:lang="cs">Odstraněny nadbytečné mezery v dialogovém okně Nastavení.</li>
           <li xml:lang="es">Se ha eliminado el espacio excesivo del diálogo de preferencias.</li>
           <li xml:lang="fr">Supprimer les espaces excessifs dans la boîte de dialogue « Préférences ».</li>
+          <li xml:lang="he">הוסר ריווח עודף בחלונית ההעדפות.</li>
           <li xml:lang="ia">Remove spatiar de excesso in dialogo de Preferentias.</li>
           <li xml:lang="it">Rimozione della spaziatura eccessiva nella finestra delle preferenze.</li>
           <li xml:lang="ka">წაიშალა ზედმეტი ჰარეები მორგების დიალოგში.</li>
@@ -1251,6 +1252,7 @@
           <li xml:lang="cs">Oprava nefunkčnosti se službou Akonadi.</li>
           <li xml:lang="es">Se ha corregido la funcionalidad de Akonadi.</li>
           <li xml:lang="fr">Correction du fonctionnement de Akonadi ne fonctionnant pas.</li>
+          <li xml:lang="he">תוקנה תפקודיות של Akonadi שלא עבדה.</li>
           <li xml:lang="ia">Corrige functionalitate de Akonadi non functiionante.</li>
           <li xml:lang="it">Correzione delle funzionalità Akonadi, non funzionanti.</li>
           <li xml:lang="ka">გასწორდა Akonadi-ის ფუნქციონალის შეფერხება.</li>
@@ -1308,6 +1310,7 @@
           <li xml:lang="cs">Oprava sestavení na FreeBSD při použití zvukového formátu MPV.</li>
           <li xml:lang="es">Se ha corregido el problema de compilación en FreeBSD si se usa sonido MPV.</li>
           <li xml:lang="fr">Correction de la compilation sur FreeBSD lorsque l'audio « MPV » est utilisé.</li>
+          <li xml:lang="he">תוקנה בנייה ב־FreeBSD בעת שימוש בשמע מ־MPV.</li>
           <li xml:lang="ia">Corrige le construction sur FreeBSD si uante audio MPV.</li>
           <li xml:lang="it">Correzione della compilazione su FreeBSD se si usa l'audio via MPV.</li>
           <li xml:lang="ka">გასწორდა FreeBSD-ზე აგების პროცესი MPV აუდიოს გამოყენებისას.</li>
@@ -1353,6 +1356,7 @@
           <li xml:lang="cs">V dialogovém okně Nastavení zobrazeny všechny možnosti režimu spuštění.</li>
           <li xml:lang="es">Mostrar todas las opciones del modo de ejecución en el diálogo de preferencias.</li>
           <li xml:lang="fr">Afficher toutes les options du mode « Exécution » dans la boîte de dialogue « Préférences ».</li>
+          <li xml:lang="he">הצגת כל אפשרויות מצב ההרצה בחלונית ההעדפות.</li>
           <li xml:lang="ia">Monstra omne optiones de Modo de Executar in dialogo de Preferentias.</li>
           <li xml:lang="it">Mostra tutte le opzioni delle Modalità di esecuzione nella finestra delle preferenze.</li>
           <li xml:lang="ka">გასწორდა პარამეტრების დიალოგში გაშვების რეჟიმის ყველა ვარიანტის ჩვენება.</li>
@@ -1372,6 +1376,7 @@
           <li xml:lang="cs">Přidána možnost nastavení, která umožní přehrávání zvuků pomocí VLC nebo MPV.</li>
           <li xml:lang="es">Se proporciona una opción de compilación para usar VLC o MPV para reproducir sonido.</li>
           <li xml:lang="fr">Fournir une option de compilation pour utiliser VLC ou MPV lors de la lecture de sons.</li>
+          <li xml:lang="he">אספקת אפשרות בנייה להשתמש VLC או ב־MPV כדי להשמיע צלילים.</li>
           <li xml:lang="ia">Forni optiones de construer per usar VLC o MPV per reproducer sonos.</li>
           <li xml:lang="it">Fornita un'opzione di compilazione per usare VLC o MPV per riprodurre suoni.</li>
           <li xml:lang="ka">დაემატა აგების პარამეტრი ხმების დასაკვრელად VLC-ის, ან MPV-ის გამოსაყენებლად.</li>
@@ -1391,6 +1396,7 @@
           <li xml:lang="cs">Přizpůsobení změnám v QDateTime a QTimeZone v Qt 6.5.</li>
           <li xml:lang="es">Convertir a los cambios de QDateTime/QTimeZone de Qt 6.5.</li>
           <li xml:lang="fr">Convertir vers les modifications de QDateTime / QTimeZone de Qt 6.5.</li>
+          <li xml:lang="he">המרה לשינויי QDateTime/QTimeZone ב־Qt 6.5.</li>
           <li xml:lang="ia">Converte a Qt 6.5 modificationes de QDateTime/QTimeZone .</li>
           <li xml:lang="it">Conversione alle modifiche di QDateTime/QTimeZone in Qt 6.5.</li>
           <li xml:lang="ka">განხორციელდა გადასვლა Qt 6.5-ის QDateTime-ის, ან QTimeZone-ის ცვლილებებზე.</li>
@@ -1437,6 +1443,7 @@
           <li xml:lang="cs">Oprava pádu v případě, že jsou podporovány časovače alarmů jádra.</li>
           <li xml:lang="es">Se ha corregido un fallo de la aplicación si existe compatibilidad con los temporizadores de alarmas del kernel.</li>
           <li xml:lang="fr">Correction du plantage si les minuteurs d'alarme du noyau sont prises en charge.</li>
+          <li xml:lang="he">תוקנה קריסה אם יש תמיכה במתזמני תזכורות ליבה.</li>
           <li xml:lang="ia">Corrige fracasso si chronometros (timers) de alarma de kernel es supportate.</li>
           <li xml:lang="it">Correzione di un blocco quando i timer di avviso del kernel sono supportati.</li>
           <li xml:lang="ka">გასწორდა პროგრამის ავარიული გათიშვა, თუ ბირთვის განგაშის ტაიმერების, ან მათი ფუნქციონალის მხარდაჭერა არსებობს.</li>
@@ -1456,6 +1463,7 @@
           <li xml:lang="cs">Opravena chyba, kvůli které se zařízení po probuzení z režimu spánku neprobudilo při použití probuzení pomocí RTC.</li>
           <li xml:lang="es">Se ha corregido «Despertar de suspensión» no funcional cuando se usa despertar RTC.</li>
           <li xml:lang="fr">Correction du problème de réveil à partir de la suspension avec l'utilisation du réveil « RTC ».</li>
+          <li xml:lang="he">תוקנה התעוררות מהשהיה שלא עבדה בעת שימוש בהתעוררות RTC.</li>
           <li xml:lang="ia">Corrige si Evelia ex Suspende non functiona quando on usa un evelia RTC.</li>
           <li xml:lang="it">Correzione della riattivazione dalla sospensione che non funzionava quando si usavano una riattivazione RTC.</li>
           <li xml:lang="ka">გასწორდა ძილის რეჟიმიდან გაღვიძების, ან RTC-ით გაღვიძების ფუნქციონალის შეფერხება.</li>
