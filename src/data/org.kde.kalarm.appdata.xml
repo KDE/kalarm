@@ -50,6 +50,7 @@
   <name xml:lang="sv">Kalarm</name>
   <name xml:lang="ta">கேயலாரம்</name>
   <name xml:lang="tr">K Alarm</name>
+  <name xml:lang="ug">KAlarm</name>
   <name xml:lang="uk">KAlarm</name>
   <name xml:lang="zh-CN">KAlarm</name>
   <name xml:lang="zh-TW">KAlarm</name>
@@ -97,6 +98,7 @@
   <summary xml:lang="sv">Personlig alarmschemaläggning</summary>
   <summary xml:lang="ta">அலார செயலி</summary>
   <summary xml:lang="tr">Kişisel Alarm Zamanlayıcısı</summary>
+  <summary xml:lang="ug">شەخسىي قوڭغۇراق كۈنتەرتىپلىگۈچ</summary>
   <summary xml:lang="uk">Персональний планувальник нагадувань</summary>
   <summary xml:lang="zh-CN">个人闹钟计划程序</summary>
   <summary xml:lang="zh-TW">個人鬧鐘排程程式</summary>
@@ -190,6 +192,7 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="ta">அம்சங்கள்:</p>
     <p xml:lang="tr">Özellikler:</p>
+    <p xml:lang="ug">ئىقتىدار:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="zh-CN">功能：</p>
     <p xml:lang="zh-TW">功能：</p>
