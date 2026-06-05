@@ -546,6 +546,7 @@
           <li xml:lang="ca-valencia">Corregix els càlculs prompte de subrepetició de només data.</li>
           <li xml:lang="es">Corregir los cálculos de tiempo de subrepetición que solo tienen en cuenta la fecha.</li>
           <li xml:lang="fr">Correction des calculs de temps de sous-répétition uniquement pour les dates.</li>
+          <li xml:lang="he">תוקנו חישובי זמנים לתת־חזרה לפי תאריך בלבד.</li>
           <li xml:lang="ia">Corrige le calculationes de tempore de sub-repetition de sol data.</li>
           <li xml:lang="it">Corretto il calcolo dell'orario di sotto-ripetizioni con solo data.</li>
           <li xml:lang="ka">გასწორდა მხოლოდ-თარიღიანი ქვეგამეორებების დროის გამოთვლა.</li>
