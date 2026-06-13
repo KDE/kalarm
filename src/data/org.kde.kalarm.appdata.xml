@@ -846,6 +846,7 @@
           <li xml:lang="cs">V kalendáři upomínek se rozlišuje mezi denními a minutovými vnořenými opakováními.</li>
           <li xml:lang="es">Distinguir entre subrepeticiones diarias y detalladas en el calendario de alarmas.</li>
           <li xml:lang="fr">Distinguer les sous-répétitions quotidiennes et minutées dans le calendrier des alarmes.</li>
+          <li xml:lang="he">הבדלה בין תת־חזרות יומיות או לפי דקה בלוח השנה של התזכורות.</li>
           <li xml:lang="ia">Distingue inter sub-repetitiones quotidian e de minutas in calendario de alarmas.</li>
           <li xml:lang="it">Vengono distinte le sotto-ripetizioni ogni giorno/ogni minuto nel calendario degli avvisi.</li>
           <li xml:lang="ka">განგაშის კალენდარში დღიური და წუთობრივი ქვე-გამეორებების გამიჯვნა.</li>
@@ -865,6 +866,7 @@
           <li xml:lang="cs">Kalendáře označeny jako „KeepFormat“ pouze v případě, že uživatel odmítne jejich aktualizaci.</li>
           <li xml:lang="es">Marcar los calendarios como «mantener formato» solo si el usuario declina actualizarlos.</li>
           <li xml:lang="fr">Ne marquez les agendas comme « Conserver le format » que si l'utilisateur refuse de les mettre à jour.</li>
+          <li xml:lang="he">לסמן לוחות שנה בתור ‚KeepFormat’ (שמירה על תסדיר) אם המשתמש מסרב לעדכן אותם.</li>
           <li xml:lang="ia">Marca solmente como 'ManteneFormato' si le usator refusa actualisar los.</li>
           <li xml:lang="it">I calendari vengono marcati come «KeepFormat« solo se l'utente rifiuta di aggiornarli.</li>
           <li xml:lang="ka">კალენდრების 'KeepFormat'-ად მონიშვნა მხოლოდ იმ შემთხვევაში, თუ მომხმარებელი მათ განახლებაზე უარს იტყვის.</li>
@@ -1041,6 +1043,7 @@
           <li xml:lang="cs">Zabráněno tomu, aby se okna se zprávami při zobrazení dostala do popředí.</li>
           <li xml:lang="es">Impedir que las ventanas de mensajes capturen el foco del teclado cuando se muestran.</li>
           <li xml:lang="fr">Empêcher les fenêtres de messages de recevoir le focus du clavier lors de leurs apparitions.</li>
+          <li xml:lang="he">חלונות של הודעות נמנעות ללכוד את מיקוד המקלדת כשהן קופצות.</li>
           <li xml:lang="ia">Preveni que le fenestras de message prende le foco de claviero quando illos emerge como popup.</li>
           <li xml:lang="it">Viene impedito alle finestre dei messaggi di prendere il fuoco quando appaiono.</li>
           <li xml:lang="ka">შეტყობინების დიალოგებისთვის კლავიატურის ფოკუსის მიღების აკრძალვა მათი ამოხტომისას.</li>
@@ -1088,6 +1091,7 @@
           <li xml:lang="cs">Implementovány zvukové podpůrné vrstvy jako moduly, aby si je uživatel mohl vybrat.</li>
           <li xml:lang="es">Implementar los motores de sonido como complementos para permitir la selección del usuario.</li>
           <li xml:lang="fr">Implémentation de moteurs audio sous forme de modules externes pour permettre une sélection par l'utilisateur.</li>
+          <li xml:lang="he">מימוש מנגנוני שמע כתוספים כדי לאפשר למשתמש לבחור.</li>
           <li xml:lang="ia">Implementa retro administrationes audio como plugins per permitter selection de usator. </li>
           <li xml:lang="it">Implementazione di motori audio come estensioni per permettere all'utente di scegliere tra loto.</li>
           <li xml:lang="ka">განხორციელდა აუდიოს უკანაბოლოები დამატებების სახით, რომ მომხმარებელს არჩევა შეეძლოს.</li>
