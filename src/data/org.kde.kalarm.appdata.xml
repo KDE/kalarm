@@ -503,6 +503,7 @@
           <li xml:lang="ka">დაემატა განგაშის შემდეგი რამდენიმე გამეორება/ქვეგამეორების გამოტოვების შესაძლებლობა.</li>
           <li xml:lang="nl">Bied de mogelijkheid om de volgende paar herhalingen van een alarm over te slaan.</li>
           <li xml:lang="pt-BR">Fornecer a possibilidade de ignorar as próximas recorrências/sub-repetições de um alarme.</li>
+          <li xml:lang="ru">Добавлена возможность пропуска следующих нескольких повторений/подповторов напоминания;</li>
           <li xml:lang="sk">Poskytnúť možnosť preskočiť niekoľko nasledujúcich opakovaní/podopakovaní budíka.</li>
           <li xml:lang="sl">Omogoča zmožnost preskoka naslednjih nekaj ponovitev/podponovitev alarma.</li>
           <li xml:lang="uk">Надано можливість пропустити наступні кілька повторень/підповторень нагадування.</li>
@@ -519,6 +520,7 @@
           <li xml:lang="ka">განგაშის ჩასწორების დიალოგს დაემატა გაფრთხილების ჩახშობის გადაფარვის, ან X11-ის სრულეკრანიანი აპლიკაციების ზემოდან ჩვენების შესაძლებლობა.</li>
           <li xml:lang="nl">Voeg de optie 'Alarm bewerken' toe aan het dialoogvenster om de onderdrukking van meldingen op te heffen of om ze weer te geven in X11-toepassingen op volledig scherm.</li>
           <li xml:lang="pt-BR">Fornecer opção no diálogo para editar alarme para ignorar a inibição de notificações ou para exibir sobre aplicativos X11 em tela cheia.</li>
+          <li xml:lang="ru">В диалог редактирования напоминания добавлен параметр переопределения подавления уведомлений или отображения поверх полноэкранных приложений в X11;</li>
           <li xml:lang="sk">Poskytnúť v dialógu Upraviť budík možnosť prepísať potlačenie upozornení alebo zobrazenie cez celoobrazovkové aplikácie X11.</li>
           <li xml:lang="sl">Omogoči zmožnost pogovornega okna za urejanje alarma, da preglasi blokiranje obvestil ali jih prikaže prek celozaslonskih aplikacij X11.</li>
           <li xml:lang="uk">Додано пункт редагування діалогового вікна сповіщень для скасування блокування сповіщень або їх показу над повноекранних вікнами програм X11.</li>
@@ -535,6 +537,7 @@
           <li xml:lang="ka">მხოლოდ, გვიანი გაუქმების/შეხსენების არჩევნის ჩვენება განგაშის ჩასწორების დიალოგში, როცა ისინი ჩართულია.</li>
           <li xml:lang="nl">Toon alleen de opties voor 'Annuleren indien te laat/Herinnering' in het dialoogvenster 'Alarm bewerken' als deze zijn ingeschakeld.</li>
           <li xml:lang="pt-BR">Exibir as opções de Cancelamento tardio/Lembrete na caixa de diálogo para editar alarme somente quando eles estiverem ativados.</li>
+          <li xml:lang="ru">Реализовано отображение параметров «Отмена с опозданием»/«Напоминание» в диалоге «Редактирование напоминания» только при их включении;</li>
           <li xml:lang="sk">Zobraziť možnosti Neskoré zrušenie/Pripomienka v dialógu Upraviť budík iba keď sú povolené.</li>
           <li xml:lang="sl">Možnosti za pozni preklic/opomnik v pogovornem oknu Urejanje alarma, če so omogočene.</li>
           <li xml:lang="uk">Реалізовано показ параметрів для пізнього скасування/нагадування у діалоговому вікні редагування нагадування лише тоді, коли вони увімкнені.</li>
@@ -552,6 +555,7 @@
           <li xml:lang="ka">გასწორდა მხოლოდ-თარიღიანი ქვეგამეორებების დროის გამოთვლა.</li>
           <li xml:lang="nl">Corrigeer de berekeningen van de herhalingstijd van subperioden die alleen op datum gebaseerd zijn.</li>
           <li xml:lang="pt-BR">Correção dos cálculos de tempo de sub-repetição que consideram apenas a data.</li>
+          <li xml:lang="ru">Исправлены расчёты времени для подповторов только по дате.</li>
           <li xml:lang="sk">Opraviť výpočty času podopakovaní iba s dátumom.</li>
           <li xml:lang="sl">Popravi izračune časa podponovitev samo na podlagi datuma.</li>
           <li xml:lang="uk">Виправлено обчислення часу підповторення лише на основі дати.</li>
@@ -568,6 +572,7 @@
           <li xml:lang="ka">გაუმჯობესდა გვიანი გაუქმების და სხვა ვიჯეტები განგაშის ჩასწორების დიალოგის ბოლოში.</li>
           <li xml:lang="nl">Verbeter de lay-out van de widgets voor het annuleren indien te laat en andere widgets onderaan het dialoogvenster 'Alarm bewerken'.</li>
           <li xml:lang="pt-BR">Melhoria do layout do botão de cancelamento tardio e de outros widgets na parte inferior da caixa de diálogo para editar alarme.</li>
+          <li xml:lang="ru">Улучшена компоновка виджета отмены с опозданием и других виджетов в нижней части диалога «Редактирование напоминания»;</li>
           <li xml:lang="sk">Vylepšiť rozloženie neskorého zrušenia a ďalších widgetov v spodnej časti dialógu Upraviť budík.</li>
           <li xml:lang="sl">Izboljšana postavitev gradnikov za pozni preklic in drugih gradnikov na dnu pogovornega okna za urejanje alarma.</li>
           <li xml:lang="uk">Удосконалено компонування віджетів для пізнього скасування та інших віджетів у нижній частині діалогового вікна редагування нагадування.</li>
