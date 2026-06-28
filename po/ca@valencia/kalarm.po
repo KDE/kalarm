@@ -77,7 +77,7 @@ msgstr ""
 msgctxt "@info"
 msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
 msgstr ""
-"Açò utilitza el fus horari predeterminat de KAlarm, definit al diàleg de "
+"Açò utilitza el fus horari predeterminat de KAlarm, establit en el diàleg de "
 "configuració."
 
 #: alarmtimewidget.cpp:93
@@ -240,7 +240,7 @@ msgid ""
 "zone set in KAlarm's configuration dialog."
 msgstr ""
 "Trieu un fus horari per a esta alarma que siga diferent del fus horari "
-"predeterminat definit al diàleg de configuració de KAlarm."
+"predeterminat establit en el diàleg de configuració de KAlarm."
 
 #: alarmtimewidget.cpp:228 prefdlg.cpp:804
 #, kde-format
@@ -7765,7 +7765,7 @@ msgstr "URL"
 #, kde-format
 msgctxt "@item:intext What a resource is stored in (directory in filesystem)"
 msgid "Directory"
-msgstr "Directori"
+msgstr "Carpeta"
 
 #: resources/singlefileresource.cpp:177 resources/singlefileresource.cpp:351
 #, kde-format
