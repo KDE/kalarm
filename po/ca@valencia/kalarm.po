@@ -7765,7 +7765,7 @@ msgstr "URL"
 #, kde-format
 msgctxt "@item:intext What a resource is stored in (directory in filesystem)"
 msgid "Directory"
-msgstr "Directori"
+msgstr "Carpeta"
 
 #: resources/singlefileresource.cpp:177 resources/singlefileresource.cpp:351
 #, kde-format
