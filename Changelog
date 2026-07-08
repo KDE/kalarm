@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.13.1 (KDE Gear 26.08) --- 8 July 2026 ===
+* Fix crash when alarm excludes holidays [KDE Bug 522440]
+
 === Version 3.13.0 (KDE Gear 26.04) --- 17 February 2026 ===
 * Provide facility to skip the next few recurrences/sub-repetitions of an alarm.
 * Provide Edit Alarm dialogue option to override notification inhibition or display over X11 full screen applications.

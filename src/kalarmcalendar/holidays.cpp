@@ -100,7 +100,7 @@ Holidays::Type Holidays::holidayType(const QDate& date) const
 {
     if (date < QDate::currentDate().addDays(-1))
     {
-        Q_ASSERT(date >= QDate::currentDate());
+        qCCritical(KALARMCAL_LOG) << "Holidays::holidayType: Error! Past date:" << date;
         return None;
     }
     const int offset = mCacheStartDate.daysTo(date);
