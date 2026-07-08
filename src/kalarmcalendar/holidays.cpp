@@ -3,12 +3,14 @@
  *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2023-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2023-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "holidays.h"
+
+#include "kalarmcal_debug.h"
 
 #include <KHolidays/HolidayRegion>
 
