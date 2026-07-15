@@ -64,7 +64,6 @@ set(AKONADI_MIMELIB_VERSION "6.7.40")
 set(AKONADI_CONTACT_VERSION "6.7.40")
 set(KMAILTRANSPORT_LIB_VERSION "6.7.40")
 set(IDENTITYMANAGEMENT_LIB_VERSION "6.7.40")
-set(KMIME_LIB_VERSION "6.7.40")
 
 set(KDEPIM_LIB_VERSION "${PIM_VERSION}")
 set(KDEPIM_LIB_SOVERSION "6")
@@ -126,10 +125,6 @@ endif()
 find_package(KPim6CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim6IdentityManagementWidgets ${IDENTITYMANAGEMENT_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF6Mime ${KF_MIN_VERSION} CONFIG)
-if(NOT TARGET KF6::Mime)
-    find_package(KPim6Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
-    add_library(KF6::Mime ALIAS KPim6::Mime)
-endif()
 
 # Build support for audio backend plugins
 option(ENABLE_LIBVLC "Build support for LibVLC" ON)
