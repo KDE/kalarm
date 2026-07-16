@@ -98,7 +98,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2026-1-9</date>
+>2026-1-22</date>
 <releaseinfo
 >3.13.0 (KDE Gear 26.04)</releaseinfo>
 
@@ -1932,14 +1932,33 @@
 
 <sect2>
 <title
->Uitstel</title>
+>Uitstel en overslaan</title>
 
 <para
 >Als het alarm een zich herhalend alarm is en het was uitgesteld nadat het voor het laatst was getoond, dan toont het groepsvak <guilabel
->Uitgesteld alarm</guilabel
+>Uitgesteld / overgeslagen alarm</guilabel
 > de tijd waarnaar het alarm was uitgesteld. <guibutton
 >Wijzigen...</guibutton
 > toont een dialoog waarmee u de uitgestelde tijd kunt wijzigen of het uitstel kunt annuleren.</para>
+
+<para
+>Als het alarm een ​​terugkerend alarm is en momenteel wordt overgeslagen (zie <link linkend="skipping"
+>Individuele alarmen overslaan</link
+>), toont het groepsvak <guilabel
+>Uitgesteld/Overgeslagen alarm</guilabel
+> het volgende tijdstip waarop het alarm na het overslaan weer wordt geactiveerd, d.w.z. het tijdstip waarop het de normale werking hervat. <guibutton
+>Overslaan annuleren</guibutton
+> annuleert het overslaan van het alarm.</para>
+
+<note
+><para
+>Als u de starttijd of herhalingsinstellingen van het alarm wijzigt, wordt het overslaan automatisch geannuleerd en wordt de overgeslagen tijd niet langer weergegeven.</para
+></note>
+
+<para
+>Houd er rekening mee dat wijzigingen in uitstel en overslaan van kracht worden wanneer op <guibutton
+>OK</guibutton
+> wordt geklikt.</para>
 
 </sect2>
 
@@ -3015,7 +3034,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="skipping">
 <title
 >Individuele alarmen overslaan</title>
 
