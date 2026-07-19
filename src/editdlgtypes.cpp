@@ -36,7 +36,11 @@
 #include "audioplugin/audioplugin.h"
 #include "kalarm_debug.h"
 
+#if KCALENDARCORE_VERSION < QT_VERSION_CHECK(6, 29, 0)
 #include <KCalUtils/ICalDrag>
+#else
+#include <KCalendarCore/MimeData>
+#endif
 #include <KCalendarCore/Person>
 
 #include <KLocalizedString>
@@ -1994,7 +1998,11 @@ void TextEdit::enableEmailDrop()
 
 void TextEdit::dragEnterEvent(QDragEnterEvent* e)
 {
+#if KCALENDARCORE_VERSION < QT_VERSION_CHECK(6, 29, 0)
     if (KCalUtils::ICalDrag::canDecode(e->mimeData()))
+#else
+    if (KCalendarCore::MimeData::canDecode(e->mimeData()))
+#endif
     {
         e->ignore();   // don't accept "text/calendar" objects
         return;
