@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-18 00:46+0000\n"
+"POT-Creation-Date: 2026-07-27 00:45+0000\n"
 "PO-Revision-Date: 2005-12-29 22:18+0100\n"
 "Last-Translator: Arnar Leosson <leosson@frisurf.no>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -2568,90 +2568,90 @@ msgid ""
 "inhibition or active full screen applications."
 msgstr ""
 
-#: editdlgtypes.cpp:75
+#: editdlgtypes.cpp:79
 #, fuzzy, kde-format
 #| msgid "Choose Log File"
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Veldu annálaskrá"
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:92
 #, fuzzy, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "Sýna uppkallsskeyti núna"
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:93
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "Vöktunalisti"
 
-#: editdlgtypes.cpp:90
+#: editdlgtypes.cpp:94
 #, fuzzy, kde-format
 #| msgid "Action"
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "Aðgerð"
 
-#: editdlgtypes.cpp:91
+#: editdlgtypes.cpp:95
 #, fuzzy, kde-format
 #| msgid "Confirm acknowledgment"
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Staðfesting þörf"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:131
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Nýtt uppkall"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:131
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Breyta Uppkalli"
 
-#: editdlgtypes.cpp:128
+#: editdlgtypes.cpp:132
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Sýna uppkallsskeyti núna"
 
-#: editdlgtypes.cpp:128
+#: editdlgtypes.cpp:132
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Sýna uppkallsskeyti núna"
 
-#: editdlgtypes.cpp:141
+#: editdlgtypes.cpp:145
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Sýna uppkallsskeyti núna"
 
-#: editdlgtypes.cpp:145
+#: editdlgtypes.cpp:149
 #, fuzzy, kde-format
 #| msgid "The alarm message"
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Uppkalls skeytið"
 
-#: editdlgtypes.cpp:146
+#: editdlgtypes.cpp:150
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr ""
 
-#: editdlgtypes.cpp:147
+#: editdlgtypes.cpp:151
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "&Skipun"
 
-#: editdlgtypes.cpp:167
+#: editdlgtypes.cpp:171
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2662,35 +2662,35 @@ msgid ""
 "display the output from a command.</item></list></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:182
+#: editdlgtypes.cpp:186
 #, fuzzy, kde-format
 #| msgid "Enter the text of the alarm message. It may be multi-line."
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Skrifið inn texta uppkalls-skeytis.  Það mega vera margar línur."
 
-#: editdlgtypes.cpp:195
+#: editdlgtypes.cpp:199
 #, fuzzy, kde-format
 #| msgid "Enter the name or URL of a text or image file to display."
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "Gefið nafn eða vefslóð á texta- eða myndaskrá sem á að sýna."
 
-#: editdlgtypes.cpp:202 editdlgtypes.cpp:891 sounddlg.cpp:185
+#: editdlgtypes.cpp:206 editdlgtypes.cpp:895 sounddlg.cpp:185
 #, fuzzy, kde-format
 #| msgid "Choose a file"
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Veldu skrá"
 
-#: editdlgtypes.cpp:203
+#: editdlgtypes.cpp:207
 #, fuzzy, kde-format
 #| msgid "Select a text or image file to display."
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Veljið texta- eða myndaskrá til að sýna."
 
-#: editdlgtypes.cpp:247
+#: editdlgtypes.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2698,7 +2698,7 @@ msgid ""
 "system."
 msgstr ""
 
-#: editdlgtypes.cpp:274
+#: editdlgtypes.cpp:278
 #, fuzzy, kde-format
 #| msgid ""
 #| "Check to additionally display a reminder in advance of the main alarm "
@@ -2709,7 +2709,7 @@ msgid ""
 "alarm time(s)."
 msgstr "Hakaðu við til að birta áminningu fyrir tíma atburðar."
 
-#: editdlgtypes.cpp:275
+#: editdlgtypes.cpp:279
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Enter how long in advance of the main alarm to display a reminder alarm."
@@ -2719,7 +2719,7 @@ msgid ""
 "reminder alarm.</para><para>%1</para>"
 msgstr "Veldu hve snemma fyrir atburð á að birta áminningu."
 
-#: editdlgtypes.cpp:276
+#: editdlgtypes.cpp:280
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2727,7 +2727,7 @@ msgid ""
 "alarm"
 msgstr ""
 
-#: editdlgtypes.cpp:286
+#: editdlgtypes.cpp:290
 #, fuzzy, kde-format
 #| msgid ""
 #| "Check to be prompted for confirmation when you acknowledge the alarm."
@@ -2735,107 +2735,107 @@ msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr "Hakið hér til að biðja um staðfestingu þegar þú samþykkir uppkallið."
 
-#: editdlgtypes.cpp:295
+#: editdlgtypes.cpp:299
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Sýna uppkallsskeyti núna"
 
-#: editdlgtypes.cpp:677
+#: editdlgtypes.cpp:681
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Sýna uppkallsskeyti núna"
 
-#: editdlgtypes.cpp:686
+#: editdlgtypes.cpp:690
 #, fuzzy, kde-format
 #| msgid "Display the file now"
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Sýna skrána núna"
 
-#: editdlgtypes.cpp:696
+#: editdlgtypes.cpp:700
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Sýna uppkallsskeyti núna"
 
-#: editdlgtypes.cpp:728
+#: editdlgtypes.cpp:732
 #, fuzzy, kde-format
 #| msgid "Choose Text or Image File to Display"
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Veldu texta eða myndaskrá til að birta"
 
-#: editdlgtypes.cpp:806
+#: editdlgtypes.cpp:810
 #, fuzzy, kde-format
 #| msgid "Enter a script"
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "Slá inn skriftu"
 
-#: editdlgtypes.cpp:807
+#: editdlgtypes.cpp:811
 #, fuzzy, kde-format
 #| msgid "Execute in terminal window"
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "Keyra í skeljarglugga"
 
-#: editdlgtypes.cpp:808
+#: editdlgtypes.cpp:812
 #, fuzzy, kde-format
 #| msgid "Execute in terminal window"
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "Keyra í skeljarglugga"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:842
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Nýtt uppkall"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:842
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Breyta Uppkalli"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:843
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "&Skipun"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:843
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "&Skipun"
 
-#: editdlgtypes.cpp:847
+#: editdlgtypes.cpp:851
 #, fuzzy, kde-format
 #| msgid "Execute the specified command now"
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Keyra skipun núna"
 
-#: editdlgtypes.cpp:848
+#: editdlgtypes.cpp:852
 #, fuzzy, kde-format
 #| msgid "Execute the specified command now"
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Keyra skipun núna"
 
-#: editdlgtypes.cpp:855 specialactions.cpp:182
+#: editdlgtypes.cpp:859 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr ""
 
-#: editdlgtypes.cpp:856
+#: editdlgtypes.cpp:860
 #, fuzzy, kde-format
 #| msgid ""
 #| "The default setting for the recurrence rule in the alarm edit dialog."
@@ -2843,39 +2843,39 @@ msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "Sjálfgefnar stillingar fyrir endurtekningatímabil."
 
-#: editdlgtypes.cpp:862
+#: editdlgtypes.cpp:866
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "&Skipun"
 
-#: editdlgtypes.cpp:870
+#: editdlgtypes.cpp:874
 #, fuzzy, kde-format
 #| msgid "Execute in terminal window"
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "Keyra í skeljarglugga"
 
-#: editdlgtypes.cpp:883
+#: editdlgtypes.cpp:887
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Skrifið inn texta uppkalls-skeytis.  Það mega vera margar línur."
 
-#: editdlgtypes.cpp:892
+#: editdlgtypes.cpp:896
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Veljið texta- eða myndaskrá til að sýna."
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:899
 #, fuzzy, kde-format
 #| msgid "Lo&g to file"
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "S&krifa í annál"
 
-#: editdlgtypes.cpp:896
+#: editdlgtypes.cpp:900
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2883,26 +2883,26 @@ msgid ""
 "to any existing contents of the file."
 msgstr ""
 
-#: editdlgtypes.cpp:903
+#: editdlgtypes.cpp:907
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "&Skipun"
 
-#: editdlgtypes.cpp:904
+#: editdlgtypes.cpp:908
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "&Skipun"
 
-#: editdlgtypes.cpp:1066
+#: editdlgtypes.cpp:1070
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Log file must be the name or path of a local file, with write permission."
 msgstr ""
 
-#: editdlgtypes.cpp:1076
+#: editdlgtypes.cpp:1080
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2912,7 +2912,7 @@ msgstr ""
 "Ekkert 'Frá' póstfang skilgreint.\n"
 "Vinsamlegast stilltu það í %1 stillingaglugganum."
 
-#: editdlgtypes.cpp:1096
+#: editdlgtypes.cpp:1100
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Command executed:\n"
@@ -2923,51 +2923,51 @@ msgstr ""
 "Skipun keyrð:\n"
 "%1"
 
-#: editdlgtypes.cpp:1130
+#: editdlgtypes.cpp:1134
 #, fuzzy, kde-format
 #| msgid "Copy email to self"
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "Taka afrit af sendum pósti"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1171
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "Nýtt uppkall"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1171
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Breyta Uppkalli"
 
-#: editdlgtypes.cpp:1168
+#: editdlgtypes.cpp:1172
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "&Virkja vöktun"
 
-#: editdlgtypes.cpp:1168
+#: editdlgtypes.cpp:1172
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "&Virkja vöktun"
 
-#: editdlgtypes.cpp:1176
+#: editdlgtypes.cpp:1180
 #, fuzzy, kde-format
 #| msgid "Send the email to the specified addressees now"
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Senda póst á tilgreind netföng núna"
 
-#: editdlgtypes.cpp:1177
+#: editdlgtypes.cpp:1181
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "&Sendmail"
 
-#: editdlgtypes.cpp:1188
+#: editdlgtypes.cpp:1192
 #, fuzzy, kde-format
 #| msgctxt "'From' email address"
 #| msgid "From:"
@@ -2975,7 +2975,7 @@ msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "Frá:"
 
-#: editdlgtypes.cpp:1194
+#: editdlgtypes.cpp:1198
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2985,7 +2985,7 @@ msgstr ""
 "Þitt póstfang, notað til að auðkenna þig sem sendanda þeirra skeyta sem "
 "póstvakar senda."
 
-#: editdlgtypes.cpp:1200
+#: editdlgtypes.cpp:1204
 #, fuzzy, kde-format
 #| msgctxt "Email addressee"
 #| msgid "To:"
@@ -2993,7 +2993,7 @@ msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "Til:"
 
-#: editdlgtypes.cpp:1205
+#: editdlgtypes.cpp:1209
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter the addresses of the email recipients. Separate multiple addresses "
@@ -3006,21 +3006,21 @@ msgstr ""
 "Sláið hér inn netföng þeirra sem eiga að fá póst.  Aðskiljið mörg netföng "
 "með kommum eða semikommum."
 
-#: editdlgtypes.cpp:1216
+#: editdlgtypes.cpp:1220
 #, fuzzy, kde-format
 #| msgid "Open address book"
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Opna vistfangaskrá"
 
-#: editdlgtypes.cpp:1217
+#: editdlgtypes.cpp:1221
 #, fuzzy, kde-format
 #| msgid "Select email addresses from your address book."
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Velja netföng úr vistfangaskránni þinni."
 
-#: editdlgtypes.cpp:1224
+#: editdlgtypes.cpp:1228
 #, fuzzy, kde-format
 #| msgctxt "Email subject"
 #| msgid "Subject:"
@@ -3028,69 +3028,69 @@ msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Viðfangsefni:"
 
-#: editdlgtypes.cpp:1230
+#: editdlgtypes.cpp:1234
 #, fuzzy, kde-format
 #| msgid "Enter the email subject."
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Gefið upp efni skeytis."
 
-#: editdlgtypes.cpp:1236
+#: editdlgtypes.cpp:1240
 #, fuzzy, kde-format
 #| msgid "Enter the email message."
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Sláið inn skeyti."
 
-#: editdlgtypes.cpp:1244
+#: editdlgtypes.cpp:1248
 #, fuzzy, kde-format
 #| msgid "Attachment&s:"
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "&Viðhengi:"
 
-#: editdlgtypes.cpp:1253
+#: editdlgtypes.cpp:1257
 #, fuzzy, kde-format
 #| msgid "Files to send as attachments to the email."
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Skrár sem á að senda með póstinum."
 
-#: editdlgtypes.cpp:1257 resourceselector.cpp:77
+#: editdlgtypes.cpp:1261 resourceselector.cpp:77
 #, fuzzy, kde-format
 #| msgid "Add..."
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Bæta við..."
 
-#: editdlgtypes.cpp:1259
+#: editdlgtypes.cpp:1263
 #, fuzzy, kde-format
 #| msgid "Add an attachment to the email."
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Bæta viðhengi við póstinn."
 
-#: editdlgtypes.cpp:1262 resourceselector.cpp:79
+#: editdlgtypes.cpp:1266 resourceselector.cpp:79
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "&Fjarlægja"
 
-#: editdlgtypes.cpp:1264
+#: editdlgtypes.cpp:1268
 #, fuzzy, kde-format
 #| msgid "Remove the highlighted attachment from the email."
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Fjarlægja valið viðhengi af póstinum."
 
-#: editdlgtypes.cpp:1269
+#: editdlgtypes.cpp:1273
 #, fuzzy, kde-format
 #| msgid "If checked, the email will be blind copied to you."
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "Ef valið þá mun afrit af sendum pósti verða sent til þín."
 
-#: editdlgtypes.cpp:1451
+#: editdlgtypes.cpp:1455
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Invalid email address:\n"
@@ -3101,14 +3101,14 @@ msgstr ""
 "Ógilt netfang:\n"
 "%1"
 
-#: editdlgtypes.cpp:1458
+#: editdlgtypes.cpp:1462
 #, fuzzy, kde-format
 #| msgid "No email address specified"
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Engin netföng skilgreind"
 
-#: editdlgtypes.cpp:1475
+#: editdlgtypes.cpp:1479
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Invalid email attachment:\n"
@@ -3119,7 +3119,7 @@ msgstr ""
 "Ógilt viðhengi við póst:\n"
 "%1"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1483
 #, fuzzy, kde-format
 #| msgid ""
 #| "Do you really want to send the email now to the specified recipient(s)?"
@@ -3127,21 +3127,21 @@ msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "Viltu senda póstinn núna til tilgreindra aðila?"
 
-#: editdlgtypes.cpp:1480
+#: editdlgtypes.cpp:1484
 #, fuzzy, kde-format
 #| msgid "Confirm Email"
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Staðfestið póstsendingu."
 
-#: editdlgtypes.cpp:1480
+#: editdlgtypes.cpp:1484
 #, fuzzy, kde-format
 #| msgid "&Send"
 msgctxt "@action:button"
 msgid "Send"
 msgstr "&Senda"
 
-#: editdlgtypes.cpp:1506
+#: editdlgtypes.cpp:1510
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Email sent to:\n"
@@ -3152,7 +3152,7 @@ msgstr ""
 "Póstur sendur á:\n"
 "%1%2"
 
-#: editdlgtypes.cpp:1509
+#: editdlgtypes.cpp:1513
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Email sent to:\n"
@@ -3163,78 +3163,78 @@ msgstr ""
 "Póstur sendur á:\n"
 "%1%2"
 
-#: editdlgtypes.cpp:1538
+#: editdlgtypes.cpp:1542
 #, fuzzy, kde-format
 #| msgid "Choose File to Attach"
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Veldu viðhengi"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1625
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Nýtt uppkall"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1625
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Breyta Uppkalli"
 
-#: editdlgtypes.cpp:1622
+#: editdlgtypes.cpp:1626
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "&Virkja vöktun"
 
-#: editdlgtypes.cpp:1622
+#: editdlgtypes.cpp:1626
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "&Virkja vöktun"
 
-#: editdlgtypes.cpp:1630
+#: editdlgtypes.cpp:1634
 #, fuzzy, kde-format
 #| msgid "Display the file now"
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Sýna skrána núna"
 
-#: editdlgtypes.cpp:1631
+#: editdlgtypes.cpp:1635
 #, fuzzy, kde-format
 #| msgid "Display the file now"
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Sýna skrána núna"
 
-#: editdlgtypes.cpp:1633
+#: editdlgtypes.cpp:1637
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
 msgstr "Ef valið þá mun vaktari sýna innihald texta- eða myndaskráar."
 
-#: editdlgtypes.cpp:1849
+#: editdlgtypes.cpp:1853
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "Gefið upp nafn á forriti sem skal keyrt."
 
-#: editdlgtypes.cpp:1855
+#: editdlgtypes.cpp:1859
 #, fuzzy, kde-format
 #| msgid "Enter a shell command to execute."
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Gefið upp nafn á forriti sem skal keyrt."
 
-#: editdlgtypes.cpp:1860
+#: editdlgtypes.cpp:1864
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Gefið upp nafn á forriti sem skal keyrt."
 
-#: editdlgtypes.cpp:1922
+#: editdlgtypes.cpp:1926
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3242,7 +3242,7 @@ msgid ""
 "icode></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:1927
+#: editdlgtypes.cpp:1931
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
@@ -4781,7 +4781,7 @@ msgstr "Persónuleg vakning, skipana- og póstvaki fyrir KDE"
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr ""
 
-#: mainwindow.cpp:443
+#: mainwindow.cpp:447
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Failed to save calendar to\n"
@@ -4794,122 +4794,122 @@ msgstr ""
 "Get ekki vistað dagbók í\n"
 "'%1'"
 
-#: mainwindow.cpp:463
+#: mainwindow.cpp:467
 #, fuzzy, kde-format
 #| msgid "&Templates..."
 msgctxt "@action"
 msgid "Templates..."
 msgstr "Snið&mát..."
 
-#: mainwindow.cpp:467 templatedlg.cpp:74
+#: mainwindow.cpp:471 templatedlg.cpp:74
 #, fuzzy, kde-format
 #| msgid "&New..."
 msgctxt "@action"
 msgid "New"
 msgstr "&Nýtt..."
 
-#: mainwindow.cpp:473
+#: mainwindow.cpp:477
 #, fuzzy, kde-format
 #| msgid "Create Tem&plate..."
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "Búa til s&niðmát..."
 
-#: mainwindow.cpp:477
+#: mainwindow.cpp:481
 #, fuzzy, kde-format
 #| msgid "&Copy..."
 msgctxt "@action"
 msgid "Copy..."
 msgstr "&Afrita..."
 
-#: mainwindow.cpp:482 resourceselector.cpp:302
+#: mainwindow.cpp:486 resourceselector.cpp:302
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "&Breyta..."
 
-#: mainwindow.cpp:487
+#: mainwindow.cpp:491
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Eyða uppkalli"
 
-#: mainwindow.cpp:493
+#: mainwindow.cpp:497
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Stilling áminningar"
 
-#: mainwindow.cpp:498
+#: mainwindow.cpp:502
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Virkja %1"
 
-#: mainwindow.cpp:517
+#: mainwindow.cpp:521
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr ""
 
-#: mainwindow.cpp:529
+#: mainwindow.cpp:533
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Sýna ú&trunnar vakningar"
 
-#: mainwindow.cpp:534
+#: mainwindow.cpp:538
 #, fuzzy, kde-format
 #| msgid "Show in System &Tray"
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Sýna í &kerfisslá"
 
-#: mainwindow.cpp:538
+#: mainwindow.cpp:542
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Dagbókarslóð"
 
-#: mainwindow.cpp:542
+#: mainwindow.cpp:546
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr ""
 
-#: mainwindow.cpp:555
+#: mainwindow.cpp:559
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Flytja inn &Afmælisdaga..."
 
-#: mainwindow.cpp:561
+#: mainwindow.cpp:565
 #, fuzzy, kde-format
 #| msgid "Import &Birthdays..."
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Flytja inn &Afmælisdaga..."
 
-#: mainwindow.cpp:566
+#: mainwindow.cpp:570
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "Flytja inn &Afmælisdaga..."
 
-#: mainwindow.cpp:570 resourceselector.cpp:320
+#: mainwindow.cpp:574 resourceselector.cpp:320
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "Flytja inn &Afmælisdaga..."
 
-#: mainwindow.cpp:574
+#: mainwindow.cpp:578
 #, fuzzy, kde-format
 #| msgid "&Refresh Alarms"
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "&Uppfæra uppköll"
 
-#: mainwindow.cpp:821
+#: mainwindow.cpp:825
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4917,7 +4917,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "Ertu viss um að þú viljir eyða völdu uppkalli?"
 msgstr[1] "Ertu viss um að þú viljir eyða %1 völdum uppköllum?"
 
-#: mainwindow.cpp:823
+#: mainwindow.cpp:827
 #, fuzzy, kde-format
 #| msgid "Delete Alarm"
 #| msgid_plural "Delete Alarms"
@@ -4927,44 +4927,44 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Eyða uppkalli"
 msgstr[1] "Eyða uppköllum"
 
-#: mainwindow.cpp:824 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:828 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Eyða uppkalli"
 
-#: mainwindow.cpp:911
+#: mainwindow.cpp:915
 #, fuzzy, kde-format
 #| msgid "View Alarm"
 msgctxt "@title:window"
 msgid "Skip Alarm"
 msgstr "Skoða vakningu"
 
-#: mainwindow.cpp:912
+#: mainwindow.cpp:916
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
 msgstr "Einföld endurtekning"
 
-#: mainwindow.cpp:943
+#: mainwindow.cpp:947
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Útrunnin uppköll"
 
-#: mainwindow.cpp:944
+#: mainwindow.cpp:948
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Sýna ú&trunnar vakningar"
 
-#: mainwindow.cpp:1020
+#: mainwindow.cpp:1024
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Flytja inn &Afmælisdaga..."
 
-#: mainwindow.cpp:1272
+#: mainwindow.cpp:1276
 #, fuzzy, kde-format
 #| msgctxt "Hours and Minutes"
 #| msgid "%1H %2M"
@@ -4972,7 +4972,7 @@ msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1klst %2mín"
 
-#: mainwindow.cpp:1273
+#: mainwindow.cpp:1277
 #, fuzzy, kde-format
 #| msgctxt "prefix + hours:minutes"
 #| msgid "%1%2:%3"
@@ -4980,67 +4980,67 @@ msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1%2:%3"
 
-#: mainwindow.cpp:1339
+#: mainwindow.cpp:1343
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1341
+#: mainwindow.cpp:1345
 #, fuzzy, kde-format
 msgid "Hide menu bar"
 msgstr "Sýna tíma t&il vakningar"
 
-#: mainwindow.cpp:1581
+#: mainwindow.cpp:1596
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Sýna uppkallsskeyti núna"
 
-#: mainwindow.cpp:1583
+#: mainwindow.cpp:1598
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "&Virkja vöktun"
 
-#: mainwindow.cpp:1585
+#: mainwindow.cpp:1600
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "&Skipun"
 
-#: mainwindow.cpp:1587
+#: mainwindow.cpp:1602
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Texti í áminnigu"
 
-#: mainwindow.cpp:1588
+#: mainwindow.cpp:1603
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Sýna &vakningatíma"
 
-#: mainwindow.cpp:1722
+#: mainwindow.cpp:1737
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "&Virkja"
 
-#: mainwindow.cpp:1722
+#: mainwindow.cpp:1737
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Disable"
 msgstr "S&lökkva"
 
-#: mainwindow.cpp:1781
+#: mainwindow.cpp:1796
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
 msgstr ""
 
-#: mainwindow.cpp:1781
+#: mainwindow.cpp:1796
 #, fuzzy, kde-format
 #| msgid "Cancel if late"
 msgctxt "@action"

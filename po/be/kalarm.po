@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-18 00:46+0000\n"
+"POT-Creation-Date: 2026-07-27 00:45+0000\n"
 "PO-Revision-Date: 2007-10-28 14:03+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -2448,86 +2448,86 @@ msgid ""
 "inhibition or active full screen applications."
 msgstr ""
 
-#: editdlgtypes.cpp:75
+#: editdlgtypes.cpp:79
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Пакажыце файл часопіса"
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:92
 #, fuzzy, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "Паказ напамінкаў"
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:93
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "Спіс напамінкаў"
 
-#: editdlgtypes.cpp:90
+#: editdlgtypes.cpp:94
 #, fuzzy, kde-format
 #| msgid "Action"
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "Дзеянне"
 
-#: editdlgtypes.cpp:91
+#: editdlgtypes.cpp:95
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Пацверджанні"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:131
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Новы шаблон напамінку"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:131
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Змяніць шаблон напамінку"
 
-#: editdlgtypes.cpp:128
+#: editdlgtypes.cpp:132
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Паказ напамінкаў"
 
-#: editdlgtypes.cpp:128
+#: editdlgtypes.cpp:132
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Паказ напамінкаў"
 
-#: editdlgtypes.cpp:141
+#: editdlgtypes.cpp:145
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Паказ напамінкаў"
 
-#: editdlgtypes.cpp:145
+#: editdlgtypes.cpp:149
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Тэкст напамінку"
 
-#: editdlgtypes.cpp:146
+#: editdlgtypes.cpp:150
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr ""
 
-#: editdlgtypes.cpp:147
+#: editdlgtypes.cpp:151
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "Выснова каманды"
 
-#: editdlgtypes.cpp:167
+#: editdlgtypes.cpp:171
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2538,13 +2538,13 @@ msgid ""
 "display the output from a command.</item></list></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:182
+#: editdlgtypes.cpp:186
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Увядзіце тэкст напамінку. Можна паказаць некалькі радкоў."
 
-#: editdlgtypes.cpp:195
+#: editdlgtypes.cpp:199
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
@@ -2552,19 +2552,19 @@ msgstr ""
 "Увядзіце імя файла або спасылку Інтэрнэт на тэкставы файл або малюнак для "
 "паказу."
 
-#: editdlgtypes.cpp:202 editdlgtypes.cpp:891 sounddlg.cpp:185
+#: editdlgtypes.cpp:206 editdlgtypes.cpp:895 sounddlg.cpp:185
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Вылучыце файл"
 
-#: editdlgtypes.cpp:203
+#: editdlgtypes.cpp:207
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Выбар тэкставага файла або малюначкі для паказу."
 
-#: editdlgtypes.cpp:247
+#: editdlgtypes.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2572,7 +2572,7 @@ msgid ""
 "system."
 msgstr ""
 
-#: editdlgtypes.cpp:274
+#: editdlgtypes.cpp:278
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2580,7 +2580,7 @@ msgid ""
 "alarm time(s)."
 msgstr "Дадаткова паказваць напамінак да асноўнай падзеі."
 
-#: editdlgtypes.cpp:275
+#: editdlgtypes.cpp:279
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2588,7 +2588,7 @@ msgid ""
 "reminder alarm.</para><para>%1</para>"
 msgstr "За колькі нагадаць аб падзеі."
 
-#: editdlgtypes.cpp:276
+#: editdlgtypes.cpp:280
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2596,140 +2596,140 @@ msgid ""
 "alarm"
 msgstr ""
 
-#: editdlgtypes.cpp:286
+#: editdlgtypes.cpp:290
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr ""
 "Калі сцяжок уключаны, будзе запытана пацверджанне чытання паведамлення."
 
-#: editdlgtypes.cpp:295
+#: editdlgtypes.cpp:299
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Паказаць напамінак зараз"
 
-#: editdlgtypes.cpp:677
+#: editdlgtypes.cpp:681
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Паказаць напамінак зараз"
 
-#: editdlgtypes.cpp:686
+#: editdlgtypes.cpp:690
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Паказаць файл зараз"
 
-#: editdlgtypes.cpp:696
+#: editdlgtypes.cpp:700
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Паказаць напамінак зараз"
 
-#: editdlgtypes.cpp:728
+#: editdlgtypes.cpp:732
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Выбар тэкставага файла або малюнкі для паказу"
 
-#: editdlgtypes.cpp:806
+#: editdlgtypes.cpp:810
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "Пакажыце скрыпт"
 
-#: editdlgtypes.cpp:807
+#: editdlgtypes.cpp:811
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "Выканаць у акне тэрмінала"
 
-#: editdlgtypes.cpp:808
+#: editdlgtypes.cpp:812
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "Выканаць у акне тэрмінала"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:842
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Новы шаблон напамінку"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:842
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Змяніць шаблон напамінку"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:843
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Напамінкі, якія запускаюць каманды"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:843
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Напамінкі, якія запускаюць каманды"
 
-#: editdlgtypes.cpp:847
+#: editdlgtypes.cpp:851
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Выканаць паказаную каманду зараз"
 
-#: editdlgtypes.cpp:848
+#: editdlgtypes.cpp:852
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Выканаць паказаную каманду зараз"
 
-#: editdlgtypes.cpp:855 specialactions.cpp:182
+#: editdlgtypes.cpp:859 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr ""
 
-#: editdlgtypes.cpp:856
+#: editdlgtypes.cpp:860
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "Значэнне перыяду паўтору па змаўчанні ў дыялогу налады напамінку."
 
-#: editdlgtypes.cpp:862
+#: editdlgtypes.cpp:866
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Выснова каманды"
 
-#: editdlgtypes.cpp:870
+#: editdlgtypes.cpp:874
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "Выканаць каманду ў акне тэрмінала"
 
-#: editdlgtypes.cpp:883
+#: editdlgtypes.cpp:887
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Увядзіце імя файла часопіса."
 
-#: editdlgtypes.cpp:892
+#: editdlgtypes.cpp:896
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Выбар файла часопіса."
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:899
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "Вывесці ў часопіс"
 
-#: editdlgtypes.cpp:896
+#: editdlgtypes.cpp:900
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2739,26 +2739,26 @@ msgstr ""
 "Весткі часопіс у лакальным файле. Напамінкі будуць дадавацца ў конц гэтага "
 "файла."
 
-#: editdlgtypes.cpp:903
+#: editdlgtypes.cpp:907
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Адхіліць"
 
-#: editdlgtypes.cpp:904
+#: editdlgtypes.cpp:908
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Не паказваць выснову каманды."
 
-#: editdlgtypes.cpp:1066
+#: editdlgtypes.cpp:1070
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
 "Log file must be the name or path of a local file, with write permission."
 msgstr "Файл часопіса павінен быць лакальным і мець правы на запіс."
 
-#: editdlgtypes.cpp:1076
+#: editdlgtypes.cpp:1080
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2769,7 +2769,7 @@ msgstr ""
 "\n"
 "Пакажыце яго ў наладах KAlarm."
 
-#: editdlgtypes.cpp:1096
+#: editdlgtypes.cpp:1100
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
@@ -2778,56 +2778,56 @@ msgstr ""
 "\n"
 "%1"
 
-#: editdlgtypes.cpp:1130
+#: editdlgtypes.cpp:1134
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "Паслаць копію ліста самому сабе"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1171
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "Новы шаблон напамінку"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1171
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Змяніць шаблон напамінку"
 
-#: editdlgtypes.cpp:1168
+#: editdlgtypes.cpp:1172
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "Напамінкі па электроннай пошце"
 
-#: editdlgtypes.cpp:1168
+#: editdlgtypes.cpp:1172
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Напамінкі па электроннай пошце"
 
-#: editdlgtypes.cpp:1176
+#: editdlgtypes.cpp:1180
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Паслаць паведамленне паказаным атрымальнікам зараз"
 
-#: editdlgtypes.cpp:1177
+#: editdlgtypes.cpp:1181
 #, fuzzy, kde-format
 #| msgid "&Sendmail"
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "Sendmail"
 
-#: editdlgtypes.cpp:1188
+#: editdlgtypes.cpp:1192
 #, fuzzy, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "Ад:"
 
-#: editdlgtypes.cpp:1194
+#: editdlgtypes.cpp:1198
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2836,13 +2836,13 @@ msgid ""
 msgstr ""
 "Ваш профіль электроннай пошты для адпраўкі напамінкаў электроннай поштай."
 
-#: editdlgtypes.cpp:1200
+#: editdlgtypes.cpp:1204
 #, fuzzy, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "Каму:"
 
-#: editdlgtypes.cpp:1205
+#: editdlgtypes.cpp:1209
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2852,82 +2852,82 @@ msgstr ""
 "Увядзіце адрасы электроннай пошты. У якасці падзельніка адрасоў выкарыстайце "
 "коскі або кропкі з коскі."
 
-#: editdlgtypes.cpp:1216
+#: editdlgtypes.cpp:1220
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Адкрыць адрасную кнігу"
 
-#: editdlgtypes.cpp:1217
+#: editdlgtypes.cpp:1221
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Вылучыць адрасы электроннай пошты з адраснай кнігі."
 
-#: editdlgtypes.cpp:1224
+#: editdlgtypes.cpp:1228
 #, fuzzy, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Тэма:"
 
-#: editdlgtypes.cpp:1230
+#: editdlgtypes.cpp:1234
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Пакажыце тэму паведамлення."
 
-#: editdlgtypes.cpp:1236
+#: editdlgtypes.cpp:1240
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Пакажыце паведамленне электроннай пошты."
 
-#: editdlgtypes.cpp:1244
+#: editdlgtypes.cpp:1248
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "Укладанні:"
 
-#: editdlgtypes.cpp:1253
+#: editdlgtypes.cpp:1257
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Файлы для ўкладання ў паведамленне электроннай пошты."
 
-#: editdlgtypes.cpp:1257 resourceselector.cpp:77
+#: editdlgtypes.cpp:1261 resourceselector.cpp:77
 #, fuzzy, kde-format
 #| msgid "Add..."
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Дадаць..."
 
-#: editdlgtypes.cpp:1259
+#: editdlgtypes.cpp:1263
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Дадаць далучэнне ў паведамленне."
 
-#: editdlgtypes.cpp:1262 resourceselector.cpp:79
+#: editdlgtypes.cpp:1266 resourceselector.cpp:79
 #, fuzzy, kde-format
 #| msgid "Remo&ve"
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Выдаліць"
 
-#: editdlgtypes.cpp:1264
+#: editdlgtypes.cpp:1268
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Выдаліць вылучанае ўкладанне з паведамлення."
 
-#: editdlgtypes.cpp:1269
+#: editdlgtypes.cpp:1273
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr ""
 "Калі сцяжок вылучаны, вам будзе адпраўленая ўтоеная копія паведамлення."
 
-#: editdlgtypes.cpp:1451
+#: editdlgtypes.cpp:1455
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
@@ -2936,13 +2936,13 @@ msgstr ""
 "\n"
 "%1"
 
-#: editdlgtypes.cpp:1458
+#: editdlgtypes.cpp:1462
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Не паказаныя атрымальнікі паведамлення"
 
-#: editdlgtypes.cpp:1475
+#: editdlgtypes.cpp:1479
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
@@ -2951,26 +2951,26 @@ msgstr ""
 "\n"
 "%1"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1483
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "Паслаць паведамленне электроннай пошты паказаным атрымальнікам?"
 
-#: editdlgtypes.cpp:1480
+#: editdlgtypes.cpp:1484
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Пацверджанне адпраўкі паведамлення"
 
-#: editdlgtypes.cpp:1480
+#: editdlgtypes.cpp:1484
 #, fuzzy, kde-format
 #| msgid "&Send"
 msgctxt "@action:button"
 msgid "Send"
 msgstr "&Даслаць"
 
-#: editdlgtypes.cpp:1506
+#: editdlgtypes.cpp:1510
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
@@ -2979,7 +2979,7 @@ msgstr ""
 "\n"
 "%1%2"
 
-#: editdlgtypes.cpp:1509
+#: editdlgtypes.cpp:1513
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
@@ -2988,49 +2988,49 @@ msgstr ""
 "\n"
 "%1%2"
 
-#: editdlgtypes.cpp:1538
+#: editdlgtypes.cpp:1542
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Выбар файла для ўкладання"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1625
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Новы шаблон напамінку"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1625
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Змяніць шаблон напамінку"
 
-#: editdlgtypes.cpp:1622
+#: editdlgtypes.cpp:1626
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Напамінкі па электроннай пошце"
 
-#: editdlgtypes.cpp:1622
+#: editdlgtypes.cpp:1626
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Змяніць напамінак"
 
-#: editdlgtypes.cpp:1630
+#: editdlgtypes.cpp:1634
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Паказаць файл зараз"
 
-#: editdlgtypes.cpp:1631
+#: editdlgtypes.cpp:1635
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Паказаць файл зараз"
 
-#: editdlgtypes.cpp:1633
+#: editdlgtypes.cpp:1637
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3039,25 +3039,25 @@ msgstr ""
 "Пры ўключэнні гэтай опцыі гукавы файл будзе прайгравацца бесперапынна датуль "
 "пакуль паведамленне паказваецца."
 
-#: editdlgtypes.cpp:1849
+#: editdlgtypes.cpp:1853
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "Паказаць змесціва скрыпту замест радка запуску каманд абалонкі"
 
-#: editdlgtypes.cpp:1855
+#: editdlgtypes.cpp:1859
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Увядзіце каманду для выканання."
 
-#: editdlgtypes.cpp:1860
+#: editdlgtypes.cpp:1864
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Увядзіце скрыпт для выканання"
 
-#: editdlgtypes.cpp:1922
+#: editdlgtypes.cpp:1926
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3065,7 +3065,7 @@ msgid ""
 "icode></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:1927
+#: editdlgtypes.cpp:1931
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
@@ -4525,7 +4525,7 @@ msgstr ""
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr ""
 
-#: mainwindow.cpp:443
+#: mainwindow.cpp:447
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4536,117 +4536,117 @@ msgstr ""
 "\n"
 "(магчыма, %1 адсутнічае або пашкоджаны)"
 
-#: mainwindow.cpp:463
+#: mainwindow.cpp:467
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Templates..."
 msgstr "Шаблоны..."
 
-#: mainwindow.cpp:467 templatedlg.cpp:74
+#: mainwindow.cpp:471 templatedlg.cpp:74
 #, fuzzy, kde-format
 #| msgid "&New..."
 msgctxt "@action"
 msgid "New"
 msgstr "&Новы..."
 
-#: mainwindow.cpp:473
+#: mainwindow.cpp:477
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "Стварыць шаблон..."
 
-#: mainwindow.cpp:477
+#: mainwindow.cpp:481
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Copy..."
 msgstr "Капіяваць..."
 
-#: mainwindow.cpp:482 resourceselector.cpp:302
+#: mainwindow.cpp:486 resourceselector.cpp:302
 #, fuzzy, kde-format
 #| msgid "&Edit..."
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Рэдагаваць..."
 
-#: mainwindow.cpp:487
+#: mainwindow.cpp:491
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Выдаліць"
 
-#: mainwindow.cpp:493
+#: mainwindow.cpp:497
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Наставіць рэсурсы"
 
-#: mainwindow.cpp:498
+#: mainwindow.cpp:502
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Актывізаваць"
 
-#: mainwindow.cpp:517
+#: mainwindow.cpp:521
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr ""
 
-#: mainwindow.cpp:529
+#: mainwindow.cpp:533
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Паказваць састарэлыя напамінкі"
 
-#: mainwindow.cpp:534
+#: mainwindow.cpp:538
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Паказваць у сістэмным латку"
 
-#: mainwindow.cpp:538
+#: mainwindow.cpp:542
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Адрас файла каляндара"
 
-#: mainwindow.cpp:542
+#: mainwindow.cpp:546
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr ""
 
-#: mainwindow.cpp:555
+#: mainwindow.cpp:559
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Імпарт дзён нараджэння..."
 
-#: mainwindow.cpp:561
+#: mainwindow.cpp:565
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Імпарт дзён нараджэння..."
 
-#: mainwindow.cpp:566
+#: mainwindow.cpp:570
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "Імпарт дзён нараджэння..."
 
-#: mainwindow.cpp:570 resourceselector.cpp:320
+#: mainwindow.cpp:574 resourceselector.cpp:320
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "Імпарт дзён нараджэння..."
 
-#: mainwindow.cpp:574
+#: mainwindow.cpp:578
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Абнавіць"
 
-#: mainwindow.cpp:821
+#: mainwindow.cpp:825
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4655,7 +4655,7 @@ msgstr[0] "Вы жадаеце пацвердзіць чытанне гэтаг�
 msgstr[1] "Вы жадаеце пацвердзіць чытанне гэтага напамінку?"
 msgstr[2] "Вы жадаеце пацвердзіць чытанне гэтага напамінку?"
 
-#: mainwindow.cpp:823
+#: mainwindow.cpp:827
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4664,115 +4664,115 @@ msgstr[0] "Адкласці напамінак"
 msgstr[1] "Адкласці напамінак"
 msgstr[2] "Адкласці напамінак"
 
-#: mainwindow.cpp:824 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:828 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Выдаліць"
 
-#: mainwindow.cpp:911
+#: mainwindow.cpp:915
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
 msgstr "Прагляд напамінку"
 
-#: mainwindow.cpp:912
+#: mainwindow.cpp:916
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
 msgstr "Колькасць дадатковых напамінкаў:"
 
-#: mainwindow.cpp:943
+#: mainwindow.cpp:947
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Схаваць састарэлыя напамінкі"
 
-#: mainwindow.cpp:944
+#: mainwindow.cpp:948
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Паказваць састарэлыя напамінкі"
 
-#: mainwindow.cpp:1020
+#: mainwindow.cpp:1024
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Імпарт дзён нараджэння..."
 
-#: mainwindow.cpp:1272
+#: mainwindow.cpp:1276
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr ""
 
-#: mainwindow.cpp:1273
+#: mainwindow.cpp:1277
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr ""
 
-#: mainwindow.cpp:1339
+#: mainwindow.cpp:1343
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1341
+#: mainwindow.cpp:1345
 #, fuzzy, kde-format
 msgid "Hide menu bar"
 msgstr "Схаваць час да напамінку"
 
-#: mainwindow.cpp:1581
+#: mainwindow.cpp:1596
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Паказ напамінкаў"
 
-#: mainwindow.cpp:1583
+#: mainwindow.cpp:1598
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Напамінкі па электроннай пошце"
 
-#: mainwindow.cpp:1585
+#: mainwindow.cpp:1600
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Напамінкі, якія запускаюць каманды"
 
-#: mainwindow.cpp:1587
+#: mainwindow.cpp:1602
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Тып напамінку"
 
-#: mainwindow.cpp:1588
+#: mainwindow.cpp:1603
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Вылучыце шаблон напамінку"
 
-#: mainwindow.cpp:1722
+#: mainwindow.cpp:1737
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Уключаны"
 
-#: mainwindow.cpp:1722
+#: mainwindow.cpp:1737
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Disable"
 msgstr "Выключана"
 
-#: mainwindow.cpp:1781
+#: mainwindow.cpp:1796
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
 msgstr ""
 
-#: mainwindow.cpp:1781
+#: mainwindow.cpp:1796
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Cancel skip"

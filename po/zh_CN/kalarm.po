@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-18 00:46+0000\n"
+"POT-Creation-Date: 2026-07-27 00:45+0000\n"
 "PO-Revision-Date: 2024-04-22 15:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -2377,85 +2377,85 @@ msgstr ""
 "选中以在闹钟到点时始终执行闹钟，无论系统是否处于阻止通知状态，或存在活动的全"
 "屏应用程序。"
 
-#: editdlgtypes.cpp:75
+#: editdlgtypes.cpp:79
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "选择日志文件"
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:92
 #, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "显示方式："
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:93
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "窗口"
 
-#: editdlgtypes.cpp:90
+#: editdlgtypes.cpp:94
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "通知"
 
-#: editdlgtypes.cpp:91
+#: editdlgtypes.cpp:95
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "闹钟关闭确认"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:131
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "新建显示闹钟模板"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:131
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "编辑显示闹钟模板"
 
-#: editdlgtypes.cpp:128
+#: editdlgtypes.cpp:132
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "新建显示闹钟"
 
-#: editdlgtypes.cpp:128
+#: editdlgtypes.cpp:132
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "编辑显示闹钟"
 
-#: editdlgtypes.cpp:141
+#: editdlgtypes.cpp:145
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "显示类型："
 
-#: editdlgtypes.cpp:145
+#: editdlgtypes.cpp:149
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "文本消息"
 
-#: editdlgtypes.cpp:146
+#: editdlgtypes.cpp:150
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr "文件内容"
 
-#: editdlgtypes.cpp:147
+#: editdlgtypes.cpp:151
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "命令输出"
 
-#: editdlgtypes.cpp:167
+#: editdlgtypes.cpp:171
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2470,31 +2470,31 @@ msgstr ""
 "或图像文件的内容。</item><item><interface>%3</interface>：闹钟将显示命令的输"
 "出。</item></list></para>"
 
-#: editdlgtypes.cpp:182
+#: editdlgtypes.cpp:186
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "输入闹钟消息的文本 (可输入多行)。"
 
-#: editdlgtypes.cpp:195
+#: editdlgtypes.cpp:199
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "输入文件名或 URL，将用于显示文本文件或图像文件。"
 
-#: editdlgtypes.cpp:202 editdlgtypes.cpp:891 sounddlg.cpp:185
+#: editdlgtypes.cpp:206 editdlgtypes.cpp:895 sounddlg.cpp:185
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "选择文件"
 
-#: editdlgtypes.cpp:203
+#: editdlgtypes.cpp:207
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "选择要显示的文本文件或图像文件。"
 
-#: editdlgtypes.cpp:247
+#: editdlgtypes.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2502,7 +2502,7 @@ msgid ""
 "system."
 msgstr "闹钟将显示于窗口内或系统通知中。"
 
-#: editdlgtypes.cpp:274
+#: editdlgtypes.cpp:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2510,7 +2510,7 @@ msgid ""
 "alarm time(s)."
 msgstr "勾选后，将在主闹钟时间之前或之后显示附加提醒。"
 
-#: editdlgtypes.cpp:275
+#: editdlgtypes.cpp:279
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2518,7 +2518,7 @@ msgid ""
 "reminder alarm.</para><para>%1</para>"
 msgstr "<para>输入主闹钟与显示提醒闹钟之间的时间。</para><para>%1</para>"
 
-#: editdlgtypes.cpp:276
+#: editdlgtypes.cpp:280
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2526,139 +2526,139 @@ msgid ""
 "alarm"
 msgstr "提醒应于主闹钟之前还是之后弹出"
 
-#: editdlgtypes.cpp:286
+#: editdlgtypes.cpp:290
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr "勾选后，关闭闹钟时会弹出确认。"
 
-#: editdlgtypes.cpp:295
+#: editdlgtypes.cpp:299
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "立即显示闹钟"
 
-#: editdlgtypes.cpp:677
+#: editdlgtypes.cpp:681
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "立即显示闹钟消息"
 
-#: editdlgtypes.cpp:686
+#: editdlgtypes.cpp:690
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "立即显示文件"
 
-#: editdlgtypes.cpp:696
+#: editdlgtypes.cpp:700
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "立即显示命令输出"
 
-#: editdlgtypes.cpp:728
+#: editdlgtypes.cpp:732
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "选择要显示的文本文件或图像文件"
 
-#: editdlgtypes.cpp:806
+#: editdlgtypes.cpp:810
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "输入脚本"
 
-#: editdlgtypes.cpp:807
+#: editdlgtypes.cpp:811
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "在终端窗口中执行"
 
-#: editdlgtypes.cpp:808
+#: editdlgtypes.cpp:812
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "在终端窗口中执行"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:842
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "新建命令闹钟模板"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:842
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "编辑命令闹钟模板"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:843
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "新建命令闹钟"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:843
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "编辑命令闹钟"
 
-#: editdlgtypes.cpp:847
+#: editdlgtypes.cpp:851
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "立即执行指定命令"
 
-#: editdlgtypes.cpp:848
+#: editdlgtypes.cpp:852
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "立即执行指定命令"
 
-#: editdlgtypes.cpp:855 specialactions.cpp:182
+#: editdlgtypes.cpp:859 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr "不提示错误"
 
-#: editdlgtypes.cpp:856
+#: editdlgtypes.cpp:860
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "命令执行失败时不显示错误消息。"
 
-#: editdlgtypes.cpp:862
+#: editdlgtypes.cpp:866
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "命令输出"
 
-#: editdlgtypes.cpp:870
+#: editdlgtypes.cpp:874
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "勾选后，将在终端窗口中执行命令"
 
-#: editdlgtypes.cpp:883
+#: editdlgtypes.cpp:887
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "输入日志文件的名称或路径。"
 
-#: editdlgtypes.cpp:892
+#: editdlgtypes.cpp:896
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "选择日志文件。"
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:899
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "将日志写入到文件"
 
-#: editdlgtypes.cpp:896
+#: editdlgtypes.cpp:900
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2667,26 +2667,26 @@ msgid ""
 msgstr ""
 "勾选后，命令输出将被记录到本地文件中。输出内容将被追加到文件已有内容的后面。"
 
-#: editdlgtypes.cpp:903
+#: editdlgtypes.cpp:907
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "丢弃"
 
-#: editdlgtypes.cpp:904
+#: editdlgtypes.cpp:908
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "勾选后将丢弃命令输出。"
 
-#: editdlgtypes.cpp:1066
+#: editdlgtypes.cpp:1070
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Log file must be the name or path of a local file, with write permission."
 msgstr "日志文件处必须填写本地文件的文件名或路径，且必须拥有该文件的写入权限。"
 
-#: editdlgtypes.cpp:1076
+#: editdlgtypes.cpp:1080
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2696,61 +2696,61 @@ msgstr ""
 "<para>尚未选择命令闹钟所使用的终端。</para><para>请在 <application>KAlarm</"
 "application> 配置对话框中设置。</para>"
 
-#: editdlgtypes.cpp:1096
+#: editdlgtypes.cpp:1100
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
 msgstr "命令已执行：<icode>%1</icode>"
 
-#: editdlgtypes.cpp:1130
+#: editdlgtypes.cpp:1134
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "将电子邮件抄送给自己"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1171
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "新建邮件闹钟模板"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1171
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "编辑邮件闹钟模板"
 
-#: editdlgtypes.cpp:1168
+#: editdlgtypes.cpp:1172
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "新建邮件闹钟"
 
-#: editdlgtypes.cpp:1168
+#: editdlgtypes.cpp:1172
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "编辑邮件闹钟"
 
-#: editdlgtypes.cpp:1176
+#: editdlgtypes.cpp:1180
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "立即将电子邮件发送到指定地址"
 
-#: editdlgtypes.cpp:1177
+#: editdlgtypes.cpp:1181
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "立即发送电子邮件"
 
-#: editdlgtypes.cpp:1188
+#: editdlgtypes.cpp:1192
 #, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "发件人："
 
-#: editdlgtypes.cpp:1194
+#: editdlgtypes.cpp:1198
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2758,13 +2758,13 @@ msgid ""
 "alarms."
 msgstr "您的电子邮件身份，用在发送邮件闹钟中将您识别为发件人。"
 
-#: editdlgtypes.cpp:1200
+#: editdlgtypes.cpp:1204
 #, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "收件人："
 
-#: editdlgtypes.cpp:1205
+#: editdlgtypes.cpp:1209
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2772,194 +2772,194 @@ msgid ""
 "commas or semicolons."
 msgstr "输入电子邮件的收件人地址。可用逗号或分号分隔多个地址。"
 
-#: editdlgtypes.cpp:1216
+#: editdlgtypes.cpp:1220
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "打开地址簿"
 
-#: editdlgtypes.cpp:1217
+#: editdlgtypes.cpp:1221
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "从地址簿中选择电子邮件地址。"
 
-#: editdlgtypes.cpp:1224
+#: editdlgtypes.cpp:1228
 #, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "主题："
 
-#: editdlgtypes.cpp:1230
+#: editdlgtypes.cpp:1234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "输入电子邮件主题。"
 
-#: editdlgtypes.cpp:1236
+#: editdlgtypes.cpp:1240
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "输入电子邮件消息。"
 
-#: editdlgtypes.cpp:1244
+#: editdlgtypes.cpp:1248
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "附件："
 
-#: editdlgtypes.cpp:1253
+#: editdlgtypes.cpp:1257
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "要作为电子邮件附件一同发送的文件。"
 
-#: editdlgtypes.cpp:1257 resourceselector.cpp:77
+#: editdlgtypes.cpp:1261 resourceselector.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "添加..."
 
-#: editdlgtypes.cpp:1259
+#: editdlgtypes.cpp:1263
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "向电子邮件添加附件。"
 
-#: editdlgtypes.cpp:1262 resourceselector.cpp:79
+#: editdlgtypes.cpp:1266 resourceselector.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "删除"
 
-#: editdlgtypes.cpp:1264
+#: editdlgtypes.cpp:1268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "删除邮件中突出显示的附件。"
 
-#: editdlgtypes.cpp:1269
+#: editdlgtypes.cpp:1273
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "勾选后，该电子邮件将被密送给您。"
 
-#: editdlgtypes.cpp:1451
+#: editdlgtypes.cpp:1455
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "无效的电子邮件地址：<email>%1</email>"
 
-#: editdlgtypes.cpp:1458
+#: editdlgtypes.cpp:1462
 #, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "没有指定电子邮件地址"
 
-#: editdlgtypes.cpp:1475
+#: editdlgtypes.cpp:1479
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "无效的电子邮件附件：<filename>%1</filename>"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1483
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "您确定要立即将电子邮件发送给指定的收件人吗？"
 
-#: editdlgtypes.cpp:1480
+#: editdlgtypes.cpp:1484
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "确认发送电子邮件"
 
-#: editdlgtypes.cpp:1480
+#: editdlgtypes.cpp:1484
 #, kde-format
 msgctxt "@action:button"
 msgid "Send"
 msgstr "发送"
 
-#: editdlgtypes.cpp:1506
+#: editdlgtypes.cpp:1510
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
 msgstr "邮件已发送到：<nl/>%1<nl/>密送到：<email>%2</email>"
 
-#: editdlgtypes.cpp:1509
+#: editdlgtypes.cpp:1513
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
 msgstr "邮件已发送到：<nl/>%1"
 
-#: editdlgtypes.cpp:1538
+#: editdlgtypes.cpp:1542
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "选择要作为附件的文件"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1625
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "新建音频闹钟模板"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1625
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "编辑音频闹钟模板"
 
-#: editdlgtypes.cpp:1622
+#: editdlgtypes.cpp:1626
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "新建音频闹钟"
 
-#: editdlgtypes.cpp:1622
+#: editdlgtypes.cpp:1626
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "编辑音频闹钟"
 
-#: editdlgtypes.cpp:1630
+#: editdlgtypes.cpp:1634
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "立即播放音频文件"
 
-#: editdlgtypes.cpp:1631
+#: editdlgtypes.cpp:1635
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "立即播放音频文件"
 
-#: editdlgtypes.cpp:1633
+#: editdlgtypes.cpp:1637
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
 msgstr "勾选后，声音文件将会重复播放，直到点击 %1 为止。"
 
-#: editdlgtypes.cpp:1849
+#: editdlgtypes.cpp:1853
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "勾选后，可输入脚本内容而无需输入 shell 命令行"
 
-#: editdlgtypes.cpp:1855
+#: editdlgtypes.cpp:1859
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "输入要执行的 shell 命令。"
 
-#: editdlgtypes.cpp:1860
+#: editdlgtypes.cpp:1864
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "输入要执行的脚本内容"
 
-#: editdlgtypes.cpp:1922
+#: editdlgtypes.cpp:1926
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2967,7 +2967,7 @@ msgid ""
 "icode></para>"
 msgstr "<para>命令不能设置环境变量：</para><para><icode>%1</icode></para>"
 
-#: editdlgtypes.cpp:1927
+#: editdlgtypes.cpp:1931
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
@@ -4318,7 +4318,7 @@ msgstr "由 KDE 打造的个人消息、命令闹钟和电子邮件计划程序"
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "Copyright © 2001-%1, David Jarvie"
 
-#: mainwindow.cpp:443
+#: mainwindow.cpp:447
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4326,237 +4326,237 @@ msgid ""
 "corrupted)"
 msgstr "菜单创建失败 (可能缺失文件 <filename>%1</filename> 或者该文件已损坏)"
 
-#: mainwindow.cpp:463
+#: mainwindow.cpp:467
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
 msgstr "模板..."
 
-#: mainwindow.cpp:467 templatedlg.cpp:74
+#: mainwindow.cpp:471 templatedlg.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "新建"
 
-#: mainwindow.cpp:473
+#: mainwindow.cpp:477
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "新建模板..."
 
-#: mainwindow.cpp:477
+#: mainwindow.cpp:481
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
 msgstr "复制..."
 
-#: mainwindow.cpp:482 resourceselector.cpp:302
+#: mainwindow.cpp:486 resourceselector.cpp:302
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "编辑..."
 
-#: mainwindow.cpp:487
+#: mainwindow.cpp:491
 #, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "删除"
 
-#: mainwindow.cpp:493
+#: mainwindow.cpp:497
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "删除时无需确认"
 
-#: mainwindow.cpp:498
+#: mainwindow.cpp:502
 #, kde-format
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "激活"
 
-#: mainwindow.cpp:517
+#: mainwindow.cpp:521
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "从睡眠中唤醒..."
 
-#: mainwindow.cpp:529
+#: mainwindow.cpp:533
 #, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "显示已归档闹钟"
 
-#: mainwindow.cpp:534
+#: mainwindow.cpp:538
 #, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "在系统托盘中显示"
 
-#: mainwindow.cpp:538
+#: mainwindow.cpp:542
 #, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "显示日历"
 
-#: mainwindow.cpp:542
+#: mainwindow.cpp:546
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr "显示日期选择器"
 
-#: mainwindow.cpp:555
+#: mainwindow.cpp:559
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "导入闹钟..."
 
-#: mainwindow.cpp:561
+#: mainwindow.cpp:565
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "导入生日..."
 
-#: mainwindow.cpp:566
+#: mainwindow.cpp:570
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "导出所选闹钟..."
 
-#: mainwindow.cpp:570 resourceselector.cpp:320
+#: mainwindow.cpp:574 resourceselector.cpp:320
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "导出..."
 
-#: mainwindow.cpp:574
+#: mainwindow.cpp:578
 #, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "刷新闹钟"
 
-#: mainwindow.cpp:821
+#: mainwindow.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "您确定要删除所选的 %1 个闹钟吗？"
 
-#: mainwindow.cpp:823
+#: mainwindow.cpp:827
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
 msgstr[0] "删除闹钟"
 
-#: mainwindow.cpp:824 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:828 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "删除"
 
-#: mainwindow.cpp:911
+#: mainwindow.cpp:915
 #, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
 msgstr "跳过闹钟"
 
-#: mainwindow.cpp:912
+#: mainwindow.cpp:916
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
 msgstr "要跳过的激活次数："
 
-#: mainwindow.cpp:943
+#: mainwindow.cpp:947
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "隐藏已归档闹钟"
 
-#: mainwindow.cpp:944
+#: mainwindow.cpp:948
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "显示已归档闹钟"
 
-#: mainwindow.cpp:1020
+#: mainwindow.cpp:1024
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "导入生日"
 
-#: mainwindow.cpp:1272
+#: mainwindow.cpp:1276
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1%2"
 
-#: mainwindow.cpp:1273
+#: mainwindow.cpp:1277
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1%2：%3"
 
-#: mainwindow.cpp:1339
+#: mainwindow.cpp:1343
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr "<qt>这将完全隐藏菜单栏。按 %1 可以重新显示。</qt>"
 
-#: mainwindow.cpp:1341
+#: mainwindow.cpp:1345
 #, kde-format
 msgid "Hide menu bar"
 msgstr "隐藏菜单栏"
 
-#: mainwindow.cpp:1581
+#: mainwindow.cpp:1596
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "显示闹钟"
 
-#: mainwindow.cpp:1583
+#: mainwindow.cpp:1598
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "电子邮件闹钟"
 
-#: mainwindow.cpp:1585
+#: mainwindow.cpp:1600
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "命令闹钟"
 
-#: mainwindow.cpp:1587
+#: mainwindow.cpp:1602
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "闹钟类型"
 
-#: mainwindow.cpp:1588
+#: mainwindow.cpp:1603
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "选择要创建的闹钟类型："
 
-#: mainwindow.cpp:1722
+#: mainwindow.cpp:1737
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "启用"
 
-#: mainwindow.cpp:1722
+#: mainwindow.cpp:1737
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
 msgstr "禁用"
 
-#: mainwindow.cpp:1781
+#: mainwindow.cpp:1796
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
 msgstr "跳过..."
 
-#: mainwindow.cpp:1781
+#: mainwindow.cpp:1796
 #, kde-format
 msgctxt "@action"
 msgid "Cancel skip"

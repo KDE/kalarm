@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-18 00:46+0000\n"
+"POT-Creation-Date: 2026-07-27 00:45+0000\n"
 "PO-Revision-Date: 2017-09-28 18:00+0200\n"
 "Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
@@ -2593,20 +2593,20 @@ msgid ""
 "inhibition or active full screen applications."
 msgstr ""
 
-#: editdlgtypes.cpp:75
+#: editdlgtypes.cpp:79
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Избор дневничког фајла"
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:92
 #, fuzzy, kde-format
 #| msgid "Display name."
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "Приказно име"
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:93
 #, fuzzy, kde-format
 #| msgctxt "@title:tab"
 #| msgid "Alarm Windows"
@@ -2614,67 +2614,67 @@ msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "Прозори аларма"
 
-#: editdlgtypes.cpp:90
+#: editdlgtypes.cpp:94
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr ""
 
-#: editdlgtypes.cpp:91
+#: editdlgtypes.cpp:95
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Потврда пријема"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:131
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Нови шаблон приказног аларма"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:131
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Уређивање шаблона приказног аларма"
 
-#: editdlgtypes.cpp:128
+#: editdlgtypes.cpp:132
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Нови приказни аларм"
 
-#: editdlgtypes.cpp:128
+#: editdlgtypes.cpp:132
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Уређивање приказног аларма"
 
-#: editdlgtypes.cpp:141
+#: editdlgtypes.cpp:145
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Тип приказа:"
 
-#: editdlgtypes.cpp:145
+#: editdlgtypes.cpp:149
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "текстуална порука"
 
-#: editdlgtypes.cpp:146
+#: editdlgtypes.cpp:150
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr "садржај фајла"
 
-#: editdlgtypes.cpp:147
+#: editdlgtypes.cpp:151
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "излаз наредбе"
 
-#: editdlgtypes.cpp:167
+#: editdlgtypes.cpp:171
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2690,31 +2690,31 @@ msgstr ""
 "фајла или фајла слике.</item><item><interface>%3</interface>: аларм ће "
 "приказати излаз извршавања наредбе.</item></list></para>"
 
-#: editdlgtypes.cpp:182
+#: editdlgtypes.cpp:186
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Унесите текст алармне поруке. Може имати и више редова."
 
-#: editdlgtypes.cpp:195
+#: editdlgtypes.cpp:199
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "Унесите име или УРЛ текстуалног фајла или фајла слике за приказивање."
 
-#: editdlgtypes.cpp:202 editdlgtypes.cpp:891 sounddlg.cpp:185
+#: editdlgtypes.cpp:206 editdlgtypes.cpp:895 sounddlg.cpp:185
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Изаберите фајл."
 
-#: editdlgtypes.cpp:203
+#: editdlgtypes.cpp:207
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Изаберите текстуални фајл или фајл слике за приказивање."
 
-#: editdlgtypes.cpp:247
+#: editdlgtypes.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2722,7 +2722,7 @@ msgid ""
 "system."
 msgstr ""
 
-#: editdlgtypes.cpp:274
+#: editdlgtypes.cpp:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2732,7 +2732,7 @@ msgstr ""
 "Попуните да би се додатно приказао подсетник, пре или после главног времена "
 "аларма."
 
-#: editdlgtypes.cpp:275
+#: editdlgtypes.cpp:279
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2742,7 +2742,7 @@ msgstr ""
 "<para>Унесите колико пре или после главног времена аларма треба приказати "
 "подсетник.</para><para>%1</para>"
 
-#: editdlgtypes.cpp:276
+#: editdlgtypes.cpp:280
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2750,13 +2750,13 @@ msgid ""
 "alarm"
 msgstr "Изаберите да ли огласити подсетник пре или после главног аларма."
 
-#: editdlgtypes.cpp:286
+#: editdlgtypes.cpp:290
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr "Попуните да би вам била тражена потврда пријема аларма."
 
-#: editdlgtypes.cpp:295
+#: editdlgtypes.cpp:299
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the alarm message now"
@@ -2764,79 +2764,79 @@ msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Прикажите алармну поруку сада."
 
-#: editdlgtypes.cpp:677
+#: editdlgtypes.cpp:681
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Прикажите алармну поруку сада."
 
-#: editdlgtypes.cpp:686
+#: editdlgtypes.cpp:690
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Прикажи фајл сада."
 
-#: editdlgtypes.cpp:696
+#: editdlgtypes.cpp:700
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Прикажите излаз наредбе сада."
 
-#: editdlgtypes.cpp:728
+#: editdlgtypes.cpp:732
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Избор текстуалног фајл или фајла слике за приказ"
 
-#: editdlgtypes.cpp:806
+#: editdlgtypes.cpp:810
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "Скрипта"
 
-#: editdlgtypes.cpp:807
+#: editdlgtypes.cpp:811
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "Изврши у терминалском прозору"
 
-#: editdlgtypes.cpp:808
+#: editdlgtypes.cpp:812
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "Изврши у терминалском прозору"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:842
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Нови шаблон наредбеног аларма"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:842
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Уређивање шаблона наредбеног аларма"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:843
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Нови наредбени аларми"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:843
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Уређивање наредбеног аларма"
 
-#: editdlgtypes.cpp:847
+#: editdlgtypes.cpp:851
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Извршите задату наредбу сада."
 
-#: editdlgtypes.cpp:848
+#: editdlgtypes.cpp:852
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Execute the specified command now"
@@ -2844,13 +2844,13 @@ msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Извршите задату наредбу сада."
 
-#: editdlgtypes.cpp:855 specialactions.cpp:182
+#: editdlgtypes.cpp:859 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr "Не обавештавај о грешкама"
 
-#: editdlgtypes.cpp:856
+#: editdlgtypes.cpp:860
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -2860,37 +2860,37 @@ msgid "Do not show error message if the command fails."
 msgstr ""
 "Не приказује се стање нити порука грешке када наредба пре аларма пропадне."
 
-#: editdlgtypes.cpp:862
+#: editdlgtypes.cpp:866
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Излаз наредбе"
 
-#: editdlgtypes.cpp:870
+#: editdlgtypes.cpp:874
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "Попуните за извршавање наредбе у терминала прозору."
 
-#: editdlgtypes.cpp:883
+#: editdlgtypes.cpp:887
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Унесите име или путању дневничког фајла."
 
-#: editdlgtypes.cpp:892
+#: editdlgtypes.cpp:896
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Изаберите дневнички фајл."
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:899
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "Бележи у фајл"
 
-#: editdlgtypes.cpp:896
+#: editdlgtypes.cpp:900
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2900,19 +2900,19 @@ msgstr ""
 "Попуните да би се излаз наредбе бележио у локални фајл. Излаз ће бити "
 "надовезан на постојећи садржај фајла."
 
-#: editdlgtypes.cpp:903
+#: editdlgtypes.cpp:907
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Одбаци"
 
-#: editdlgtypes.cpp:904
+#: editdlgtypes.cpp:908
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Попуните да би се излаз наредбе одбацивао."
 
-#: editdlgtypes.cpp:1066
+#: editdlgtypes.cpp:1070
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2920,7 +2920,7 @@ msgid ""
 msgstr ""
 "Дневнички фајл мора бити име или путања локалног фајла са дозволом уписа."
 
-#: editdlgtypes.cpp:1076
+#: editdlgtypes.cpp:1080
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2930,51 +2930,51 @@ msgstr ""
 "<para>Није изабран терминал за наредбене аларме.</para><para>Поставите га у "
 "<application>К‑алармовом</application> дијалогу за подешавање.</para>"
 
-#: editdlgtypes.cpp:1096
+#: editdlgtypes.cpp:1100
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
 msgstr "Извршена наредба: <icode>%1</icode>"
 
 # rewrite-msgid: /email/message/
-#: editdlgtypes.cpp:1130
+#: editdlgtypes.cpp:1134
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "Копирај поруку и мени"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1171
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "Нови шаблон е‑поштанског аларма"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1171
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Уређивање шаблона е‑поштанског аларма"
 
-#: editdlgtypes.cpp:1168
+#: editdlgtypes.cpp:1172
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "Нови е‑поштански аларм"
 
-#: editdlgtypes.cpp:1168
+#: editdlgtypes.cpp:1172
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Уређивање е‑поштанског аларма"
 
 # rewrite-msgid: /email/message/
-#: editdlgtypes.cpp:1176
+#: editdlgtypes.cpp:1180
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Пошаљите поруку на наведене адресе сада."
 
-#: editdlgtypes.cpp:1177
+#: editdlgtypes.cpp:1181
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "Sendmail"
@@ -2982,13 +2982,13 @@ msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "сендмејл"
 
-#: editdlgtypes.cpp:1188
+#: editdlgtypes.cpp:1192
 #, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "Од:"
 
-#: editdlgtypes.cpp:1194
+#: editdlgtypes.cpp:1198
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2998,13 +2998,13 @@ msgstr ""
 "Ваш е‑поштански идентитет, којим се представљате као пошиљалац при слању "
 "е‑поштанских аларма."
 
-#: editdlgtypes.cpp:1200
+#: editdlgtypes.cpp:1204
 #, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "За:"
 
-#: editdlgtypes.cpp:1205
+#: editdlgtypes.cpp:1209
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3014,103 +3014,103 @@ msgstr ""
 "Унесите адресу е‑поште примаоца. Више адреса можете задати раздвојене "
 "запетама или тачка-запетама."
 
-#: editdlgtypes.cpp:1216
+#: editdlgtypes.cpp:1220
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Отворите адресар."
 
-#: editdlgtypes.cpp:1217
+#: editdlgtypes.cpp:1221
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Изаберите адресе е‑поште из свог адресара."
 
-#: editdlgtypes.cpp:1224
+#: editdlgtypes.cpp:1228
 #, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Тема:"
 
 # rewrite-msgid: /email/message/
-#: editdlgtypes.cpp:1230
+#: editdlgtypes.cpp:1234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Унесите тему поруке."
 
 # rewrite-msgid: /email/message/
-#: editdlgtypes.cpp:1236
+#: editdlgtypes.cpp:1240
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Унесите текст поруке."
 
-#: editdlgtypes.cpp:1244
+#: editdlgtypes.cpp:1248
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "Прилози:"
 
-#: editdlgtypes.cpp:1253
+#: editdlgtypes.cpp:1257
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Фајлови за слање у виду прилога е‑поште."
 
-#: editdlgtypes.cpp:1257 resourceselector.cpp:77
+#: editdlgtypes.cpp:1261 resourceselector.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Додај..."
 
 # rewrite-msgid: /email/message/
-#: editdlgtypes.cpp:1259
+#: editdlgtypes.cpp:1263
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Додајте прилог уз поруку."
 
-#: editdlgtypes.cpp:1262 resourceselector.cpp:79
+#: editdlgtypes.cpp:1266 resourceselector.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Уклони"
 
 # rewrite-msgid: /email/message/
-#: editdlgtypes.cpp:1264
+#: editdlgtypes.cpp:1268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Уклоните истакнути прилог из поруке."
 
 # rewrite-msgid: /email/message/
-#: editdlgtypes.cpp:1269
+#: editdlgtypes.cpp:1273
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "Ако је попуњено, порука ће бити слепо копирана вама."
 
-#: editdlgtypes.cpp:1451
+#: editdlgtypes.cpp:1455
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "Лоша адреса е‑поште: <email>%1</email>"
 
-#: editdlgtypes.cpp:1458
+#: editdlgtypes.cpp:1462
 #, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Није задата адреса е‑поште."
 
-#: editdlgtypes.cpp:1475
+#: editdlgtypes.cpp:1479
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "Лош прилог е‑поште: <filename>%1</filename>"
 
 # rewrite-msgid: /email/message/
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1483
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
@@ -3118,63 +3118,63 @@ msgstr "Желите ли заиста сада да пошаљете порук
 
 # >! @title:window
 # rewrite-msgid: /Email/Message/
-#: editdlgtypes.cpp:1480
+#: editdlgtypes.cpp:1484
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Потврда поруке"
 
-#: editdlgtypes.cpp:1480
+#: editdlgtypes.cpp:1484
 #, kde-format
 msgctxt "@action:button"
 msgid "Send"
 msgstr "Пошаљи"
 
 # rewrite-msgid: /Email/Message/
-#: editdlgtypes.cpp:1506
+#: editdlgtypes.cpp:1510
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
 msgstr "Порука послата за:<nl/>%1<nl/>БЦЦ: <email>%2</email>"
 
 # rewrite-msgid: /Email/Message/
-#: editdlgtypes.cpp:1509
+#: editdlgtypes.cpp:1513
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
 msgstr "Порука послата за:<nl/>%1"
 
-#: editdlgtypes.cpp:1538
+#: editdlgtypes.cpp:1542
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Избор фајла за прилагање"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1625
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Нови шаблон аудио аларма"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1625
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Уређивање шаблона аудио аларма"
 
-#: editdlgtypes.cpp:1622
+#: editdlgtypes.cpp:1626
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Нови аудио аларм"
 
-#: editdlgtypes.cpp:1622
+#: editdlgtypes.cpp:1626
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Уређивање аудио аларма"
 
-#: editdlgtypes.cpp:1630
+#: editdlgtypes.cpp:1634
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the file now"
@@ -3182,7 +3182,7 @@ msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Прикажи фајл сада."
 
-#: editdlgtypes.cpp:1631
+#: editdlgtypes.cpp:1635
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the file now"
@@ -3190,7 +3190,7 @@ msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Прикажи фајл сада."
 
-#: editdlgtypes.cpp:1633
+#: editdlgtypes.cpp:1637
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3202,25 +3202,25 @@ msgid ""
 msgstr ""
 "Ако је попуњено, звучни фајл ће бити понављан све док је приказана порука."
 
-#: editdlgtypes.cpp:1849
+#: editdlgtypes.cpp:1853
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "Попуните да бисте унели садржај скрипте уместо командне линије шкољке."
 
-#: editdlgtypes.cpp:1855
+#: editdlgtypes.cpp:1859
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Унесите наредбу шкољке за извршавање."
 
-#: editdlgtypes.cpp:1860
+#: editdlgtypes.cpp:1864
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Унесите садржај скрипте за извршавање."
 
-#: editdlgtypes.cpp:1922
+#: editdlgtypes.cpp:1926
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3228,7 +3228,7 @@ msgid ""
 "icode></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:1927
+#: editdlgtypes.cpp:1931
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
@@ -4804,7 +4804,7 @@ msgstr "Лични распоређивач алармних порука, на�
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "© 2001–%1, Дејвид Џарви"
 
-#: mainwindow.cpp:443
+#: mainwindow.cpp:447
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4814,7 +4814,7 @@ msgstr ""
 "Неуспех у стварању менија (можда <filename>%1</filename> недостаје или је "
 "искварен)."
 
-#: mainwindow.cpp:463
+#: mainwindow.cpp:467
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Templates..."
@@ -4822,13 +4822,13 @@ msgctxt "@action"
 msgid "Templates..."
 msgstr "&Шаблони..."
 
-#: mainwindow.cpp:467 templatedlg.cpp:74
+#: mainwindow.cpp:471 templatedlg.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Нови"
 
-#: mainwindow.cpp:473
+#: mainwindow.cpp:477
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Create Tem&plate..."
@@ -4836,7 +4836,7 @@ msgctxt "@action"
 msgid "Create Template..."
 msgstr "Направи шаб&лон..."
 
-#: mainwindow.cpp:477
+#: mainwindow.cpp:481
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Copy..."
@@ -4844,7 +4844,7 @@ msgctxt "@action"
 msgid "Copy..."
 msgstr "&Копирај..."
 
-#: mainwindow.cpp:482 resourceselector.cpp:302
+#: mainwindow.cpp:486 resourceselector.cpp:302
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Edit..."
@@ -4852,7 +4852,7 @@ msgctxt "@action"
 msgid "Edit..."
 msgstr "Уреди..."
 
-#: mainwindow.cpp:487
+#: mainwindow.cpp:491
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Delete"
@@ -4860,13 +4860,13 @@ msgctxt "@action"
 msgid "Delete"
 msgstr "Обриши"
 
-#: mainwindow.cpp:493
+#: mainwindow.cpp:497
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Обриши без потврде"
 
-#: mainwindow.cpp:498
+#: mainwindow.cpp:502
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Reac&tivate"
@@ -4874,13 +4874,13 @@ msgctxt "@action"
 msgid "Reactivate"
 msgstr "&Активирај поново"
 
-#: mainwindow.cpp:517
+#: mainwindow.cpp:521
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Пробуди из суспендованости..."
 
-#: mainwindow.cpp:529
+#: mainwindow.cpp:533
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Show Archived Alarms"
@@ -4888,7 +4888,7 @@ msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Прикажи архивиране аларме"
 
-#: mainwindow.cpp:534
+#: mainwindow.cpp:538
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show in System &Tray"
@@ -4896,7 +4896,7 @@ msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Прикажи у &системској касети"
 
-#: mainwindow.cpp:538
+#: mainwindow.cpp:542
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show &Calendars"
@@ -4904,13 +4904,13 @@ msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Прикажи &календаре"
 
-#: mainwindow.cpp:542
+#: mainwindow.cpp:546
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr ""
 
-#: mainwindow.cpp:555
+#: mainwindow.cpp:559
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Import &Alarms..."
@@ -4918,7 +4918,7 @@ msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Увези &аларме..."
 
-#: mainwindow.cpp:561
+#: mainwindow.cpp:565
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Import &Birthdays..."
@@ -4926,7 +4926,7 @@ msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Увези &рођендане..."
 
-#: mainwindow.cpp:566
+#: mainwindow.cpp:570
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "E&xport Selected Alarms..."
@@ -4934,7 +4934,7 @@ msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "&Извези изабране аларме..."
 
-#: mainwindow.cpp:570 resourceselector.cpp:320
+#: mainwindow.cpp:574 resourceselector.cpp:320
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "E&xport..."
@@ -4942,7 +4942,7 @@ msgctxt "@action"
 msgid "Export..."
 msgstr "Из&вези..."
 
-#: mainwindow.cpp:574
+#: mainwindow.cpp:578
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Refresh Alarms"
@@ -4950,7 +4950,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Осв&ежи аларме"
 
-#: mainwindow.cpp:821
+#: mainwindow.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4960,7 +4960,7 @@ msgstr[1] "Желите ли заиста да обришете %1 изабра�
 msgstr[2] "Желите ли заиста да обришете %1 изабраних аларма?"
 msgstr[3] "Желите ли заиста да обришете изабрани аларм?"
 
-#: mainwindow.cpp:823
+#: mainwindow.cpp:827
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4970,13 +4970,13 @@ msgstr[1] "Брисање аларма"
 msgstr[2] "Брисање аларма"
 msgstr[3] "Брисање аларма"
 
-#: mainwindow.cpp:824 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:828 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Обриши"
 
-#: mainwindow.cpp:911
+#: mainwindow.cpp:915
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Display Alarm"
@@ -4984,7 +4984,7 @@ msgctxt "@title:window"
 msgid "Skip Alarm"
 msgstr "приказни аларм"
 
-#: mainwindow.cpp:912
+#: mainwindow.cpp:916
 #, fuzzy, kde-format
 #| msgctxt "@option:radio"
 #| msgid "Number of repetitions:"
@@ -4992,79 +4992,79 @@ msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
 msgstr "&Број потпонављања:"
 
-#: mainwindow.cpp:943
+#: mainwindow.cpp:947
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Сакриј архивиране аларме"
 
-#: mainwindow.cpp:944
+#: mainwindow.cpp:948
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Прикажи архивиране аларме"
 
-#: mainwindow.cpp:1020
+#: mainwindow.cpp:1024
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Увези рођендане"
 
-#: mainwindow.cpp:1272
+#: mainwindow.cpp:1276
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2|/|%1 $[аку %2]"
 
-#: mainwindow.cpp:1273
+#: mainwindow.cpp:1277
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3|/|%1 $[аку %2]: %3"
 
-#: mainwindow.cpp:1339
+#: mainwindow.cpp:1343
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1341
+#: mainwindow.cpp:1345
 #, kde-format
 msgid "Hide menu bar"
 msgstr ""
 
-#: mainwindow.cpp:1581
+#: mainwindow.cpp:1596
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "приказни аларм"
 
-#: mainwindow.cpp:1583
+#: mainwindow.cpp:1598
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "е‑поштански аларм"
 
-#: mainwindow.cpp:1585
+#: mainwindow.cpp:1600
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "наредбени аларм"
 
-#: mainwindow.cpp:1587
+#: mainwindow.cpp:1602
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Тип аларма"
 
-#: mainwindow.cpp:1588
+#: mainwindow.cpp:1603
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Изаберите жељени тип аларма:"
 
-#: mainwindow.cpp:1722
+#: mainwindow.cpp:1737
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Enable"
@@ -5072,20 +5072,20 @@ msgctxt "@action"
 msgid "Enable"
 msgstr "Активирај"
 
-#: mainwindow.cpp:1722
+#: mainwindow.cpp:1737
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@action"
 msgid "Disable"
 msgstr "Деактивирани"
 
-#: mainwindow.cpp:1781
+#: mainwindow.cpp:1796
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
 msgstr ""
 
-#: mainwindow.cpp:1781
+#: mainwindow.cpp:1796
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Cancel if late"

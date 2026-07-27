@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-18 00:46+0000\n"
+"POT-Creation-Date: 2026-07-27 00:45+0000\n"
 "PO-Revision-Date: 2026-03-30 11:29+0200\n"
 "Last-Translator:  Vít Pelčák <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -2509,85 +2509,85 @@ msgstr ""
 "zda je potlačování oznámení zapnuté nebo zda jsou spuštěny aplikace na celé "
 "obrazovce."
 
-#: editdlgtypes.cpp:75
+#: editdlgtypes.cpp:79
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Vybrat soubor pro záznam"
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:92
 #, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "Způsob zobrazení:"
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:93
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "Okno"
 
-#: editdlgtypes.cpp:90
+#: editdlgtypes.cpp:94
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "Upozornění"
 
-#: editdlgtypes.cpp:91
+#: editdlgtypes.cpp:95
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Schválit potvrzení"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:131
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Nová šablona Upomínky zobrazením"
 
-#: editdlgtypes.cpp:127
+#: editdlgtypes.cpp:131
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Upravit šablonu Upomínky zobrazením"
 
-#: editdlgtypes.cpp:128
+#: editdlgtypes.cpp:132
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Nová Upomínka zobrazením"
 
-#: editdlgtypes.cpp:128
+#: editdlgtypes.cpp:132
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Upravit Upomínku zobrazením"
 
-#: editdlgtypes.cpp:141
+#: editdlgtypes.cpp:145
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Zobrazený typ:"
 
-#: editdlgtypes.cpp:145
+#: editdlgtypes.cpp:149
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Textová zpráva"
 
-#: editdlgtypes.cpp:146
+#: editdlgtypes.cpp:150
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr "Obsah souboru"
 
-#: editdlgtypes.cpp:147
+#: editdlgtypes.cpp:151
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "Výstup příkazu"
 
-#: editdlgtypes.cpp:167
+#: editdlgtypes.cpp:171
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2603,32 +2603,32 @@ msgstr ""
 "obrázkového souboru.</item><item><interface>%3</interface>: upomínka zobrazí "
 "výstup příkazu.</item></list></para>"
 
-#: editdlgtypes.cpp:182
+#: editdlgtypes.cpp:186
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Zadejte text zprávy upomínky. Můžete použít i více řádků."
 
-#: editdlgtypes.cpp:195
+#: editdlgtypes.cpp:199
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr ""
 "Zadejte název nebo URL textového souboru nebo obrázku, který má být zobrazen."
 
-#: editdlgtypes.cpp:202 editdlgtypes.cpp:891 sounddlg.cpp:185
+#: editdlgtypes.cpp:206 editdlgtypes.cpp:895 sounddlg.cpp:185
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Vybrat soubor"
 
-#: editdlgtypes.cpp:203
+#: editdlgtypes.cpp:207
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Vyberte textový soubor nebo obrázek který má být zobrazen."
 
-#: editdlgtypes.cpp:247
+#: editdlgtypes.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2638,7 +2638,7 @@ msgstr ""
 "Zvolte, zda se má upomínka zobrazit v okně, nebo prostřednictvím systémových "
 "oznámení."
 
-#: editdlgtypes.cpp:274
+#: editdlgtypes.cpp:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2648,7 +2648,7 @@ msgstr ""
 "Zaškrtněte, pokud si přejete, aby bylo zobrazeno připomenutí před nebo po "
 "hlavní upomínce."
 
-#: editdlgtypes.cpp:275
+#: editdlgtypes.cpp:279
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2658,7 +2658,7 @@ msgstr ""
 "<para>Zadejte, v jakém předstihu se před nebo po hlavní upomínce zobrazí "
 "připomenutí.</para><para>%1</para>"
 
-#: editdlgtypes.cpp:276
+#: editdlgtypes.cpp:280
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2666,140 +2666,140 @@ msgid ""
 "alarm"
 msgstr "Zvolte, zda se má připomenutí spustit před nebo po hlavní upomínce"
 
-#: editdlgtypes.cpp:286
+#: editdlgtypes.cpp:290
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr ""
 "Tato volba způsobí, že musíte potvrdit, že jste vzali upomínku na vědomí."
 
-#: editdlgtypes.cpp:295
+#: editdlgtypes.cpp:299
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Zobrazit upomínku"
 
-#: editdlgtypes.cpp:677
+#: editdlgtypes.cpp:681
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Zobrazit zprávu upomínky"
 
-#: editdlgtypes.cpp:686
+#: editdlgtypes.cpp:690
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Zobrazit soubor"
 
-#: editdlgtypes.cpp:696
+#: editdlgtypes.cpp:700
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Zobrazit výstup příkazu"
 
-#: editdlgtypes.cpp:728
+#: editdlgtypes.cpp:732
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Vyberte textový soubor nebo obrázek, který si přejete zobrazit"
 
-#: editdlgtypes.cpp:806
+#: editdlgtypes.cpp:810
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "Zapsat skript"
 
-#: editdlgtypes.cpp:807
+#: editdlgtypes.cpp:811
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "Spustit v okně terminálu"
 
-#: editdlgtypes.cpp:808
+#: editdlgtypes.cpp:812
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "Spustit v okně terminálu"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:842
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Nová šablona Upomínky s příkazem"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:842
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Upravit šablonu Upomínky s příkazem"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:843
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Nová Upomínka s příkazem"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:843
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Upravit Upomínku s příkazem"
 
-#: editdlgtypes.cpp:847
+#: editdlgtypes.cpp:851
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Spustit zadaný příkaz"
 
-#: editdlgtypes.cpp:848
+#: editdlgtypes.cpp:852
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Spustit zadaný příkaz"
 
-#: editdlgtypes.cpp:855 specialactions.cpp:182
+#: editdlgtypes.cpp:859 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr "Neupozorňovat na chyby"
 
-#: editdlgtypes.cpp:856
+#: editdlgtypes.cpp:860
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "Nezobrazovat chybové zprávy pokud příkaz selže."
 
-#: editdlgtypes.cpp:862
+#: editdlgtypes.cpp:866
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Výstup příkazu"
 
-#: editdlgtypes.cpp:870
+#: editdlgtypes.cpp:874
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "Zaškrtněte pro spuštění příkazu v okně terminálu"
 
-#: editdlgtypes.cpp:883
+#: editdlgtypes.cpp:887
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Zadejte název nebo cestu k souboru pro záznam."
 
-#: editdlgtypes.cpp:892
+#: editdlgtypes.cpp:896
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Vybrat soubor pro záznam."
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:899
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "Zaznamenat do souboru"
 
-#: editdlgtypes.cpp:896
+#: editdlgtypes.cpp:900
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2809,19 +2809,19 @@ msgstr ""
 "Zaškrtněte pro zaznamenávání výstupu příkazu do lokálního souboru. Výstup "
 "bude připojen k existujícímu obsahu souboru."
 
-#: editdlgtypes.cpp:903
+#: editdlgtypes.cpp:907
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Zahodit"
 
-#: editdlgtypes.cpp:904
+#: editdlgtypes.cpp:908
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Zaškrtněte pro zahození výstupu příkazu."
 
-#: editdlgtypes.cpp:1066
+#: editdlgtypes.cpp:1070
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2830,7 +2830,7 @@ msgstr ""
 "Soubor záznamu musí mít název nebo cestu k lokálnímu souboru s oprávněním k "
 "zápisu."
 
-#: editdlgtypes.cpp:1076
+#: editdlgtypes.cpp:1080
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2841,61 +2841,61 @@ msgstr ""
 "para><para>Prosím, nastavte jej v dialogu pro nastavení v aplikaci "
 "<application>KAlarm</application>.</para>"
 
-#: editdlgtypes.cpp:1096
+#: editdlgtypes.cpp:1100
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
 msgstr "Proveden příkaz: <icode>%1</icode>"
 
-#: editdlgtypes.cpp:1130
+#: editdlgtypes.cpp:1134
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "Kopii e-mailu sobě"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1171
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "Nová šablona Poštovní upomínky"
 
-#: editdlgtypes.cpp:1167
+#: editdlgtypes.cpp:1171
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Upravit šablonu Poštovní upomínky"
 
-#: editdlgtypes.cpp:1168
+#: editdlgtypes.cpp:1172
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "Nová Poštovní upomínka"
 
-#: editdlgtypes.cpp:1168
+#: editdlgtypes.cpp:1172
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Upravit Poštovní upomínku"
 
-#: editdlgtypes.cpp:1176
+#: editdlgtypes.cpp:1180
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Poslat e-mail na zadané adresy nyní"
 
-#: editdlgtypes.cpp:1177
+#: editdlgtypes.cpp:1181
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "Odeslat e-mail"
 
-#: editdlgtypes.cpp:1188
+#: editdlgtypes.cpp:1192
 #, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "Od:"
 
-#: editdlgtypes.cpp:1194
+#: editdlgtypes.cpp:1198
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2905,13 +2905,13 @@ msgstr ""
 "Vaše e-mailová adresa, která slouží k vaší identifikaci jakožto odesílatele "
 "upomínek."
 
-#: editdlgtypes.cpp:1200
+#: editdlgtypes.cpp:1204
 #, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "Komu:"
 
-#: editdlgtypes.cpp:1205
+#: editdlgtypes.cpp:1209
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2919,73 +2919,73 @@ msgid ""
 "commas or semicolons."
 msgstr "Zadejte adresáty e-mailu. Oddělte je čárkami nebo středníky."
 
-#: editdlgtypes.cpp:1216
+#: editdlgtypes.cpp:1220
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Otevřít knihu adres"
 
-#: editdlgtypes.cpp:1217
+#: editdlgtypes.cpp:1221
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Vybrat e-mailové adresy z knihy adres."
 
-#: editdlgtypes.cpp:1224
+#: editdlgtypes.cpp:1228
 #, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Předmět:"
 
-#: editdlgtypes.cpp:1230
+#: editdlgtypes.cpp:1234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Zadejte předmět zprávy."
 
-#: editdlgtypes.cpp:1236
+#: editdlgtypes.cpp:1240
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Zadejte obsah e-mailu."
 
-#: editdlgtypes.cpp:1244
+#: editdlgtypes.cpp:1248
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "Přílohy:"
 
-#: editdlgtypes.cpp:1253
+#: editdlgtypes.cpp:1257
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Soubory, které mají být poslány jako přílohy zprávy."
 
-#: editdlgtypes.cpp:1257 resourceselector.cpp:77
+#: editdlgtypes.cpp:1261 resourceselector.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Přidat..."
 
-#: editdlgtypes.cpp:1259
+#: editdlgtypes.cpp:1263
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Přidat přílohu ke zprávě."
 
-#: editdlgtypes.cpp:1262 resourceselector.cpp:79
+#: editdlgtypes.cpp:1266 resourceselector.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Odstranit"
 
-#: editdlgtypes.cpp:1264
+#: editdlgtypes.cpp:1268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Odstranit označenou přílohu ze zprávy."
 
-#: editdlgtypes.cpp:1269
+#: editdlgtypes.cpp:1273
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
@@ -2993,97 +2993,97 @@ msgstr ""
 "Pokud je zapnuto, e-mailová zpráva bude odeslána \n"
 "jako neviditelná kopie i vám."
 
-#: editdlgtypes.cpp:1451
+#: editdlgtypes.cpp:1455
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "Neplatná adresa: <email>%1</email>"
 
-#: editdlgtypes.cpp:1458
+#: editdlgtypes.cpp:1462
 #, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "E-mailová adresa nebyla zadána"
 
-#: editdlgtypes.cpp:1475
+#: editdlgtypes.cpp:1479
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "Neplatná příloha zprávy: <filename>%1</filename>"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1483
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "Opravdu si přejete nyní odeslat zprávu zadaným adresátům?"
 
-#: editdlgtypes.cpp:1480
+#: editdlgtypes.cpp:1484
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Potvrzení e-mailu"
 
-#: editdlgtypes.cpp:1480
+#: editdlgtypes.cpp:1484
 #, kde-format
 msgctxt "@action:button"
 msgid "Send"
 msgstr "Odeslat"
 
-#: editdlgtypes.cpp:1506
+#: editdlgtypes.cpp:1510
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
 msgstr "E-mail odeslán:<nl/>%1<nl/>Skrytá kopie: <email>%2</email>"
 
-#: editdlgtypes.cpp:1509
+#: editdlgtypes.cpp:1513
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
 msgstr "E-mail odeslán:<nl/>%1"
 
-#: editdlgtypes.cpp:1538
+#: editdlgtypes.cpp:1542
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Vyberte soubor, který si přejete přiložit"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1625
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Nová šablona Zvukové upomínky"
 
-#: editdlgtypes.cpp:1621
+#: editdlgtypes.cpp:1625
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Upravit šablonu Zvukové upomínky"
 
-#: editdlgtypes.cpp:1622
+#: editdlgtypes.cpp:1626
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Nová Zvuková upomínka"
 
-#: editdlgtypes.cpp:1622
+#: editdlgtypes.cpp:1626
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Upravit Zvukovou upomínku"
 
-#: editdlgtypes.cpp:1630
+#: editdlgtypes.cpp:1634
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Přehrát zvukový soubor"
 
-#: editdlgtypes.cpp:1631
+#: editdlgtypes.cpp:1635
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Přehrát zvukový soubor"
 
-#: editdlgtypes.cpp:1633
+#: editdlgtypes.cpp:1637
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3092,26 +3092,26 @@ msgstr ""
 "Pokud je volba povolena, zvukový soubor bude přehráván dokud nekliknete na "
 "%1."
 
-#: editdlgtypes.cpp:1849
+#: editdlgtypes.cpp:1853
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr ""
 "Zvolte, pokud si přejete zadat obsah skriptu namísto příkazového řádku shell"
 
-#: editdlgtypes.cpp:1855
+#: editdlgtypes.cpp:1859
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Zadejte příkaz, který má být proveden."
 
-#: editdlgtypes.cpp:1860
+#: editdlgtypes.cpp:1864
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Zadejte obsah skriptu"
 
-#: editdlgtypes.cpp:1922
+#: editdlgtypes.cpp:1926
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3121,7 +3121,7 @@ msgstr ""
 "<para>Příkaz nemůže nastavit proměnné prostředí:</para><para><icode>%1</"
 "icode></para>"
 
-#: editdlgtypes.cpp:1927
+#: editdlgtypes.cpp:1931
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
@@ -4517,7 +4517,7 @@ msgstr "Osobní plánovač upomínek, příkazů a e-mailů od KDE"
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "Autorská práva © 2001-%1, David Jarvie"
 
-#: mainwindow.cpp:443
+#: mainwindow.cpp:447
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4527,115 +4527,115 @@ msgstr ""
 "Vytvoření nabídek selhalo (možná kvůli chybějícímu nebo poškozenému "
 "<filename>%1</filename>)"
 
-#: mainwindow.cpp:463
+#: mainwindow.cpp:467
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
 msgstr "Šablony..."
 
-#: mainwindow.cpp:467 templatedlg.cpp:74
+#: mainwindow.cpp:471 templatedlg.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Nový"
 
-#: mainwindow.cpp:473
+#: mainwindow.cpp:477
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "Vytvořit šablonu..."
 
-#: mainwindow.cpp:477
+#: mainwindow.cpp:481
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
 msgstr "Kopírovat..."
 
-#: mainwindow.cpp:482 resourceselector.cpp:302
+#: mainwindow.cpp:486 resourceselector.cpp:302
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Upravit..."
 
-#: mainwindow.cpp:487
+#: mainwindow.cpp:491
 #, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Smazat"
 
-#: mainwindow.cpp:493
+#: mainwindow.cpp:497
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Smazat bez potvrzení"
 
-#: mainwindow.cpp:498
+#: mainwindow.cpp:502
 #, kde-format
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Znovu aktivovat"
 
-#: mainwindow.cpp:517
+#: mainwindow.cpp:521
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Probudit z uspání..."
 
-#: mainwindow.cpp:529
+#: mainwindow.cpp:533
 #, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Zobrazit archivované upomínky"
 
-#: mainwindow.cpp:534
+#: mainwindow.cpp:538
 #, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Zobrazit v systémovém panelu"
 
-#: mainwindow.cpp:538
+#: mainwindow.cpp:542
 #, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Zobrazit kalendáře"
 
-#: mainwindow.cpp:542
+#: mainwindow.cpp:546
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr "Zobrazit výběr data"
 
-#: mainwindow.cpp:555
+#: mainwindow.cpp:559
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Importovat upomínky..."
 
-#: mainwindow.cpp:561
+#: mainwindow.cpp:565
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Importovat narozeniny..."
 
-#: mainwindow.cpp:566
+#: mainwindow.cpp:570
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "Exportovat vybrané upomínky..."
 
-#: mainwindow.cpp:570 resourceselector.cpp:320
+#: mainwindow.cpp:574 resourceselector.cpp:320
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "Exportovat..."
 
-#: mainwindow.cpp:574
+#: mainwindow.cpp:578
 #, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Aktualizovat upomínky"
 
-#: mainwindow.cpp:821
+#: mainwindow.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4644,7 +4644,7 @@ msgstr[0] "Opravdu si přejete odstranit vybranou upomínku?"
 msgstr[1] "Opravdu si přejete odstranit %1 vybrané upomínky?"
 msgstr[2] "Opravdu si přejete odstranit %1 vybraných upomínek?"
 
-#: mainwindow.cpp:823
+#: mainwindow.cpp:827
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4653,55 +4653,55 @@ msgstr[0] "Smazat upomínku"
 msgstr[1] "Smazat upomínky"
 msgstr[2] "Smazat upomínky"
 
-#: mainwindow.cpp:824 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:828 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Smazat"
 
-#: mainwindow.cpp:911
+#: mainwindow.cpp:915
 #, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
 msgstr "Přeskočit upomínku"
 
-#: mainwindow.cpp:912
+#: mainwindow.cpp:916
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
 msgstr "Počet přeskočených aktivací:"
 
-#: mainwindow.cpp:943
+#: mainwindow.cpp:947
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Skrýt archivované upomínky"
 
-#: mainwindow.cpp:944
+#: mainwindow.cpp:948
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Zobrazit archivované upomínky"
 
-#: mainwindow.cpp:1020
+#: mainwindow.cpp:1024
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Importovat narozeniny"
 
-#: mainwindow.cpp:1272
+#: mainwindow.cpp:1276
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1273
+#: mainwindow.cpp:1277
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1339
+#: mainwindow.cpp:1343
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4710,60 +4710,60 @@ msgstr ""
 "<qt>Toto úplně skryje panel nabídky. Můžete ji opětovně zobrazit pomocí %1.</"
 "qt>"
 
-#: mainwindow.cpp:1341
+#: mainwindow.cpp:1345
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Skrýt nabídku"
 
-#: mainwindow.cpp:1581
+#: mainwindow.cpp:1596
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Upomínka zobrazením"
 
-#: mainwindow.cpp:1583
+#: mainwindow.cpp:1598
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Poštovní upomínka"
 
-#: mainwindow.cpp:1585
+#: mainwindow.cpp:1600
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Upomínka s příkazem"
 
-#: mainwindow.cpp:1587
+#: mainwindow.cpp:1602
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Typ upomínky"
 
-#: mainwindow.cpp:1588
+#: mainwindow.cpp:1603
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Vybrat typ upomínky pro vytvoření:"
 
-#: mainwindow.cpp:1722
+#: mainwindow.cpp:1737
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Povolit"
 
-#: mainwindow.cpp:1722
+#: mainwindow.cpp:1737
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
 msgstr "Zakázat"
 
-#: mainwindow.cpp:1781
+#: mainwindow.cpp:1796
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
 msgstr "Přeskočit..."
 
-#: mainwindow.cpp:1781
+#: mainwindow.cpp:1796
 #, kde-format
 msgctxt "@action"
 msgid "Cancel skip"
