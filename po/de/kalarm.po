@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-27 00:45+0000\n"
+"POT-Creation-Date: 2026-08-01 00:48+0000\n"
 "PO-Revision-Date: 2026-05-12 22:28+0200\n"
 "Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -946,7 +946,7 @@ msgid "Select the holiday region to use."
 msgstr "Wählen Sie die Region für Feiertage aus."
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
-#: data/kalarmconfig.kcfg:102 kalarmcalendar/kaeventformatter.cpp:93
+#: data/kalarmconfig.kcfg:102
 #, kde-format
 msgctxt "@label"
 msgid "Foreground color"
@@ -960,7 +960,7 @@ msgid "Default foreground color for alarm message windows."
 msgstr "Standard-Vordergrundfarbe für das Fenster der Erinnerungsnachricht."
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
-#: data/kalarmconfig.kcfg:107 kalarmcalendar/kaeventformatter.cpp:95
+#: data/kalarmconfig.kcfg:107
 #, kde-format
 msgctxt "@label"
 msgid "Background color"
@@ -1642,7 +1642,7 @@ msgstr ""
 "„Erinnerung bearbeiten“."
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:325 kalarmcalendar/kaeventformatter.cpp:107
+#: data/kalarmconfig.kcfg:325
 #, kde-format
 msgctxt "@label"
 msgid "Confirm acknowledgement"
@@ -1712,7 +1712,7 @@ msgstr ""
 "Pfad für die Standard-Klangdatei für den Dialog „Erinnerung bearbeiten“"
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:350 kalarmcalendar/kaeventformatter.cpp:115
+#: data/kalarmconfig.kcfg:350
 #, kde-format
 msgctxt "@label"
 msgid "Sound volume"
@@ -1801,7 +1801,7 @@ msgid "Execute in terminal window"
 msgstr "In Terminalfenster ausführen"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:377 kalarmcalendar/kaeventformatter.cpp:138
+#: data/kalarmconfig.kcfg:377
 #, kde-format
 msgctxt "@label"
 msgid "Log file"
@@ -3831,8 +3831,6 @@ msgid "At login"
 msgstr "Bei Anmeldung"
 
 #: kalarmcalendar/kaevent.cpp:3534 kalarmcalendar/kaevent.cpp:3627
-#: kalarmcalendar/kaeventformatter.cpp:429
-#: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
 msgctxt "@info"
 msgid "1 Minute"
@@ -3841,7 +3839,6 @@ msgstr[0] "Eine Minute"
 msgstr[1] "%1 Minuten"
 
 #: kalarmcalendar/kaevent.cpp:3536 kalarmcalendar/kaevent.cpp:3629
-#: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
 msgid "1 Hour"
@@ -3856,7 +3853,6 @@ msgid "%1h %2m"
 msgstr "%1h %2m"
 
 #: kalarmcalendar/kaevent.cpp:3541 kalarmcalendar/kaevent.cpp:3620
-#: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
 msgid "1 Day"
@@ -3899,447 +3895,6 @@ msgstr "Keine"
 msgctxt "@info No repetition"
 msgid "None"
 msgstr "Keine"
-
-#: kalarmcalendar/kaeventformatter.cpp:38
-#, kde-format
-msgctxt "@label Unique identifier"
-msgid "UID"
-msgstr "UID"
-
-#: kalarmcalendar/kaeventformatter.cpp:40
-#, kde-format
-msgctxt "@label"
-msgid "Alarm type"
-msgstr "Erinnerungstyp"
-
-#: kalarmcalendar/kaeventformatter.cpp:42
-#, kde-format
-msgctxt "@label"
-msgid "Alarm status"
-msgstr "Erinnerungstatus"
-
-#: kalarmcalendar/kaeventformatter.cpp:44
-#, kde-format
-msgctxt "@label"
-msgid "Alarm name"
-msgstr "Erinnerungsname"
-
-#: kalarmcalendar/kaeventformatter.cpp:46
-#, kde-format
-msgctxt "@label"
-msgid "Template name"
-msgstr "Vorlagenname"
-
-#: kalarmcalendar/kaeventformatter.cpp:48
-#, kde-format
-msgctxt "@label"
-msgid "Creation time"
-msgstr "Erstellungszeit"
-
-#: kalarmcalendar/kaeventformatter.cpp:50
-#, kde-format
-msgctxt "@label"
-msgid "Start time"
-msgstr "Startzeit"
-
-#: kalarmcalendar/kaeventformatter.cpp:52
-#, kde-format
-msgctxt "@label Start delay configured in an alarm template"
-msgid "Template after time"
-msgstr "Vorlage nach Zeitablauf"
-
-#: kalarmcalendar/kaeventformatter.cpp:54
-#, kde-format
-msgctxt "@label"
-msgid "Recurs"
-msgstr "Wiederholt"
-
-#: kalarmcalendar/kaeventformatter.cpp:56
-#, kde-format
-msgctxt "@label"
-msgid "Recurrence"
-msgstr "Wiederholung"
-
-#: kalarmcalendar/kaeventformatter.cpp:58
-#, kde-format
-msgctxt "@label"
-msgid "Sub-repetition"
-msgstr "Zusatz-Wiederholung"
-
-#: kalarmcalendar/kaeventformatter.cpp:60
-#, kde-format
-msgctxt "@label"
-msgid "Sub-repetition interval"
-msgstr "Intervall für Zusatz-Wiederholungen"
-
-#: kalarmcalendar/kaeventformatter.cpp:62
-#, kde-format
-msgctxt "@label"
-msgid "Sub-repetition count"
-msgstr "Anzahl der Zusatz-Wiederholungen"
-
-#: kalarmcalendar/kaeventformatter.cpp:64
-#, kde-format
-msgctxt "@label"
-msgid "Next sub-repetition"
-msgstr "Nächste Zusatz-Wiederholung"
-
-#: kalarmcalendar/kaeventformatter.cpp:66
-#, kde-format
-msgctxt "@label"
-msgid "Work time only"
-msgstr "Nur Arbeitszeiten"
-
-#: kalarmcalendar/kaeventformatter.cpp:68
-#, kde-format
-msgctxt "@label"
-msgid "Holidays excluded"
-msgstr "Feiertage ausgenommen"
-
-#: kalarmcalendar/kaeventformatter.cpp:70
-#, kde-format
-msgctxt "@label"
-msgid "Next recurrence"
-msgstr "Nächste Wiederholung"
-
-#: kalarmcalendar/kaeventformatter.cpp:72
-#, kde-format
-msgctxt "@label"
-msgid "Late cancel"
-msgstr "Verzögertes Abbrechen"
-
-#: kalarmcalendar/kaeventformatter.cpp:74
-#, kde-format
-msgctxt "@label Automatically close window"
-msgid "Auto close"
-msgstr "Automatisches Schließen"
-
-#: kalarmcalendar/kaeventformatter.cpp:76
-#, kde-format
-msgctxt "@label"
-msgid "Copy to KOrganizer"
-msgstr "In KOrganizer kopieren"
-
-#: kalarmcalendar/kaeventformatter.cpp:78
-#, kde-format
-msgctxt "@label"
-msgid "Enabled"
-msgstr "Aktiviert"
-
-#: kalarmcalendar/kaeventformatter.cpp:80
-#, kde-format
-msgctxt "@label"
-msgid "Read-only"
-msgstr "Schreibgeschützt"
-
-#: kalarmcalendar/kaeventformatter.cpp:82
-#, kde-format
-msgctxt "@label Whether alarm should be archived"
-msgid "Archive"
-msgstr "Archiv"
-
-#: kalarmcalendar/kaeventformatter.cpp:84
-#, kde-format
-msgctxt "@label"
-msgid "Revision"
-msgstr "Revision"
-
-#: kalarmcalendar/kaeventformatter.cpp:86
-#, kde-format
-msgctxt "@label"
-msgid "Custom properties"
-msgstr "Eigene Eigenschaften"
-
-#: kalarmcalendar/kaeventformatter.cpp:89
-#, kde-format
-msgctxt "@label"
-msgid "Message text"
-msgstr "Nachrichtentext"
-
-#: kalarmcalendar/kaeventformatter.cpp:91
-#, kde-format
-msgctxt "@label File to provide text for message"
-msgid "Message file"
-msgstr "Nachrichtendatei"
-
-#: kalarmcalendar/kaeventformatter.cpp:97
-#, kde-format
-msgctxt "@label"
-msgid "Font"
-msgstr "Schriftart"
-
-#: kalarmcalendar/kaeventformatter.cpp:99
-#, kde-format
-msgctxt "@label Shell command to execute before alarm"
-msgid "Pre-alarm action"
-msgstr "Vor der Erinnerung auszulösende Aktion"
-
-#: kalarmcalendar/kaeventformatter.cpp:101
-#, kde-format
-msgctxt "@label"
-msgid "Pre-alarm action cancel"
-msgstr "Abbruch der vor der Erinnerung auszulösenden Aktion"
-
-#: kalarmcalendar/kaeventformatter.cpp:103
-#, kde-format
-msgctxt "@label"
-msgid "Pre-alarm action no error"
-msgstr "Erinnerung bei Fehler der Vorab-Aktion nicht aussetzen"
-
-#: kalarmcalendar/kaeventformatter.cpp:105
-#, kde-format
-msgctxt "@label Shell command to execute after alarm"
-msgid "Post-alarm action"
-msgstr "Nach der Erinnerung auszulösende Aktion"
-
-#: kalarmcalendar/kaeventformatter.cpp:109
-#, kde-format
-msgctxt "@label"
-msgid "Akonadi Item ID"
-msgstr "ID des Akonadi-Eintrags"
-
-#: kalarmcalendar/kaeventformatter.cpp:111
-#, kde-format
-msgctxt "@label Audio method"
-msgid "Sound"
-msgstr "Klang"
-
-#: kalarmcalendar/kaeventformatter.cpp:113
-#, kde-format
-msgctxt "@label Whether audio should repeat"
-msgid "Sound repeat"
-msgstr "Klangwiederholung"
-
-#: kalarmcalendar/kaeventformatter.cpp:117
-#, kde-format
-msgctxt "@label"
-msgid "Sound fade volume"
-msgstr "Klanglautstärke einblenden"
-
-#: kalarmcalendar/kaeventformatter.cpp:119
-#, kde-format
-msgctxt "@label"
-msgid "Sound fade time"
-msgstr "Zeit der Klangeinblendung"
-
-#: kalarmcalendar/kaeventformatter.cpp:121
-#, kde-format
-msgctxt "@label Whether the alarm has a reminder"
-msgid "Reminder"
-msgstr "Erinnerung"
-
-#: kalarmcalendar/kaeventformatter.cpp:123
-#, kde-format
-msgctxt "@label Whether reminder is on first recurrence only"
-msgid "Reminder once only"
-msgstr "Nur einmalig erinnern"
-
-#: kalarmcalendar/kaeventformatter.cpp:125
-#, kde-format
-msgctxt "@label Whether to use standard notification system"
-msgid "Notify"
-msgstr "Benachrichtigen"
-
-#: kalarmcalendar/kaeventformatter.cpp:127
-#, kde-format
-msgctxt "@label Deferral type"
-msgid "Deferral"
-msgstr "Verschiebung"
-
-#: kalarmcalendar/kaeventformatter.cpp:129
-#, kde-format
-msgctxt "@label"
-msgid "Deferral time"
-msgstr "Zeitverschiebung"
-
-#: kalarmcalendar/kaeventformatter.cpp:131
-#, kde-format
-msgctxt "@label Default deferral delay"
-msgid "Deferral default"
-msgstr "Standardzeitverschiebung"
-
-#: kalarmcalendar/kaeventformatter.cpp:133
-#, kde-format
-msgctxt "@label Whether deferral time is date-only by default"
-msgid "Deferral default date only"
-msgstr "Zeitverschiebung ist standardmäßig ein Datum"
-
-#: kalarmcalendar/kaeventformatter.cpp:136
-#, kde-format
-msgctxt "@label A shell command"
-msgid "Command"
-msgstr "Befehl"
-
-#: kalarmcalendar/kaeventformatter.cpp:140
-#, kde-format
-msgctxt "@label Execute in terminal window"
-msgid "Execute in terminal"
-msgstr "Im Terminal ausführen"
-
-#: kalarmcalendar/kaeventformatter.cpp:142
-#, kde-format
-msgctxt "@label"
-msgid "Hide command error"
-msgstr "Fehler bei der Ausführung ausblenden"
-
-#: kalarmcalendar/kaeventformatter.cpp:145
-#, kde-format
-msgctxt "@label"
-msgid "Email subject"
-msgstr "Betreff der E-Mail"
-
-#: kalarmcalendar/kaeventformatter.cpp:147
-#, kde-format
-msgctxt "@label Email address"
-msgid "Email sender ID"
-msgstr "Identifikation des E-Mailabsenders"
-
-#: kalarmcalendar/kaeventformatter.cpp:149
-#, kde-format
-msgctxt "@label Email address"
-msgid "Email to"
-msgstr "E-Mail an"
-
-#: kalarmcalendar/kaeventformatter.cpp:151
-#, kde-format
-msgctxt "@label true/false"
-msgid "Email bcc"
-msgstr "Blindkopie der E-Mail"
-
-#: kalarmcalendar/kaeventformatter.cpp:153
-#, kde-format
-msgctxt "@label"
-msgid "Email body"
-msgstr "Text der E-Mail"
-
-#: kalarmcalendar/kaeventformatter.cpp:155
-#, kde-format
-msgctxt "@label"
-msgid "Email attachments"
-msgstr "E-Mail-Anhänge"
-
-#: kalarmcalendar/kaeventformatter.cpp:257
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Display (text)"
-msgstr "Anzeige (Text)"
-
-#: kalarmcalendar/kaeventformatter.cpp:259
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Display (file)"
-msgstr "Anzeige (Datei)"
-
-#: kalarmcalendar/kaeventformatter.cpp:262
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Display (command)"
-msgstr "Anzeige (Befehl)"
-
-#: kalarmcalendar/kaeventformatter.cpp:263
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Command"
-msgstr "Befehl"
-
-#: kalarmcalendar/kaeventformatter.cpp:265
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Email"
-msgstr "E-Mail"
-
-#: kalarmcalendar/kaeventformatter.cpp:267
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Audio"
-msgstr "Audio"
-
-#: kalarmcalendar/kaeventformatter.cpp:274
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Active"
-msgstr "Aktiv"
-
-#: kalarmcalendar/kaeventformatter.cpp:276
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Archived"
-msgstr "Archiviert"
-
-#: kalarmcalendar/kaeventformatter.cpp:278
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Template"
-msgstr "Vorlage"
-
-#: kalarmcalendar/kaeventformatter.cpp:297
-#, kde-format
-msgctxt "@info Repeat at login"
-msgid "At login until %1"
-msgstr "Beim Anmelden wiederholen bis %1"
-
-#: kalarmcalendar/kaeventformatter.cpp:338
-#, kde-format
-msgctxt "@info"
-msgid "%1"
-msgstr "%1"
-
-#: kalarmcalendar/kaeventformatter.cpp:350
-#, kde-format
-msgctxt "@info Using default font"
-msgid "Default"
-msgstr "Standard"
-
-#: kalarmcalendar/kaeventformatter.cpp:366 messagedisplayhelper.cpp:220
-#, kde-format
-msgctxt "@info"
-msgid "Reminder"
-msgstr "Voraberinnerung"
-
-#: kalarmcalendar/kaeventformatter.cpp:379
-#, kde-format
-msgctxt "@info"
-msgid "Speak"
-msgstr "Vorlesen"
-
-#: kalarmcalendar/kaeventformatter.cpp:380
-#, kde-format
-msgctxt "@info"
-msgid "Beep"
-msgstr "Signalton"
-
-#: kalarmcalendar/kaeventformatter.cpp:385
-#: kalarmcalendar/kaeventformatter.cpp:389
-#, kde-format
-msgctxt "@info Percentage"
-msgid "%1%%"
-msgstr "%1%%"
-
-#: kalarmcalendar/kaeventformatter.cpp:393
-#, kde-format
-msgctxt "@info"
-msgid "1 Second"
-msgid_plural "%1 Seconds"
-msgstr[0] "Eine Sekunde"
-msgstr[1] "%1 Sekunden"
-
-#: kalarmcalendar/kaeventformatter.cpp:418
-#, kde-format
-msgctxt "@info Error indication"
-msgid "error!"
-msgstr "Fehler."
-
-#: kalarmcalendar/kaeventformatter.cpp:423
-#, kde-format
-msgctxt "@info General purpose status indication: yes or no"
-msgid "Yes"
-msgstr "Ja"
-
-#: kalarmcalendar/kaeventformatter.cpp:424
-#, kde-format
-msgctxt "@info General purpose status indication: yes or no"
-msgid "No"
-msgstr "Nein"
 
 #: kamail.cpp:69
 #, kde-format
@@ -4919,6 +4474,12 @@ msgstr "Voraberinnerung"
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Nachricht"
+
+#: messagedisplayhelper.cpp:220
+#, kde-format
+msgctxt "@info"
+msgid "Reminder"
+msgstr "Voraberinnerung"
 
 #: messagedisplayhelper.cpp:298
 #, kde-format
@@ -9083,6 +8644,296 @@ msgstr ""
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
 "Anzahl Minuten vor der Erinnerung für das Aufwachen aus dem Standby-Modus"
+
+#~ msgctxt "@label Unique identifier"
+#~ msgid "UID"
+#~ msgstr "UID"
+
+#~ msgctxt "@label"
+#~ msgid "Alarm type"
+#~ msgstr "Erinnerungstyp"
+
+#~ msgctxt "@label"
+#~ msgid "Alarm status"
+#~ msgstr "Erinnerungstatus"
+
+#~ msgctxt "@label"
+#~ msgid "Alarm name"
+#~ msgstr "Erinnerungsname"
+
+#~ msgctxt "@label"
+#~ msgid "Template name"
+#~ msgstr "Vorlagenname"
+
+#~ msgctxt "@label"
+#~ msgid "Creation time"
+#~ msgstr "Erstellungszeit"
+
+#~ msgctxt "@label"
+#~ msgid "Start time"
+#~ msgstr "Startzeit"
+
+#~ msgctxt "@label Start delay configured in an alarm template"
+#~ msgid "Template after time"
+#~ msgstr "Vorlage nach Zeitablauf"
+
+#~ msgctxt "@label"
+#~ msgid "Recurs"
+#~ msgstr "Wiederholt"
+
+#~ msgctxt "@label"
+#~ msgid "Recurrence"
+#~ msgstr "Wiederholung"
+
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition"
+#~ msgstr "Zusatz-Wiederholung"
+
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition interval"
+#~ msgstr "Intervall für Zusatz-Wiederholungen"
+
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition count"
+#~ msgstr "Anzahl der Zusatz-Wiederholungen"
+
+#~ msgctxt "@label"
+#~ msgid "Next sub-repetition"
+#~ msgstr "Nächste Zusatz-Wiederholung"
+
+#~ msgctxt "@label"
+#~ msgid "Work time only"
+#~ msgstr "Nur Arbeitszeiten"
+
+#~ msgctxt "@label"
+#~ msgid "Holidays excluded"
+#~ msgstr "Feiertage ausgenommen"
+
+#~ msgctxt "@label"
+#~ msgid "Next recurrence"
+#~ msgstr "Nächste Wiederholung"
+
+#~ msgctxt "@label"
+#~ msgid "Late cancel"
+#~ msgstr "Verzögertes Abbrechen"
+
+#~ msgctxt "@label Automatically close window"
+#~ msgid "Auto close"
+#~ msgstr "Automatisches Schließen"
+
+#~ msgctxt "@label"
+#~ msgid "Copy to KOrganizer"
+#~ msgstr "In KOrganizer kopieren"
+
+#~ msgctxt "@label"
+#~ msgid "Enabled"
+#~ msgstr "Aktiviert"
+
+#~ msgctxt "@label"
+#~ msgid "Read-only"
+#~ msgstr "Schreibgeschützt"
+
+#~ msgctxt "@label Whether alarm should be archived"
+#~ msgid "Archive"
+#~ msgstr "Archiv"
+
+#~ msgctxt "@label"
+#~ msgid "Revision"
+#~ msgstr "Revision"
+
+#~ msgctxt "@label"
+#~ msgid "Custom properties"
+#~ msgstr "Eigene Eigenschaften"
+
+#~ msgctxt "@label"
+#~ msgid "Message text"
+#~ msgstr "Nachrichtentext"
+
+#~ msgctxt "@label File to provide text for message"
+#~ msgid "Message file"
+#~ msgstr "Nachrichtendatei"
+
+#~ msgctxt "@label"
+#~ msgid "Font"
+#~ msgstr "Schriftart"
+
+#~ msgctxt "@label Shell command to execute before alarm"
+#~ msgid "Pre-alarm action"
+#~ msgstr "Vor der Erinnerung auszulösende Aktion"
+
+#~ msgctxt "@label"
+#~ msgid "Pre-alarm action cancel"
+#~ msgstr "Abbruch der vor der Erinnerung auszulösenden Aktion"
+
+#~ msgctxt "@label"
+#~ msgid "Pre-alarm action no error"
+#~ msgstr "Erinnerung bei Fehler der Vorab-Aktion nicht aussetzen"
+
+#~ msgctxt "@label Shell command to execute after alarm"
+#~ msgid "Post-alarm action"
+#~ msgstr "Nach der Erinnerung auszulösende Aktion"
+
+#~ msgctxt "@label"
+#~ msgid "Akonadi Item ID"
+#~ msgstr "ID des Akonadi-Eintrags"
+
+#~ msgctxt "@label Audio method"
+#~ msgid "Sound"
+#~ msgstr "Klang"
+
+#~ msgctxt "@label Whether audio should repeat"
+#~ msgid "Sound repeat"
+#~ msgstr "Klangwiederholung"
+
+#~ msgctxt "@label"
+#~ msgid "Sound fade volume"
+#~ msgstr "Klanglautstärke einblenden"
+
+#~ msgctxt "@label"
+#~ msgid "Sound fade time"
+#~ msgstr "Zeit der Klangeinblendung"
+
+#~ msgctxt "@label Whether the alarm has a reminder"
+#~ msgid "Reminder"
+#~ msgstr "Erinnerung"
+
+#~ msgctxt "@label Whether reminder is on first recurrence only"
+#~ msgid "Reminder once only"
+#~ msgstr "Nur einmalig erinnern"
+
+#~ msgctxt "@label Whether to use standard notification system"
+#~ msgid "Notify"
+#~ msgstr "Benachrichtigen"
+
+#~ msgctxt "@label Deferral type"
+#~ msgid "Deferral"
+#~ msgstr "Verschiebung"
+
+#~ msgctxt "@label"
+#~ msgid "Deferral time"
+#~ msgstr "Zeitverschiebung"
+
+#~ msgctxt "@label Default deferral delay"
+#~ msgid "Deferral default"
+#~ msgstr "Standardzeitverschiebung"
+
+#~ msgctxt "@label Whether deferral time is date-only by default"
+#~ msgid "Deferral default date only"
+#~ msgstr "Zeitverschiebung ist standardmäßig ein Datum"
+
+#~ msgctxt "@label A shell command"
+#~ msgid "Command"
+#~ msgstr "Befehl"
+
+#~ msgctxt "@label Execute in terminal window"
+#~ msgid "Execute in terminal"
+#~ msgstr "Im Terminal ausführen"
+
+#~ msgctxt "@label"
+#~ msgid "Hide command error"
+#~ msgstr "Fehler bei der Ausführung ausblenden"
+
+#~ msgctxt "@label"
+#~ msgid "Email subject"
+#~ msgstr "Betreff der E-Mail"
+
+#~ msgctxt "@label Email address"
+#~ msgid "Email sender ID"
+#~ msgstr "Identifikation des E-Mailabsenders"
+
+#~ msgctxt "@label Email address"
+#~ msgid "Email to"
+#~ msgstr "E-Mail an"
+
+#~ msgctxt "@label true/false"
+#~ msgid "Email bcc"
+#~ msgstr "Blindkopie der E-Mail"
+
+#~ msgctxt "@label"
+#~ msgid "Email body"
+#~ msgstr "Text der E-Mail"
+
+#~ msgctxt "@label"
+#~ msgid "Email attachments"
+#~ msgstr "E-Mail-Anhänge"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (text)"
+#~ msgstr "Anzeige (Text)"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (file)"
+#~ msgstr "Anzeige (Datei)"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (command)"
+#~ msgstr "Anzeige (Befehl)"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Command"
+#~ msgstr "Befehl"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Email"
+#~ msgstr "E-Mail"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Audio"
+#~ msgstr "Audio"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Active"
+#~ msgstr "Aktiv"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Archived"
+#~ msgstr "Archiviert"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Template"
+#~ msgstr "Vorlage"
+
+#~ msgctxt "@info Repeat at login"
+#~ msgid "At login until %1"
+#~ msgstr "Beim Anmelden wiederholen bis %1"
+
+#~ msgctxt "@info"
+#~ msgid "%1"
+#~ msgstr "%1"
+
+#~ msgctxt "@info Using default font"
+#~ msgid "Default"
+#~ msgstr "Standard"
+
+#~ msgctxt "@info"
+#~ msgid "Speak"
+#~ msgstr "Vorlesen"
+
+#~ msgctxt "@info"
+#~ msgid "Beep"
+#~ msgstr "Signalton"
+
+#~ msgctxt "@info Percentage"
+#~ msgid "%1%%"
+#~ msgstr "%1%%"
+
+#~ msgctxt "@info"
+#~ msgid "1 Second"
+#~ msgid_plural "%1 Seconds"
+#~ msgstr[0] "Eine Sekunde"
+#~ msgstr[1] "%1 Sekunden"
+
+#~ msgctxt "@info Error indication"
+#~ msgid "error!"
+#~ msgstr "Fehler."
+
+#~ msgctxt "@info General purpose status indication: yes or no"
+#~ msgid "Yes"
+#~ msgstr "Ja"
+
+#~ msgctxt "@info General purpose status indication: yes or no"
+#~ msgid "No"
+#~ msgstr "Nein"
 
 #~ msgctxt "@label"
 #~ msgid "Message windows have a title bar and take keyboard focus"

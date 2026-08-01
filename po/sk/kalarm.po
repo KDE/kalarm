@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-27 00:45+0000\n"
+"POT-Creation-Date: 2026-08-01 00:48+0000\n"
 "PO-Revision-Date: 2022-04-25 19:18+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -907,7 +907,7 @@ msgid "Select the holiday region to use."
 msgstr "Vybrať, ktorý región sviatkov sa má použiť."
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
-#: data/kalarmconfig.kcfg:102 kalarmcalendar/kaeventformatter.cpp:93
+#: data/kalarmconfig.kcfg:102
 #, kde-format
 msgctxt "@label"
 msgid "Foreground color"
@@ -921,7 +921,7 @@ msgid "Default foreground color for alarm message windows."
 msgstr "Predvolená farba popredia pre okná správy alarmu."
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
-#: data/kalarmconfig.kcfg:107 kalarmcalendar/kaeventformatter.cpp:95
+#: data/kalarmconfig.kcfg:107
 #, kde-format
 msgctxt "@label"
 msgid "Background color"
@@ -1574,7 +1574,7 @@ msgstr ""
 "úprav alarmu."
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:325 kalarmcalendar/kaeventformatter.cpp:107
+#: data/kalarmconfig.kcfg:325
 #, kde-format
 msgctxt "@label"
 msgid "Confirm acknowledgement"
@@ -1643,7 +1643,7 @@ msgid "Default sound file path in the alarm edit dialog."
 msgstr "Východzia cesta ku zvukovým súborom v dialógu úprav alarmu."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:350 kalarmcalendar/kaeventformatter.cpp:115
+#: data/kalarmconfig.kcfg:350
 #, kde-format
 msgctxt "@label"
 msgid "Sound volume"
@@ -1729,7 +1729,7 @@ msgid "Execute in terminal window"
 msgstr "Spustiť v okne terminálu"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:377 kalarmcalendar/kaeventformatter.cpp:138
+#: data/kalarmconfig.kcfg:377
 #, kde-format
 msgctxt "@label"
 msgid "Log file"
@@ -3677,8 +3677,6 @@ msgid "At login"
 msgstr "Pri prihlásení"
 
 #: kalarmcalendar/kaevent.cpp:3534 kalarmcalendar/kaevent.cpp:3627
-#: kalarmcalendar/kaeventformatter.cpp:429
-#: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
 msgctxt "@info"
 msgid "1 Minute"
@@ -3688,7 +3686,6 @@ msgstr[1] "%1 minúty"
 msgstr[2] "%1 minút"
 
 #: kalarmcalendar/kaevent.cpp:3536 kalarmcalendar/kaevent.cpp:3629
-#: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
 msgid "1 Hour"
@@ -3704,7 +3701,6 @@ msgid "%1h %2m"
 msgstr "%1h %2m"
 
 #: kalarmcalendar/kaevent.cpp:3541 kalarmcalendar/kaevent.cpp:3620
-#: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
 msgid "1 Day"
@@ -3751,448 +3747,6 @@ msgstr "Žiadne"
 msgctxt "@info No repetition"
 msgid "None"
 msgstr "Žiadne"
-
-#: kalarmcalendar/kaeventformatter.cpp:38
-#, kde-format
-msgctxt "@label Unique identifier"
-msgid "UID"
-msgstr "UID"
-
-#: kalarmcalendar/kaeventformatter.cpp:40
-#, kde-format
-msgctxt "@label"
-msgid "Alarm type"
-msgstr "Typ alarmu"
-
-#: kalarmcalendar/kaeventformatter.cpp:42
-#, kde-format
-msgctxt "@label"
-msgid "Alarm status"
-msgstr "Stav alarmu"
-
-#: kalarmcalendar/kaeventformatter.cpp:44
-#, kde-format
-msgctxt "@label"
-msgid "Alarm name"
-msgstr "Názov alarmu"
-
-#: kalarmcalendar/kaeventformatter.cpp:46
-#, kde-format
-msgctxt "@label"
-msgid "Template name"
-msgstr "Názov šablóny"
-
-#: kalarmcalendar/kaeventformatter.cpp:48
-#, kde-format
-msgctxt "@label"
-msgid "Creation time"
-msgstr "Čas vytvorenia"
-
-#: kalarmcalendar/kaeventformatter.cpp:50
-#, kde-format
-msgctxt "@label"
-msgid "Start time"
-msgstr "Čas spustenia"
-
-#: kalarmcalendar/kaeventformatter.cpp:52
-#, kde-format
-msgctxt "@label Start delay configured in an alarm template"
-msgid "Template after time"
-msgstr "Šablóna po čase"
-
-#: kalarmcalendar/kaeventformatter.cpp:54
-#, kde-format
-msgctxt "@label"
-msgid "Recurs"
-msgstr "Opakuje sa"
-
-#: kalarmcalendar/kaeventformatter.cpp:56
-#, kde-format
-msgctxt "@label"
-msgid "Recurrence"
-msgstr "Opakovanie"
-
-#: kalarmcalendar/kaeventformatter.cpp:58
-#, kde-format
-msgctxt "@label"
-msgid "Sub-repetition"
-msgstr "Pod-opakovanie"
-
-#: kalarmcalendar/kaeventformatter.cpp:60
-#, kde-format
-msgctxt "@label"
-msgid "Sub-repetition interval"
-msgstr "Interval pod-opakovaní"
-
-#: kalarmcalendar/kaeventformatter.cpp:62
-#, kde-format
-msgctxt "@label"
-msgid "Sub-repetition count"
-msgstr "Počet pod-opakovaní"
-
-#: kalarmcalendar/kaeventformatter.cpp:64
-#, kde-format
-msgctxt "@label"
-msgid "Next sub-repetition"
-msgstr "Nové pod-opakovanie"
-
-#: kalarmcalendar/kaeventformatter.cpp:66
-#, kde-format
-msgctxt "@label"
-msgid "Work time only"
-msgstr "Iba pracovná doba"
-
-#: kalarmcalendar/kaeventformatter.cpp:68
-#, kde-format
-msgctxt "@label"
-msgid "Holidays excluded"
-msgstr "Vylúčené sviatky"
-
-#: kalarmcalendar/kaeventformatter.cpp:70
-#, kde-format
-msgctxt "@label"
-msgid "Next recurrence"
-msgstr "Ďalšie opakovanie"
-
-#: kalarmcalendar/kaeventformatter.cpp:72
-#, kde-format
-msgctxt "@label"
-msgid "Late cancel"
-msgstr "Neskoré zrušenie"
-
-#: kalarmcalendar/kaeventformatter.cpp:74
-#, kde-format
-msgctxt "@label Automatically close window"
-msgid "Auto close"
-msgstr "Automaticky zatvoriť"
-
-#: kalarmcalendar/kaeventformatter.cpp:76
-#, kde-format
-msgctxt "@label"
-msgid "Copy to KOrganizer"
-msgstr "Kopírovať do KOrganizer"
-
-#: kalarmcalendar/kaeventformatter.cpp:78
-#, kde-format
-msgctxt "@label"
-msgid "Enabled"
-msgstr "Povolené"
-
-#: kalarmcalendar/kaeventformatter.cpp:80
-#, kde-format
-msgctxt "@label"
-msgid "Read-only"
-msgstr "Iba na čítanie"
-
-#: kalarmcalendar/kaeventformatter.cpp:82
-#, kde-format
-msgctxt "@label Whether alarm should be archived"
-msgid "Archive"
-msgstr "Archív"
-
-#: kalarmcalendar/kaeventformatter.cpp:84
-#, kde-format
-msgctxt "@label"
-msgid "Revision"
-msgstr "Revízia"
-
-#: kalarmcalendar/kaeventformatter.cpp:86
-#, kde-format
-msgctxt "@label"
-msgid "Custom properties"
-msgstr "Vlastné vlastnosti"
-
-#: kalarmcalendar/kaeventformatter.cpp:89
-#, kde-format
-msgctxt "@label"
-msgid "Message text"
-msgstr "Text správy"
-
-#: kalarmcalendar/kaeventformatter.cpp:91
-#, kde-format
-msgctxt "@label File to provide text for message"
-msgid "Message file"
-msgstr "Súbor správy"
-
-#: kalarmcalendar/kaeventformatter.cpp:97
-#, kde-format
-msgctxt "@label"
-msgid "Font"
-msgstr "Písmo"
-
-#: kalarmcalendar/kaeventformatter.cpp:99
-#, kde-format
-msgctxt "@label Shell command to execute before alarm"
-msgid "Pre-alarm action"
-msgstr "Akcia pred alarmom"
-
-#: kalarmcalendar/kaeventformatter.cpp:101
-#, kde-format
-msgctxt "@label"
-msgid "Pre-alarm action cancel"
-msgstr "Zrušiť akciu pred alarmom"
-
-#: kalarmcalendar/kaeventformatter.cpp:103
-#, kde-format
-msgctxt "@label"
-msgid "Pre-alarm action no error"
-msgstr "Akcia pred alarmom bez chyby"
-
-#: kalarmcalendar/kaeventformatter.cpp:105
-#, kde-format
-msgctxt "@label Shell command to execute after alarm"
-msgid "Post-alarm action"
-msgstr "Akcia po alarme"
-
-#: kalarmcalendar/kaeventformatter.cpp:109
-#, kde-format
-msgctxt "@label"
-msgid "Akonadi Item ID"
-msgstr "ID položky Akonadi"
-
-#: kalarmcalendar/kaeventformatter.cpp:111
-#, kde-format
-msgctxt "@label Audio method"
-msgid "Sound"
-msgstr "Zvuk"
-
-#: kalarmcalendar/kaeventformatter.cpp:113
-#, kde-format
-msgctxt "@label Whether audio should repeat"
-msgid "Sound repeat"
-msgstr "Opakovanie zvuku"
-
-#: kalarmcalendar/kaeventformatter.cpp:117
-#, kde-format
-msgctxt "@label"
-msgid "Sound fade volume"
-msgstr "Hlasitosť zoslabenia zvuku"
-
-#: kalarmcalendar/kaeventformatter.cpp:119
-#, kde-format
-msgctxt "@label"
-msgid "Sound fade time"
-msgstr "Čas zoslabenia zvuku"
-
-#: kalarmcalendar/kaeventformatter.cpp:121
-#, kde-format
-msgctxt "@label Whether the alarm has a reminder"
-msgid "Reminder"
-msgstr "Pripomienka"
-
-#: kalarmcalendar/kaeventformatter.cpp:123
-#, kde-format
-msgctxt "@label Whether reminder is on first recurrence only"
-msgid "Reminder once only"
-msgstr "Pripomenúť iba raz"
-
-#: kalarmcalendar/kaeventformatter.cpp:125
-#, kde-format
-msgctxt "@label Whether to use standard notification system"
-msgid "Notify"
-msgstr "Oznámiť"
-
-#: kalarmcalendar/kaeventformatter.cpp:127
-#, kde-format
-msgctxt "@label Deferral type"
-msgid "Deferral"
-msgstr "Odloženie"
-
-#: kalarmcalendar/kaeventformatter.cpp:129
-#, kde-format
-msgctxt "@label"
-msgid "Deferral time"
-msgstr "Čas odloženia"
-
-#: kalarmcalendar/kaeventformatter.cpp:131
-#, kde-format
-msgctxt "@label Default deferral delay"
-msgid "Deferral default"
-msgstr "Predvolené odloženie"
-
-#: kalarmcalendar/kaeventformatter.cpp:133
-#, kde-format
-msgctxt "@label Whether deferral time is date-only by default"
-msgid "Deferral default date only"
-msgstr "Iba predvolený dátum odloženia"
-
-#: kalarmcalendar/kaeventformatter.cpp:136
-#, kde-format
-msgctxt "@label A shell command"
-msgid "Command"
-msgstr "Príkaz"
-
-#: kalarmcalendar/kaeventformatter.cpp:140
-#, kde-format
-msgctxt "@label Execute in terminal window"
-msgid "Execute in terminal"
-msgstr "Spustiť v termináli"
-
-#: kalarmcalendar/kaeventformatter.cpp:142
-#, kde-format
-msgctxt "@label"
-msgid "Hide command error"
-msgstr "Skryť chybu príkazu"
-
-#: kalarmcalendar/kaeventformatter.cpp:145
-#, kde-format
-msgctxt "@label"
-msgid "Email subject"
-msgstr "Predmet e-mailu"
-
-#: kalarmcalendar/kaeventformatter.cpp:147
-#, kde-format
-msgctxt "@label Email address"
-msgid "Email sender ID"
-msgstr "ID odosielateľa e-mailu"
-
-#: kalarmcalendar/kaeventformatter.cpp:149
-#, kde-format
-msgctxt "@label Email address"
-msgid "Email to"
-msgstr "E-mail pre"
-
-#: kalarmcalendar/kaeventformatter.cpp:151
-#, kde-format
-msgctxt "@label true/false"
-msgid "Email bcc"
-msgstr "E-mail bcc"
-
-#: kalarmcalendar/kaeventformatter.cpp:153
-#, kde-format
-msgctxt "@label"
-msgid "Email body"
-msgstr "Telo e-mailu"
-
-#: kalarmcalendar/kaeventformatter.cpp:155
-#, kde-format
-msgctxt "@label"
-msgid "Email attachments"
-msgstr "Prílohy e-mailu"
-
-#: kalarmcalendar/kaeventformatter.cpp:257
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Display (text)"
-msgstr "Zobraziť (text)"
-
-#: kalarmcalendar/kaeventformatter.cpp:259
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Display (file)"
-msgstr "Zobraziť (súbor)"
-
-#: kalarmcalendar/kaeventformatter.cpp:262
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Display (command)"
-msgstr "Zobraziť (príkaz)"
-
-#: kalarmcalendar/kaeventformatter.cpp:263
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Command"
-msgstr "Príkaz"
-
-#: kalarmcalendar/kaeventformatter.cpp:265
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Email"
-msgstr "E-mail"
-
-#: kalarmcalendar/kaeventformatter.cpp:267
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Audio"
-msgstr "Zvuk"
-
-#: kalarmcalendar/kaeventformatter.cpp:274
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Active"
-msgstr "Aktívne"
-
-#: kalarmcalendar/kaeventformatter.cpp:276
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Archived"
-msgstr "Archivovaný"
-
-#: kalarmcalendar/kaeventformatter.cpp:278
-#, kde-format
-msgctxt "@info Alarm type"
-msgid "Template"
-msgstr "Šablóna"
-
-#: kalarmcalendar/kaeventformatter.cpp:297
-#, kde-format
-msgctxt "@info Repeat at login"
-msgid "At login until %1"
-msgstr "Pri prihlásení do %1"
-
-#: kalarmcalendar/kaeventformatter.cpp:338
-#, kde-format
-msgctxt "@info"
-msgid "%1"
-msgstr "%1"
-
-#: kalarmcalendar/kaeventformatter.cpp:350
-#, kde-format
-msgctxt "@info Using default font"
-msgid "Default"
-msgstr "Predvolené"
-
-#: kalarmcalendar/kaeventformatter.cpp:366 messagedisplayhelper.cpp:220
-#, kde-format
-msgctxt "@info"
-msgid "Reminder"
-msgstr "Upozornenie"
-
-#: kalarmcalendar/kaeventformatter.cpp:379
-#, kde-format
-msgctxt "@info"
-msgid "Speak"
-msgstr "Čítať"
-
-#: kalarmcalendar/kaeventformatter.cpp:380
-#, kde-format
-msgctxt "@info"
-msgid "Beep"
-msgstr "Pípnuť"
-
-#: kalarmcalendar/kaeventformatter.cpp:385
-#: kalarmcalendar/kaeventformatter.cpp:389
-#, kde-format
-msgctxt "@info Percentage"
-msgid "%1%%"
-msgstr "%1%%"
-
-#: kalarmcalendar/kaeventformatter.cpp:393
-#, kde-format
-msgctxt "@info"
-msgid "1 Second"
-msgid_plural "%1 Seconds"
-msgstr[0] "1 sekunda"
-msgstr[1] "%1 sekundy"
-msgstr[2] "%1 sekúnd"
-
-#: kalarmcalendar/kaeventformatter.cpp:418
-#, kde-format
-msgctxt "@info Error indication"
-msgid "error!"
-msgstr "chyba!"
-
-#: kalarmcalendar/kaeventformatter.cpp:423
-#, kde-format
-msgctxt "@info General purpose status indication: yes or no"
-msgid "Yes"
-msgstr "Áno"
-
-#: kalarmcalendar/kaeventformatter.cpp:424
-#, kde-format
-msgctxt "@info General purpose status indication: yes or no"
-msgid "No"
-msgstr "Nie"
 
 #: kamail.cpp:69
 #, kde-format
@@ -4763,6 +4317,12 @@ msgstr "Upozornenie"
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Správa"
+
+#: messagedisplayhelper.cpp:220
+#, kde-format
+msgctxt "@info"
+msgid "Reminder"
+msgstr "Upozornenie"
 
 #: messagedisplayhelper.cpp:298
 #, kde-format
@@ -8814,6 +8374,297 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Počet minút pred alarmom na prebudenie z uspania"
+
+#~ msgctxt "@label Unique identifier"
+#~ msgid "UID"
+#~ msgstr "UID"
+
+#~ msgctxt "@label"
+#~ msgid "Alarm type"
+#~ msgstr "Typ alarmu"
+
+#~ msgctxt "@label"
+#~ msgid "Alarm status"
+#~ msgstr "Stav alarmu"
+
+#~ msgctxt "@label"
+#~ msgid "Alarm name"
+#~ msgstr "Názov alarmu"
+
+#~ msgctxt "@label"
+#~ msgid "Template name"
+#~ msgstr "Názov šablóny"
+
+#~ msgctxt "@label"
+#~ msgid "Creation time"
+#~ msgstr "Čas vytvorenia"
+
+#~ msgctxt "@label"
+#~ msgid "Start time"
+#~ msgstr "Čas spustenia"
+
+#~ msgctxt "@label Start delay configured in an alarm template"
+#~ msgid "Template after time"
+#~ msgstr "Šablóna po čase"
+
+#~ msgctxt "@label"
+#~ msgid "Recurs"
+#~ msgstr "Opakuje sa"
+
+#~ msgctxt "@label"
+#~ msgid "Recurrence"
+#~ msgstr "Opakovanie"
+
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition"
+#~ msgstr "Pod-opakovanie"
+
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition interval"
+#~ msgstr "Interval pod-opakovaní"
+
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition count"
+#~ msgstr "Počet pod-opakovaní"
+
+#~ msgctxt "@label"
+#~ msgid "Next sub-repetition"
+#~ msgstr "Nové pod-opakovanie"
+
+#~ msgctxt "@label"
+#~ msgid "Work time only"
+#~ msgstr "Iba pracovná doba"
+
+#~ msgctxt "@label"
+#~ msgid "Holidays excluded"
+#~ msgstr "Vylúčené sviatky"
+
+#~ msgctxt "@label"
+#~ msgid "Next recurrence"
+#~ msgstr "Ďalšie opakovanie"
+
+#~ msgctxt "@label"
+#~ msgid "Late cancel"
+#~ msgstr "Neskoré zrušenie"
+
+#~ msgctxt "@label Automatically close window"
+#~ msgid "Auto close"
+#~ msgstr "Automaticky zatvoriť"
+
+#~ msgctxt "@label"
+#~ msgid "Copy to KOrganizer"
+#~ msgstr "Kopírovať do KOrganizer"
+
+#~ msgctxt "@label"
+#~ msgid "Enabled"
+#~ msgstr "Povolené"
+
+#~ msgctxt "@label"
+#~ msgid "Read-only"
+#~ msgstr "Iba na čítanie"
+
+#~ msgctxt "@label Whether alarm should be archived"
+#~ msgid "Archive"
+#~ msgstr "Archív"
+
+#~ msgctxt "@label"
+#~ msgid "Revision"
+#~ msgstr "Revízia"
+
+#~ msgctxt "@label"
+#~ msgid "Custom properties"
+#~ msgstr "Vlastné vlastnosti"
+
+#~ msgctxt "@label"
+#~ msgid "Message text"
+#~ msgstr "Text správy"
+
+#~ msgctxt "@label File to provide text for message"
+#~ msgid "Message file"
+#~ msgstr "Súbor správy"
+
+#~ msgctxt "@label"
+#~ msgid "Font"
+#~ msgstr "Písmo"
+
+#~ msgctxt "@label Shell command to execute before alarm"
+#~ msgid "Pre-alarm action"
+#~ msgstr "Akcia pred alarmom"
+
+#~ msgctxt "@label"
+#~ msgid "Pre-alarm action cancel"
+#~ msgstr "Zrušiť akciu pred alarmom"
+
+#~ msgctxt "@label"
+#~ msgid "Pre-alarm action no error"
+#~ msgstr "Akcia pred alarmom bez chyby"
+
+#~ msgctxt "@label Shell command to execute after alarm"
+#~ msgid "Post-alarm action"
+#~ msgstr "Akcia po alarme"
+
+#~ msgctxt "@label"
+#~ msgid "Akonadi Item ID"
+#~ msgstr "ID položky Akonadi"
+
+#~ msgctxt "@label Audio method"
+#~ msgid "Sound"
+#~ msgstr "Zvuk"
+
+#~ msgctxt "@label Whether audio should repeat"
+#~ msgid "Sound repeat"
+#~ msgstr "Opakovanie zvuku"
+
+#~ msgctxt "@label"
+#~ msgid "Sound fade volume"
+#~ msgstr "Hlasitosť zoslabenia zvuku"
+
+#~ msgctxt "@label"
+#~ msgid "Sound fade time"
+#~ msgstr "Čas zoslabenia zvuku"
+
+#~ msgctxt "@label Whether the alarm has a reminder"
+#~ msgid "Reminder"
+#~ msgstr "Pripomienka"
+
+#~ msgctxt "@label Whether reminder is on first recurrence only"
+#~ msgid "Reminder once only"
+#~ msgstr "Pripomenúť iba raz"
+
+#~ msgctxt "@label Whether to use standard notification system"
+#~ msgid "Notify"
+#~ msgstr "Oznámiť"
+
+#~ msgctxt "@label Deferral type"
+#~ msgid "Deferral"
+#~ msgstr "Odloženie"
+
+#~ msgctxt "@label"
+#~ msgid "Deferral time"
+#~ msgstr "Čas odloženia"
+
+#~ msgctxt "@label Default deferral delay"
+#~ msgid "Deferral default"
+#~ msgstr "Predvolené odloženie"
+
+#~ msgctxt "@label Whether deferral time is date-only by default"
+#~ msgid "Deferral default date only"
+#~ msgstr "Iba predvolený dátum odloženia"
+
+#~ msgctxt "@label A shell command"
+#~ msgid "Command"
+#~ msgstr "Príkaz"
+
+#~ msgctxt "@label Execute in terminal window"
+#~ msgid "Execute in terminal"
+#~ msgstr "Spustiť v termináli"
+
+#~ msgctxt "@label"
+#~ msgid "Hide command error"
+#~ msgstr "Skryť chybu príkazu"
+
+#~ msgctxt "@label"
+#~ msgid "Email subject"
+#~ msgstr "Predmet e-mailu"
+
+#~ msgctxt "@label Email address"
+#~ msgid "Email sender ID"
+#~ msgstr "ID odosielateľa e-mailu"
+
+#~ msgctxt "@label Email address"
+#~ msgid "Email to"
+#~ msgstr "E-mail pre"
+
+#~ msgctxt "@label true/false"
+#~ msgid "Email bcc"
+#~ msgstr "E-mail bcc"
+
+#~ msgctxt "@label"
+#~ msgid "Email body"
+#~ msgstr "Telo e-mailu"
+
+#~ msgctxt "@label"
+#~ msgid "Email attachments"
+#~ msgstr "Prílohy e-mailu"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (text)"
+#~ msgstr "Zobraziť (text)"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (file)"
+#~ msgstr "Zobraziť (súbor)"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (command)"
+#~ msgstr "Zobraziť (príkaz)"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Command"
+#~ msgstr "Príkaz"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Email"
+#~ msgstr "E-mail"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Audio"
+#~ msgstr "Zvuk"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Active"
+#~ msgstr "Aktívne"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Archived"
+#~ msgstr "Archivovaný"
+
+#~ msgctxt "@info Alarm type"
+#~ msgid "Template"
+#~ msgstr "Šablóna"
+
+#~ msgctxt "@info Repeat at login"
+#~ msgid "At login until %1"
+#~ msgstr "Pri prihlásení do %1"
+
+#~ msgctxt "@info"
+#~ msgid "%1"
+#~ msgstr "%1"
+
+#~ msgctxt "@info Using default font"
+#~ msgid "Default"
+#~ msgstr "Predvolené"
+
+#~ msgctxt "@info"
+#~ msgid "Speak"
+#~ msgstr "Čítať"
+
+#~ msgctxt "@info"
+#~ msgid "Beep"
+#~ msgstr "Pípnuť"
+
+#~ msgctxt "@info Percentage"
+#~ msgid "%1%%"
+#~ msgstr "%1%%"
+
+#~ msgctxt "@info"
+#~ msgid "1 Second"
+#~ msgid_plural "%1 Seconds"
+#~ msgstr[0] "1 sekunda"
+#~ msgstr[1] "%1 sekundy"
+#~ msgstr[2] "%1 sekúnd"
+
+#~ msgctxt "@info Error indication"
+#~ msgid "error!"
+#~ msgstr "chyba!"
+
+#~ msgctxt "@info General purpose status indication: yes or no"
+#~ msgid "Yes"
+#~ msgstr "Áno"
+
+#~ msgctxt "@info General purpose status indication: yes or no"
+#~ msgid "No"
+#~ msgstr "Nie"
 
 #~ msgctxt "@label"
 #~ msgid "Message windows have a title bar and take keyboard focus"

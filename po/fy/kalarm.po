@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-27 00:45+0000\n"
+"POT-Creation-Date: 2026-08-01 00:48+0000\n"
 "PO-Revision-Date: 2007-04-24 00:52+0200\n"
 "Last-Translator: Rinse de Vries <rinsedevries@kde.nl>\n"
 "Language-Team: Frysk <kde-i18n-fry@kde.org>\n"
@@ -1025,7 +1025,7 @@ msgid "Select the holiday region to use."
 msgstr "Fier de tiid yn om it alaarm te plannen."
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
-#: data/kalarmconfig.kcfg:102 kalarmcalendar/kaeventformatter.cpp:93
+#: data/kalarmconfig.kcfg:102
 #, fuzzy, kde-format
 #| msgid "&Foreground color:"
 msgctxt "@label"
@@ -1041,7 +1041,7 @@ msgid "Default foreground color for alarm message windows."
 msgstr "Kies de eftergrûnkleur foar de alaarmstekst."
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
-#: data/kalarmconfig.kcfg:107 kalarmcalendar/kaeventformatter.cpp:95
+#: data/kalarmconfig.kcfg:107
 #, fuzzy, kde-format
 #| msgid "&Background color:"
 msgctxt "@label"
@@ -1716,7 +1716,7 @@ msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
 msgstr "De standertynstelling foar \"%1\" yn it bewurkfinster foar alaarms."
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:325 kalarmcalendar/kaeventformatter.cpp:107
+#: data/kalarmconfig.kcfg:325
 #, fuzzy, kde-format
 #| msgid "Confirm acknowledgment"
 msgctxt "@label"
@@ -1793,7 +1793,7 @@ msgstr ""
 "Jou in standert lûdstriem op om yn it bewurkfinster foar alaarms te brûken."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:350 kalarmcalendar/kaeventformatter.cpp:115
+#: data/kalarmconfig.kcfg:350
 #, fuzzy, kde-format
 #| msgid "Set volume"
 msgctxt "@label"
@@ -1886,7 +1886,7 @@ msgid "Execute in terminal window"
 msgstr "Útfiere yn terminalfinster"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:377 kalarmcalendar/kaeventformatter.cpp:138
+#: data/kalarmconfig.kcfg:377
 #, fuzzy, kde-format
 #| msgid "Lo&g to file"
 msgctxt "@label"
@@ -4197,8 +4197,6 @@ msgid "At login"
 msgstr "By oanmelden"
 
 #: kalarmcalendar/kaevent.cpp:3534 kalarmcalendar/kaevent.cpp:3627
-#: kalarmcalendar/kaeventformatter.cpp:429
-#: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
 #| msgid "1 Minute"
 #| msgid_plural "%1 Minutes"
@@ -4209,7 +4207,6 @@ msgstr[0] "1 minút"
 msgstr[1] "%1 minuten"
 
 #: kalarmcalendar/kaevent.cpp:3536 kalarmcalendar/kaevent.cpp:3629
-#: kalarmcalendar/kaeventformatter.cpp:445
 #, fuzzy, kde-format
 #| msgid "1 Hour"
 #| msgid_plural "%1 Hours"
@@ -4228,7 +4225,6 @@ msgid "%1h %2m"
 msgstr "%1: %2"
 
 #: kalarmcalendar/kaevent.cpp:3541 kalarmcalendar/kaevent.cpp:3620
-#: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 #| msgid "1 Day"
 #| msgid_plural "%1 Days"
@@ -4280,512 +4276,6 @@ msgstr "Gjin"
 #| msgid "None"
 msgctxt "@info No repetition"
 msgid "None"
-msgstr "Gjin"
-
-#: kalarmcalendar/kaeventformatter.cpp:38
-#, kde-format
-msgctxt "@label Unique identifier"
-msgid "UID"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:40
-#, fuzzy, kde-format
-#| msgid "Alarm Type"
-msgctxt "@label"
-msgid "Alarm type"
-msgstr "Type alaarm"
-
-#: kalarmcalendar/kaeventformatter.cpp:42
-#, fuzzy, kde-format
-#| msgid "Alarm Templates"
-msgctxt "@label"
-msgid "Alarm status"
-msgstr "Alaarm-sjabloanen"
-
-#: kalarmcalendar/kaeventformatter.cpp:44
-#, fuzzy, kde-format
-#| msgid "Alarm Type"
-msgctxt "@label"
-msgid "Alarm name"
-msgstr "Type alaarm"
-
-#: kalarmcalendar/kaeventformatter.cpp:46
-#, fuzzy, kde-format
-#| msgid "Template name:"
-msgctxt "@label"
-msgid "Template name"
-msgstr "Namme sjabloan:"
-
-#: kalarmcalendar/kaeventformatter.cpp:48
-#, fuzzy, kde-format
-#| msgid "&Default time"
-msgctxt "@label"
-msgid "Creation time"
-msgstr "&Standert tiid"
-
-#: kalarmcalendar/kaeventformatter.cpp:50
-#, fuzzy, kde-format
-#| msgctxt "Date cannot be earlier than start date"
-#| msgid "start date"
-msgctxt "@label"
-msgid "Start time"
-msgstr "startdatum"
-
-#: kalarmcalendar/kaeventformatter.cpp:52
-#, fuzzy, kde-format
-#| msgid "Template name:"
-msgctxt "@label Start delay configured in an alarm template"
-msgid "Template after time"
-msgstr "Namme sjabloan:"
-
-#: kalarmcalendar/kaeventformatter.cpp:54
-#, fuzzy, kde-format
-#| msgid "&Recurrence"
-msgctxt "@label"
-msgid "Recurs"
-msgstr "Wer&helling"
-
-#: kalarmcalendar/kaeventformatter.cpp:56
-#, fuzzy, kde-format
-#| msgid "Recurrence:"
-msgctxt "@label"
-msgid "Recurrence"
-msgstr "Werhelling:"
-
-#: kalarmcalendar/kaeventformatter.cpp:58
-#, fuzzy, kde-format
-#| msgid "Simple Repetition"
-msgctxt "@label"
-msgid "Sub-repetition"
-msgstr "Ienfâldige werhelling"
-
-#: kalarmcalendar/kaeventformatter.cpp:60
-#, fuzzy, kde-format
-#| msgid "Simple Repetition"
-msgctxt "@label"
-msgid "Sub-repetition interval"
-msgstr "Ienfâldige werhelling"
-
-#: kalarmcalendar/kaeventformatter.cpp:62
-#, fuzzy, kde-format
-#| msgid "Simple Repetition"
-msgctxt "@label"
-msgid "Sub-repetition count"
-msgstr "Ienfâldige werhelling"
-
-#: kalarmcalendar/kaeventformatter.cpp:64
-#, fuzzy, kde-format
-#| msgid "&Number of repetitions:"
-msgctxt "@label"
-msgid "Next sub-repetition"
-msgstr "Oa&ntal werhellingen:"
-
-#: kalarmcalendar/kaeventformatter.cpp:66
-#, fuzzy, kde-format
-#| msgid "Time To"
-msgctxt "@label"
-msgid "Work time only"
-msgstr "Tiid oant"
-
-#: kalarmcalendar/kaeventformatter.cpp:68
-#, kde-format
-msgctxt "@label"
-msgid "Holidays excluded"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:70
-#, fuzzy, kde-format
-#| msgid "No recurrence"
-msgctxt "@label"
-msgid "Next recurrence"
-msgstr "Gjin werhelling"
-
-#: kalarmcalendar/kaeventformatter.cpp:72
-#, kde-format
-msgctxt "@label"
-msgid "Late cancel"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:74
-#, kde-format
-msgctxt "@label Automatically close window"
-msgid "Auto close"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:76
-#, fuzzy, kde-format
-#| msgid "Show in KOrganizer"
-msgctxt "@label"
-msgid "Copy to KOrganizer"
-msgstr "Yn KOrganizer toane"
-
-#: kalarmcalendar/kaeventformatter.cpp:78
-#, fuzzy, kde-format
-#| msgid "Enable"
-msgctxt "@label"
-msgid "Enabled"
-msgstr "Ynskeakelje"
-
-#: kalarmcalendar/kaeventformatter.cpp:80
-#, fuzzy, kde-format
-#| msgid "read-only"
-msgctxt "@label"
-msgid "Read-only"
-msgstr "allinnich-lêze"
-
-#: kalarmcalendar/kaeventformatter.cpp:82
-#, fuzzy, kde-format
-#| msgid "Acti&ve"
-msgctxt "@label Whether alarm should be archived"
-msgid "Archive"
-msgstr "Akty&f"
-
-#: kalarmcalendar/kaeventformatter.cpp:84
-#, kde-format
-msgctxt "@label"
-msgid "Revision"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:86
-#, kde-format
-msgctxt "@label"
-msgid "Custom properties"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:89
-#, fuzzy, kde-format
-#| msgid "Message"
-msgctxt "@label"
-msgid "Message text"
-msgstr "Berjocht"
-
-#: kalarmcalendar/kaeventformatter.cpp:91
-#, fuzzy, kde-format
-#| msgid "Message"
-msgctxt "@label File to provide text for message"
-msgid "Message file"
-msgstr "Berjocht"
-
-#: kalarmcalendar/kaeventformatter.cpp:97
-#, kde-format
-msgctxt "@label"
-msgid "Font"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:99
-#, fuzzy, kde-format
-#| msgid "Pre-alarm action:"
-msgctxt "@label Shell command to execute before alarm"
-msgid "Pre-alarm action"
-msgstr "Aksje foarôfgeand oan alaarm:"
-
-#: kalarmcalendar/kaeventformatter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Pre-alarm action:"
-msgctxt "@label"
-msgid "Pre-alarm action cancel"
-msgstr "Aksje foarôfgeand oan alaarm:"
-
-#: kalarmcalendar/kaeventformatter.cpp:103
-#, fuzzy, kde-format
-#| msgid "Pre-alarm action:"
-msgctxt "@label"
-msgid "Pre-alarm action no error"
-msgstr "Aksje foarôfgeand oan alaarm:"
-
-#: kalarmcalendar/kaeventformatter.cpp:105
-#, fuzzy, kde-format
-#| msgid "Post-alarm action:"
-msgctxt "@label Shell command to execute after alarm"
-msgid "Post-alarm action"
-msgstr "Aksje nei ôfrin alaarm:"
-
-#: kalarmcalendar/kaeventformatter.cpp:109
-#, kde-format
-msgctxt "@label"
-msgid "Akonadi Item ID"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:111
-#, fuzzy, kde-format
-#| msgctxt "An audio sound"
-#| msgid "Sound"
-msgctxt "@label Audio method"
-msgid "Sound"
-msgstr "Lûd"
-
-#: kalarmcalendar/kaeventformatter.cpp:113
-#, fuzzy, kde-format
-#| msgid "Do &not repeat"
-msgctxt "@label Whether audio should repeat"
-msgid "Sound repeat"
-msgstr "&Net werhelje"
-
-#: kalarmcalendar/kaeventformatter.cpp:117
-#, fuzzy, kde-format
-#| msgid "Set volume"
-msgctxt "@label"
-msgid "Sound fade volume"
-msgstr "Folume ynstelle"
-
-#: kalarmcalendar/kaeventformatter.cpp:119
-#, fuzzy, kde-format
-#| msgid "Sound file"
-msgctxt "@label"
-msgid "Sound fade time"
-msgstr "Lûdstriem"
-
-#: kalarmcalendar/kaeventformatter.cpp:121
-#, fuzzy, kde-format
-#| msgid "Reminder"
-msgctxt "@label Whether the alarm has a reminder"
-msgid "Reminder"
-msgstr "Omtinken"
-
-#: kalarmcalendar/kaeventformatter.cpp:123
-#, fuzzy, kde-format
-#| msgid "Reminder for first recurrence only"
-msgctxt "@label Whether reminder is on first recurrence only"
-msgid "Reminder once only"
-msgstr "Omtinken foar allinnich it earste alaarm"
-
-#: kalarmcalendar/kaeventformatter.cpp:125
-#, kde-format
-msgctxt "@label Whether to use standard notification system"
-msgid "Notify"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:127
-#, fuzzy, kde-format
-#| msgid "Cancel &Deferral"
-msgctxt "@label Deferral type"
-msgid "Deferral"
-msgstr "Útstel omtinken &annulearje"
-
-#: kalarmcalendar/kaeventformatter.cpp:129
-#, fuzzy, kde-format
-#| msgid "&Default time"
-msgctxt "@label"
-msgid "Deferral time"
-msgstr "&Standert tiid"
-
-#: kalarmcalendar/kaeventformatter.cpp:131
-#, fuzzy, kde-format
-#| msgid "Cancel &Deferral"
-msgctxt "@label Default deferral delay"
-msgid "Deferral default"
-msgstr "Útstel omtinken &annulearje"
-
-#: kalarmcalendar/kaeventformatter.cpp:133
-#, fuzzy, kde-format
-#| msgid "Cancel &Deferral"
-msgctxt "@label Whether deferral time is date-only by default"
-msgid "Deferral default date only"
-msgstr "Útstel omtinken &annulearje"
-
-#: kalarmcalendar/kaeventformatter.cpp:136
-#, fuzzy, kde-format
-#| msgid "Co&mmand"
-msgctxt "@label A shell command"
-msgid "Command"
-msgstr "Ko&mmando"
-
-#: kalarmcalendar/kaeventformatter.cpp:140
-#, fuzzy, kde-format
-#| msgid "Execute in terminal window"
-msgctxt "@label Execute in terminal window"
-msgid "Execute in terminal"
-msgstr "Útfiere yn terminalfinster"
-
-#: kalarmcalendar/kaeventformatter.cpp:142
-#, kde-format
-msgctxt "@label"
-msgid "Hide command error"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:145
-#, fuzzy, kde-format
-#| msgid "Email subject line"
-msgctxt "@label"
-msgid "Email subject"
-msgstr "Ûnderwerp foar e-mailberjocht"
-
-#: kalarmcalendar/kaeventformatter.cpp:147
-#, fuzzy, kde-format
-#| msgid "Email subject line"
-msgctxt "@label Email address"
-msgid "Email sender ID"
-msgstr "Ûnderwerp foar e-mailberjocht"
-
-#: kalarmcalendar/kaeventformatter.cpp:149
-#, fuzzy, kde-format
-#| msgid "Email"
-msgctxt "@label Email address"
-msgid "Email to"
-msgstr "E-post"
-
-#: kalarmcalendar/kaeventformatter.cpp:151
-#, fuzzy, kde-format
-#| msgid "Email"
-msgctxt "@label true/false"
-msgid "Email bcc"
-msgstr "E-post"
-
-#: kalarmcalendar/kaeventformatter.cpp:153
-#, fuzzy, kde-format
-#| msgid "Email"
-msgctxt "@label"
-msgid "Email body"
-msgstr "E-post"
-
-#: kalarmcalendar/kaeventformatter.cpp:155
-#, fuzzy, kde-format
-#| msgid "Email client:"
-msgctxt "@label"
-msgid "Email attachments"
-msgstr "E-mailprogramma:"
-
-#: kalarmcalendar/kaeventformatter.cpp:257
-#, fuzzy, kde-format
-#| msgid "Display Alarms"
-msgctxt "@info Alarm type"
-msgid "Display (text)"
-msgstr "Alaarms toane"
-
-#: kalarmcalendar/kaeventformatter.cpp:259
-#, fuzzy, kde-format
-#| msgid "Display the file now"
-msgctxt "@info Alarm type"
-msgid "Display (file)"
-msgstr "Triem no sjen litte"
-
-#: kalarmcalendar/kaeventformatter.cpp:262
-#, fuzzy, kde-format
-#| msgid "Display the alarm message now"
-msgctxt "@info Alarm type"
-msgid "Display (command)"
-msgstr "Alaarmberjocht no toane"
-
-#: kalarmcalendar/kaeventformatter.cpp:263
-#, fuzzy, kde-format
-#| msgid "Co&mmand"
-msgctxt "@info Alarm type"
-msgid "Command"
-msgstr "Ko&mmando"
-
-#: kalarmcalendar/kaeventformatter.cpp:265
-#, fuzzy, kde-format
-#| msgid "Email"
-msgctxt "@info Alarm type"
-msgid "Email"
-msgstr "E-post"
-
-#: kalarmcalendar/kaeventformatter.cpp:267
-#, fuzzy, kde-format
-#| msgid "Sound file"
-msgctxt "@info Alarm type"
-msgid "Audio"
-msgstr "Lûdstriem"
-
-#: kalarmcalendar/kaeventformatter.cpp:274
-#, fuzzy, kde-format
-#| msgid "Acti&ve"
-msgctxt "@info Alarm type"
-msgid "Active"
-msgstr "Akty&f"
-
-#: kalarmcalendar/kaeventformatter.cpp:276
-#, fuzzy, kde-format
-#| msgid "Acti&ve"
-msgctxt "@info Alarm type"
-msgid "Archived"
-msgstr "Akty&f"
-
-#: kalarmcalendar/kaeventformatter.cpp:278
-#, fuzzy, kde-format
-#| msgid "&Templates..."
-msgctxt "@info Alarm type"
-msgid "Template"
-msgstr "S&jabloanen..."
-
-#: kalarmcalendar/kaeventformatter.cpp:297
-#, fuzzy, kde-format
-#| msgid "At login"
-msgctxt "@info Repeat at login"
-msgid "At login until %1"
-msgstr "By oanmelden"
-
-#: kalarmcalendar/kaeventformatter.cpp:338
-#, fuzzy, kde-format
-#| msgctxt "n days"
-#| msgid " %1d "
-msgctxt "@info"
-msgid "%1"
-msgstr " %1dei "
-
-#: kalarmcalendar/kaeventformatter.cpp:350
-#, fuzzy, kde-format
-#| msgid "&Default time"
-msgctxt "@info Using default font"
-msgid "Default"
-msgstr "&Standert tiid"
-
-#: kalarmcalendar/kaeventformatter.cpp:366 messagedisplayhelper.cpp:220
-#, fuzzy, kde-format
-#| msgid "Reminder"
-msgctxt "@info"
-msgid "Reminder"
-msgstr "Omtinken"
-
-#: kalarmcalendar/kaeventformatter.cpp:379
-#, fuzzy, kde-format
-#| msgid "Speak"
-msgctxt "@info"
-msgid "Speak"
-msgstr "Spraak"
-
-#: kalarmcalendar/kaeventformatter.cpp:380
-#, fuzzy, kde-format
-#| msgid "Beep"
-msgctxt "@info"
-msgid "Beep"
-msgstr "Systeemlûd"
-
-#: kalarmcalendar/kaeventformatter.cpp:385
-#: kalarmcalendar/kaeventformatter.cpp:389
-#, fuzzy, kde-format
-#| msgctxt "Undo-action: message"
-#| msgid "%1: %2"
-msgctxt "@info Percentage"
-msgid "%1%%"
-msgstr "%1: %2"
-
-#: kalarmcalendar/kaeventformatter.cpp:393
-#, fuzzy, kde-format
-#| msgid "seconds"
-msgctxt "@info"
-msgid "1 Second"
-msgid_plural "%1 Seconds"
-msgstr[0] "sekonden"
-msgstr[1] "sekonden"
-
-#: kalarmcalendar/kaeventformatter.cpp:418
-#, kde-format
-msgctxt "@info Error indication"
-msgid "error!"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:423
-#, kde-format
-msgctxt "@info General purpose status indication: yes or no"
-msgid "Yes"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:424
-#, fuzzy, kde-format
-#| msgid "None"
-msgctxt "@info General purpose status indication: yes or no"
-msgid "No"
 msgstr "Gjin"
 
 #: kamail.cpp:69
@@ -5496,6 +4986,13 @@ msgstr "Omtinken"
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Berjocht"
+
+#: messagedisplayhelper.cpp:220
+#, fuzzy, kde-format
+#| msgid "Reminder"
+msgctxt "@info"
+msgid "Reminder"
+msgstr "Omtinken"
 
 #: messagedisplayhelper.cpp:298
 #, fuzzy, kde-format
@@ -10081,6 +9578,372 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Alarm Type"
+#~ msgctxt "@label"
+#~ msgid "Alarm type"
+#~ msgstr "Type alaarm"
+
+#, fuzzy
+#~| msgid "Alarm Templates"
+#~ msgctxt "@label"
+#~ msgid "Alarm status"
+#~ msgstr "Alaarm-sjabloanen"
+
+#, fuzzy
+#~| msgid "Alarm Type"
+#~ msgctxt "@label"
+#~ msgid "Alarm name"
+#~ msgstr "Type alaarm"
+
+#, fuzzy
+#~| msgid "Template name:"
+#~ msgctxt "@label"
+#~ msgid "Template name"
+#~ msgstr "Namme sjabloan:"
+
+#, fuzzy
+#~| msgid "&Default time"
+#~ msgctxt "@label"
+#~ msgid "Creation time"
+#~ msgstr "&Standert tiid"
+
+#, fuzzy
+#~| msgctxt "Date cannot be earlier than start date"
+#~| msgid "start date"
+#~ msgctxt "@label"
+#~ msgid "Start time"
+#~ msgstr "startdatum"
+
+#, fuzzy
+#~| msgid "Template name:"
+#~ msgctxt "@label Start delay configured in an alarm template"
+#~ msgid "Template after time"
+#~ msgstr "Namme sjabloan:"
+
+#, fuzzy
+#~| msgid "&Recurrence"
+#~ msgctxt "@label"
+#~ msgid "Recurs"
+#~ msgstr "Wer&helling"
+
+#, fuzzy
+#~| msgid "Recurrence:"
+#~ msgctxt "@label"
+#~ msgid "Recurrence"
+#~ msgstr "Werhelling:"
+
+#, fuzzy
+#~| msgid "Simple Repetition"
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition"
+#~ msgstr "Ienfâldige werhelling"
+
+#, fuzzy
+#~| msgid "Simple Repetition"
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition interval"
+#~ msgstr "Ienfâldige werhelling"
+
+#, fuzzy
+#~| msgid "Simple Repetition"
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition count"
+#~ msgstr "Ienfâldige werhelling"
+
+#, fuzzy
+#~| msgid "&Number of repetitions:"
+#~ msgctxt "@label"
+#~ msgid "Next sub-repetition"
+#~ msgstr "Oa&ntal werhellingen:"
+
+#, fuzzy
+#~| msgid "Time To"
+#~ msgctxt "@label"
+#~ msgid "Work time only"
+#~ msgstr "Tiid oant"
+
+#, fuzzy
+#~| msgid "No recurrence"
+#~ msgctxt "@label"
+#~ msgid "Next recurrence"
+#~ msgstr "Gjin werhelling"
+
+#, fuzzy
+#~| msgid "Show in KOrganizer"
+#~ msgctxt "@label"
+#~ msgid "Copy to KOrganizer"
+#~ msgstr "Yn KOrganizer toane"
+
+#, fuzzy
+#~| msgid "Enable"
+#~ msgctxt "@label"
+#~ msgid "Enabled"
+#~ msgstr "Ynskeakelje"
+
+#, fuzzy
+#~| msgid "read-only"
+#~ msgctxt "@label"
+#~ msgid "Read-only"
+#~ msgstr "allinnich-lêze"
+
+#, fuzzy
+#~| msgid "Acti&ve"
+#~ msgctxt "@label Whether alarm should be archived"
+#~ msgid "Archive"
+#~ msgstr "Akty&f"
+
+#, fuzzy
+#~| msgid "Message"
+#~ msgctxt "@label"
+#~ msgid "Message text"
+#~ msgstr "Berjocht"
+
+#, fuzzy
+#~| msgid "Message"
+#~ msgctxt "@label File to provide text for message"
+#~ msgid "Message file"
+#~ msgstr "Berjocht"
+
+#, fuzzy
+#~| msgid "Pre-alarm action:"
+#~ msgctxt "@label Shell command to execute before alarm"
+#~ msgid "Pre-alarm action"
+#~ msgstr "Aksje foarôfgeand oan alaarm:"
+
+#, fuzzy
+#~| msgid "Pre-alarm action:"
+#~ msgctxt "@label"
+#~ msgid "Pre-alarm action cancel"
+#~ msgstr "Aksje foarôfgeand oan alaarm:"
+
+#, fuzzy
+#~| msgid "Pre-alarm action:"
+#~ msgctxt "@label"
+#~ msgid "Pre-alarm action no error"
+#~ msgstr "Aksje foarôfgeand oan alaarm:"
+
+#, fuzzy
+#~| msgid "Post-alarm action:"
+#~ msgctxt "@label Shell command to execute after alarm"
+#~ msgid "Post-alarm action"
+#~ msgstr "Aksje nei ôfrin alaarm:"
+
+#, fuzzy
+#~| msgctxt "An audio sound"
+#~| msgid "Sound"
+#~ msgctxt "@label Audio method"
+#~ msgid "Sound"
+#~ msgstr "Lûd"
+
+#, fuzzy
+#~| msgid "Do &not repeat"
+#~ msgctxt "@label Whether audio should repeat"
+#~ msgid "Sound repeat"
+#~ msgstr "&Net werhelje"
+
+#, fuzzy
+#~| msgid "Set volume"
+#~ msgctxt "@label"
+#~ msgid "Sound fade volume"
+#~ msgstr "Folume ynstelle"
+
+#, fuzzy
+#~| msgid "Sound file"
+#~ msgctxt "@label"
+#~ msgid "Sound fade time"
+#~ msgstr "Lûdstriem"
+
+#, fuzzy
+#~| msgid "Reminder"
+#~ msgctxt "@label Whether the alarm has a reminder"
+#~ msgid "Reminder"
+#~ msgstr "Omtinken"
+
+#, fuzzy
+#~| msgid "Reminder for first recurrence only"
+#~ msgctxt "@label Whether reminder is on first recurrence only"
+#~ msgid "Reminder once only"
+#~ msgstr "Omtinken foar allinnich it earste alaarm"
+
+#, fuzzy
+#~| msgid "Cancel &Deferral"
+#~ msgctxt "@label Deferral type"
+#~ msgid "Deferral"
+#~ msgstr "Útstel omtinken &annulearje"
+
+#, fuzzy
+#~| msgid "&Default time"
+#~ msgctxt "@label"
+#~ msgid "Deferral time"
+#~ msgstr "&Standert tiid"
+
+#, fuzzy
+#~| msgid "Cancel &Deferral"
+#~ msgctxt "@label Default deferral delay"
+#~ msgid "Deferral default"
+#~ msgstr "Útstel omtinken &annulearje"
+
+#, fuzzy
+#~| msgid "Cancel &Deferral"
+#~ msgctxt "@label Whether deferral time is date-only by default"
+#~ msgid "Deferral default date only"
+#~ msgstr "Útstel omtinken &annulearje"
+
+#, fuzzy
+#~| msgid "Co&mmand"
+#~ msgctxt "@label A shell command"
+#~ msgid "Command"
+#~ msgstr "Ko&mmando"
+
+#, fuzzy
+#~| msgid "Execute in terminal window"
+#~ msgctxt "@label Execute in terminal window"
+#~ msgid "Execute in terminal"
+#~ msgstr "Útfiere yn terminalfinster"
+
+#, fuzzy
+#~| msgid "Email subject line"
+#~ msgctxt "@label"
+#~ msgid "Email subject"
+#~ msgstr "Ûnderwerp foar e-mailberjocht"
+
+#, fuzzy
+#~| msgid "Email subject line"
+#~ msgctxt "@label Email address"
+#~ msgid "Email sender ID"
+#~ msgstr "Ûnderwerp foar e-mailberjocht"
+
+#, fuzzy
+#~| msgid "Email"
+#~ msgctxt "@label Email address"
+#~ msgid "Email to"
+#~ msgstr "E-post"
+
+#, fuzzy
+#~| msgid "Email"
+#~ msgctxt "@label true/false"
+#~ msgid "Email bcc"
+#~ msgstr "E-post"
+
+#, fuzzy
+#~| msgid "Email"
+#~ msgctxt "@label"
+#~ msgid "Email body"
+#~ msgstr "E-post"
+
+#, fuzzy
+#~| msgid "Email client:"
+#~ msgctxt "@label"
+#~ msgid "Email attachments"
+#~ msgstr "E-mailprogramma:"
+
+#, fuzzy
+#~| msgid "Display Alarms"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (text)"
+#~ msgstr "Alaarms toane"
+
+#, fuzzy
+#~| msgid "Display the file now"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (file)"
+#~ msgstr "Triem no sjen litte"
+
+#, fuzzy
+#~| msgid "Display the alarm message now"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (command)"
+#~ msgstr "Alaarmberjocht no toane"
+
+#, fuzzy
+#~| msgid "Co&mmand"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Command"
+#~ msgstr "Ko&mmando"
+
+#, fuzzy
+#~| msgid "Email"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Email"
+#~ msgstr "E-post"
+
+#, fuzzy
+#~| msgid "Sound file"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Audio"
+#~ msgstr "Lûdstriem"
+
+#, fuzzy
+#~| msgid "Acti&ve"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Active"
+#~ msgstr "Akty&f"
+
+#, fuzzy
+#~| msgid "Acti&ve"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Archived"
+#~ msgstr "Akty&f"
+
+#, fuzzy
+#~| msgid "&Templates..."
+#~ msgctxt "@info Alarm type"
+#~ msgid "Template"
+#~ msgstr "S&jabloanen..."
+
+#, fuzzy
+#~| msgid "At login"
+#~ msgctxt "@info Repeat at login"
+#~ msgid "At login until %1"
+#~ msgstr "By oanmelden"
+
+#, fuzzy
+#~| msgctxt "n days"
+#~| msgid " %1d "
+#~ msgctxt "@info"
+#~ msgid "%1"
+#~ msgstr " %1dei "
+
+#, fuzzy
+#~| msgid "&Default time"
+#~ msgctxt "@info Using default font"
+#~ msgid "Default"
+#~ msgstr "&Standert tiid"
+
+#, fuzzy
+#~| msgid "Speak"
+#~ msgctxt "@info"
+#~ msgid "Speak"
+#~ msgstr "Spraak"
+
+#, fuzzy
+#~| msgid "Beep"
+#~ msgctxt "@info"
+#~ msgid "Beep"
+#~ msgstr "Systeemlûd"
+
+#, fuzzy
+#~| msgctxt "Undo-action: message"
+#~| msgid "%1: %2"
+#~ msgctxt "@info Percentage"
+#~ msgid "%1%%"
+#~ msgstr "%1: %2"
+
+#, fuzzy
+#~| msgid "seconds"
+#~ msgctxt "@info"
+#~ msgid "1 Second"
+#~ msgid_plural "%1 Seconds"
+#~ msgstr[0] "sekonden"
+#~ msgstr[1] "sekonden"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "@info General purpose status indication: yes or no"
+#~ msgid "No"
+#~ msgstr "Gjin"
 
 #, fuzzy
 #~| msgid "Message &windows have a title bar and take keyboard focus"

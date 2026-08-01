@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4.3\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-27 00:45+0000\n"
+"POT-Creation-Date: 2026-08-01 00:48+0000\n"
 "PO-Revision-Date: 2024-03-21 10:32+0100\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -935,7 +935,7 @@ msgid "Select the holiday region to use."
 msgstr "Itt kell megadni a használandó szabadságterületet."
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
-#: data/kalarmconfig.kcfg:102 kalarmcalendar/kaeventformatter.cpp:93
+#: data/kalarmconfig.kcfg:102
 #, kde-format
 msgctxt "@label"
 msgid "Foreground color"
@@ -949,7 +949,7 @@ msgid "Default foreground color for alarm message windows."
 msgstr "A riasztásablakok alapértelmezett előtérszíne."
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
-#: data/kalarmconfig.kcfg:107 kalarmcalendar/kaeventformatter.cpp:95
+#: data/kalarmconfig.kcfg:107
 #, kde-format
 msgctxt "@label"
 msgid "Background color"
@@ -1619,7 +1619,7 @@ msgstr ""
 "figyelmeztetőszerkesztőben."
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:325 kalarmcalendar/kaeventformatter.cpp:107
+#: data/kalarmconfig.kcfg:325
 #, kde-format
 msgctxt "@label"
 msgid "Confirm acknowledgement"
@@ -1691,7 +1691,7 @@ msgstr ""
 "hangfájlmappát."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:350 kalarmcalendar/kaeventformatter.cpp:115
+#: data/kalarmconfig.kcfg:350
 #, kde-format
 msgctxt "@label"
 msgid "Sound volume"
@@ -1779,7 +1779,7 @@ msgid "Execute in terminal window"
 msgstr "Végrehajtás terminálablakban"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:377 kalarmcalendar/kaeventformatter.cpp:138
+#: data/kalarmconfig.kcfg:377
 #, kde-format
 msgctxt "@label"
 msgid "Log file"
@@ -3815,8 +3815,6 @@ msgid "At login"
 msgstr "Bejelentkezéskor"
 
 #: kalarmcalendar/kaevent.cpp:3534 kalarmcalendar/kaevent.cpp:3627
-#: kalarmcalendar/kaeventformatter.cpp:429
-#: kalarmcalendar/kaeventformatter.cpp:443
 #, kde-format
 msgctxt "@info"
 msgid "1 Minute"
@@ -3825,7 +3823,6 @@ msgstr[0] "1 perc"
 msgstr[1] "%1 perc"
 
 #: kalarmcalendar/kaevent.cpp:3536 kalarmcalendar/kaevent.cpp:3629
-#: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
 msgid "1 Hour"
@@ -3840,7 +3837,6 @@ msgid "%1h %2m"
 msgstr "%1ó %2p"
 
 #: kalarmcalendar/kaevent.cpp:3541 kalarmcalendar/kaevent.cpp:3620
-#: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
 msgid "1 Day"
@@ -3890,572 +3886,6 @@ msgstr "Nincs"
 msgctxt "@info No repetition"
 msgid "None"
 msgstr "Nincs"
-
-#: kalarmcalendar/kaeventformatter.cpp:38
-#, kde-format
-msgctxt "@label Unique identifier"
-msgid "UID"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Alarm Type"
-msgctxt "@label"
-msgid "Alarm type"
-msgstr "Az emlékeztető típusa"
-
-#: kalarmcalendar/kaeventformatter.cpp:42
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm templates"
-msgctxt "@label"
-msgid "Alarm status"
-msgstr "Emlékeztetősablonok"
-
-#: kalarmcalendar/kaeventformatter.cpp:44
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Alarm name:"
-msgctxt "@label"
-msgid "Alarm name"
-msgstr "Riasztás neve:"
-
-#: kalarmcalendar/kaeventformatter.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Template name:"
-msgctxt "@label"
-msgid "Template name"
-msgstr "Sablonnév:"
-
-#: kalarmcalendar/kaeventformatter.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
-msgctxt "@label"
-msgid "Creation time"
-msgstr "Alapértelmezett idő"
-
-#: kalarmcalendar/kaeventformatter.cpp:50
-#, fuzzy, kde-format
-#| msgctxt "@info Date cannot be earlier than start date"
-#| msgid "start date"
-msgctxt "@label"
-msgid "Start time"
-msgstr "kezdési dátum"
-
-#: kalarmcalendar/kaeventformatter.cpp:52
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Template name:"
-msgctxt "@label Start delay configured in an alarm template"
-msgid "Template after time"
-msgstr "Sablonnév:"
-
-#: kalarmcalendar/kaeventformatter.cpp:54
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Recurrence:"
-msgctxt "@label"
-msgid "Recurs"
-msgstr "Ismétlődés:"
-
-#: kalarmcalendar/kaeventformatter.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Recurrence:"
-msgctxt "@label"
-msgid "Recurrence"
-msgstr "Ismétlődés:"
-
-#: kalarmcalendar/kaeventformatter.cpp:58
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
-msgctxt "@label"
-msgid "Sub-repetition"
-msgstr "Részismétlődés"
-
-#: kalarmcalendar/kaeventformatter.cpp:60
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
-msgctxt "@label"
-msgid "Sub-repetition interval"
-msgstr "Részismétlődés"
-
-#: kalarmcalendar/kaeventformatter.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
-msgctxt "@label"
-msgid "Sub-repetition count"
-msgstr "Részismétlődés"
-
-#: kalarmcalendar/kaeventformatter.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
-msgctxt "@label"
-msgid "Next sub-repetition"
-msgstr "Részismétlődés"
-
-#: kalarmcalendar/kaeventformatter.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Ignore time zone"
-msgctxt "@label"
-msgid "Work time only"
-msgstr "Az időzóna figyelmen kívül hagyása"
-
-#: kalarmcalendar/kaeventformatter.cpp:68
-#, kde-format
-msgctxt "@label"
-msgid "Holidays excluded"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:70
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "No recurrence"
-msgctxt "@label"
-msgid "Next recurrence"
-msgstr "Nincs ismétlődés"
-
-#: kalarmcalendar/kaeventformatter.cpp:72
-#, kde-format
-msgctxt "@label"
-msgid "Late cancel"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:74
-#, kde-format
-msgctxt "@label Automatically close window"
-msgid "Auto close"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:76
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Show in KOrganizer"
-msgctxt "@label"
-msgid "Copy to KOrganizer"
-msgstr "Megjelenítés a KOrganizerrel"
-
-#: kalarmcalendar/kaeventformatter.cpp:78
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Enabled"
-msgctxt "@label"
-msgid "Enabled"
-msgstr "Bekapcsolva"
-
-#: kalarmcalendar/kaeventformatter.cpp:80
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Read-only"
-msgctxt "@label"
-msgid "Read-only"
-msgstr "Csak olvasható"
-
-#: kalarmcalendar/kaeventformatter.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Archived"
-msgctxt "@label Whether alarm should be archived"
-msgid "Archive"
-msgstr "Archivált"
-
-#: kalarmcalendar/kaeventformatter.cpp:84
-#, kde-format
-msgctxt "@label"
-msgid "Revision"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:86
-#, kde-format
-msgctxt "@label"
-msgid "Custom properties"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Message font"
-msgctxt "@label"
-msgid "Message text"
-msgstr "Az üzenet betűtípusa"
-
-#: kalarmcalendar/kaeventformatter.cpp:91
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Message font"
-msgctxt "@label File to provide text for message"
-msgid "Message file"
-msgstr "Az üzenet betűtípusa"
-
-#: kalarmcalendar/kaeventformatter.cpp:97
-#, kde-format
-msgctxt "@label"
-msgid "Font"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Pre-alarm action"
-msgctxt "@label Shell command to execute before alarm"
-msgid "Pre-alarm action"
-msgstr "Művelet az emlékeztető előtt"
-
-#: kalarmcalendar/kaeventformatter.cpp:101
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Pre-alarm action"
-msgctxt "@label"
-msgid "Pre-alarm action cancel"
-msgstr "Művelet az emlékeztető előtt"
-
-#: kalarmcalendar/kaeventformatter.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Pre-alarm action"
-msgctxt "@label"
-msgid "Pre-alarm action no error"
-msgstr "Művelet az emlékeztető előtt"
-
-#: kalarmcalendar/kaeventformatter.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Post-alarm action"
-msgctxt "@label Shell command to execute after alarm"
-msgid "Post-alarm action"
-msgstr "Művelet az emlékeztető után"
-
-#: kalarmcalendar/kaeventformatter.cpp:109
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Akonadi"
-msgctxt "@label"
-msgid "Akonadi Item ID"
-msgstr "Akonadi"
-
-#: kalarmcalendar/kaeventformatter.cpp:111
-#, fuzzy, kde-format
-#| msgctxt "@label Label for audio options"
-#| msgid "Sound"
-msgctxt "@label Audio method"
-msgid "Sound"
-msgstr "Hang"
-
-#: kalarmcalendar/kaeventformatter.cpp:113
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Do not repeat"
-msgctxt "@label Whether audio should repeat"
-msgid "Sound repeat"
-msgstr "Ne ismétlődjön"
-
-#: kalarmcalendar/kaeventformatter.cpp:117
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Sound volume"
-msgctxt "@label"
-msgid "Sound fade volume"
-msgstr "Hangerő"
-
-#: kalarmcalendar/kaeventformatter.cpp:119
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Sound file"
-msgctxt "@label"
-msgid "Sound fade time"
-msgstr "Hangfájl"
-
-#: kalarmcalendar/kaeventformatter.cpp:121
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Reminder"
-msgctxt "@label Whether the alarm has a reminder"
-msgid "Reminder"
-msgstr "Emlékeztető"
-
-#: kalarmcalendar/kaeventformatter.cpp:123
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Reminder for first recurrence only"
-msgctxt "@label Whether reminder is on first recurrence only"
-msgid "Reminder once only"
-msgstr "Emlékeztető csak az első előfordulásnál"
-
-#: kalarmcalendar/kaeventformatter.cpp:125
-#, kde-format
-msgctxt "@label Whether to use standard notification system"
-msgid "Notify"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:127
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Cancel Deferral"
-msgctxt "@label Deferral type"
-msgid "Deferral"
-msgstr "A halasztás törlése"
-
-#: kalarmcalendar/kaeventformatter.cpp:129
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
-msgctxt "@label"
-msgid "Deferral time"
-msgstr "Alapértelmezett idő"
-
-#: kalarmcalendar/kaeventformatter.cpp:131
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Cancel Deferral"
-msgctxt "@label Default deferral delay"
-msgid "Deferral default"
-msgstr "A halasztás törlése"
-
-#: kalarmcalendar/kaeventformatter.cpp:133
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Cancel Deferral"
-msgctxt "@label Whether deferral time is date-only by default"
-msgid "Deferral default date only"
-msgstr "A halasztás törlése"
-
-#: kalarmcalendar/kaeventformatter.cpp:136
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Command"
-msgctxt "@label A shell command"
-msgid "Command"
-msgstr "Parancsalapú"
-
-#: kalarmcalendar/kaeventformatter.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Execute in terminal window"
-msgctxt "@label Execute in terminal window"
-msgid "Execute in terminal"
-msgstr "Végrehajtás terminálban"
-
-#: kalarmcalendar/kaeventformatter.cpp:142
-#, kde-format
-msgctxt "@label"
-msgid "Hide command error"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:145
-#, fuzzy, kde-format
-#| msgid "Email subject line"
-msgctxt "@label"
-msgid "Email subject"
-msgstr "Az e-mail tárgysora"
-
-#: kalarmcalendar/kaeventformatter.cpp:147
-#, fuzzy, kde-format
-#| msgid "Email subject line"
-msgctxt "@label Email address"
-msgid "Email sender ID"
-msgstr "Az e-mail tárgysora"
-
-#: kalarmcalendar/kaeventformatter.cpp:149
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
-msgctxt "@label Email address"
-msgid "Email to"
-msgstr "E-mailes"
-
-#: kalarmcalendar/kaeventformatter.cpp:151
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
-msgctxt "@label true/false"
-msgid "Email bcc"
-msgstr "E-mailes"
-
-#: kalarmcalendar/kaeventformatter.cpp:153
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
-msgctxt "@label"
-msgid "Email body"
-msgstr "E-mailes"
-
-#: kalarmcalendar/kaeventformatter.cpp:155
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Email client"
-msgctxt "@label"
-msgid "Email attachments"
-msgstr "E-mail-kliens"
-
-#: kalarmcalendar/kaeventformatter.cpp:257
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Display type:"
-msgctxt "@info Alarm type"
-msgid "Display (text)"
-msgstr "Sablontípus:"
-
-#: kalarmcalendar/kaeventformatter.cpp:259
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the file now"
-msgctxt "@info Alarm type"
-msgid "Display (file)"
-msgstr "A fájl megjelenítése most"
-
-#: kalarmcalendar/kaeventformatter.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the command output now"
-msgctxt "@info Alarm type"
-msgid "Display (command)"
-msgstr "A parancs kimenetének megjelenítése most"
-
-#: kalarmcalendar/kaeventformatter.cpp:263
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Command"
-msgctxt "@info Alarm type"
-msgid "Command"
-msgstr "Parancsalapú"
-
-#: kalarmcalendar/kaeventformatter.cpp:265
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
-msgctxt "@info Alarm type"
-msgid "Email"
-msgstr "E-mailes"
-
-#: kalarmcalendar/kaeventformatter.cpp:267
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Audio"
-msgctxt "@info Alarm type"
-msgid "Audio"
-msgstr "Hang"
-
-#: kalarmcalendar/kaeventformatter.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Active"
-msgctxt "@info Alarm type"
-msgid "Active"
-msgstr "Aktív"
-
-#: kalarmcalendar/kaeventformatter.cpp:276
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Archived"
-msgctxt "@info Alarm type"
-msgid "Archived"
-msgstr "Archivált"
-
-#: kalarmcalendar/kaeventformatter.cpp:278
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Templates..."
-msgctxt "@info Alarm type"
-msgid "Template"
-msgstr "S&ablonok..."
-
-#: kalarmcalendar/kaeventformatter.cpp:297
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "At login"
-msgctxt "@info Repeat at login"
-msgid "At login until %1"
-msgstr "Bejelentkezéskor"
-
-#: kalarmcalendar/kaeventformatter.cpp:338
-#, fuzzy, kde-format
-#| msgctxt "@info n days"
-#| msgid "%1d"
-msgctxt "@info"
-msgid "%1"
-msgstr "%1 nap"
-
-#: kalarmcalendar/kaeventformatter.cpp:350
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
-msgctxt "@info Using default font"
-msgid "Default"
-msgstr "Alapértelmezett idő"
-
-#: kalarmcalendar/kaeventformatter.cpp:366 messagedisplayhelper.cpp:220
-#, kde-format
-msgctxt "@info"
-msgid "Reminder"
-msgstr "Emlékeztető"
-
-#: kalarmcalendar/kaeventformatter.cpp:379
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Speak"
-msgctxt "@info"
-msgid "Speak"
-msgstr "Felolvasás"
-
-#: kalarmcalendar/kaeventformatter.cpp:380
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Beep"
-msgctxt "@info"
-msgid "Beep"
-msgstr "Hangjelzés"
-
-#: kalarmcalendar/kaeventformatter.cpp:385
-#: kalarmcalendar/kaeventformatter.cpp:389
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "%1%2"
-msgctxt "@info Percentage"
-msgid "%1%%"
-msgstr "%1%2"
-
-#: kalarmcalendar/kaeventformatter.cpp:393
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "1 Second"
-#| msgid_plural "%s Seconds"
-msgctxt "@info"
-msgid "1 Second"
-msgid_plural "%1 Seconds"
-msgstr[0] "1 másodperc"
-msgstr[1] "%s másodperc"
-
-#: kalarmcalendar/kaeventformatter.cpp:418
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Error"
-msgctxt "@info Error indication"
-msgid "error!"
-msgstr "Hiba"
-
-#: kalarmcalendar/kaeventformatter.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
-#| msgid "Yes"
-msgctxt "@info General purpose status indication: yes or no"
-msgid "Yes"
-msgstr "Igen"
-
-#: kalarmcalendar/kaeventformatter.cpp:424
-#, fuzzy, kde-format
-#| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
-#| msgid "No"
-msgctxt "@info General purpose status indication: yes or no"
-msgid "No"
-msgstr "Nem"
 
 #: kamail.cpp:69
 #, kde-format
@@ -5088,6 +4518,12 @@ msgstr "Emlékeztető"
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Üzenet"
+
+#: messagedisplayhelper.cpp:220
+#, kde-format
+msgctxt "@info"
+msgid "Reminder"
+msgstr "Emlékeztető"
 
 #: messagedisplayhelper.cpp:298
 #, kde-format
@@ -9295,6 +8731,448 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Percek száma a felfüggesztésből felébredésre való figyelmeztetés előtt"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Alarm Type"
+#~ msgctxt "@label"
+#~ msgid "Alarm type"
+#~ msgstr "Az emlékeztető típusa"
+
+#, fuzzy
+#~| msgctxt "@info/plain"
+#~| msgid "Alarm templates"
+#~ msgctxt "@label"
+#~ msgid "Alarm status"
+#~ msgstr "Emlékeztetősablonok"
+
+#, fuzzy
+#~| msgctxt "@label:textbox"
+#~| msgid "Alarm name:"
+#~ msgctxt "@label"
+#~ msgid "Alarm name"
+#~ msgstr "Riasztás neve:"
+
+#, fuzzy
+#~| msgctxt "@label:textbox"
+#~| msgid "Template name:"
+#~ msgctxt "@label"
+#~ msgid "Template name"
+#~ msgstr "Sablonnév:"
+
+#, fuzzy
+#~| msgctxt "@option:radio"
+#~| msgid "Default time"
+#~ msgctxt "@label"
+#~ msgid "Creation time"
+#~ msgstr "Alapértelmezett idő"
+
+#, fuzzy
+#~| msgctxt "@info Date cannot be earlier than start date"
+#~| msgid "start date"
+#~ msgctxt "@label"
+#~ msgid "Start time"
+#~ msgstr "kezdési dátum"
+
+#, fuzzy
+#~| msgctxt "@label:textbox"
+#~| msgid "Template name:"
+#~ msgctxt "@label Start delay configured in an alarm template"
+#~ msgid "Template after time"
+#~ msgstr "Sablonnév:"
+
+#, fuzzy
+#~| msgctxt "@label:listbox"
+#~| msgid "Recurrence:"
+#~ msgctxt "@label"
+#~ msgid "Recurs"
+#~ msgstr "Ismétlődés:"
+
+#, fuzzy
+#~| msgctxt "@label:listbox"
+#~| msgid "Recurrence:"
+#~ msgctxt "@label"
+#~ msgid "Recurrence"
+#~ msgstr "Ismétlődés:"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Sub-Repetition"
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition"
+#~ msgstr "Részismétlődés"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Sub-Repetition"
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition interval"
+#~ msgstr "Részismétlődés"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Sub-Repetition"
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition count"
+#~ msgstr "Részismétlődés"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Sub-Repetition"
+#~ msgctxt "@label"
+#~ msgid "Next sub-repetition"
+#~ msgstr "Részismétlődés"
+
+#, fuzzy
+#~| msgctxt "@option:check"
+#~| msgid "Ignore time zone"
+#~ msgctxt "@label"
+#~ msgid "Work time only"
+#~ msgstr "Az időzóna figyelmen kívül hagyása"
+
+#, fuzzy
+#~| msgctxt "@option"
+#~| msgid "No recurrence"
+#~ msgctxt "@label"
+#~ msgid "Next recurrence"
+#~ msgstr "Nincs ismétlődés"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Show in KOrganizer"
+#~ msgctxt "@label"
+#~ msgid "Copy to KOrganizer"
+#~ msgstr "Megjelenítés a KOrganizerrel"
+
+#, fuzzy
+#~| msgctxt "@info/plain"
+#~| msgid "Enabled"
+#~ msgctxt "@label"
+#~ msgid "Enabled"
+#~ msgstr "Bekapcsolva"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid "Read-only"
+#~ msgctxt "@label"
+#~ msgid "Read-only"
+#~ msgstr "Csak olvasható"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm type"
+#~| msgid "Archived"
+#~ msgctxt "@label Whether alarm should be archived"
+#~ msgid "Archive"
+#~ msgstr "Archivált"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Message font"
+#~ msgctxt "@label"
+#~ msgid "Message text"
+#~ msgstr "Az üzenet betűtípusa"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Message font"
+#~ msgctxt "@label File to provide text for message"
+#~ msgid "Message file"
+#~ msgstr "Az üzenet betűtípusa"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Pre-alarm action"
+#~ msgctxt "@label Shell command to execute before alarm"
+#~ msgid "Pre-alarm action"
+#~ msgstr "Művelet az emlékeztető előtt"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Pre-alarm action"
+#~ msgctxt "@label"
+#~ msgid "Pre-alarm action cancel"
+#~ msgstr "Művelet az emlékeztető előtt"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Pre-alarm action"
+#~ msgctxt "@label"
+#~ msgid "Pre-alarm action no error"
+#~ msgstr "Művelet az emlékeztető előtt"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Post-alarm action"
+#~ msgctxt "@label Shell command to execute after alarm"
+#~ msgid "Post-alarm action"
+#~ msgstr "Művelet az emlékeztető után"
+
+#, fuzzy
+#~| msgctxt "@option"
+#~| msgid "Akonadi"
+#~ msgctxt "@label"
+#~ msgid "Akonadi Item ID"
+#~ msgstr "Akonadi"
+
+#, fuzzy
+#~| msgctxt "@label Label for audio options"
+#~| msgid "Sound"
+#~ msgctxt "@label Audio method"
+#~ msgid "Sound"
+#~ msgstr "Hang"
+
+#, fuzzy
+#~| msgctxt "@option"
+#~| msgid "Do not repeat"
+#~ msgctxt "@label Whether audio should repeat"
+#~ msgid "Sound repeat"
+#~ msgstr "Ne ismétlődjön"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Sound volume"
+#~ msgctxt "@label"
+#~ msgid "Sound fade volume"
+#~ msgstr "Hangerő"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Sound file"
+#~ msgctxt "@label"
+#~ msgid "Sound fade time"
+#~ msgstr "Hangfájl"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Reminder"
+#~ msgctxt "@label Whether the alarm has a reminder"
+#~ msgid "Reminder"
+#~ msgstr "Emlékeztető"
+
+#, fuzzy
+#~| msgctxt "@option:check"
+#~| msgid "Reminder for first recurrence only"
+#~ msgctxt "@label Whether reminder is on first recurrence only"
+#~ msgid "Reminder once only"
+#~ msgstr "Emlékeztető csak az első előfordulásnál"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Cancel Deferral"
+#~ msgctxt "@label Deferral type"
+#~ msgid "Deferral"
+#~ msgstr "A halasztás törlése"
+
+#, fuzzy
+#~| msgctxt "@option:radio"
+#~| msgid "Default time"
+#~ msgctxt "@label"
+#~ msgid "Deferral time"
+#~ msgstr "Alapértelmezett idő"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Cancel Deferral"
+#~ msgctxt "@label Default deferral delay"
+#~ msgid "Deferral default"
+#~ msgstr "A halasztás törlése"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Cancel Deferral"
+#~ msgctxt "@label Whether deferral time is date-only by default"
+#~ msgid "Deferral default date only"
+#~ msgstr "A halasztás törlése"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Command"
+#~ msgctxt "@label A shell command"
+#~ msgid "Command"
+#~ msgstr "Parancsalapú"
+
+#, fuzzy
+#~| msgctxt "@option:radio"
+#~| msgid "Execute in terminal window"
+#~ msgctxt "@label Execute in terminal window"
+#~ msgid "Execute in terminal"
+#~ msgstr "Végrehajtás terminálban"
+
+#, fuzzy
+#~| msgid "Email subject line"
+#~ msgctxt "@label"
+#~ msgid "Email subject"
+#~ msgstr "Az e-mail tárgysora"
+
+#, fuzzy
+#~| msgid "Email subject line"
+#~ msgctxt "@label Email address"
+#~ msgid "Email sender ID"
+#~ msgstr "Az e-mail tárgysora"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Email"
+#~ msgctxt "@label Email address"
+#~ msgid "Email to"
+#~ msgstr "E-mailes"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Email"
+#~ msgctxt "@label true/false"
+#~ msgid "Email bcc"
+#~ msgstr "E-mailes"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Email"
+#~ msgctxt "@label"
+#~ msgid "Email body"
+#~ msgstr "E-mailes"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Email client"
+#~ msgctxt "@label"
+#~ msgid "Email attachments"
+#~ msgstr "E-mail-kliens"
+
+#, fuzzy
+#~| msgctxt "@label:listbox"
+#~| msgid "Display type:"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (text)"
+#~ msgstr "Sablontípus:"
+
+#, fuzzy
+#~| msgctxt "@info:whatsthis"
+#~| msgid "Display the file now"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (file)"
+#~ msgstr "A fájl megjelenítése most"
+
+#, fuzzy
+#~| msgctxt "@info:whatsthis"
+#~| msgid "Display the command output now"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (command)"
+#~ msgstr "A parancs kimenetének megjelenítése most"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Command"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Command"
+#~ msgstr "Parancsalapú"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Email"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Email"
+#~ msgstr "E-mailes"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Audio"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Audio"
+#~ msgstr "Hang"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm type"
+#~| msgid "Active"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Active"
+#~ msgstr "Aktív"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm type"
+#~| msgid "Archived"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Archived"
+#~ msgstr "Archivált"
+
+#, fuzzy
+#~| msgctxt "@action"
+#~| msgid "&Templates..."
+#~ msgctxt "@info Alarm type"
+#~ msgid "Template"
+#~ msgstr "S&ablonok..."
+
+#, fuzzy
+#~| msgctxt "@info/plain"
+#~| msgid "At login"
+#~ msgctxt "@info Repeat at login"
+#~ msgid "At login until %1"
+#~ msgstr "Bejelentkezéskor"
+
+#, fuzzy
+#~| msgctxt "@info n days"
+#~| msgid "%1d"
+#~ msgctxt "@info"
+#~ msgid "%1"
+#~ msgstr "%1 nap"
+
+#, fuzzy
+#~| msgctxt "@option:radio"
+#~| msgid "Default time"
+#~ msgctxt "@info Using default font"
+#~ msgid "Default"
+#~ msgstr "Alapértelmezett idő"
+
+#, fuzzy
+#~| msgctxt "@item:inlistbox"
+#~| msgid "Speak"
+#~ msgctxt "@info"
+#~ msgid "Speak"
+#~ msgstr "Felolvasás"
+
+#, fuzzy
+#~| msgctxt "@item:inlistbox"
+#~| msgid "Beep"
+#~ msgctxt "@info"
+#~ msgid "Beep"
+#~ msgstr "Hangjelzés"
+
+#, fuzzy
+#~| msgctxt "@info:tooltip"
+#~| msgid "%1%2"
+#~ msgctxt "@info Percentage"
+#~ msgid "%1%%"
+#~ msgstr "%1%2"
+
+#, fuzzy
+#~| msgctxt "@info/plain"
+#~| msgid "1 Second"
+#~| msgid_plural "%s Seconds"
+#~ msgctxt "@info"
+#~ msgid "1 Second"
+#~ msgid_plural "%1 Seconds"
+#~ msgstr[0] "1 másodperc"
+#~ msgstr[1] "%s másodperc"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Error"
+#~ msgctxt "@info Error indication"
+#~ msgid "error!"
+#~ msgstr "Hiba"
+
+#, fuzzy
+#~| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
+#~| msgid "Yes"
+#~ msgctxt "@info General purpose status indication: yes or no"
+#~ msgid "Yes"
+#~ msgstr "Igen"
+
+#, fuzzy
+#~| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
+#~| msgid "No"
+#~ msgctxt "@info General purpose status indication: yes or no"
+#~ msgid "No"
+#~ msgstr "Nem"
 
 #~ msgctxt "@label"
 #~ msgid "Message windows have a title bar and take keyboard focus"

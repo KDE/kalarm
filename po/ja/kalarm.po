@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-27 00:45+0000\n"
+"POT-Creation-Date: 2026-08-01 00:48+0000\n"
 "PO-Revision-Date: 2011-08-14 14:09-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -961,7 +961,7 @@ msgid "Select the holiday region to use."
 msgstr "どの地域の休日を使うかを選択します。"
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
-#: data/kalarmconfig.kcfg:102 kalarmcalendar/kaeventformatter.cpp:93
+#: data/kalarmconfig.kcfg:102
 #, kde-format
 msgctxt "@label"
 msgid "Foreground color"
@@ -975,7 +975,7 @@ msgid "Default foreground color for alarm message windows."
 msgstr "アラームメッセージウィンドウのデフォルトの前景色です。"
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
-#: data/kalarmconfig.kcfg:107 kalarmcalendar/kaeventformatter.cpp:95
+#: data/kalarmconfig.kcfg:107
 #, kde-format
 msgctxt "@label"
 msgid "Background color"
@@ -1669,7 +1669,7 @@ msgstr ""
 "ト設定です。"
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:325 kalarmcalendar/kaeventformatter.cpp:107
+#: data/kalarmconfig.kcfg:325
 #, kde-format
 msgctxt "@label"
 msgid "Confirm acknowledgement"
@@ -1735,7 +1735,7 @@ msgid "Default sound file path in the alarm edit dialog."
 msgstr "アラーム編集ダイアログのサウンドファイルのデフォルトのパスです。"
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:350 kalarmcalendar/kaeventformatter.cpp:115
+#: data/kalarmconfig.kcfg:350
 #, kde-format
 msgctxt "@label"
 msgid "Sound volume"
@@ -1818,7 +1818,7 @@ msgid "Execute in terminal window"
 msgstr "ターミナルウィンドウで実行"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:377 kalarmcalendar/kaeventformatter.cpp:138
+#: data/kalarmconfig.kcfg:377
 #, kde-format
 msgctxt "@label"
 msgid "Log file"
@@ -3820,8 +3820,6 @@ msgid "At login"
 msgstr "ログイン時"
 
 #: kalarmcalendar/kaevent.cpp:3534 kalarmcalendar/kaevent.cpp:3627
-#: kalarmcalendar/kaeventformatter.cpp:429
-#: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Minutes"
@@ -3831,7 +3829,6 @@ msgid_plural "%1 Minutes"
 msgstr[0] "分"
 
 #: kalarmcalendar/kaevent.cpp:3536 kalarmcalendar/kaevent.cpp:3629
-#: kalarmcalendar/kaeventformatter.cpp:445
 #, kde-format
 msgctxt "@info"
 msgid "1 Hour"
@@ -3845,7 +3842,6 @@ msgid "%1h %2m"
 msgstr ""
 
 #: kalarmcalendar/kaevent.cpp:3541 kalarmcalendar/kaevent.cpp:3620
-#: kalarmcalendar/kaeventformatter.cpp:447
 #, kde-format
 msgctxt "@info"
 msgid "1 Day"
@@ -3894,506 +3890,6 @@ msgstr "なし"
 msgctxt "@info No repetition"
 msgid "None"
 msgstr "なし"
-
-#: kalarmcalendar/kaeventformatter.cpp:38
-#, kde-format
-msgctxt "@label Unique identifier"
-msgid "UID"
-msgstr "UID"
-
-#: kalarmcalendar/kaeventformatter.cpp:40
-#, fuzzy, kde-format
-#| msgid "Alarm types."
-msgctxt "@label"
-msgid "Alarm type"
-msgstr "アラームのタイプ。"
-
-#: kalarmcalendar/kaeventformatter.cpp:42
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm templates"
-msgctxt "@label"
-msgid "Alarm status"
-msgstr "アラームテンプレート"
-
-#: kalarmcalendar/kaeventformatter.cpp:44
-#, fuzzy, kde-format
-#| msgid "Alarm types."
-msgctxt "@label"
-msgid "Alarm name"
-msgstr "アラームのタイプ。"
-
-#: kalarmcalendar/kaeventformatter.cpp:46
-#, kde-format
-msgctxt "@label"
-msgid "Template name"
-msgstr "テンプレート名"
-
-#: kalarmcalendar/kaeventformatter.cpp:48
-#, kde-format
-msgctxt "@label"
-msgid "Creation time"
-msgstr "作成時"
-
-#: kalarmcalendar/kaeventformatter.cpp:50
-#, kde-format
-msgctxt "@label"
-msgid "Start time"
-msgstr "開始時"
-
-#: kalarmcalendar/kaeventformatter.cpp:52
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Template name:"
-msgctxt "@label Start delay configured in an alarm template"
-msgid "Template after time"
-msgstr "テンプレート名:"
-
-#: kalarmcalendar/kaeventformatter.cpp:54
-#, kde-format
-msgctxt "@label"
-msgid "Recurs"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:56
-#, kde-format
-msgctxt "@label"
-msgid "Recurrence"
-msgstr "繰り返し"
-
-#: kalarmcalendar/kaeventformatter.cpp:58
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
-msgctxt "@label"
-msgid "Sub-repetition"
-msgstr "同一アラームの反復"
-
-#: kalarmcalendar/kaeventformatter.cpp:60
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
-msgctxt "@label"
-msgid "Sub-repetition interval"
-msgstr "同一アラームの反復"
-
-#: kalarmcalendar/kaeventformatter.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
-msgctxt "@label"
-msgid "Sub-repetition count"
-msgstr "同一アラームの反復"
-
-#: kalarmcalendar/kaeventformatter.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
-msgctxt "@label"
-msgid "Next sub-repetition"
-msgstr "同一アラームの反復"
-
-#: kalarmcalendar/kaeventformatter.cpp:66
-#, kde-format
-msgctxt "@label"
-msgid "Work time only"
-msgstr "勤務時間中のみ"
-
-#: kalarmcalendar/kaeventformatter.cpp:68
-#, kde-format
-msgctxt "@label"
-msgid "Holidays excluded"
-msgstr "祝日を除外"
-
-#: kalarmcalendar/kaeventformatter.cpp:70
-#, kde-format
-msgctxt "@label"
-msgid "Next recurrence"
-msgstr "次の繰り返し"
-
-#: kalarmcalendar/kaeventformatter.cpp:72
-#, kde-format
-msgctxt "@label"
-msgid "Late cancel"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:74
-#, kde-format
-msgctxt "@label Automatically close window"
-msgid "Auto close"
-msgstr "自動的に閉じる"
-
-#: kalarmcalendar/kaeventformatter.cpp:76
-#, kde-format
-msgctxt "@label"
-msgid "Copy to KOrganizer"
-msgstr "KOrganizer にコピー"
-
-#: kalarmcalendar/kaeventformatter.cpp:78
-#, kde-format
-msgctxt "@label"
-msgid "Enabled"
-msgstr "有効"
-
-#: kalarmcalendar/kaeventformatter.cpp:80
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Read-only"
-msgctxt "@label"
-msgid "Read-only"
-msgstr "読み取り専用"
-
-#: kalarmcalendar/kaeventformatter.cpp:82
-#, kde-format
-msgctxt "@label Whether alarm should be archived"
-msgid "Archive"
-msgstr "アーカイブ"
-
-#: kalarmcalendar/kaeventformatter.cpp:84
-#, kde-format
-msgctxt "@label"
-msgid "Revision"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:86
-#, kde-format
-msgctxt "@label"
-msgid "Custom properties"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:89
-#, kde-format
-msgctxt "@label"
-msgid "Message text"
-msgstr "メッセージテキスト"
-
-#: kalarmcalendar/kaeventformatter.cpp:91
-#, kde-format
-msgctxt "@label File to provide text for message"
-msgid "Message file"
-msgstr "メッセージファイル"
-
-#: kalarmcalendar/kaeventformatter.cpp:97
-#, kde-format
-msgctxt "@label"
-msgid "Font"
-msgstr "フォント"
-
-#: kalarmcalendar/kaeventformatter.cpp:99
-#, kde-format
-msgctxt "@label Shell command to execute before alarm"
-msgid "Pre-alarm action"
-msgstr "アラーム前のアクション"
-
-#: kalarmcalendar/kaeventformatter.cpp:101
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Pre-alarm action"
-msgctxt "@label"
-msgid "Pre-alarm action cancel"
-msgstr "アラーム前のアクション"
-
-#: kalarmcalendar/kaeventformatter.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Pre-alarm action"
-msgctxt "@label"
-msgid "Pre-alarm action no error"
-msgstr "アラーム前のアクション"
-
-#: kalarmcalendar/kaeventformatter.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Post-alarm action"
-msgctxt "@label Shell command to execute after alarm"
-msgid "Post-alarm action"
-msgstr "アラーム後のアクション"
-
-#: kalarmcalendar/kaeventformatter.cpp:109
-#, kde-format
-msgctxt "@label"
-msgid "Akonadi Item ID"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:111
-#, kde-format
-msgctxt "@label Audio method"
-msgid "Sound"
-msgstr "サウンド"
-
-#: kalarmcalendar/kaeventformatter.cpp:113
-#, kde-format
-msgctxt "@label Whether audio should repeat"
-msgid "Sound repeat"
-msgstr "サウンドを繰り返す"
-
-#: kalarmcalendar/kaeventformatter.cpp:117
-#, kde-format
-msgctxt "@label"
-msgid "Sound fade volume"
-msgstr "フェード"
-
-#: kalarmcalendar/kaeventformatter.cpp:119
-#, kde-format
-msgctxt "@label"
-msgid "Sound fade time"
-msgstr "フェード時間"
-
-#: kalarmcalendar/kaeventformatter.cpp:121
-#, kde-format
-msgctxt "@label Whether the alarm has a reminder"
-msgid "Reminder"
-msgstr "リマインダ"
-
-#: kalarmcalendar/kaeventformatter.cpp:123
-#, kde-format
-msgctxt "@label Whether reminder is on first recurrence only"
-msgid "Reminder once only"
-msgstr "一回だけリマインダ"
-
-#: kalarmcalendar/kaeventformatter.cpp:125
-#, kde-format
-msgctxt "@label Whether to use standard notification system"
-msgid "Notify"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:127
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "&Defer..."
-msgctxt "@label Deferral type"
-msgid "Deferral"
-msgstr "延期(&D)..."
-
-#: kalarmcalendar/kaeventformatter.cpp:129
-#, kde-format
-msgctxt "@label"
-msgid "Deferral time"
-msgstr "延期時間"
-
-#: kalarmcalendar/kaeventformatter.cpp:131
-#, kde-format
-msgctxt "@label Default deferral delay"
-msgid "Deferral default"
-msgstr "デフォルトの延期時間"
-
-#: kalarmcalendar/kaeventformatter.cpp:133
-#, kde-format
-msgctxt "@label Whether deferral time is date-only by default"
-msgid "Deferral default date only"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:136
-#, kde-format
-msgctxt "@label A shell command"
-msgid "Command"
-msgstr "コマンド"
-
-#: kalarmcalendar/kaeventformatter.cpp:140
-#, kde-format
-msgctxt "@label Execute in terminal window"
-msgid "Execute in terminal"
-msgstr "ターミナルで実行"
-
-#: kalarmcalendar/kaeventformatter.cpp:142
-#, kde-format
-msgctxt "@label"
-msgid "Hide command error"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:145
-#, kde-format
-msgctxt "@label"
-msgid "Email subject"
-msgstr "メールの件名"
-
-#: kalarmcalendar/kaeventformatter.cpp:147
-#, kde-format
-msgctxt "@label Email address"
-msgid "Email sender ID"
-msgstr "メールの送信者 ID"
-
-#: kalarmcalendar/kaeventformatter.cpp:149
-#, kde-format
-msgctxt "@label Email address"
-msgid "Email to"
-msgstr "メール To"
-
-#: kalarmcalendar/kaeventformatter.cpp:151
-#, kde-format
-msgctxt "@label true/false"
-msgid "Email bcc"
-msgstr "メール BCC"
-
-#: kalarmcalendar/kaeventformatter.cpp:153
-#, kde-format
-msgctxt "@label"
-msgid "Email body"
-msgstr "メール本文"
-
-#: kalarmcalendar/kaeventformatter.cpp:155
-#, kde-format
-msgctxt "@label"
-msgid "Email attachments"
-msgstr "メールの添付ファイル"
-
-#: kalarmcalendar/kaeventformatter.cpp:257
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Display type:"
-msgctxt "@info Alarm type"
-msgid "Display (text)"
-msgstr "表示するもの:"
-
-#: kalarmcalendar/kaeventformatter.cpp:259
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the file now"
-msgctxt "@info Alarm type"
-msgid "Display (file)"
-msgstr "ファイルを今すぐ表示します。"
-
-#: kalarmcalendar/kaeventformatter.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the command output now"
-msgctxt "@info Alarm type"
-msgid "Display (command)"
-msgstr "コマンド出力を今すぐ表示します。"
-
-#: kalarmcalendar/kaeventformatter.cpp:263
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Command"
-msgctxt "@info Alarm type"
-msgid "Command"
-msgstr "コマンド"
-
-#: kalarmcalendar/kaeventformatter.cpp:265
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
-msgctxt "@info Alarm type"
-msgid "Email"
-msgstr "メール"
-
-#: kalarmcalendar/kaeventformatter.cpp:267
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Audio"
-msgctxt "@info Alarm type"
-msgid "Audio"
-msgstr "音声"
-
-#: kalarmcalendar/kaeventformatter.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Active"
-msgctxt "@info Alarm type"
-msgid "Active"
-msgstr "有効"
-
-#: kalarmcalendar/kaeventformatter.cpp:276
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Archived"
-msgctxt "@info Alarm type"
-msgid "Archived"
-msgstr "アーカイブ"
-
-#: kalarmcalendar/kaeventformatter.cpp:278
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Templates..."
-msgctxt "@info Alarm type"
-msgid "Template"
-msgstr "テンプレート(&T)..."
-
-#: kalarmcalendar/kaeventformatter.cpp:297
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "At login"
-msgctxt "@info Repeat at login"
-msgid "At login until %1"
-msgstr "ログイン時"
-
-#: kalarmcalendar/kaeventformatter.cpp:338
-#, fuzzy, kde-format
-#| msgctxt "@info/plain n days"
-#| msgid "%1d"
-msgctxt "@info"
-msgid "%1"
-msgstr "%1 日"
-
-#: kalarmcalendar/kaeventformatter.cpp:350
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
-msgctxt "@info Using default font"
-msgid "Default"
-msgstr "デフォルトの時間"
-
-#: kalarmcalendar/kaeventformatter.cpp:366 messagedisplayhelper.cpp:220
-#, kde-format
-msgctxt "@info"
-msgid "Reminder"
-msgstr "リマインダ"
-
-#: kalarmcalendar/kaeventformatter.cpp:379
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Speak"
-msgctxt "@info"
-msgid "Speak"
-msgstr "読み上げ"
-
-#: kalarmcalendar/kaeventformatter.cpp:380
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Beep"
-msgctxt "@info"
-msgid "Beep"
-msgstr "ビープ"
-
-#: kalarmcalendar/kaeventformatter.cpp:385
-#: kalarmcalendar/kaeventformatter.cpp:389
-#, kde-format
-msgctxt "@info Percentage"
-msgid "%1%%"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:393
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "seconds"
-msgctxt "@info"
-msgid "1 Second"
-msgid_plural "%1 Seconds"
-msgstr[0] "秒"
-
-#: kalarmcalendar/kaeventformatter.cpp:418
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Error"
-msgctxt "@info Error indication"
-msgid "error!"
-msgstr "エラー"
-
-#: kalarmcalendar/kaeventformatter.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
-#| msgid "Yes"
-msgctxt "@info General purpose status indication: yes or no"
-msgid "Yes"
-msgstr "はい"
-
-#: kalarmcalendar/kaeventformatter.cpp:424
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
-#| msgid "No"
-msgctxt "@info General purpose status indication: yes or no"
-msgid "No"
-msgstr "いいえ"
 
 #: kamail.cpp:69
 #, fuzzy, kde-format
@@ -5023,6 +4519,12 @@ msgstr "リマインダ"
 msgctxt "@title:window"
 msgid "Message"
 msgstr "メッセージ"
+
+#: messagedisplayhelper.cpp:220
+#, kde-format
+msgctxt "@info"
+msgid "Reminder"
+msgstr "リマインダ"
 
 #: messagedisplayhelper.cpp:298
 #, kde-format
@@ -9275,6 +8777,350 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
+
+#~ msgctxt "@label Unique identifier"
+#~ msgid "UID"
+#~ msgstr "UID"
+
+#, fuzzy
+#~| msgid "Alarm types."
+#~ msgctxt "@label"
+#~ msgid "Alarm type"
+#~ msgstr "アラームのタイプ。"
+
+#, fuzzy
+#~| msgctxt "@info/plain"
+#~| msgid "Alarm templates"
+#~ msgctxt "@label"
+#~ msgid "Alarm status"
+#~ msgstr "アラームテンプレート"
+
+#, fuzzy
+#~| msgid "Alarm types."
+#~ msgctxt "@label"
+#~ msgid "Alarm name"
+#~ msgstr "アラームのタイプ。"
+
+#~ msgctxt "@label"
+#~ msgid "Template name"
+#~ msgstr "テンプレート名"
+
+#~ msgctxt "@label"
+#~ msgid "Creation time"
+#~ msgstr "作成時"
+
+#~ msgctxt "@label"
+#~ msgid "Start time"
+#~ msgstr "開始時"
+
+#, fuzzy
+#~| msgctxt "@label:textbox"
+#~| msgid "Template name:"
+#~ msgctxt "@label Start delay configured in an alarm template"
+#~ msgid "Template after time"
+#~ msgstr "テンプレート名:"
+
+#~ msgctxt "@label"
+#~ msgid "Recurrence"
+#~ msgstr "繰り返し"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Sub-Repetition"
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition"
+#~ msgstr "同一アラームの反復"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Sub-Repetition"
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition interval"
+#~ msgstr "同一アラームの反復"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Sub-Repetition"
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition count"
+#~ msgstr "同一アラームの反復"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Sub-Repetition"
+#~ msgctxt "@label"
+#~ msgid "Next sub-repetition"
+#~ msgstr "同一アラームの反復"
+
+#~ msgctxt "@label"
+#~ msgid "Work time only"
+#~ msgstr "勤務時間中のみ"
+
+#~ msgctxt "@label"
+#~ msgid "Holidays excluded"
+#~ msgstr "祝日を除外"
+
+#~ msgctxt "@label"
+#~ msgid "Next recurrence"
+#~ msgstr "次の繰り返し"
+
+#~ msgctxt "@label Automatically close window"
+#~ msgid "Auto close"
+#~ msgstr "自動的に閉じる"
+
+#~ msgctxt "@label"
+#~ msgid "Copy to KOrganizer"
+#~ msgstr "KOrganizer にコピー"
+
+#~ msgctxt "@label"
+#~ msgid "Enabled"
+#~ msgstr "有効"
+
+#, fuzzy
+#~| msgctxt "@info/plain"
+#~| msgid "Read-only"
+#~ msgctxt "@label"
+#~ msgid "Read-only"
+#~ msgstr "読み取り専用"
+
+#~ msgctxt "@label Whether alarm should be archived"
+#~ msgid "Archive"
+#~ msgstr "アーカイブ"
+
+#~ msgctxt "@label"
+#~ msgid "Message text"
+#~ msgstr "メッセージテキスト"
+
+#~ msgctxt "@label File to provide text for message"
+#~ msgid "Message file"
+#~ msgstr "メッセージファイル"
+
+#~ msgctxt "@label"
+#~ msgid "Font"
+#~ msgstr "フォント"
+
+#~ msgctxt "@label Shell command to execute before alarm"
+#~ msgid "Pre-alarm action"
+#~ msgstr "アラーム前のアクション"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Pre-alarm action"
+#~ msgctxt "@label"
+#~ msgid "Pre-alarm action cancel"
+#~ msgstr "アラーム前のアクション"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Pre-alarm action"
+#~ msgctxt "@label"
+#~ msgid "Pre-alarm action no error"
+#~ msgstr "アラーム前のアクション"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Post-alarm action"
+#~ msgctxt "@label Shell command to execute after alarm"
+#~ msgid "Post-alarm action"
+#~ msgstr "アラーム後のアクション"
+
+#~ msgctxt "@label Audio method"
+#~ msgid "Sound"
+#~ msgstr "サウンド"
+
+#~ msgctxt "@label Whether audio should repeat"
+#~ msgid "Sound repeat"
+#~ msgstr "サウンドを繰り返す"
+
+#~ msgctxt "@label"
+#~ msgid "Sound fade volume"
+#~ msgstr "フェード"
+
+#~ msgctxt "@label"
+#~ msgid "Sound fade time"
+#~ msgstr "フェード時間"
+
+#~ msgctxt "@label Whether the alarm has a reminder"
+#~ msgid "Reminder"
+#~ msgstr "リマインダ"
+
+#~ msgctxt "@label Whether reminder is on first recurrence only"
+#~ msgid "Reminder once only"
+#~ msgstr "一回だけリマインダ"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "&Defer..."
+#~ msgctxt "@label Deferral type"
+#~ msgid "Deferral"
+#~ msgstr "延期(&D)..."
+
+#~ msgctxt "@label"
+#~ msgid "Deferral time"
+#~ msgstr "延期時間"
+
+#~ msgctxt "@label Default deferral delay"
+#~ msgid "Deferral default"
+#~ msgstr "デフォルトの延期時間"
+
+#~ msgctxt "@label A shell command"
+#~ msgid "Command"
+#~ msgstr "コマンド"
+
+#~ msgctxt "@label Execute in terminal window"
+#~ msgid "Execute in terminal"
+#~ msgstr "ターミナルで実行"
+
+#~ msgctxt "@label"
+#~ msgid "Email subject"
+#~ msgstr "メールの件名"
+
+#~ msgctxt "@label Email address"
+#~ msgid "Email sender ID"
+#~ msgstr "メールの送信者 ID"
+
+#~ msgctxt "@label Email address"
+#~ msgid "Email to"
+#~ msgstr "メール To"
+
+#~ msgctxt "@label true/false"
+#~ msgid "Email bcc"
+#~ msgstr "メール BCC"
+
+#~ msgctxt "@label"
+#~ msgid "Email body"
+#~ msgstr "メール本文"
+
+#~ msgctxt "@label"
+#~ msgid "Email attachments"
+#~ msgstr "メールの添付ファイル"
+
+#, fuzzy
+#~| msgctxt "@label:listbox"
+#~| msgid "Display type:"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (text)"
+#~ msgstr "表示するもの:"
+
+#, fuzzy
+#~| msgctxt "@info:whatsthis"
+#~| msgid "Display the file now"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (file)"
+#~ msgstr "ファイルを今すぐ表示します。"
+
+#, fuzzy
+#~| msgctxt "@info:whatsthis"
+#~| msgid "Display the command output now"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (command)"
+#~ msgstr "コマンド出力を今すぐ表示します。"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Command"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Command"
+#~ msgstr "コマンド"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Email"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Email"
+#~ msgstr "メール"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Audio"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Audio"
+#~ msgstr "音声"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm type"
+#~| msgid "Active"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Active"
+#~ msgstr "有効"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm type"
+#~| msgid "Archived"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Archived"
+#~ msgstr "アーカイブ"
+
+#, fuzzy
+#~| msgctxt "@action"
+#~| msgid "&Templates..."
+#~ msgctxt "@info Alarm type"
+#~ msgid "Template"
+#~ msgstr "テンプレート(&T)..."
+
+#, fuzzy
+#~| msgctxt "@option"
+#~| msgid "At login"
+#~ msgctxt "@info Repeat at login"
+#~ msgid "At login until %1"
+#~ msgstr "ログイン時"
+
+#, fuzzy
+#~| msgctxt "@info/plain n days"
+#~| msgid "%1d"
+#~ msgctxt "@info"
+#~ msgid "%1"
+#~ msgstr "%1 日"
+
+#, fuzzy
+#~| msgctxt "@option:radio"
+#~| msgid "Default time"
+#~ msgctxt "@info Using default font"
+#~ msgid "Default"
+#~ msgstr "デフォルトの時間"
+
+#, fuzzy
+#~| msgctxt "@item:inlistbox"
+#~| msgid "Speak"
+#~ msgctxt "@info"
+#~ msgid "Speak"
+#~ msgstr "読み上げ"
+
+#, fuzzy
+#~| msgctxt "@item:inlistbox"
+#~| msgid "Beep"
+#~ msgctxt "@info"
+#~ msgid "Beep"
+#~ msgstr "ビープ"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "seconds"
+#~ msgctxt "@info"
+#~ msgid "1 Second"
+#~ msgid_plural "%1 Seconds"
+#~ msgstr[0] "秒"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Error"
+#~ msgctxt "@info Error indication"
+#~ msgid "error!"
+#~ msgstr "エラー"
+
+#, fuzzy
+#~| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
+#~| msgid "Yes"
+#~ msgctxt "@info General purpose status indication: yes or no"
+#~ msgid "Yes"
+#~ msgstr "はい"
+
+#, fuzzy
+#~| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
+#~| msgid "No"
+#~ msgctxt "@info General purpose status indication: yes or no"
+#~ msgid "No"
+#~ msgstr "いいえ"
 
 #~ msgctxt "@label"
 #~ msgid "Message windows have a title bar and take keyboard focus"

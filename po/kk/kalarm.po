@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-27 00:45+0000\n"
+"POT-Creation-Date: 2026-08-01 00:48+0000\n"
 "PO-Revision-Date: 2013-07-07 03:28+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -964,7 +964,7 @@ msgid "Select the holiday region to use."
 msgstr "Жергілікті демалыс күндерін таңдаңыз."
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
-#: data/kalarmconfig.kcfg:102 kalarmcalendar/kaeventformatter.cpp:93
+#: data/kalarmconfig.kcfg:102
 #, kde-format
 msgctxt "@label"
 msgid "Foreground color"
@@ -978,7 +978,7 @@ msgid "Default foreground color for alarm message windows."
 msgstr "Ескерту хабарламаның әдетті түсі."
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
-#: data/kalarmconfig.kcfg:107 kalarmcalendar/kaeventformatter.cpp:95
+#: data/kalarmconfig.kcfg:107
 #, kde-format
 msgctxt "@label"
 msgid "Background color"
@@ -1710,7 +1710,7 @@ msgstr ""
 "параметрі."
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
-#: data/kalarmconfig.kcfg:325 kalarmcalendar/kaeventformatter.cpp:107
+#: data/kalarmconfig.kcfg:325
 #, kde-format
 msgctxt "@label"
 msgid "Confirm acknowledgement"
@@ -1779,7 +1779,7 @@ msgid "Default sound file path in the alarm edit dialog."
 msgstr "Ескертуді өңдеу диалогы үшін әдетті дыбыс файлдың жолы"
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
-#: data/kalarmconfig.kcfg:350 kalarmcalendar/kaeventformatter.cpp:115
+#: data/kalarmconfig.kcfg:350
 #, kde-format
 msgctxt "@label"
 msgid "Sound volume"
@@ -1865,7 +1865,7 @@ msgid "Execute in terminal window"
 msgstr "Терминал терезесінде орындалсын"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
-#: data/kalarmconfig.kcfg:377 kalarmcalendar/kaeventformatter.cpp:138
+#: data/kalarmconfig.kcfg:377
 #, kde-format
 msgctxt "@label"
 msgid "Log file"
@@ -3906,8 +3906,6 @@ msgid "At login"
 msgstr "Жүйеге кіргенде"
 
 #: kalarmcalendar/kaevent.cpp:3534 kalarmcalendar/kaevent.cpp:3627
-#: kalarmcalendar/kaeventformatter.cpp:429
-#: kalarmcalendar/kaeventformatter.cpp:443
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Minute"
@@ -3918,7 +3916,6 @@ msgid_plural "%1 Minutes"
 msgstr[0] "%1 минут"
 
 #: kalarmcalendar/kaevent.cpp:3536 kalarmcalendar/kaevent.cpp:3629
-#: kalarmcalendar/kaeventformatter.cpp:445
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Hour"
@@ -3937,7 +3934,6 @@ msgid "%1h %2m"
 msgstr "%1сағ %2мин"
 
 #: kalarmcalendar/kaevent.cpp:3541 kalarmcalendar/kaevent.cpp:3620
-#: kalarmcalendar/kaeventformatter.cpp:447
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "1 Day"
@@ -3991,567 +3987,6 @@ msgstr "Жоқ"
 #| msgid "None"
 msgctxt "@info No repetition"
 msgid "None"
-msgstr "Жоқ"
-
-#: kalarmcalendar/kaeventformatter.cpp:38
-#, kde-format
-msgctxt "@label Unique identifier"
-msgid "UID"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Alarm Type"
-msgctxt "@label"
-msgid "Alarm type"
-msgstr "Ескерту түрі"
-
-#: kalarmcalendar/kaeventformatter.cpp:42
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm templates"
-msgctxt "@label"
-msgid "Alarm status"
-msgstr "Ескерту үлгілері"
-
-#: kalarmcalendar/kaeventformatter.cpp:44
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Alarm Type"
-msgctxt "@label"
-msgid "Alarm name"
-msgstr "Ескерту түрі"
-
-#: kalarmcalendar/kaeventformatter.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Template name:"
-msgctxt "@label"
-msgid "Template name"
-msgstr "Үлгі атауы:"
-
-#: kalarmcalendar/kaeventformatter.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
-msgctxt "@label"
-msgid "Creation time"
-msgstr "Әдетті уақыт"
-
-#: kalarmcalendar/kaeventformatter.cpp:50
-#, fuzzy, kde-format
-#| msgctxt "@info Date cannot be earlier than start date"
-#| msgid "start date"
-msgctxt "@label"
-msgid "Start time"
-msgstr "бастау күні"
-
-#: kalarmcalendar/kaeventformatter.cpp:52
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Template name:"
-msgctxt "@label Start delay configured in an alarm template"
-msgid "Template after time"
-msgstr "Үлгі атауы:"
-
-#: kalarmcalendar/kaeventformatter.cpp:54
-#, fuzzy, kde-format
-msgctxt "@label"
-msgid "Recurs"
-msgstr "Қай&талану"
-
-#: kalarmcalendar/kaeventformatter.cpp:56
-#, fuzzy, kde-format
-#| msgid "Recurrence:"
-msgctxt "@label"
-msgid "Recurrence"
-msgstr "Қайталану:"
-
-#: kalarmcalendar/kaeventformatter.cpp:58
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
-msgctxt "@label"
-msgid "Sub-repetition"
-msgstr "Жай қайталау"
-
-#: kalarmcalendar/kaeventformatter.cpp:60
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
-msgctxt "@label"
-msgid "Sub-repetition interval"
-msgstr "Жай қайталау"
-
-#: kalarmcalendar/kaeventformatter.cpp:62
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
-msgctxt "@label"
-msgid "Sub-repetition count"
-msgstr "Жай қайталау"
-
-#: kalarmcalendar/kaeventformatter.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
-msgctxt "@label"
-msgid "Next sub-repetition"
-msgstr "Жай қайталау"
-
-#: kalarmcalendar/kaeventformatter.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Ignore time zone"
-msgctxt "@label"
-msgid "Work time only"
-msgstr "Уақыт белдеуін елемеу"
-
-#: kalarmcalendar/kaeventformatter.cpp:68
-#, kde-format
-msgctxt "@label"
-msgid "Holidays excluded"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:70
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "No recurrence"
-msgctxt "@label"
-msgid "Next recurrence"
-msgstr "Қайталану болмасын"
-
-#: kalarmcalendar/kaeventformatter.cpp:72
-#, kde-format
-msgctxt "@label"
-msgid "Late cancel"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:74
-#, kde-format
-msgctxt "@label Automatically close window"
-msgid "Auto close"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:76
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Show in KOrganizer"
-msgctxt "@label"
-msgid "Copy to KOrganizer"
-msgstr "KOrganizer-де көрсетілсін"
-
-#: kalarmcalendar/kaeventformatter.cpp:78
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Enabled"
-msgctxt "@label"
-msgid "Enabled"
-msgstr "Рұқсат етілген"
-
-#: kalarmcalendar/kaeventformatter.cpp:80
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Read-only"
-msgctxt "@label"
-msgid "Read-only"
-msgstr "Тек оқу үшін"
-
-#: kalarmcalendar/kaeventformatter.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Archived"
-msgctxt "@label Whether alarm should be archived"
-msgid "Archive"
-msgstr "Өткен"
-
-#: kalarmcalendar/kaeventformatter.cpp:84
-#, kde-format
-msgctxt "@label"
-msgid "Revision"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:86
-#, kde-format
-msgctxt "@label"
-msgid "Custom properties"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Message font"
-msgctxt "@label"
-msgid "Message text"
-msgstr "Хабарлама қаріпі"
-
-#: kalarmcalendar/kaeventformatter.cpp:91
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Message font"
-msgctxt "@label File to provide text for message"
-msgid "Message file"
-msgstr "Хабарлама қаріпі"
-
-#: kalarmcalendar/kaeventformatter.cpp:97
-#, kde-format
-msgctxt "@label"
-msgid "Font"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Pre-alarm action"
-msgctxt "@label Shell command to execute before alarm"
-msgid "Pre-alarm action"
-msgstr "Ескерту алдындағы әрекет"
-
-#: kalarmcalendar/kaeventformatter.cpp:101
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Pre-alarm action"
-msgctxt "@label"
-msgid "Pre-alarm action cancel"
-msgstr "Ескерту алдындағы әрекет"
-
-#: kalarmcalendar/kaeventformatter.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Pre-alarm action"
-msgctxt "@label"
-msgid "Pre-alarm action no error"
-msgstr "Ескерту алдындағы әрекет"
-
-#: kalarmcalendar/kaeventformatter.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Post-alarm action"
-msgctxt "@label Shell command to execute after alarm"
-msgid "Post-alarm action"
-msgstr "Ескерту кейінгі әрекет"
-
-#: kalarmcalendar/kaeventformatter.cpp:109
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Akonadi"
-msgctxt "@label"
-msgid "Akonadi Item ID"
-msgstr "Akonadi"
-
-#: kalarmcalendar/kaeventformatter.cpp:111
-#, fuzzy, kde-format
-#| msgctxt "@label Label for audio options"
-#| msgid "Sound"
-msgctxt "@label Audio method"
-msgid "Sound"
-msgstr "Дыбыс"
-
-#: kalarmcalendar/kaeventformatter.cpp:113
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Do not repeat"
-msgctxt "@label Whether audio should repeat"
-msgid "Sound repeat"
-msgstr "Қайталауы болмасын"
-
-#: kalarmcalendar/kaeventformatter.cpp:117
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Sound volume"
-msgctxt "@label"
-msgid "Sound fade volume"
-msgstr "Дыбыстың үнділігі"
-
-#: kalarmcalendar/kaeventformatter.cpp:119
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Sound file"
-msgctxt "@label"
-msgid "Sound fade time"
-msgstr "Дыбыс файлы"
-
-#: kalarmcalendar/kaeventformatter.cpp:121
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Reminder"
-msgctxt "@label Whether the alarm has a reminder"
-msgid "Reminder"
-msgstr "Алдын-ала еске салу"
-
-#: kalarmcalendar/kaeventformatter.cpp:123
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Reminder for first recurrence only"
-msgctxt "@label Whether reminder is on first recurrence only"
-msgid "Reminder once only"
-msgstr "Тек бірінші қайталануға арналған еске салу"
-
-#: kalarmcalendar/kaeventformatter.cpp:125
-#, kde-format
-msgctxt "@label Whether to use standard notification system"
-msgid "Notify"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:127
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Cancel Deferral"
-msgctxt "@label Deferral type"
-msgid "Deferral"
-msgstr "Кейінге қалдырудан айну"
-
-#: kalarmcalendar/kaeventformatter.cpp:129
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
-msgctxt "@label"
-msgid "Deferral time"
-msgstr "Әдетті уақыт"
-
-#: kalarmcalendar/kaeventformatter.cpp:131
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Cancel Deferral"
-msgctxt "@label Default deferral delay"
-msgid "Deferral default"
-msgstr "Кейінге қалдырудан айну"
-
-#: kalarmcalendar/kaeventformatter.cpp:133
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Cancel Deferral"
-msgctxt "@label Whether deferral time is date-only by default"
-msgid "Deferral default date only"
-msgstr "Кейінге қалдырудан айну"
-
-#: kalarmcalendar/kaeventformatter.cpp:136
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Command"
-msgctxt "@label A shell command"
-msgid "Command"
-msgstr "Командалық"
-
-#: kalarmcalendar/kaeventformatter.cpp:140
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Execute in terminal window"
-msgctxt "@label Execute in terminal window"
-msgid "Execute in terminal"
-msgstr "Терминал терезесінде орындалсын"
-
-#: kalarmcalendar/kaeventformatter.cpp:142
-#, kde-format
-msgctxt "@label"
-msgid "Hide command error"
-msgstr ""
-
-#: kalarmcalendar/kaeventformatter.cpp:145
-#, fuzzy, kde-format
-#| msgid "Email subject line"
-msgctxt "@label"
-msgid "Email subject"
-msgstr "Эл.поштаның тақырып жолы"
-
-#: kalarmcalendar/kaeventformatter.cpp:147
-#, fuzzy, kde-format
-#| msgid "Email subject line"
-msgctxt "@label Email address"
-msgid "Email sender ID"
-msgstr "Эл.поштаның тақырып жолы"
-
-#: kalarmcalendar/kaeventformatter.cpp:149
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
-msgctxt "@label Email address"
-msgid "Email to"
-msgstr "Эл.пошталық"
-
-#: kalarmcalendar/kaeventformatter.cpp:151
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
-msgctxt "@label true/false"
-msgid "Email bcc"
-msgstr "Эл.пошталық"
-
-#: kalarmcalendar/kaeventformatter.cpp:153
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
-msgctxt "@label"
-msgid "Email body"
-msgstr "Эл.пошталық"
-
-#: kalarmcalendar/kaeventformatter.cpp:155
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Email client"
-msgctxt "@label"
-msgid "Email attachments"
-msgstr "Эл.пошта клиенті"
-
-#: kalarmcalendar/kaeventformatter.cpp:257
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Display type:"
-msgctxt "@info Alarm type"
-msgid "Display (text)"
-msgstr "Көрсету түрі:"
-
-#: kalarmcalendar/kaeventformatter.cpp:259
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the file now"
-msgctxt "@info Alarm type"
-msgid "Display (file)"
-msgstr "Файлды қазір көрсету"
-
-#: kalarmcalendar/kaeventformatter.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the command output now"
-msgctxt "@info Alarm type"
-msgid "Display (command)"
-msgstr "Команданың шығысын қазір көрсету"
-
-#: kalarmcalendar/kaeventformatter.cpp:263
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Command"
-msgctxt "@info Alarm type"
-msgid "Command"
-msgstr "Командалық"
-
-#: kalarmcalendar/kaeventformatter.cpp:265
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
-msgctxt "@info Alarm type"
-msgid "Email"
-msgstr "Эл.пошталық"
-
-#: kalarmcalendar/kaeventformatter.cpp:267
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Audio"
-msgctxt "@info Alarm type"
-msgid "Audio"
-msgstr "Дыбысты"
-
-#: kalarmcalendar/kaeventformatter.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Active"
-msgctxt "@info Alarm type"
-msgid "Active"
-msgstr "Белсенді"
-
-#: kalarmcalendar/kaeventformatter.cpp:276
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Archived"
-msgctxt "@info Alarm type"
-msgid "Archived"
-msgstr "Өткен"
-
-#: kalarmcalendar/kaeventformatter.cpp:278
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Templates..."
-msgctxt "@info Alarm type"
-msgid "Template"
-msgstr "&Үлгілер..."
-
-#: kalarmcalendar/kaeventformatter.cpp:297
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "At login"
-msgctxt "@info Repeat at login"
-msgid "At login until %1"
-msgstr "Жүйеге кіргенде"
-
-#: kalarmcalendar/kaeventformatter.cpp:338
-#, fuzzy, kde-format
-#| msgctxt "@info/plain n days"
-#| msgid "%1d"
-msgctxt "@info"
-msgid "%1"
-msgstr "%1к"
-
-#: kalarmcalendar/kaeventformatter.cpp:350
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
-msgctxt "@info Using default font"
-msgid "Default"
-msgstr "Әдетті уақыт"
-
-#: kalarmcalendar/kaeventformatter.cpp:366 messagedisplayhelper.cpp:220
-#, kde-format
-msgctxt "@info"
-msgid "Reminder"
-msgstr "Алдын-ала еске салу"
-
-#: kalarmcalendar/kaeventformatter.cpp:379
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Speak"
-msgctxt "@info"
-msgid "Speak"
-msgstr "Үн қату"
-
-#: kalarmcalendar/kaeventformatter.cpp:380
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Beep"
-msgctxt "@info"
-msgid "Beep"
-msgstr "Шиқыл"
-
-#: kalarmcalendar/kaeventformatter.cpp:385
-#: kalarmcalendar/kaeventformatter.cpp:389
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "%1%2"
-msgctxt "@info Percentage"
-msgid "%1%%"
-msgstr "%1%2"
-
-#: kalarmcalendar/kaeventformatter.cpp:393
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "seconds"
-msgctxt "@info"
-msgid "1 Second"
-msgid_plural "%1 Seconds"
-msgstr[0] "сек"
-
-#: kalarmcalendar/kaeventformatter.cpp:418
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Error"
-msgctxt "@info Error indication"
-msgid "error!"
-msgstr "Қате"
-
-#: kalarmcalendar/kaeventformatter.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
-#| msgid "Yes"
-msgctxt "@info General purpose status indication: yes or no"
-msgid "Yes"
-msgstr "Иә"
-
-#: kalarmcalendar/kaeventformatter.cpp:424
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
-#| msgid "No"
-msgctxt "@info General purpose status indication: yes or no"
-msgid "No"
 msgstr "Жоқ"
 
 #: kamail.cpp:69
@@ -5181,6 +4616,12 @@ msgstr "Алдын-ала еске салу"
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Хабарлама"
+
+#: messagedisplayhelper.cpp:220
+#, kde-format
+msgctxt "@info"
+msgid "Reminder"
+msgstr "Алдын-ала еске салу"
 
 #: messagedisplayhelper.cpp:298
 #, kde-format
@@ -9574,6 +9015,443 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Ескертуден неше минут бұрын аялдау режімінен оралу керек"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Alarm Type"
+#~ msgctxt "@label"
+#~ msgid "Alarm type"
+#~ msgstr "Ескерту түрі"
+
+#, fuzzy
+#~| msgctxt "@info/plain"
+#~| msgid "Alarm templates"
+#~ msgctxt "@label"
+#~ msgid "Alarm status"
+#~ msgstr "Ескерту үлгілері"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Alarm Type"
+#~ msgctxt "@label"
+#~ msgid "Alarm name"
+#~ msgstr "Ескерту түрі"
+
+#, fuzzy
+#~| msgctxt "@label:textbox"
+#~| msgid "Template name:"
+#~ msgctxt "@label"
+#~ msgid "Template name"
+#~ msgstr "Үлгі атауы:"
+
+#, fuzzy
+#~| msgctxt "@option:radio"
+#~| msgid "Default time"
+#~ msgctxt "@label"
+#~ msgid "Creation time"
+#~ msgstr "Әдетті уақыт"
+
+#, fuzzy
+#~| msgctxt "@info Date cannot be earlier than start date"
+#~| msgid "start date"
+#~ msgctxt "@label"
+#~ msgid "Start time"
+#~ msgstr "бастау күні"
+
+#, fuzzy
+#~| msgctxt "@label:textbox"
+#~| msgid "Template name:"
+#~ msgctxt "@label Start delay configured in an alarm template"
+#~ msgid "Template after time"
+#~ msgstr "Үлгі атауы:"
+
+#, fuzzy
+#~ msgctxt "@label"
+#~ msgid "Recurs"
+#~ msgstr "Қай&талану"
+
+#, fuzzy
+#~| msgid "Recurrence:"
+#~ msgctxt "@label"
+#~ msgid "Recurrence"
+#~ msgstr "Қайталану:"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Sub-Repetition"
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition"
+#~ msgstr "Жай қайталау"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Sub-Repetition"
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition interval"
+#~ msgstr "Жай қайталау"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Sub-Repetition"
+#~ msgctxt "@label"
+#~ msgid "Sub-repetition count"
+#~ msgstr "Жай қайталау"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Sub-Repetition"
+#~ msgctxt "@label"
+#~ msgid "Next sub-repetition"
+#~ msgstr "Жай қайталау"
+
+#, fuzzy
+#~| msgctxt "@option:check"
+#~| msgid "Ignore time zone"
+#~ msgctxt "@label"
+#~ msgid "Work time only"
+#~ msgstr "Уақыт белдеуін елемеу"
+
+#, fuzzy
+#~| msgctxt "@option"
+#~| msgid "No recurrence"
+#~ msgctxt "@label"
+#~ msgid "Next recurrence"
+#~ msgstr "Қайталану болмасын"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Show in KOrganizer"
+#~ msgctxt "@label"
+#~ msgid "Copy to KOrganizer"
+#~ msgstr "KOrganizer-де көрсетілсін"
+
+#, fuzzy
+#~| msgctxt "@info/plain"
+#~| msgid "Enabled"
+#~ msgctxt "@label"
+#~ msgid "Enabled"
+#~ msgstr "Рұқсат етілген"
+
+#, fuzzy
+#~| msgctxt "@info/plain"
+#~| msgid "Read-only"
+#~ msgctxt "@label"
+#~ msgid "Read-only"
+#~ msgstr "Тек оқу үшін"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm type"
+#~| msgid "Archived"
+#~ msgctxt "@label Whether alarm should be archived"
+#~ msgid "Archive"
+#~ msgstr "Өткен"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Message font"
+#~ msgctxt "@label"
+#~ msgid "Message text"
+#~ msgstr "Хабарлама қаріпі"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Message font"
+#~ msgctxt "@label File to provide text for message"
+#~ msgid "Message file"
+#~ msgstr "Хабарлама қаріпі"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Pre-alarm action"
+#~ msgctxt "@label Shell command to execute before alarm"
+#~ msgid "Pre-alarm action"
+#~ msgstr "Ескерту алдындағы әрекет"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Pre-alarm action"
+#~ msgctxt "@label"
+#~ msgid "Pre-alarm action cancel"
+#~ msgstr "Ескерту алдындағы әрекет"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Pre-alarm action"
+#~ msgctxt "@label"
+#~ msgid "Pre-alarm action no error"
+#~ msgstr "Ескерту алдындағы әрекет"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Post-alarm action"
+#~ msgctxt "@label Shell command to execute after alarm"
+#~ msgid "Post-alarm action"
+#~ msgstr "Ескерту кейінгі әрекет"
+
+#, fuzzy
+#~| msgctxt "@option"
+#~| msgid "Akonadi"
+#~ msgctxt "@label"
+#~ msgid "Akonadi Item ID"
+#~ msgstr "Akonadi"
+
+#, fuzzy
+#~| msgctxt "@label Label for audio options"
+#~| msgid "Sound"
+#~ msgctxt "@label Audio method"
+#~ msgid "Sound"
+#~ msgstr "Дыбыс"
+
+#, fuzzy
+#~| msgctxt "@option"
+#~| msgid "Do not repeat"
+#~ msgctxt "@label Whether audio should repeat"
+#~ msgid "Sound repeat"
+#~ msgstr "Қайталауы болмасын"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Sound volume"
+#~ msgctxt "@label"
+#~ msgid "Sound fade volume"
+#~ msgstr "Дыбыстың үнділігі"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Sound file"
+#~ msgctxt "@label"
+#~ msgid "Sound fade time"
+#~ msgstr "Дыбыс файлы"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Reminder"
+#~ msgctxt "@label Whether the alarm has a reminder"
+#~ msgid "Reminder"
+#~ msgstr "Алдын-ала еске салу"
+
+#, fuzzy
+#~| msgctxt "@option:check"
+#~| msgid "Reminder for first recurrence only"
+#~ msgctxt "@label Whether reminder is on first recurrence only"
+#~ msgid "Reminder once only"
+#~ msgstr "Тек бірінші қайталануға арналған еске салу"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Cancel Deferral"
+#~ msgctxt "@label Deferral type"
+#~ msgid "Deferral"
+#~ msgstr "Кейінге қалдырудан айну"
+
+#, fuzzy
+#~| msgctxt "@option:radio"
+#~| msgid "Default time"
+#~ msgctxt "@label"
+#~ msgid "Deferral time"
+#~ msgstr "Әдетті уақыт"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Cancel Deferral"
+#~ msgctxt "@label Default deferral delay"
+#~ msgid "Deferral default"
+#~ msgstr "Кейінге қалдырудан айну"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Cancel Deferral"
+#~ msgctxt "@label Whether deferral time is date-only by default"
+#~ msgid "Deferral default date only"
+#~ msgstr "Кейінге қалдырудан айну"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Command"
+#~ msgctxt "@label A shell command"
+#~ msgid "Command"
+#~ msgstr "Командалық"
+
+#, fuzzy
+#~| msgctxt "@option:radio"
+#~| msgid "Execute in terminal window"
+#~ msgctxt "@label Execute in terminal window"
+#~ msgid "Execute in terminal"
+#~ msgstr "Терминал терезесінде орындалсын"
+
+#, fuzzy
+#~| msgid "Email subject line"
+#~ msgctxt "@label"
+#~ msgid "Email subject"
+#~ msgstr "Эл.поштаның тақырып жолы"
+
+#, fuzzy
+#~| msgid "Email subject line"
+#~ msgctxt "@label Email address"
+#~ msgid "Email sender ID"
+#~ msgstr "Эл.поштаның тақырып жолы"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Email"
+#~ msgctxt "@label Email address"
+#~ msgid "Email to"
+#~ msgstr "Эл.пошталық"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Email"
+#~ msgctxt "@label true/false"
+#~ msgid "Email bcc"
+#~ msgstr "Эл.пошталық"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Email"
+#~ msgctxt "@label"
+#~ msgid "Email body"
+#~ msgstr "Эл.пошталық"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "Email client"
+#~ msgctxt "@label"
+#~ msgid "Email attachments"
+#~ msgstr "Эл.пошта клиенті"
+
+#, fuzzy
+#~| msgctxt "@label:listbox"
+#~| msgid "Display type:"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (text)"
+#~ msgstr "Көрсету түрі:"
+
+#, fuzzy
+#~| msgctxt "@info:whatsthis"
+#~| msgid "Display the file now"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (file)"
+#~ msgstr "Файлды қазір көрсету"
+
+#, fuzzy
+#~| msgctxt "@info:whatsthis"
+#~| msgid "Display the command output now"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Display (command)"
+#~ msgstr "Команданың шығысын қазір көрсету"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Command"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Command"
+#~ msgstr "Командалық"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Email"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Email"
+#~ msgstr "Эл.пошталық"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm action"
+#~| msgid "Audio"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Audio"
+#~ msgstr "Дыбысты"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm type"
+#~| msgid "Active"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Active"
+#~ msgstr "Белсенді"
+
+#, fuzzy
+#~| msgctxt "@option:check Alarm type"
+#~| msgid "Archived"
+#~ msgctxt "@info Alarm type"
+#~ msgid "Archived"
+#~ msgstr "Өткен"
+
+#, fuzzy
+#~| msgctxt "@action"
+#~| msgid "&Templates..."
+#~ msgctxt "@info Alarm type"
+#~ msgid "Template"
+#~ msgstr "&Үлгілер..."
+
+#, fuzzy
+#~| msgctxt "@info/plain"
+#~| msgid "At login"
+#~ msgctxt "@info Repeat at login"
+#~ msgid "At login until %1"
+#~ msgstr "Жүйеге кіргенде"
+
+#, fuzzy
+#~| msgctxt "@info/plain n days"
+#~| msgid "%1d"
+#~ msgctxt "@info"
+#~ msgid "%1"
+#~ msgstr "%1к"
+
+#, fuzzy
+#~| msgctxt "@option:radio"
+#~| msgid "Default time"
+#~ msgctxt "@info Using default font"
+#~ msgid "Default"
+#~ msgstr "Әдетті уақыт"
+
+#, fuzzy
+#~| msgctxt "@item:inlistbox"
+#~| msgid "Speak"
+#~ msgctxt "@info"
+#~ msgid "Speak"
+#~ msgstr "Үн қату"
+
+#, fuzzy
+#~| msgctxt "@item:inlistbox"
+#~| msgid "Beep"
+#~ msgctxt "@info"
+#~ msgid "Beep"
+#~ msgstr "Шиқыл"
+
+#, fuzzy
+#~| msgctxt "@info:tooltip"
+#~| msgid "%1%2"
+#~ msgctxt "@info Percentage"
+#~ msgid "%1%%"
+#~ msgstr "%1%2"
+
+#, fuzzy
+#~| msgctxt "@label"
+#~| msgid "seconds"
+#~ msgctxt "@info"
+#~ msgid "1 Second"
+#~ msgid_plural "%1 Seconds"
+#~ msgstr[0] "сек"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Error"
+#~ msgctxt "@info Error indication"
+#~ msgid "error!"
+#~ msgstr "Қате"
+
+#, fuzzy
+#~| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
+#~| msgid "Yes"
+#~ msgctxt "@info General purpose status indication: yes or no"
+#~ msgid "Yes"
+#~ msgstr "Иә"
+
+#, fuzzy
+#~| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
+#~| msgid "No"
+#~ msgctxt "@info General purpose status indication: yes or no"
+#~ msgid "No"
+#~ msgstr "Жоқ"
 
 #~ msgctxt "@label"
 #~ msgid "Message windows have a title bar and take keyboard focus"
