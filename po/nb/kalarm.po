@@ -8,6 +8,7 @@
 # Nils Kristian Tomren <slx@nilsk.net>, 2004, 2005, 2007.
 # Øyvind A. Holm <sunny@sunbase.org>, 2005, 2006.
 # Jørgen Grønlund <jorgenhg@broadpark.no>, 2006.
+# Karl Ove Hufthammer <karl@huftis.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
