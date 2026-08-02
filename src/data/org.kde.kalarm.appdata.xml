@@ -1355,6 +1355,7 @@
           <li xml:lang="cs">Opravena chyba v dialogovém okně „Upravit upomínku“ při nastavování času, pokud je časové pásmo uživatele UTC.</li>
           <li xml:lang="es">Se ha corregido el error del diálogo Editar alarma al configurar la hora si la zona horaria del usuario es UTC.</li>
           <li xml:lang="fr">Correction de l’erreur de réglage de l’heure dans la boîte de dialogue « Modifier l’alarme » si le fuseau horaire de l’utilisateur est « UTC ».</li>
+          <li xml:lang="he">תוקנה שגיאת חלונית עריכת התראות בעת הגדרת השעה אם אזור הזמן של המשתמש הוא UTC.</li>
           <li xml:lang="ia">Corrige error de dialogo de Modifica Alarma assignante tempore si le fuso horari del usator è UTC.</li>
           <li xml:lang="it">Correzione dell'errore nella finestra Modifica avviso all'impostazione dell'orario se il fuso orario dell'utente è UTC.</li>
           <li xml:lang="ka">გასწორდა განგაშის ჩასწორების დიალოგში დროის დაყენების შეცდომა, როდესაც მომხმარებლის დროის სარტყელი UTC-ია.</li>
