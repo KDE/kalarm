@@ -3932,7 +3932,7 @@ msgstr "命令"
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Email"
-msgstr "Email"
+msgstr "电子邮件"
 
 #: kalarmcalendar/kaeventformatter.cpp:267
 #, kde-format
@@ -3950,7 +3950,7 @@ msgstr "活动"
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Archived"
-msgstr "存档"
+msgstr "已归档"
 
 #: kalarmcalendar/kaeventformatter.cpp:278
 #, kde-format
@@ -3986,7 +3986,7 @@ msgstr "提醒"
 #, kde-format
 msgctxt "@info"
 msgid "Speak"
-msgstr "朗读"
+msgstr "读出"
 
 #: kalarmcalendar/kaeventformatter.cpp:380
 #, kde-format
