@@ -36,6 +36,7 @@
 #include "audioplugin/audioplugin.h"
 #include "kalarm_debug.h"
 
+#include <kcalendarcore_version.h>
 #if KCALENDARCORE_VERSION < QT_VERSION_CHECK(6, 29, 0)
 #include <KCalUtils/ICalDrag>
 #else

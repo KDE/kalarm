@@ -36,6 +36,7 @@
 
 #include <KCalendarCore/MemoryCalendar>
 using namespace KCalendarCore;
+#include <kcalendarcore_version.h>
 #if KCALENDARCORE_VERSION < QT_VERSION_CHECK(6, 29, 0)
 #include <KCalUtils/ICalDrag>
 using namespace KCalUtils;
