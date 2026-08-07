@@ -1,7 +1,7 @@
 /*
  *  messagedisplayhelper.cpp  -  helper class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -264,8 +264,8 @@ void MessageDisplayHelper::initTexts()
                             case File::Type::TextFormatted:
                                 delete mTempFile;
                                 mTempFile = new QTemporaryFile;
-                                mTempFile->open();
-                                mTempFile->write(data);
+                                if (mTempFile->open())
+                                    mTempFile->write(data);
                                 break;
                             default:
                                 break;
