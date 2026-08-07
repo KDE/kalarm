@@ -1,7 +1,7 @@
 /*
  *  dirresourceimportdialog.h - configuration dialog to import directory resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -85,7 +85,6 @@ private:
     Ui_DirResourceImportTypeWidget* mUi {nullptr};
     QString     (*mUrlValidationFunc)(const QUrl&) {nullptr};
     KIO::StatJob* mStatJob {nullptr};
-    bool          mLastPage {false};
     bool          mCheckingDir {false};
 
 };

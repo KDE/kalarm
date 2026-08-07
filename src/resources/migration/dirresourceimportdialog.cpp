@@ -1,7 +1,7 @@
 /*
  *  dirresourceimportdialog.cpp - configuration dialog to import directory resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020,2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -45,7 +45,6 @@ DirResourceImportDialog::DirResourceImportDialog(const QString& dirResourceName,
         mPageActive = new DirResourceImportTypeWidget(CalEvent::ACTIVE, this);
         addPage(mPageActive, i18nc("@title:tab", "Import Active Alarms"));
         connect(mPageActive, &DirResourceImportTypeWidget::status, this, &DirResourceImportDialog::typeStatusChanged);
-        mLastPage = mPageActive;
     }
 
     if (mAlarmTypes & CalEvent::ARCHIVED)
@@ -54,7 +53,6 @@ DirResourceImportDialog::DirResourceImportDialog(const QString& dirResourceName,
         mPageArchived = new DirResourceImportTypeWidget(CalEvent::ARCHIVED, this);
         addPage(mPageArchived, i18nc("@title:tab", "Import Archived Alarms"));
         connect(mPageArchived, &DirResourceImportTypeWidget::status, this, &DirResourceImportDialog::typeStatusChanged);
-        mLastPage = mPageArchived;
     }
 
     if (mAlarmTypes & CalEvent::TEMPLATE)
@@ -63,7 +61,6 @@ DirResourceImportDialog::DirResourceImportDialog(const QString& dirResourceName,
         mPageTemplate = new DirResourceImportTypeWidget(CalEvent::TEMPLATE, this);
         addPage(mPageTemplate, i18nc("@title:tab", "Import Alarm Templates"));
         connect(mPageTemplate, &DirResourceImportTypeWidget::status, this, &DirResourceImportDialog::typeStatusChanged);
-        mLastPage = mPageTemplate;
     }
 
     connect(this, &KPageDialog::currentPageChanged, this, &DirResourceImportDialog::pageChanged);
@@ -138,12 +135,7 @@ void DirResourceImportDialog::pageChanged(KPageWidgetItem* current, KPageWidgetI
 */
 void DirResourceImportDialog::typeStatusChanged(bool ok)
 {
-    auto page = qobject_cast<DirResourceImportTypeWidget*>(currentPage()->widget());
-    if (page)
-    {
-        nextButton()->setEnabled(ok  &&  (page != mLastPage));
-        finishButton()->setEnabled(ok  &&  (page == mLastPage));
-    }
+    setValid(currentPage(), ok);
 }
 
 const DirResourceImportTypeWidget* DirResourceImportDialog::typePage(KAlarmCal::CalEvent::Type type) const
@@ -296,14 +288,6 @@ QUrl DirResourceImportTypeWidget::url() const
 QString DirResourceImportTypeWidget::displayName() const
 {
     return mUi->newRadio->isChecked() ? mUi->nameText->text() : QString();
-}
-
-/******************************************************************************
-* Notify the page that it is the last page.
-*/
-void DirResourceImportTypeWidget::setLastPage()
-{
-    mLastPage = true;
 }
 
 /******************************************************************************

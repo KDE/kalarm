@@ -1,7 +1,7 @@
 /*
  *  dirresourceimportdialog.h - configuration dialog to import directory resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -57,7 +57,6 @@ private:
     DirResourceImportTypeWidget*  mPageActive {nullptr};
     DirResourceImportTypeWidget*  mPageArchived {nullptr};
     DirResourceImportTypeWidget*  mPageTemplate {nullptr};
-    DirResourceImportTypeWidget*  mLastPage {nullptr};
 
     friend struct TypeData;
 };
