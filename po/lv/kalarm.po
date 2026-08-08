@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-01 00:48+0000\n"
+"POT-Creation-Date: 2026-08-08 00:45+0000\n"
 "PO-Revision-Date: 2025-02-13 15:56+0200\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
@@ -2519,85 +2519,85 @@ msgid ""
 "inhibition or active full screen applications."
 msgstr ""
 
-#: editdlgtypes.cpp:79
+#: editdlgtypes.cpp:80
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Izvēlieties žurnāla datni"
 
-#: editdlgtypes.cpp:92
+#: editdlgtypes.cpp:93
 #, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "Parādīšanas metode:"
 
-#: editdlgtypes.cpp:93
+#: editdlgtypes.cpp:94
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "Logs"
 
-#: editdlgtypes.cpp:94
+#: editdlgtypes.cpp:95
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "Paziņojums"
 
-#: editdlgtypes.cpp:95
+#: editdlgtypes.cpp:96
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Lūgt apstiprināšanu"
 
-#: editdlgtypes.cpp:131
+#: editdlgtypes.cpp:132
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Jauna ekrāna signāla sagatave"
 
-#: editdlgtypes.cpp:131
+#: editdlgtypes.cpp:132
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Ekrāna signāla sagataves rediģēšana"
 
-#: editdlgtypes.cpp:132
+#: editdlgtypes.cpp:133
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Jauns ekrāna signāls"
 
-#: editdlgtypes.cpp:132
+#: editdlgtypes.cpp:133
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Ekrāna signāla rediģēšana"
 
-#: editdlgtypes.cpp:145
+#: editdlgtypes.cpp:146
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Attēlošanas tips:"
 
-#: editdlgtypes.cpp:149
+#: editdlgtypes.cpp:150
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Teksta ziņojums"
 
-#: editdlgtypes.cpp:150
+#: editdlgtypes.cpp:151
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr "Datnes saturs"
 
-#: editdlgtypes.cpp:151
+#: editdlgtypes.cpp:152
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "Komandas izvade"
 
-#: editdlgtypes.cpp:171
+#: editdlgtypes.cpp:172
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2613,31 +2613,31 @@ msgstr ""
 "saturu. </item><item><interface>%3</interface>: signālā rādīs komandas "
 "izvadi.</item></list></para>"
 
-#: editdlgtypes.cpp:186
+#: editdlgtypes.cpp:187
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Ievadiet signāla ziņojuma tekstu. Tas var būt vairākās rindās."
 
-#: editdlgtypes.cpp:199
+#: editdlgtypes.cpp:200
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "Ievadiet nosaukumu vai URL rādāmajam teksta vai attēla datnei."
 
-#: editdlgtypes.cpp:206 editdlgtypes.cpp:895 sounddlg.cpp:185
+#: editdlgtypes.cpp:207 editdlgtypes.cpp:896 sounddlg.cpp:185
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Izvēlieties datni"
 
-#: editdlgtypes.cpp:207
+#: editdlgtypes.cpp:208
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Izvēlieties rādāmo teksta vai attēla datni."
 
-#: editdlgtypes.cpp:251
+#: editdlgtypes.cpp:252
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2645,7 +2645,7 @@ msgid ""
 "system."
 msgstr "Norādiet, vai rādīt signālu logā vai pie paziņojumu sistēmas."
 
-#: editdlgtypes.cpp:278
+#: editdlgtypes.cpp:279
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2655,7 +2655,7 @@ msgstr ""
 "Atzīmējiet, lai rādītu arī atgādinājumu noteiktas reizes pirms vai pēc "
 "galvenā signāla sākšanās."
 
-#: editdlgtypes.cpp:279
+#: editdlgtypes.cpp:280
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2665,7 +2665,7 @@ msgstr ""
 "<para>Norādiet, cik ilgi pirms vai pēc galvenā signāla sākšanās parādīt "
 "atgādinājumu.</para><para>%1</para>"
 
-#: editdlgtypes.cpp:280
+#: editdlgtypes.cpp:281
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2673,139 +2673,139 @@ msgid ""
 "alarm"
 msgstr "Izvēlieties, vai atgādinājumu palaist pirms vai pēc galvenā signāla"
 
-#: editdlgtypes.cpp:290
+#: editdlgtypes.cpp:291
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr "Atzīmējiet, ja vēlaties, lai programma lūdz signālu apstiprināt"
 
-#: editdlgtypes.cpp:299
+#: editdlgtypes.cpp:300
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Parādīt signālu tagad"
 
-#: editdlgtypes.cpp:681
+#: editdlgtypes.cpp:682
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Rādīt signāla paziņojumu"
 
-#: editdlgtypes.cpp:690
+#: editdlgtypes.cpp:691
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Parādīt datni"
 
-#: editdlgtypes.cpp:700
+#: editdlgtypes.cpp:701
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Rādīt komandas izvadi"
 
-#: editdlgtypes.cpp:732
+#: editdlgtypes.cpp:733
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Izvēlieties rādāmo teksta vai attēla datni"
 
-#: editdlgtypes.cpp:810
+#: editdlgtypes.cpp:811
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "Ierakstīt skriptu"
 
-#: editdlgtypes.cpp:811
+#: editdlgtypes.cpp:812
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "Izpildīt termināļa logā"
 
-#: editdlgtypes.cpp:812
+#: editdlgtypes.cpp:813
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "Izpildīt termināļa logā"
 
-#: editdlgtypes.cpp:842
+#: editdlgtypes.cpp:843
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Jauna komandas signāla sagatave"
 
-#: editdlgtypes.cpp:842
+#: editdlgtypes.cpp:843
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Rediģēt komandas signāla sagatavi"
 
-#: editdlgtypes.cpp:843
+#: editdlgtypes.cpp:844
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Jauns komandas signāls"
 
-#: editdlgtypes.cpp:843
+#: editdlgtypes.cpp:844
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Rediģēt komandas signālu"
 
-#: editdlgtypes.cpp:851
+#: editdlgtypes.cpp:852
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Izpildīt norādīto komandu"
 
-#: editdlgtypes.cpp:852
+#: editdlgtypes.cpp:853
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Izpildīt norādīto komandu"
 
-#: editdlgtypes.cpp:859 specialactions.cpp:182
+#: editdlgtypes.cpp:860 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr "Neziņot par kļūdām"
 
-#: editdlgtypes.cpp:860
+#: editdlgtypes.cpp:861
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "Nerādīt kļūdas ziņojumu, ja komanda neizdodas."
 
-#: editdlgtypes.cpp:866
+#: editdlgtypes.cpp:867
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Komandas izvade"
 
-#: editdlgtypes.cpp:874
+#: editdlgtypes.cpp:875
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "Atzīmējiet, lai izpildītu komandu termināļa logā"
 
-#: editdlgtypes.cpp:887
+#: editdlgtypes.cpp:888
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Ievadiet nosaukumu vai ceļu uz žurnāla datni."
 
-#: editdlgtypes.cpp:896
+#: editdlgtypes.cpp:897
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Atlasiet žurnāla datni."
 
-#: editdlgtypes.cpp:899
+#: editdlgtypes.cpp:900
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "Žurnalēt datnē"
 
-#: editdlgtypes.cpp:900
+#: editdlgtypes.cpp:901
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2815,26 +2815,26 @@ msgstr ""
 "Atzīmējiet, lai žurnalētu komandas izvadi lokālā datnē. Izvadi programam "
 "pievienos esošās datnes saturam."
 
-#: editdlgtypes.cpp:907
+#: editdlgtypes.cpp:908
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Izmest"
 
-#: editdlgtypes.cpp:908
+#: editdlgtypes.cpp:909
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Atzīmējiet, lai izmestu komandas izvadi."
 
-#: editdlgtypes.cpp:1070
+#: editdlgtypes.cpp:1071
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Log file must be the name or path of a local file, with write permission."
 msgstr "Žurnāla datnei jābūt lokālai datnei vai ceļam ar rakstīšanas atļauju."
 
-#: editdlgtypes.cpp:1080
+#: editdlgtypes.cpp:1081
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2845,61 +2845,61 @@ msgstr ""
 "para><para>Atlasiet to „<application>KAlarm</application>“ konfigurācijas "
 "lodziņā.</para>"
 
-#: editdlgtypes.cpp:1100
+#: editdlgtypes.cpp:1101
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
 msgstr "Izpildītā komanda: <icode>%1</icode>"
 
-#: editdlgtypes.cpp:1134
+#: editdlgtypes.cpp:1135
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "Kopēt e-pasta vēstuli uz sevi"
 
-#: editdlgtypes.cpp:1171
+#: editdlgtypes.cpp:1172
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "Jauna e-pasta signāla sagatave"
 
-#: editdlgtypes.cpp:1171
+#: editdlgtypes.cpp:1172
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Rediģēt e-pasta signāla sagatavi"
 
-#: editdlgtypes.cpp:1172
+#: editdlgtypes.cpp:1173
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "Jauns e-pasta signāls"
 
-#: editdlgtypes.cpp:1172
+#: editdlgtypes.cpp:1173
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Rediģēt e-pasta signālu"
 
-#: editdlgtypes.cpp:1180
+#: editdlgtypes.cpp:1181
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Nosūtīt e-pastu uz norādītajām adresēm"
 
-#: editdlgtypes.cpp:1181
+#: editdlgtypes.cpp:1182
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "Nosūtīt e-pastu"
 
-#: editdlgtypes.cpp:1192
+#: editdlgtypes.cpp:1193
 #, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "No:"
 
-#: editdlgtypes.cpp:1198
+#: editdlgtypes.cpp:1199
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2909,13 +2909,13 @@ msgstr ""
 "Jūsu e-pasta identitāte, kas tiek izmantota, lai jūs identificētu kā "
 "nosūtītāju, sūtot e-pasta signālus."
 
-#: editdlgtypes.cpp:1204
+#: editdlgtypes.cpp:1205
 #, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "Kam:"
 
-#: editdlgtypes.cpp:1209
+#: editdlgtypes.cpp:1210
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2925,169 +2925,169 @@ msgstr ""
 "Ierakstiet e-pasta saņēmēju adreses. Atdaliet vairākas adreses ar komatiem "
 "vai semikoliem."
 
-#: editdlgtypes.cpp:1220
+#: editdlgtypes.cpp:1221
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Atvērt adrešu grāmatu"
 
-#: editdlgtypes.cpp:1221
+#: editdlgtypes.cpp:1222
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Atlasiet e-pasta adreses no jūsu adrešu grāmatas."
 
-#: editdlgtypes.cpp:1228
+#: editdlgtypes.cpp:1229
 #, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Temats:"
 
-#: editdlgtypes.cpp:1234
+#: editdlgtypes.cpp:1235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Ievadiet e-pasta vēstules tematu."
 
-#: editdlgtypes.cpp:1240
+#: editdlgtypes.cpp:1241
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Rakstiet e-pasta vēstuli."
 
-#: editdlgtypes.cpp:1248
+#: editdlgtypes.cpp:1249
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "Piesaistne:"
 
-#: editdlgtypes.cpp:1257
+#: editdlgtypes.cpp:1258
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Datnes, ko sūtīt kā e-pasta piesaistnes."
 
-#: editdlgtypes.cpp:1261 resourceselector.cpp:77
+#: editdlgtypes.cpp:1262 resourceselector.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Pievienot..."
 
-#: editdlgtypes.cpp:1263
+#: editdlgtypes.cpp:1264
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Pievienot e-pastam piesaistni."
 
-#: editdlgtypes.cpp:1266 resourceselector.cpp:79
+#: editdlgtypes.cpp:1267 resourceselector.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Noņemt"
 
-#: editdlgtypes.cpp:1268
+#: editdlgtypes.cpp:1269
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Noņemt no e-pasta vēstules izcelto piesaistni."
 
-#: editdlgtypes.cpp:1273
+#: editdlgtypes.cpp:1274
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "Ja atzīmēts, programma e-pastu akli pārkopēs jums."
 
-#: editdlgtypes.cpp:1455
+#: editdlgtypes.cpp:1456
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "Nederīga e-pasta adrese: <email>%1</email>"
 
-#: editdlgtypes.cpp:1462
+#: editdlgtypes.cpp:1463
 #, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Nav norādīta e-pasta adrese"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1480
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "Nederīga e-pasta piesaistne: <filename>%1</filename>"
 
-#: editdlgtypes.cpp:1483
+#: editdlgtypes.cpp:1484
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "Vai tiešām vēlaties tagad nosūtīt e-pastu norādītajiem saņēmējiem?"
 
-#: editdlgtypes.cpp:1484
+#: editdlgtypes.cpp:1485
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Apstiprināt e-pastu"
 
-#: editdlgtypes.cpp:1484
+#: editdlgtypes.cpp:1485
 #, kde-format
 msgctxt "@action:button"
 msgid "Send"
 msgstr "Sūtīt"
 
-#: editdlgtypes.cpp:1510
+#: editdlgtypes.cpp:1511
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
 msgstr "E-pasta vēstule ir nosūtīta uz:<nl/>%1<nl/>Bcc: <email>%2</email>"
 
-#: editdlgtypes.cpp:1513
+#: editdlgtypes.cpp:1514
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
 msgstr "E-pasta vēstule ir nosūtīta uz:<nl/>%1"
 
-#: editdlgtypes.cpp:1542
+#: editdlgtypes.cpp:1543
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Izvēlieties pievienojamo datni"
 
-#: editdlgtypes.cpp:1625
+#: editdlgtypes.cpp:1626
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Jauna audio signāla sagatave"
 
-#: editdlgtypes.cpp:1625
+#: editdlgtypes.cpp:1626
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Rediģēt audio signāla sagatavi"
 
-#: editdlgtypes.cpp:1626
+#: editdlgtypes.cpp:1627
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Jauns audio signāls"
 
-#: editdlgtypes.cpp:1626
+#: editdlgtypes.cpp:1627
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Rediģēt audio signālu"
 
-#: editdlgtypes.cpp:1634
+#: editdlgtypes.cpp:1635
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Atskaņot audio datni"
 
-#: editdlgtypes.cpp:1635
+#: editdlgtypes.cpp:1636
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Atskaņot audio datni"
 
-#: editdlgtypes.cpp:1637
+#: editdlgtypes.cpp:1638
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3096,26 +3096,26 @@ msgstr ""
 "Ja atzīmēts, programma atkārtoti atskaņos audio datni līdz lietotājs "
 "noklikšķina uz „%1“."
 
-#: editdlgtypes.cpp:1853
+#: editdlgtypes.cpp:1854
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr ""
 "Atzīmējiet, lai ierakstītu nevis čaulas komandrindu, bet skripta saturu"
 
-#: editdlgtypes.cpp:1859
+#: editdlgtypes.cpp:1860
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Ierakstiet izpildāmo čaulas komandu."
 
-#: editdlgtypes.cpp:1864
+#: editdlgtypes.cpp:1865
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Ierakstiet izpildāmā skripta saturu."
 
-#: editdlgtypes.cpp:1926
+#: editdlgtypes.cpp:1927
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3125,7 +3125,7 @@ msgstr ""
 "<para>Komanda nevar iestatīt vides mainīgos:</para><para><icode>%1</icode></"
 "para>"
 
-#: editdlgtypes.cpp:1931
+#: editdlgtypes.cpp:1932
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
@@ -4074,7 +4074,7 @@ msgstr "KDE ziņojumu, komandu un e-pasta sūtīšanas plānotājs"
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "Autortiesības © 2001—%1, David Jarvie"
 
-#: mainwindow.cpp:447
+#: mainwindow.cpp:448
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4084,115 +4084,115 @@ msgstr ""
 "Kļūda, veidojot izvēlnes (iespējams, datne „<filename>%1</filename>“ nav "
 "atrasta vai ir bojāta)"
 
-#: mainwindow.cpp:467
+#: mainwindow.cpp:468
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
 msgstr "Sagataves..."
 
-#: mainwindow.cpp:471 templatedlg.cpp:74
+#: mainwindow.cpp:472 templatedlg.cpp:74
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Jauns"
 
-#: mainwindow.cpp:477
+#: mainwindow.cpp:478
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "Izveidot sagatavi..."
 
-#: mainwindow.cpp:481
+#: mainwindow.cpp:482
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
 msgstr "Kopēt..."
 
-#: mainwindow.cpp:486 resourceselector.cpp:302
+#: mainwindow.cpp:487 resourceselector.cpp:302
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Rediģēt..."
 
-#: mainwindow.cpp:491
+#: mainwindow.cpp:492
 #, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Dzēst"
 
-#: mainwindow.cpp:497
+#: mainwindow.cpp:498
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Dzēst bez apstiprināšanas"
 
-#: mainwindow.cpp:502
+#: mainwindow.cpp:503
 #, kde-format
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Atkārtoti aktivizēt"
 
-#: mainwindow.cpp:521
+#: mainwindow.cpp:522
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Pamodināt no iesnaudināšanas..."
 
-#: mainwindow.cpp:533
+#: mainwindow.cpp:534
 #, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Rādīt arhivētos signālus"
 
-#: mainwindow.cpp:538
+#: mainwindow.cpp:539
 #, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Rādīt sistēmas ikonu joslā"
 
-#: mainwindow.cpp:542
+#: mainwindow.cpp:543
 #, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Rādīt kalendārus"
 
-#: mainwindow.cpp:546
+#: mainwindow.cpp:547
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr "Rādīt datumu atlasītāju"
 
-#: mainwindow.cpp:559
+#: mainwindow.cpp:560
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Importēt signālus..."
 
-#: mainwindow.cpp:565
+#: mainwindow.cpp:566
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Importēt dzimšanas dienas..."
 
-#: mainwindow.cpp:570
+#: mainwindow.cpp:571
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "Eksportēt atlasītos signālus..."
 
-#: mainwindow.cpp:574 resourceselector.cpp:320
+#: mainwindow.cpp:575 resourceselector.cpp:320
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "Eksportēt..."
 
-#: mainwindow.cpp:578
+#: mainwindow.cpp:579
 #, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Pārlādēt signālus"
 
-#: mainwindow.cpp:825
+#: mainwindow.cpp:826
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4201,7 +4201,7 @@ msgstr[0] "Vai tiešām vēlaties dzēst %1 atlasīto signālu?"
 msgstr[1] "Vai tiešām vēlaties dzēst %1 atlasītos signālus?"
 msgstr[2] "Vai tiešām vēlaties dzēst %1 atlasīto signālu?"
 
-#: mainwindow.cpp:827
+#: mainwindow.cpp:828
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4210,13 +4210,13 @@ msgstr[0] "Signāla dzēšana"
 msgstr[1] "Signālu dzēšana"
 msgstr[2] "Signālu dzēšana"
 
-#: mainwindow.cpp:828 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:829 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Dzēst"
 
-#: mainwindow.cpp:915
+#: mainwindow.cpp:916
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Display Alarm"
@@ -4224,7 +4224,7 @@ msgctxt "@title:window"
 msgid "Skip Alarm"
 msgstr "Ekrāna signāls"
 
-#: mainwindow.cpp:916
+#: mainwindow.cpp:917
 #, fuzzy, kde-format
 #| msgctxt "@option:radio"
 #| msgid "Number of repetitions:"
@@ -4232,37 +4232,37 @@ msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
 msgstr "Atkārtošanās reižu skaits:"
 
-#: mainwindow.cpp:947
+#: mainwindow.cpp:948
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Slēpt arhivētos signālus"
 
-#: mainwindow.cpp:948
+#: mainwindow.cpp:949
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Rādīt arhivētos signālus"
 
-#: mainwindow.cpp:1024
+#: mainwindow.cpp:1025
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Importēt dzimšanas dienas"
 
-#: mainwindow.cpp:1276
+#: mainwindow.cpp:1277
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1277
+#: mainwindow.cpp:1278
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1343
+#: mainwindow.cpp:1344
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4271,60 +4271,60 @@ msgstr ""
 "<qt>Šī darbība pilnībā paslēps izvēlnes joslu. To var atkal parādīt, "
 "nospiežot „%1“.</qt>"
 
-#: mainwindow.cpp:1345
+#: mainwindow.cpp:1346
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Paslēpt izvēļņu joslu"
 
-#: mainwindow.cpp:1596
+#: mainwindow.cpp:1597
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Ekrāna signāls"
 
-#: mainwindow.cpp:1598
+#: mainwindow.cpp:1599
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "E-pasta signāls"
 
-#: mainwindow.cpp:1600
+#: mainwindow.cpp:1601
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Komandas signāls"
 
-#: mainwindow.cpp:1602
+#: mainwindow.cpp:1603
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Signāla tips"
 
-#: mainwindow.cpp:1603
+#: mainwindow.cpp:1604
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Izvēlieties izveidojamo signāla tipu:"
 
-#: mainwindow.cpp:1737
+#: mainwindow.cpp:1738
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Ieslēgt"
 
-#: mainwindow.cpp:1737
+#: mainwindow.cpp:1738
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
 msgstr "Izslēgt"
 
-#: mainwindow.cpp:1796
+#: mainwindow.cpp:1797
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
 msgstr ""
 
-#: mainwindow.cpp:1796
+#: mainwindow.cpp:1797
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Cancel if late"
@@ -6676,78 +6676,78 @@ msgctxt "@title:tab"
 msgid "Import Active Alarms"
 msgstr "Importēt aktīvus signālus"
 
-#: resources/migration/dirresourceimportdialog.cpp:55
+#: resources/migration/dirresourceimportdialog.cpp:54
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Archived Alarms"
 msgstr "Importēt arhivētus signālus"
 
-#: resources/migration/dirresourceimportdialog.cpp:64
+#: resources/migration/dirresourceimportdialog.cpp:62
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Alarm Templates"
 msgstr "Importēt signālu sagataves"
 
-#: resources/migration/dirresourceimportdialog.cpp:191
+#: resources/migration/dirresourceimportdialog.cpp:183
 #, kde-format
 msgctxt "@item:intext"
 msgid "Active alarms"
 msgstr "Aktīvie signāli"
 
-#: resources/migration/dirresourceimportdialog.cpp:193
+#: resources/migration/dirresourceimportdialog.cpp:185
 #, kde-format
 msgctxt "@item:intext"
 msgid "Archived alarms"
 msgstr "Arhivētie signāli"
 
-#: resources/migration/dirresourceimportdialog.cpp:195
+#: resources/migration/dirresourceimportdialog.cpp:187
 #, kde-format
 msgctxt "@item:intext"
 msgid "Alarm templates"
 msgstr "Signālu sagataves"
 
-#: resources/migration/dirresourceimportdialog.cpp:251
+#: resources/migration/dirresourceimportdialog.cpp:243
 #: resources/singlefileresourceconfigdialog.cpp:40
 #, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar files"
 msgstr "Kalendāru datnes"
 
-#: resources/migration/dirresourceimportdialog.cpp:397
+#: resources/migration/dirresourceimportdialog.cpp:381
 #: resources/singlefileresourceconfigdialog.cpp:213
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
 msgstr "Pārbauda datnes informāciju..."
 
-#: resources/migration/dirresourceimportdialog.cpp:405
-#: resources/migration/dirresourceimportdialog.cpp:453
+#: resources/migration/dirresourceimportdialog.cpp:389
+#: resources/migration/dirresourceimportdialog.cpp:437
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! File already exists."
 msgstr "Kļūda! Datne jau pastāv."
 
-#: resources/migration/dirresourceimportdialog.cpp:411
-#: resources/migration/dirresourceimportdialog.cpp:462
+#: resources/migration/dirresourceimportdialog.cpp:395
+#: resources/migration/dirresourceimportdialog.cpp:446
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory does not exist)."
 msgstr "Kļūda! Nevar izveidot datni (mape nepastāv)."
 
-#: resources/migration/dirresourceimportdialog.cpp:416
-#: resources/migration/dirresourceimportdialog.cpp:464
+#: resources/migration/dirresourceimportdialog.cpp:400
+#: resources/migration/dirresourceimportdialog.cpp:448
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory is not writable)."
 msgstr "Kļūda! Nevar izveidot datni (mape nav rakstāma)."
 
-#: resources/migration/dirresourceimportdialog.cpp:470
+#: resources/migration/dirresourceimportdialog.cpp:454
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory does not exist)."
 msgstr "Kļūda! Nevar izveidot datni (mape nepastāv)."
 
-#: resources/migration/dirresourceimportdialog.cpp:472
+#: resources/migration/dirresourceimportdialog.cpp:456
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory is not writable)."

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-01 00:48+0000\n"
+"POT-Creation-Date: 2026-08-08 00:45+0000\n"
 "PO-Revision-Date: 2004-02-25 13:46+0000\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -2540,89 +2540,89 @@ msgid ""
 "inhibition or active full screen applications."
 msgstr ""
 
-#: editdlgtypes.cpp:79
+#: editdlgtypes.cpp:80
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Dewiswch Ffeil Sain"
 
-#: editdlgtypes.cpp:92
+#: editdlgtypes.cpp:93
 #, fuzzy, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "Larymau Ebost"
 
-#: editdlgtypes.cpp:93
+#: editdlgtypes.cpp:94
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "Rhestr Larwm"
 
-#: editdlgtypes.cpp:94
+#: editdlgtypes.cpp:95
 #, fuzzy, kde-format
 #| msgid "Action"
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "Gweithred"
 
-#: editdlgtypes.cpp:95
+#: editdlgtypes.cpp:96
 #, fuzzy, kde-format
 #| msgid "Confirm acknowledgment"
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Cadarnhau &cydnabyddiaeth"
 
-#: editdlgtypes.cpp:131
+#: editdlgtypes.cpp:132
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Larwm Newydd"
 
-#: editdlgtypes.cpp:131
+#: editdlgtypes.cpp:132
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Golygu Larwm"
 
-#: editdlgtypes.cpp:132
+#: editdlgtypes.cpp:133
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Larymau Ebost"
 
-#: editdlgtypes.cpp:132
+#: editdlgtypes.cpp:133
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Larymau Ebost"
 
-#: editdlgtypes.cpp:145
+#: editdlgtypes.cpp:146
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Larymau Ebost"
 
-#: editdlgtypes.cpp:149
+#: editdlgtypes.cpp:150
 #, fuzzy, kde-format
 #| msgid "The alarm message"
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Y neges larwm"
 
-#: editdlgtypes.cpp:150
+#: editdlgtypes.cpp:151
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr ""
 
-#: editdlgtypes.cpp:151
+#: editdlgtypes.cpp:152
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "Gorchy&myn"
 
-#: editdlgtypes.cpp:171
+#: editdlgtypes.cpp:172
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2633,35 +2633,35 @@ msgid ""
 "display the output from a command.</item></list></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:186
+#: editdlgtypes.cpp:187
 #, fuzzy, kde-format
 #| msgid "Enter the text of the alarm message. It may be multi-line."
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Rhowch destun y neges larwm. Gall fod yn aml-linell."
 
-#: editdlgtypes.cpp:199
+#: editdlgtypes.cpp:200
 #, fuzzy, kde-format
 #| msgid "Enter the name or URL of a text or image file to display."
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "Rhowch enw ffeil destun neu ddelwedd, neu URL iddi, i'w dangos."
 
-#: editdlgtypes.cpp:206 editdlgtypes.cpp:895 sounddlg.cpp:185
+#: editdlgtypes.cpp:207 editdlgtypes.cpp:896 sounddlg.cpp:185
 #, fuzzy, kde-format
 #| msgid "Choose a file"
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Dewiswch ffeil"
 
-#: editdlgtypes.cpp:207
+#: editdlgtypes.cpp:208
 #, fuzzy, kde-format
 #| msgid "Select a text or image file to display."
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Dewiswch ffeil destun i'w dangos."
 
-#: editdlgtypes.cpp:251
+#: editdlgtypes.cpp:252
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2669,7 +2669,7 @@ msgid ""
 "system."
 msgstr ""
 
-#: editdlgtypes.cpp:278
+#: editdlgtypes.cpp:279
 #, fuzzy, kde-format
 #| msgid ""
 #| "Check to additionally display a reminder in advance of the main alarm "
@@ -2680,7 +2680,7 @@ msgid ""
 "alarm time(s)."
 msgstr "Brithwch i ddangos atgof ychwanegol cyn y prif amser(au) larwm."
 
-#: editdlgtypes.cpp:279
+#: editdlgtypes.cpp:280
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Enter how long in advance of the main alarm to display a reminder alarm."
@@ -2690,7 +2690,7 @@ msgid ""
 "reminder alarm.</para><para>%1</para>"
 msgstr "Rhowch faint o amser cyn y prif larwm i ddangos larwm atgof."
 
-#: editdlgtypes.cpp:280
+#: editdlgtypes.cpp:281
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2698,7 +2698,7 @@ msgid ""
 "alarm"
 msgstr ""
 
-#: editdlgtypes.cpp:290
+#: editdlgtypes.cpp:291
 #, fuzzy, kde-format
 #| msgid ""
 #| "Check to be prompted for confirmation when you acknowledge the alarm."
@@ -2707,104 +2707,104 @@ msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr ""
 "Brithwch os ydych am eich annog am wiriad pan rydych yn cydnabod y larwm."
 
-#: editdlgtypes.cpp:299
+#: editdlgtypes.cpp:300
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Dangos y neges larwm nawr"
 
-#: editdlgtypes.cpp:681
+#: editdlgtypes.cpp:682
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Dangos y neges larwm nawr"
 
-#: editdlgtypes.cpp:690
+#: editdlgtypes.cpp:691
 #, fuzzy, kde-format
 #| msgid "Display the file now"
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Dangos y ffeil destun nawr"
 
-#: editdlgtypes.cpp:700
+#: editdlgtypes.cpp:701
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Dangos y neges larwm nawr"
 
-#: editdlgtypes.cpp:732
+#: editdlgtypes.cpp:733
 #, fuzzy, kde-format
 #| msgid "Choose Text or Image File to Display"
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Dewiswch Ffeil Destun i'w Dangos"
 
-#: editdlgtypes.cpp:810
+#: editdlgtypes.cpp:811
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr ""
 
-#: editdlgtypes.cpp:811
+#: editdlgtypes.cpp:812
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr ""
 
-#: editdlgtypes.cpp:812
+#: editdlgtypes.cpp:813
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr ""
 
-#: editdlgtypes.cpp:842
+#: editdlgtypes.cpp:843
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Larwm Newydd"
 
-#: editdlgtypes.cpp:842
+#: editdlgtypes.cpp:843
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Golygu Larwm"
 
-#: editdlgtypes.cpp:843
+#: editdlgtypes.cpp:844
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Larymau Ebost"
 
-#: editdlgtypes.cpp:843
+#: editdlgtypes.cpp:844
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Larymau Ebost"
 
-#: editdlgtypes.cpp:851
+#: editdlgtypes.cpp:852
 #, fuzzy, kde-format
 #| msgid "Execute the specified command now"
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Gweithredu'r gorchymyn penodedig nawr"
 
-#: editdlgtypes.cpp:852
+#: editdlgtypes.cpp:853
 #, fuzzy, kde-format
 #| msgid "Execute the specified command now"
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Gweithredu'r gorchymyn penodedig nawr"
 
-#: editdlgtypes.cpp:859 specialactions.cpp:182
+#: editdlgtypes.cpp:860 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr ""
 
-#: editdlgtypes.cpp:860
+#: editdlgtypes.cpp:861
 #, fuzzy, kde-format
 #| msgid ""
 #| "The default setting for the recurrence rule in the alarm edit dialog."
@@ -2812,37 +2812,37 @@ msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "Rhagosodiad y reol ailddigwydd yn yr ymgom olygu larymau."
 
-#: editdlgtypes.cpp:866
+#: editdlgtypes.cpp:867
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Gorchy&myn"
 
-#: editdlgtypes.cpp:874
+#: editdlgtypes.cpp:875
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr ""
 
-#: editdlgtypes.cpp:887
+#: editdlgtypes.cpp:888
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Rhowch enw ffeil destun neu ddelwedd, neu URL iddi, i'w dangos."
 
-#: editdlgtypes.cpp:896
+#: editdlgtypes.cpp:897
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Dewiswch ffeil destun i'w dangos."
 
-#: editdlgtypes.cpp:899
+#: editdlgtypes.cpp:900
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "&Ffeil sain:"
 
-#: editdlgtypes.cpp:900
+#: editdlgtypes.cpp:901
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2850,26 +2850,26 @@ msgid ""
 "to any existing contents of the file."
 msgstr ""
 
-#: editdlgtypes.cpp:907
+#: editdlgtypes.cpp:908
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Gorchy&myn"
 
-#: editdlgtypes.cpp:908
+#: editdlgtypes.cpp:909
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Gorchy&myn"
 
-#: editdlgtypes.cpp:1070
+#: editdlgtypes.cpp:1071
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Log file must be the name or path of a local file, with write permission."
 msgstr ""
 
-#: editdlgtypes.cpp:1080
+#: editdlgtypes.cpp:1081
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2879,7 +2879,7 @@ msgstr ""
 "Ni ffurfweddir cyfeiriad ebost 'Oddi wrth'.\n"
 "Gallwch ei osod yn yr ymgom Hoffterau %1."
 
-#: editdlgtypes.cpp:1100
+#: editdlgtypes.cpp:1101
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Command executed:\n"
@@ -2890,53 +2890,53 @@ msgstr ""
 "Gweithredwyd y gorchymyn:\n"
 " %1"
 
-#: editdlgtypes.cpp:1134
+#: editdlgtypes.cpp:1135
 #, fuzzy, kde-format
 #| msgid "Copy email to self"
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "Copïo ebost atoch chi eich hun"
 
-#: editdlgtypes.cpp:1171
+#: editdlgtypes.cpp:1172
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "Larwm Newydd"
 
-#: editdlgtypes.cpp:1171
+#: editdlgtypes.cpp:1172
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Golygu Larwm"
 
-#: editdlgtypes.cpp:1172
+#: editdlgtypes.cpp:1173
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "Larymau Ebost"
 
-#: editdlgtypes.cpp:1172
+#: editdlgtypes.cpp:1173
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Larymau Ebost"
 
-#: editdlgtypes.cpp:1180
+#: editdlgtypes.cpp:1181
 #, fuzzy, kde-format
 #| msgid "Send the email to the specified addressees now"
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Anfon yr ebost at y cyfeiriadau penodedig nawr"
 
-#: editdlgtypes.cpp:1181
+#: editdlgtypes.cpp:1182
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "S&endmail"
 
-#: editdlgtypes.cpp:1192
+#: editdlgtypes.cpp:1193
 #, fuzzy, kde-format
 #| msgctxt "'From' email address"
 #| msgid "From:"
@@ -2944,7 +2944,7 @@ msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "Oddiwrth:"
 
-#: editdlgtypes.cpp:1198
+#: editdlgtypes.cpp:1199
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2954,7 +2954,7 @@ msgstr ""
 "Eich cyfeiriad ebost, a ddefnyddir i'ch dynodi fel yr anfonwr wrth anfon "
 "larymau ebost."
 
-#: editdlgtypes.cpp:1204
+#: editdlgtypes.cpp:1205
 #, fuzzy, kde-format
 #| msgctxt "Email addressee"
 #| msgid "To:"
@@ -2962,7 +2962,7 @@ msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "I:"
 
-#: editdlgtypes.cpp:1209
+#: editdlgtypes.cpp:1210
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter the addresses of the email recipients. Separate multiple addresses "
@@ -2975,21 +2975,21 @@ msgstr ""
 "Rhowch gyfeiriadau y derbynwyr ebost. Gwahanwch gyfeiriadau gwahanol âg "
 "atalnodau neu wahannodau."
 
-#: editdlgtypes.cpp:1220
+#: editdlgtypes.cpp:1221
 #, fuzzy, kde-format
 #| msgid "Open address book"
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Agor llyfr cyfeiriadau"
 
-#: editdlgtypes.cpp:1221
+#: editdlgtypes.cpp:1222
 #, fuzzy, kde-format
 #| msgid "Select email addresses from your address book."
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Dewiswch gyfeiriadau ebost o'ch llyfr cyfeiriadau."
 
-#: editdlgtypes.cpp:1228
+#: editdlgtypes.cpp:1229
 #, fuzzy, kde-format
 #| msgctxt "Email subject"
 #| msgid "Subject:"
@@ -2997,69 +2997,69 @@ msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Pwnc:"
 
-#: editdlgtypes.cpp:1234
+#: editdlgtypes.cpp:1235
 #, fuzzy, kde-format
 #| msgid "Enter the email subject."
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Rhowch bwnc yr ebost."
 
-#: editdlgtypes.cpp:1240
+#: editdlgtypes.cpp:1241
 #, fuzzy, kde-format
 #| msgid "Enter the email message."
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Rhowch neges yr ebost."
 
-#: editdlgtypes.cpp:1248
+#: editdlgtypes.cpp:1249
 #, fuzzy, kde-format
 #| msgid "Attachment&s:"
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "&Atodiadau:"
 
-#: editdlgtypes.cpp:1257
+#: editdlgtypes.cpp:1258
 #, fuzzy, kde-format
 #| msgid "Files to send as attachments to the email."
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Ffeiliau i'w hanfon yn atodiadau at yr ebost."
 
-#: editdlgtypes.cpp:1261 resourceselector.cpp:77
+#: editdlgtypes.cpp:1262 resourceselector.cpp:77
 #, fuzzy, kde-format
 #| msgid "Add..."
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Ychwanegu..."
 
-#: editdlgtypes.cpp:1263
+#: editdlgtypes.cpp:1264
 #, fuzzy, kde-format
 #| msgid "Add an attachment to the email."
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Ychwanegu atodiad at yr ebost."
 
-#: editdlgtypes.cpp:1266 resourceselector.cpp:79
+#: editdlgtypes.cpp:1267 resourceselector.cpp:79
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "&Gwaredu"
 
-#: editdlgtypes.cpp:1268
+#: editdlgtypes.cpp:1269
 #, fuzzy, kde-format
 #| msgid "Remove the highlighted attachment from the email."
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Gwaredu'r atodiad amlygedig o'r ebost."
 
-#: editdlgtypes.cpp:1273
+#: editdlgtypes.cpp:1274
 #, fuzzy, kde-format
 #| msgid "If checked, the email will be blind copied to you."
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "Os yn frith, copïir yr ebost yn ddall atoch."
 
-#: editdlgtypes.cpp:1455
+#: editdlgtypes.cpp:1456
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Invalid email address:\n"
@@ -3070,14 +3070,14 @@ msgstr ""
 "Cyfeiriad ebost annilys:\n"
 " %1"
 
-#: editdlgtypes.cpp:1462
+#: editdlgtypes.cpp:1463
 #, fuzzy, kde-format
 #| msgid "No email address specified"
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Ni benodwyd cyfeiriad ebost"
 
-#: editdlgtypes.cpp:1479
+#: editdlgtypes.cpp:1480
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Invalid email attachment:\n"
@@ -3088,7 +3088,7 @@ msgstr ""
 "Atodiad ebost annilys:\n"
 " %1"
 
-#: editdlgtypes.cpp:1483
+#: editdlgtypes.cpp:1484
 #, fuzzy, kde-format
 #| msgid ""
 #| "Do you really want to send the email now to the specified recipient(s)?"
@@ -3096,21 +3096,21 @@ msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "A ydych wir am anfon yr ebost nawr at y derbynw(y)r penodedig?"
 
-#: editdlgtypes.cpp:1484
+#: editdlgtypes.cpp:1485
 #, fuzzy, kde-format
 #| msgid "Confirm Email"
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Cadarnhau Ebost"
 
-#: editdlgtypes.cpp:1484
+#: editdlgtypes.cpp:1485
 #, fuzzy, kde-format
 #| msgid "&Send"
 msgctxt "@action:button"
 msgid "Send"
 msgstr "&Anfon"
 
-#: editdlgtypes.cpp:1510
+#: editdlgtypes.cpp:1511
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Email sent to:\n"
@@ -3121,7 +3121,7 @@ msgstr ""
 "Anfonwyd ebost at:\n"
 " %1%2"
 
-#: editdlgtypes.cpp:1513
+#: editdlgtypes.cpp:1514
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Email sent to:\n"
@@ -3132,80 +3132,80 @@ msgstr ""
 "Anfonwyd ebost at:\n"
 " %1%2"
 
-#: editdlgtypes.cpp:1542
+#: editdlgtypes.cpp:1543
 #, fuzzy, kde-format
 #| msgid "Choose File to Attach"
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Dewiswch Ffeil i'w Atodi"
 
-#: editdlgtypes.cpp:1625
+#: editdlgtypes.cpp:1626
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Larwm Newydd"
 
-#: editdlgtypes.cpp:1625
+#: editdlgtypes.cpp:1626
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Golygu Larwm"
 
-#: editdlgtypes.cpp:1626
+#: editdlgtypes.cpp:1627
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Larymau Ebost"
 
-#: editdlgtypes.cpp:1626
+#: editdlgtypes.cpp:1627
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Larymau Ebost"
 
-#: editdlgtypes.cpp:1634
+#: editdlgtypes.cpp:1635
 #, fuzzy, kde-format
 #| msgid "Display the file now"
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Dangos y ffeil destun nawr"
 
-#: editdlgtypes.cpp:1635
+#: editdlgtypes.cpp:1636
 #, fuzzy, kde-format
 #| msgid "Display the file now"
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Dangos y ffeil destun nawr"
 
-#: editdlgtypes.cpp:1637
+#: editdlgtypes.cpp:1638
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
 msgstr "Os yn frith, dangosa'r larwm gynnwys ffeil destun neu ffeil ddelwedd."
 
-#: editdlgtypes.cpp:1853
+#: editdlgtypes.cpp:1854
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "Rhowch orchymyn plisgyn i'w weithredu."
 
-#: editdlgtypes.cpp:1859
+#: editdlgtypes.cpp:1860
 #, fuzzy, kde-format
 #| msgid "Enter a shell command to execute."
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Rhowch orchymyn plisgyn i'w weithredu."
 
-#: editdlgtypes.cpp:1864
+#: editdlgtypes.cpp:1865
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Rhowch orchymyn plisgyn i'w weithredu."
 
-#: editdlgtypes.cpp:1926
+#: editdlgtypes.cpp:1927
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3213,7 +3213,7 @@ msgid ""
 "icode></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:1931
+#: editdlgtypes.cpp:1932
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
@@ -4258,7 +4258,7 @@ msgstr ""
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr ""
 
-#: mainwindow.cpp:447
+#: mainwindow.cpp:448
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Failed to save calendar to\n"
@@ -4271,122 +4271,122 @@ msgstr ""
 "Methu cadw'r calendr i\n"
 " '%1'"
 
-#: mainwindow.cpp:467
+#: mainwindow.cpp:468
 #, fuzzy, kde-format
 #| msgid "&Templates..."
 msgctxt "@action"
 msgid "Templates..."
 msgstr "&Patrymluniau ..."
 
-#: mainwindow.cpp:471 templatedlg.cpp:74
+#: mainwindow.cpp:472 templatedlg.cpp:74
 #, fuzzy, kde-format
 #| msgid "&New..."
 msgctxt "@action"
 msgid "New"
 msgstr "&Newydd..."
 
-#: mainwindow.cpp:477
+#: mainwindow.cpp:478
 #, fuzzy, kde-format
 #| msgid "Load Template..."
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "Llwytho Patrymlun ..."
 
-#: mainwindow.cpp:481
+#: mainwindow.cpp:482
 #, fuzzy, kde-format
 #| msgid "&Copy..."
 msgctxt "@action"
 msgid "Copy..."
 msgstr "&Copïo..."
 
-#: mainwindow.cpp:486 resourceselector.cpp:302
+#: mainwindow.cpp:487 resourceselector.cpp:302
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "&Golygu..."
 
-#: mainwindow.cpp:491
+#: mainwindow.cpp:492
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Dileu Larwm"
 
-#: mainwindow.cpp:497
+#: mainwindow.cpp:498
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Ffurfwedd Larwm"
 
-#: mainwindow.cpp:502
+#: mainwindow.cpp:503
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Gweithredoli %1"
 
-#: mainwindow.cpp:521
+#: mainwindow.cpp:522
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr ""
 
-#: mainwindow.cpp:533
+#: mainwindow.cpp:534
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Dangos Larymau Darfodedig"
 
-#: mainwindow.cpp:538
+#: mainwindow.cpp:539
 #, fuzzy, kde-format
 #| msgid "Show in System &Tray"
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Dangos yng &Nghafn y Cysawd"
 
-#: mainwindow.cpp:542
+#: mainwindow.cpp:543
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "URL y ffeil galendr"
 
-#: mainwindow.cpp:546
+#: mainwindow.cpp:547
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr ""
 
-#: mainwindow.cpp:559
+#: mainwindow.cpp:560
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Mewnforio &Penblwyddi..."
 
-#: mainwindow.cpp:565
+#: mainwindow.cpp:566
 #, fuzzy, kde-format
 #| msgid "Import &Birthdays..."
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Mewnforio &Penblwyddi..."
 
-#: mainwindow.cpp:570
+#: mainwindow.cpp:571
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "Mewnforio &Penblwyddi..."
 
-#: mainwindow.cpp:574 resourceselector.cpp:320
+#: mainwindow.cpp:575 resourceselector.cpp:320
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "Mewnforio &Penblwyddi..."
 
-#: mainwindow.cpp:578
+#: mainwindow.cpp:579
 #, fuzzy, kde-format
 #| msgid "&Refresh Alarms"
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Ail&fywio Larymau"
 
-#: mainwindow.cpp:825
+#: mainwindow.cpp:826
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4394,7 +4394,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "A ydych wir am ddileu'r larwm dewisiedig?"
 msgstr[1] " A ydych wir am ddileu'r %1 lawrm dewisiedig?"
 
-#: mainwindow.cpp:827
+#: mainwindow.cpp:828
 #, fuzzy, kde-format
 #| msgid "Delete Alarm"
 #| msgid_plural "Delete Alarms"
@@ -4404,44 +4404,44 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Dileu Larwm"
 msgstr[1] " Dileu Larymau"
 
-#: mainwindow.cpp:828 recurrenceedit.cpp:318 templatedlg.cpp:93
+#: mainwindow.cpp:829 recurrenceedit.cpp:318 templatedlg.cpp:93
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Dileu Larwm"
 
-#: mainwindow.cpp:915
+#: mainwindow.cpp:916
 #, fuzzy, kde-format
 #| msgid "View Alarm"
 msgctxt "@title:window"
 msgid "Skip Alarm"
 msgstr "Gweld Larwm"
 
-#: mainwindow.cpp:916
+#: mainwindow.cpp:917
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
 msgstr "Ffurfwedd Larwm"
 
-#: mainwindow.cpp:947
+#: mainwindow.cpp:948
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Larymau Darfodedig"
 
-#: mainwindow.cpp:948
+#: mainwindow.cpp:949
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Dangos Larymau Darfodedig"
 
-#: mainwindow.cpp:1024
+#: mainwindow.cpp:1025
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Mewnforio &Penblwyddi..."
 
-#: mainwindow.cpp:1276
+#: mainwindow.cpp:1277
 #, fuzzy, kde-format
 #| msgctxt "Hours and Minutes"
 #| msgid "%1H %2M"
@@ -4449,7 +4449,7 @@ msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1A %2M"
 
-#: mainwindow.cpp:1277
+#: mainwindow.cpp:1278
 #, fuzzy, kde-format
 #| msgctxt "prefix + hours:minutes"
 #| msgid "%1%2:%3"
@@ -4457,69 +4457,69 @@ msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1%2:%3"
 
-#: mainwindow.cpp:1343
+#: mainwindow.cpp:1344
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1345
+#: mainwindow.cpp:1346
 #, fuzzy, kde-format
 msgid "Hide menu bar"
 msgstr "Dangos A&mser i Larymau"
 
-#: mainwindow.cpp:1596
+#: mainwindow.cpp:1597
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Larymau Ebost"
 
-#: mainwindow.cpp:1598
+#: mainwindow.cpp:1599
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Larymau Ebost"
 
-#: mainwindow.cpp:1600
+#: mainwindow.cpp:1601
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Larymau Ebost"
 
-#: mainwindow.cpp:1602
+#: mainwindow.cpp:1603
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Rhestr Larwm"
 
-#: mainwindow.cpp:1603
+#: mainwindow.cpp:1604
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Dangos Amserau &Larwm"
 
-#: mainwindow.cpp:1737
+#: mainwindow.cpp:1738
 #, fuzzy, kde-format
 #| msgid "Enable"
 msgctxt "@action"
 msgid "Enable"
 msgstr "Galluogi"
 
-#: mainwindow.cpp:1737
+#: mainwindow.cpp:1738
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Disable"
 msgstr "Anal&luogi"
 
-#: mainwindow.cpp:1796
+#: mainwindow.cpp:1797
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
 msgstr ""
 
-#: mainwindow.cpp:1796
+#: mainwindow.cpp:1797
 #, fuzzy, kde-format
 #| msgid "Cancel if late"
 msgctxt "@action"
@@ -6969,78 +6969,78 @@ msgctxt "@title:tab"
 msgid "Import Active Alarms"
 msgstr "Gweithredoli %1"
 
-#: resources/migration/dirresourceimportdialog.cpp:55
+#: resources/migration/dirresourceimportdialog.cpp:54
 #, fuzzy, kde-format
 msgctxt "@title:tab"
 msgid "Import Archived Alarms"
 msgstr "Gweithredoli %1"
 
-#: resources/migration/dirresourceimportdialog.cpp:64
+#: resources/migration/dirresourceimportdialog.cpp:62
 #, fuzzy, kde-format
 msgctxt "@title:tab"
 msgid "Import Alarm Templates"
 msgstr "Testun Larwm"
 
-#: resources/migration/dirresourceimportdialog.cpp:191
+#: resources/migration/dirresourceimportdialog.cpp:183
 #, fuzzy, kde-format
 msgctxt "@item:intext"
 msgid "Active alarms"
 msgstr "Gweithredoli %1"
 
-#: resources/migration/dirresourceimportdialog.cpp:193
+#: resources/migration/dirresourceimportdialog.cpp:185
 #, fuzzy, kde-format
 msgctxt "@item:intext"
 msgid "Archived alarms"
 msgstr "Gweithredoli %1"
 
-#: resources/migration/dirresourceimportdialog.cpp:195
+#: resources/migration/dirresourceimportdialog.cpp:187
 #, fuzzy, kde-format
 msgctxt "@item:intext"
 msgid "Alarm templates"
 msgstr "Testun Larwm"
 
-#: resources/migration/dirresourceimportdialog.cpp:251
+#: resources/migration/dirresourceimportdialog.cpp:243
 #: resources/singlefileresourceconfigdialog.cpp:40
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar files"
 msgstr "URL y ffeil galendr"
 
-#: resources/migration/dirresourceimportdialog.cpp:397
+#: resources/migration/dirresourceimportdialog.cpp:381
 #: resources/singlefileresourceconfigdialog.cpp:213
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
 msgstr ""
 
-#: resources/migration/dirresourceimportdialog.cpp:405
-#: resources/migration/dirresourceimportdialog.cpp:453
+#: resources/migration/dirresourceimportdialog.cpp:389
+#: resources/migration/dirresourceimportdialog.cpp:437
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! File already exists."
 msgstr ""
 
-#: resources/migration/dirresourceimportdialog.cpp:411
-#: resources/migration/dirresourceimportdialog.cpp:462
+#: resources/migration/dirresourceimportdialog.cpp:395
+#: resources/migration/dirresourceimportdialog.cpp:446
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory does not exist)."
 msgstr ""
 
-#: resources/migration/dirresourceimportdialog.cpp:416
-#: resources/migration/dirresourceimportdialog.cpp:464
+#: resources/migration/dirresourceimportdialog.cpp:400
+#: resources/migration/dirresourceimportdialog.cpp:448
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory is not writable)."
 msgstr ""
 
-#: resources/migration/dirresourceimportdialog.cpp:470
+#: resources/migration/dirresourceimportdialog.cpp:454
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory does not exist)."
 msgstr ""
 
-#: resources/migration/dirresourceimportdialog.cpp:472
+#: resources/migration/dirresourceimportdialog.cpp:456
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory is not writable)."
