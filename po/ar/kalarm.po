@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-08 00:45+0000\n"
-"PO-Revision-Date: 2026-01-28 20:09+0400\n"
+"PO-Revision-Date: 2026-08-10 18:33+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -7294,7 +7294,7 @@ msgstr "أدخل اسم العرض المستخدم لتحديد هذا التق
 #, kde-format
 msgctxt "@title:group"
 msgid "Access Rights"
-msgstr "أذونات النّفاذ"
+msgstr "حقوق النفاذ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, readOnlyCheckbox)
 #: resources/singlefileresourceconfigdialog.ui:238
@@ -7591,7 +7591,7 @@ msgid ""
 "calendar: %9</para>"
 msgstr ""
 "<title>%1</title> <para>المعرف: %2<nl/> النوع التقويم: %3<nl/>  المحتويات: "
-"%4<nl/>  %5: <filename>%6</filename><nl/>الأذونات: %7<nl/>الحالة: %8<nl/"
+"%4<nl/>  %5: <filename>%6</filename><nl/>الأذون: %7<nl/>الحالة: %8<nl/"
 ">التقويم المبدئي: %9</para>"
 
 #: rtcwakeaction.cpp:88
