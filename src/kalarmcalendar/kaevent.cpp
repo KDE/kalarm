@@ -5061,6 +5061,8 @@ void KAEventPrivate::calcTriggerTimes() const
         {
             const KAEvent::OccurType type = nextOccurrence(mSkipTime.kDateTime().addSecs(-60), mBaseSkipTriggers.main, Repeats::Return);
             mBaseSkipTriggers.repeatNum = KAEvent::repeatNum(type);
+            const int reminder = (mReminderMinutes > 0) ? mReminderMinutes : 0;   // only interested in reminders BEFORE the alarm
+            mBaseSkipTriggers.all = KAEvent::isRepeat(type) ? mBaseSkipTriggers.main : mBaseSkipTriggers.main.addMins(-reminder);
         }
 
         if (mSkipTime <= mWorkTriggers.main)
