@@ -121,7 +121,9 @@
 ><year
 >2024</year
 ><year
->2025</year>
+>2025</year
+><year
+>2026</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -132,9 +134,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2025-12-3</date>
+>2026-1-22</date>
 <releaseinfo
->3.12.0 (KDE Gear 25.12)</releaseinfo>
+>3.13.0 (KDE Gear 26.04)</releaseinfo>
 
 <abstract>
 <para
@@ -448,7 +450,7 @@
 >Creare un nuovo avviso</title>
 
 <para
->Per creare un nuovo avviso, fai una delle seguenti azioni, e poi seleziona il tipo di avviso dall'elenco che apparirà. Ciò mostra la <link linkend="alarm-edit-dlg"
+>Per creare un nuovo avviso, esegui una delle seguenti azioni, e poi seleziona il tipo di avviso dall'elenco che apparirà. Ciò mostra la <link linkend="alarm-edit-dlg"
 >finestra di modifica degli avvisi</link
 > da cui lo puoi configurare.</para>
 
@@ -489,7 +491,7 @@
 <itemizedlist>
 <listitem>
 <para
->Per preimpostare la data dell'allarme nella <link linkend="alarm-edit-dlg"
+>Per preimpostare la data dell'allarme nella <link linkend="alarm-edit-dlg-time"
 >finestra Modifica avviso</link
 >, fai clic col pulsante <mousebutton
 >destro</mousebutton
@@ -593,7 +595,7 @@
 >Modificare un avviso esistente</title>
 
 <para
->Per modificare un avviso attivo (non si possono correggere gli avvisi scaduti), fai una delle seguenti azioni:</para>
+>Per modificare un avviso attivo (non si possono correggere gli avvisi scaduti), esegui una delle seguenti azioni:</para>
 
 <itemizedlist>
 <listitem>
@@ -703,7 +705,7 @@
 <para
 >Vedi la sezione su come <link linkend="enable-disable"
 >abilitare e disabilitare gli avvisi</link
-> per sapere come si fa, uno per uno o tutti insieme.</para>
+> per sapere come si fa, uno per uno o tutti insieme, o salta temporaneamente i singoli avvisi.</para>
 
 </sect2>
 
@@ -789,7 +791,7 @@
 >Puoi creare, modificare o eliminare i modelli con la finestra dei modelli di avviso, oppure puoi creare un nuovo modello di avviso partendo da un avviso esistente.</para>
 
 <para
->Per creare un nuovo modello di avviso, fai una delle seguenti azioni:</para>
+>Per creare un nuovo modello di avviso, esegui una delle seguenti azioni:</para>
 
 <itemizedlist>
 <listitem>
@@ -1956,18 +1958,37 @@
 
 <sect2>
 <title
->Rinvio</title>
+>Rinviare e saltare</title>
 
 <para
 >Se l'avviso è ricorrente ed è stato rinviato dopo l'ultima volta che è stato visualizzato, il riquadro <guilabel
->Avviso rinviato</guilabel
+>Avviso rinviato / saltato</guilabel
 > mostra l'ora a cui è stato rinviato. <guibutton
 >Cambia</guibutton
 > visualizza una finestra che permette di cambiare l'ora di rinvio o annullarlo del tutto.</para>
 
+<para
+>Se un avviso è ricorrente ed è attualmente saltato (vedere <link linkend="skipping"
+>Saltare singoli avvisi</link
+>), il riquadro di gruppo <guilabel
+>Avviso rinviato / saltato</guilabel
+> mostra al volta successiva in cui l'avviso viene attivato dopo essere stato saltato, &ie; l'orario in cui riprenderà le normali operazioni. <guibutton
+>Annulla salto</guibutton
+> annulla il salto dell'avviso.</para>
+
+<note
+><para
+>Se effettui delle modifiche al momento iniziale o ai dettagli della ricorrenza dell'avviso, il salto è automaticamente annullato e l'orario di salto non viene più mostrato.</para
+></note>
+
+<para
+>Si noti come le modifiche a rinvi e salti hanno effetto quando il pulsante <guibutton
+>OK</guibutton
+> viene premuto.</para>
+
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-time">
 <title
 >Data e ora</title>
 
@@ -2049,7 +2070,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-cancel">
 <title
 >Annullamento</title>
 
@@ -2092,7 +2113,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-recur">
 <title
 >Ricorrenza</title>
 
@@ -2143,21 +2164,33 @@
 <itemizedlist>
 <listitem>
 <para
+>Per una ricorrenza giornaliera, verifica ogni giorni delle settimana in cui è possibile far attivare gli avvisi. L'avviso si ripeterà alla frequenza specificata, ma quando si attiverà in un giorno della settimana non selezionato, sarà soppresso.</para>
+</listitem>
+
+<listitem>
+<para
 >Per una ricorrenza settimanale, seleziona tutti i giorni della settimana nei quali vuoi attivare l'avviso.</para>
 </listitem>
 
 <listitem>
 <para
->Per una ricorrenza mensile, puoi scegliere una data fissa o una posizione (per esempio, <quote
->il secondo martedì del mese</quote
->).</para>
+>Per una ricorrenza mensile, puoi scegliere tra:</para>
+<itemizedlist>
+<listitem
+><para
+>Un giorno fisso nel mese o l'ultimo giorno del mese. Si noti come se si seleziona per esempio il 31mo giorno del mese, l'avviso non si attiverà nei mesi con meno di 31 giorni.</para>
+</listitem>
+
+<listitem
+><para
+>Una posizione nel mese, &eg; il secondo martedì o l'ultimo venerdì del mese.</para>
+</listitem>
+</itemizedlist>
 </listitem>
 
 <listitem>
 <para
->Per una ricorrenza annuale, puoi scegliere un giorno fisso di un mese o una posizione nel mese (per esempio <quote
->l'ultimo sabato di maggio</quote
->). Seleziona tutti i mesi dell'anno in cui vuoi attivare l'avviso.</para>
+>Per una ricorrenza annuale, puoi scegliere un giorno fisso di un mese o una posizione nel mese, come descritto nel caso delle ricorrenze mensili. Seleziona tutti i mesi dell'anno in cui vuoi attivare l'avviso.</para>
 
 <para
 >Se hai impostato una ricorrenza annuale per il 29 febbraio, puoi specificare come gestirla negli anni non bisestili selezionando l'opzione appropriata per l'<guilabel
@@ -2336,7 +2369,7 @@
 </sect3>
 </sect2>
 
-<sect2>
+<sect2 id="alarm-edit-dlg-other">
 <title
 >Altri controlli</title>
 
@@ -2351,6 +2384,11 @@
 >Per gli avvisi visivi, la casella <guilabel
 >Conferma l'accettazione</guilabel
 > permette di specificare se ti sarà chiesta conferma quando chiudi la finestra del messaggio di avviso. Si potrebbe usare come misura di sicurezza per evitare di accettare avvisi per sbaglio.</para>
+
+<para
+>Gli avvisi di tipo visuale sono normalmente sospesi quando le notifiche sono bloccate per il desktop, e non vengono mostrati al di sopra delle applicazioni a schermo intero. Per ignorare queste restrizioni e mostrare sempre l'avviso se possibile, selezionare la casella <guilabel
+>Non inibire mai l'avviso</guilabel
+>. Si noti come la capacità di mostrare dei messaggi sopra le applicazioni a schermo intero può dipendere dal gestore di finestre, e attualmente solo il sistema di finestre X11 lo permette.</para>
 
 <para
 >Seleziona <guilabel
@@ -2396,7 +2434,9 @@
 >. Queste due opzioni sono descritte di seguito.</para>
 
 <para
->Se blocchi le notifiche per il desktop, l'esecuzione degli avvisi visivi sarà sospesa fino alla riattivazione delle notifiche. Nota come questo si applica a tutti gli avvisi visivi, indipendentemente dal fatto che siano mostrati in una finestra o come notifiche.</para>
+>Se blocchi le notifiche per il desktop, l'esecuzione degli avvisi visivi sarà sospesa fino alla riattivazione delle notifiche, con l'eccezione degli avvisi che sono stati specificati nella <link linkend="alarm-edit-dlg-other"
+>finestra di dialogo di modifica degli avvisi</link
+> e che non devono mai essere bloccati. Nota come questo si applica a tutti gli avvisi visivi, indipendentemente dal fatto che siano mostrati in una finestra o come notifiche.</para>
 
 <para
 >Si noti come in un sistema con un solo schermo, il gestore delle finestre potrebbe bloccare le notifiche quando c'è un'applicazione a pieno schermo, e questo automaticamente sospende l'esecuzione della visualizzazione degli avvisi.</para>
@@ -2416,7 +2456,7 @@
 <para
 >Le finestre dei messaggi di avviso rimangono visibili finché le accetti, a meno che sia stato selezionato <guilabel
 >Chiudi automaticamente la finestra dopo l'annullamento da ritardo</guilabel
-> nella <link linkend="alarm-edit-dlg"
+> nella <link linkend="alarm-edit-dlg-cancel"
 >finestra di modifica degli avvisi</link
 >. Nel caso di un avviso ricorrente, se rimane una finestra non accettata da una ricorrenza precedente dell'avviso, viene chiusa alla ricorrenza dell'avviso. Ciò evita di dover accettare più copie dello stesso messaggio se tu non volessi o potessi accettare il messaggio al momento della sua comparsa.</para>
 
@@ -2876,7 +2916,7 @@
 > della finestra di configurazione.</para>
 
 <para
->Se il controllo degli avvisi è attualmente disabilitato, fai una delle seguenti azioni per abilitare gli avvisi:</para>
+>Se il controllo degli avvisi è attualmente disabilitato, esegui una delle seguenti azioni per abilitare gli avvisi:</para>
 
 <itemizedlist>
 <listitem>
@@ -2957,7 +2997,7 @@
 >Abilitare e disabilitare singoli avvisi</title>
 
 <para
->Per abilitare individualmente gli avvisi attualmente disabilitati, fai una delle azioni seguenti:</para>
+>Per abilitare individualmente gli avvisi attualmente disabilitati, esegui una delle azioni seguenti:</para>
 
 <itemizedlist>
 <listitem>
@@ -2982,7 +3022,7 @@
 </itemizedlist>
 
 <para
->Per disabilitare individualmente gli avvisi attualmente abilitati, fai una delle azioni seguenti:</para>
+>Per disabilitare individualmente gli avvisi attualmente abilitati, esegui una delle azioni seguenti:</para>
 
 <itemizedlist>
 <listitem>
@@ -3007,6 +3047,72 @@
 </itemizedlist>
 
 </sect2>
+
+<sect2 id="skipping">
+<title
+>Saltare singoli avvisi</title>
+
+<para
+>Puoi scegliere di saltare alcuni delle successive (1 - 10) attivazioni di un avviso. Ciò disabiliterà temporaneamente l'avviso finché quel numero di ricorrenze o sotto-ripetizioni non sarà trascorso senza attivazione; dopodiché l'avviso riprenderà ad attivarsi normalmente.</para>
+
+<note
+><para
+>Non sarà mostrato nessun promemoria per le attivazioni saltate.</para>
+<para
+>Saltare le attivazioni non ha effetto sui rinvii pendenti degli avvisi.</para
+></note>
+
+<para
+>Per saltare le successive attivazioni di singoli avvisi, esegui una delle seguenti azioni, e quindi inserisci il numero delle attivazioni da saltare:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleziona uno o più avvisi facendo clic sulle loro voci nell'elenco degli avvisi. Quindi scegli <menuchoice
+><guimenu
+>Azioni</guimenu
+><guimenuitem
+>Salta</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Fai clic con il &RMB; sulle voci desiderate nell'elenco degli avvisi e scegli <menuchoice
+><guimenuitem
+>Salta</guimenuitem
+></menuchoice
+> dal menu contestuale.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Per annullare il salto di avvisi esistenti, esegui una delle seguenti azioni:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleziona uno o più avvisi facendo clic sulle loro voci nell'elenco degli avvisi. Quindi scegli <menuchoice
+><guimenu
+>Azioni</guimenu
+><guimenuitem
+>Annulla salto</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Fai clic con il &RMB; sulle voci desiderate nell'elenco degli avvisi e scegli <menuchoice
+><guimenuitem
+>Annulla salto</guimenuitem
+></menuchoice
+> dal menu contestuale.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
 </sect1>
 
 <sect1 id="wake-suspend">
@@ -3023,7 +3129,7 @@
 <para
 >Nei sistemi Linux, se l'utente ha i permessi (capability) per i timer degli avvisi del kernel (<literal
 >cap wake alarm</literal
->), può essere impostato un totale a piacere di avvisi per svegliare il sistema. In questo caso, il risveglio è configurato per ogni avviso nella <link linkend="alarm-edit-dlg"
+>), può essere impostato un totale a piacere di avvisi per svegliare il sistema. In questo caso, il risveglio è configurato per ogni avviso nella <link linkend="alarm-edit-dlg-other"
 >finestra di modifica dell'avviso</link
 > tramite l'opzione <guilabel
 >Risveglio</guilabel
@@ -3360,7 +3466,7 @@
 >Orario di lavoro</guilabel
 >: queste opzioni permettono di definire le ore di lavoro, necessarie quando per una ricorrenza è selezionata l'opzione <guilabel
 >Solo durante l'orario di lavoro</guilabel
-> nella <link linkend="alarm-edit-dlg"
+> nella <link linkend="alarm-edit-dlg-recur"
 >finestra di modifica degli avvisi</link
 >.</para>
 
@@ -7082,10 +7188,10 @@
 <para
 >&kalarm; </para>
 <para
->Copyright del programma 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright del programma 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Copyright della documentazione 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright della documentazione 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
 >Traduzione in italiano di Federico Zenith <email

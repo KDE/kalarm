@@ -375,7 +375,7 @@ msgid ""
 "be unique."
 msgstr ""
 "أدخل اسمًا لمساعدتك في تحديد هذا المنبه. هذا اختياري وليس من الضروري أن يكون "
-"أن يكون فريداً."
+"أن يكون فريدًا."
 
 #: birthdaydlg.cpp:77
 #, kde-format
@@ -1948,7 +1948,7 @@ msgid ""
 "actually transmitted."
 msgstr ""
 "تعرض رسالة إشعار عندما يضع منبه البريد الإلكتروني رسالة بريد إلكتروني في "
-"قائمة الانتظار لإرسالها إلى نظام بعيد. قد يكون هذا مفيداً إذا كان لديك، على "
+"قائمة الانتظار لإرسالها إلى نظام بعيد. قد يكون هذا مفيدًا إذا كان لديك، على "
 "سبيل المثال لديك اتصال طلب هاتفي، بحيث يمكنك بعد ذلك التأكد من إرسال البريد "
 "الإلكتروني قد أرسل فعلًا."
 
@@ -2062,19 +2062,19 @@ msgstr "ألغ المنبه المؤجل. لا يؤثر ذلك على التكر
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next sub-repetition (currently %1)"
-msgstr "لا يمكن التأجيل إلى ما بعد تكرار المنبه الفرعي التالي (حالياً %1)"
+msgstr "لا يمكن التأجيل إلى ما بعد تكرار المنبه الفرعي التالي (حاليًا %1)"
 
 #: deferdlg.cpp:99
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next recurrence (currently %1)"
-msgstr "لا يمكن التأجيل إلى ما بعد التكرار التالي للمنبه (حالياً %1)"
+msgstr "لا يمكن التأجيل إلى ما بعد التكرار التالي للمنبه (حاليًا %1)"
 
 #: deferdlg.cpp:103
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next reminder (currently %1)"
-msgstr "لا يمكن التأجيل بعد تذكير المنبه التالي (حالياً %1)"
+msgstr "لا يمكن التأجيل بعد تذكير المنبه التالي (حاليًا %1)"
 
 #: deferdlg.cpp:107
 #, kde-format
@@ -2150,7 +2150,7 @@ msgstr "حمّل قالبًا…"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
-msgstr "حدد قالب المنبه لضبط المنبه مسبقاً"
+msgstr "حدد قالب المنبه لضبط المنبه مسبقًا"
 
 #: editdlg.cpp:206
 #, kde-format
@@ -3028,7 +3028,7 @@ msgstr "في حالة تحديده، سيشغل ملف الصوت بشكل مت�
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
-msgstr "حدده لإدخال محتويات برنامج نصي بدلاً من سطر أوامر الصدفة"
+msgstr "حدده لإدخال محتويات برنامج نصي بدلًا من سطر أوامر الصدفة"
 
 #: editdlgtypes.cpp:1860
 #, kde-format
@@ -3663,7 +3663,7 @@ msgstr[0] "أسبوع واحِد"
 msgstr[1] "أسبوع"
 msgstr[2] "أسبوعان"
 msgstr[3] "%1 أسابيع"
-msgstr[4] "%1 أسبوعاً"
+msgstr[4] "%1 أسبوعًا"
 msgstr[5] "%1 أسبوع"
 
 #: kalarmcalendar/kaevent.cpp:3545
@@ -5191,7 +5191,7 @@ msgid ""
 msgstr ""
 "<para>يُطلب وجود تقويم مبدئي حتى تتمكن من أرشفة المنبهات، ولكن لا يوجد تقويم "
 "مبدئي ممكّن حاليًا.</para><para>إذا كنت ترغب في الاحتفاظ بالمنبهات منتهية "
-"الصلاحية، فيرجى استخدام عرض التقويمات أولاً لتحديد تقويم المنبهات المؤرشفة "
+"الصلاحية، فيرجى استخدام عرض التقويمات أولًا لتحديد تقويم المنبهات المؤرشفة "
 "المبدئي.</para>"
 
 #: prefdlg.cpp:1153
@@ -6405,7 +6405,7 @@ msgid ""
 "Instead of the alarm triggering just once at each recurrence, checking this "
 "option makes the alarm trigger multiple times at each recurrence."
 msgstr ""
-"بدلاً من المنبّه الذي يعمل لمرة واحدة فقط في كل تكرار، فإن تفعيل هذا الخيار "
+"بدلًا من المنبّه الذي يعمل لمرة واحدة فقط في كل تكرار، فإن تفعيل هذا الخيار "
 "سيجعل المنبه يعمل عدة مرات في كل تكرار."
 
 #: repetitionbutton.cpp:142
@@ -7313,7 +7313,7 @@ msgid ""
 "access."
 msgstr ""
 "إذا كان وضع القراءة فقط ممكّنًا، فلن تُكتب أي تغييرات على الملف. سيُمكّن وضع "
-"القراءة فقط آليّاً إذا لم يكن لديك حق الوصول للكتابة إلى الملف أو إذا كان "
+"القراءة فقط آليًّا إذا لم يكن لديك حق الوصول للكتابة إلى الملف أو إذا كان "
 "الملف على خادم بعيد لا يدعم حق الوصول للكتابة."
 
 #: resourceselector.cpp:51
@@ -7355,7 +7355,7 @@ msgid ""
 "calendar is shown in bold."
 msgstr ""
 "قائمة بالتقويمات المتاحة من النوع المحدد. تُظهر حالة التحديد ما إذا كان "
-"التقويم ممكّنًا (محددًا) أو معطلاً (غير محدد). يظهر التقويم المبدئي بخط غامق."
+"التقويم ممكّنًا (محددًا) أو معطلًا (غير محدد). يظهر التقويم المبدئي بخط غامق."
 
 #: resourceselector.cpp:83
 #, kde-format
@@ -7708,7 +7708,7 @@ msgstr "التّلاشي"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
-msgstr "حدد لتلاشى مستوى الصوت عندما يبدأ ملف الصوت أولاً في التشغيل."
+msgstr "حدد لتلاشى مستوى الصوت عندما يبدأ ملف الصوت أولًا في التشغيل."
 
 #: sounddlg.cpp:266
 #, kde-format
@@ -8280,7 +8280,7 @@ msgid ""
 "cancel the alarm itself, which will still trigger in the normal way. This "
 "button is disabled if no wake-from-suspend alarm is configured."
 msgstr ""
-"ألغِ المنبه من الإيقاف المؤقت المهيأ حالياً. لاحظ أن هذا لا يلغي المنبه نفسه، "
+"ألغِ المنبه من الإيقاف المؤقت المهيأ حاليًا. لاحظ أن هذا لا يلغي المنبه نفسه، "
 "والذي سيستمر تشغيله بالطريقة العادية. يُعطّل هذا الزر إذا لم يُضبط أي إنذار "
 "للاستيقاظ من الإيقاف المؤقت."
 
