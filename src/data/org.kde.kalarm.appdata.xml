@@ -762,7 +762,7 @@
           <li xml:lang="uk">Реалізовано запобігання появі декількох вікон відхилення нагадувань для однієї події.</li>
           <li xml:lang="zh-CN">防止针对同一事件出现多个“延迟提醒”对话框。</li>
           <li>If Defer is disabled for a notification alarm, don't show two Edit buttons.</li>
-          <li xml:lang="ar">عدم إظهار زري تحرير إذا كان التأجيل معطلاً لمنبّه إخطار.</li>
+          <li xml:lang="ar">عدم إظهار زري تحرير إذا كان التأجيل معطلًا لمنبّه إخطار.</li>
           <li xml:lang="bg">Ако „Отлагане“ е деактивирано за аларма за известие, не се показват два бутона „Редактиране“.</li>
           <li xml:lang="ca">Si l'ajornament està desactivat per a una alarma de notificació, no es mostren dos botons d'edició.</li>
           <li xml:lang="ca-valencia">Si l'ajornament està desactivat per a una alarma de notificació, no es mostren dos botons d'edició.</li>
@@ -809,7 +809,7 @@
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
           <li>If a recurrence is suppressed by work time/holidays/exception, suppress its sub-repetitions.</li>
-          <li xml:lang="ar">إذا كُبت التكرار بسبب وقت العمل/العطلات/الاستثناءات، تُكبت تكراراته الفرعية أيضاً.</li>
+          <li xml:lang="ar">إذا كُبت التكرار بسبب وقت العمل/العطلات/الاستثناءات، تُكبت تكراراته الفرعية أيضًا.</li>
           <li xml:lang="bg">Ако дадено повторение е прекъснато от работно време/празници/изключение, се прекъсват неговите подповторения.</li>
           <li xml:lang="ca">Si se suprimeix una recurrència per horari de treball/festius/excepció, suprimeix les seves subrepeticions.</li>
           <li xml:lang="ca-valencia">Si se suprimix una recurrència per horari de treball/festius/excepció, suprimix les seues subrepeticions.</li>
@@ -856,6 +856,7 @@
           <li xml:lang="cs">Opraveno formátování uživatelských zpráv, ve kterých se zobrazovaly HTML tagy.</li>
           <li xml:lang="es">Se ha corregido el formato de los mensajes de usuario que mostraban etiquetas HTML.</li>
           <li xml:lang="fr">Correction du formatage des messages des utilisateurs montrant des balises « HTML ».</li>
+          <li xml:lang="he">תוקן עיצוב של הודעות משתמשים שהציגו תגיות HTML.</li>
           <li xml:lang="ia">Corrige fnormatar de messages de usator que monstrava etiquettas (tags) HTML.</li>
           <li xml:lang="it">Correzione della formattazione di messaggi utente contenenti tag HTML.</li>
           <li xml:lang="ka">გასწორდა მომხმარებლის შეტყობინებების დაფორმატება, რომელიც HTML ჭდეებს აჩვენებდა.</li>
@@ -939,7 +940,7 @@
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
           <li>If an alarm is late-cancelled, don't remove the event if a sub-repetition is still due.</li>
-          <li xml:lang="ar">إذا أُلغي المنبّه متأخراً، لا يُزال الحدث إذا كان هناك تكرار فرعي لا يزال مستحقاً.</li>
+          <li xml:lang="ar">إذا أُلغي المنبّه متأخرًا، لا يُزال الحدث إذا كان هناك تكرار فرعي لا يزال مستحقًا.</li>
           <li xml:lang="bg">Ако алармата е отменена късно, да не се премахва събитието, ако все още има подповторение.</li>
           <li xml:lang="ca">Si una alarma està cancel·lada tard, no elimina l'esdeveniment si encara hi ha pendent una subrepetició.</li>
           <li xml:lang="ca-valencia">Si una alarma està cancel·lada tard, no elimina l'esdeveniment si encara hi ha pendent una subrepetició.</li>
@@ -1551,7 +1552,7 @@
           <li xml:lang="uk">Виправлено помилку, пов'язану із тим, що пробудження від сну не працювало при використанні пробудження RTC.</li>
           <li xml:lang="zh-CN">修复使用实时时钟唤醒时从挂起状态唤醒功能无法正常工作的问题。</li>
           <li>Display any audio error message immediately when using Try button while editing an alarm.</li>
-          <li xml:lang="ar">تُعرض أي رسالة خطأ صوتية فوراً عند استخدام زر "جرب" أثناء تحرير منبّه.</li>
+          <li xml:lang="ar">تُعرض أي رسالة خطأ صوتية فورًا عند استخدام زر "جرب" أثناء تحرير منبّه.</li>
           <li xml:lang="bg">Показвайте незабавно всяко аудио съобщение за грешка, когато използвате бутона „Опитай“ по време на редактиране на аларма.</li>
           <li xml:lang="ca">Mostra qualsevol missatge d'error d'àudio immediatament quan s'utilitza el botó Prova mentre s'edita una alarma.</li>
           <li xml:lang="ca-valencia">Mostra qualsevol missatge d'error d'àudio immediatament quan s'utilitza el botó Prova mentre s'edita una alarma.</li>
@@ -1667,7 +1668,7 @@
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
           <li>Use VLC instead of libcanberra to play sounds.</li>
-          <li xml:lang="ar">استُخدم VLC بدلاً من libcanberra لتشغيل الأصوات.</li>
+          <li xml:lang="ar">استُخدم VLC بدلًا من libcanberra لتشغيل الأصوات.</li>
           <li xml:lang="bg">Използване на VLC вместо libcanberra за възпроизвеждане на звуци.</li>
           <li xml:lang="ca">Utilitza el VLC en lloc de la «libcanberra» per a reproduir sons.</li>
           <li xml:lang="ca-valencia">Utilitza VLC en lloc de la «libcanberra» per a reproduir sons.</li>
@@ -1715,7 +1716,7 @@
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
           <li>Fix crash after editing new alarm if spell checking is enabled.</li>
-          <li xml:lang="ar">أُصلح الانهيار بعد تحرير منبّه جديد إذا كان تدقيق الإملاء مفعلاً.</li>
+          <li xml:lang="ar">أُصلح الانهيار بعد تحرير منبّه جديد إذا كان تدقيق الإملاء مفعلًا.</li>
           <li xml:lang="bg">Поправен е сривът след редактиране на нова аларма, ако е активирана проверката на правописа.</li>
           <li xml:lang="ca">Corregeix una fallada després d'editar una alarma nova si la verificació ortogràfica està activada.</li>
           <li xml:lang="ca-valencia">Corregix una fallada després d'editar una alarma nova si la verificació ortogràfica està activada.</li>
@@ -1813,7 +1814,7 @@
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
           <li>Use libcanberra instead of Phonon to play sounds, for thread safety.</li>
-          <li xml:lang="ar">استُخدم libcanberra بدلاً من Phonon لتشغيل الأصوات، لضمان سلامة الخيوط (thread safety).</li>
+          <li xml:lang="ar">استُخدم libcanberra بدلًا من Phonon لتشغيل الأصوات، لضمان سلامة الخيوط (thread safety).</li>
           <li xml:lang="bg">Използване на libcanberra вместо Phonon за възпроизвеждане на звуци, за безопасност на нишките.</li>
           <li xml:lang="ca">Utilitza la «libcanberra» en lloc del Phonon per a reproduir sons, per a la seguretat dels fils.</li>
           <li xml:lang="ca-valencia">Utilitza la «libcanberra» en lloc de Phonon per a reproduir sons, per a la seguretat dels fils.</li>
