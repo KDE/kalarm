@@ -1,7 +1,7 @@
 /*
  *  calendarupdater.cpp  -  base class to update a calendar to current KAlarm format
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,6 +10,7 @@
 
 #include "lib/desktop.h"
 #include "lib/i18n.h"
+#include "kalarm_debug.h"
 
 #include <KLocalizedString>
 
@@ -72,6 +73,7 @@ void CalendarUpdater::waitForCompletion()
 */
 void CalendarUpdater::setCompleted()
 {
+    qCDebug(KALARM_LOG) << "CalendarUpdater::setCompleted";
     mCompleted = true;
     deleteLater();
 }

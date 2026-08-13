@@ -1,7 +1,7 @@
 /*
  *  fileresourcemigrator.cpp  -  migrates or creates KAlarm file system resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2011-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2011-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -100,16 +100,17 @@ void FileResourceMigrator::start()
     {
         // Some file system resources already exist, so no migration is
         // required. Create any missing default file system resources.
-        akonadiMigrationComplete();
+        akonadiMigrationComplete(false);
     }
     else
     {
         // There are no file system resources, so migrate any Akonadi resources.
         mAkonadiPlugin = Preferences::akonadiPlugin();
         if (!mAkonadiPlugin)
-            akonadiMigrationComplete();   // Akonadi plugin is not available
+            akonadiMigrationComplete(false);   // Akonadi plugin is not available
         else
         {
+            qCDebug(KALARM_LOG) << "FileResourceMigrator::start: migrate Akonadi";
             connect(mAkonadiPlugin, &AkonadiPlugin::akonadiMigrationComplete, this, &FileResourceMigrator::akonadiMigrationComplete);
             connect(mAkonadiPlugin, &AkonadiPlugin::migrateFileResource, this, &FileResourceMigrator::migrateFileResource);
             connect(mAkonadiPlugin, &AkonadiPlugin::migrateDirResource, this, &FileResourceMigrator::migrateDirResource);
@@ -129,6 +130,7 @@ void FileResourceMigrator::migrateFileResource(const QString& resourceName,
                       CalEvent::Types enabledTypes, CalEvent::Types standardTypes,
                       bool readOnly)
 {
+    qCDebug(KALARM_LOG) << "FileResourceMigrator::migrateFileResource" << location.toString(QUrl::PreferLocalFile | QUrl::PrettyDecoded);
     FileResourceSettings::Ptr settings(new FileResourceSettings(
                   FileResourceSettings::File, location, alarmTypes, displayName,
                   backgroundColour, enabledTypes, standardTypes, readOnly));
@@ -161,6 +163,7 @@ void FileResourceMigrator::migrateDirResource(const QString& resourceName,
                       CalEvent::Types enabledTypes, CalEvent::Types standardTypes,
                       bool readOnly)
 {
+    qCDebug(KALARM_LOG) << "FileResourceMigrator::migrateDirResource" << path;
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).
@@ -223,8 +226,9 @@ void FileResourceMigrator::migrateDirResource(const QString& resourceName,
 /******************************************************************************
 * Called when Akonadi migration is complete or is known not to be possible.
 */
-void FileResourceMigrator::akonadiMigrationComplete()
+void FileResourceMigrator::akonadiMigrationComplete(bool migrated)
 {
+    qCDebug(KALARM_LOG) << "FileResourceMigrator::akonadiMigrationComplete" << migrated;
     // Create any necessary additional default file system resources.
     createDefaultResources();
 

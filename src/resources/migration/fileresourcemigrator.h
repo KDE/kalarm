@@ -1,7 +1,7 @@
 /*
  *  fileresourcemigrator.h  -  migrates or creates KAlarm file system resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -39,7 +39,7 @@ public:
     static bool completed()    { return mCompleted; }
 
 private Q_SLOTS:
-    void akonadiMigrationComplete();
+    void akonadiMigrationComplete(bool migrated);
     void checkIfComplete();
 
 private:
