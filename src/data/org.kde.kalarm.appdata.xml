@@ -472,6 +472,26 @@
     <release version="3.13.1" date="2026-08-20">
       <description>
         <p>Release description</p>
+        <p xml:lang="ar">وصف الإصدارة</p>
+        <p xml:lang="bg">Описание на изданието</p>
+        <p xml:lang="ca">Descripció de la versió</p>
+        <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="cs">Popis vydání</p>
+        <p xml:lang="es">Descripción de la versión</p>
+        <p xml:lang="fr">Description de la version</p>
+        <p xml:lang="he">תיאור מהדורה</p>
+        <p xml:lang="ia">Description de version</p>
+        <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="ka">რელიზის აღწერა</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
+        <p xml:lang="ru">Описание выпуска</p>
+        <p xml:lang="sk">Popis vydania</p>
+        <p xml:lang="sl">Opis izdaje</p>
+        <p xml:lang="sv">Utgåvebeskrivning</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
+        <p xml:lang="uk">Опис випуску</p>
+        <p xml:lang="zh-CN">新版描述</p>
         <ul>
           <li>Fix crash when alarm excludes holidays.</li>
           <li>Fix skipped alarms not triggering unless KAlarm is restarted.</li>
@@ -1304,6 +1324,7 @@
           <li xml:lang="cs">V X11 se zobrazuje standardní okno s upomínkami nad aplikacemi v režimu celé obrazovky.</li>
           <li xml:lang="es">Mostrar ventanas de alarma decoradas normales sobre aplicaciones a pantalla completa en X11.</li>
           <li xml:lang="fr">Afficher des fenêtres normales d'alarme décorées sur des applications en plein écran sous X11.</li>
+          <li xml:lang="he">יוצגו חלונות תזכורת מעוצבים רגילים על גבי יישומי מסך מלא ב־X11.</li>
           <li xml:lang="ia">Monstra fenestras de alarma decorate normal sur applicationes de schermo plen sur X11.</li>
           <li xml:lang="it">Mostra finestre di avviso con decorazione normale sopra applicazioni a schermo intero su X11.</li>
           <li xml:lang="ka">X11-ზე სრულეკრანიანი აპლიკაციების ზემოთ ჩვეულებრივი დეკორირებული განგაშის ფანჯრების ჩვენება.</li>
