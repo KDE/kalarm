@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-08 00:45+0000\n"
+"POT-Creation-Date: 2026-08-14 00:46+0000\n"
 "PO-Revision-Date: 2017-09-28 18:00+0200\n"
 "Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
@@ -6866,7 +6866,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "Не могу да преузмем календар: <filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:86
+#: resources/calendarupdater.cpp:88
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6878,7 +6878,7 @@ msgstr ""
 "<application>К‑аларма</application> %2), па ће бити само‑за‑читање ако га не "
 "ажурирате на текући формат."
 
-#: resources/calendarupdater.cpp:89
+#: resources/calendarupdater.cpp:91
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6890,7 +6890,7 @@ msgstr ""
 "<application>К‑аларма</application>, па ће бити само‑за‑читање ако их не "
 "ажурирате на текући формат."
 
-#: resources/calendarupdater.cpp:92
+#: resources/calendarupdater.cpp:94
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -7222,7 +7222,7 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "без понављања"
 
-#: resources/migration/fileresourcemigrator.cpp:256
+#: resources/migration/fileresourcemigrator.cpp:260
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Active Alarms"
@@ -7230,7 +7230,7 @@ msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "активни аларми"
 
-#: resources/migration/fileresourcemigrator.cpp:258
+#: resources/migration/fileresourcemigrator.cpp:262
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Archived Alarms"
@@ -7238,7 +7238,7 @@ msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "архивирани аларми"
 
-#: resources/migration/fileresourcemigrator.cpp:260
+#: resources/migration/fileresourcemigrator.cpp:264
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Alarm Templates"
@@ -7246,7 +7246,7 @@ msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "шаблони аларма"
 
-#: resources/migration/fileresourcemigrator.cpp:280
+#: resources/migration/fileresourcemigrator.cpp:284
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info/plain"
 #| msgid "Failed to create default calendar <resource>%1</resource>"

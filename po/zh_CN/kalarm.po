@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-08 00:45+0000\n"
+"POT-Creation-Date: 2026-08-14 00:46+0000\n"
 "PO-Revision-Date: 2024-04-22 15:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -6238,7 +6238,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "无法下载日历：<filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:86
+#: resources/calendarupdater.cpp:88
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6249,7 +6249,7 @@ msgstr ""
 "日历 <resource>%1</resource> 为旧版格式 (<application>KAlarm</application> "
 "%2)，在更新格式前，此日历将保持只读状态。"
 
-#: resources/calendarupdater.cpp:89
+#: resources/calendarupdater.cpp:91
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6260,7 +6260,7 @@ msgstr ""
 "日历 <resource>%1</resource> 中有部分或全部闹钟为 <application>KAlarm</"
 "application> 旧版格式。在更新格式前，此日历将保持只读状态。"
 
-#: resources/calendarupdater.cpp:92
+#: resources/calendarupdater.cpp:94
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6554,25 +6554,25 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "不导入"
 
-#: resources/migration/fileresourcemigrator.cpp:256
+#: resources/migration/fileresourcemigrator.cpp:260
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "活动闹钟"
 
-#: resources/migration/fileresourcemigrator.cpp:258
+#: resources/migration/fileresourcemigrator.cpp:262
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "已归档闹钟"
 
-#: resources/migration/fileresourcemigrator.cpp:260
+#: resources/migration/fileresourcemigrator.cpp:264
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "闹钟模板"
 
-#: resources/migration/fileresourcemigrator.cpp:280
+#: resources/migration/fileresourcemigrator.cpp:284
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

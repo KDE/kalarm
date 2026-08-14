@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-08 00:45+0000\n"
+"POT-Creation-Date: 2026-08-14 00:46+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -6773,7 +6773,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "មិនអាច​ទាញយក​ប្រតិទិន ៖ <filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:86
+#: resources/calendarupdater.cpp:88
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -6790,7 +6790,7 @@ msgstr ""
 "application> កំណែ %2) ហើយ​នឹងក្លាយ​ជា​ បានតែ​អាន រហូតទាល់អ្នក​ជ្រើស​ធ្វើ​​បច្ចុប្បន្នភាព​​​​ជា​ទ្រង់ទ្រាយ​"
 "បច្ចុប្បន្ន ។"
 
-#: resources/calendarupdater.cpp:89
+#: resources/calendarupdater.cpp:91
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -6807,7 +6807,7 @@ msgstr ""
 "<application>KAlarm</application> ចាស់ ហើយ​​បានតែ​អាន ទាល់តែ​អ្នក​ជ្រើស​ធ្វើ​បច្ចុប្បន្នភាព​​"
 "ពួកវា​ទៅ​ជា​ទ្រង់ទ្រាយ​បច្ចុប្បន្ន ។"
 
-#: resources/calendarupdater.cpp:92
+#: resources/calendarupdater.cpp:94
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -7141,7 +7141,7 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "កុំ​ធ្វើ​ម្ដង​ទៀត"
 
-#: resources/migration/fileresourcemigrator.cpp:256
+#: resources/migration/fileresourcemigrator.cpp:260
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Active Alarms"
@@ -7149,7 +7149,7 @@ msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "ការ​ជូនដំណឹង​សកម្ម"
 
-#: resources/migration/fileresourcemigrator.cpp:258
+#: resources/migration/fileresourcemigrator.cpp:262
 #, fuzzy, kde-format
 #| msgctxt "@title:group"
 #| msgid "Archived Alarms"
@@ -7157,7 +7157,7 @@ msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "ការជូន​ដំណឹង​ដែលបាន​ដាក់​ក្នុង​ប័ណ្ណសារ"
 
-#: resources/migration/fileresourcemigrator.cpp:260
+#: resources/migration/fileresourcemigrator.cpp:264
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Alarm Templates"
@@ -7165,7 +7165,7 @@ msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "ពុម្ព​ការ​ជូនដំណឹង"
 
-#: resources/migration/fileresourcemigrator.cpp:280
+#: resources/migration/fileresourcemigrator.cpp:284
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info/plain"
 #| msgid "Failed to create default calendar <resource>%1</resource>"

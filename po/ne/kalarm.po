@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-08 00:45+0000\n"
+"POT-Creation-Date: 2026-08-14 00:46+0000\n"
 "PO-Revision-Date: 2007-09-07 11:50+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -7480,7 +7480,7 @@ msgstr ""
 "क्यालेन्डर डाउनलोड गर्न सकिँदैन:\n"
 "%1"
 
-#: resources/calendarupdater.cpp:86
+#: resources/calendarupdater.cpp:88
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Resource <b>%1</b> is in an old format (KAlarm version %2), and will be "
@@ -7494,7 +7494,7 @@ msgstr ""
 "संसाधन <b>%1</b> पूरानो ढाँचा (केडीई संसूचक संस्करण %2)मा छ, र तपाईँले यसलाई हालको "
 "ढाँचामा अद्यावधिक गर्न नरोजेमा पढिने मात्र छ ।"
 
-#: resources/calendarupdater.cpp:89
+#: resources/calendarupdater.cpp:91
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Some or all of the alarms in resource <b>%1</b> are in an old KAlarm "
@@ -7509,7 +7509,7 @@ msgstr ""
 "स्रोत <b>%1</b> का केही वा सबै संसूचक पूरानो केडीई संसूचक ढाँचामा छन्, र तपाईँले हालको "
 "ढाँचामा तिनीहरूलाई अद्यावधिक गर्न नरोजेमा पढिने मात्र हुन्छन् ।"
 
-#: resources/calendarupdater.cpp:92
+#: resources/calendarupdater.cpp:94
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>%1<br><br>WARNING: Do not update the resource if it is shared with "
@@ -7830,28 +7830,28 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "नदोहोर्याउनुहोस्"
 
-#: resources/migration/fileresourcemigrator.cpp:256
+#: resources/migration/fileresourcemigrator.cpp:260
 #, fuzzy, kde-format
 #| msgid "Active Alarms"
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "संसूचक सक्रिय पार्नुहोस्"
 
-#: resources/migration/fileresourcemigrator.cpp:258
+#: resources/migration/fileresourcemigrator.cpp:262
 #, fuzzy, kde-format
 #| msgid "Archived Alarms"
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "सङ्ग्रहित संसूचक"
 
-#: resources/migration/fileresourcemigrator.cpp:260
+#: resources/migration/fileresourcemigrator.cpp:264
 #, fuzzy, kde-format
 #| msgid "Alarm Templates"
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "संसूचक टेम्प्लेट"
 
-#: resources/migration/fileresourcemigrator.cpp:280
+#: resources/migration/fileresourcemigrator.cpp:284
 #, fuzzy, kde-kuit-format
 #| msgid "<qt>Unable to create resource of type <b>%1</b>.</qt>"
 msgctxt "@info"

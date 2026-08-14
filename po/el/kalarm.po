@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-08 00:45+0000\n"
+"POT-Creation-Date: 2026-08-14 00:46+0000\n"
 "PO-Revision-Date: 2024-09-19 15:13+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -6794,7 +6794,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "Αδυναμία λήψης ημερολογίου: <filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:86
+#: resources/calendarupdater.cpp:88
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6806,7 +6806,7 @@ msgstr ""
 "(<application>KAlarm</application> έκδοση %2), και θα είναι για ανάγνωση "
 "μόνο εκτός αν επιλέξετε να το ενημερώσετε στον τρέχοντα τύπο."
 
-#: resources/calendarupdater.cpp:89
+#: resources/calendarupdater.cpp:91
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6818,7 +6818,7 @@ msgstr ""
 "παλαιό τύπο αποθήκευσης του <application>KAlarm</application>, και θα είναι "
 "για ανάγνωση-μόνο εκτός αν επιλέξετε να τους ενημερώσετε στον τρέχοντα τύπο."
 
-#: resources/calendarupdater.cpp:92
+#: resources/calendarupdater.cpp:94
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -7138,25 +7138,25 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "Να μη γίνει εισαγωγή"
 
-#: resources/migration/fileresourcemigrator.cpp:256
+#: resources/migration/fileresourcemigrator.cpp:260
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "Ενεργοί συναγερμοί"
 
-#: resources/migration/fileresourcemigrator.cpp:258
+#: resources/migration/fileresourcemigrator.cpp:262
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "Αρχειοθετημένοι συναγερμοί"
 
-#: resources/migration/fileresourcemigrator.cpp:260
+#: resources/migration/fileresourcemigrator.cpp:264
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "Πρότυπα συναγερμών"
 
-#: resources/migration/fileresourcemigrator.cpp:280
+#: resources/migration/fileresourcemigrator.cpp:284
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

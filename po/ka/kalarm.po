@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-08 00:45+0000\n"
+"POT-Creation-Date: 2026-08-14 00:46+0000\n"
 "PO-Revision-Date: 2026-01-24 04:22+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -6535,7 +6535,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "ვერ გადმოვწერე კალენდარი: <filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:86
+#: resources/calendarupdater.cpp:88
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6547,7 +6547,7 @@ msgstr ""
 "application> ვერსია %2), და მხოლოდ წაკითხვად იქნება, სანამ მას მიმდინარე "
 "ფორმატამდე არ ასწევთ.."
 
-#: resources/calendarupdater.cpp:89
+#: resources/calendarupdater.cpp:91
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6559,7 +6559,7 @@ msgstr ""
 "<application>KAlarm</application>-ის ფორმატშია და მხოლოდ-წაკითხვადი იქნება "
 "მანამდე, სანამ, მათ, მიმდინარე ფორმატამდე არ განაახლებთ."
 
-#: resources/calendarupdater.cpp:92
+#: resources/calendarupdater.cpp:94
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6869,25 +6869,25 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "იმპორტი არ შეიძლება"
 
-#: resources/migration/fileresourcemigrator.cpp:256
+#: resources/migration/fileresourcemigrator.cpp:260
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "აქტიური განგაშები"
 
-#: resources/migration/fileresourcemigrator.cpp:258
+#: resources/migration/fileresourcemigrator.cpp:262
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "დაარქივებული განგაშები"
 
-#: resources/migration/fileresourcemigrator.cpp:260
+#: resources/migration/fileresourcemigrator.cpp:264
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "განგაშის შაბლონები"
 
-#: resources/migration/fileresourcemigrator.cpp:280
+#: resources/migration/fileresourcemigrator.cpp:284
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

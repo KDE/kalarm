@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-08 00:45+0000\n"
+"POT-Creation-Date: 2026-08-14 00:46+0000\n"
 "PO-Revision-Date: 2026-03-30 11:29+0200\n"
 "Last-Translator:  Vít Pelčák <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -6552,7 +6552,7 @@ msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
 msgstr "Nelze stáhnout kalendář: <filename>%1</filename>"
 
-#: resources/calendarupdater.cpp:86
+#: resources/calendarupdater.cpp:88
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6564,7 +6564,7 @@ msgstr ""
 "application> verze %2) a bude pouze ke čtení, dokud nezvolíte jeho "
 "aktualizaci do aktuálního formátu."
 
-#: resources/calendarupdater.cpp:89
+#: resources/calendarupdater.cpp:91
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6576,7 +6576,7 @@ msgstr ""
 "starém formátu <application>KAlarm</application> a budou pouze ke čtení, "
 "dokud nezvolíte jejich aktualizaci do aktuálního formátu."
 
-#: resources/calendarupdater.cpp:92
+#: resources/calendarupdater.cpp:94
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6883,25 +6883,25 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "Neimportovat"
 
-#: resources/migration/fileresourcemigrator.cpp:256
+#: resources/migration/fileresourcemigrator.cpp:260
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "Aktivní upomínky"
 
-#: resources/migration/fileresourcemigrator.cpp:258
+#: resources/migration/fileresourcemigrator.cpp:262
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "Archivované upomínky"
 
-#: resources/migration/fileresourcemigrator.cpp:260
+#: resources/migration/fileresourcemigrator.cpp:264
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "Šablony upomínek"
 
-#: resources/migration/fileresourcemigrator.cpp:280
+#: resources/migration/fileresourcemigrator.cpp:284
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
