@@ -499,7 +499,33 @@
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
           <li>Fix crash when alarm excludes holidays.</li>
+          <li xml:lang="bg">Поправка на срив, когато алармата изключва празнични дни.</li>
+          <li xml:lang="ca">Corregeix una fallada quan l'alarma exclou festius.</li>
+          <li xml:lang="ca-valencia">Corregix una fallada quan l'alarma exclou festius.</li>
+          <li xml:lang="cs">Opravena chyba, která způsobovala pád aplikace, když byla upomínka nastavena tak, aby vynechávala svátky.</li>
+          <li xml:lang="es">Se ha corregido un error cuando la alarma excluye días festivos.</li>
+          <li xml:lang="ka">გასწორდა შეცდომა, როცა განგაში გამორიცხავდა დასვენების დღეებს.</li>
+          <li xml:lang="nl">Los crash op wanneer het alarm feestdagen uitsluit.</li>
+          <li xml:lang="pt-BR">Correção de falha quando o alarme exclui feriados.</li>
+          <li xml:lang="sk">Oprava pádu, keď alarm vynecháva sviatky.</li>
+          <li xml:lang="sl">Odpravljeno je bilo sesutje, ko alarm izključuje praznike.</li>
+          <li xml:lang="sv">Rätta krasch när alarm undantar helger.</li>
+          <li xml:lang="tr">Alarm tatillerde çalmadığında oluşan çökmeyi önle</li>
+          <li xml:lang="uk">Усунено аварійне завершення роботи для нагадувань, у яких виключено свята.</li>
           <li>Fix skipped alarms not triggering unless KAlarm is restarted.</li>
+          <li xml:lang="bg">Поправка на пропуснатите аларми, които не се активират, освен ако KAlarm не бъде рестартирана.</li>
+          <li xml:lang="ca">Corregeix que les alarmes omeses no s'activen a menys que es reiniciï el KAlarm.</li>
+          <li xml:lang="ca-valencia">Corregix que les alarmes omeses no s'activen a menys que es reinicie KAlarm.</li>
+          <li xml:lang="cs">Opraven problém, kdy přeskočené upomínky nefungovaly, dokud nebyl KAlarm restartován.</li>
+          <li xml:lang="es">Se ha corregido el fallo que evitaba que las alarmas omitidas no se activaran a menos que KAlarm se reiniciara.</li>
+          <li xml:lang="ka">გასწორდა შეცდომა, როცა განგაშები არ ტრიგერდებოდა, სანამ KAlarm არ გაიტვირთებოდა.</li>
+          <li xml:lang="nl">Probleem opgelost waarbij overgeslagen alarmen niet afgingen tenzij KAlarm opnieuw werd opgestart.</li>
+          <li xml:lang="pt-BR">Correção de alarmes ignorados que não disparavam a menos que o KAlarm fosse reiniciado.</li>
+          <li xml:lang="sk">Oprava vynechaných alarmov, ktoré sa nespustili, kým sa KAlarm nereštartoval.</li>
+          <li xml:lang="sl">Odpravljena je bila napaka, zaradi katere se preskočeni alarmi niso prožili, razen če je KAlarm ponovno zagnan.</li>
+          <li xml:lang="sv">Rätta överhoppade alarm som inte utlösas om Kalarm inte startas om.</li>
+          <li xml:lang="tr">K Alarm yeniden başlatılmadığı sürece atlanan alarmların tetiklenmemesi sorununu düzelt</li>
+          <li xml:lang="uk">Виправлено невмикання пропущених нагадувань без перезапуску KAlarm.</li>
         </ul>
       </description>
     </release>
