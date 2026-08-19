@@ -499,6 +499,7 @@
         <p xml:lang="zh-CN">新版描述</p>
         <ul>
           <li>Fix crash when alarm excludes holidays.</li>
+          <li xml:lang="ar">إصلاح مشكلة تعطل التطبيق عند استبعاد أيام العطلات من التنبيهات.</li>
           <li xml:lang="bg">Поправка на срив, когато алармата изключва празнични дни.</li>
           <li xml:lang="ca">Corregeix una fallada quan l'alarma exclou festius.</li>
           <li xml:lang="ca-valencia">Corregix una fallada quan l'alarma exclou festius.</li>
@@ -514,6 +515,7 @@
           <li xml:lang="tr">Alarm tatillerde çalmadığında oluşan çökmeyi önle</li>
           <li xml:lang="uk">Усунено аварійне завершення роботи для нагадувань, у яких виключено свята.</li>
           <li>Fix skipped alarms not triggering unless KAlarm is restarted.</li>
+          <li xml:lang="ar">إصلاح مشكلة عدم انطلاق المنبهات المتخطاة ما لم يعاد تشغيل تطبيق منبهك.</li>
           <li xml:lang="bg">Поправка на пропуснатите аларми, които не се активират, освен ако KAlarm не бъде рестартирана.</li>
           <li xml:lang="ca">Corregeix que les alarmes omeses no s'activen a menys que es reiniciï el KAlarm.</li>
           <li xml:lang="ca-valencia">Corregix que les alarmes omeses no s'activen a menys que es reinicie KAlarm.</li>
