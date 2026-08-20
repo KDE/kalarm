@@ -509,6 +509,7 @@
           <li xml:lang="sv">Rätta krasch när alarm undantar helger.</li>
           <li xml:lang="tr">Alarm tatillerde çalmadığında oluşan çökmeyi önle</li>
           <li xml:lang="uk">Усунено аварійне завершення роботи для нагадувань, у яких виключено свята.</li>
+          <li xml:lang="zh-CN">修复闹钟不包括假日时的崩溃。</li>
           <li>Fix skipped alarms not triggering unless KAlarm is restarted.</li>
           <li xml:lang="ar">إصلاح مشكلة عدم انطلاق المنبهات المتخطاة ما لم يعاد تشغيل تطبيق منبهك.</li>
           <li xml:lang="bg">Поправено е, че пропуснатите аларми не се задействат, освен ако KAlarm не се рестартира.</li>
@@ -525,6 +526,7 @@
           <li xml:lang="sv">Rätta överhoppade alarm som inte utlösas om Kalarm inte startas om.</li>
           <li xml:lang="tr">K Alarm yeniden başlatılmadığı sürece atlanan alarmların tetiklenmemesi sorununu düzelt</li>
           <li xml:lang="uk">Виправлено невмикання пропущених нагадувань без перезапуску KAlarm.</li>
+          <li xml:lang="zh-CN">修复跳过的提醒不被触发，除非重新启动 KAlarm。</li>
         </ul>
       </description>
     </release>
