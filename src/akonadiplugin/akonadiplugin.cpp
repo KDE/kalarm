@@ -1,7 +1,7 @@
 /*
  *  akonadiplugin.cpp  -  plugin to provide features requiring Akonadi
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2022-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2022-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -180,11 +180,19 @@ void AkonadiPlugin::initiateAkonadiResourceMigration()
     AkonadiResourceMigrator* akonadiMigrator = AkonadiResourceMigrator::instance();
     if (akonadiMigrator)
     {
+        connect(akonadiMigrator, &AkonadiResourceMigrator::migrationState, this, &AkonadiPlugin::akonadiMigrationState);
         connect(akonadiMigrator, &AkonadiResourceMigrator::migrationComplete, this, &AkonadiPlugin::akonadiMigrationComplete);
         connect(akonadiMigrator, &AkonadiResourceMigrator::fileResource, this, &AkonadiPlugin::migrateFileResource);
         connect(akonadiMigrator, &AkonadiResourceMigrator::dirResource, this, &AkonadiPlugin::migrateDirResource);
         akonadiMigrator->initiateMigration();
     }
+}
+
+void AkonadiPlugin::cancelAkonadiResourceMigration()
+{
+    AkonadiResourceMigrator* akonadiMigrator = AkonadiResourceMigrator::instance();
+    if (akonadiMigrator)
+        akonadiMigrator->cancelMigration();
 }
 
 void AkonadiPlugin::deleteAkonadiResource(const QString& resourceName)

@@ -1,7 +1,7 @@
 /*
  *  fileresourcedatamodel.h  -  model containing file system resources and their events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,6 +13,9 @@
 #include "kalarmcalendar/kaevent.h"
 
 #include <QAbstractItemModel>
+
+class QDialog;
+class QLabel;
 
 using namespace KAlarmCal;
 
@@ -124,6 +127,8 @@ protected:
 
 private Q_SLOTS:
     void     slotMigrationCompleted();
+    void     slotCancelMigration();
+    void     slotMigrationState(int state);    // state is type PluginBaseAkonadi::MigrationState
     void     slotUpdateTimeTo();
     void     slotUpdateArchivedColour(const QColor&);
     void     slotUpdateDisabledColour(const QColor&);
@@ -148,6 +153,7 @@ private:
     explicit FileResourceDataModel(QObject* parent = nullptr);
     void     initialise();
     void     signalDataChanged(bool (*checkFunc)(const KAEvent*), int startColumn, int endColumn, const QModelIndex& parent);
+    void     showMigrationMessage(bool create);
 
     /** Remove a resource's events. */
     void removeResourceEvents(Resource&, bool setHaveEvents = true);
@@ -166,6 +172,11 @@ private:
     QList<Resource>       mResources;
     QHash<QString, Node*> mEventNodes;  // each event ID, mapped to its node.
     bool                  mHaveEvents;  // there are events in this model
+    int                   mMigrationState;    // current resource migration state
+    QDialog*              mMigrationMessage {nullptr};  // user message about migration state
+    QLabel*               mMigrationMessageText1;
+    QLabel*               mMigrationMessageText2;
+    QLabel*               mMigrationMessageText3;
 };
 
 // vim: et sw=4:

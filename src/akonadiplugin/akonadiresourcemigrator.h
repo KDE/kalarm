@@ -1,7 +1,7 @@
 /*
  *  akonadiresourcemigrator.h  -  migrates KAlarm Akonadi resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,6 +9,7 @@
 #pragma once
 
 #include "kalarmcalendar/kacalendar.h"
+#include "akonadiplugin.h"
 
 #include <Akonadi/ServerManager>
 #include <Akonadi/Collection>
@@ -37,12 +38,18 @@ public:
     /** Initiate Akonadi resource migration. */
     void initiateMigration();
 
+    /** Cancel Akonadi resource migration. */
+    void cancelMigration();
+
     /** Delete a named Akonadi resource.
      *  This should be called after the resource has been migrated.
      */
     void deleteAkonadiResource(const QString& resourceName);
 
 Q_SIGNALS:
+    /** Emitted when the the state of Akonadi resource migration has changed. */
+    void migrationState(int state);   // state is type PluginBaseAkonadi::MigrationState
+
     /** Emitted when Akonadi resource migration has completed.
      *  @param migrated  true if Akonadi migration was performed.
      */
@@ -56,9 +63,9 @@ Q_SIGNALS:
 
     /** Emitted when a directory resource needs to be migrated. */
     void dirResource(const QString& resourceName, const QString& path, KAlarmCal::CalEvent::Types alarmTypes,
-                      const QString& displayName, const QColor& backgroundColour,
-                      KAlarmCal::CalEvent::Types enabledTypes, KAlarmCal::CalEvent::Types standardTypes,
-                      bool readOnly);
+                     const QString& displayName, const QColor& backgroundColour,
+                     KAlarmCal::CalEvent::Types enabledTypes, KAlarmCal::CalEvent::Types standardTypes,
+                     bool readOnly);
 
 private Q_SLOTS:
     void checkServer(Akonadi::ServerManager::State);
@@ -84,7 +91,9 @@ private:
     };
     QHash<QString, AkResourceData> mCollectionPaths;    // path, (Akonadi resource identifier, collection) pairs
     QHash<Akonadi::CollectionFetchJob*, bool> mFetchesPending;  // pending collection fetch jobs for existing resources, and whether directory resource
+    PluginBaseAkonadi::MigrationState mState {PluginBaseAkonadi::MigrationState::Inactive};  // current status of migration process
     bool            mAkonadiStarted {false};    // Akonadi was started by the migrator
+    bool            mCancelling {false};        // migration is being cancelled
     static bool     mCompleted;                 // migration has completed
 };
 

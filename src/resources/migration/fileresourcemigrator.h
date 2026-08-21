@@ -20,6 +20,16 @@ class FileResourceMigrator : public QObject
 {
     Q_OBJECT
 public:
+    /** Current state of resource migration. */
+    enum class State
+    {
+        Inactive,        // migration hasn't started
+        WaitServer,      // waiting for Akonadi server to start
+        FindResources,   // identifying resources to migrate
+        Migrating,       // migrating resources
+        Complete         // migration complete
+    };
+
     ~FileResourceMigrator() override;
 
     /** Return the unique instance, creating it if necessary.
@@ -36,9 +46,17 @@ public:
      */
     void start();
 
+    /** Cancel resource migration. */
+    void cancelMigration();
+
     static bool completed()    { return mCompleted; }
 
+Q_SIGNALS:
+    /** Emitted when the the state of Akonadi resource migration has changed. */
+    void state(int state_);     // state_ is type State
+
 private Q_SLOTS:
+    void akonadiMigrationState(int state);
     void akonadiMigrationComplete(bool migrated);
     void checkIfComplete();
 

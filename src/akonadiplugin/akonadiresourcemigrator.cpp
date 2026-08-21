@@ -1,7 +1,7 @@
 /*
  *  akonadiresourcemigrator.cpp  -  migrates KAlarm Akonadi resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2011-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2011-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -76,10 +76,39 @@ AkonadiResourceMigrator* AkonadiResourceMigrator::instance()
 */
 void AkonadiResourceMigrator::initiateMigration()
 {
+    if (mCompleted  ||  mState != PluginBaseAkonadi::MigrationState::Inactive)
+        return;
+    mState = PluginBaseAkonadi::MigrationState::WaitServer;
+    Q_EMIT migrationState((int)mState);
     connect(Akonadi::ServerManager::self(), &Akonadi::ServerManager::stateChanged, this, &AkonadiResourceMigrator::checkServer);
     auto akstate = Akonadi::ServerManager::state();
     mAkonadiStarted = (akstate == Akonadi::ServerManager::NotRunning);
     checkServer(akstate);
+}
+
+/******************************************************************************
+* Cancel migration of old Akonadi calendars.
+*/
+void AkonadiResourceMigrator::cancelMigration()
+{
+    if (mCancelling)
+        return;
+    mCancelling = true;
+    switch (mState)
+    {
+        case PluginBaseAkonadi::MigrationState::WaitServer:
+            terminate(false);
+            return;
+        case PluginBaseAkonadi::MigrationState::FindResources:
+            mCollectionPaths.clear();
+            terminate(false);
+            return;
+        case PluginBaseAkonadi::MigrationState::Migrating:
+        case PluginBaseAkonadi::MigrationState::Inactive:
+        case PluginBaseAkonadi::MigrationState::Complete:
+        default:
+            return;
+    }
 }
 
 /******************************************************************************
@@ -119,27 +148,33 @@ void AkonadiResourceMigrator::checkServer(Akonadi::ServerManager::State state)
 void AkonadiResourceMigrator::migrateResources()
 {
     qCDebug(AKONADIPLUGIN_LOG) << "AkonadiResourceMigrator::migrateResources: initiated";
+    mState = PluginBaseAkonadi::MigrationState::FindResources;
+    Q_EMIT migrationState((int)mState);
     mCollectionPaths.clear();
     mFetchesPending.clear();
     Akonadi::AttributeFactory::registerAttribute<CollectionAttribute>();
 
-    // Create jobs to fetch all KAlarm Akonadi collections.
-    bool migrating = false;
-    const Akonadi::AgentInstance::List agents = Akonadi::AgentManager::self()->instances();
-    for (const Akonadi::AgentInstance& agent : agents)
+    // Find all KAlarm Akonadi collections.
+    Akonadi::AgentInstance::List agents = Akonadi::AgentManager::self()->instances();
+    for (int i = agents.count();  --i >= 0;  )
     {
-        const QString type = agent.type().identifier();
-        if (type == KALARM_RESOURCE  ||  type == KALARM_DIR_RESOURCE)
+        const QString type = agents.at(i).type().identifier();
+        if (type != KALARM_RESOURCE  &&  type != KALARM_DIR_RESOURCE)
+            agents.removeAt(i);
+    }
+    if (agents.isEmpty())
+        terminate(false);   // there are no KAlarm Akonadi resources to migrate
+    else
+    {
+        // Create jobs to fetch all KAlarm Akonadi collections.
+        for (const Akonadi::AgentInstance& agent : std::as_const(agents))
         {
             Akonadi::CollectionFetchJob* job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(), Akonadi::CollectionFetchJob::FirstLevel);
             job->fetchScope().setResource(agent.identifier());
-            mFetchesPending[job] = (type == KALARM_DIR_RESOURCE);
+            mFetchesPending[job] = (agent.type().identifier() == KALARM_DIR_RESOURCE);
             connect(job, &KJob::result, this, &AkonadiResourceMigrator::collectionFetchResult);
-            migrating = true;
         }
     }
-    if (!migrating)
-        terminate(false);   // there are no Akonadi resources to migrate
 }
 
 /******************************************************************************
@@ -149,6 +184,8 @@ void AkonadiResourceMigrator::migrateResources()
 */
 void AkonadiResourceMigrator::collectionFetchResult(KJob* j)
 {
+    if (mCancelling)
+        return;
     auto job = qobject_cast<Akonadi::CollectionFetchJob*>(j);
     const QString id = job->fetchScope().resource();
     if (j->error())
@@ -206,29 +243,42 @@ void AkonadiResourceMigrator::collectionFetchResult(KJob* j)
 void AkonadiResourceMigrator::doMigrateResources()
 {
     qCDebug(AKONADIPLUGIN_LOG) << "AkonadiResourceMigrator::doMigrateResources";
+    mState = PluginBaseAkonadi::MigrationState::Migrating;
+    Q_EMIT migrationState((int)mState);
+    int count = mCollectionPaths.count();
 
     // First, migrate KAlarm calendar file Akonadi resources.
     // This will allow any KAlarm directory resources to be merged into
     // single file resources, if the user prefers that.
     for (auto it = mCollectionPaths.constBegin();  it != mCollectionPaths.constEnd();  ++it)
     {
+        if (mCancelling)
+            break;
         const AkResourceData& resourceData = it.value();
         if (!resourceData.dirType)
+        {
             migrateCollection(resourceData.collection, false);
+            --count;
+        }
     }
 
     // Now migrate KAlarm directory Akonadi resources, which must be merged
     // or converted into single file resources.
     for (auto it = mCollectionPaths.constBegin();  it != mCollectionPaths.constEnd();  ++it)
     {
+        if (mCancelling)
+            break;
         const AkResourceData& resourceData = it.value();
         if (resourceData.dirType)
+        {
             migrateCollection(resourceData.collection, true);
+            --count;
+        }
     }
 
     // The alarm types of all collections have been found.
     mCollectionPaths.clear();
-    terminate(true);
+    terminate(!count);
 }
 
 /******************************************************************************
@@ -278,6 +328,7 @@ void AkonadiResourceMigrator::deleteAkonadiResource(const QString& resourceName)
 void AkonadiResourceMigrator::terminate(bool migrated)
 {
     qCDebug(AKONADIPLUGIN_LOG) << "AkonadiResourceMigrator::terminate" << migrated;
+    mState = PluginBaseAkonadi::MigrationState::Complete;
 
     Q_EMIT migrationComplete(migrated);
 

@@ -1,7 +1,7 @@
 /*
  *  pluginbaseakonadi.h  -  base class for plugin to provide features requiring Akonadi
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2022-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2022-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -28,6 +28,16 @@ class KALARMPLUGINLIB_EXPORT PluginBaseAkonadi : public QObject
 {
     Q_OBJECT
 public:
+    /** Current state of Akonadi resource migration. */
+    enum class MigrationState
+    {
+        Inactive,        // migration hasn't started
+        WaitServer,      // waiting for Akonadi server to start
+        FindResources,   // identifying KAlarm Akonadi resources to migrate
+        Migrating,       // migrating KAlarm Akonadi resources
+        Complete         // migration complete
+    };
+
     explicit PluginBaseAkonadi(QObject* parent = nullptr, const QList<QVariant>& = {});
     ~PluginBaseAkonadi() override;
 
@@ -64,6 +74,9 @@ public:
     /** Initiate Akonadi resource migration. */
     virtual void initiateAkonadiResourceMigration() = 0;
 
+    /** Cancel Akonadi resource migration. */
+    virtual void cancelAkonadiResourceMigration() = 0;
+
     /** Delete a named Akonadi resource.
      *  This should be called after the resource has been migrated.
      */
@@ -78,6 +91,9 @@ Q_SIGNALS:
 
     /** Emitted when an error has occurred sending an email. */
     void emailQueued(const KAlarmCal::KAEvent&);
+
+    /** Emitted when the the state of Akonadi resource migration has changed. */
+    void akonadiMigrationState(int state);   // state is type MigrationState
 
     /** Emitted when Akonadi resource migration has completed.
      *  @param migrated  true if Akonadi migration was required.

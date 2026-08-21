@@ -1,7 +1,7 @@
 /*
  *  fileresourcedatamodel.cpp  -  model containing file system resources and their events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,8 +16,23 @@
 #include "resources.h"
 
 #include "preferences.h"
+#include "lib/desktop.h"
 #include "lib/synchtimer.h"
 #include "kalarm_debug.h"
+
+#include <KLocalizedString>
+
+#include <QLabel>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGridLayout>
+#include <QTimer>
+#include <QApplication>
+
+namespace
+{
+const int MessageTimeout = 3;   // don't display a message until 3 seconds after migration starts
+}
 
 // Represents a resource or event within the data model.
 struct FileResourceDataModel::Node
@@ -66,6 +81,7 @@ FileResourceDataModel::FileResourceDataModel(QObject* parent)
     : QAbstractItemModel(parent)
     , ResourceDataModelBase()
     , mHaveEvents(false)
+    , mMigrationState((int)FileResourceMigrator::State::Inactive)
 {
     qCDebug(KALARM_LOG) << "FileResourceDataModel::FileResourceDataModel";
 
@@ -118,6 +134,7 @@ void FileResourceDataModel::initialise()
         setMigrationComplete();
     else
     {
+        connect(migrator, &FileResourceMigrator::state, this, &FileResourceDataModel::slotMigrationState);
         connect(migrator, &QObject::destroyed, this, &FileResourceDataModel::slotMigrationCompleted);
         setMigrationInitiated();
         migrator->start();
@@ -332,9 +349,153 @@ void FileResourceDataModel::signalDataChanged(bool (*checkFunc)(const KAEvent*),
         Q_EMIT dataChanged(index(start, startColumn, parent), index(end, endColumn, parent));
 }
 
+/******************************************************************************
+* Called when the migration state changes.
+* Sometimes on a new installation, migration can hang, so the user needs to be
+* told what is going on and allowed to cancel the migration.
+* After a short timeout, displays a user message.
+*/
+void FileResourceDataModel::slotMigrationState(int state)
+{
+    qCDebug(KALARM_LOG) << "FileResourceDataModel: Migration state" << (int)state;
+    mMigrationState = state;
+    switch ((FileResourceMigrator::State)state)
+    {
+        case FileResourceMigrator::State::WaitServer:
+            // This state is always notified as the first step in the migration.
+            // Wait 3 seconds before displaying a message, in case migration
+            // is fast enough not to need to warn the user.
+            QTimer::singleShot(MessageTimeout * 1000, this, [this]() { showMigrationMessage(true); });
+            break;
+        case FileResourceMigrator::State::FindResources:
+        case FileResourceMigrator::State::Migrating:
+        case FileResourceMigrator::State::Inactive:
+        case FileResourceMigrator::State::Complete:
+        default:
+            showMigrationMessage(false);   // show, update or remove the user message
+            break;
+    }
+}
+
+/******************************************************************************
+* Called after a timeout to display an appropriate user message about resource
+* migration.
+* The message window will only be created if 'create' is true. This prevents
+* the message window appearing before the timeout.
+*/
+void FileResourceDataModel::showMigrationMessage(bool create)
+{
+    if (!create  &&  !mMigrationMessage)
+        return;    // too soon to display the message
+
+    switch ((FileResourceMigrator::State)mMigrationState)
+    {
+        case FileResourceMigrator::State::WaitServer:
+        case FileResourceMigrator::State::FindResources:
+        case FileResourceMigrator::State::Migrating:
+            break;
+        case FileResourceMigrator::State::Inactive:
+        case FileResourceMigrator::State::Complete:
+        default:
+            delete mMigrationMessage;
+            mMigrationMessage = nullptr;
+            return;
+    }
+
+    // Need to display a message, or update the existing one.
+    QString msg = i18n("Checking for existing KAlarm calendars to migrate.");
+    QString msg1;
+    switch ((FileResourceMigrator::State)mMigrationState)
+    {
+        case FileResourceMigrator::State::WaitServer:
+            msg1 = i18n(" – Waiting for Akonadi to start.");
+            break;
+        case FileResourceMigrator::State::FindResources:
+            msg1 = i18n(" – Finding KAlarm Akonadi resources.");
+            break;
+        case FileResourceMigrator::State::Migrating:
+            msg = i18n("Migrating existing KAlarm calendars.");
+            break;
+        default:
+            return;
+    }
+    const bool existing = static_cast<bool>(mMigrationMessage);
+    if (!mMigrationMessage)
+    {
+        // Wait for the main window, which is the message's parent window, to be visible.
+        if (!Desktop::mainWindow()  ||  !Desktop::mainWindow()->isVisible())
+            QTimer::singleShot(1000, this, [this]() { showMigrationMessage(true); });
+        // Construct a QDialog to display the message.
+        // A QMessageBox doesn't allow its text to be updated to show progress,
+        // so use a QDialog instead.
+        mMigrationMessage = new QDialog(Desktop::mainWindow());
+        mMigrationMessage->setWindowTitle(i18nc("@title:window", "Calendar migration"));
+        auto grid = new QGridLayout(mMigrationMessage);
+        QLabel* iconLabel = new QLabel(mMigrationMessage);
+        QIcon icon = QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation);
+        QStyleOption option;
+        option.initFrom(mMigrationMessage);
+        iconLabel->setPixmap(icon.pixmap(mMigrationMessage->style()->pixelMetric(QStyle::PM_MessageBoxIconSize, &option, mMigrationMessage)));
+        grid->addWidget(iconLabel, 0, 0, 2, 1);
+        grid->setColumnStretch(0, 0);
+        grid->setColumnStretch(1, 1);
+        mMigrationMessageText1 = new QLabel(mMigrationMessage);
+        grid->addWidget(mMigrationMessageText1, 0, 1, Qt::AlignLeft);
+        mMigrationMessageText2 = new QLabel(mMigrationMessage);
+        grid->addWidget(mMigrationMessageText2, 1, 1, Qt::AlignLeft);
+        mMigrationMessageText3 = new QLabel(mMigrationMessage);
+        grid->addWidget(mMigrationMessageText3, 0, 1, 2, 1, Qt::AlignLeft);
+        auto buttonBox = new QDialogButtonBox(mMigrationMessage);
+        buttonBox->addButton(i18nc("@action:button", "Cancel migration"), QDialogButtonBox::RejectRole);
+        grid->addWidget(buttonBox, 2, 0, 1, 2);
+        connect(buttonBox, &QDialogButtonBox::rejected, mMigrationMessage, &QDialog::reject);
+        connect(buttonBox, &QDialogButtonBox::rejected, this, &FileResourceDataModel::slotCancelMigration);
+        mMigrationMessage->setWindowModality(Qt::ApplicationModal);
+    }
+    if (msg1.isEmpty())
+    {
+        mMigrationMessageText1->hide();
+        mMigrationMessageText2->hide();
+        mMigrationMessageText3->setText(msg);
+        mMigrationMessageText3->show();
+    }
+    else
+    {
+        mMigrationMessageText3->hide();
+        mMigrationMessageText1->setText(msg);
+        mMigrationMessageText2->setText(msg1);
+        mMigrationMessageText1->show();
+        mMigrationMessageText2->show();
+    }
+    if (!existing)
+    {
+        mMigrationMessage->open();
+        // Centre the message window on the main window.
+        // Need to allow the event loop to run first in order for this to work.
+        QTimer::singleShot(0, this, [this]()
+                {
+                    QRect mainRect = Desktop::mainWindow()->geometry();
+                    mMigrationMessage->move(mainRect.center() - mMigrationMessage->rect().center());
+                });
+    }
+}
+
+/******************************************************************************
+* Called when the user clicks "Cancel migration".
+*/
+void FileResourceDataModel::slotCancelMigration()
+{
+    qCDebug(KALARM_LOG) << "FileResourceDataModel: Migration cancelled by user. State:" << mMigrationState;
+    FileResourceMigrator* migrator = FileResourceMigrator::instance();
+    if (migrator)
+        migrator->cancelMigration();
+}
+
 void FileResourceDataModel::slotMigrationCompleted()
 {
     qCDebug(KALARM_LOG) << "FileResourceDataModel: Migration completed";
+    mMigrationState = (int)FileResourceMigrator::State::Complete;
+    showMigrationMessage(false);   // show, update or remove the user message
     setMigrationComplete();
 }
 

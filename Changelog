@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.14.0 (KDE Gear 26.12) --- 21 August 2026 ===
+* Show message during first run calendar migration and let user cancel if it hangs [KDE Bug 524187]
+
 === Version 3.13.1 (KDE Gear 26.08) --- 11 August 2026 ===
 * Fix crash when alarm excludes holidays [KDE Bug 522440]
 * Fix skipped alarms not triggering unless KAlarm is restarted [KDE Bug 524062]

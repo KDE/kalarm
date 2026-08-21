@@ -14,9 +14,9 @@
 #include "resources/fileresourcecalendarupdater.h"
 #include "resources/fileresourceconfigmanager.h"
 #include "resources/resources.h"
+#include "akonadiplugin/akonadiplugin.h"
 #include "lib/autoqpointer.h"
 #include "lib/desktop.h"
-#include "akonadiplugin/akonadiplugin.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -111,6 +111,7 @@ void FileResourceMigrator::start()
         else
         {
             qCDebug(KALARM_LOG) << "FileResourceMigrator::start: migrate Akonadi";
+            connect(mAkonadiPlugin, &AkonadiPlugin::akonadiMigrationState, this, &FileResourceMigrator::akonadiMigrationState);
             connect(mAkonadiPlugin, &AkonadiPlugin::akonadiMigrationComplete, this, &FileResourceMigrator::akonadiMigrationComplete);
             connect(mAkonadiPlugin, &AkonadiPlugin::migrateFileResource, this, &FileResourceMigrator::migrateFileResource);
             connect(mAkonadiPlugin, &AkonadiPlugin::migrateDirResource, this, &FileResourceMigrator::migrateDirResource);
@@ -119,6 +120,14 @@ void FileResourceMigrator::start()
             // completion, any missing default resources will be created.
         }
     }
+}
+
+/******************************************************************************
+* Cancel migration of old Akonadi calendars.
+*/
+void FileResourceMigrator::cancelMigration()
+{
+    mAkonadiPlugin->cancelAkonadiResourceMigration();
 }
 
 /******************************************************************************
@@ -152,6 +161,7 @@ void FileResourceMigrator::migrateFileResource(const QString& resourceName,
         // prompted replacing Akonadi resources with file resources.
         mAkonadiPlugin->deleteAkonadiResource(resourceName);
     }
+    qCDebug(KALARM_LOG) << "FileResourceMigrator::migrateFileResource: done";
 }
 
 /******************************************************************************
@@ -220,6 +230,33 @@ void FileResourceMigrator::migrateDirResource(const QString& resourceName,
                 mAkonadiPlugin->deleteAkonadiResource(resourceName);
             }
         }
+    }
+}
+
+/******************************************************************************
+* Called to notify a change in the Akonadi migration state.
+*/
+void FileResourceMigrator::akonadiMigrationState(int state_)
+{
+    switch ((PluginBaseAkonadi::MigrationState)state_)
+    {
+        case PluginBaseAkonadi::MigrationState::WaitServer:
+            Q_EMIT state((int)State::WaitServer);
+            return;
+        case PluginBaseAkonadi::MigrationState::FindResources:
+            Q_EMIT state((int)State::FindResources);
+            return;
+        case PluginBaseAkonadi::MigrationState::Migrating:
+            Q_EMIT state((int)State::Migrating);
+            return;
+        case PluginBaseAkonadi::MigrationState::Inactive:
+            Q_EMIT state((int)State::Inactive);
+            return;
+        case PluginBaseAkonadi::MigrationState::Complete:
+            Q_EMIT state((int)State::Complete);
+            return;
+        default:
+            return;
     }
 }
 
