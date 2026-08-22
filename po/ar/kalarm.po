@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-14 00:46+0000\n"
+"POT-Creation-Date: 2026-08-22 00:46+0000\n"
 "PO-Revision-Date: 2026-08-10 18:33+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -6560,6 +6560,43 @@ msgid ""
 "calendar."
 msgstr "خطأ!  الملف <filename>%1</filename> مستخدم فعلًا من قبل تقويم موجود."
 
+#: resources/fileresourcedatamodel.cpp:406
+#, kde-format
+msgid "Checking for existing KAlarm calendars to migrate."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:411
+#, kde-format
+msgid " – Waiting for Akonadi to start."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:414
+#, kde-format
+msgid " – Finding KAlarm Akonadi resources."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:417
+#, fuzzy, kde-format
+#| msgid "Path to KAlarm calendar file."
+msgid "Migrating existing KAlarm calendars."
+msgstr "مسار ملف تقويم «منبّهك»."
+
+#: resources/fileresourcedatamodel.cpp:432
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Calendar Configuration"
+msgctxt "@title:window"
+msgid "Calendar migration"
+msgstr "ضبط التقويم"
+
+#: resources/fileresourcedatamodel.cpp:449
+#, fuzzy, kde-format
+#| msgctxt "@option:check"
+#| msgid "Cancel if late"
+msgctxt "@action:button"
+msgid "Cancel migration"
+msgstr "ألغ إذا تأخرت"
+
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
 msgctxt "@title:window"
@@ -6787,25 +6824,25 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "لا تستورد"
 
-#: resources/migration/fileresourcemigrator.cpp:260
+#: resources/migration/fileresourcemigrator.cpp:297
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "المنبّهات النشطة"
 
-#: resources/migration/fileresourcemigrator.cpp:262
+#: resources/migration/fileresourcemigrator.cpp:299
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "المنبّهات المؤرشفة"
 
-#: resources/migration/fileresourcemigrator.cpp:264
+#: resources/migration/fileresourcemigrator.cpp:301
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "قوالب المنبّهات"
 
-#: resources/migration/fileresourcemigrator.cpp:284
+#: resources/migration/fileresourcemigrator.cpp:321
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -8799,9 +8836,6 @@ msgstr "عدد دقائق قبل المنبّه للاستيقاظ من التع
 
 #~ msgid "Alarm types."
 #~ msgstr "أنواع المنبّهات."
-
-#~ msgid "Path to KAlarm calendar file."
-#~ msgstr "مسار ملف تقويم «منبّهك»."
 
 #~ msgid "Monitor file for changes."
 #~ msgstr "راقِب تغييرات الملف."

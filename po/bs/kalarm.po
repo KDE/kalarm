@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-14 00:46+0000\n"
+"POT-Creation-Date: 2026-08-22 00:46+0000\n"
 "PO-Revision-Date: 2015-01-08 09:03+0100\n"
 "Last-Translator: Samir Ribic <samir.ribic@etf.unsa.ba>\n"
 "Language-Team: bosanski <bs@li.org>\n"
@@ -6937,6 +6937,43 @@ msgid ""
 "calendar."
 msgstr ""
 
+#: resources/fileresourcedatamodel.cpp:406
+#, kde-format
+msgid "Checking for existing KAlarm calendars to migrate."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:411
+#, kde-format
+msgid " – Waiting for Akonadi to start."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:414
+#, kde-format
+msgid " – Finding KAlarm Akonadi resources."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:417
+#, fuzzy, kde-format
+#| msgid "Path to KAlarm calendar file."
+msgid "Migrating existing KAlarm calendars."
+msgstr "Staza do KAlarm kalendarske datoteke."
+
+#: resources/fileresourcedatamodel.cpp:432
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Calendar Configuration"
+msgctxt "@title:window"
+msgid "Calendar migration"
+msgstr "Podešavanje kalendara"
+
+#: resources/fileresourcedatamodel.cpp:449
+#, fuzzy, kde-format
+#| msgctxt "@option:check"
+#| msgid "Cancel if late"
+msgctxt "@action:button"
+msgid "Cancel migration"
+msgstr "Odustani ako je kasno"
+
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -7171,13 +7208,13 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "Ne ponavljaj"
 
-#: resources/migration/fileresourcemigrator.cpp:260
+#: resources/migration/fileresourcemigrator.cpp:297
 #, fuzzy, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "Aktivni alarmi"
 
-#: resources/migration/fileresourcemigrator.cpp:262
+#: resources/migration/fileresourcemigrator.cpp:299
 #, fuzzy, kde-format
 #| msgctxt "@title:group"
 #| msgid "Archived Alarms"
@@ -7185,13 +7222,13 @@ msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "Arhivirani alarmi"
 
-#: resources/migration/fileresourcemigrator.cpp:264
+#: resources/migration/fileresourcemigrator.cpp:301
 #, fuzzy, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "Šabloni alarma"
 
-#: resources/migration/fileresourcemigrator.cpp:284
+#: resources/migration/fileresourcemigrator.cpp:321
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info/plain"
 #| msgid "Failed to create default calendar <resource>%1</resource>"
@@ -9431,9 +9468,6 @@ msgstr "Broj minuta prije alarma za buđenje iz suspenzije"
 
 #~ msgid "Update backend storage format."
 #~ msgstr "Ažuriraj pozadinski memorijski format."
-
-#~ msgid "Path to KAlarm calendar file."
-#~ msgstr "Staza do KAlarm kalendarske datoteke."
 
 #~ msgid "Monitor file for changes."
 #~ msgstr "Nadgledaj promjene datoteke."

@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-14 00:46+0000\n"
+"POT-Creation-Date: 2026-08-22 00:46+0000\n"
 "PO-Revision-Date: 2026-01-05 15:51+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -6627,6 +6627,43 @@ msgid ""
 msgstr ""
 "Virhe! Tiedostoa <filename>%1</filename> käyttää jo olemassa oleva kalenteri."
 
+#: resources/fileresourcedatamodel.cpp:406
+#, kde-format
+msgid "Checking for existing KAlarm calendars to migrate."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:411
+#, kde-format
+msgid " – Waiting for Akonadi to start."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:414
+#, kde-format
+msgid " – Finding KAlarm Akonadi resources."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:417
+#, fuzzy, kde-format
+#| msgid "Path to KAlarm calendar file."
+msgid "Migrating existing KAlarm calendars."
+msgstr "KAlarmin kalenteritiedoston sijainti."
+
+#: resources/fileresourcedatamodel.cpp:432
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Calendar Configuration"
+msgctxt "@title:window"
+msgid "Calendar migration"
+msgstr "Kalenterin asetukset"
+
+#: resources/fileresourcedatamodel.cpp:449
+#, fuzzy, kde-format
+#| msgctxt "@option:check"
+#| msgid "Cancel if late"
+msgctxt "@action:button"
+msgid "Cancel migration"
+msgstr "Peru, jos myöhässä "
+
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
 msgctxt "@title:window"
@@ -6858,25 +6895,25 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "Älä tuo"
 
-#: resources/migration/fileresourcemigrator.cpp:260
+#: resources/migration/fileresourcemigrator.cpp:297
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "Aktiiviset hälytykset"
 
-#: resources/migration/fileresourcemigrator.cpp:262
+#: resources/migration/fileresourcemigrator.cpp:299
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "Arkistoidut hälytykset"
 
-#: resources/migration/fileresourcemigrator.cpp:264
+#: resources/migration/fileresourcemigrator.cpp:301
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "Hälytysmallit"
 
-#: resources/migration/fileresourcemigrator.cpp:284
+#: resources/migration/fileresourcemigrator.cpp:321
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -8897,9 +8934,6 @@ msgstr "Montako minuuttia ennen hälytystä herätään keskeytyksistä"
 
 #~ msgid "Update backend storage format."
 #~ msgstr "Päivitä taustaosan tallennusmuoto."
-
-#~ msgid "Path to KAlarm calendar file."
-#~ msgstr "KAlarmin kalenteritiedoston sijainti."
 
 #~ msgid "Monitor file for changes."
 #~ msgstr "Tarkkaile tiedoston muutoksia."

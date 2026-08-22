@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-14 00:46+0000\n"
+"POT-Creation-Date: 2026-08-22 00:46+0000\n"
 "PO-Revision-Date: 2006-12-17 13:25+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -6813,6 +6813,40 @@ msgid ""
 "calendar."
 msgstr ""
 
+#: resources/fileresourcedatamodel.cpp:406
+#, kde-format
+msgid "Checking for existing KAlarm calendars to migrate."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:411
+#, kde-format
+msgid " – Waiting for Akonadi to start."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:414
+#, kde-format
+msgid " – Finding KAlarm Akonadi resources."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:417
+#, kde-format
+msgid "Migrating existing KAlarm calendars."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:432
+#, fuzzy, kde-format
+#| msgid "Alarm Configuration"
+msgctxt "@title:window"
+msgid "Calendar migration"
+msgstr "Огоҳлантириш мосламаси"
+
+#: resources/fileresourcedatamodel.cpp:449
+#, fuzzy, kde-format
+#| msgid "Cancel if late"
+msgctxt "@action:button"
+msgid "Cancel migration"
+msgstr "Кеч бўлса, бекор қилиш"
+
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -7036,26 +7070,26 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "Такрор&ланмасин"
 
-#: resources/migration/fileresourcemigrator.cpp:260
+#: resources/migration/fileresourcemigrator.cpp:297
 #, fuzzy, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "KAlarm'ни активлаштириш"
 
-#: resources/migration/fileresourcemigrator.cpp:262
+#: resources/migration/fileresourcemigrator.cpp:299
 #, fuzzy, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "KAlarm'ни активлаштириш"
 
-#: resources/migration/fileresourcemigrator.cpp:264
+#: resources/migration/fileresourcemigrator.cpp:301
 #, fuzzy, kde-format
 #| msgid "Alarm Templates"
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "Огоҳлантириш намуналари"
 
-#: resources/migration/fileresourcemigrator.cpp:284
+#: resources/migration/fileresourcemigrator.cpp:321
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"

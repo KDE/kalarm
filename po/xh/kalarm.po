@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-14 00:46+0000\n"
+"POT-Creation-Date: 2026-08-22 00:46+0000\n"
 "PO-Revision-Date: 2002-10-12 14:57+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -6537,6 +6537,39 @@ msgid ""
 "calendar."
 msgstr ""
 
+#: resources/fileresourcedatamodel.cpp:406
+#, kde-format
+msgid "Checking for existing KAlarm calendars to migrate."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:411
+#, kde-format
+msgid " – Waiting for Akonadi to start."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:414
+#, kde-format
+msgid " – Finding KAlarm Akonadi resources."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:417
+#, kde-format
+msgid "Migrating existing KAlarm calendars."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:432
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Calendar migration"
+msgstr "Alarm Daemon ayifumaneki"
+
+#: resources/fileresourcedatamodel.cpp:449
+#, fuzzy, kde-format
+#| msgid "Cancel if late"
+msgctxt "@action:button"
+msgid "Cancel migration"
+msgstr "Rhoxisa ukuba isemva kwethuba"
+
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -6754,25 +6787,25 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "Phinda-phinda i alamu rhoqo"
 
-#: resources/migration/fileresourcemigrator.cpp:260
+#: resources/migration/fileresourcemigrator.cpp:297
 #, fuzzy, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "Sebenzisa %1"
 
-#: resources/migration/fileresourcemigrator.cpp:262
+#: resources/migration/fileresourcemigrator.cpp:299
 #, fuzzy, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "Sebenzisa %1"
 
-#: resources/migration/fileresourcemigrator.cpp:264
+#: resources/migration/fileresourcemigrator.cpp:301
 #, fuzzy, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "Ukungaqgibeki kwe Alarm"
 
-#: resources/migration/fileresourcemigrator.cpp:284
+#: resources/migration/fileresourcemigrator.cpp:321
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""

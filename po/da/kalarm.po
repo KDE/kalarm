@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-14 00:46+0000\n"
+"POT-Creation-Date: 2026-08-22 00:46+0000\n"
 "PO-Revision-Date: 2016-08-15 16:35+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -6966,6 +6966,43 @@ msgid ""
 "calendar."
 msgstr ""
 
+#: resources/fileresourcedatamodel.cpp:406
+#, kde-format
+msgid "Checking for existing KAlarm calendars to migrate."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:411
+#, kde-format
+msgid " – Waiting for Akonadi to start."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:414
+#, kde-format
+msgid " – Finding KAlarm Akonadi resources."
+msgstr ""
+
+#: resources/fileresourcedatamodel.cpp:417
+#, fuzzy, kde-format
+#| msgid "Path to KAlarm calendar file."
+msgid "Migrating existing KAlarm calendars."
+msgstr "Sti til KAlarm-kalenderfil."
+
+#: resources/fileresourcedatamodel.cpp:432
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Calendar Configuration"
+msgctxt "@title:window"
+msgid "Calendar migration"
+msgstr "Kalenderkonfiguration"
+
+#: resources/fileresourcedatamodel.cpp:449
+#, fuzzy, kde-format
+#| msgctxt "@option:check"
+#| msgid "Cancel if late"
+msgctxt "@action:button"
+msgid "Cancel migration"
+msgstr "Annullér hvis for sent"
+
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, fuzzy, kde-format
 #| msgctxt "@info"
@@ -7238,7 +7275,7 @@ msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "Repetér ikke"
 
-#: resources/migration/fileresourcemigrator.cpp:260
+#: resources/migration/fileresourcemigrator.cpp:297
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Active Alarms"
@@ -7246,7 +7283,7 @@ msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "Aktive alarmer"
 
-#: resources/migration/fileresourcemigrator.cpp:262
+#: resources/migration/fileresourcemigrator.cpp:299
 #, fuzzy, kde-format
 #| msgctxt "@title:group"
 #| msgid "Archived Alarms"
@@ -7254,7 +7291,7 @@ msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "Arkiverede alarmer"
 
-#: resources/migration/fileresourcemigrator.cpp:264
+#: resources/migration/fileresourcemigrator.cpp:301
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Alarm Templates"
@@ -7262,7 +7299,7 @@ msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
 msgstr "Alarmskabeloner"
 
-#: resources/migration/fileresourcemigrator.cpp:284
+#: resources/migration/fileresourcemigrator.cpp:321
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info/plain"
 #| msgid "Failed to create default calendar <resource>%1</resource>"
@@ -9593,9 +9630,6 @@ msgstr "Antal minutter før alarm der skal vågnes fra suspendering"
 
 #~ msgid "Update backend storage format."
 #~ msgstr "Opdatér lagringsformat for backend."
-
-#~ msgid "Path to KAlarm calendar file."
-#~ msgstr "Sti til KAlarm-kalenderfil."
 
 #~ msgid "Monitor file for changes."
 #~ msgstr "Overvåg fil for ændringer."
