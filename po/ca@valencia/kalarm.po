@@ -6850,7 +6850,7 @@ msgstr "4t"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th"
-msgstr "5è"
+msgstr "5é"
 
 #: recurrenceedit.cpp:1339
 #, kde-format
@@ -6880,7 +6880,7 @@ msgstr "4t últim"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th Last"
-msgstr "5è últim"
+msgstr "5é últim"
 
 #: recurrenceedit.cpp:1346
 #, kde-format
