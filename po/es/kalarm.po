@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the kalarm package.
 #
 # SPDX-FileCopyrightText: 2001 Miguel Revilla <yo@miguelrevilla.com>
-# SPDX-FileCopyrightText: 2001, 2002, 2003, 2004, 2005, 2006, 2007 Juan Manuel García Molina <juanma@superiodico.net>
+# SPDX-FileCopyrightText: 2001-2007 Juan Manuel García Molina <juanma@superiodico.net>
 # SPDX-FileCopyrightText: 2006 Pablo de Vicente <pablo.devicente@gmail.com>
 # SPDX-FileCopyrightText: 2007 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
 # SPDX-FileCopyrightText: 2007 Jaime Robles <jaime@kde.org>
-# SPDX-FileCopyrightText: 2008, 2009, 2010, 2014, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Eloy Cuadra <ecuadra@eloihr.net>
-# SPDX-FileCopyrightText: 2008, 2009 Franco Mariluis <fmariluis@gmail.com>
+# SPDX-FileCopyrightText: 2008-2010, 2014, 2019-2026 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2008-2009 Franco Mariluis <fmariluis@gmail.com>
 # SPDX-FileCopyrightText: 2009 Dario Andres Rodriguez <andrebajotierra@gmail.com>
-# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Javier Viñal <fjvinal@gmail.com>
+# SPDX-FileCopyrightText: 2009-2019 Javier Viñal <fjvinal@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-22 00:46+0000\n"
-"PO-Revision-Date: 2026-01-24 11:24+0100\n"
+"PO-Revision-Date: 2026-08-22 12:27+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "First-Translator: Miguel Revilla <yo@miguelrevilla.com>\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 26.04.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -6749,38 +6749,34 @@ msgstr ""
 #: resources/fileresourcedatamodel.cpp:406
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
-msgstr ""
+msgstr "Comprobando si existen calendarios de KAlarm para migrar."
 
 #: resources/fileresourcedatamodel.cpp:411
 #, kde-format
 msgid " – Waiting for Akonadi to start."
-msgstr ""
+msgstr " – Esperando el inicio de Akonadi."
 
 #: resources/fileresourcedatamodel.cpp:414
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
-msgstr ""
+msgstr " – Buscando recursos de Akonadi para KAlarm."
 
 #: resources/fileresourcedatamodel.cpp:417
 #, kde-format
 msgid "Migrating existing KAlarm calendars."
-msgstr ""
+msgstr "Migrando los calendarios de KAlarm existentes."
 
 #: resources/fileresourcedatamodel.cpp:432
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr "Configuración del calendario"
+msgstr "Migración de calendario"
 
 #: resources/fileresourcedatamodel.cpp:449
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
-msgstr "Cancelar si ya es tarde"
+msgstr "Cancelar la migración"
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
@@ -8548,293 +8544,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Número de minutos antes de la alarma para despertar desde suspendido"
-
-#~ msgctxt "@label Unique identifier"
-#~ msgid "UID"
-#~ msgstr "UID"
-
-#~ msgctxt "@label"
-#~ msgid "Alarm type"
-#~ msgstr "Tipo de alarma"
-
-#~ msgctxt "@label"
-#~ msgid "Alarm status"
-#~ msgstr "Estado de la alarma"
-
-#~ msgctxt "@label"
-#~ msgid "Alarm name"
-#~ msgstr "Nombre de la alarma"
-
-#~ msgctxt "@label"
-#~ msgid "Template name"
-#~ msgstr "Nombre de la plantilla"
-
-#~ msgctxt "@label"
-#~ msgid "Creation time"
-#~ msgstr "Hora de creación"
-
-#~ msgctxt "@label"
-#~ msgid "Start time"
-#~ msgstr "Hora de inicio"
-
-#~ msgctxt "@label Start delay configured in an alarm template"
-#~ msgid "Template after time"
-#~ msgstr "Retardo de la plantilla"
-
-#~ msgctxt "@label"
-#~ msgid "Recurs"
-#~ msgstr "Se repite"
-
-#~ msgctxt "@label"
-#~ msgid "Recurrence"
-#~ msgstr "Repetición"
-
-#~ msgctxt "@label"
-#~ msgid "Sub-repetition"
-#~ msgstr "Subrepetición"
-
-#~ msgctxt "@label"
-#~ msgid "Sub-repetition interval"
-#~ msgstr "Intervalo de subrepetición"
-
-#~ msgctxt "@label"
-#~ msgid "Sub-repetition count"
-#~ msgstr "Contador de subrepetición"
-
-#~ msgctxt "@label"
-#~ msgid "Next sub-repetition"
-#~ msgstr "Siguiente subrepetición"
-
-#~ msgctxt "@label"
-#~ msgid "Work time only"
-#~ msgstr "Solo tiempo de trabajo"
-
-#~ msgctxt "@label"
-#~ msgid "Holidays excluded"
-#~ msgstr "Excluidos los días festivos"
-
-#~ msgctxt "@label"
-#~ msgid "Next recurrence"
-#~ msgstr "Siguiente repetición"
-
-#~ msgctxt "@label"
-#~ msgid "Late cancel"
-#~ msgstr "Cancelación tardía"
-
-#~ msgctxt "@label Automatically close window"
-#~ msgid "Auto close"
-#~ msgstr "Cierre automático"
-
-#~ msgctxt "@label"
-#~ msgid "Copy to KOrganizer"
-#~ msgstr "Copiar en KOrganizer"
-
-#~ msgctxt "@label"
-#~ msgid "Enabled"
-#~ msgstr "Activada"
-
-#~ msgctxt "@label"
-#~ msgid "Read-only"
-#~ msgstr "Solo lectura"
-
-#~ msgctxt "@label Whether alarm should be archived"
-#~ msgid "Archive"
-#~ msgstr "Archivar"
-
-#~ msgctxt "@label"
-#~ msgid "Revision"
-#~ msgstr "Revisión"
-
-#~ msgctxt "@label"
-#~ msgid "Custom properties"
-#~ msgstr "Propiedades personalizadas"
-
-#~ msgctxt "@label"
-#~ msgid "Message text"
-#~ msgstr "Texto del mensaje"
-
-#~ msgctxt "@label File to provide text for message"
-#~ msgid "Message file"
-#~ msgstr "Archivo del mensaje"
-
-#~ msgctxt "@label"
-#~ msgid "Font"
-#~ msgstr "Tipo de letra"
-
-#~ msgctxt "@label Shell command to execute before alarm"
-#~ msgid "Pre-alarm action"
-#~ msgstr "Acción previa a la alarma"
-
-#~ msgctxt "@label"
-#~ msgid "Pre-alarm action cancel"
-#~ msgstr "Cancelación de la acción previa a la alarma"
-
-#~ msgctxt "@label"
-#~ msgid "Pre-alarm action no error"
-#~ msgstr "Acción previa a la alarma sin error"
-
-#~ msgctxt "@label Shell command to execute after alarm"
-#~ msgid "Post-alarm action"
-#~ msgstr "Acción posterior a la alarma"
-
-#~ msgctxt "@label"
-#~ msgid "Akonadi Item ID"
-#~ msgstr "ID de elemento de Akonadi"
-
-#~ msgctxt "@label Audio method"
-#~ msgid "Sound"
-#~ msgstr "Sonido"
-
-#~ msgctxt "@label Whether audio should repeat"
-#~ msgid "Sound repeat"
-#~ msgstr "Repetición del sonido"
-
-#~ msgctxt "@label"
-#~ msgid "Sound fade volume"
-#~ msgstr "Volumen de desvanecimiento del sonido"
-
-#~ msgctxt "@label"
-#~ msgid "Sound fade time"
-#~ msgstr "Tiempo de desvanecimiento del sonido"
-
-#~ msgctxt "@label Whether the alarm has a reminder"
-#~ msgid "Reminder"
-#~ msgstr "Recordatorio"
-
-#~ msgctxt "@label Whether reminder is on first recurrence only"
-#~ msgid "Reminder once only"
-#~ msgstr "Recordatorio único"
-
-#~ msgctxt "@label Whether to use standard notification system"
-#~ msgid "Notify"
-#~ msgstr "Notificar"
-
-#~ msgctxt "@label Deferral type"
-#~ msgid "Deferral"
-#~ msgstr "Aplazamiento"
-
-#~ msgctxt "@label"
-#~ msgid "Deferral time"
-#~ msgstr "Hora de aplazamiento"
-
-#~ msgctxt "@label Default deferral delay"
-#~ msgid "Deferral default"
-#~ msgstr "Aplazamiento predeterminado"
-
-#~ msgctxt "@label Whether deferral time is date-only by default"
-#~ msgid "Deferral default date only"
-#~ msgstr "Aplazamiento predeterminado solo de fecha"
-
-#~ msgctxt "@label A shell command"
-#~ msgid "Command"
-#~ msgstr "Orden"
-
-#~ msgctxt "@label Execute in terminal window"
-#~ msgid "Execute in terminal"
-#~ msgstr "Ejecutar en terminal"
-
-#~ msgctxt "@label"
-#~ msgid "Hide command error"
-#~ msgstr "Ocultar error de la orden"
-
-#~ msgctxt "@label"
-#~ msgid "Email subject"
-#~ msgstr "Asunto del correo"
-
-#~ msgctxt "@label Email address"
-#~ msgid "Email sender ID"
-#~ msgstr "ID del remitente del correo"
-
-#~ msgctxt "@label Email address"
-#~ msgid "Email to"
-#~ msgstr "Enviar correo a"
-
-#~ msgctxt "@label true/false"
-#~ msgid "Email bcc"
-#~ msgstr "Cco del correo"
-
-#~ msgctxt "@label"
-#~ msgid "Email body"
-#~ msgstr "Cuerpo del correo"
-
-#~ msgctxt "@label"
-#~ msgid "Email attachments"
-#~ msgstr "Adjuntos del correo"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Display (text)"
-#~ msgstr "Mostrar (texto)"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Display (file)"
-#~ msgstr "Mostrar (archivo)"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Display (command)"
-#~ msgstr "Mostrar (orden)"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Command"
-#~ msgstr "Orden"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Email"
-#~ msgstr "Correo electrónico"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Audio"
-#~ msgstr "Sonido"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Active"
-#~ msgstr "Activa"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Archived"
-#~ msgstr "Archivada"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Template"
-#~ msgstr "Plantilla"
-
-#~ msgctxt "@info Repeat at login"
-#~ msgid "At login until %1"
-#~ msgstr "Al iniciar sesión hasta %1"
-
-#~ msgctxt "@info"
-#~ msgid "%1"
-#~ msgstr "%1"
-
-#~ msgctxt "@info Using default font"
-#~ msgid "Default"
-#~ msgstr "Predeterminada"
-
-#~ msgctxt "@info"
-#~ msgid "Speak"
-#~ msgstr "Leer"
-
-#~ msgctxt "@info"
-#~ msgid "Beep"
-#~ msgstr "Pitido"
-
-#~ msgctxt "@info Percentage"
-#~ msgid "%1%%"
-#~ msgstr "%1 %%"
-
-#~ msgctxt "@info"
-#~ msgid "1 Second"
-#~ msgid_plural "%1 Seconds"
-#~ msgstr[0] "1 segundo"
-#~ msgstr[1] "%1 segundos"
-
-#~ msgctxt "@info Error indication"
-#~ msgid "error!"
-#~ msgstr "Error"
-
-#~ msgctxt "@info General purpose status indication: yes or no"
-#~ msgid "Yes"
-#~ msgstr "Sí"
-
-#~ msgctxt "@info General purpose status indication: yes or no"
-#~ msgid "No"
-#~ msgstr "No"

@@ -11,13 +11,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2012.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015, 2017.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025, 2026 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022-2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-22 00:46+0000\n"
-"PO-Revision-Date: 2026-05-02 19:55+0300\n"
+"PO-Revision-Date: 2026-08-22 20:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.04.2\n"
 "(http: //www.transifex.com/projects/p/kdepim-k-tr/language/tr/)\n"
 "X-POOTLE-MTIME: 1413131629.000000\n"
 
@@ -6651,38 +6651,34 @@ msgstr ""
 #: resources/fileresourcedatamodel.cpp:406
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
-msgstr ""
+msgstr "Aktarılmak üzere var olan K Alarm takvimlerine bakılıyor…"
 
 #: resources/fileresourcedatamodel.cpp:411
 #, kde-format
 msgid " – Waiting for Akonadi to start."
-msgstr ""
+msgstr " - Akonadi’nin başlaması bekleniyor…"
 
 #: resources/fileresourcedatamodel.cpp:414
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
-msgstr ""
+msgstr " - K Alarm Akonadi özkaynakları bulunuyor…"
 
 #: resources/fileresourcedatamodel.cpp:417
 #, kde-format
 msgid "Migrating existing KAlarm calendars."
-msgstr ""
+msgstr "Var olan K Alarm takvimleri aktarılıyor…"
 
 #: resources/fileresourcedatamodel.cpp:432
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr "Takvim Yapılandırması"
+msgstr "Takvim Aktarımı"
 
 #: resources/fileresourcedatamodel.cpp:449
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
-msgstr "Geç kalmışsa iptal et"
+msgstr "Aktarımı İptal Et"
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format

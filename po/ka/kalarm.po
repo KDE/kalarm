@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-22 00:46+0000\n"
-"PO-Revision-Date: 2026-01-24 04:22+0100\n"
+"PO-Revision-Date: 2026-08-22 06:13+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -6635,38 +6635,34 @@ msgstr ""
 #: resources/fileresourcedatamodel.cpp:406
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
-msgstr ""
+msgstr "არსებული დასამიგრირებელი KAlarm-ის კალენდრების შემოწმება."
 
 #: resources/fileresourcedatamodel.cpp:411
 #, kde-format
 msgid " – Waiting for Akonadi to start."
-msgstr ""
+msgstr " – Akonadi-ის გაშვების მოლოდინი."
 
 #: resources/fileresourcedatamodel.cpp:414
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
-msgstr ""
+msgstr " – KAlarm-ის Akonadi-ის რესურსების ძებნა."
 
 #: resources/fileresourcedatamodel.cpp:417
 #, kde-format
 msgid "Migrating existing KAlarm calendars."
-msgstr ""
+msgstr "არსებული KAlarm-ის კალენდრების მიგრაცია."
 
 #: resources/fileresourcedatamodel.cpp:432
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr "კალენდრის მორგება"
+msgstr "კალენდრის მიგრაცია"
 
 #: resources/fileresourcedatamodel.cpp:449
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
-msgstr "გაუქმება, თუ გვიანია"
+msgstr "მიგრაციის გაუქმება"
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format

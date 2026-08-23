@@ -5,20 +5,20 @@
 # SPDX-FileCopyrightText: 2004, 2006 Sebastià Pla i Sanz <sps@sastia.com>
 # SPDX-FileCopyrightText: 2004, 2005 Albert Astals Cid <aacid@kde.org>
 # SPDX-FileCopyrightText: 2009, 2010, 2011 Manuel Tortosa Moreno <manutortosa@chakra-project.org>
-# SPDX-FileCopyrightText: 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2006-2012, 2014-2026 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-22 00:46+0000\n"
-"PO-Revision-Date: 2026-03-29 12:49+0200\n"
+"PO-Revision-Date: 2026-08-22 09:13+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 26.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
@@ -6411,7 +6411,7 @@ msgstr "4t"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th"
-msgstr "5è"
+msgstr "5é"
 
 #: recurrenceedit.cpp:1339
 #, kde-format
@@ -6441,7 +6441,7 @@ msgstr "4t últim"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th Last"
-msgstr "5è últim"
+msgstr "5é últim"
 
 #: recurrenceedit.cpp:1346
 #, kde-format
@@ -6760,38 +6760,34 @@ msgstr ""
 #: resources/fileresourcedatamodel.cpp:406
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
-msgstr ""
+msgstr "S'està comprovant si hi ha calendaris de KAlarm a migrar."
 
 #: resources/fileresourcedatamodel.cpp:411
 #, kde-format
 msgid " – Waiting for Akonadi to start."
-msgstr ""
+msgstr " – S'està esperant que comence Akonadi."
 
 #: resources/fileresourcedatamodel.cpp:414
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
-msgstr ""
+msgstr " – S'estan buscant els recursos Akonadi de KAlarm."
 
 #: resources/fileresourcedatamodel.cpp:417
 #, kde-format
 msgid "Migrating existing KAlarm calendars."
-msgstr ""
+msgstr "S'estan migrant els calendaris existents de KAlarm."
 
 #: resources/fileresourcedatamodel.cpp:432
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr "Configuració de calendari"
+msgstr "Migració de calendari"
 
 #: resources/fileresourcedatamodel.cpp:449
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
-msgstr "Cancel·la si ja és tard"
+msgstr "Cancel·la la migració"
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
@@ -8557,293 +8553,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Nombre de minuts abans de l'alarma per a activar des de la suspensió"
-
-#~ msgctxt "@label Unique identifier"
-#~ msgid "UID"
-#~ msgstr "UID"
-
-#~ msgctxt "@label"
-#~ msgid "Alarm type"
-#~ msgstr "Tipus d'alarma"
-
-#~ msgctxt "@label"
-#~ msgid "Alarm status"
-#~ msgstr "Estat de l'alarma"
-
-#~ msgctxt "@label"
-#~ msgid "Alarm name"
-#~ msgstr "Nom de l'alarma"
-
-#~ msgctxt "@label"
-#~ msgid "Template name"
-#~ msgstr "Nom de la plantilla"
-
-#~ msgctxt "@label"
-#~ msgid "Creation time"
-#~ msgstr "Hora de creació"
-
-#~ msgctxt "@label"
-#~ msgid "Start time"
-#~ msgstr "Hora d'inici"
-
-#~ msgctxt "@label Start delay configured in an alarm template"
-#~ msgid "Template after time"
-#~ msgstr "Retard des d'una plantilla"
-
-#~ msgctxt "@label"
-#~ msgid "Recurs"
-#~ msgstr "Repetix"
-
-#~ msgctxt "@label"
-#~ msgid "Recurrence"
-#~ msgstr "Recurrència"
-
-#~ msgctxt "@label"
-#~ msgid "Sub-repetition"
-#~ msgstr "Subrepetició"
-
-#~ msgctxt "@label"
-#~ msgid "Sub-repetition interval"
-#~ msgstr "Interval de subrepetició"
-
-#~ msgctxt "@label"
-#~ msgid "Sub-repetition count"
-#~ msgstr "Comptador de subrepeticions"
-
-#~ msgctxt "@label"
-#~ msgid "Next sub-repetition"
-#~ msgstr "Subrepetició següent"
-
-#~ msgctxt "@label"
-#~ msgid "Work time only"
-#~ msgstr "Només horari laboral"
-
-#~ msgctxt "@label"
-#~ msgid "Holidays excluded"
-#~ msgstr "Festius exclosos"
-
-#~ msgctxt "@label"
-#~ msgid "Next recurrence"
-#~ msgstr "Recurrència següent"
-
-#~ msgctxt "@label"
-#~ msgid "Late cancel"
-#~ msgstr "Cancel·lació retardada"
-
-#~ msgctxt "@label Automatically close window"
-#~ msgid "Auto close"
-#~ msgstr "Tancament automàtic"
-
-#~ msgctxt "@label"
-#~ msgid "Copy to KOrganizer"
-#~ msgstr "Copia a KOrganizer"
-
-#~ msgctxt "@label"
-#~ msgid "Enabled"
-#~ msgstr "Activada"
-
-#~ msgctxt "@label"
-#~ msgid "Read-only"
-#~ msgstr "Només de lectura"
-
-#~ msgctxt "@label Whether alarm should be archived"
-#~ msgid "Archive"
-#~ msgstr "Arxiva"
-
-#~ msgctxt "@label"
-#~ msgid "Revision"
-#~ msgstr "Revisió"
-
-#~ msgctxt "@label"
-#~ msgid "Custom properties"
-#~ msgstr "Propietats personalitzades"
-
-#~ msgctxt "@label"
-#~ msgid "Message text"
-#~ msgstr "Text del missatge"
-
-#~ msgctxt "@label File to provide text for message"
-#~ msgid "Message file"
-#~ msgstr "Fitxer del missatge"
-
-#~ msgctxt "@label"
-#~ msgid "Font"
-#~ msgstr "Lletra"
-
-#~ msgctxt "@label Shell command to execute before alarm"
-#~ msgid "Pre-alarm action"
-#~ msgstr "Acció de prealarma"
-
-#~ msgctxt "@label"
-#~ msgid "Pre-alarm action cancel"
-#~ msgstr "Cancel·la l'acció de la prealarma"
-
-#~ msgctxt "@label"
-#~ msgid "Pre-alarm action no error"
-#~ msgstr "Acció de prealarma sense error"
-
-#~ msgctxt "@label Shell command to execute after alarm"
-#~ msgid "Post-alarm action"
-#~ msgstr "Acció de postalarma"
-
-#~ msgctxt "@label"
-#~ msgid "Akonadi Item ID"
-#~ msgstr "ID d'element d'Akonadi"
-
-#~ msgctxt "@label Audio method"
-#~ msgid "Sound"
-#~ msgstr "So"
-
-#~ msgctxt "@label Whether audio should repeat"
-#~ msgid "Sound repeat"
-#~ msgstr "Repetició del so"
-
-#~ msgctxt "@label"
-#~ msgid "Sound fade volume"
-#~ msgstr "Volum d'esvaïment del so"
-
-#~ msgctxt "@label"
-#~ msgid "Sound fade time"
-#~ msgstr "Temps d'esvaïment del so"
-
-#~ msgctxt "@label Whether the alarm has a reminder"
-#~ msgid "Reminder"
-#~ msgstr "Recordatori"
-
-#~ msgctxt "@label Whether reminder is on first recurrence only"
-#~ msgid "Reminder once only"
-#~ msgstr "Recordatori únic"
-
-#~ msgctxt "@label Whether to use standard notification system"
-#~ msgid "Notify"
-#~ msgstr "Notifica"
-
-#~ msgctxt "@label Deferral type"
-#~ msgid "Deferral"
-#~ msgstr "Ajornament"
-
-#~ msgctxt "@label"
-#~ msgid "Deferral time"
-#~ msgstr "Temps d'ajornament"
-
-#~ msgctxt "@label Default deferral delay"
-#~ msgid "Deferral default"
-#~ msgstr "Ajornament predeterminat"
-
-#~ msgctxt "@label Whether deferral time is date-only by default"
-#~ msgid "Deferral default date only"
-#~ msgstr "Ajornament predeterminat només per data"
-
-#~ msgctxt "@label A shell command"
-#~ msgid "Command"
-#~ msgstr "Ordre"
-
-#~ msgctxt "@label Execute in terminal window"
-#~ msgid "Execute in terminal"
-#~ msgstr "Executa en un terminal"
-
-#~ msgctxt "@label"
-#~ msgid "Hide command error"
-#~ msgstr "Oculta l'error de l'ordre"
-
-#~ msgctxt "@label"
-#~ msgid "Email subject"
-#~ msgstr "Assumpte del correu electrònic"
-
-#~ msgctxt "@label Email address"
-#~ msgid "Email sender ID"
-#~ msgstr "ID del remitent del correu electrònic"
-
-#~ msgctxt "@label Email address"
-#~ msgid "Email to"
-#~ msgstr "Adreça a"
-
-#~ msgctxt "@label true/false"
-#~ msgid "Email bcc"
-#~ msgstr "Adreça BCC"
-
-#~ msgctxt "@label"
-#~ msgid "Email body"
-#~ msgstr "Cos del correu"
-
-#~ msgctxt "@label"
-#~ msgid "Email attachments"
-#~ msgstr "Adjunts del correu"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Display (text)"
-#~ msgstr "Mostra (text)"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Display (file)"
-#~ msgstr "Mostra (fitxer)"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Display (command)"
-#~ msgstr "Mostra (ordre)"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Command"
-#~ msgstr "Ordre"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Email"
-#~ msgstr "Correu electrònic"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Audio"
-#~ msgstr "Àudio"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Active"
-#~ msgstr "Activa"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Archived"
-#~ msgstr "Arxivada"
-
-#~ msgctxt "@info Alarm type"
-#~ msgid "Template"
-#~ msgstr "Plantilla"
-
-#~ msgctxt "@info Repeat at login"
-#~ msgid "At login until %1"
-#~ msgstr "En iniciar la sessió fins %1"
-
-#~ msgctxt "@info"
-#~ msgid "%1"
-#~ msgstr "%1"
-
-#~ msgctxt "@info Using default font"
-#~ msgid "Default"
-#~ msgstr "Predeterminat"
-
-#~ msgctxt "@info"
-#~ msgid "Speak"
-#~ msgstr "Llig"
-
-#~ msgctxt "@info"
-#~ msgid "Beep"
-#~ msgstr "Timbre"
-
-#~ msgctxt "@info Percentage"
-#~ msgid "%1%%"
-#~ msgstr "%1%%"
-
-#~ msgctxt "@info"
-#~ msgid "1 Second"
-#~ msgid_plural "%1 Seconds"
-#~ msgstr[0] "1 segon"
-#~ msgstr[1] "%1 segons"
-
-#~ msgctxt "@info Error indication"
-#~ msgid "error!"
-#~ msgstr "Error!"
-
-#~ msgctxt "@info General purpose status indication: yes or no"
-#~ msgid "Yes"
-#~ msgstr "Sí"
-
-#~ msgctxt "@info General purpose status indication: yes or no"
-#~ msgid "No"
-#~ msgstr "No"

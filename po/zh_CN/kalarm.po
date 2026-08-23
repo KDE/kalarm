@@ -6351,20 +6351,16 @@ msgid "Migrating existing KAlarm calendars."
 msgstr ""
 
 #: resources/fileresourcedatamodel.cpp:432
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr "日历配置"
+msgstr ""
 
 #: resources/fileresourcedatamodel.cpp:449
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
-msgstr "超时自动关闭闹钟"
+msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
