@@ -6333,34 +6333,34 @@ msgstr "错误！文件 <filename>%1</filename> 已被某个已有日历使用�
 #: resources/fileresourcedatamodel.cpp:406
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
-msgstr ""
+msgstr "检查要迁移的已有 KAlarm 日历。"
 
 #: resources/fileresourcedatamodel.cpp:411
 #, kde-format
 msgid " – Waiting for Akonadi to start."
-msgstr ""
+msgstr " – 正在等待 Akonadi 启动。"
 
 #: resources/fileresourcedatamodel.cpp:414
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
-msgstr ""
+msgstr " – 正在查找 KAlarm Akonadi 资源。"
 
 #: resources/fileresourcedatamodel.cpp:417
 #, kde-format
 msgid "Migrating existing KAlarm calendars."
-msgstr ""
+msgstr "正在迁移已有 KAlarm 日历。"
 
 #: resources/fileresourcedatamodel.cpp:432
 #, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr ""
+msgstr "日历迁移"
 
 #: resources/fileresourcedatamodel.cpp:449
 #, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
-msgstr ""
+msgstr "取消迁移"
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
