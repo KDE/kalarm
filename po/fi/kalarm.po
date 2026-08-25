@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-18 00:46+0000\n"
-"PO-Revision-Date: 2026-01-05 15:51+0200\n"
+"PO-Revision-Date: 2026-03-04 15:46+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -2232,12 +2232,10 @@ msgid "Action"
 msgstr "Toiminto"
 
 #: editdlg.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Deferred Alarm"
+#, kde-format
 msgctxt "@title:group"
 msgid "Deferred / Skipped Alarm"
-msgstr "Viivästetty hälytys"
+msgstr "Viivästetty tai ohitettu hälytys"
 
 #: editdlg.cpp:271
 #, kde-format
@@ -2257,32 +2255,33 @@ msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "Muuta hälytyksen viivästettyä aikaa tai peru viivästys"
 
+# Tämä on kurja käännös, parempi olisi saada ”asti / saakka” kellonajan perään – kun vain tietäisi, missä se tehdään
 #: editdlg.cpp:282
 #, kde-format
 msgctxt "@label When the alarm will next trigger after being skipped"
 msgid "Skipping until:"
-msgstr ""
+msgstr "Ohita kunnes:"
 
+# *** TARKISTA: Id:ssä on jotakin outoa, kuin ”when” olisi ylimääräinen.
 #: editdlg.cpp:285
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The next time the alarm will trigger, when it will resume normal activation."
 msgstr ""
+"Hälytyksen seuraavan kerran käynnistyessä se jatkaa normaalia aktivointia."
 
 #: editdlg.cpp:288
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel skip"
-msgstr "Peru, jos myöhässä "
+msgstr "Peru ohittaminen"
 
 #: editdlg.cpp:290
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel skipping of the alarm"
-msgstr ""
+msgstr "Peru hälytyksen ohittaminen"
 
 #: editdlg.cpp:301 editdlg.cpp:362
 #, kde-format
@@ -4645,20 +4644,16 @@ msgid "Delete"
 msgstr "Poista"
 
 #: mainwindow.cpp:911
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Display Alarm"
+#, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
-msgstr "Näyttöhälytys"
+msgstr "Ohita hälytys"
 
 #: mainwindow.cpp:912
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Number of repetitions:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
-msgstr "Toistokertojen määrä:"
+msgstr "Ohitettavia aktivointeja:"
 
 #: mainwindow.cpp:943
 #, kde-format
@@ -4750,15 +4745,13 @@ msgstr "Poista käytöstä"
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
-msgstr ""
+msgstr "Ohita…"
 
 #: mainwindow.cpp:1781
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action"
 msgid "Cancel skip"
-msgstr "Peru, jos myöhässä "
+msgstr "Peru ohittaminen"
 
 #: messagedisplay.cpp:278
 #, kde-kuit-format
@@ -7363,20 +7356,16 @@ msgid "Read-only"
 msgstr "Vain luku"
 
 #: resources/resourcedatamodelbase.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (old format)"
+#, kde-format
 msgctxt "@item:intext Calendar status, parameter is KAlarm version"
 msgid "Read-only (KAlarm pre-%1 format)"
-msgstr "Vain luku (vanha muoto)"
+msgstr "Vain luku (vanhempi kuin %1 KAlarm-muoto)"
 
 #: resources/resourcedatamodelbase.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (other format)"
+#, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (not a KAlarm calendar)"
-msgstr "Vain luku (muu muoto)"
+msgstr "Vain luku (ei KAlarm-kalenteri)"
 
 #: resources/resourcedatamodelbase.cpp:119
 #, kde-format
