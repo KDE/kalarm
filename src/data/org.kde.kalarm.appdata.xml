@@ -506,6 +506,7 @@
           <li xml:lang="ka">გასწორდა შეცდომა, როცა განგაში გამორიცხავდა დასვენების დღეებს.</li>
           <li xml:lang="nl">Los crash op wanneer het alarm feestdagen uitsluit.</li>
           <li xml:lang="pt-BR">Correção de falha quando o alarme exclui feriados.</li>
+          <li xml:lang="ru">Исправлен сбой программы при исключении выходных из напоминания;</li>
           <li xml:lang="sk">Oprava pádu, keď alarm vynecháva sviatky.</li>
           <li xml:lang="sl">Odpravljeno je bilo sesutje, ko alarm izključuje praznike.</li>
           <li xml:lang="sv">Rätta krasch när alarm undantar helger.</li>
@@ -524,6 +525,7 @@
           <li xml:lang="ka">გასწორდა ფაქტი, რომ განგაშები არ ტრიგერდებოდა, სანამ KAlarm-ს არ გადატვირთავდით.</li>
           <li xml:lang="nl">Probleem opgelost waarbij overgeslagen alarmen niet afgingen tenzij KAlarm opnieuw werd opgestart.</li>
           <li xml:lang="pt-BR">Correção de alarmes ignorados que não disparavam a menos que o KAlarm fosse reiniciado.</li>
+          <li xml:lang="ru">Исправлено несрабатывание пропущенных напоминаний без перезапуска KAlarm;</li>
           <li xml:lang="sk">Oprava vynechaných alarmov, ktoré sa nespustili, kým sa KAlarm nereštartoval.</li>
           <li xml:lang="sl">Odpravljena je bila napaka, zaradi katere se preskočeni alarmi niso sprožili, razen če se je KAlarm ponovno zagnal.</li>
           <li xml:lang="sv">Rätta överhoppade alarm som inte utlösas om Kalarm inte startas om.</li>
@@ -635,7 +637,7 @@
           <li xml:lang="ka">გასწორდა მხოლოდ-თარიღიანი ქვეგამეორებების დროის გამოთვლა.</li>
           <li xml:lang="nl">Corrigeer de berekeningen van de herhalingstijd van subperioden die alleen op datum gebaseerd zijn.</li>
           <li xml:lang="pt-BR">Correção dos cálculos de tempo de sub-repetição que consideram apenas a data.</li>
-          <li xml:lang="ru">Исправлены расчёты времени для подповторов только по дате.</li>
+          <li xml:lang="ru">Исправлены расчёты времени для подповторов только по дате;</li>
           <li xml:lang="sk">Oprava výpočtov času čiastkového opakovania iba s dátumom.</li>
           <li xml:lang="sl">Popravi izračune časa podponovitev samo na podlagi datuma.</li>
           <li xml:lang="sv">Rätta tidsberäkning för delupprepning med bara datum.</li>
