@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-22 00:46+0000\n"
-"PO-Revision-Date: 2026-08-10 18:33+0400\n"
+"PO-Revision-Date: 2026-08-29 17:06+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -6563,39 +6563,34 @@ msgstr "خطأ!  الملف <filename>%1</filename> مستخدم فعلًا من
 #: resources/fileresourcedatamodel.cpp:406
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
-msgstr ""
+msgstr "البحث عن تقاويم منبهك الموجودة لترحيلها."
 
 #: resources/fileresourcedatamodel.cpp:411
 #, kde-format
 msgid " – Waiting for Akonadi to start."
-msgstr ""
+msgstr " – في انتظار بدء تشغيل الأكونادي."
 
 #: resources/fileresourcedatamodel.cpp:414
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
-msgstr ""
+msgstr " – البحث عن موارد منبهك في أوكونادي."
 
 #: resources/fileresourcedatamodel.cpp:417
-#, fuzzy, kde-format
-#| msgid "Path to KAlarm calendar file."
+#, kde-format
 msgid "Migrating existing KAlarm calendars."
-msgstr "مسار ملف تقويم «منبّهك»."
+msgstr "ترحيل تقاويم منبهك الحالية."
 
 #: resources/fileresourcedatamodel.cpp:432
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr "ضبط التقويم"
+msgstr "ترحيل التقويم"
 
 #: resources/fileresourcedatamodel.cpp:449
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
-msgstr "ألغ إذا تأخرت"
+msgstr "ترحيل الإلغاء"
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
