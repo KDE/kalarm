@@ -19,7 +19,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        "CMAKE_SHARED_LINKER_FLAGS": "-fuse-ld=mold"
+        "CMAKE_LINKER_TYPE": "MOLD"
       },
       "inherits": [
         "base"
