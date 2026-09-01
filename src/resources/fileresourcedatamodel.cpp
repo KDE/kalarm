@@ -25,6 +25,7 @@
 #include <QLabel>
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QPushButton>
 #include <QGridLayout>
 #include <QTimer>
 #include <QApplication>
@@ -446,7 +447,8 @@ void FileResourceDataModel::showMigrationMessage(bool create)
         mMigrationMessageText3 = new QLabel(mMigrationMessage);
         grid->addWidget(mMigrationMessageText3, 0, 1, 2, 1, Qt::AlignLeft);
         auto buttonBox = new QDialogButtonBox(mMigrationMessage);
-        buttonBox->addButton(i18nc("@action:button", "Cancel migration"), QDialogButtonBox::RejectRole);
+        auto cancelButton = buttonBox->addButton(i18nc("@action:button", "Cancel migration"), QDialogButtonBox::RejectRole);
+        cancelButton->setToolTip(i18nc("@info:tooltip", "Stop attempting to migrate calendars.\nNew calendars will be created if necessary."));
         grid->addWidget(buttonBox, 2, 0, 1, 2);
         connect(buttonBox, &QDialogButtonBox::rejected, mMigrationMessage, &QDialog::reject);
         connect(buttonBox, &QDialogButtonBox::rejected, this, &FileResourceDataModel::slotCancelMigration);
