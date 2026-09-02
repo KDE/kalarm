@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-22 00:46+0000\n"
+"POT-Creation-Date: 2026-09-02 00:44+0000\n"
 "PO-Revision-Date: 2022-04-25 19:18+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -6625,28 +6625,28 @@ msgstr ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
 
-#: resources/fileresourcedatamodel.cpp:406
+#: resources/fileresourcedatamodel.cpp:407
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
 msgstr ""
 
-#: resources/fileresourcedatamodel.cpp:411
+#: resources/fileresourcedatamodel.cpp:412
 #, kde-format
 msgid " – Waiting for Akonadi to start."
 msgstr ""
 
-#: resources/fileresourcedatamodel.cpp:414
+#: resources/fileresourcedatamodel.cpp:415
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
 msgstr ""
 
-#: resources/fileresourcedatamodel.cpp:417
+#: resources/fileresourcedatamodel.cpp:418
 #, fuzzy, kde-format
 #| msgid "Path to KAlarm calendar file."
 msgid "Migrating existing KAlarm calendars."
 msgstr "Cesta k súboru kalendára KAlarm."
 
-#: resources/fileresourcedatamodel.cpp:432
+#: resources/fileresourcedatamodel.cpp:433
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Calendar Configuration"
@@ -6654,13 +6654,21 @@ msgctxt "@title:window"
 msgid "Calendar migration"
 msgstr "Nastavenie kalendára"
 
-#: resources/fileresourcedatamodel.cpp:449
+#: resources/fileresourcedatamodel.cpp:450
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Cancel if late"
 msgctxt "@action:button"
 msgid "Cancel migration"
 msgstr "Zrušiť, ak neskoro"
+
+#: resources/fileresourcedatamodel.cpp:451
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Stop attempting to migrate calendars.\n"
+"New calendars will be created if necessary."
+msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format

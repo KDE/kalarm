@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-22 00:46+0000\n"
+"POT-Creation-Date: 2026-09-02 00:44+0000\n"
 "PO-Revision-Date: 2026-08-22 18:18+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -6705,37 +6705,45 @@ msgid ""
 msgstr ""
 "Помилка! Файл <filename>%1</filename> вже використано наявним календарем."
 
-#: resources/fileresourcedatamodel.cpp:406
+#: resources/fileresourcedatamodel.cpp:407
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
 msgstr "Пошук наявних календарів KAlarm для перенесення."
 
-#: resources/fileresourcedatamodel.cpp:411
+#: resources/fileresourcedatamodel.cpp:412
 #, kde-format
 msgid " – Waiting for Akonadi to start."
 msgstr " – Очікування на запуск Akonadi."
 
-#: resources/fileresourcedatamodel.cpp:414
+#: resources/fileresourcedatamodel.cpp:415
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
 msgstr " – Пошук ресурсів Akonadi для KAlarm."
 
-#: resources/fileresourcedatamodel.cpp:417
+#: resources/fileresourcedatamodel.cpp:418
 #, kde-format
 msgid "Migrating existing KAlarm calendars."
 msgstr "Перенесення наявних календарів KAlarm."
 
-#: resources/fileresourcedatamodel.cpp:432
+#: resources/fileresourcedatamodel.cpp:433
 #, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
 msgstr "Перенесення календарів"
 
-#: resources/fileresourcedatamodel.cpp:449
+#: resources/fileresourcedatamodel.cpp:450
 #, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
 msgstr "Скасувати перенесення"
+
+#: resources/fileresourcedatamodel.cpp:451
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Stop attempting to migrate calendars.\n"
+"New calendars will be created if necessary."
+msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
