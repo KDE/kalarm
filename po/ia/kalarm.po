@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-02 00:44+0000\n"
-"PO-Revision-Date: 2026-08-31 16:02+0200\n"
+"PO-Revision-Date: 2026-09-02 15:32+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -4292,7 +4292,7 @@ msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
-"<qt>Isto celera completemente le barra de menu. Tu pote monstrar lo de nove "
+"<qt>Isto celara completemente le barra de menu. Tu pote monstrar lo de nove "
 "per typar %1.</qt>"
 
 #: mainwindow.cpp:1346
@@ -6741,6 +6741,7 @@ msgid ""
 "Stop attempting to migrate calendars.\n"
 "New calendars will be created if necessary."
 msgstr ""
+"Stoppa tentar migrar calendarios.Nove calendarios essera create si necessari."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
