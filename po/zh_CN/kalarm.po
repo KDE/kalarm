@@ -6369,6 +6369,8 @@ msgid ""
 "Stop attempting to migrate calendars.\n"
 "New calendars will be created if necessary."
 msgstr ""
+"停止尝试迁移日历。\n"
+"必要时将创建新日历。"
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
