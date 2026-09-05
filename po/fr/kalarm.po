@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-02 00:44+0000\n"
-"PO-Revision-Date: 2026-08-23 14:54+0200\n"
+"PO-Revision-Date: 2026-09-03 13:00+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -6984,6 +6984,8 @@ msgid ""
 "Stop attempting to migrate calendars.\n"
 "New calendars will be created if necessary."
 msgstr ""
+"Arrêt de la tentative de migrations des agendas.\n"
+"De nouveaux calendriers seront créés si nécessaire."
 
 # unreviewed-context
 #: resources/migration/dirresourceimportdialog.cpp:34

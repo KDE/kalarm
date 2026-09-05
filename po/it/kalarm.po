@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-02 00:44+0000\n"
-"PO-Revision-Date: 2026-08-22 15:59+0200\n"
+"PO-Revision-Date: 2026-09-02 14:23+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -6773,6 +6773,8 @@ msgid ""
 "Stop attempting to migrate calendars.\n"
 "New calendars will be created if necessary."
 msgstr ""
+"Interrompi il tentativo di migrazione dei calendari.\n"
+"Se necessario, saranno creati nuovi calendari."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
