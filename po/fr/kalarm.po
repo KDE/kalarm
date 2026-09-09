@@ -4393,7 +4393,7 @@ msgstr "Exporter..."
 #, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
-msgstr "Rafraîchir les alarmes"
+msgstr "Rafraichir les alarmes"
 
 #: mainwindow.cpp:826
 #, kde-format
