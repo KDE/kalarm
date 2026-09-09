@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-18 00:46+0000\n"
-"PO-Revision-Date: 2026-05-04 18:04+0200\n"
+"PO-Revision-Date: 2026-09-03 13:00+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -4849,7 +4849,7 @@ msgstr "Exporter..."
 #, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
-msgstr "Rafraîchir les alarmes"
+msgstr "Rafraichir les alarmes"
 
 #: mainwindow.cpp:821
 #, kde-format
