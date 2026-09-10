@@ -780,7 +780,7 @@
           <li xml:lang="cs">Opraveno zaseknutí při výpočtu času dalšího opakování u časových pásem s letním časem.</li>
           <li xml:lang="es">Se ha corregido el problema del bloqueo al evaluar la hora de la siguiente repetición para las zonas horarias con horario de verano.</li>
           <li xml:lang="fi">korjattu jumittunut seuraavan toistoajan laskenta kesäajan aikavyöhykkeille</li>
-          <li xml:lang="fr">Correction du problème d’évaluation de l’heure de prochaine récurrence pour les fuseaux horaires avec heure d’été.</li>
+          <li xml:lang="fr">Correction du problème d'évaluation de l'heure de prochaine récurrence pour les fuseaux horaires avec heure d'été.</li>
           <li xml:lang="ia">Corrige le bloco de evalutation del proxime tempore  de recurrentia per zonas de tempore con hora estive.</li>
           <li xml:lang="it">Correzione del blocco durante la valutazione del successivo orario di ricorrenza per i fusi orari con ora legale.</li>
           <li xml:lang="ka">გასწორდა გაჭედვა შემდეგი გაშვების დროისთვის იმ დროის სარტყლებისთვის, რომლებიც საათს სწევენ.</li>
@@ -1465,7 +1465,7 @@
           <li xml:lang="cs">Opravena chyba v dialogovém okně „Upravit upomínku“ při nastavování času, pokud je časové pásmo uživatele UTC.</li>
           <li xml:lang="es">Se ha corregido el error del diálogo Editar alarma al configurar la hora si la zona horaria del usuario es UTC.</li>
           <li xml:lang="fi">korjattiin hälytyksen muokkausikkunan virhe asetettaessa aikaa, kun käyttäjän aikavyöhyke oli UTC</li>
-          <li xml:lang="fr">Correction de l’erreur de réglage de l’heure dans la boite de dialogue « Modifier l’alarme » si le fuseau horaire de l’utilisateur est « UTC ».</li>
+          <li xml:lang="fr">Correction de l'erreur de réglage de l'heure dans la boite de dialogue « Modifier l'alarme » si le fuseau horaire de l'utilisateur est « UTC ».</li>
           <li xml:lang="he">תוקנה שגיאת חלונית עריכת התראות בעת הגדרת השעה אם אזור הזמן של המשתמש הוא UTC.</li>
           <li xml:lang="ia">Corrige error de dialogo de Modifica Alarma assignante tempore si le fuso horari del usator è UTC.</li>
           <li xml:lang="it">Correzione dell'errore nella finestra Modifica avviso all'impostazione dell'orario se il fuso orario dell'utente è UTC.</li>
