@@ -3,13 +3,13 @@
 #
 # Zlatko Popov <zlatkopopov@fsa-bg.org>, 2006, 2007, 2008.
 # Krasimir Aranudov <krasi.arnaudov@gmail.com>, 2007.
-# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025, 2026 Mincho Kondarev <mkondarev@yahoo.de>
+# SPDX-FileCopyrightText: 2022-2026 Mincho Kondarev <mkondarev@yahoo.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-02 00:44+0000\n"
-"PO-Revision-Date: 2026-01-29 23:19+0100\n"
+"PO-Revision-Date: 2026-09-09 21:40+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 26.03.70\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -6705,38 +6705,34 @@ msgstr ""
 #: resources/fileresourcedatamodel.cpp:407
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
-msgstr ""
+msgstr "Проверка за съществуващи календари на KAlarm за миграция."
 
 #: resources/fileresourcedatamodel.cpp:412
 #, kde-format
 msgid " – Waiting for Akonadi to start."
-msgstr ""
+msgstr " – Изчакване на Akonadi да стартира."
 
 #: resources/fileresourcedatamodel.cpp:415
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
-msgstr ""
+msgstr " – Търсене на ресурси на Akonadi за  KAlarm."
 
 #: resources/fileresourcedatamodel.cpp:418
 #, kde-format
 msgid "Migrating existing KAlarm calendars."
-msgstr ""
+msgstr "Миграция на съществуващи календари на KAlarm."
 
 #: resources/fileresourcedatamodel.cpp:433
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr "Настройване на календар"
+msgstr "Миграция на календари"
 
 #: resources/fileresourcedatamodel.cpp:450
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
-msgstr "Отмяна, ако е късно"
+msgstr "Отмяна на миграцията"
 
 #: resources/fileresourcedatamodel.cpp:451
 #, kde-format
@@ -6745,6 +6741,8 @@ msgid ""
 "Stop attempting to migrate calendars.\n"
 "New calendars will be created if necessary."
 msgstr ""
+"Прекратяване на опитите за прехвърляне на календари.\n"
+"Ако е необходимо, ще бъдат създадени нови календари."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
