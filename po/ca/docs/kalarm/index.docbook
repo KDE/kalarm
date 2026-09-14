@@ -1224,7 +1224,7 @@
 > <guimenuitem
 >Importa les alarmes...</guimenuitem
 ></menuchoice
-> per a importar les alarmes de tot tipus (alarmes actives, alarmes arxivades i plantilles d'alarma) des de fitxers de calendari.</para>
+> per a importar alarmes de tot tipus (alarmes actives, alarmes arxivades i plantilles d'alarma) des de fitxers de calendari.</para>
 
 <para
 >Si heu configurat <link linkend="calendars"
@@ -2055,7 +2055,7 @@
 > determina el que passarà si l'alarma no es pot activar en la seva hora programada.</para>
 
 <para
->Marqueu aquesta casella per a cancel·lar l'alarma si no es pot activar dins d'un període de temps especificat després de l'hora correcta. El període de temps se selecciona mitjançant els controls que apareixeran quan marqueu la casella. Per exemple, si introduïu un període de temps d'1 hora, l'alarma s'activarà en la primera oportunitat una hora després del venciment, però si no es pot activar dins d'una hora, la seva activació serà cancel·lada.</para>
+>Marqueu aquesta casella per a cancel·lar l'alarma si no es pot activar dins d'un període de temps especificat després de l'hora correcta. El període de temps se selecciona mitjançant els controls que apareixeran quan marqueu la casella. Per exemple, si introduïu un període de temps d'1 hora, l'alarma s'activarà en la primera oportunitat una hora després del venciment, però si no es pot activar d'aquí a una hora, es cancel·larà la seva activació.</para>
 
 <note
 ><para
