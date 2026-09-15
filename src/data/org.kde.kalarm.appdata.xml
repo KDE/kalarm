@@ -776,6 +776,7 @@
           <li xml:lang="es">Se ha corregido el problema del bloqueo al evaluar la hora de la siguiente repetición para las zonas horarias con horario de verano.</li>
           <li xml:lang="fi">korjattu jumittunut seuraavan toistoajan laskenta kesäajan aikavyöhykkeille</li>
           <li xml:lang="fr">Correction du problème d'évaluation de l'heure de prochaine récurrence pour les fuseaux horaires avec heure d'été.</li>
+          <li xml:lang="he">תוקן עיכוב בהערכת זמן החזרה הבאה לאזורי זמן עם שעון קיץ.</li>
           <li xml:lang="ia">Corrige le bloco de evalutation del proxime tempore  de recurrentia per zonas de tempore con hora estive.</li>
           <li xml:lang="it">Correzione del blocco durante la valutazione del successivo orario di ricorrenza per i fusi orari con ora legale.</li>
           <li xml:lang="ka">გასწორდა გაჭედვა შემდეგი გაშვების დროისთვის იმ დროის სარტყლებისთვის, რომლებიც საათს სწევენ.</li>
@@ -825,6 +826,7 @@
           <li xml:lang="es">Evitar múltiples diálogos de aplazamiento de alarmas para el mismo evento.</li>
           <li xml:lang="fi">estetään useampi hälytyksen viivästysikkuna samalla tapahtumalle</li>
           <li xml:lang="fr">Empêcher plusieurs boites de dialogue de report d'alarme pour le même évènement.</li>
+          <li xml:lang="he">למנוע מהופעת כמה חלוניות דחיית התראה לאותו האירוע.</li>
           <li xml:lang="ia">Preveni multiple dialogos de Differe Alarmas per le mesme evento.</li>
           <li xml:lang="it">Prevenzione di finestre di rinvio avviso multiple per lo stesso evento.</li>
           <li xml:lang="ka">ერთი და იმავე მოვლენისთვის მაღვიძარას გადადების მრავალი დიალოგური ფანჯრის თავიდან აცილება.</li>
@@ -916,6 +918,7 @@
           <li xml:lang="es">Mejoras y corrección de fallos para los cálculos de repetición, horario de trabajo y festivos.</li>
           <li xml:lang="fi">parannuksia ja viankorjauksia toiston/työajan/vapaiden laskentaan</li>
           <li xml:lang="fr">Améliorations et corrections de bogues dans les calculs de récurrence / temps de travail / jours fériés.</li>
+          <li xml:lang="he">שיפורים ותיקוני תקלות לחישובי חזרתיות/זמן עבודה/חופשות.</li>
           <li xml:lang="ia">Melioramentos e correctiones de faltas per calculationes de recurrentia/tempore da labor/ ferias.</li>
           <li xml:lang="it">Miglioramenti e correzioni di bug nel calcolo di ricorrenze/orari lavorativi/festività.</li>
           <li xml:lang="ka">განმეორების, სამუშაო დროისა და უქმეების გამოთვლების გაუმჯობესება და შეცდომების გასწორება.</li>
@@ -1053,6 +1056,7 @@
           <li xml:lang="es">Se ha corregido un bucle sin retorno cuando se activan las alarmas, si son de solo lectura o si el calendario no permite escritura.</li>
           <li xml:lang="fi">korjattu päättymätön silmukka hälytyksen käynnistyessä, jos se on vain luku tai kalenteri ei kirjoitettavissa</li>
           <li xml:lang="fr">Correction de la boucle infinie lorsque les alarmes se déclenchent, si elles sont en lecture seule ou si le calendrier est non modifiable.</li>
+          <li xml:lang="he">תוקנה לולאה אינסופית כאשר התראות מוזנקות, אם הן לקריאה בלבד או אם לוח השנה נעול לכתיבה.</li>
           <li xml:lang="ia">Corrige le loop infinite quando un alarma discatena,si illos es de sol lectura o si le calendario non es scribibile.</li>
           <li xml:lang="it">Correzione di un ciclo infinito quando si attivano degli avvisi in solo lettura o il cui calendario non è scrivibile.</li>
           <li xml:lang="ka">გასწორდა განგაშების ჩართვისას წარმოქმნილი უსასრულო ციკლი, როდესაც ისინი მხოლოდ წაკითხვადია ან კალენდარი ჩაწერადი არ არის.</li>
@@ -1074,6 +1078,7 @@
           <li xml:lang="es">En el diálogo de edición, no mostrar una advertencia de alta precisión si la hora de inicio es anterior a ahora.</li>
           <li xml:lang="fi">muokkausikkunassa ei näytetä hyvin tarkkaa varoitusta, jos aloitusaika on ennen tätä hetkeä</li>
           <li xml:lang="fr">Dans la boite de dialogue de modification, ne pas afficher l'avertissement de haute précision si l'heure de début est antérieure à maintenant.</li>
+          <li xml:lang="he">בחלונית עריכה, לא תופיע אזהרת דיוק גבוה אם זמן ההתחלה הוא לפני עכשיו.</li>
           <li xml:lang="ia">In dialogo de editar, non monstra aviso de alte precision si le tempore  de initio es ante nunc.</li>
           <li xml:lang="it">Nelle finestra di modifica, non mostrare avvisi di alta previsione se l'ora di inizio è prima di adesso.</li>
           <li xml:lang="ka">ჩასწორების დიალოგში მაღალი სიზუსტის გაფრთხილების ჩვენების გაუქმება, თუ დაწყების დრო მიმდინარეზე ადრინდელია.</li>
