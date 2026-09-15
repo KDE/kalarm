@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-02 00:44+0000\n"
-"PO-Revision-Date: 2022-04-25 19:18+0200\n"
-"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"PO-Revision-Date: 2026-09-14 20:10+0200\n"
+"Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -6628,39 +6628,34 @@ msgstr ""
 #: resources/fileresourcedatamodel.cpp:407
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
-msgstr ""
+msgstr "Kontroluje sa, či existujú kalendáre KAlarm na migráciu."
 
 #: resources/fileresourcedatamodel.cpp:412
 #, kde-format
 msgid " – Waiting for Akonadi to start."
-msgstr ""
+msgstr " – Čaká sa na spustenie Akonadi."
 
 #: resources/fileresourcedatamodel.cpp:415
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
-msgstr ""
+msgstr " – Hľadajú sa zdroje KAlarm v Akonadi."
 
 #: resources/fileresourcedatamodel.cpp:418
-#, fuzzy, kde-format
-#| msgid "Path to KAlarm calendar file."
+#, kde-format
 msgid "Migrating existing KAlarm calendars."
-msgstr "Cesta k súboru kalendára KAlarm."
+msgstr "Migrujú sa existujúce kalendáre KAlarm."
 
 #: resources/fileresourcedatamodel.cpp:433
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr "Nastavenie kalendára"
+msgstr "Migrácia kalendárov"
 
 #: resources/fileresourcedatamodel.cpp:450
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
-msgstr "Zrušiť, ak neskoro"
+msgstr "Zrušiť migráciu"
 
 #: resources/fileresourcedatamodel.cpp:451
 #, kde-format
@@ -6669,6 +6664,8 @@ msgid ""
 "Stop attempting to migrate calendars.\n"
 "New calendars will be created if necessary."
 msgstr ""
+"Prestať sa pokúšať migrovať kalendáre.\n"
+"V prípade potreby sa vytvoria nové kalendáre."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
