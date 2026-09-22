@@ -8,20 +8,20 @@
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2006, 2008, 2009, 2010.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007, 2008.
-# SPDX-FileCopyrightText: 2023, 2024, 2025, 2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2023-2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-02 00:44+0000\n"
-"PO-Revision-Date: 2026-01-28 20:03+0900\n"
+"PO-Revision-Date: 2026-09-22 01:22+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.03.70\n"
+"X-Generator: Lokalize 26.11.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -6363,39 +6363,34 @@ msgstr "錯誤！檔案 <filename>%1</filename> 已被既有行事曆使用。"
 #: resources/fileresourcedatamodel.cpp:407
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
-msgstr ""
+msgstr "正在檢查要轉移的現存 KAlarm 行事曆。"
 
 #: resources/fileresourcedatamodel.cpp:412
 #, kde-format
 msgid " – Waiting for Akonadi to start."
-msgstr ""
+msgstr " – 正在等待 Akonadi 啟動。"
 
 #: resources/fileresourcedatamodel.cpp:415
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
-msgstr ""
+msgstr " – 正在尋找 KAlarm 的 Akonadi 資源。"
 
 #: resources/fileresourcedatamodel.cpp:418
-#, fuzzy, kde-format
-#| msgid "Path to KAlarm calendar file."
+#, kde-format
 msgid "Migrating existing KAlarm calendars."
-msgstr "請輸入 KAlarm 行事曆檔案的路徑。"
+msgstr "正在轉移現存的 KAlarm 行事曆。"
 
 #: resources/fileresourcedatamodel.cpp:433
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr "行事曆設定"
+msgstr "行事曆轉移"
 
 #: resources/fileresourcedatamodel.cpp:450
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
-msgstr "如果逾時就取消"
+msgstr "取消轉移"
 
 #: resources/fileresourcedatamodel.cpp:451
 #, kde-format
@@ -6404,6 +6399,8 @@ msgid ""
 "Stop attempting to migrate calendars.\n"
 "New calendars will be created if necessary."
 msgstr ""
+"停止嘗試轉移行事曆。\n"
+"如有需要，新行事曆會被建立。"
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
