@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-02 00:44+0000\n"
-"PO-Revision-Date: 2026-05-30 16:45-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -161,7 +161,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
-msgstr ""
+msgstr "ئەسلىگە قايتۇرۇش"
 
 #: alarmtimewidget.cpp:157
 #, kde-format
@@ -175,7 +175,7 @@ msgstr[0] "%1 مىنۇت"
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
-msgstr[0] "‏%1‎‏ سائەت"
+msgstr[0] "%1 سائەت"
 
 #: alarmtimewidget.cpp:166
 #, kde-format
@@ -1074,6 +1074,15 @@ msgid ""
 "p>\n"
 "      "
 msgstr ""
+"<p>Specify the positioning of alarm message windows, and the delay in "
+"seconds after a window shows until its buttons are enabled.\n"
+"        <ul><li>0 to position message windows as far from the cursor as "
+"possible with no enable delay.</li>\n"
+"        <li>> 0 to position in center of screen and specify delay before "
+"enabling buttons.</li>\n"
+"        <li>-1 for no special positioning and no enable delay.</li></ul></"
+"p>\n"
+"      "
 
 #. i18n: ectx: label, entry (TooltipAlarmCount), group (General)
 #: data/kalarmconfig.kcfg:177
@@ -1166,7 +1175,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option"
 msgid "Sendmail"
-msgstr "Sendmail"
+msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:210
@@ -3426,7 +3435,7 @@ msgstr "قەرەلى:"
 #: kalarmcalendar/kacalendar.cpp:136
 #, kde-format
 msgid "KAlarm"
-msgstr "KAlarm"
+msgstr ""
 
 #: kalarmcalendar/kaevent.cpp:3525
 #, kde-format
@@ -3949,7 +3958,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
-msgstr "%1 %2"
+msgstr ""
 
 #: mainwindow.cpp:1278
 #, kde-format
@@ -3963,8 +3972,6 @@ msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
-"<qt>بۇ مەشغۇلات تىزىملىك بالداقنى پۈتۈنلەي يوشۇرىدۇ. %1 نى بېسىپ قايتا "
-"كۆرسىتەلەيسىز.</qt>"
 
 #: mainwindow.cpp:1346
 #, kde-format
@@ -4112,7 +4119,7 @@ msgstr[0] "%1 سائەتنىڭ ئىچىدە"
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
 msgid_plural "%1 hours"
-msgstr[0] "‏%1‎‏ سائەت"
+msgstr[0] "%1 سائەت"
 
 #: messagedisplayhelper.cpp:508
 #, kde-format
@@ -4682,7 +4689,7 @@ msgstr ""
 #, kde-format
 msgctxt "Holiday region, region language"
 msgid "%1 (%2)"
-msgstr "%1 (%2)"
+msgstr ""
 
 #: prefdlg.cpp:846
 #, kde-format
@@ -4917,7 +4924,7 @@ msgstr "KMail  تور خەت"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Sendmail"
-msgstr "Sendmail"
+msgstr ""
 
 #: prefdlg.cpp:1191
 #, kde-format
@@ -5952,7 +5959,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox 28th February (short form)"
 msgid "28 Feb"
-msgstr ""
+msgstr "28 ھۇت"
 
 #: recurrenceedit.cpp:1544
 #, kde-format
@@ -6159,6 +6166,8 @@ msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
 msgstr ""
+"خاتالىق!  The file <filename>%1</filename> is already used by an existing "
+"calendar."
 
 #: resources/fileresourcedatamodel.cpp:407
 #, kde-format
@@ -6181,12 +6190,10 @@ msgid "Migrating existing KAlarm calendars."
 msgstr ""
 
 #: resources/fileresourcedatamodel.cpp:433
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Calendar Files"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr "يىلنامىلەر"
+msgstr ""
 
 #: resources/fileresourcedatamodel.cpp:450
 #, kde-format
@@ -6269,33 +6276,33 @@ msgstr ""
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! File already exists."
-msgstr ""
+msgstr "خاتالىق! File already exists."
 
 #: resources/migration/dirresourceimportdialog.cpp:395
 #: resources/migration/dirresourceimportdialog.cpp:446
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory does not exist)."
-msgstr ""
+msgstr "خاتالىق! Cannot create file (directory does not exist)."
 
 #: resources/migration/dirresourceimportdialog.cpp:400
 #: resources/migration/dirresourceimportdialog.cpp:448
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory is not writable)."
-msgstr ""
+msgstr "خاتالىق! Cannot create file (directory is not writable)."
 
 #: resources/migration/dirresourceimportdialog.cpp:454
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory does not exist)."
-msgstr ""
+msgstr "خاتالىق! Cannot create file (directory does not exist)."
 
 #: resources/migration/dirresourceimportdialog.cpp:456
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory is not writable)."
-msgstr ""
+msgstr "خاتالىق! Cannot create file (directory is not writable)."
 
 #. i18n: ectx: property (text), widget (QLabel, warning1)
 #: resources/migration/dirresourceimportdialog_intro.ui:16
@@ -6656,7 +6663,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info hours:minutes"
 msgid "%1:%2"
-msgstr "%1:%2"
+msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:791
 #, kde-format
@@ -7657,7 +7664,7 @@ msgstr "نامەلۇم خاتالىق"
 #, kde-format
 msgctxt "@info Undo-action: message"
 msgid "%1: %2"
-msgstr "%1: %2"
+msgstr ""
 
 #: undo.cpp:662
 #, kde-format
