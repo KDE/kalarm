@@ -499,6 +499,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Fix crash when alarm excludes holidays.</li>
           <li xml:lang="ar">إصلاح مشكلة تعطل التطبيق عند استبعاد أيام العطلات من التنبيهات.</li>
@@ -570,6 +571,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Provide facility to skip the next few recurrences/sub-repetitions of an alarm.</li>
           <li xml:lang="ar">توفير إمكانية تخطي التكرارات/التكرارات الفرعية القليلة التالية للتنبيه.</li>
@@ -699,6 +701,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Fix sound files being played at the wrong volume when using VLC.</li>
           <li xml:lang="ar">إصلاح مشكلة تشغيل ملفات الصوت بمستوى صوت غير صحيح عند استخدام VLC.</li>
@@ -749,6 +752,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Fix hang evaluating recurring date-only alarms when start-of-day time is non-zero.</li>
           <li xml:lang="ar">أُصلح التعليق عند تقييم المنبّهات المتكررة (تاريخ فقط) عندما يكون وقت بداية اليوم غير صفري.</li>
@@ -821,6 +825,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Prevent multiple Defer Alarm dialogs for the same event.</li>
           <li xml:lang="ar">مُنعت حوارات تأجيل المنبّه المتعددة لنفس الحدث.</li>
@@ -892,6 +897,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>If a recurrence is suppressed by work time/holidays/exception, suppress its sub-repetitions.</li>
           <li xml:lang="ar">إذا كُبت التكرار بسبب وقت العمل/العطلات/الاستثناءات، تُكبت تكراراته الفرعية أيضًا.</li>
@@ -1030,6 +1036,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>If an alarm is late-cancelled, don't remove the event if a sub-repetition is still due.</li>
           <li xml:lang="ar">إذا أُلغي المنبّه متأخرًا، لا يُزال الحدث إذا كان هناك تكرار فرعي لا يزال مستحقًا.</li>
@@ -1124,6 +1131,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Remove excess spacing in Preferences dialog.</li>
           <li xml:lang="ar">أُزيلت المساحات الزائدة في حوار التفضيلات.</li>
@@ -1174,6 +1182,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Prevent message windows taking keyboard focus when they pop up.</li>
           <li xml:lang="ar">مُنعت نوافذ الرسائل من أخذ تركيز لوحة المفاتيح عند ظهورها.</li>
@@ -1226,6 +1235,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Implement audio backends as plugins to allow user selection.</li>
           <li xml:lang="ar">نُفذت الخلفيات الصوتية كملحقات للسماح للمستخدم باختيارها.</li>
@@ -1297,6 +1307,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Fix KAlarm exiting before executing session restoration.</li>
           <li xml:lang="ar">أُصلح خروج منبّهك قبل تنفيذ استعادة الجلسة.</li>
@@ -1347,6 +1358,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Fix system tray showing blank KAlarm icon under XFCE.</li>
           <li xml:lang="ar">أُصلح إظهار صينية النظام لأيقونة فارغة لمنبّهك تحت بيئة XFCE.</li>
@@ -1396,6 +1408,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Show normal decorated alarm windows over full screen applications on X11.</li>
           <li xml:lang="ar">تُعرض نوافذ المنبّهات المزخرفة العادية فوق تطبيقات ملء الشاشة على X11.</li>
@@ -1533,6 +1546,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Show all Run Mode options in Preferences dialog. </li>
           <li xml:lang="ar">تُعرض كافة خيارات وضع التشغيل في حوار التفضيلات.</li>
@@ -1628,6 +1642,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Fix crash if kernel alarm timers are supported.</li>
           <li xml:lang="ar">أُصلح الانهيار في حال كانت مؤقتات منبّهات النواة مدعومة.</li>
@@ -1743,6 +1758,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Fix repeating audio alarms only playing once.</li>
           <li xml:lang="ar">أُصلحت المنبّهات الصوتية المكررة التي كانت تعمل لمرة واحدة فقط.</li>
@@ -1793,6 +1809,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Use VLC instead of libcanberra to play sounds.</li>
           <li xml:lang="ar">استُخدم VLC بدلًا من libcanberra لتشغيل الأصوات.</li>
@@ -1816,6 +1833,7 @@
           <li xml:lang="tr">Sesleri çalmak için libcanberra yerine VLC kullanın.</li>
           <li xml:lang="uk">Реалізовано використання VLC замість libcanberra для відтворення звуків.</li>
           <li xml:lang="zh-CN">使用 VLC 而不是 libcanberra 来播放声音。</li>
+          <li xml:lang="zh-TW">用 VLC 而非 libcanberra 來播放音效。</li>
         </ul>
       </description>
     </release>
@@ -1843,6 +1861,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Fix crash after editing new alarm if spell checking is enabled.</li>
           <li xml:lang="ar">أُصلح الانهيار بعد تحرير منبّه جديد إذا كان تدقيق الإملاء مفعلًا.</li>
@@ -1895,6 +1914,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Display error message if error occurs trying to play an audio file.</li>
           <li xml:lang="ar">تُعرض رسالة خطأ في حال حدوث خطأ أثناء محاولة تشغيل ملف صوتي.</li>
@@ -1945,6 +1965,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Use libcanberra instead of Phonon to play sounds, for thread safety.</li>
           <li xml:lang="ar">استُخدم libcanberra بدلًا من Phonon لتشغيل الأصوات، لضمان سلامة الخيوط (thread safety).</li>
@@ -2016,6 +2037,7 @@
         <p xml:lang="tr">Yayım açıklaması</p>
         <p xml:lang="uk">Опис випуску</p>
         <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Convert to Qt6 / KDE Frameworks 6.</li>
           <li xml:lang="ar">حُوّل إلى Qt6 / أطر عمل كِيدِي 6.</li>
@@ -2039,6 +2061,7 @@
           <li xml:lang="tr">Qt6 / KDE Frameworks 6 geçişi yapıldı.</li>
           <li xml:lang="uk">Перехід на Qt6 / KDE Frameworks 6.</li>
           <li xml:lang="zh-CN">转换为 Qt6 / KDE 程序框架 6。</li>
+          <li xml:lang="zh-TW">移植到 Qt6 / KDE Frameworks 6。</li>
           <li>Enable wake-from-suspend for multiple alarms if user kernel alarm timers are supported (Linux only).</li>
           <li xml:lang="ar">فُعّل الاستيقاظ من التعليق لعدة منبّهات إذا كانت مؤقتات منبّهات نواة المستخدم مدعومة (لينكس فقط).</li>
           <li xml:lang="bg">Активирайте събуждане от временно спиране за множество аларми, ако се поддържат таймери за аларми на потребителското ядро (само за Linux).</li>
