@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-18 00:46+0000\n"
-"PO-Revision-Date: 2026-02-13 21:48+0200\n"
+"PO-Revision-Date: 2026-09-24 08:38+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -2390,7 +2390,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
-msgstr "Разбудить из ждущего режима"
+msgstr "Разбудить из спящего режима"
 
 #: editdlg.cpp:411
 #, kde-format
@@ -2398,8 +2398,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
-"Включите этот параметр, если необходимо разбудить систему из ждущего режим "
-"перед срабатыванием напоминания"
+"Включите этот параметр, чтобы система выходила из спящего режима, если "
+"напоминание срабатывает во время сна"
 
 #: editdlg.cpp:428
 #, kde-format
