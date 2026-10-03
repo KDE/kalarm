@@ -56,7 +56,7 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMDeprecationSettings)
 include(ECMFeatureSummary)
 set(QT_REQUIRED_VERSION "6.9.0")
-set(KTEXTADDONS_MIN_VERSION "2.1.2")
+set(KTEXTADDONS_MIN_VERSION "2.2.0")
 # Do NOT add quote
 set(KDEPIM_DEV_VERSION alpha)
 
