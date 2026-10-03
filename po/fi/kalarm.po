@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-02 00:44+0000\n"
-"PO-Revision-Date: 2026-03-04 15:46+0200\n"
+"PO-Revision-Date: 2026-09-05 10:48+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -6623,39 +6623,34 @@ msgstr ""
 #: resources/fileresourcedatamodel.cpp:407
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
-msgstr ""
+msgstr "Etsitään siirrettäväksi vanhoja KAlarm-kalentereja."
 
 #: resources/fileresourcedatamodel.cpp:412
 #, kde-format
 msgid " – Waiting for Akonadi to start."
-msgstr ""
+msgstr "– Odotetaan Akonadin käynnistymistä."
 
 #: resources/fileresourcedatamodel.cpp:415
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
-msgstr ""
+msgstr "– Etsitään KAlarmin Akonadi-resursseja."
 
 #: resources/fileresourcedatamodel.cpp:418
-#, fuzzy, kde-format
-#| msgid "Path to KAlarm calendar file."
+#, kde-format
 msgid "Migrating existing KAlarm calendars."
-msgstr "KAlarmin kalenteritiedoston sijainti."
+msgstr "Siirretään vanhoja KAlarm-kalentereja."
 
 #: resources/fileresourcedatamodel.cpp:433
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr "Kalenterin asetukset"
+msgstr "Kalenterin siirto"
 
 #: resources/fileresourcedatamodel.cpp:450
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
-msgstr "Peru, jos myöhässä "
+msgstr "Peru siirto"
 
 #: resources/fileresourcedatamodel.cpp:451
 #, kde-format
