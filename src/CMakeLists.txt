@@ -325,7 +325,6 @@ target_link_libraries(kalarm_bin
     KF6::Crash
     KF6::StatusNotifierItem
     KF6::CalendarCore
-    KPim6::CalendarUtils
     KF6::Contacts
     KPim6::IdentityManagementWidgets
     KF6::Mime

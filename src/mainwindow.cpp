@@ -36,13 +36,7 @@
 
 #include <KCalendarCore/MemoryCalendar>
 using namespace KCalendarCore;
-#include <kcalendarcore_version.h>
-#if KCALENDARCORE_VERSION < QT_VERSION_CHECK(6, 29, 0)
-#include <KCalUtils/ICalDrag>
-using namespace KCalUtils;
-#else
 #include <KCalendarCore/MimeData>
-#endif
 
 #include <KAboutData>
 #include <KToolBar>
@@ -1429,13 +1423,8 @@ void MainWindow::closeEvent(QCloseEvent* ce)
 void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 {
     const QMimeData* data = e->mimeData();
-#if KCALENDARCORE_VERSION < QT_VERSION_CHECK(6, 29, 0)
-    bool accept = ICalDrag::canDecode(data) ? !e->source()   // don't accept "text/calendar" objects from this application
-                                            : data->hasText() || data->hasUrls();
-#else
     bool accept = KCalendarCore::MimeData::canDecode(data) ? !e->source()   // don't accept "text/calendar" objects from this application
                                             : data->hasText() || data->hasUrls();
-#endif
     if (accept)
         e->acceptProposedAction();
 }
@@ -1459,9 +1448,6 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     const QMimeData* data = e->mimeData();
     KAEvent::SubAction action = KAEvent::SubAction::Message;
     AlarmText          alarmText;
-#if KCALENDARCORE_VERSION < QT_VERSION_CHECK(6, 29, 0)
-    MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
-#endif
 #ifndef NDEBUG
     const QString fmts = data->formats().join(", "_L1);
     qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent:" << fmts;
@@ -1477,11 +1463,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: email";
 //TODO: Fetch attachments if an email alarm is created below
     }
-#if KCALENDARCORE_VERSION < QT_VERSION_CHECK(6, 29, 0)
-    else if (ICalDrag::fromMimeData(data, calendar))
-#else
     else if (const auto calendar = KCalendarCore::MimeData::decodeCalendar(data); calendar)
-#endif
     {
         // iCalendar - If events are included, use the first event
         qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: iCalendar";

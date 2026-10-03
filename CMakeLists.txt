@@ -77,7 +77,6 @@ set(KDEPIM_LIB_VERSION "${PIM_VERSION}")
 set(KDEPIM_LIB_SOVERSION "6")
 
 find_package(Qt6 ${QT_REQUIRED_VERSION} CONFIG REQUIRED DBus Gui Network Widgets)
-set(CALENDARUTILS_LIB_VERSION "6.8.40")
 
 
 option(ENABLE_AKONADI_PLUGIN "Build the Akonadi plugin" ON)
@@ -130,7 +129,6 @@ if(TARGET KF6::GlobalAccel)
 endif()
 
 # Find KDE PIM packages
-find_package(KPim6CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim6IdentityManagementWidgets ${IDENTITYMANAGEMENT_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF6Mime ${KF_MIN_VERSION} CONFIG REQUIRED)
 

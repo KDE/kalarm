@@ -11,12 +11,7 @@
 #include "dragdrop.h"
 
 #include <KContacts/VCardDrag>
-#include <kcalendarcore_version.h>
-#if KCALENDARCORE_VERSION < QT_VERSION_CHECK(6, 29, 0)
-#include <KCalUtils/ICalDrag>
-#else
 #include <KCalendarCore/MimeData>
-#endif
 
 #include <KUrlCompletion>
 #include <KShell>
@@ -92,11 +87,7 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 {
     const QMimeData* data = e->mimeData();
     bool ok;
-#if KCALENDARCORE_VERSION < QT_VERSION_CHECK(6, 29, 0)
-    if (KCalUtils::ICalDrag::canDecode(data))
-#else
     if (KCalendarCore::MimeData::canDecode(data))
-#endif
         ok = false;   // don't accept "text/calendar" objects
     else
         ok = (data->hasText()
