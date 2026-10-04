@@ -507,6 +507,7 @@
           <li xml:lang="ca-valencia">Corregix una fallada quan l'alarma exclou festius.</li>
           <li xml:lang="cs">Opravena chyba, která způsobovala pád aplikace, když byla upomínka nastavena tak, aby vynechávala svátky.</li>
           <li xml:lang="es">Se ha corregido un error cuando la alarma excluye días festivos.</li>
+          <li xml:lang="fi">Korjattu kaatuminen hälytyksen sivuuttaessa vapaapäiviä.</li>
           <li xml:lang="fr">Correction d'un plantage lorsque l'alarme exclut les jours fériés.</li>
           <li xml:lang="ia">Corrige fracasso quando alarma exclude dies feriate.</li>
           <li xml:lang="it">Corretto un arresto anomalo quando un avviso esclude le festività.</li>
@@ -527,6 +528,7 @@
           <li xml:lang="ca-valencia">Corregix que les alarmes omeses no s'activen a menys que es reinicie KAlarm.</li>
           <li xml:lang="cs">Opraven problém, kdy přeskočené upomínky nefungovaly, dokud nebyl KAlarm restartován.</li>
           <li xml:lang="es">Se ha corregido el fallo que evitaba que las alarmas omitidas no se activaran a menos que KAlarm se reiniciara.</li>
+          <li xml:lang="fi">Korjattu se, etteivät ohitetut hälytykset käynnistyneet, ellei KAlarmia käynnistetty uudelleen.</li>
           <li xml:lang="fr">Correction des alarmes ignorées ne se déclenchant que si KAlarm était redémarré.</li>
           <li xml:lang="ia">Corrige alarmas saltate que non se activa a minus que KAlarm sia reinitiate.</li>
           <li xml:lang="it">Corretto il problema degli avvisi saltati, che non si attivavano a meno che non si riavviasse KAlarm.</li>
@@ -579,6 +581,7 @@
           <li xml:lang="ca-valencia">Proporciona una facilitat per a ometre les properes recurrències/subrepeticions d'una alarma.</li>
           <li xml:lang="cs">Zavedena funkce, která umožňuje přeskočit několik následujících opakování/částečných opakování upomínky.</li>
           <li xml:lang="es">Proporcionar la opción de omitir las siguientes repeticiones o subrepeticiones de una alarma.</li>
+          <li xml:lang="fi">Tarjotaan mahdollisuus ohittaa hälytyksen muutama seuraava toisto- tai alitoistokerta.</li>
           <li xml:lang="fr">Fournir une fonctionnalité permettant d'ignorer les prochaines occurrences / sous-répétitions d'une alarme.</li>
           <li xml:lang="ia">Provide le facilitate de omitter le proxime pauc recurrentias/sub-repetitiones de un alarma.</li>
           <li xml:lang="it">È possibile saltare alcune prossime ricorrenze/sotto-ripetizioni di un avviso.</li>
@@ -599,6 +602,7 @@
           <li xml:lang="ca-valencia">Proporciona una opció de diàleg d'edició d'una alarma per a anul·lar la inhibició de notificacions o mostrar-les a través d'aplicacions de pantalla completa d'X11.</li>
           <li xml:lang="cs">Přidána možnost v dialogovém okně pro úpravu upomínky, která umožňuje přepsat potlačení upozornění nebo zobrazit upozornění přes aplikace X11 běžící na celé obrazovce.</li>
           <li xml:lang="es">Proporcionar en el diálogo de edición de alarmas una opción para anular la inhibición de la notificación o mostrar sobre las aplicaciones de X11 a pantalla completa.</li>
+          <li xml:lang="fi">Tarjotaan hälytinmuokkainvalintaa ilmoituksen eston ohittamiseksi tai ilmoituksen näyttämiseksi X11-kokoruutusovelluksen yllä.</li>
           <li xml:lang="fr">Fourniture d'une option dans la boite de dialogue « Modifier l'alarme » pour contourner l'inhibition des notifications ou d'affichage au-dessus des applications en mode « Plein écran » sous X11.</li>
           <li xml:lang="ia">Provide un option in le dialogo de modification de alarmas pro superpassar le inhibition de notificationes o pro apparer sur applicationes X11 a schermo plen.</li>
           <li xml:lang="it">È disponibile un'opzione della finestra di modifica avviso per annullare l'inibizione delle notifiche o mostrare applicazioni a schermo intero in ambiente X11.</li>
@@ -619,6 +623,7 @@
           <li xml:lang="ca-valencia">Mostra només les opcions de cancel·lació retardada/recordatori en el diàleg d'edició d'una alarma quan estiguen habilitades.</li>
           <li xml:lang="cs">V dialogovém okně pro úpravu upomínky se zobrazí možnosti pozdního zrušení a připomenutí pouze v případě, že jsou povoleny.</li>
           <li xml:lang="es">Mostrar solo las opciones para cancelación tardía y recordatorio en el diálogo de edición de alarmas cuando están activadas.</li>
+          <li xml:lang="fi">Näytetään hälytysmuokkaimessa valinnat myöhäiselle perumiselle ja muistutukselle vain, kun ne ovat käytettävissä.</li>
           <li xml:lang="fr">Affichage uniquement des options pour « Annulation tardive / Rappel » dans la boite de dialogue « Modifier l'alarme » lorsqu'elles sont activées.</li>
           <li xml:lang="ia">Monstra optiones per Cancellation tardive/Rememoration in le dialogo  de Modificar Alarma solmente quando illos es activate.</li>
           <li xml:lang="it">Mostra solo opzioni per Annullamento per il ritardo/Promemoria nella finestra di modifica dell'avviso quando sono abilitate.</li>
@@ -639,6 +644,7 @@
           <li xml:lang="ca-valencia">Corregix els càlculs prompte de subrepetició de només data.</li>
           <li xml:lang="cs">Opraven výpočet času dílčího opakování pouze na základě data.</li>
           <li xml:lang="es">Corregir los cálculos de tiempo de subrepetición que solo tienen en cuenta la fecha.</li>
+          <li xml:lang="fi">Korjattu se, että alitoiston aikalaskenta koski vain päivämäärää.</li>
           <li xml:lang="fr">Correction des calculs de temps de sous-répétition uniquement pour les dates.</li>
           <li xml:lang="he">תוקנו חישובי זמנים לתת־חזרה לפי תאריך בלבד.</li>
           <li xml:lang="ia">Corrige le calculationes de tempore de sub-repetition de sol data.</li>
@@ -660,6 +666,7 @@
           <li xml:lang="ca-valencia">Millora la disposició de la cancel·lació retardada i altres ginys a la part inferior del diàleg d'edició d'una alarma.</li>
           <li xml:lang="cs">Vylepšené uspořádání widgetů pro pozdní zrušení a dalších widgetů v dolní části dialogového okna pro úpravu upomínky.</li>
           <li xml:lang="es">Mejorar la disposición de los elementos gráficos de cancelación tardía y de otros elementos gráficos en la parte inferior del diálogo de edición de alarmas.</li>
+          <li xml:lang="fi">Parannettu myöhäisen perumisen ja muiden sovelmien asettelua hälytysmuokkaimen alalaidassa.</li>
           <li xml:lang="fr">Amélioration de la disposition des composants graphiques de retard de suppression et autres en bas de la boite de dialogue « Modifier l'alarme ».</li>
           <li xml:lang="ia">Meliorar le disposition del widgets de cancellation tardive e altere widgets  al basso del dialogo de modification de alarma.</li>
           <li xml:lang="it">Miglioramento della disposizione dell'annullamento per il ritardo ed altri oggetti in basso nella finestra di modifica avviso.</li>
