@@ -52,10 +52,10 @@
 #include <QCloseEvent>
 #include <QScreen>
 #include <QStyle>
-using namespace Qt::Literals::StringLiterals;
 
 #include "kmailinterface.h"
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KAlarmCal;
 
 namespace

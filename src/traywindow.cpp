@@ -31,11 +31,11 @@
 #include <QTimer>
 #include <QLocale>
 #include <QMenu>
-using namespace Qt::Literals::StringLiterals;
 
 #include <stdlib.h>
 #include <limits.h>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KAlarmCal;
 
 struct TipItem

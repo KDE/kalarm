@@ -32,10 +32,10 @@
 #include <QSaveFile>
 #include <QDir>
 #include <QStandardPaths>
-using namespace Qt::Literals::StringLiterals;
 
 #include <time.h>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace KAlarmCal;
 
 //clazy:excludeall=non-pod-global-static

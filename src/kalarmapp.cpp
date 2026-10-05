@@ -50,12 +50,13 @@
 #include <QStandardPaths>
 #include <QSystemTrayIcon>
 #include <QCommandLineParser>
-using namespace Qt::Literals::StringLiterals;
 
 #include <stdlib.h>
 #include <ctype.h>
 #include <iostream>
 #include <climits>
+
+using namespace Qt::Literals::StringLiterals;
 
 namespace
 {

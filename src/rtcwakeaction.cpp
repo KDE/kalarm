@@ -14,9 +14,11 @@
 
 #include <QProcess>
 #include <QDateTime>
-using namespace Qt::Literals::StringLiterals;
 
 #include <stdio.h>
+
+using namespace Qt::Literals::StringLiterals;
+
 #ifdef Q_OS_WIN
 #define popen _popen
 #define pclose _pclose

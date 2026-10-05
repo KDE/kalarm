@@ -19,9 +19,10 @@
 #include <QSharedData>
 #include <QStringList>
 #include <QTimeZone>
-using namespace Qt::Literals::StringLiterals;
 
 #include <limits>
+
+using namespace Qt::Literals::StringLiterals;
 
 namespace
 {

@@ -18,9 +18,10 @@
 #include <KLocalizedString>
 
 #include <QCommandLineParser>
-using namespace Qt::Literals::StringLiterals;
 
 #include <iostream>
+
+using namespace Qt::Literals::StringLiterals;
 
 namespace
 {
