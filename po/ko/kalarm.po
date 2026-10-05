@@ -1,7 +1,7 @@
 # Translation of kalarm to Korean.
 # Copyright (C) 2008 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdepim package.
-# SPDX-FileCopyrightText: 2008, 2015, 2019, 2020, 2021, 2022, 2023, 2025 Shinjo Park <kde@peremen.name>
+# SPDX-FileCopyrightText: 2008, 2015, 2019, 2020, 2021, 2022, 2023, 2025, 2026 Shinjo Park <kde@peremen.name>
 # Jung Hee Lee <daemul72@gmail.com>, 2019.
 #
 msgid ""
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-04 00:48+0000\n"
-"PO-Revision-Date: 2025-04-21 15:19+0200\n"
+"PO-Revision-Date: 2026-10-04 23:22+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1499,20 +1499,17 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:309
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr "강조된 알람 사용"
+msgstr "알람 차단하지 않음"
 
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
-msgstr "알람 편집 대화 상자의 \"늦었을 때 취소\" 기본 설정입니다."
+msgstr "알람 편집 대화 상자의 \"알람 차단하지 않음\" 기본 설정입니다."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -2105,11 +2102,10 @@ msgid "Recurrence - [%1]"
 msgstr "반복 - [%1]"
 
 #: editdlg.cpp:87
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@option:check"
 msgid "Never inhibit alarm"
-msgstr "강조된 알람 사용"
+msgstr "알람 차단하지 않음"
 
 #: editdlg.cpp:88
 #, kde-format
@@ -2184,12 +2180,10 @@ msgid "Action"
 msgstr "동작"
 
 #: editdlg.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Deferred Alarm"
+#, kde-format
 msgctxt "@title:group"
 msgid "Deferred / Skipped Alarm"
-msgstr "연기된 알람"
+msgstr "연기/건너뛴 알람"
 
 #: editdlg.cpp:271
 #, kde-format
@@ -2213,7 +2207,7 @@ msgstr "연기된 알람 시간을 변경하거나 연기 취소"
 #, kde-format
 msgctxt "@label When the alarm will next trigger after being skipped"
 msgid "Skipping until:"
-msgstr ""
+msgstr "다음까지 취소:"
 
 #: editdlg.cpp:285
 #, kde-format
@@ -2221,20 +2215,20 @@ msgctxt "@info:tooltip"
 msgid ""
 "The next time the alarm will trigger, when it will resume normal activation."
 msgstr ""
+"다음으로 알람이 트리거되는 시간입니다. 해당 시간 이후 일반적인 활성화가 다시 "
+"시작됩니다."
 
 #: editdlg.cpp:288
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel skip"
-msgstr "늦었을 때 취소"
+msgstr "건너뛰기 취소"
 
 #: editdlg.cpp:290
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel skipping of the alarm"
-msgstr ""
+msgstr "알람 건너뛰기 취소"
 
 #: editdlg.cpp:301 editdlg.cpp:362
 #, kde-format
@@ -2445,6 +2439,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications"
 msgstr ""
+"이 옵션을 사용하면 알람이 울릴 시간에 알림 차단 및 전체 화면 앱 실행 여부와 "
+"관계 없이 항상 알람이 실행됩니다"
 
 #: editdlg.cpp:1621
 #, kde-format
@@ -2453,6 +2449,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications."
 msgstr ""
+"이 옵션을 사용하면 알람이 울릴 시간에 알림 차단 및 전체 화면 앱 실행 여부와 "
+"관계 없이 항상 알람이 실행됩니다."
 
 #: editdlgtypes.cpp:75
 #, kde-format
@@ -4119,20 +4117,16 @@ msgid "Delete"
 msgstr "삭제"
 
 #: mainwindow.cpp:910
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Display Alarm"
+#, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
-msgstr "표시 알람"
+msgstr "알람 건너뛰기"
 
 #: mainwindow.cpp:911
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Number of repetitions:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
-msgstr "반복할 횟수:"
+msgstr "건너뛸 활성화 회수:"
 
 #: mainwindow.cpp:942
 #, kde-format
@@ -4223,15 +4217,13 @@ msgstr "비활성화"
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
-msgstr ""
+msgstr "건너뛰기..."
 
 #: mainwindow.cpp:1779
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action"
 msgid "Cancel skip"
-msgstr "늦었을 때 취소"
+msgstr "건너뛰기 취소"
 
 #: messagedisplay.cpp:278
 #, kde-kuit-format
@@ -6507,39 +6499,34 @@ msgstr ""
 #: resources/fileresourcedatamodel.cpp:407
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
-msgstr ""
+msgstr "이전할 기존 KAlarm 캘린더를 확인하고 있습니다."
 
 #: resources/fileresourcedatamodel.cpp:412
 #, kde-format
 msgid " – Waiting for Akonadi to start."
-msgstr ""
+msgstr " – Akonadi 시작을 기다리고 있습니다."
 
 #: resources/fileresourcedatamodel.cpp:415
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
-msgstr ""
+msgstr " – KAlarm Akonadi 리소스를 찾고 있습니다."
 
 #: resources/fileresourcedatamodel.cpp:418
-#, fuzzy, kde-format
-#| msgid "Path to KAlarm calendar file."
+#, kde-format
 msgid "Migrating existing KAlarm calendars."
-msgstr "KAlarm 달력 파일의 경로입니다."
+msgstr "기존 KAlarm 캘린더를 이전하고 있습니다."
 
 #: resources/fileresourcedatamodel.cpp:433
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr "캘린더 설정"
+msgstr "캘린더 이전"
 
 #: resources/fileresourcedatamodel.cpp:450
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
-msgstr "늦었을 때 취소"
+msgstr "이전 취소"
 
 #: resources/fileresourcedatamodel.cpp:451
 #, kde-format
@@ -6548,6 +6535,8 @@ msgid ""
 "Stop attempting to migrate calendars.\n"
 "New calendars will be created if necessary."
 msgstr ""
+"캘린더 이전 시도를 취소합니다.\n"
+"필요한 경우 새 캘린더를 생성합니다."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
@@ -6828,13 +6817,13 @@ msgstr "알람 템플릿"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -6843,20 +6832,16 @@ msgid "Read-only"
 msgstr "읽기 전용"
 
 #: resources/resourcedatamodelbase.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (old format)"
+#, kde-format
 msgctxt "@item:intext Calendar status, parameter is KAlarm version"
 msgid "Read-only (KAlarm pre-%1 format)"
-msgstr "읽기 전용(이전 형식)"
+msgstr "읽기 전용(KAlarm %1 이전 형식)"
 
 #: resources/resourcedatamodelbase.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (other format)"
+#, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (not a KAlarm calendar)"
-msgstr "읽기 전용(기타 형식)"
+msgstr "읽기 전용(KAlarm 캘린더가 아님)"
 
 #: resources/resourcedatamodelbase.cpp:119
 #, kde-format
@@ -7059,12 +7044,7 @@ msgid "Choose Calendar"
 msgstr "캘린더 선택"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7074,9 +7054,9 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para><resource>%1</resource> 캘린더가 읽기 전용으로 변경되었습니다. 다음 알"
-"람에 사용할 기본 캘린더였습니다: %2</para><para>새 기본 캘린더를 선택하십시"
-"오.</para>"
+"<para><resource>%2</resource> 캘린더가 읽기 전용으로 변경되었습니다.</"
+"para><para>%3에 대한 기본 캘린더였습니다.</para><para>새 기본 캘린더를 선택하"
+"십시오.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7400,26 +7380,20 @@ msgstr ""
 "니다."
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>다음을 포함함: %1</para>"
+msgstr "다음을 포함함: %1"
 
 #: resourceselector.cpp:255
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource>이(가) 다음의 기본 캘린더입니다: %2</para>"
-"%3<para>모든 캘린더 목록에서 삭제하시겠습니까?</para>"
+"<para><resource>%1</resource>이(가) 다음의 기본 캘린더입니다: %2</para><para>"
+"%3</para><para>모든 캘린더 목록에서 삭제하시겠습니까?</para>"
 
 #: resourceselector.cpp:259
 #, kde-kuit-format
@@ -7430,11 +7404,7 @@ msgid ""
 msgstr "목록에서 기본 캘린더(<resource>%1</resource>)를 삭제하시겠습니까?"
 
 #: resourceselector.cpp:262
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
