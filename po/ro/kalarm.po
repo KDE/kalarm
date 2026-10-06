@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-04 00:48+0000\n"
+"POT-Creation-Date: 2026-10-06 00:47+0000\n"
 "PO-Revision-Date: 2021-05-15 16:59+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -531,201 +531,201 @@ msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
 msgstr "Configurați o repetare suplimentară a alarmei"
 
-#: commandoptions.cpp:128
+#: commandoptions.cpp:129
 #, kde-format
 msgid "Prompt for confirmation when alarm is acknowledged"
 msgstr "Cere confirmare la acceptarea alarmei"
 
-#: commandoptions.cpp:131
+#: commandoptions.cpp:132
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
 msgstr "Atașează un fișier la email (repetă după cum este necesar)"
 
-#: commandoptions.cpp:135
+#: commandoptions.cpp:136
 #, kde-format
 msgid "Auto-close alarm window after --late-cancel period"
 msgstr "Auto-închide fereastra de alarmă după perioada de anulare"
 
-#: commandoptions.cpp:138
+#: commandoptions.cpp:139
 #, kde-format
 msgid "Blind copy email to self"
 msgstr "Copiere email pentru tine"
 
-#: commandoptions.cpp:141
+#: commandoptions.cpp:142
 #, kde-format
 msgid "Beep when message is displayed"
 msgstr "Emite un sunet atunci când un mesaj este afișat"
 
-#: commandoptions.cpp:144
+#: commandoptions.cpp:145
 #, kde-format
 msgid "Message background color (name or hex 0xRRGGBB)"
 msgstr "Culoarea de fundal a mesajului (nume sau hex 0xRRGGBB)"
 
-#: commandoptions.cpp:148
+#: commandoptions.cpp:149
 #, kde-format
 msgid "Message foreground color (name or hex 0xRRGGBB)"
 msgstr "Culoare de prim-plan a mesajului (nume sau hex 0xRRGGBB)"
 
-#: commandoptions.cpp:152
+#: commandoptions.cpp:153
 #, kde-format
 msgid "Cancel alarm with the specified event ID"
 msgstr "Anulează alarma cu ID-ul de eveniment specificat"
 
-#: commandoptions.cpp:156
+#: commandoptions.cpp:157
 #, kde-format
 msgid "Disable the alarm"
 msgstr "Dezactivează alarma"
 
-#: commandoptions.cpp:159
+#: commandoptions.cpp:160
 #, kde-format
 msgid "Disable monitoring of all alarms"
 msgstr "Dezactivează monitorizarea tuturor alarmelor"
 
-#: commandoptions.cpp:162
+#: commandoptions.cpp:163
 #, kde-format
 msgid "Execute a shell command line"
 msgstr "Execută o comandă de linie"
 
-#: commandoptions.cpp:166
+#: commandoptions.cpp:167
 #, kde-format
 msgid "Command line to generate alarm message text"
 msgstr "Linia de comandă pentru a genera mesajul text al alarmei"
 
-#: commandoptions.cpp:170
+#: commandoptions.cpp:171
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
 msgstr "Afișează câmpul de editare a alarmei pentru a edita alarma specificată"
 
-#: commandoptions.cpp:174
+#: commandoptions.cpp:175
 #, fuzzy, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr "Afișează mesajul alarmei acum"
 
-#: commandoptions.cpp:177
+#: commandoptions.cpp:178
 #, fuzzy, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr "Afișează mesajul alarmei acum"
 
-#: commandoptions.cpp:180
+#: commandoptions.cpp:181
 #, fuzzy, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
 msgstr "Afișează mesajul alarmei acum"
 
-#: commandoptions.cpp:183
+#: commandoptions.cpp:184
 #, fuzzy, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
 msgstr "Afișează mesajul alarmei acum"
 
-#: commandoptions.cpp:186
+#: commandoptions.cpp:187
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
 msgstr "Afișează câmpul de editare a alarmei, presetat cu un șablon"
 
-#: commandoptions.cpp:190
+#: commandoptions.cpp:191
 #, kde-format
 msgid "File to display"
 msgstr "Fișier de afișat"
 
-#: commandoptions.cpp:194
+#: commandoptions.cpp:195
 #, fuzzy, kde-format
 msgid "KMail identity to use as sender of email"
 msgstr "Eroare la trimiterea e-mail-ului"
 
-#: commandoptions.cpp:198
+#: commandoptions.cpp:199
 #, kde-format
 msgid "Interval between alarm repetitions"
 msgstr "Interval între repetările alarmei"
 
-#: commandoptions.cpp:202
+#: commandoptions.cpp:203
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
 msgstr "Arată alarma ca eveniment în Organizator"
 
-#: commandoptions.cpp:205
+#: commandoptions.cpp:206
 #, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
 msgstr ""
 "Anulează alarma dacă a fost declanșată cu mai mult de o perioadă de "
 "întârziere"
 
-#: commandoptions.cpp:210
+#: commandoptions.cpp:211
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "List of scheduled alarms"
 msgid "Output list of scheduled alarms to stdout"
 msgstr "Lista alarmelor planificate"
 
-#: commandoptions.cpp:213
+#: commandoptions.cpp:214
 #, kde-format
 msgid "Repeat alarm at every login"
 msgstr "Repetă alarma la fiecare autentificare"
 
-#: commandoptions.cpp:216
+#: commandoptions.cpp:217
 #, kde-format
 msgid "Send an email to the given address (repeat as needed)"
 msgstr "Trimite un email la adresa indicată (repetă după cum este necesar)"
 
-#: commandoptions.cpp:220
+#: commandoptions.cpp:221
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Action to create a new alarm"
 #| msgid "New alarm"
 msgid "Name of alarm"
 msgstr "Alarmă nouă"
 
-#: commandoptions.cpp:224
+#: commandoptions.cpp:225
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the alarm message now"
 msgid "Display alarm message as a notification"
 msgstr "Afișează mesajul alarmei acum"
 
-#: commandoptions.cpp:227
+#: commandoptions.cpp:228
 #, kde-format
 msgid "Audio file to play once"
 msgstr "Fișier audio de redat o dată"
 
-#: commandoptions.cpp:231
+#: commandoptions.cpp:232
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Fișier audio de redat repetat"
 
-#: commandoptions.cpp:235
+#: commandoptions.cpp:236
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "Specificați repetiția alarmei folosint sintaxa iCalendar"
 
-#: commandoptions.cpp:239
+#: commandoptions.cpp:240
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "Afișează memento-ul înainte sau după alarmă"
 
-#: commandoptions.cpp:243
+#: commandoptions.cpp:244
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "Afișează memento-ul o dată, înainte sau după prima repetiție a alarmei"
 
-#: commandoptions.cpp:247
+#: commandoptions.cpp:248
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Numărul de ori pentru a repeta alarma (incluzând data inițială)"
 
-#: commandoptions.cpp:252
+#: commandoptions.cpp:253
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Vorbește mesajul când este afișat"
 
-#: commandoptions.cpp:256
+#: commandoptions.cpp:257
 #, kde-format
 msgid "Email subject line"
 msgstr "Subiecul email-ului"
 
-#: commandoptions.cpp:261
+#: commandoptions.cpp:262
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
 "Simulează ora sistemului [[[aaaa-]ll-]zz-]oo:mm[TZ] (modul de depanare)"
 
-#: commandoptions.cpp:266
+#: commandoptions.cpp:267
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
@@ -733,53 +733,53 @@ msgstr ""
 "Declanșează alarma la ora [[[aaaa-]ll-]zz-]oo:mm[TZ], sau data aaaa-ll-zz "
 "[TZ]"
 
-#: commandoptions.cpp:270
+#: commandoptions.cpp:271
 #, kde-format
 msgid "Display system tray icon"
 msgstr "Arată pictograma în tava de sistem"
 
-#: commandoptions.cpp:273
+#: commandoptions.cpp:274
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Declanșează alarma cu ID-ul de eveniment specificat"
 
-#: commandoptions.cpp:277
+#: commandoptions.cpp:278
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Repetă până la ora [[[aaaa-]ll-]zz-]oo:mm [TZ], sau data aaaa-ll-zz [TZ]"
 
-#: commandoptions.cpp:281
+#: commandoptions.cpp:282
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "Volumul de redare a fișierului audio"
 
-#: commandoptions.cpp:292
+#: commandoptions.cpp:293
 #, kde-format
 msgid "Message text to display"
 msgstr "Textul mesajului de afișat"
 
-#: commandoptions.cpp:456
+#: commandoptions.cpp:457
 #, fuzzy, kde-kuit-format
 #| msgid "%1: invalid email address"
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
 msgstr "Adresă de e-mail eronată"
 
-#: commandoptions.cpp:579 commandoptions.cpp:594 commandoptions.cpp:673
+#: commandoptions.cpp:580 commandoptions.cpp:595 commandoptions.cpp:674
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
 msgstr "Parametru <icode>%1</icode> invalid pentru alarma numai cu dată"
 
-#: commandoptions.cpp:583
+#: commandoptions.cpp:584
 #, fuzzy, kde-kuit-format
 #| msgid "%1 incompatible with %2"
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "%1 este incompatibil cu %2"
 
-#: commandoptions.cpp:605
+#: commandoptions.cpp:606
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid ""
@@ -789,14 +789,14 @@ msgstr ""
 "Parametri <icode>%1</icode> si <icode>%2</icode> nevalizi: repetiția este "
 "mai lungă decât <icode>%3</icode> intervalul"
 
-#: commandoptions.cpp:786
+#: commandoptions.cpp:787
 #, fuzzy, kde-format
 #| msgid "%1 incompatible with %2"
 msgctxt "@info:shell"
 msgid ": option(s) only valid with an appropriate action option or message"
 msgstr "%1 este incompatibil cu %2"
 
-#: commandoptions.cpp:807 commandoptions.cpp:824
+#: commandoptions.cpp:808 commandoptions.cpp:825
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -807,27 +807,27 @@ msgstr ""
 "Utilizați --ajutor pentru a obține o listă de opțiuni disponibile în linia "
 "de comandă.\n"
 
-#: commandoptions.cpp:852
+#: commandoptions.cpp:853
 #, fuzzy, kde-kuit-format
 #| msgid "%1 incompatible with %2"
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
 msgstr "%1 este incompatibil cu %2"
 
-#: commandoptions.cpp:854
+#: commandoptions.cpp:855
 #, fuzzy, kde-kuit-format
 #| msgid "%1 incompatible with %2"
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
 msgstr "%1 este incompatibil cu %2"
 
-#: commandoptions.cpp:859
+#: commandoptions.cpp:860
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
 msgstr "Parametru <icode>%1</icode> nevalid"
 
-#: commandoptions.cpp:864
+#: commandoptions.cpp:865
 #, fuzzy, kde-kuit-format
 #| msgid "%1 incompatible with %2"
 msgctxt "@info:shell"
@@ -3691,7 +3691,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Eroare la citirea cărții de adrese"
 
-#: kalarmapp.cpp:830
+#: kalarmapp.cpp:831
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3700,25 +3700,25 @@ msgstr ""
 "Renunțarea va dezactiva alarmele (o dată ce toate ferestrele cu mesaje de "
 "alarmă sunt închise)."
 
-#: kalarmapp.cpp:840
+#: kalarmapp.cpp:841
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Renunțarea va anula trezirea programată de la suspendare."
 
-#: kalarmapp.cpp:1057
+#: kalarmapp.cpp:1058
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1071
+#: kalarmapp.cpp:1072
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Eroare la citirea cărții de adrese"
 
-#: kalarmapp.cpp:1127
+#: kalarmapp.cpp:1128
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:shell"
 #| msgid ""
@@ -3730,7 +3730,7 @@ msgstr ""
 "<icode>%1</icode>: Evenimentul <resource>%2</resource> nu a fost găsit sau "
 "nu este redactabil"
 
-#: kalarmapp.cpp:1439
+#: kalarmapp.cpp:1440
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3739,7 +3739,7 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1479
+#: kalarmapp.cpp:1480
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:shell"
 #| msgid ""
@@ -3751,7 +3751,7 @@ msgstr ""
 "<icode>%1</icode>: Evenimentul <resource>%2</resource> nu a fost găsit sau "
 "nu este redactabil"
 
-#: kalarmapp.cpp:1507
+#: kalarmapp.cpp:1508
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3761,7 +3761,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1515
+#: kalarmapp.cpp:1516
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3772,7 +3772,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2472
+#: kalarmapp.cpp:2473
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3782,19 +3782,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Eșec la execuția comenzii (acces la consolă neautorizat)"
 
-#: kalarmapp.cpp:2625
+#: kalarmapp.cpp:2626
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Eroare la citirea cărții de adrese"
 
-#: kalarmapp.cpp:2721
+#: kalarmapp.cpp:2722
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Acțiune pre-alarmă:"
 
-#: kalarmapp.cpp:2727
+#: kalarmapp.cpp:2728
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -8232,7 +8232,7 @@ msgstr ""
 "%4<nl/>%5: <filename>%6</filename><nl/>Permisiuni: %7<nl/>Statut: %8<nl/"
 ">Calendar implicit: %9</para>"
 
-#: rtcwakeaction.cpp:88
+#: rtcwakeaction.cpp:90
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "<command>%1</command> not found"
@@ -8240,7 +8240,7 @@ msgctxt "@text/plain"
 msgid "Could not run <command>%1</command> to set wake from suspend"
 msgstr "<command>%1</command> nu poate fi găsit"
 
-#: rtcwakeaction.cpp:91
+#: rtcwakeaction.cpp:93
 #, fuzzy, kde-kuit-format
 #| msgctxt "@text/plain"
 #| msgid ""

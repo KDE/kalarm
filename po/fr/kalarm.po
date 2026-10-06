@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-04 00:48+0000\n"
+"POT-Creation-Date: 2026-10-06 00:47+0000\n"
 "PO-Revision-Date: 2026-09-03 13:00+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
@@ -548,209 +548,209 @@ msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
 msgstr "Définir un rappel supplémentaire de l'alarme"
 
-#: commandoptions.cpp:128
+#: commandoptions.cpp:129
 #, kde-format
 msgid "Prompt for confirmation when alarm is acknowledged"
 msgstr "Demander une confirmation quand une alarme est reçue"
 
-#: commandoptions.cpp:131
+#: commandoptions.cpp:132
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
 msgstr "Joindre le fichier au courrier électronique (répéter si nécessaire)"
 
-#: commandoptions.cpp:135
+#: commandoptions.cpp:136
 #, kde-format
 msgid "Auto-close alarm window after --late-cancel period"
 msgstr ""
 "Fermer automatiquement la fenêtre de l'alarme après le délai d'annulation"
 
-#: commandoptions.cpp:138
+#: commandoptions.cpp:139
 #, kde-format
 msgid "Blind copy email to self"
 msgstr "S'envoyer le courrier électronique en copie cachée"
 
-#: commandoptions.cpp:141
+#: commandoptions.cpp:142
 #, kde-format
 msgid "Beep when message is displayed"
 msgstr "Émettre un bip lorsque le message est affiché"
 
-#: commandoptions.cpp:144
+#: commandoptions.cpp:145
 #, kde-format
 msgid "Message background color (name or hex 0xRRGGBB)"
 msgstr "Couleur de fond du message (nom ou code hexadécimal 0xRRVVBB)"
 
-#: commandoptions.cpp:148
+#: commandoptions.cpp:149
 #, kde-format
 msgid "Message foreground color (name or hex 0xRRGGBB)"
 msgstr "Couleur du texte du message (nom ou code hexadécimal 0xRRVVBB)"
 
-#: commandoptions.cpp:152
+#: commandoptions.cpp:153
 #, kde-format
 msgid "Cancel alarm with the specified event ID"
 msgstr "Annuler l'alarme avec l'identifiant d'évènement indiqué"
 
-#: commandoptions.cpp:156
+#: commandoptions.cpp:157
 #, kde-format
 msgid "Disable the alarm"
 msgstr "Désactiver l'alarme"
 
-#: commandoptions.cpp:159
+#: commandoptions.cpp:160
 #, kde-format
 msgid "Disable monitoring of all alarms"
 msgstr "Désactiver la surveillance de toutes les alarmes"
 
-#: commandoptions.cpp:162
+#: commandoptions.cpp:163
 #, kde-format
 msgid "Execute a shell command line"
 msgstr "Exécuter une ligne de commande"
 
-#: commandoptions.cpp:166
+#: commandoptions.cpp:167
 #, kde-format
 msgid "Command line to generate alarm message text"
 msgstr "Commande pour générer le texte du message d'alarme"
 
-#: commandoptions.cpp:170
+#: commandoptions.cpp:171
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
 msgstr ""
 "Afficher la fenêtre de modification d'alarmes pour modifier l'alarme indiquée"
 
-#: commandoptions.cpp:174
+#: commandoptions.cpp:175
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr ""
 "Afficher la fenêtre de modification d'alarme pour modifier une nouvelle "
 "alarme affichée"
 
-#: commandoptions.cpp:177
+#: commandoptions.cpp:178
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr ""
 "Afficher la fenêtre de modification d'alarme pour modifier une nouvelle "
 "alarme à base de commande"
 
-#: commandoptions.cpp:180
+#: commandoptions.cpp:181
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
 msgstr ""
 "Afficher la fenêtre de modification d'alarme pour modifier une nouvelle "
 "alarme par courriel"
 
-#: commandoptions.cpp:183
+#: commandoptions.cpp:184
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
 msgstr ""
 "Afficher la fenêtre de modification d'alarme pour modifier une nouvelle "
 "alarme audio"
 
-#: commandoptions.cpp:186
+#: commandoptions.cpp:187
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
 msgstr ""
 "Afficher la fenêtre de modification d'alarmes, préremplie selon un modèle"
 
-#: commandoptions.cpp:190
+#: commandoptions.cpp:191
 #, kde-format
 msgid "File to display"
 msgstr "Fichier à afficher"
 
-#: commandoptions.cpp:194
+#: commandoptions.cpp:195
 #, kde-format
 msgid "KMail identity to use as sender of email"
 msgstr "Identité KMail à utiliser comme expéditeur du courrier électronique"
 
-#: commandoptions.cpp:198
+#: commandoptions.cpp:199
 #, kde-format
 msgid "Interval between alarm repetitions"
 msgstr "Intervalle de temps entre deux répétitions de l'alarme"
 
-#: commandoptions.cpp:202
+#: commandoptions.cpp:203
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
 msgstr "Afficher l'alarme comme un évènement dans KOrganizer"
 
-#: commandoptions.cpp:205
+#: commandoptions.cpp:206
 #, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
 msgstr ""
 "Annuler l'alarme si le déclenchement aurait lieu avec plus d'une période de "
 "retard"
 
-#: commandoptions.cpp:210
+#: commandoptions.cpp:211
 #, kde-format
 msgid "Output list of scheduled alarms to stdout"
 msgstr "Sortie de la liste des alarmes programmées vers stdout"
 
-#: commandoptions.cpp:213
+#: commandoptions.cpp:214
 #, kde-format
 msgid "Repeat alarm at every login"
 msgstr "Répéter l'alarme à chaque connexion"
 
-#: commandoptions.cpp:216
+#: commandoptions.cpp:217
 #, kde-format
 msgid "Send an email to the given address (repeat as needed)"
 msgstr ""
 "Envoyer un courrier électronique à l'adresse indiquée (répéter si nécessaire)"
 
-#: commandoptions.cpp:220
+#: commandoptions.cpp:221
 #, kde-format
 msgid "Name of alarm"
 msgstr "Nom de l'alarme"
 
-#: commandoptions.cpp:224
+#: commandoptions.cpp:225
 #, kde-format
 msgid "Display alarm message as a notification"
 msgstr "Afficher un message de l'alarme comme une notification"
 
-#: commandoptions.cpp:227
+#: commandoptions.cpp:228
 #, kde-format
 msgid "Audio file to play once"
 msgstr "Fichier audio à jouer"
 
-#: commandoptions.cpp:231
+#: commandoptions.cpp:232
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Fichier audio à jouer en boucle"
 
-#: commandoptions.cpp:235
+#: commandoptions.cpp:236
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "Définir l'occurrence de l'alarme en utilisant une syntaxe iCalendar"
 
-#: commandoptions.cpp:239
+#: commandoptions.cpp:240
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "Afficher un rappel avant ou après l'alarme"
 
-#: commandoptions.cpp:243
+#: commandoptions.cpp:244
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr ""
 "N'afficher qu'un seul rappel, avant ou après la première occurrence de "
 "l'alarme"
 
-#: commandoptions.cpp:247
+#: commandoptions.cpp:248
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Nombre de répétitions de l'alarme (en comptant la première fois)"
 
-#: commandoptions.cpp:252
+#: commandoptions.cpp:253
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Énoncer le message lorsqu'il est affiché"
 
-#: commandoptions.cpp:256
+#: commandoptions.cpp:257
 #, kde-format
 msgid "Email subject line"
 msgstr "Sujet du courrier électronique"
 
-#: commandoptions.cpp:261
+#: commandoptions.cpp:262
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
 "Simuler le temps système [[[aaaa-] mm-] jj-]hh:mm [FH](mode de débogage)"
 
-#: commandoptions.cpp:266
+#: commandoptions.cpp:267
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
@@ -758,53 +758,53 @@ msgstr ""
 "Déclencher l'alarme à l'heure [[[aaaa-]mm-]jj-]hh:mm [fuseau], ou à la date "
 "aaaa-mm-jj [fuseau]"
 
-#: commandoptions.cpp:270
+#: commandoptions.cpp:271
 #, kde-format
 msgid "Display system tray icon"
 msgstr "Afficher l'icône dans la boite à miniatures"
 
-#: commandoptions.cpp:273
+#: commandoptions.cpp:274
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Déclencher l'alarme avec l'identifiant d'évènement indiqué"
 
-#: commandoptions.cpp:277
+#: commandoptions.cpp:278
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Répéter jusqu'à l'heure [[[aaaa-]mm-]jj-]hh:mm [fuseau], ou la date aaaa-mm-"
 "jj [fuseau]"
 
-#: commandoptions.cpp:281
+#: commandoptions.cpp:282
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "Volume auquel lire le fichier audio"
 
-#: commandoptions.cpp:292
+#: commandoptions.cpp:293
 #, kde-format
 msgid "Message text to display"
 msgstr "Message à afficher"
 
-#: commandoptions.cpp:456
+#: commandoptions.cpp:457
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
 msgstr "<icode>%1</icode> : adresse électronique non valable"
 
-#: commandoptions.cpp:579 commandoptions.cpp:594 commandoptions.cpp:673
+#: commandoptions.cpp:580 commandoptions.cpp:595 commandoptions.cpp:674
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
 msgstr ""
 "Paramètre <icode>%1</icode> non valable pour une alarme datée uniquement"
 
-#: commandoptions.cpp:583
+#: commandoptions.cpp:584
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "<icode>%1</icode> précède <icode>%2</icode>"
 
-#: commandoptions.cpp:605
+#: commandoptions.cpp:606
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid ""
@@ -814,7 +814,7 @@ msgstr ""
 "Paramètres <icode>%1</icode> et <icode>%2</icode> non valables : la "
 "répétition est plus longue que l'intervalle <icode>%3</icode>"
 
-#: commandoptions.cpp:786
+#: commandoptions.cpp:787
 #, kde-format
 msgctxt "@info:shell"
 msgid ": option(s) only valid with an appropriate action option or message"
@@ -822,7 +822,7 @@ msgstr ""
 " : option(s) seulement valable(s) avec une option ou un message d'action "
 "appropriée"
 
-#: commandoptions.cpp:807 commandoptions.cpp:824
+#: commandoptions.cpp:808 commandoptions.cpp:825
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -833,25 +833,25 @@ msgstr ""
 "Utilisez l'option --help pour obtenir la liste des options de ligne de "
 "commande.\n"
 
-#: commandoptions.cpp:852
+#: commandoptions.cpp:853
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
 msgstr "<icode>%1</icode> nécessite <icode>%2</icode>"
 
-#: commandoptions.cpp:854
+#: commandoptions.cpp:855
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
 msgstr "<icode>%1</icode> requiert <icode>%2</icode> ou <icode>%3</icode>"
 
-#: commandoptions.cpp:859
+#: commandoptions.cpp:860
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
 msgstr "Paramètre <icode>%1</icode> non valable"
 
-#: commandoptions.cpp:864
+#: commandoptions.cpp:865
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> incompatible with <icode>%2</icode>"
@@ -3708,7 +3708,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Erreur lors de l'enregistrement du modèle"
 
-#: kalarmapp.cpp:830
+#: kalarmapp.cpp:831
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3717,31 +3717,31 @@ msgstr ""
 "Le fait de quitter désactivera les alarmes (une fois que toutes les fenêtres "
 "de message auront été fermées)"
 
-#: kalarmapp.cpp:840
+#: kalarmapp.cpp:841
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Quitter annulera la sortie de veille planifiée"
 
-#: kalarmapp.cpp:1057
+#: kalarmapp.cpp:1058
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Impossible de créer une alarme : aucun agenda par défaut n'est défini."
 
-#: kalarmapp.cpp:1071
+#: kalarmapp.cpp:1072
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Erreur lors de la création de l'alarme"
 
-#: kalarmapp.cpp:1127
+#: kalarmapp.cpp:1128
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1 : Événement <resource>%2</resource> introuvable, ou non unique"
 
-#: kalarmapp.cpp:1439
+#: kalarmapp.cpp:1440
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3754,13 +3754,13 @@ msgstr ""
 "<interface>Affichage | Afficher les agendas</interface> pour vérifier ou "
 "modifier les états des agendas."
 
-#: kalarmapp.cpp:1479
+#: kalarmapp.cpp:1480
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1  : Événement <resource>%2</resource> introuvable, ou non modifiable"
 
-#: kalarmapp.cpp:1507
+#: kalarmapp.cpp:1508
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3774,7 +3774,7 @@ msgstr ""
 "<nl/> Pour corriger cela, utilisez <interface>Affichage | Afficher les "
 "agendas</interface> pour vérifier ou modifier les états des agendas."
 
-#: kalarmapp.cpp:1515
+#: kalarmapp.cpp:1516
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3790,7 +3790,7 @@ msgstr ""
 "agendas</interface>, choisissez un agenda d'alarme archivé et cochez la case "
 "<interface>Utiliser par défaut pour les alarmes archivées</interface>."
 
-#: kalarmapp.cpp:2472
+#: kalarmapp.cpp:2473
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3800,19 +3800,19 @@ msgstr ""
 "L'exécution de la commande a échoué\n"
 "(aucun terminal sélectionné pour les alarmes en ligne de commande)"
 
-#: kalarmapp.cpp:2625
+#: kalarmapp.cpp:2626
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Erreur lors de la création du fichier de script temporaire"
 
-#: kalarmapp.cpp:2721
+#: kalarmapp.cpp:2722
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Action précédant l'alarme :"
 
-#: kalarmapp.cpp:2727
+#: kalarmapp.cpp:2728
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -8046,14 +8046,14 @@ msgstr ""
 "%4<nl />%5 : <filename>%6</filename><nl />Permissions : %7<nl />État : "
 "%8<nl />Agenda par défaut : %9</para>"
 
-#: rtcwakeaction.cpp:88
+#: rtcwakeaction.cpp:90
 #, kde-kuit-format
 msgctxt "@text/plain"
 msgid "Could not run <command>%1</command> to set wake from suspend"
 msgstr ""
 "Impossible de lancer <command>%1</command> pour définir la sortie de veille."
 
-#: rtcwakeaction.cpp:91
+#: rtcwakeaction.cpp:93
 #, kde-kuit-format
 msgctxt "@text/plain"
 msgid ""

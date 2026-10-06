@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-04 00:48+0000\n"
+"POT-Creation-Date: 2026-10-06 00:47+0000\n"
 "PO-Revision-Date: 2026-09-02 15:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -497,233 +497,233 @@ msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
 msgstr "Ek alarm yinelemesi ayarla"
 
-#: commandoptions.cpp:128
+#: commandoptions.cpp:129
 #, kde-format
 msgid "Prompt for confirmation when alarm is acknowledged"
 msgstr "Alarm bildiriminde onaylama iste"
 
-#: commandoptions.cpp:131
+#: commandoptions.cpp:132
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
 msgstr "E-postaya dosya iliştir (gerekirse yinele)"
 
-#: commandoptions.cpp:135
+#: commandoptions.cpp:136
 #, kde-format
 msgid "Auto-close alarm window after --late-cancel period"
 msgstr "--late-cancel döneminden sonra alarm penceresini kendiliğinden kapat"
 
-#: commandoptions.cpp:138
+#: commandoptions.cpp:139
 #, kde-format
 msgid "Blind copy email to self"
 msgstr "E-postanın bir kopyasını bana gönder"
 
-#: commandoptions.cpp:141
+#: commandoptions.cpp:142
 #, kde-format
 msgid "Beep when message is displayed"
 msgstr "İleti görüntülendiğinde sesle uyar"
 
-#: commandoptions.cpp:144
+#: commandoptions.cpp:145
 #, kde-format
 msgid "Message background color (name or hex 0xRRGGBB)"
 msgstr "İleti arka plan rengi (renk adı, ya da onaltılı 0xRRGGBB şeklinde)"
 
-#: commandoptions.cpp:148
+#: commandoptions.cpp:149
 #, kde-format
 msgid "Message foreground color (name or hex 0xRRGGBB)"
 msgstr "İleti arka plan rengi (renk adı, ya da onaltılı 0xRRGGBB şeklinde)"
 
-#: commandoptions.cpp:152
+#: commandoptions.cpp:153
 #, kde-format
 msgid "Cancel alarm with the specified event ID"
 msgstr "İleti belirtilen olay kimliği ile iptal et"
 
-#: commandoptions.cpp:156
+#: commandoptions.cpp:157
 #, kde-format
 msgid "Disable the alarm"
 msgstr "Uyarıyı kapat"
 
-#: commandoptions.cpp:159
+#: commandoptions.cpp:160
 #, kde-format
 msgid "Disable monitoring of all alarms"
 msgstr "Bütün alarmların izlemesini kapat"
 
-#: commandoptions.cpp:162
+#: commandoptions.cpp:163
 #, kde-format
 msgid "Execute a shell command line"
 msgstr "Bir kabuk komutunu yürüt"
 
-#: commandoptions.cpp:166
+#: commandoptions.cpp:167
 #, kde-format
 msgid "Command line to generate alarm message text"
 msgstr "Alarm iletisinin metnini oluşturacak komut"
 
-#: commandoptions.cpp:170
+#: commandoptions.cpp:171
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
 msgstr "Belirtilen alarmı düzenlemek için alarm düzenleme penceresi göster"
 
-#: commandoptions.cpp:174
+#: commandoptions.cpp:175
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr ""
 "Yeni bir görüntüleme alarmını düzenlemek için alarm düzenle penceresini aç"
 
-#: commandoptions.cpp:177
+#: commandoptions.cpp:178
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr "Yeni komut alarmını düzenlemek için alarm düzenleme penceresi göster"
 
-#: commandoptions.cpp:180
+#: commandoptions.cpp:181
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
 msgstr "Yeni e-posta alarmonı düzenlemek için alarm düzenleme penceresi göster"
 
-#: commandoptions.cpp:183
+#: commandoptions.cpp:184
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
 msgstr "Yeni ses alarmını düzenlemek için alarm düzenleme penceresi göster"
 
-#: commandoptions.cpp:186
+#: commandoptions.cpp:187
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
 msgstr "Alarm düzenleme penceresini göster, bir şablonla başla"
 
-#: commandoptions.cpp:190
+#: commandoptions.cpp:191
 #, kde-format
 msgid "File to display"
 msgstr "Görüntülenecek dosya"
 
-#: commandoptions.cpp:194
+#: commandoptions.cpp:195
 #, kde-format
 msgid "KMail identity to use as sender of email"
 msgstr "E-postanın göndericisi olarak kullanılacak kimlik"
 
-#: commandoptions.cpp:198
+#: commandoptions.cpp:199
 #, kde-format
 msgid "Interval between alarm repetitions"
 msgstr "Uyarı yinelemeleri arasındaki süre"
 
-#: commandoptions.cpp:202
+#: commandoptions.cpp:203
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
 msgstr "Alarmı, K Organizatör’de bir olay olarak göster"
 
-#: commandoptions.cpp:205
+#: commandoptions.cpp:206
 #, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
 msgstr "Alarm tetiklendiğinde 'dönemi' kadar gecikmişse iptal et"
 
-#: commandoptions.cpp:210
+#: commandoptions.cpp:211
 #, kde-format
 msgid "Output list of scheduled alarms to stdout"
 msgstr "Standart çıktıya zamanlanmış alarmlar çıktısı listesi"
 
-#: commandoptions.cpp:213
+#: commandoptions.cpp:214
 #, kde-format
 msgid "Repeat alarm at every login"
 msgstr "Her oturum açılışında uyarıyı yinele"
 
-#: commandoptions.cpp:216
+#: commandoptions.cpp:217
 #, kde-format
 msgid "Send an email to the given address (repeat as needed)"
 msgstr "Verilen adrese e-posta yolla (gerekiyorsa yinele)"
 
-#: commandoptions.cpp:220
+#: commandoptions.cpp:221
 #, kde-format
 msgid "Name of alarm"
 msgstr "Alarmın adı"
 
-#: commandoptions.cpp:224
+#: commandoptions.cpp:225
 #, kde-format
 msgid "Display alarm message as a notification"
 msgstr "Alarm iletisini bildirim olarak göster"
 
-#: commandoptions.cpp:227
+#: commandoptions.cpp:228
 #, kde-format
 msgid "Audio file to play once"
 msgstr "Çalınacak ses dosyası"
 
-#: commandoptions.cpp:231
+#: commandoptions.cpp:232
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Yinelenerek çalınacak ses dosyası"
 
-#: commandoptions.cpp:235
+#: commandoptions.cpp:236
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "Uyarı yinelemesini iCalendar sözdizimi kullanarak belirt"
 
-#: commandoptions.cpp:239
+#: commandoptions.cpp:240
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "Alarmdan önce ya da sonra anımsatıcıyı göster"
 
-#: commandoptions.cpp:243
+#: commandoptions.cpp:244
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "İlk alarm yinelemesinden önce veya sonra anımsatıcıyı bir kez göster"
 
-#: commandoptions.cpp:247
+#: commandoptions.cpp:248
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr ""
 "İlk görüntülenmesinden sonra uyarının kaç kez yineleneceği (ilk kez dahil)"
 
-#: commandoptions.cpp:252
+#: commandoptions.cpp:253
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Görüntülendiğinde iletiyi konuş"
 
-#: commandoptions.cpp:256
+#: commandoptions.cpp:257
 #, kde-format
 msgid "Email subject line"
 msgstr "E-posta konu satırı"
 
-#: commandoptions.cpp:261
+#: commandoptions.cpp:262
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
 "Sistem saatini taklit et [[[yyyy-]mm-]dd-]hh:mm [TZ] (hata ayıklama kipi)"
 
-#: commandoptions.cpp:266
+#: commandoptions.cpp:267
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Alarm tetikleme zamanı [[[yyyy-]aa-]gg-]ss:dd [ZD] veya gün yyyy-aa-gg [ZD]"
 
-#: commandoptions.cpp:270
+#: commandoptions.cpp:271
 #, kde-format
 msgid "Display system tray icon"
 msgstr "Sistem tepsisi simgesini göster"
 
-#: commandoptions.cpp:273
+#: commandoptions.cpp:274
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Uyarıyı belirtilen olay ile çalıştır"
 
-#: commandoptions.cpp:277
+#: commandoptions.cpp:278
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr "Yineleme sonu [[[yyyy-]aa-]gg-]ss:dd [ZD] veya gün yyyy-aa-gg [ZD]"
 
-#: commandoptions.cpp:281
+#: commandoptions.cpp:282
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "Çalınacak dosyanın ses düzeyi"
 
-#: commandoptions.cpp:292
+#: commandoptions.cpp:293
 #, kde-format
 msgid "Message text to display"
 msgstr "Görüntülenecek ileti dosyası"
 
-#: commandoptions.cpp:456
+#: commandoptions.cpp:457
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
 msgstr "<icode>%1</icode>: geçersiz e-posta adresi"
 
-#: commandoptions.cpp:579 commandoptions.cpp:594 commandoptions.cpp:673
+#: commandoptions.cpp:580 commandoptions.cpp:595 commandoptions.cpp:674
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
@@ -731,13 +731,13 @@ msgstr ""
 "Yalnızca gün için hazırlanan uyarı için geçersiz <icode>%1</icode> "
 "parametresi"
 
-#: commandoptions.cpp:583
+#: commandoptions.cpp:584
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "<icode>%1</icode>, <icode>%2</icode> ögesinden daha önce"
 
-#: commandoptions.cpp:605
+#: commandoptions.cpp:606
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid ""
@@ -747,14 +747,14 @@ msgstr ""
 "Geçersiz <icode>%1</icode> ve <icode>%2</icode> parametreleri: Yineleme "
 "zamanı <icode>%3</icode> aralığından uzun"
 
-#: commandoptions.cpp:786
+#: commandoptions.cpp:787
 #, kde-format
 msgctxt "@info:shell"
 msgid ": option(s) only valid with an appropriate action option or message"
 msgstr ""
 ": seçenek(ler) yalnızca uygun bir eylem seçeneği ya da iletisiyle geçerlidir"
 
-#: commandoptions.cpp:807 commandoptions.cpp:824
+#: commandoptions.cpp:808 commandoptions.cpp:825
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -765,26 +765,26 @@ msgstr ""
 "Kullanılabilir komut satırı seçeneklerini --help kullanarak "
 "listeleyebilirsiniz.\n"
 
-#: commandoptions.cpp:852
+#: commandoptions.cpp:853
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
 msgstr "<icode>%1</icode>, <icode>%2</icode> gerektirir"
 
-#: commandoptions.cpp:854
+#: commandoptions.cpp:855
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
 msgstr ""
 "<icode>%1</icode>, <icode>%2</icode> ya da <icode>%3</icode> gerektirir"
 
-#: commandoptions.cpp:859
+#: commandoptions.cpp:860
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
 msgstr "Geçersiz <icode>%1</icode> parametresi"
 
-#: commandoptions.cpp:864
+#: commandoptions.cpp:865
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> incompatible with <icode>%2</icode>"
@@ -3526,7 +3526,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Alarm şablonu kaydetme hatası"
 
-#: kalarmapp.cpp:830
+#: kalarmapp.cpp:831
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3535,31 +3535,31 @@ msgstr ""
 "Uygulamadan çıkmak uyarıları geçersiz kılacak (herhangi bir uyarı penceresi "
 "ilk kapandığında)."
 
-#: kalarmapp.cpp:840
+#: kalarmapp.cpp:841
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Çıkmak, zamanlanmış askıdan uyandır işlemini iptal eder."
 
-#: kalarmapp.cpp:1057
+#: kalarmapp.cpp:1058
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Alarm oluşturulamıyor: Bir öntanımlı takvim tanımlanmamış"
 
-#: kalarmapp.cpp:1071
+#: kalarmapp.cpp:1072
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Alarm oluşturulurken hata"
 
-#: kalarmapp.cpp:1127
+#: kalarmapp.cpp:1128
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: Olay <resource>%2</resource> bulunamadı veya benzersiz değil"
 
-#: kalarmapp.cpp:1439
+#: kalarmapp.cpp:1440
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3571,13 +3571,13 @@ msgstr ""
 "alarm yok.<nl/><nl/>Bunu düzeltmek için takvim durumunu değiştirmek ya da "
 "kontrol etmek için <interface>Görünüm | Takvimleri Göster</interface> kullan."
 
-#: kalarmapp.cpp:1479
+#: kalarmapp.cpp:1480
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: Olay <resource>%2</resource> bulunamadı veya düzenlenebilir değil"
 
-#: kalarmapp.cpp:1507
+#: kalarmapp.cpp:1508
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3590,7 +3590,7 @@ msgstr ""
 "alarm yok.<nl/><nl/>Bunu düzeltmek için takvim durumunu değiştirmek ya da "
 "kontrol etmek için <interface>Görünüm | Takvimleri Göster</interface> kullan."
 
-#: kalarmapp.cpp:1515
+#: kalarmapp.cpp:1516
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3606,7 +3606,7 @@ msgstr ""
 "bir arşivlenmiş alarm takvimi seçin ve <interface>Arşivlenmiş Alarmlar için "
 "Öntanımlı Olarak Kullan</interface>’ı imleyin."
 
-#: kalarmapp.cpp:2472
+#: kalarmapp.cpp:2473
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3616,19 +3616,19 @@ msgstr ""
 "Komut yürütülemedi\n"
 "(komut alarmları için seçili uçbirim yok)"
 
-#: kalarmapp.cpp:2625
+#: kalarmapp.cpp:2626
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Geçici betik dosyası oluşturulamadı"
 
-#: kalarmapp.cpp:2721
+#: kalarmapp.cpp:2722
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Alarm uyarısından önce yapılacak eylem:"
 
-#: kalarmapp.cpp:2727
+#: kalarmapp.cpp:2728
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -7719,14 +7719,14 @@ msgstr ""
 "%5: <filename>%6</filename><nl/>İzinler: %7<nl/>Durum: %8<nl/>Öntanımlı "
 "takvim: %9</para>"
 
-#: rtcwakeaction.cpp:88
+#: rtcwakeaction.cpp:90
 #, kde-kuit-format
 msgctxt "@text/plain"
 msgid "Could not run <command>%1</command> to set wake from suspend"
 msgstr ""
 "Askıdan Uyandır’ı ayarlamak için <command>%1</command> komutu çalıştırılamadı"
 
-#: rtcwakeaction.cpp:91
+#: rtcwakeaction.cpp:93
 #, kde-kuit-format
 msgctxt "@text/plain"
 msgid ""
