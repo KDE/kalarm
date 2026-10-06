@@ -134,7 +134,7 @@
     <p xml:lang="pl">KAlarm jest osobistym programem KDE do planowania wiadomości alarmowych, poleceń i wiadomości pocztowych</p>
     <p xml:lang="pt">O KAlarm é um sistema para agendar alarmes com mensagens, comandos e e-mails do KDE</p>
     <p xml:lang="pt-BR">O KAlarm é um aplicativo agendador pessoal de mensagens de alarme, comandos e e-mails do KDE</p>
-    <p xml:lang="ru">KAlarm — разработанная KDE программа для установки напоминаний, а также для планирования запуска команд и отправки электронных писем</p>
+    <p xml:lang="ru">KAlarm — разработанное KDE приложение для установки напоминаний, а также для планирования запуска команд и отправки электронных писем</p>
     <p xml:lang="sa">KAlarm KDE द्वारा व्यक्तिगतं अलार्म सन्देशं, आदेशं, ईमेल-निर्मातृ-अनुप्रयोगं च अस्ति</p>
     <p xml:lang="sk">KAlarm je aplikácia osobného budíku, príkazového a e-mailového plánovača od KDE</p>
     <p xml:lang="sl">Kalarm je osebni planer alarmov, ukazov in e-pošte izdelan v skupnosti KDE</p>
@@ -270,7 +270,7 @@
       <li xml:lang="pl">Alarmy dźwiękowe używające pliku dźwiękowego</li>
       <li xml:lang="pt">Alarme audível com um ficheiro de som</li>
       <li xml:lang="pt-BR">Alarme sonoro usando um arquivo de som</li>
-      <li xml:lang="ru">Воспроизведения звука из выбранного файла в назначенный момент;</li>
+      <li xml:lang="ru">Воспроизведение звука из выбранного файла в назначенный момент;</li>
       <li xml:lang="sa">ध्वनिसञ्चिकायाः उपयोगेन श्रव्यः अलार्मः</li>
       <li xml:lang="sk">Zvukový budík pomocou zvukového súboru</li>
       <li xml:lang="sl">Zvočni alarm z uporabo zvočne datoteke</li>
@@ -515,7 +515,7 @@
           <li xml:lang="ka">გასწორდა შეცდომა, როცა განგაში გამორიცხავდა დასვენების დღეებს.</li>
           <li xml:lang="nl">Los crash op wanneer het alarm feestdagen uitsluit.</li>
           <li xml:lang="pt-BR">Correção de falha quando o alarme exclui feriados.</li>
-          <li xml:lang="ru">Исправлен сбой программы при исключении выходных из напоминания;</li>
+          <li xml:lang="ru">Исправлен сбой приложения при исключении праздников из напоминания;</li>
           <li xml:lang="sk">Oprava pádu, keď alarm vynecháva sviatky.</li>
           <li xml:lang="sl">Odpravljeno je bilo sesutje, ko alarm izključuje praznike.</li>
           <li xml:lang="sv">Rätta krasch när alarm undantar helger.</li>
@@ -870,7 +870,7 @@
           <li xml:lang="ka">თუ შეტყობინების განგაშისთვის გადადება გამორთულია, ორი ჩასწორების ღილაკი ნაჩვენები არ იქნება.</li>
           <li xml:lang="nl">Als 'Uitstellen' is uitgeschakeld voor een melding, toon dan geen twee knoppen 'Bewerken'.</li>
           <li xml:lang="pt-BR">Se a opção Adiar estiver desativada para um alarme de notificação, não mostrar dois botões de Editar.</li>
-          <li xml:lang="ru">Если для оповещения отложенный запуск отключён, более вы выводятся две кнопки «Изменить»;</li>
+          <li xml:lang="ru">Если для оповещения отложенный запуск отключён, больше не выводятся две кнопки «Изменить»;</li>
           <li xml:lang="sk">Ak je odloženie zakázané pre oznamovací budík, nezobrazovať dve tlačidlá Upraviť.</li>
           <li xml:lang="sl">Če je možnost Odloži za obvestilni alarm onemogočena, ne prikaže dveh gumbov za urejanje.</li>
           <li xml:lang="sv">Om Uppskjutning är inaktiverat för ett underrättelsealarm, visa inte två redigeringsknappar.</li>
@@ -986,7 +986,7 @@
           <li xml:lang="ka">განგაშის კალენდარში დღიური და წუთობრივი ქვე-გამეორებების გამიჯვნა.</li>
           <li xml:lang="nl">Maak in de alarmkalender onderscheid tussen dagelijkse en minuutgebonden subherhalingen.</li>
           <li xml:lang="pt-BR">Diferenciar entre sub-repetições diárias e sub-repetições por minuto em um calendário de alarmes.</li>
-          <li xml:lang="ru">Различия между ежедневными и ежеминутными подповторами в календаре будильников;</li>
+          <li xml:lang="ru">Различия между ежедневными и ежеминутными подповторами в календаре напоминаний;</li>
           <li xml:lang="sk">Rozlíšenie medzi dennými a minútovými čiastkovými opakovaniami v kalendári budíkov.</li>
           <li xml:lang="sl">V koledarju alarmov loči med dnevnimi in minutnimi podponovitvemi.</li>
           <li xml:lang="sv">Skilj mellan dagliga och minutbaserade delupprepningar i alarmkalendern.</li>
@@ -1081,7 +1081,7 @@
           <li xml:lang="ka">გასწორდა განგაშების ჩართვისას წარმოქმნილი უსასრულო ციკლი, როდესაც ისინი მხოლოდ წაკითხვადია ან კალენდარი ჩაწერადი არ არის.</li>
           <li xml:lang="nl">Los de oneindige lus op die optreedt wanneer alarmen afgaan, als ze alleen-lezen zijn of als de agenda niet beschrijfbaar is.</li>
           <li xml:lang="pt-BR">Correção do loop infinito quando alarmes são acionados, se eles forem somente leitura ou se o calendário não for gravável.</li>
-          <li xml:lang="ru">Исправлен бесконечный цикл при срабатывании будильников, если они доступны только для чтения или календарь защищён от записи;</li>
+          <li xml:lang="ru">Исправлен бесконечный цикл при срабатывании напоминаний, если они доступны только для чтения или календарь защищён от записи;</li>
           <li xml:lang="sk">Oprava nekonečnej slučky pri spustení budíkov, ak sú iba na čítanie alebo ak kalendár nie je zapisovateľný.</li>
           <li xml:lang="sl">Odpravljena je neskončna zanka, ko se sprožijo alarmi, če so samo za branje ali če koledar ni mogoče zapisovati.</li>
           <li xml:lang="sv">Rätta oändlig upprepning när alarm utlöses, om de är skrivskyddade eller om kalendern inte är skrivbar.</li>
@@ -1103,7 +1103,7 @@
           <li xml:lang="ka">ჩასწორების დიალოგში მაღალი სიზუსტის გაფრთხილების ჩვენების გაუქმება, თუ დაწყების დრო მიმდინარეზე ადრინდელია.</li>
           <li xml:lang="nl">In het bewerkingsdialoogvenster mag de waarschuwing voor hoge nauwkeurigheid niet worden weergegeven als de starttijd vóór het huidige tijdstip ligt.</li>
           <li xml:lang="pt-BR">Na caixa de diálogo de edição, não exibir o aviso de alta precisão se a hora de início for anterior à hora atual.</li>
-          <li xml:lang="ru">В диалоге редактирования не выводятся  предупреждение о высокой точности, если время начала раньше текущего;</li>
+          <li xml:lang="ru">В диалоге редактирования не выводится предупреждение о высокой точности, если время начала раньше текущего;</li>
           <li xml:lang="sk">V dialógu úprav nezobrazovať varovanie o vysokej presnosti, ak je čas začiatku v minulosti.</li>
           <li xml:lang="sl">V pogovornem oknu za urejanje se opozorilo o visoki natančnosti ne prikaže, če je začetni čas pred zdajci.</li>
           <li xml:lang="sv">Visa inte varningar med stor noggrannhet i redigeringsdialogrutan om starttiden är före nu.</li>
@@ -1497,7 +1497,7 @@
           <li xml:lang="ka">გასწორდა განგაშის ჩასწორების დიალოგში დროის დაყენების შეცდომა, როდესაც მომხმარებლის დროის სარტყელი UTC-ია.</li>
           <li xml:lang="nl">Los de fout op in het dialoogvenster 'Alarm bewerken' bij het instellen van de tijd als de tijdzone van de gebruiker UTC is.</li>
           <li xml:lang="pt-BR">Corrigido o erro na caixa de diálogo para editar alarme ao definir a hora quando o fuso horário do usuário é UTC.</li>
-          <li xml:lang="ru">Исправлена ошибка в диалоге «Редактирование будильника» при установке времени, если часовой пояс пользователя — UTC;</li>
+          <li xml:lang="ru">Исправлена ошибка в диалоге «Редактирование напоминания» при установке времени, если часовой пояс пользователя — UTC;</li>
           <li xml:lang="sk">Oprava chyby nastavenia času v dialógu Úprava budíka, ak je časové pásmo používateľa UTC.</li>
           <li xml:lang="sl">Popravi napako pri nastavitvi časa v pogovornem oknu za urejanje alarma, če je časovni pas uporabnika UTC.</li>
           <li xml:lang="sv">Rätta fel i dialogrutan Redigera alarm vid inställning av tid om användarens tidszon är UTC.</li>
@@ -1709,7 +1709,7 @@
           <li xml:lang="ka">გამოჩნდება ნებისმიერი აუდიო შეცდომის შეტყობინება, „მოსინჯვის“ ღილაკის გამოყენებისას განგაშის ჩასწორების, ან მისი პარამეტრების შეცვლის დროს.</li>
           <li xml:lang="nl">Geef eventuele audiofoutmeldingen direct weer wanneer u de knop 'Probeer' gebruikt tijdens het bewerken van een alarm.</li>
           <li xml:lang="pt-BR">Exibir imediatamente qualquer mensagem de erro de áudio ao usar o botão "Testar" durante a edição de um alarme.</li>
-          <li xml:lang="ru">Вывод сообщения об ошибках воспроизведения звука сразу при использовании кнопки «Проверить» во время редактирования будильника;</li>
+          <li xml:lang="ru">Вывод сообщения об ошибках воспроизведения звука сразу при использовании кнопки «Проверить» во время редактирования напоминания;</li>
           <li xml:lang="sk">Okamžité zobrazenie chybovej správy zvuku pri použití tlačidla Vyskúšať počas úpravy budíka.</li>
           <li xml:lang="sl">Pri uporabi gumba Poskusi med urejanjem alarma takoj prikaže vsako zvočno sporočilo o napaki.</li>
           <li xml:lang="sv">Visa eventuella ljudfelmeddelanden omedelbart när knappen Försök används medan ett alarm redigeras.</li>
@@ -1885,7 +1885,7 @@
           <li xml:lang="ka">გასწორდა პროგრამის ავარიული გათიშვა ახალი განგაშის ჩასწორების შემდეგ, თუ მართლწერის შემოწმება ჩართულია.</li>
           <li xml:lang="nl">Los het probleem op dat de toepassing vastloopt na het bewerken van een nieuw alarm als de spellingcontrole is ingeschakeld.</li>
           <li xml:lang="pt-BR">Corrigido o problema que causava o fechamento inesperado do sistema após a edição de um novo alarme quando a verificação ortográfica estava ativada.</li>
-          <li xml:lang="ru">Исправлено аварийное завершение при редактировании нового будильника, если включена проверка орфографии;</li>
+          <li xml:lang="ru">Исправлено аварийное завершение при редактировании нового напоминания, если включена проверка орфографии;</li>
           <li xml:lang="sk">Oprava pádu po úprave nového budíka, ak je zapnutá kontrola pravopisu.</li>
           <li xml:lang="sl">Popravi sesutje po urejanju novega alarma, če je omogočeno preverjanje črkovanja.</li>
           <li xml:lang="sv">Rätta krasch efter redigering av nytt alarm om stavningskontroll är aktiverad.</li>
@@ -2010,7 +2010,7 @@
           <li xml:lang="ka">შენახვის ნებართვა განგაშის ჩასწორების დიალოგში, თუ ხმის სიმძლავრის დაყენების მოსანიშნი ღილაკი გადართულია.</li>
           <li xml:lang="nl">In de dialoog Alarm bewerken moet opslaan mogelijk zijn als het keuzevakje Volume instellen wordt omgeschakeld.</li>
           <li xml:lang="pt-BR">Na caixa de diálogo para editar alarme, permitir salvar se a caixa de seleção para definir volume estiver marcada.</li>
-          <li xml:lang="ru">В диалоге «Редактирование будильника» разрешено сохранение при переключении флажка «Настроить громкость»;</li>
+          <li xml:lang="ru">В диалоге «Редактирование напоминания» разрешено сохранение при переключении флажка «Настроить громкость»;</li>
           <li xml:lang="sk">V dialógu Úprava budíka umožnenie uloženia, ak sa prepne zaškrtávacie políčko Nastaviť hlasitosť.</li>
           <li xml:lang="sl">V pogovornem oknu Urejanje alarma dovoli shranjevanje, če je potrditveno polje Nastavi glasnost preklopljeno.</li>
           <li xml:lang="sv">I dialogrutan Redigera alarm, tillåt spara om kryssrutan Ange volym är aktiverad.</li>
@@ -2083,7 +2083,7 @@
           <li xml:lang="ka">მრავალი განგაშისთვის ძილის რეჟიმიდან გამოღვიძების ჩართვა, თუ მომხმარებლის ბირთვის განგაშის ტაიმერები მხარდაჭერილია (მხოლოდ Linux-ისთვის).</li>
           <li xml:lang="nl">Schakel het ontwaken uit de slaapstand in voor meerdere alarmen als de alarmtimers van de gebruikerskernel worden ondersteund (alleen Linux).</li>
           <li xml:lang="pt-BR">Habilita a função de despertar a partir da suspensão para múltiplos alarmes se os temporizadores de alarme do kernel do usuário forem suportados (somente Linux).</li>
-          <li xml:lang="ru">Задействовано пробуждение из спящего режима для нескольких будильников при поддержке таймеров ядра пользователя (только для Linux).</li>
+          <li xml:lang="ru">Задействовано пробуждение из спящего режима для нескольких напоминаний при поддержке таймеров ядра пользователя (только для Linux).</li>
           <li xml:lang="sk">Zapnutie prebudenia z uspania pre viacero budíkov, ak sú podporované používateľské časovače budíkov jadra (iba Linux).</li>
           <li xml:lang="sl">Omogoči wake-from-suspend za več alarmov, če so podprti časovniki alarmov uporabniškega jedra (samo za Linux).</li>
           <li xml:lang="sv">Aktivera vakna från viloläge för flera alarm om kärnans användaralarmtimer stöds (bara Linux).</li>
@@ -2104,7 +2104,7 @@
           <li xml:lang="ka">შეხსენებისა და დაგვიანებული გაუქმების ერთეულების დაყენება განგაშის შაბლონის ჩასწორების დიალოგში მხოლოდ თარიღის არჩევის მიხედვით.</li>
           <li xml:lang="nl">Stel de eenheden voor herinnering en te late annulering in, afhankelijk van de datumselectie in het dialoogvenster Alarmsjabloon bewerken.</li>
           <li xml:lang="pt-BR">Define as unidades para lembrete e cancelamento tardio com base na seleção de data na caixa de diálogo para editar modelo de alarme.</li>
-          <li xml:lang="ru">Выбор единиц измерения для напоминания и отмены с опозданием в зависимости от выбора только даты в диалоге «Изменение шаблона будильника»;</li>
+          <li xml:lang="ru">Выбор единиц измерения для напоминания и отмены с опозданием в зависимости от выбора только даты в диалоге «Изменение шаблона напоминания»;</li>
           <li xml:lang="sk">Nastavenie jednotiek pre pripomienku a neskoré zrušenie v závislosti od výberu iba dátumu v dialógovom okne Upraviť šablónu budíka.</li>
           <li xml:lang="sl">Nastavi enote za opomnik in pozni preklic glede na izbiro samo datuma v pogovornem oknu Urejanje predloge alarma.</li>
           <li xml:lang="sv">Ställ in enheter för påminnelse och avbryt sent beroende på datumvalet i dialogrutan Redigera alarmmall.</li>
@@ -2125,7 +2125,7 @@
           <li xml:lang="ka">Akonadi-მდელი KResources-ის კალენდრის კონფიგურაციის მიგრაციის ამოღება.</li>
           <li xml:lang="nl">Verwijder de migratie van de KResources-kalenderconfiguratie van vóór Akonadi.</li>
           <li xml:lang="pt-BR">Remove a migração da configuração de calendário KResources pré-Akonadi.</li>
-          <li xml:lang="ru">Удалена миграцию конфигурации календаря KResources, используемого до Akonadi;</li>
+          <li xml:lang="ru">Удалён перенос конфигурации календаря KResources, используемого до Akonadi;</li>
           <li xml:lang="sk">Odstránenie migrácie konfigurácie kalendára KResources z obdobia pred Akonadi.</li>
           <li xml:lang="sl">Odstrani selitev konfiguracije koledarja KResources pred Akonadijem.</li>
           <li xml:lang="sv">Ta bort konvertering av KResources kalenderinställning innan Akonadi.</li>
