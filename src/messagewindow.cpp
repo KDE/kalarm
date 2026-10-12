@@ -429,9 +429,10 @@ void MessageWindow::setUpDisplay()
     mOkButton->setWhatsThis(i18nc("@info:whatsthis", "Acknowledge the alarm"));
     mLastButton = mOkButton;
 
-    // Don't show Edit, Defer, KMail or KAlarm buttons if displaying over an active
-    // full screen window, since the edit and defer dialogs might be hidden by the
-    // full screen window, leaving the message window unresponsive and stuck.
+    // Don't show Edit, KMail or KAlarm buttons over an active full screen
+    // window: those dialogs can be hidden behind it and leave the message
+    // window stuck. The Defer button is still shown; slotDefer() copies
+    // BypassWindowManagerHint to the defer dialog so it stays on top.
     if (mShowEdit()  &&  !mFullScreenActive)
     {
         // Edit button
@@ -444,23 +445,20 @@ void MessageWindow::setUpDisplay()
         mLastButton = mEditButton;
     }
 
-    if (!mFullScreenActive)
-    {
-        // Defer button
-        mDeferButton = new PushButton(i18nc("@action:button", "Defer..."), topWidget);
-        mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
-        connect(mDeferButton, &QAbstractButton::clicked, this, &MessageWindow::slotDefer);
-        grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
-        mDeferButton->setToolTip(i18nc("@info:tooltip", "Defer the alarm until later"));
-        mDeferButton->setWhatsThis(xi18nc("@info:whatsthis", "<para>Defer the alarm until later.</para>"
-                                        "<para>You will be prompted to specify when the alarm should be redisplayed.</para>"));
-        mLastButton = mDeferButton;
+    // Defer button
+    mDeferButton = new PushButton(i18nc("@action:button", "Defer..."), topWidget);
+    mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
+    connect(mDeferButton, &QAbstractButton::clicked, this, &MessageWindow::slotDefer);
+    grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
+    mDeferButton->setToolTip(i18nc("@info:tooltip", "Defer the alarm until later"));
+    mDeferButton->setWhatsThis(xi18nc("@info:whatsthis", "<para>Defer the alarm until later.</para>"
+                                    "<para>You will be prompted to specify when the alarm should be redisplayed.</para>"));
+    mLastButton = mDeferButton;
 
-        if (mNoDefer())
-            mDeferButton->hide();
-        else
-            mHelper->setDeferralLimit(mEvent());    // ensure that button is disabled when alarm can't be deferred any more
-    }
+    if (mNoDefer())
+        mDeferButton->hide();
+    else
+        mHelper->setDeferralLimit(mEvent());    // ensure that button is disabled when alarm can't be deferred any more
 
     if (!mAudioFile().isEmpty()  &&  (mVolume() || mFadeVolume() > 0))
     {
