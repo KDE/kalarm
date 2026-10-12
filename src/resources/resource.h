@@ -34,7 +34,7 @@ public:
     Resource(const Resource&) = default;
     ~Resource();
 
-    bool operator==(const Resource&) const;
+    bool operator==(const Resource&) const = default;
     bool operator==(const ResourceType*) const;
 
     /** Return a null resource. */

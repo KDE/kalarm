@@ -23,11 +23,6 @@ Resource::~Resource()
 {
 }
 
-bool Resource::operator==(const Resource& other) const
-{
-    return mResource == other.mResource;
-}
-
 bool Resource::operator==(const ResourceType* other) const
 {
     return mResource.data() == other;

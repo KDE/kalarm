@@ -35,7 +35,7 @@ public:
     {
         Connection() = default;
         Connection(QObject* r, const char* s) : receiver(r), slot(s) { }
-        bool operator==(const Connection& c) const  { return receiver == c.receiver && slot == c.slot; }
+        bool operator==(const Connection& c) const = default;
         QObject*   receiver;
         QByteArray slot;
     };

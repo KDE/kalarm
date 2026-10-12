@@ -16,13 +16,7 @@ class CollectionAttribute::Private
 {
 public:
     Private() = default;
-    bool operator==(const Private& other) const
-    {
-        return mBackgroundColour == other.mBackgroundColour
-           &&  mEnabled          == other.mEnabled
-           &&  mStandard         == other.mStandard
-           &&  mKeepFormat       == other.mKeepFormat;
-    }
+    bool operator==(const Private& other) const = default;
 
     QColor           mBackgroundColour;          // background color for collection and its alarms
     CalEvent::Types  mEnabled{CalEvent::EMPTY};  // which alarm types the collection is enabled for

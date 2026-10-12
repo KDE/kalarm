@@ -21,11 +21,6 @@ EventId::EventId(const QString& resourceEventId)
         mResourceId = getResourceId(resourceIdString);  // convert the resource ID string
 }
 
-bool EventId::operator==(const EventId& other) const
-{
-    return mEventId == other.mEventId  &&  mResourceId == other.mResourceId;
-}
-
 ResourceId EventId::resourceDisplayId() const
 {
     return (mResourceId > 0) ? (mResourceId & ~ResourceType::IdFlag) : mResourceId;

@@ -44,7 +44,7 @@ public:
      */
     explicit EventId(const QString& resourceEventId);
 
-    bool operator==(const EventId&) const;
+    bool operator==(const EventId&) const = default;
     bool operator!=(const EventId& other) const   { return !operator==(other); }
 
     void clear()          { mResourceId = -1; mEventId.clear(); }
