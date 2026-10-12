@@ -2595,7 +2595,7 @@ msgstr "Изменение визуального напоминания"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
-msgstr "Тип показа:"
+msgstr "Показывать:"
 
 #: editdlgtypes.cpp:145
 #, kde-format
