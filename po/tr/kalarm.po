@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-06 00:47+0000\n"
-"PO-Revision-Date: 2026-09-02 15:00+0300\n"
+"PO-Revision-Date: 2026-10-12 10:46+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -449,7 +449,7 @@ msgid ""
 "Ctrl or Shift.</para>"
 msgstr ""
 "<para>Alarm ayarlanacak doğum günlerini seçin.<nl/>Bu liste, hakkında zaten "
-"alarm ayarlanmış olanlar haricinde <application>K Adres Defteri</"
+"alarm ayarlanmış olanlar haricinde <application>KAddressbook</"
 "application>’ndeki tüm doğum günlerini içerir.</para><para>Fareyi liste "
 "üzerinde sürükleyerek veya Kontrol veya Üst Karakter düğmelerini basılı "
 "tutarak fareyle tıklayarak birden fazla doğum günü seçebilirsiniz.</para>"
@@ -606,7 +606,7 @@ msgstr "Uyarı yinelemeleri arasındaki süre"
 #: commandoptions.cpp:203
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
-msgstr "Alarmı, K Organizatör’de bir olay olarak göster"
+msgstr "Alarmı, KOrganizer’da bir olay olarak göster"
 
 #: commandoptions.cpp:206
 #, kde-format
@@ -1267,8 +1267,8 @@ msgid ""
 "automatically. This option will only work if your system is configured to "
 "use sendmail or a sendmail compatible mail transport agent.</li></ul></p>"
 msgstr ""
-"<p>E-posta alarmı tetiklendiğinde e-posta nasıl gönderilir<ul><li>K Posta: E-"
-"posta kendiliğinden K Posta üzerinden gönderilir.</li><li>Sendmail: E-posta, "
+"<p>E-posta alarmı tetiklendiğinde e-posta nasıl gönderilir<ul><li>KMail: E-"
+"posta kendiliğinden KMail üzerinden gönderilir.</li><li>Sendmail: E-posta, "
 "kendiliğinden gönderilir. Bu seçenek yalnızca sistemin Sendmail ya da "
 "Sendmail uyumlu bir posta taşıma aracıyla yapılandırıldıysa çalışır.</li></"
 "ul></p>"
@@ -1285,7 +1285,7 @@ msgstr "Sendmail"
 #, kde-format
 msgctxt "@option"
 msgid "KMail"
-msgstr "K Posta"
+msgstr "KMail"
 
 #. i18n: ectx: label, entry (Base_EmailCopyToKMail), group (General)
 #: data/kalarmconfig.kcfg:215
@@ -1293,7 +1293,7 @@ msgstr "K Posta"
 msgctxt "@label"
 msgid "Whether to copy sent emails into KMail's Sent folder."
 msgstr ""
-"Gönderilen e-postaların K Posta’nın Gönderilenler klasörüne kopyalanıp "
+"Gönderilen e-postaların KMail’in Gönderilenler klasörüne kopyalanıp "
 "kopyalanmayacağı."
 
 #. i18n: ectx: whatsthis, entry (Base_EmailCopyToKMail), group (General)
@@ -1304,7 +1304,7 @@ msgid ""
 "Whether after sending an email to store a copy in KMail's sent-mail folder. "
 "Only applies when sendmail is selected as the email client."
 msgstr ""
-"Bir e-postanın gönderildikten sonra K Posta’nın gönderilmiş e-postalar "
+"Bir e-postanın gönderildikten sonra KMail’in gönderilmiş e-postalar "
 "klasörüne kopyalanıp kopyalanmayacağı. Yalnızca sendmail’in e-posta "
 "istemcisi olarak seçilmesi durumunda kullanılabilir."
 
@@ -1326,8 +1326,8 @@ msgid ""
 "email address otherwise."
 msgstr ""
 "E-posta alarmlarını gönderirken kimliğinizi tanımlayacak e-posta adresiniz. "
-"K Posta’da kullanılan öntanımlı posta adresini kullanmak için "
-"“@SystemSettings” girin, K Posta kimliklerinden birinin seçilmesine izin "
+"KMail’de kullanılan öntanımlı posta adresini kullanmak için "
+"“@SystemSettings” girin, KMail kimliklerinden birinin seçilmesine izin "
 "vermek için “@KMail” girebilir veya gerçek e-posta adresinizi yazabilirsiniz."
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
@@ -1351,8 +1351,8 @@ msgstr ""
 "E-posta alarmlarını kendinize gizli kopya olarak gönderebilmeniz için e-"
 "posta adresiniz. Eğer kör kopyaların K Alarm’ın çalıştığı bilgisayardaki "
 "hesabınızdan gönderilmesini istiyorsanız basitçe oturum açtığınız kullanıcı "
-"adını girebilirsiniz. K Posta’da yer alan e-posta adresinin kullanılması "
-"için “@SystemSettings” girebileceğiniz gibi gerçek e-posta adresinizi de "
+"adını girebilirsiniz. KMail’de yer alan e-posta adresinin kullanılması için "
+"“@SystemSettings” girebileceğiniz gibi gerçek e-posta adresinizi de "
 "yazabilirsiniz."
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
@@ -1493,7 +1493,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "KOrganizer event duration"
-msgstr "K Organizatör olay süresi"
+msgstr "KOrganizer olay süresi"
 
 #. i18n: ectx: whatsthis, entry (KOrgEventDuration), group (General)
 #: data/kalarmconfig.kcfg:282
@@ -1503,7 +1503,7 @@ msgid ""
 "Enter the event duration in minutes, for alarms which are copied to "
 "KOrganizer."
 msgstr ""
-"K Organizatör’e kopyalanan alarmlar için olay süresini dakika olarak girin."
+"KOrganizer’a kopyalanan alarmlar için olay süresini dakika olarak girin."
 
 #. i18n: ectx: label, entry (WakeFromSuspendAdvance), group (General)
 #: data/kalarmconfig.kcfg:286
@@ -1617,7 +1617,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Show in KOrganizer"
-msgstr "K Organizatör içerisinde Göster"
+msgstr "K Organizatör içinde Göster"
 
 #. i18n: ectx: whatsthis, entry (DefaultCopyToKOrganizer), group (Defaults)
 #: data/kalarmconfig.kcfg:331
@@ -1625,7 +1625,7 @@ msgstr "K Organizatör içerisinde Göster"
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"show in KOrganizer\"."
 msgstr ""
-"“K Organizatör’de göster” için alarm düzenleme penceresindeki öntanımlı ayar."
+"“KOrganizer’da göster” için alarm düzenleme penceresindeki öntanımlı ayar."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
 #: data/kalarmconfig.kcfg:335
@@ -2174,7 +2174,7 @@ msgstr "Alarmı asla engelleme"
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
-msgstr "K Organizatör içinde Göster"
+msgstr "KOrganizer içinde Göster"
 
 #: editdlg.cpp:184
 #, kde-format
@@ -2381,7 +2381,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
-msgstr "Alarmı K Organizatör'ün takvimine kopyalamak için işaretleyin"
+msgstr "Alarmı KOrganizer'ün takvimine kopyalamak için işaretleyin"
 
 #: editdlg.cpp:1110
 #, kde-format
@@ -3386,49 +3386,49 @@ msgstr "Takvim buraya gönderilemedi:<nl/><filename>%1</filename>"
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
-msgstr "Alarmlar K Organizatör içinde gösterilemiyor"
+msgstr "Alarmlar KOrganizer içinde gösterilemiyor"
 
 #: functions.cpp:1115
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
-msgstr "Alarm K Organizatör içinde gösterilemiyor"
+msgstr "Alarm KOrganizer içinde gösterilemiyor"
 
 #: functions.cpp:1118
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
-msgstr "K Organizatör içindeki alarm güncellenemiyor"
+msgstr "KOrganizer içindeki alarm güncellenemiyor"
 
 #: functions.cpp:1121
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
-msgstr "K Organizatör içindeki alarm silinemiyor"
+msgstr "KOrganizer içindeki alarm silinemiyor"
 
 #: functions.cpp:1122
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
-msgstr "K Organizatör içindeki alarm silinemiyor"
+msgstr "KOrganizer içindeki alarm silinemiyor"
 
 #: functions.cpp:1132
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
-msgstr "<para>%1</para><para>(K Organizatör başlatılamadı)</para>"
+msgstr "<para>%1</para><para>(KOrganizer başlatılamadı)</para>"
 
 #: functions.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
-msgstr "<para>%1</para><para>(K Organizatör tam olarak başlatılmadı)</para>"
+msgstr "<para>%1</para><para>(KOrganizer tam olarak başlatılmadı)</para>"
 
 #: functions.cpp:1138
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
-msgstr "<para>%1</para><para>(K Organizatör ile iletişim kurulamadı)</para>"
+msgstr "<para>%1</para><para>(KOrganizer ile iletişim kurulamadı)</para>"
 
 #: functions.cpp:1388
 #, kde-format
@@ -3810,7 +3810,7 @@ msgid ""
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 "<para>Yapılandırılmış 'Kimden' e-posta adresi mevcut değil (öntanımlı e-"
-"posta tanımlaması bulunamadı)</para><para>Lütfen <application>K Posta</"
+"posta tanımlaması bulunamadı)</para><para>Lütfen <application>KMail</"
 "application> uygulamasında ya da <application>K Alarm</application> "
 "uygulaması Yapılandırma penceresinde ayarlayın.</para>"
 
@@ -3823,7 +3823,7 @@ msgid ""
 "<application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 "<para>Hiçbir 'Kimden' e-posta adresi yapılandırılmadı.</para><para>Lütfen "
-"<application>K Posta</application> veya <application>K Alarm</application> "
+"<application>KMail</application> veya <application>K Alarm</application> "
 "uygulaması Yapılandırma penceresinde ayarlayın.</para>"
 
 #: kamail.cpp:127
@@ -4554,14 +4554,14 @@ msgstr "Ses çalmayı durdur"
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
-msgstr "<application>K Posta</application> içinde konumlandır"
+msgstr "<application>KMail</application> içinde konumlandır"
 
 #: messagewindow.cpp:488
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr ""
-"Bu e-postayı <application>K Posta</application> içerisinde bul ve vurgula"
+"Bu e-postayı <application>KMail</application> içerisinde bul ve vurgula"
 
 #: messagewindow.cpp:499
 #, kde-kuit-format
@@ -4597,7 +4597,7 @@ msgstr "Onayla"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
-msgstr "Bu e-posta <application>K Posta</application> içerisinde bulunamadı"
+msgstr "Bu e-posta <application>KMail</application> içerisinde bulunamadı"
 
 #: newalarmaction.cpp:47
 #, kde-format
@@ -5113,13 +5113,13 @@ msgstr "<para>Çalışma gününün bitiş saatini girin.</para><para>%1</para>"
 #, kde-format
 msgctxt "@title:group"
 msgid "KOrganizer"
-msgstr "K Organizatör"
+msgstr "KOrganizer"
 
 #: prefdlg.cpp:963
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "KOrganizer event duration:"
-msgstr "K Organizatör olay süresi:"
+msgstr "KOrganizer olay süresi:"
 
 #: prefdlg.cpp:970
 #, kde-kuit-format
@@ -5128,7 +5128,7 @@ msgid ""
 "<para>Enter the event duration in hours and minutes, for alarms which are "
 "copied to KOrganizer.</para><para>%1</para>"
 msgstr ""
-"<para>K Organizatör uygulamasına kopyalanacak alarmlar için saat ve dakika "
+"<para>KOrganizer uygulamasına kopyalanacak alarmlar için saat ve dakika "
 "türünden olay süresini girin.</para><para>%1</para>"
 
 #: prefdlg.cpp:1039
@@ -5278,7 +5278,7 @@ msgstr "E-posta istemcisi:"
 #, kde-format
 msgctxt "@option:radio"
 msgid "KMail"
-msgstr "K Posta"
+msgstr "KMail"
 
 #: prefdlg.cpp:1178
 #, kde-format
@@ -5329,7 +5329,7 @@ msgid ""
 "Copy sent emails into <application>KMail</application>'s <resource>%1</"
 "resource> folder"
 msgstr ""
-"Gönderilen e-postaları <application>K Posta</application>’nın <resource>%1</"
+"Gönderilen e-postaları <application>KMail</application>’in <resource>%1</"
 "resource> dizinine kopyala"
 
 #: prefdlg.cpp:1214
@@ -5339,8 +5339,8 @@ msgid ""
 "After sending an email, store a copy in <application>KMail</application>'s "
 "<resource>%1</resource> folder"
 msgstr ""
-"E-posta gönderildikten sonra, <application>K Posta</application> "
-"uygulamasının <resource>%1</resource> klasöründe bir kopyasını sakla"
+"E-posta gönderildikten sonra, <application>KMail</application> uygulamasının "
+"<resource>%1</resource> klasöründe bir kopyasını sakla"
 
 #: prefdlg.cpp:1223
 #, kde-format
@@ -5374,7 +5374,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
-msgstr "Öntanımlı <application>K Posta</application> kimliğini kullan"
+msgstr "Öntanımlı <application>KMail</application> kimliğini kullan"
 
 #: prefdlg.cpp:1259
 #, kde-kuit-format
@@ -5383,7 +5383,7 @@ msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, to identify you as the sender when sending email alarms."
 msgstr ""
-"Bu e-posta adresi ayarını, <application>K Posta</application>’da kullanmak "
+"Bu e-posta adresi ayarını, <application>KMail</application>’de kullanmak "
 "için işaretleyin, e-posta alarmlarını gönderirken kendinizi gönderici olarak "
 "tanımlayın."
 
@@ -5391,7 +5391,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use <application>KMail</application> identities"
-msgstr "<application>K Posta</application> kimliklerini kullan"
+msgstr "<application>KMail</application> kimliklerini kullan"
 
 #: prefdlg.cpp:1266
 #, kde-kuit-format
@@ -5404,11 +5404,11 @@ msgid ""
 "application>'s identities to use."
 msgstr ""
 "E-posta alarmı gönderildiğinde sizi gönderici olarak tanımlayarak "
-"<application>K Posta</application> uygulamasının e-posta kimliklerini "
+"<application>KMail</application> uygulamasının e-posta kimliklerini "
 "kullanması için işaretleyin. Var olan e-posta alarmları için <application>K "
 "Posta</application> uygulamasının öntanımlı kimliği kullanılacaktır. Yeni "
-"alarmlar için <application>K Posta</application> uygulamasının "
-"kimliklerinden birini seçebilirsiniz."
+"alarmlar için <application>KMail</application> uygulamasının kimliklerinden "
+"birini seçebilirsiniz."
 
 #: prefdlg.cpp:1273
 #, kde-format
@@ -5459,7 +5459,7 @@ msgid ""
 "<para>No default email address is currently set in <application>KMail</"
 "application>.</para><para>%1</para><para>%2</para>"
 msgstr ""
-"<para>Şu anda <application>K Posta</application>uygulamasında ayarlı bir "
+"<para>Şu anda <application>KMail</application>uygulamasında ayarlı bir "
 "öntanımlı e-posta adresi yok.</para><para>%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1415
@@ -5469,8 +5469,8 @@ msgid ""
 "<para>No <application>KMail</application> identities currently exist.</"
 "para><para>%1</para><para>%2</para>"
 msgstr ""
-"<para>Şu anda bir <application>K Posta</application> kimliği yok.</"
-"para><para>%1</para><para>%2</para>"
+"<para>Şu anda bir <application>KMail</application> kimliği yok.</para><para>"
+"%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1433
 #, kde-kuit-format
