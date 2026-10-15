@@ -21,7 +21,7 @@
 
 namespace
 {
-static const char DialogName[] = "ResourceSelectDialog";
+const char DialogName[] = "ResourceSelectDialog";
 }
 
 
