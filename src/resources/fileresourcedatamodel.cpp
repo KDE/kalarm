@@ -551,7 +551,7 @@ static bool checkEvent_excludesHolidays(const KAEvent* event)
 void FileResourceDataModel::slotUpdateHolidays()
 {
     qCDebug(KALARM_LOG) << "FileResourceDataModel::slotUpdateHolidays";
-    Q_ASSERT(TimeToColumn == TimeColumn + 1);  // signal should be emitted only for TimeTo and Time columns
+    static_assert(TimeToColumn == TimeColumn + 1);  // signal should be emitted only for TimeTo and Time columns
     signalDataChanged(&checkEvent_excludesHolidays, TimeColumn, TimeToColumn, QModelIndex());
 }
 
@@ -568,7 +568,7 @@ static bool checkEvent_workTimeOnly(const KAEvent* event)
 void FileResourceDataModel::slotUpdateWorkingHours()
 {
     qCDebug(KALARM_LOG) << "FileResourceDataModel::slotUpdateWorkingHours";
-    Q_ASSERT(TimeToColumn == TimeColumn + 1);  // signal should be emitted only for TimeTo and Time columns
+    static_assert(TimeToColumn == TimeColumn + 1);  // signal should be emitted only for TimeTo and Time columns
     signalDataChanged(&checkEvent_workTimeOnly, TimeColumn, TimeToColumn, QModelIndex());
 }
 
