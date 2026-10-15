@@ -26,7 +26,7 @@ int localeFirstDayOfWeek()
     static QLocale locale;
     if (!firstDay || locale != QLocale())
     {
-        static_assert(Qt::Monday == 1 && Qt::Sunday == 7);  // all weekday numbering assumes this
+        static_assert(Qt::Monday == 1 && Qt::Sunday == 7, "All weekday numbering assumes these values");
         locale = QLocale();
         firstDay = locale.firstDayOfWeek();
         QList<Qt::DayOfWeek> weekDays = locale.weekdays();
