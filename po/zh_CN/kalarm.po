@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-06 00:47+0000\n"
+"POT-Creation-Date: 2026-10-26 00:50+0000\n"
 "PO-Revision-Date: 2024-04-22 15:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -4288,37 +4288,37 @@ msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "关闭闹钟"
 
-#: messagewindow.cpp:438 resourceselector.cpp:78 templatedlg.cpp:81
+#: messagewindow.cpp:439 resourceselector.cpp:78 templatedlg.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "编辑..."
 
-#: messagewindow.cpp:442
+#: messagewindow.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "编辑闹钟"
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "编辑闹钟。"
 
-#: messagewindow.cpp:450
+#: messagewindow.cpp:449
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
 msgstr "推迟..."
 
-#: messagewindow.cpp:454
+#: messagewindow.cpp:453
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "推迟闹钟"
 
-#: messagewindow.cpp:455
+#: messagewindow.cpp:454
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4326,61 +4326,61 @@ msgid ""
 "specify when the alarm should be redisplayed.</para>"
 msgstr "<para>推迟闹钟。</para><para>点击后会询问您何时再次显示闹钟。</para>"
 
-#: messagewindow.cpp:471 sounddlg.cpp:454
+#: messagewindow.cpp:469 sounddlg.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "停止播放声音"
 
-#: messagewindow.cpp:472 sounddlg.cpp:455
+#: messagewindow.cpp:470 sounddlg.cpp:455
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "停止播放声音"
 
-#: messagewindow.cpp:487
+#: messagewindow.cpp:485
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "在 <application>KMail</application> 中显示此邮件"
 
-#: messagewindow.cpp:488
+#: messagewindow.cpp:486
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "在 <application>KMail</application> 中高亮此邮件"
 
-#: messagewindow.cpp:499
+#: messagewindow.cpp:497
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "激活 <application>KAlarm</application>"
 
-#: messagewindow.cpp:500
+#: messagewindow.cpp:498
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "激活 <application>KAlarm</application>"
 
-#: messagewindow.cpp:1096
+#: messagewindow.cpp:1094
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "您确定要关闭此闹钟吗？"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "关闭闹钟"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "关闭"
 
-#: messagewindow.cpp:1152
+#: messagewindow.cpp:1150
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"

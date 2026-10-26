@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-06 00:47+0000\n"
+"POT-Creation-Date: 2026-10-26 00:50+0000\n"
 "PO-Revision-Date: 2026-09-02 08:43+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -4566,37 +4566,37 @@ msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Reconeixement de l'alarma"
 
-#: messagewindow.cpp:438 resourceselector.cpp:78 templatedlg.cpp:81
+#: messagewindow.cpp:439 resourceselector.cpp:78 templatedlg.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "Edita..."
 
-#: messagewindow.cpp:442
+#: messagewindow.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "Edita l'alarma"
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Edita l'alarma."
 
-#: messagewindow.cpp:450
+#: messagewindow.cpp:449
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
 msgstr "Ajorna..."
 
-#: messagewindow.cpp:454
+#: messagewindow.cpp:453
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "Ajorna l'alarma fins més tard"
 
-#: messagewindow.cpp:455
+#: messagewindow.cpp:454
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4606,62 +4606,62 @@ msgstr ""
 "<para>Ajorna l'alarma fins després.</para><para>Se us demanarà que "
 "especifiqueu quan s'hauria de tornar a mostrar l'alarma.</para>"
 
-#: messagewindow.cpp:471 sounddlg.cpp:454
+#: messagewindow.cpp:469 sounddlg.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Atura el so"
 
-#: messagewindow.cpp:472 sounddlg.cpp:455
+#: messagewindow.cpp:470 sounddlg.cpp:455
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "Atura la reproducció del so"
 
-#: messagewindow.cpp:487
+#: messagewindow.cpp:485
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "Localitzar en el <application>KMail</application>"
 
-#: messagewindow.cpp:488
+#: messagewindow.cpp:486
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr ""
 "Localitza i ressalta aquest correu en el <application>KMail</application>"
 
-#: messagewindow.cpp:499
+#: messagewindow.cpp:497
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Activa el <application>KAlarm</application>"
 
-#: messagewindow.cpp:500
+#: messagewindow.cpp:498
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Activa el <application>KAlarm</application>"
 
-#: messagewindow.cpp:1096
+#: messagewindow.cpp:1094
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Realment voleu reconèixer aquesta alarma?"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Reconeix l'alarma"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Reconeix"
 
-#: messagewindow.cpp:1152
+#: messagewindow.cpp:1150
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"

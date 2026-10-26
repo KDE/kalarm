@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-06 00:47+0000\n"
+"POT-Creation-Date: 2026-10-26 00:50+0000\n"
 "PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -4404,37 +4404,37 @@ msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "अलार्मं स्वीकुर्वन्तु"
 
-#: messagewindow.cpp:438 resourceselector.cpp:78 templatedlg.cpp:81
+#: messagewindow.cpp:439 resourceselector.cpp:78 templatedlg.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "सम्पादन..."
 
-#: messagewindow.cpp:442
+#: messagewindow.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "अलार्मं सम्पादयन्तु"
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "अलार्मं सम्पादयन्तु।"
 
-#: messagewindow.cpp:450
+#: messagewindow.cpp:449
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
 msgstr "स्थगित..."
 
-#: messagewindow.cpp:454
+#: messagewindow.cpp:453
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "अलार्मं पश्चात् यावत् स्थगयन्तु"
 
-#: messagewindow.cpp:455
+#: messagewindow.cpp:454
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4444,61 +4444,61 @@ msgstr ""
 "<para>अलार्मं पश्चात् यावत् स्थगयन्तु।</para><para>अलार्मः कदा पुनः प्रदर्शितव्यः इति "
 "निर्दिष्टुं भवन्तः प्रेरिताः भविष्यन्ति।</para>"
 
-#: messagewindow.cpp:471 sounddlg.cpp:454
+#: messagewindow.cpp:469 sounddlg.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "शब्दं स्थगयतु"
 
-#: messagewindow.cpp:472 sounddlg.cpp:455
+#: messagewindow.cpp:470 sounddlg.cpp:455
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "ध्वनिं वादयितुं त्यजतु"
 
-#: messagewindow.cpp:487
+#: messagewindow.cpp:485
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "<application>KMail</application> इत्यत्र स्थानं ज्ञातव्यम्"
 
-#: messagewindow.cpp:488
+#: messagewindow.cpp:486
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "<application>KMail</application> इत्यत्र एतत् ईमेलं ज्ञात्वा प्रकाशयन्तु"
 
-#: messagewindow.cpp:499
+#: messagewindow.cpp:497
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "<application>KAlarm</application> सक्रियं कुर्वन्तु"
 
-#: messagewindow.cpp:500
+#: messagewindow.cpp:498
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "<application>KAlarm</application> सक्रियं कुर्वन्तु"
 
-#: messagewindow.cpp:1096
+#: messagewindow.cpp:1094
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "किं भवन्तः वास्तवमेव एतत् अलार्मं स्वीकुर्वितुं इच्छन्ति?"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "अलार्म स्वीकार करें"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "सञ्जानीते"
 
-#: messagewindow.cpp:1152
+#: messagewindow.cpp:1150
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
