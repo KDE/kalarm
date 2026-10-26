@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim/kalarm.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-18 00:46+0000\n"
+"POT-Creation-Date: 2026-10-26 02:58+0000\n"
 "PO-Revision-Date: 2004-09-20 15:44+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Breton <LL@li.org>\n"
@@ -5125,42 +5125,42 @@ msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Marvaat an dihuner"
 
-#: messagewindow.cpp:438 resourceselector.cpp:78 templatedlg.cpp:81
+#: messagewindow.cpp:439 resourceselector.cpp:78 templatedlg.cpp:81
 #, fuzzy, kde-format
 #| msgid "Edit..."
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "Aozañ ..."
 
-#: messagewindow.cpp:442
+#: messagewindow.cpp:443
 #, fuzzy, kde-format
 #| msgid "Edit the alarm."
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "Aozañ an dihuner."
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:444
 #, fuzzy, kde-format
 #| msgid "Edit the alarm."
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Aozañ an dihuner."
 
-#: messagewindow.cpp:450
+#: messagewindow.cpp:449
 #, fuzzy, kde-format
 #| msgid "&New..."
 msgctxt "@action:button"
 msgid "Defer..."
 msgstr "&Nevez ..."
 
-#: messagewindow.cpp:454
+#: messagewindow.cpp:453
 #, fuzzy, kde-format
 #| msgid "Name of the alarm template"
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "Anv ar patrom dihuner"
 
-#: messagewindow.cpp:455
+#: messagewindow.cpp:454
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5168,49 +5168,49 @@ msgid ""
 "specify when the alarm should be redisplayed.</para>"
 msgstr ""
 
-#: messagewindow.cpp:471 sounddlg.cpp:454
+#: messagewindow.cpp:469 sounddlg.cpp:454
 #, fuzzy, kde-format
 #| msgid "Stop sound"
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Herzel ar sonerezh"
 
-#: messagewindow.cpp:472 sounddlg.cpp:455
+#: messagewindow.cpp:470 sounddlg.cpp:455
 #, fuzzy, kde-format
 #| msgid "Stop playing the sound"
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "Paouez da seniñ an ton"
 
-#: messagewindow.cpp:487
+#: messagewindow.cpp:485
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "Implijit &anvelezhioù KMail"
 
-#: messagewindow.cpp:488
+#: messagewindow.cpp:486
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "Implijit &anvelezhioù KMail"
 
-#: messagewindow.cpp:499
+#: messagewindow.cpp:497
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Implijit &anvelezhioù KMail"
 
-#: messagewindow.cpp:500
+#: messagewindow.cpp:498
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Implijit &anvelezhioù KMail"
 
-#: messagewindow.cpp:1096
+#: messagewindow.cpp:1094
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
@@ -5218,19 +5218,19 @@ msgstr ""
 "%1\n"
 "Mennout a rit skrivañ ho c'hemmoù ?"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Bevaat KAlarm"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr ""
 
-#: messagewindow.cpp:1152
+#: messagewindow.cpp:1150
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info"

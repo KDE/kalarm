@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-18 00:46+0000\n"
+"POT-Creation-Date: 2026-10-26 02:58+0000\n"
 "PO-Revision-Date: 2007-10-28 14:03+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -5021,38 +5021,38 @@ msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Пацвердзіць напамінак"
 
-#: messagewindow.cpp:438 resourceselector.cpp:78 templatedlg.cpp:81
+#: messagewindow.cpp:439 resourceselector.cpp:78 templatedlg.cpp:81
 #, fuzzy, kde-format
 #| msgid "&Edit..."
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "Рэдагаваць..."
 
-#: messagewindow.cpp:442
+#: messagewindow.cpp:443
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "Змена напамінку."
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:444
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Змена напамінку."
 
-#: messagewindow.cpp:450
+#: messagewindow.cpp:449
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
 msgstr "Адкласці..."
 
-#: messagewindow.cpp:454
+#: messagewindow.cpp:453
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "Адкласці напамінак на іншы час."
 
-#: messagewindow.cpp:455
+#: messagewindow.cpp:454
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5063,61 +5063,61 @@ msgstr ""
 "\n"
 "У вас будзе запытана час, на якое будзе перанесена напамінак."
 
-#: messagewindow.cpp:471 sounddlg.cpp:454
+#: messagewindow.cpp:469 sounddlg.cpp:454
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Спыніць гук"
 
-#: messagewindow.cpp:472 sounddlg.cpp:455
+#: messagewindow.cpp:470 sounddlg.cpp:455
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "Спыніць прайграванне гуку"
 
-#: messagewindow.cpp:487
+#: messagewindow.cpp:485
 #, fuzzy, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "Немагчыма знайсці гэты ліст у KMail"
 
-#: messagewindow.cpp:488
+#: messagewindow.cpp:486
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "Знайсці і вылучыць гэты ліст у KMail"
 
-#: messagewindow.cpp:499
+#: messagewindow.cpp:497
 #, fuzzy, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Немагчыма знайсці гэты ліст у KMail"
 
-#: messagewindow.cpp:500
+#: messagewindow.cpp:498
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Немагчыма знайсці гэты ліст у KMail"
 
-#: messagewindow.cpp:1096
+#: messagewindow.cpp:1094
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Вы жадаеце пацвердзіць чытанне гэтага напамінку?"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Пацвердзіць"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Пацвердзіць"
 
-#: messagewindow.cpp:1152
+#: messagewindow.cpp:1150
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"

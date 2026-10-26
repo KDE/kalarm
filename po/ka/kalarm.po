@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-18 00:46+0000\n"
+"POT-Creation-Date: 2026-10-26 02:58+0000\n"
 "PO-Revision-Date: 2026-01-24 04:22+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -4927,37 +4927,37 @@ msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "განგაშის დადასტურება"
 
-#: messagewindow.cpp:438 resourceselector.cpp:78 templatedlg.cpp:81
+#: messagewindow.cpp:439 resourceselector.cpp:78 templatedlg.cpp:81
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "ჩასწორება..."
 
-#: messagewindow.cpp:442
+#: messagewindow.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "განგაშის ჩასწორება"
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "განგაშის ჩასწორება."
 
-#: messagewindow.cpp:450
+#: messagewindow.cpp:449
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
 msgstr "გადადება..."
 
-#: messagewindow.cpp:454
+#: messagewindow.cpp:453
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "განგაშის მოგვიანებით გადადება"
 
-#: messagewindow.cpp:455
+#: messagewindow.cpp:454
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4967,61 +4967,61 @@ msgstr ""
 "<para>განგაშის გადადება.</para><para>იმას, განგაში როდის უნდა გამოჩნდეს, "
 "გკითხავთ.</para>"
 
-#: messagewindow.cpp:471 sounddlg.cpp:454
+#: messagewindow.cpp:469 sounddlg.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "ხმის გაჩერება"
 
-#: messagewindow.cpp:472 sounddlg.cpp:455
+#: messagewindow.cpp:470 sounddlg.cpp:455
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "ხმის დაკვრის შეჩერება"
 
-#: messagewindow.cpp:487
+#: messagewindow.cpp:485
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "<application>KMail</application>-ში მოძებნა"
 
-#: messagewindow.cpp:488
+#: messagewindow.cpp:486
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "ამ ელფოსტის მოძებნა და გამოკვეთა<application>KMail</application>-ში"
 
-#: messagewindow.cpp:499
+#: messagewindow.cpp:497
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "<application>KAlarm</application>-ის აქტვაცია"
 
-#: messagewindow.cpp:500
+#: messagewindow.cpp:498
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "<application>KAlarm</application>-ის აქტვაცია"
 
-#: messagewindow.cpp:1096
+#: messagewindow.cpp:1094
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "მართლა გნებავთ ამ განგაშის დადასტურება?"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "განგაშის დადასტურება"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "დადასტურება"
 
-#: messagewindow.cpp:1152
+#: messagewindow.cpp:1150
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"

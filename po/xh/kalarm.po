@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-18 00:46+0000\n"
+"POT-Creation-Date: 2026-10-26 02:58+0000\n"
 "PO-Revision-Date: 2002-10-12 14:57+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -4915,39 +4915,39 @@ msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Yamkela i alarm"
 
-#: messagewindow.cpp:438 resourceselector.cpp:78 templatedlg.cpp:81
+#: messagewindow.cpp:439 resourceselector.cpp:78 templatedlg.cpp:81
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
 msgstr "&Guqula kancinane..."
 
-#: messagewindow.cpp:442
+#: messagewindow.cpp:443
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "Hlela i Alarm"
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:444
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Hlela i Alarm"
 
-#: messagewindow.cpp:450
+#: messagewindow.cpp:449
 #, fuzzy, kde-format
 #| msgid "&Defer..."
 msgctxt "@action:button"
 msgid "Defer..."
 msgstr "&Cima..."
 
-#: messagewindow.cpp:454
+#: messagewindow.cpp:453
 #, fuzzy, kde-format
 #| msgid "Defer the alarm until the specified time."
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "Libazisa i alarm kude kufike ixesha elicaziweyo."
 
-#: messagewindow.cpp:455
+#: messagewindow.cpp:454
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Defer the alarm until later.\n"
@@ -4960,64 +4960,64 @@ msgstr ""
 "Cima i alarm kude kubesemva.\n"
 "Uzakucelwa ucaze ukuba iboniswe kwakhona nini na i alarm."
 
-#: messagewindow.cpp:471 sounddlg.cpp:454
+#: messagewindow.cpp:469 sounddlg.cpp:454
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "&Isandi"
 
-#: messagewindow.cpp:472 sounddlg.cpp:455
+#: messagewindow.cpp:470 sounddlg.cpp:455
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "&Isandi"
 
-#: messagewindow.cpp:487
+#: messagewindow.cpp:485
 #, fuzzy, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "Jonga ukubalekisa %1 xa uqala i KDE."
 
-#: messagewindow.cpp:488
+#: messagewindow.cpp:486
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "Jonga ukubalekisa %1 xa uqala i KDE."
 
-#: messagewindow.cpp:499
+#: messagewindow.cpp:497
 #, fuzzy, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Jonga ukubalekisa %1 xa uqala i KDE."
 
-#: messagewindow.cpp:500
+#: messagewindow.cpp:498
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Jonga ukubalekisa %1 xa uqala i KDE."
 
-#: messagewindow.cpp:1096
+#: messagewindow.cpp:1094
 #, fuzzy, kde-format
 #| msgid "Do you really want to acknowledge this alarm?"
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Ufuna ngokwenene ukuvuma le alarm?"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, fuzzy, kde-format
 #| msgid "Acknowledge Alarm"
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Vuma i Alarm"
 
-#: messagewindow.cpp:1097
+#: messagewindow.cpp:1095
 #, fuzzy, kde-format
 #| msgid "&Acknowledge"
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "&Yamkela"
 
-#: messagewindow.cpp:1152
+#: messagewindow.cpp:1150
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
