@@ -623,7 +623,7 @@ msgstr "Lista de alarmas planificate in exito a stdout"
 #: commandoptions.cpp:214
 #, kde-format
 msgid "Repeat alarm at every login"
-msgstr "Repite alarma a cata accesso de authentication"
+msgstr "Repete alarma a cata accesso de authentication"
 
 #: commandoptions.cpp:217
 #, kde-format
