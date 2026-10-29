@@ -100,7 +100,6 @@ public:
     MainWindow*        trayMainWindow() const;
     bool               displayTrayIcon(bool show, MainWindow* = nullptr);
     bool               trayIconDisplayed() const       { return mTrayWindow; }
-    bool               editNewAlarm(MainWindow* = nullptr);
     ExecAlarmResult    execAlarm(KAEvent&, const KAAlarm&, ExecAlarmFlags flags = NoExecFlag);
     ShellProcess*      execCommandAlarm(const KAEvent&, const KAAlarm&, bool noRecordError = false,
                                         QObject* receiver = nullptr,

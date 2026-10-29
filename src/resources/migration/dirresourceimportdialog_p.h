@@ -63,7 +63,6 @@ public:
     QUrl url() const;
     QString displayName() const;
     void setUrlValidation(QString (*func)(const QUrl&));
-    void setLastPage();
     void setTextSizes() override;
 
 public Q_SLOTS:

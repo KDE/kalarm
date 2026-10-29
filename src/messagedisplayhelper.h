@@ -76,7 +76,6 @@ public:
     ~MessageDisplayHelper() override;
     void                setParent(MessageDisplay* parent)  { mParent = parent; }
     void                setSilenceButton(PushButton* b)    { mSilenceButton = b; }
-    void                repeat(const KAAlarm&);
     const DateTime&     dateTime()             { return mDateTime; }
     KAAlarm::Type       alarmType() const      { return mAlarmType; }
     bool                cancelReminder(const KAEvent&, const KAAlarm&);

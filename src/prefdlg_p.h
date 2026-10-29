@@ -19,7 +19,6 @@ class QRadioButton;
 class QPushButton;
 class QLabel;
 class QSpinBox;
-class QTimeZone;
 class QLineEdit;
 class QComboBox;
 class QVBoxLayout;
@@ -45,7 +44,6 @@ class PrefsTabBase : public StackedScrollWidget
 public:
     explicit PrefsTabBase(StackedScrollGroup*);
 
-    void         setPreferences();
     virtual void restore(bool defaults, bool allTabs) = 0;
     virtual bool apply(bool syncToDisc) = 0;
     void         addAlignedLabel(QLabel*);
@@ -80,8 +78,6 @@ private Q_SLOTS:
     void         slotOtherTerminalToggled(bool);
 
 private:
-    void         setTimeZone(const QTimeZone&);
-
     ButtonGroup*  mRunMode;
     QRadioButton* mRunAuto;
     QRadioButton* mRunManual;
@@ -108,8 +104,6 @@ public:
     bool apply(bool syncToDisc) override;
 
 private:
-    void         setWorkDays(const QBitArray& days);
-
     TimeZoneCombo* mTimeZone;
     QComboBox*    mHolidays;
     QMap<QString, QString> mHolidayNames;
