@@ -934,7 +934,7 @@ bool convInterval(const QString& timeParam, KARecurrence::Type& recurType, int& 
             else
             {
                 recurType = KARecurrence::MINUTELY;
-                interval = timeString.left(i).toUInt(&ok) * 60;
+                interval = QByteArrayView(timeString).left(i).toUInt(&ok) * 60;
                 timeString = timeString.mid(i + 1, length - i - 2);
             }
             break;
