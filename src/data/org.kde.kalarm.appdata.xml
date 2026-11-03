@@ -472,6 +472,28 @@
     <release version="3.13.2" date="2026-11-05">
       <description>
         <p>Release description</p>
+        <p xml:lang="ar">وصف الإصدارة</p>
+        <p xml:lang="bg">Описание на изданието</p>
+        <p xml:lang="ca">Descripció de la versió</p>
+        <p xml:lang="ca-valencia">Descripció de la versió</p>
+        <p xml:lang="cs">Popis vydání</p>
+        <p xml:lang="es">Descripción de la versión</p>
+        <p xml:lang="fi">Julkaisun kuvaus</p>
+        <p xml:lang="fr">Description de la version</p>
+        <p xml:lang="he">תיאור מהדורה</p>
+        <p xml:lang="ia">Description de version</p>
+        <p xml:lang="it">Descrizione del rilascio</p>
+        <p xml:lang="ka">რელიზის აღწერა</p>
+        <p xml:lang="nl">Beschrijving van uitgave</p>
+        <p xml:lang="pt-BR">Descrição da versão</p>
+        <p xml:lang="ru">Описание выпуска</p>
+        <p xml:lang="sk">Popis vydania</p>
+        <p xml:lang="sl">Opis izdaje</p>
+        <p xml:lang="sv">Utgåvebeskrivning</p>
+        <p xml:lang="tr">Yayım açıklaması</p>
+        <p xml:lang="uk">Опис випуску</p>
+        <p xml:lang="zh-CN">新版描述</p>
+        <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Show Defer button in alarm message window when displayed over X11 full screen applications.</li>
         </ul>
