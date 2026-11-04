@@ -496,6 +496,8 @@
         <p xml:lang="zh-TW">發佈描述</p>
         <ul>
           <li>Show Defer button in alarm message window when displayed over X11 full screen applications.</li>
+          <li xml:lang="ca">Mostra el botó d'ajornament a la finestra de missatge d'alarma visualitzades sobre aplicacions a pantalla completa a l'X11.</li>
+          <li xml:lang="tr">X11 tam ekran uygulamaları üzerinde görüntülendiğinde, Ertele düğmesini alarm iletisi penceresinde göster</li>
         </ul>
       </description>
     </release>
