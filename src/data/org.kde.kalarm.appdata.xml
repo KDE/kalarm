@@ -501,7 +501,15 @@
         <ul>
           <li>Show Defer button in alarm message window when displayed over X11 full screen applications.</li>
           <li xml:lang="ca">Mostra el botó d'ajornament a la finestra de missatge d'alarma visualitzades sobre aplicacions a pantalla completa a l'X11.</li>
+          <li xml:lang="cs">Zobrazit tlačítko Odložit v okně s hlášením upomínky, pokud je toto okno zobrazeno nad aplikacemi X11 v režimu celé obrazovky.</li>
+          <li xml:lang="es">Mostrar el botón «Diferir» en la ventana del mensaje de la alarma cuando se muestra sobre aplicaciones de X11 a pantalla completa.</li>
+          <li xml:lang="ka">მოცილების ღილაკის ჩვენება განგაშის შეტყობინებაში, როცა ის X11-ის სრულეკრანიანი აპლიკაციების ზემოდანაა ნაჩვენები.</li>
+          <li xml:lang="nl">Toon de knop Uitstellen in het alarmmeldingenvensters bij weergeven over toepassingen met volledig scherm in X11.</li>
+          <li xml:lang="pt-BR">Exibir o botão "Adiar" na janela de mensagem de alarme quando esta for exibida sobre aplicativos em tela cheia no X11.</li>
+          <li xml:lang="ru">Кнопка «Отложить» в окне сигнала, показанном поверх полноэкранных приложений X11;</li>
+          <li xml:lang="sl">Prikaži gumb Odloži v oknu z alarmnimi sporočili, ko je prikazan čez celozaslonske aplikacije X11.</li>
           <li xml:lang="tr">X11 tam ekran uygulamaları üzerinde görüntülendiğinde, Ertele düğmesini alarm iletisi penceresinde göster</li>
+          <li xml:lang="uk">Реалізовано показ кнопки «Відкласти» у вікні повідомлення будильника при показі у повноекранних програмах у X11.</li>
         </ul>
       </description>
     </release>
