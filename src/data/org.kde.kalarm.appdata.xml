@@ -501,6 +501,7 @@
         <ul>
           <li>Show Defer button in alarm message window when displayed over X11 full screen applications.</li>
           <li xml:lang="ar">إظهار زر «تأجيل» في نافذة رسالة التنبيه عند عرضها فوق تطبيقات X11 التي تعمل بوضع ملء الشاشة.</li>
+          <li xml:lang="bg">Показване на бутон „Отлагане“ в прозореца със съобщение за алармата, когато се извежда върху X11 приложения в цял екран.</li>
           <li xml:lang="ca">Mostra el botó d'ajornament a la finestra de missatge d'alarma visualitzades sobre aplicacions a pantalla completa a l'X11.</li>
           <li xml:lang="ca-valencia">Mostra el botó d'ajornament a la finestra de missatge d'alarma visualitzades sobre aplicacions a pantalla completa a X11.</li>
           <li xml:lang="cs">Zobrazit tlačítko Odložit v okně s hlášením upomínky, pokud je toto okno zobrazeno nad aplikacemi X11 v režimu celé obrazovky.</li>
@@ -553,6 +554,7 @@
           <li xml:lang="es">Se ha corregido un error cuando la alarma excluye días festivos.</li>
           <li xml:lang="fi">Korjattu kaatuminen hälytyksen sivuuttaessa vapaapäiviä.</li>
           <li xml:lang="fr">Correction d'un plantage lorsque l'alarme exclut les jours fériés.</li>
+          <li xml:lang="he">תוקנה קריסה כשתזכורת החריגה חגים.</li>
           <li xml:lang="ia">Corrige fracasso quando alarma exclude dies feriate.</li>
           <li xml:lang="it">Corretto un arresto anomalo quando un avviso esclude le festività.</li>
           <li xml:lang="ka">გასწორდა შეცდომა, როცა განგაში გამორიცხავდა დასვენების დღეებს.</li>
