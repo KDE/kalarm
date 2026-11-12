@@ -624,7 +624,7 @@
           <li>Provide facility to skip the next few recurrences/sub-repetitions of an alarm.</li>
           <li xml:lang="ar">توفير إمكانية تخطي التكرارات/التكرارات الفرعية القليلة التالية للتنبيه.</li>
           <li xml:lang="bg">Предоставяне на възможност за пропускане на следващите няколко появявания/подповторения на алармата.</li>
-          <li xml:lang="ca">Proporciona una facilitat per ometre les properes recurrències/subrepeticions d'una alarma.</li>
+          <li xml:lang="ca">Proporciona una facilitat per ometre les pròximes recurrències/subrepeticions d'una alarma.</li>
           <li xml:lang="ca-valencia">Proporciona una facilitat per a ometre les properes recurrències/subrepeticions d'una alarma.</li>
           <li xml:lang="cs">Zavedena funkce, která umožňuje přeskočit několik následujících opakování/částečných opakování upomínky.</li>
           <li xml:lang="es">Proporcionar la opción de omitir las siguientes repeticiones o subrepeticiones de una alarma.</li>
@@ -1330,7 +1330,7 @@
           <li xml:lang="sk">Vyčistenie vzhľadu číselníka času v niektorých štýloch, napr. Oxygen.</li>
           <li xml:lang="sl">Čas čiščenja videza vrtljivega polja v nekaterih slogih, npr. Oxygen.</li>
           <li xml:lang="sv">Städa utseendet på tidsnummerrutan med vissa stilar, t.ex. Oxygen.</li>
-          <li xml:lang="tr">Oksijen gibi bazı biçemlerde zaman değer değiştirici kutusunun görünümü temizlendi.</li>
+          <li xml:lang="tr">Oksijen gibi bazı stillerde zaman değer değiştirici kutusunun görünümü temizlendi.</li>
           <li xml:lang="uk">Очищено вигляд лічильника часу у деяких стилях, наприклад Oxygen.</li>
           <li xml:lang="zh-CN">清理某些窗口样式 (例如 Oxygen 轻氧) 中时间微调框的外观。</li>
         </ul>
