@@ -1,0 +1,7170 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Arabic "INCLUDE"
+><!-- change language only here -->
+]>
+
+<!-- The language must NOT be changed here. -->
+
+<book id="kalarm" lang="&language;">
+
+<bookinfo id="kalarminfo">
+<title
+>دليل منبّهك</title>
+
+<authorgroup>
+<author
+><firstname
+>David</firstname
+> <surname
+>Jarvie</surname
+> <affiliation
+> <address
+>&David.Jarvie.mail;</address>
+</affiliation>
+</author>
+
+<othercredit role="developer"
+><firstname
+>David</firstname
+> <surname
+>Jarvie</surname
+> <affiliation
+><address
+>&David.Jarvie.mail;</address
+></affiliation>
+<contrib
+>مطوّر</contrib>
+</othercredit>
+
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+</authorgroup>
+
+<copyright>
+<year
+>2001</year
+><year
+>2002</year
+><year
+>2003</year
+><year
+>2004</year
+><year
+>2005</year
+><year
+>2006</year
+><year
+>2007</year
+><year
+>2008</year
+><year
+>2009</year
+><year
+>2010</year
+><year
+>2011</year
+><year
+>2012</year
+><year
+>2013</year
+><year
+>2016</year
+><year
+>2018</year
+><year
+>2019</year
+><year
+>2020</year
+><year
+>2021</year
+><year
+>2022</year
+><year
+>2023</year
+><year
+>2024</year
+><year
+>2025</year
+><year
+>2026</year>
+<holder
+>&David.Jarvie;</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<!-- Don't change format of date and version of the documentation -->
+
+<date
+>2026-1-22</date>
+<releaseinfo
+>3.13.0 (ترس كيدي 26.04)</releaseinfo>
+
+<abstract>
+<para
+>منبّهك هو مجدوِل رسائل وأوامر وبريد إلكترونيّ شخصيّ بواسطة كِيدِي.</para>
+</abstract>
+
+
+<keywordset>
+<keyword
+>كيدي</keyword>
+<keyword
+>كيدي لمدير المعلومات الشخصي</keyword>
+<keyword
+>منبّهك</keyword>
+<keyword
+>المنبه</keyword>
+<keyword
+>مذكّر</keyword>
+<keyword
+>مجدول</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title
+>مقدمة</title>
+
+<para
+>يتيح لك منبهك جدولة عرض رسائل التنبيه الشخصية، وتشغيل ملفات الصوت، وتنفيذ الأوامر، وإرسال رسائل البريد الإلكتروني.</para>
+
+<para
+>يعرض منبهك قائمة التنبيهات المعلقة، موضحًا أوقاتها وتفاصيلها. يمكنك إنشاء تنبيهات جديدة، أو اختيار تنبيهات موجودة لتعديلها أو حذفها. يمكنك أيضًا عرض التنبيهات منتهية الصلاحية اختياريًا.</para>
+
+<para
+>عند ضبط تنبيه، يمكنك اختيار ما إذا كان يجب أن يتكرر، وما إذا كان يجب إلغاء التنبيه إذا تعذر تشغيله في وقته المجدول. بالنسبة لتنبيهات العرض، يمكنك كتابة نص رسالة، أو تحديد ملف نصي أو صورة لعرضه، أو تحديد أمر يجب عرض مخرجاته. يمكنك أيضًا اختيار لون رسالة التنبيه، وما إذا كان يجب تشغيل صوت أو نطق الرسالة.</para>
+
+<para
+>يمكن أيضًا جدولة التنبيهات من سطر الأوامر، أو عبر استدعاءات &DBus; من البرامج.</para>
+
+<para
+>عند حلول موعد رسالة تنبيه، إذا سمح نظام النوافذ بذلك، تُعرض على كل سطح مكتب لضمان عدم تفويتها. تظهر نافذة الرسالة الوقت الذي جُدول له التنبيه. عادةً ما تحتوي على خيار تأجيل لطلب عرض التنبيه مرة أخرى لاحقًا. مثال على رسالة تنبيه:</para>
+
+<screenshot>
+<screeninfo
+>لقطة شاشة لنافذة رسالة منبهك</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="alarmmessage.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>رسالة المنبّه</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>اختياريًا، قد تُعرض رسالة التنبيه كإشعار بدلًا من عرضها في نافذة.</para>
+
+<para
+>عندما يحدد التنبيه أمرًا لتنفيذه أو بريدًا إلكترونيًا لإرساله، لا يعرض منبهك شيئًا.</para>
+
+<para
+>عادةً ما يعرض منبهك أيقونة في علبة النظام، على الرغم من أنه يمكن إخفاؤها إذا رغبت.</para>
+
+</chapter>
+
+<chapter id="using-kalarm">
+<title
+>استخدام منبّهك</title>
+
+<para
+>عند تشغيله بدون وسائط سطر أوامر، يبدأ منبهك في الوضع الرسومي، ويعرض القائمة الحالية للتنبيهات المعلقة.</para>
+
+<tip
+><para
+>جميع مربعات التدوير في منبهك تحتوي على ميزة تسريع. لتغيير القيمة بخطوات أكبر، اضغط مع الاستمرار على مفتاح &Shift; أثناء النقر على أزرار أسهم التدوير.</para>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="spinbox.png" format="PNG"/>
+</imageobject>
+</mediaobject>
+</tip>
+
+<sect1 id="alarm-types">
+<title
+>أنواع المنبّه</title>
+
+<para
+>الوظائف الأساسية المتاحة من أنواع التنبيه المختلفة التي يوفرها منبهك هي:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>تنبيهات العرض تعرض إما رسالة نصية تكتبها، أو محتويات ملف نصي أو صورة، أو المخرجات النصية من أمر يُشغّل عند تشغيل التنبيه. بالإضافة إلى عرض أحد هذه العناصر، يمكنها أيضًا تشغيل ملفات صوتية، أو نطق نصها، أو إصدار صوت صفير بسيط. يمكنك أيضًا تحديد أوامر لتنفيذها قبل وبعد عرض رسالة التنبيه.</para>
+</listitem>
+
+<listitem>
+<para
+>تنبيهات الأوامر تنفذ إما أمرًا أو نص صدفة يمكنك كتابته. لا يُعرض شيء ما لم يحدث خطأ.</para>
+</listitem>
+
+<listitem>
+<para
+>تنبيهات البريد الإلكتروني ترسل بريدًا إلكترونيًا. لا يُعرض شيء ما لم يحدث خطأ.</para>
+</listitem>
+
+<listitem>
+<para
+>تنبيهات الصوت تشغل ملفًا صوتيًا. لا يُعرض شيء ما لم يحدث خطأ.</para>
+</listitem>
+</itemizedlist>
+
+<sect2 id="errors">
+<title
+>معالجة الأخطاء</title>
+
+<para
+>إذا حدث خطأ عند تشغيل تنبيه، ستُعرض رسالة خطأ (ما لم تكن قد حددت سابقًا عدم عرض ذلك النوع من الرسائل مرة أخرى).</para>
+
+<para
+>إذا حدث خطأ تنفيذ في آخر مرة شُغّل فيها تنبيه أمر، يُظهر علامة تعجب بيضاء على خلفية حمراء في عمود لون الرسالة. تُعرض تفاصيل الخطأ في تلميح أدوات إذا وضعت المؤشر فوق ذلك السطر في قائمة التنبيهات. تُظهر نفس مؤشرات الخطأ لتنبيهات العرض إذا حدث خطأ تنفيذ لأمر قبل أو بعد التنبيه محدد في حوار الإجراءات الخاصة، باستثناء أن عمود اللون لا يُغيّر إلى خلفية حمراء.</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="alarm-list">
+<title
+>قائمة المنبّهات</title>
+
+<para
+>النافذة الرئيسة لـ منبهك تعرض القائمة الحالية للتنبيهات المعلقة، موضحة أوقاتها، وفترات التكرار، وألوانها، وأسمائها، ونصوص رسائلها، وأسماء الملفات لتشغيلها أو عرضها، والأوامر لتنفيذها أو موضوعات البريد الإلكتروني. (للتنبيه المتكرر، الوقت المعروض هو وقت تشغيله المجدول التالي. للتنبيه مع تذكير، الوقت المعروض هو وقت التنبيه الفعلي، وليس وقت التذكير.) أيقونة على يسار كل نص/ملف/أمر/موضوع بريد إلكتروني للتنبيه تشير إلى نوع التنبيه.</para>
+
+<para
+>لاحظ أن عمود <guilabel
+>الاسم</guilabel
+> موجود فقط إذا كان استخدام أسماء التنبيهات مفعّلًا في لسان <link linkend="preferences-general"
+>عام</link
+> من حوار الضبط.</para>
+
+<screenshot>
+<screeninfo
+>لقطة شاشة للنافذة الرئيسة لـمنبهك</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mainwindow.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>النافذة الرئيسة</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>بالنسبة لمنبه متكرر، تعرض القائمة وقت تفعيله المجدول التالي وفاصل التكرار الأساسي (مثال: <quote
+>يوم واحد</quote
+> لتكرار يومي، <quote
+>3 أسابيع</quote
+> لتكرار يُفعَّل يومَي الإثنين والأربعاء كل أسبوع ثالث، <quote
+>دخول</quote
+> لمنبه يتكرر عند الدخول).</para>
+
+<para
+>إذا حدث خطأ تنفيذ في آخر مرة فُعِّل فيها منبه أمر، أو في آخر مرة نُفِّذ فيها أمر ما قبل أو بعد المنبه لمنبه عرض، يُظهر عمود اللون مؤشر خطأ، كما هو موصوف في <link linkend="errors"
+>معالجة الأخطاء</link
+> أعلاه.</para>
+
+<sect2 id="listappear">
+<title
+>تغيير مظهر قائمة المنبهات</title>
+
+<para
+>يمكن ترتيب المنبهات حسب التاريخ/الوقت، أو فاصل التكرار، أو اللون، أو النوع، أو الاسم، أو النص بالنقر على شريط عنوان العمود المناسب. لعكس ترتيب الفرز، انقر على شريط عنوان العمود مرة أخرى.</para>
+
+<para
+>يمكنك اختياريًا عرض الوقت المتبقي حتى يحين موعد كل منبه، إلى جانب الوقت المجدول للمنبه أو بدلًا منه.</para>
+
+<para
+>يمكنك اختيار الأعمدة التي تريد عرضها أو إخفاءها بالنقر <mousebutton
+>الأيمن</mousebutton
+> على عناوين الأعمدة واستخدام القائمة السياقية لتعيين الأعمدة المراد عرضها. لكن لاحظ أنه يُعرض دائمًا عمود واحد على الأقل من <guilabel
+>الاسم</guilabel
+> أو <guilabel
+>الرسالة أو الملف أو الأمر</guilabel
+>، وعمود واحد على الأقل من <guilabel
+>الوقت</guilabel
+> أو <guilabel
+>الوقت المتبقي</guilabel
+>.</para>
+
+<para
+>إذا كنت تستخدم تقاويم منبهات متعددة، يمكنك ترميز المنبهات بالألوان وفقًا للتقويم الذي تنتمي إليه، باختيار لون خلفية مختلف لكل تقويم (انظر <link linkend="using-calendars"
+>استخدام التقاويم</link
+>).</para>
+
+</sect2>
+
+<sect2 id="expired">
+<title
+>المنبّهات المؤرشفة</title>
+
+<para
+>افتراضيًا، يؤرشف منبهك المنبهات لفترة محدودة بمجرد انتهاء صلاحيتها أو حذفها. (لكن لاحظ أن المنبهات التي تحذفها تُخزَّن فقط إذا كانت قد فُعِّلت مرة واحدة على الأقل.) يمكنك التحكم فيما إذا كان منبهك سيؤرشف المنبهات منتهية الصلاحية، ولأي مدة، في <link linkend="preferences-storage"
+>حوار الضبط</link
+>.</para>
+
+<para
+>يمكن عرض المنبهات المؤرشفة في قائمة المنبهات باختيار <menuchoice
+><guimenu
+>عرض</guimenu
+><guimenuitem
+>إظهار المنبهات المؤرشفة</guimenuitem
+></menuchoice
+>. لإخفائها مرة أخرى، ألغِ اختيار <menuchoice
+><guimenu
+>عرض</guimenu
+><guimenuitem
+>إظهار المنبهات المؤرشفة</guimenuitem
+></menuchoice
+>.</para>
+
+</sect2>
+
+<sect2 id="datepicker">
+<title
+>تصفية قائمة المنبهات حسب التاريخ</title>
+
+<para
+>يمكنك تقييد قائمة المنبهات لإظهار المنبهات المجدولة فقط في تاريخ محدد. يُحقق ذلك باستخدام منتقي تاريخ المنبهات، الذي يمكن إظهاره أو إخفاؤه عبر <menuchoice
+><guimenu
+>عرض</guimenu
+> <guimenuitem
+>إظهار منتقي التاريخ</guimenuitem
+> </menuchoice
+>. اختر تاريخًا بالنقر عليه في منتقي التاريخ، أو ألغِ اختياره بالنقر عليه مرة أخرى. يعرض منتقي التاريخ شهرًا واحدًا. لعرض شهر مختلف، استخدم عناصر التحكم بالسهام في منتقي التاريخ، أو عجلة الفأرة.</para>
+
+</sect2>
+
+<sect2 id="search">
+<title
+>البحث في قائمة المنبهات</title>
+
+<para
+>يمكنك البحث في قائمة المنبهات للعثور على منبهات تحتوي على نص بحث. لاستدعاء ذلك، اختر <menuchoice
+> <guimenu
+>تحرير</guimenu
+><guimenuitem
+>بحث...</guimenuitem
+></menuchoice
+>. في حوار البحث، اختر أنواع المنبهات التي ترغب في البحث فيها. لمواصلة البحث عن المزيد من المنبهات المتطابقة، استخدم <menuchoice
+> <guimenu
+>تحرير</guimenu
+><guimenuitem
+>البحث عن التالي</guimenuitem
+></menuchoice
+> أو <menuchoice
+> <guimenu
+>تحرير</guimenu
+><guimenuitem
+>البحث عن السابق</guimenuitem
+> </menuchoice
+>.</para>
+
+<para
+>يُجرى البحث على النحو التالي:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>منبهات الرسائل النصية: يُبحث في نص الرسالة.</para>
+</listitem>
+
+<listitem>
+<para
+>منبهات عرض الملفات: يُبحث في مسار الملف/&URL;.</para>
+</listitem>
+
+<listitem>
+<para
+>منبهات الأوامر: يُبحث في سطر الأمر أو نص الأمر البرمجي.</para>
+</listitem>
+
+<listitem>
+<para
+>منبهات البريد الإلكتروني: بالإضافة إلى موضوع البريد الإلكتروني ونصه، يُبحث في المستلمين وعناوين &URL; للمرفقات.</para>
+</listitem>
+
+<listitem>
+<para
+>منبهات الصوت: يُبحث في مسار الملف/&URL;.</para>
+</listitem>
+</itemizedlist>
+
+<note
+><para
+>يمكن تحديد المنبهات المعروضة حاليًا في قائمة المنبهات فقط للبحث. لذا، إذا أردت البحث في المنبهات المؤرشفة، يجب عليك أولًا عرضها كما هو موصوف في القسم أعلاه.</para
+></note>
+</sect2>
+</sect1>
+
+<sect1 id="create-edit">
+<title
+>إنشاء المنبهات ومعالجتها</title>
+
+<sect2>
+<title
+>إنشاء منبه جديد</title>
+
+<para
+>لإنشاء منبه جديد، نفّذ أحد الإجراءات التالية، ثم اختر نوع المنبه من القائمة التي تظهر. يعرض هذا <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> الذي تضبط من خلاله المنبه.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>اختر <menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>جديد</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>انقر <mousebutton
+>يمين</mousebutton
+> على أيقونة علبة النظام واختر <menuchoice
+><guimenuitem
+>منبه جديد</guimenuitem
+></menuchoice
+> من قائمة السياق.</para>
+</listitem>
+
+<listitem>
+<para
+>انقر <mousebutton
+>يمين</mousebutton
+> في قائمة المنبهات واختر <menuchoice
+><guimenuitem
+>جديد</guimenuitem
+></menuchoice
+> من قائمة السياق.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>بدلًا من ذلك، يمكنك إنشاء منبهات جديدة مضبوطة مسبقًا من مصادر متنوعة:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>لضبط تاريخ المنبه مسبقًا في <link linkend="alarm-edit-dlg-time"
+>حوار تحرير المنبه</link
+>، انقر <mousebutton
+>يمين</mousebutton
+> على التاريخ المطلوب في منتقي تاريخ المنبه (انظر <link linkend="datepicker"
+>تصفية قائمة المنبهات حسب التاريخ</link
+>) واختر نوع المنبه المناسب من قائمة السياق.</para>
+</listitem>
+
+<listitem>
+<para
+>لجعل منبهك الجديد مستندًا إلى قالب منبه، اتبع التعليمات في قسم <link linkend="templates"
+>قوالب المنبهات</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>لجعل منبهك الجديد مستندًا إلى منبه موجود، أبرز المنبه الموجود في القائمة واختر <menuchoice
+> <guimenu
+>ملف</guimenu
+><guimenuitem
+>نسخ</guimenuitem
+></menuchoice
+>. يفتح هذا <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> وقد مُلئ بنسخة من تفاصيل المنبه المحدد.</para>
+</listitem>
+
+<listitem>
+<para
+>لإنشاء منبه جديد يعرض رسالة بريد إلكتروني موجودة، اسحب البريد الإلكتروني من بريدك إلى النافذة الرئيسة لـ منبهك. ثم اختر خيار <guilabel
+>منبه عرض</guilabel
+>. يفتح هذا <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> مع رسالة البريد الإلكتروني بأكملها (بما في ذلك المرسل والمستلم، إلخ…) كنص المنبه.</para>
+</listitem>
+
+<listitem>
+<para
+>لإنشاء منبه بريد إلكتروني جديد لإرسال نسخة من رسالة بريد إلكتروني موجودة، اسحب البريد الإلكتروني من بريدك إلى النافذة الرئيسة لـ منبهك. ثم اختر خيار <guilabel
+>منبه بريد إلكتروني</guilabel
+>. يُضبط <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> مسبقًا برسالة البريد الإلكتروني بأكملها باستثناء المرسل.</para>
+</listitem>
+
+<listitem>
+<para
+>لإنشاء منبه جديد يعرض ملخص مهمة موجودة، اسحب المهمة من &korganizer; أو تطبيق آخر إلى النافذة الرئيسة لـ منبهك. يفتح هذا <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> مع محتويات المهمة كنص المنبه.</para>
+</listitem>
+
+<listitem>
+<para
+>لإنشاء منبه أمر جديد، اسحب نص برنامج نصي يبدأ بـ <quote
+>#!</quote
+> إلى النافذة الرئيسة لـ منبهك. ثم اختر خيار <guilabel
+>منبه أمر</guilabel
+>. يفتح هذا <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> مضبوطًا مسبقًا بنص البرنامج النصي.</para>
+</listitem>
+
+<listitem>
+<para
+>لإنشاء منبه عرض ملف، اسحب &URL; ملف نص أو صورة إلى النافذة الرئيسة لـ منبهك. يفتح هذا <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> ويضبط اسم الملف.</para>
+</listitem>
+
+<listitem>
+<para
+>لإنشاء منبه صوتي، اسحب &URL; ملف صوتي إلى النافذة الرئيسة لـ منبهك. يفتح هذا <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> ويضبط اسم الملف.</para>
+</listitem>
+
+<listitem>
+<para
+>لإنشاء منبه رسالة نصية، اسحب أي جزء من النص إلى النافذة الرئيسة لـ منبهك. إذا طُلب منك، اختر خيار <guilabel
+>منبه عرض</guilabel
+>. يفتح هذا <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> مضبوطًا مسبقًا بنص المنبه.</para>
+</listitem>
+
+<listitem>
+<para
+>يمكنك إنشاء منبهات أعياد ميلاد آليًا للأشخاص في دفتر عناوينك كما هو موصوف في <link linkend="birthdays"
+>استيراد أعياد الميلاد من دفتر عناوينك</link
+>.</para>
+</listitem>
+
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="edit-alarm">
+<title
+>تعديل منبه موجود</title>
+
+<para
+>لتعديل منبه معلق قائم (لا يمكن تعديل المنبهات المنتهية صلاحيتها)، افعل أحد الإجراءات التالية:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>انقر نقرًا مزدوجًا على مدخله في قائمة المنبهات.</para>
+</listitem>
+
+<listitem>
+<para
+>اختره بالنقر على مدخله في قائمة المنبهات. ثم اختر <menuchoice
+><guimenu
+>تحرير</guimenu
+> <guimenuitem
+>تحرير</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>انقر <mousebutton
+>يمين</mousebutton
+> على مدخله في قائمة المنبهات واختر <menuchoice
+><guimenuitem
+>تحرير</guimenuitem
+></menuchoice
+> من قائمة السياق.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>يعرض هذا <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+>.</para>
+
+</sect2>
+
+<sect2>
+<title
+>حذف/إعادة تنشيط منبه</title>
+
+<para
+>لحذف منبهات قائمة، اختر واحدًا أو أكثر بالنقر على مدخلاتها في قائمة المنبهات. ثم افعل أحد الإجراءات التالية:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>اختر <menuchoice
+> <guimenu
+>تحرير</guimenu
+><guimenuitem
+>حذف</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+<listitem>
+<para
+>انقر <mousebutton
+>يمين</mousebutton
+> على المدخلات المختارة واختر <menuchoice
+><guimenuitem
+>حذف</guimenuitem
+></menuchoice
+> من قائمة السياق.</para>
+</listitem>
+<listitem>
+<para
+>لحذفها دون مطالبة تأكيد، اكتب &Shift;-<keycap
+>Delete</keycap
+>.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>عند حذف منبه نشط، يُؤرشف، شريطة أن يكون قد نُشّط مرة واحدة على الأقل قبل حذفه، وشريطة أن تُؤرشف المنبهات المنتهية صلاحيتها أصلًا. (استخدم <link linkend="preferences-storage"
+>حوار الضبط</link
+> للتحكم في ما إذا كانت المنبهات المؤرشفة تُخزن وإلى متى.) عند حذف منبه مؤرشف، أو منبه نشط لم يُنشّط بعد، يُحذف نهائيًا.</para>
+
+<para
+>يمكنك إعادة تنشيط منبه محذوف من قائمة المنبهات المؤرشفة، شريطة ألا يكون قد انتهت صلاحيته بعد. لفعل ذلك، اعرض أولًا المنبهات المؤرشفة، كما هو موصوف في <link linkend="expired"
+>المنبهات المؤرشفة</link
+>. ثم:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>اختر واحدًا أو أكثر من المنبهات المؤرشفة المناسبة بالنقر على مدخلاتها في قائمة المنبهات. ثم اختر <menuchoice
+> <guimenu
+>إجراءات</guimenu
+><guimenuitem
+>إعادة تنشيط</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+<listitem>
+<para
+>انقر <mousebutton
+>يمين</mousebutton
+> على المدخلات المرغوبة في قائمة المنبهات المؤرشفة واختر <menuchoice
+><guimenuitem
+>إعادة تنشيط</guimenuitem
+></menuchoice
+> من قائمة السياق.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>تمكين/تعطيل منبه</title>
+
+<para
+>انظر <link linkend="enable-disable"
+>تمكين وتعطيل المنبهات</link
+> لمعرفة كيفية تمكين وتعطيل المنبهات، إما فرديًا أو ككل، أو تخطي منبهات فردية مؤقتًا.</para>
+
+</sect2>
+
+<sect2>
+<title
+>ضبط منبه للإيقاظ من الإسبات</title>
+
+<para
+>انظر <link linkend="wake-suspend"
+>الإيقاظ من الإسبات</link
+> لمعرفة كيفية ضبط منبه لإيقاظ نظامك من الإسبان أو السبات.</para>
+
+</sect2>
+
+<sect2>
+<title
+>الإقرار بمنبه</title>
+
+<para
+>انظر <link linkend="message-display"
+>عرض رسالة المنبه</link
+> لمعرفة كيفية الإقرار بالمنبهات.</para>
+
+</sect2>
+
+<sect2 id="templates">
+<title
+>قوالب المنبّهات</title>
+
+<para
+>إذا رغبت في ضبط منبهات متشابهة بشكل متكرر، يمكنك إنشاء قالب منبه لتجنب إدخال كل التفاصيل من الصفر في كل مرة. يمكن للقالب أن يحتوي على جميع التفاصيل التي يمكن أن يحتويها المنبه، باستثناء تاريخ البدء.</para>
+
+<para
+>كمثال، قد ترغب بانتظام في ضبط منبه لتذكيرك ببرنامج تلفزيوني يختلف وقته من أسبوع لآخر. سيحتوي القالب على جميع تفاصيل المنبه (نص الرسالة، تشغيل صوت أم لا، إلخ) باستثناء الوقت والتاريخ. والآن، لإنشاء المنبه، كل ما عليك فعله هو فتح <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> بهذا القالب ثم إدخال الوقت والتاريخ.</para>
+
+<para
+>لإنشاء منبه بناءً على قالب، افتح <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> المضبوط مسبقًا بتفاصيل القالب:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>اختر عنصر القائمة <menuchoice
+> <guimenu
+>ملف</guimenu
+><guimenuitem
+>جديد</guimenuitem
+> <guimenuitem
+>منبه جديد من قالب</guimenuitem
+> </menuchoice
+>، ثم اختر القالب المطلوب.</para>
+</listitem>
+
+<listitem>
+<para
+>انقر <mousebutton
+>يمين</mousebutton
+> على أيقونة علبة النظام واختر <menuchoice
+><guimenuitem
+>منبه جديد</guimenuitem
+> <guimenuitem
+>منبه جديد من قالب</guimenuitem
+></menuchoice
+> من قائمة السياق. ثم اختر القالب المطلوب.</para>
+</listitem>
+
+<listitem>
+<para
+>افتح <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> بالطريقة المعتادة، وانقر على الزر <guibutton
+>تحميل قالب...</guibutton
+> لاختيار قالب لضبط الحوار مسبقًا به.</para>
+</listitem>
+</itemizedlist>
+
+<sect3>
+<title
+>ضبط القوالب</title>
+
+<para
+>يمكنك إنشاء القوالب أو تعديلها أو حذفها باستخدام حوار قوالب المنبهات، أو يمكنك إنشاء قالب منبه جديد بناءً على منبه موجود.</para>
+
+<para
+>لإنشاء قالب منبه جديد، افعل أحد الإجراءات التالية:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>اعرض حوار قوالب المنبهات باختيار عنصر القائمة <menuchoice
+> <guimenu
+>ملف</guimenu
+><guimenuitem
+>قوالب...</guimenuitem
+> </menuchoice
+>، والنقر على <guibutton
+>جديد</guibutton
+>، واختيار نوع المنبه من القائمة التي تظهر. يعرض هذا حوار تحرير قالب فارغًا.</para>
+</listitem>
+
+<listitem>
+<para
+>اعرض حوار قوالب المنبهات باختيار عنصر القائمة <menuchoice
+> <guimenu
+>ملف</guimenu
+><guimenuitem
+>قوالب...</guimenuitem
+> </menuchoice
+>، واختر قالبًا موجودًا من القائمة وانقر على <guibutton
+>نسخ</guibutton
+>. يفتح هذا حوار تحرير القالب ممتلئًا مسبقًا بنسخة من تفاصيل القالب الموجود.</para>
+</listitem>
+
+<listitem>
+<para
+>أبرز منبهًا في قائمة المنبهات واختر <menuchoice
+> <guimenu
+>ملف</guimenu
+><guimenuitem
+>إنشاء قالب...</guimenuitem
+> </menuchoice
+>. يفتح هذا حوار تحرير القالب ممتلئًا مسبقًا بنسخة من تفاصيل المنبه المحدد.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>لتعديل قالب موجود، اعرض حوار قوالب المنبهات باختيار عنصر القائمة <menuchoice
+> <guimenu
+>ملف</guimenu
+><guimenuitem
+>قوالب...</guimenuitem
+> </menuchoice
+> وانقر على <guibutton
+>تحرير</guibutton
+>. يعرض هذا حوار تحرير القالب الموصوف أدناه.</para>
+
+<para
+>لحذف قوالب موجودة، اعرض حوار قوالب المنبهات باختيار عنصر القائمة <menuchoice
+> <guimenu
+>ملف</guimenu
+><guimenuitem
+>قوالب...</guimenuitem
+> </menuchoice
+>، واختر قالبًا واحدًا أو أكثر وانقر على <guibutton
+>حذف</guibutton
+>. يُصدر موجه تأكيد لمنع الحذف العرضي.</para>
+
+</sect3>
+
+<sect3>
+<title
+>حوار تحرير القالب</title>
+
+<para
+>حوار تحرير القالب مشابه لـ <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+>. عناصر التحكم التالية مختلفة:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>أدخل اسم القالب في <guilabel
+>اسم القالب</guilabel
+>. اسم القالب هو الذي يُعرض في قوائم اختيار القوالب، لذا من الأفضل اختيار اسم يذكرك بوظيفته. يجب أن يكون اسم كل قالب فريدًا.</para>
+</listitem>
+
+<listitem>
+<para
+>في مربع المجموعة <guilabel
+>الوقت</guilabel
+>، اختر واحدًا مما يلي:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>الوقت المبدئي</guilabel
+> إذا لم ترغب في تحديد أي وقت تشغيل. المنبهات المستندة إلى هذا القالب ستستخدم مبدئيًا وقت التشغيل المبدئي العادي للمنبهات الجديدة.</para>
+</listitem>
+
+<listitem>
+<para
+>حدد <guilabel
+>الوقت</guilabel
+> لإدخال وقت يُشغَّل فيه المنبه.</para>
+</listitem>
+
+<listitem>
+<para
+>حدد <guilabel
+>تاريخ فقط</guilabel
+> لتحديد أن للتنبيه تاريخ فقط، وليس وقتًا.</para>
+</listitem>
+
+<listitem>
+<para
+>حدد <guilabel
+>وقت من الآن</guilabel
+> لإدخال المدة (بالساعات والدقائق) بعد إنشاء التنبيه، التي يجب أن يُفعَّل بعدها.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>في مربع المجموعة <guilabel
+>قاعدة التكرار</guilabel
+> في اللسان <guilabel
+>التكرار</guilabel
+>، لا حاجة لاختيار يوم أو شهر للتكرارات الأسبوعية أو السنوية، على التوالي.</para>
+</listitem>
+</itemizedlist>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="calendars">
+<title
+>تقاويم التنبيهات</title>
+
+<para
+>إذا كنت تستخدم حاسوبًا واحدًا فقط وتعمل بشكل مستقل، فقد لا يهمك أين يخزن منبهك تنبيهاته. ولكن إذا كنت بحاجة للوصول إلى التنبيهات على أكثر من حاسوب، أو في أكثر من موقع على حاسوبك المحلي، يمكنك تعريف <quote
+>تقاويم تنبيهات</quote
+> لإخبار منبهك باستخدام تقاويم تنبيهات أخرى إضافية إلى تقاويمه المبدئية، أو بدلًا منها.</para>
+
+<para
+>يمكنك عرض التقاويم والتلاعب بها عبر قائمة التقاويم، التي يمكن عرضها بجانب قائمة التنبيهات في النافذة الرئيسة لـ منبهك. تُعرض التنبيهات من جميع تقاويم التنبيهات مدمجة معًا في قائمة التنبيهات. عند حفظ تنبيه جديد، يمكنك ضبط خيار تهيئة لتحديد ما إذا كان سيُحفظ آليًا في التقويم المبدئي، أو ما إذا ستُطلب منك اختيار تقويم. عند تحرير تنبيه موجود، يُحفظ آليًا مرة أخرى في تقويم التنبيه الأصلي.</para>
+
+<screenshot>
+<screeninfo
+>لقطة شاشة للنافذة الرئيسة لـ منبهك، تُظهر قائمة التقاويم</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mainwindow-calendars.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>النافذة الرئيسة تُظهر قائمة التقاويم</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<sect3>
+<title
+>أنواع التقاويم وخياراتها</title>
+
+<para
+>تُصنف تقاويم التنبيهات حسب نوع التنبيه ونوع التخزين. يمكن تعطيلها، أو ضبطها للقراءة فقط، أو جعلها التقويم المبدئي لنوع تنبيهها.</para>
+
+<variablelist>
+<varlistentry>
+<term
+>نوع المنبّه</term>
+<listitem>
+<para
+>أنواع كيانات التنبيه الثلاثة &ndash; التنبيهات النشطة، التنبيهات المؤرشفة، وقوالب التنبيهات &ndash; تُخزن في تقاويم تنبيهات منفصلة. لذلك، لدى منبهك ثلاثة تقاويم مبدئية قياسية، واحد لكل نوع (انظر <link linkend="faq"
+>أسئلة وأجوبة</link
+> للتفاصيل)، يمكنك تغييرها إذا أردت.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>نوع التخزين</term>
+<listitem>
+<para
+>يدير منبهك نوعي تخزين لتقاويم التنبيهات:</para>
+
+<itemizedlist>
+<listitem
+><para
+>ملف محلي: تُخزن التنبيهات في ملف محلي واحد بتنسيق iCalendar. يستخدم منبهك تقاويم الملفات المحلية مبدئيًا (انظر <link linkend="faq"
+>أسئلة وأجوبة</link
+> للتفاصيل). <quote
+>الملفات المحلية</quote
+>، بالإضافة إلى الملفات على الحاسوب المحلي، يمكن أن تتضمن تقاويم تنبيهات على الشبكة المحلية طالما يمكن تمثيل موقعها بمسار يبدأ بـ <literal
+>/</literal
+>.</para>
+</listitem>
+
+<listitem
+><para
+>ملف بعيد: تُخزن التنبيهات في ملف بعيد واحد بتنسيق iCalendar. تسمح لك طريقة التخزين هذه بالوصول إلى بيانات تنبيهاتك عن بعد أينما كنت، أو تمكن الآخرين من عرض تقاويم التنبيهات. عند استخدام الملفات البعيدة، يعمل منبهك مع نسخة محلية من البيانات.</para>
+
+<warning
+><para
+>لا يراقب منبهك تقاويم التنبيهات البعيدة للتغييرات، لذلك إذا أجرى شخص آخر تغييرات، فقد يكتب منبهك فوقها. لتجنب ذلك، يُنصح باتباع إحدى السياسات التالية:</para>
+<itemizedlist>
+<listitem
+><para
+>تأكد من أن شخصًا واحدًا أو تطبيقًا واحدًا فقط يصل إلى التقويم في أي وقت.</para
+></listitem>
+<listitem
+><para
+>يجب على جميع المستخدمين غير مالك التقويم ضبط التقويم للقراءة فقط.</para
+></listitem>
+</itemizedlist>
+<para
+>وإلا، كحد أدنى يجب إعادة تحميل التقويم قبل تغييره أو الاعتماد على محتوياته، باستخدام الطريقة الموصوفة في <link linkend="using-calendars"
+>استخدام التقاويم</link
+>. لاحظ أيضًا أنه إذا ضُبط التقويم للقراءة والكتابة، فسيكتب منبهك فوقه كلما تفعَّل تنبيه. </para
+></warning>
+</listitem>
+</itemizedlist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>حالة التمكين/التعطيل</term>
+<listitem>
+<para
+>تعطيل تقويم له نفس تأثير إزالته، باستثناء أنه لا يزال يظهر في قائمة التقاويم لسهولة إعادة تمكينه. عند تعطيله، تُتجاهل تنبيهاته ولا تظهر في قائمة التنبيهات أو قائمة القوالب. عند إعادة تمكينه، تُعرض تنبيهاته مرة أخرى، وإذا كان تقويم تنبيهات نشطًا، تُجعل نشطة.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>حالة القراءة فقط</term>
+<listitem>
+<para
+>لا يمكن تغيير أو إضافة إنذارات تقويم للقراءة فقط. لذا لا يمكنك تحرير إنذاراته، أو حفظ إنذارات جديدة إليه. كما لا يمكن تأجيل إنذاراته، لأن ذلك يتطلب حفظ وقت التأجيل في الإنذار. بعد تفعيل إنذاراته، لا تُحذف من التقويم وتُؤرشف حتى تصل أنت أو مستخدم آخر إلى التقويم في وضع القراءة والكتابة.</para>
+
+<para
+>يمكنك ضبط حالة القراءة فقط لتقويم في حوار ضبط التقويم. لكن، لا يمكن جعل بعض التقاويم قابلة للكتابة لأسباب مختلفة:</para>
+
+<itemizedlist>
+<listitem
+><para
+>إذا أُنشئ تقويم بواسطة تطبيق آخر، فسيكون من غير الآمن السماح لـمنبهك بتحديثه، لأن اختلافات في تنسيق البيانات قد تجعله غير قابل للاستخدام من قبل التطبيق المنشئ.</para>
+</listitem>
+
+<listitem
+><para
+>إذا أُنشئ التقويم بواسطة إصدار أحدث من منبهك، فقد تُفقد بيانات إذا حدّث إصدارك من منبهك التقويم.</para>
+</listitem>
+
+<listitem
+><para
+>إذا أُنشئ التقويم بواسطة إصدار سابق من منبهك، فقد تُفقد بيانات أو قد يُجعل غير قابل للاستخدام لإصدار منبهك السابق إذا حدّث إصدارك من منبهك التقويم. سيُطلب منك تحويل تنسيقه لجعله قابلًا للكتابة، مع مراعاة مشاكل التوافق المحتملة إذا احتاج إصدار منبهك السابق إلى الوصول إليه مجددًا.</para>
+</listitem>
+
+<listitem
+><para
+>إذا لم يكن لديك صلاحية الكتابة إلى ملف التقويم أو مجلده.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>إذا احتجت وصولًا للكتابة إلى إنذارات في تقويم لا يمكن جعله قابلًا للكتابة، يمكنك نسخ إنذاراته باستيرادها إلى تقويم قابل للكتابة باستخدام خيار القائمة السياقية <menuchoice
+><guimenuitem
+>استيراد...</guimenuitem
+></menuchoice
+> للتقويم الأخير (انظر <link linkend="import"
+>استيراد الإنذارات من تقاويم خارجية</link
+>).</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>حالة التقويم المبدئي</term>
+<listitem>
+<para
+>يمكن جعل تقويم واحد من كل نوع إنذار اختياريًا التقويم المبدئي لذلك النوع. تُحفظ الإنذارات الجديدة آليًا إلى التقويم المبدئي لنوع الإنذار المناسب، إلا إذا اخترت خيار الطلب للإنذارات والقوالب الجديدة في <link linkend="preferences-storage"
+>حوار الضبط</link
+>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect3>
+
+<sect3 id="using-calendars">
+<title
+>استخدام التقاويم</title>
+
+<para
+>يمكنك عرض التقاويم والتلاعب بها عبر قائمة التقاويم، التي يمكن عرضها أو إخفاؤها بواسطة <menuchoice
+> <guimenu
+>عرض</guimenu
+><guimenuitem
+>إظهار التقاويم</guimenuitem
+> </menuchoice
+>. عند استخدام قائمة التقاويم، اختر أولًا نوع الإنذار باستخدام المربع المنسدل أعلى القائمة. ثم إما انقر على أحد الأزرار أسفل القائمة، أو <mousebutton
+>انقر يمينًا</mousebutton
+> على التقويم المناسب في القائمة واختر عنصرًا من القائمة السياقية. الإجراءات المتاحة هي:</para>
+
+<variablelist>
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>أضف...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>أضف تقويمًا من النوع المحدد إلى القائمة. سيُطلب منك اختيار نوع تخزين، وبعده يُعرض حوار ضبط التقويم، حيث يمكنك إدخال موقع التقويم وخصائصه. إذا لم يكن هناك تقويم إنذار موجود في الموقع المحدد، فسيُنشأ تقويم جديد.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>أزل</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>أزل التقويم المحدد من القائمة. يُترك التقويم نفسه سليمًا؛ يُزال ببساطة من القائمة، ويمكن إعادته لاحقًا إلى القائمة إذا رغبت.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>حرّر...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>حرّر التقويم المحدد. يعرض هذا حوار الضبط للتقويم المحدد.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>أعد التحميل</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>أعد تحميل التقويم المحدد. يُعاد قراءة التقويم من موقع تخزينه، مما يضمن عدم وجود تباين بين ما يعرضه منبهك والحالة الحالية للتقويم. إذا كان التقويم مشتركًا مع مستخدمين آخرين، فسترى منبهك الآن أي تغييرات قاموا بها.</para>
+
+<warning
+><para
+>إذا أعدت تحميل تقويم بعيد، فستُفقد أي تغييرات على الإنذارات قمت بها منذ آخر حفظ للتقويم. أيضًا، قد يُعاد تفعيل أي إنذارات انتهت صلاحيتها منذ آخر حفظ.</para
+></warning>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>استورد...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>استورد إنذارات من ملفات تقويم خارجية إلى التقويم المحدد. هذا موصوف في <link linkend="import"
+>استيراد الإنذارات من تقاويم خارجية</link
+>. هذا الخيار غير متاح للتقاويم المعطلة أو للقراءة فقط.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>صدّر...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>صدّر كل الإنذارات في التقويم المحدد إلى ملف تقويم خارجي. هذا موصوف في <link linkend="export"
+>تصدير الإنذارات إلى تقاويم خارجية</link
+>. هذا الخيار غير متاح للتقاويم المعطلة.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>أظهر التّفاصيل</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>اعرض تفاصيل عن التقويم المحدد. يعرض هذا موقع التقويم ونوع تخزينه ومعلومات الحالة. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>استخدم كمبدئي</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>اجعل التقويم المحدد هو التقويم المبدئي لنوع التقويم المحدد. هذا الخيار غير متاح للتقاويم المعطلة أو للقراءة فقط.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>عيّن اللون…</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>اختر لون خلفية لتظليل منبهات هذا التقويم في قائمة المنبهات. يتيح لك هذا رؤية المنبهات التي تنتمي إلى تقويم معين بنظرة سريعة.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>امحُ الون</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>امسح تظليل الألوان لمنبهات هذا التقويم في قائمة المنبهات. يظهر الخيار فقط بعد استخدام <guimenuitem
+>ضبط اللون</guimenuitem
+> على هذا التقويم.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="import">
+<title
+>استيراد المنبهات من تقاويم خارجية</title>
+
+<para
+>يمكنك استيراد المنبهات من ملفات تقاويم أخرى إلى منبهك. تفحص وظيفة الاستيراد ملفات التقويم المحددة بحثًا عن أحداث تحتوي على منبهات، وتنسخها (بمعرفات فريدة جديدة) إلى تقويم منبهك. تُتجاهل الأحداث دون منبهات، ومدخلات التقويم غير الأحداث. هناك طريقتان لاستيراد المنبهات:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>استخدم <menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>استيراد المنبهات...</guimenuitem
+></menuchoice
+> لاستيراد المنبهات من جميع الأنواع (المنبهات النشطة، المنبهات المؤرشفة وقوالب المنبهات) من ملفات التقويم.</para>
+
+<para
+>إذا ضبطت <link linkend="calendars"
+>تقاويم المنبهات</link
+>، ستُضاف منبهات كل نوع إلى التقويم المبدئي المناسب، أو إذا اخترت خيار المطالبة للمنبهات والقوالب الجديدة في <link linkend="preferences-storage"
+>حوار الضبط</link
+>، ستُطالب بالتقويم المراد استخدامه.</para>
+</listitem>
+
+<listitem>
+<para
+>انقر <mousebutton
+>الأيمن</mousebutton
+> على تقويم في قائمة التقاويم، واختر <menuchoice
+><guimenuitem
+>استيراد...</guimenuitem
+></menuchoice
+> من قائمة السياق. يستورد هذا منبهات النوع المحدد حاليًا إلى ذلك التقويم. على سبيل المثال، إذا كان نوع التقويم المحدد هو قوالب المنبهات، فستُستورد قوالب المنبهات (وليس المنبهات النشطة أو المنبهات المؤرشفة).</para>
+</listitem>
+</itemizedlist>
+
+<warning
+><para
+>إذا استوردت منبهات من ملفات تقاويم أُنشئت بواسطة تطبيقات غير منبهك، فقد تُغير المنبهات بواسطة عملية الاستيراد &ndash; حتى أوقات المنبهات قد تتغير. يعتمد هذا على اصطلاحات تخزين البيانات المستخدمة بواسطة التطبيق الآخر، وهو أمر لا مفر منه إذا اختلفت تلك الاصطلاحات عما يتوقعه منبهك. تحقق دائمًا من المنبهات المستوردة بحثًا عن تغييرات غير متوقعة، واضبطها حسب الضرورة.</para
+></warning>
+
+</sect2>
+
+<sect2 id="export">
+<title
+>تصدير المنبهات إلى تقاويم خارجية</title>
+
+<para
+>يمكنك تصدير المنبهات من منبهك إلى ملفات تقاويم أخرى، إما المنبهات المحددة حاليًا في قائمة المنبهات، أو جميع المنبهات من تقويم منبهات. الطرق لفعل ذلك مذكورة أدناه. أيًا كانت الطريقة المستخدمة، يمكنك إما إنشاء ملف تقويم جديد أو إلحاق المنبهات المصدرة بملف تقويم موجود. لإلحاق المنبهات، حدد <guilabel
+>إلحاق بملف موجود</guilabel
+> في حوار اختيار الملف؛ وإلا، يُستبدل أي ملف موجود.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>لتصدير المنبهات المحددة حاليًا في قائمة المنبهات، انقر <mousebutton
+>الأيمن</mousebutton
+> على التحديد واختر <menuchoice
+><guimenuitem
+>تصدير...</guimenuitem
+></menuchoice
+> من قائمة السياق، أو استخدم <menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>تصدير المنبهات المحددة...</guimenuitem
+></menuchoice
+> في القائمة الرئيسة.</para>
+</listitem>
+
+<listitem>
+<para
+>لتصدير جميع المنبهات من تقويم، انقر <mousebutton
+>الأيمن</mousebutton
+> على تقويم في قائمة التقاويم، واختر <menuchoice
+><guimenuitem
+>تصدير...</guimenuitem
+></menuchoice
+> من قائمة السياق.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="birthdays">
+<title
+>استيراد أعياد الميلاد من دفتر عناوينك</title>
+
+<note
+><para
+>هذه الوظيفة متاحة فقط إذا كان <link linkend="akonadi-plugin"
+>ملحق أكونادي</link
+> لـ منبهك مثبتًا ومُفعّلًا.</para>
+</note>
+
+<para
+>يمكنك ضبط منبهات عرض لأعياد الميلاد المخزنة في دفتر عناوينك، عبر <menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>استيراد أعياد الميلاد...</guimenuitem
+></menuchoice
+>. يعرض هذا حوارًا يسمح لك باختيار أعياد الميلاد التي تريد إنشاء منبهات لها.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>في مربع المجموعة <guilabel
+>نص المنبه</guilabel
+>، يمكنك ضبط النص المراد عرضه في رسائل منبهات أعياد الميلاد. يُنشأ نص الرسالة بدمج نص <guilabel
+>البادئة</guilabel
+> متبوعًا باسم الشخص متبوعًا بنص <guilabel
+>اللاحقة</guilabel
+>. لا تُضاف مسافات، لذا تذكر تضمين أي مسافة لاحقة ضرورية في <guilabel
+>البادئة</guilabel
+> ومسافة سابقة في <guilabel
+>اللاحقة</guilabel
+>.</para>
+
+<note
+><para
+>إذا غيرت نص المنبه، ستُعاد تقييم قائمة اختيار أعياد الميلاد.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+>في قائمة <guilabel
+>اختيار أعياد الميلاد</guilabel
+>، اختر أعياد الميلاد التي تريد إنشاء منبهات لها. لاحظ أن القائمة تظهر فقط تلك المدخلات في دفتر عناوينك التي تحتوي على عيد ميلاد والتي ليس لديها بالفعل منبه عيد ميلاد بالتنسيق المحدد حاليًا في مربع المجموعة <guilabel
+>نص المنبه</guilabel
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>عناصر التحكم المتبقية هي نفسها لمنبهات <guilabel
+>النص</guilabel
+> في <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+>.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>إذا ضبطت <link linkend="calendars"
+>تقويمات التنبيهات</link
+>، ستُضاف التنبيهات إلى تقويم التنبيهات النشط المبدئي، أو إذا اخترت خيار المطالبة للتنبيهات والقوالب الجديدة في <link linkend="preferences-storage"
+>حوار الضبط</link
+>، ستُطالب بالتقويم المراد استخدامه.</para>
+</sect2>
+
+<sect2 id="undo">
+<title
+>تراجع / إعادة</title>
+
+<para
+>يمكنك التراجع عن أحدث التغييرات التي أجريتها خلال الجلسة الحالية من منبهك وإعادتها. يمكن التراجع عن معظم الإجراءات، بما في ذلك إنشاء التنبيهات وقوالب التنبيهات وتحريرها وحذفها، وإعادة تنشيط التنبيهات. لمنع استهلاك موارد مفرطة بواسطة سجل التراجع، يُحدد عدد التغييرات المخزنة بآخر 12 تغييرًا.</para>
+
+<para
+>للتراجع عن آخر تغيير، اختر <menuchoice
+> <guimenu
+>تحرير</guimenu
+><guimenuitem
+>تراجع</guimenuitem
+></menuchoice
+>. لإعادة آخر تغيير تم التراجع عنه، اختر <menuchoice
+> <guimenu
+>تحرير</guimenu
+><guimenuitem
+>إعادة</guimenuitem
+> </menuchoice
+>.</para>
+
+<para
+>للتراجع عن تغيير غير الأخير، انقر على زر <guibutton
+>تراجع</guibutton
+> في شريط الأدوات واستمر في الضغط على زر الفأرة. ستُعرض قائمة بالإجراءات يمكنك اختيار الإجراء المراد التراجع عنه. إذا لم ترَ الإجراء الذي تبحث عنه، تذكر أنك قد تحتاج إلى التراجع عن تغييرات أحدث أولًا، والتي يعتمد عليها التغيير المطلوب. مثلًا، إذا حررت تنبيهًا ثم حذفته، لا يمكنك التراجع عن التحرير حتى تتراجع عن الحذف أولًا.</para>
+
+<para
+>يمكن إعادة تغيير غير الأخير بطريقة مماثلة، باستخدام زر شريط الأدوات <guibutton
+>إعادة</guibutton
+>.</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="alarm-edit-dlg">
+<title
+>حوار تحرير التنبيه</title>
+
+<para
+>يتيح لك حوار تحرير التنبيه عرض تنبيه وتحريره. عند استخدام منبهك لأول مرة، يُعرض نموذج مبسط من الحوار، مع ظهور عدد قليل فقط من الخيارات. لرؤية جميع الخيارات، انقر على زر <guibutton
+>خيارات أكثر</guibutton
+>؛ للعودة إلى الحوار المبسط، انقر على زر <guibutton
+>خيارات أقل</guibutton
+>. يتذكر منبهك دائمًا آخر اختيار عرض لك كلما أُعيد عرض حوار تحرير التنبيه.</para>
+
+<para
+>يمكنك ضبط القيم المبدئية للعديد من الإعدادات في حوار تحرير التنبيه باستخدام <link linkend="preferences-edit"
+>لسان التحرير في حوار الضبط</link
+>.</para>
+
+<screenshot>
+<screeninfo
+>لقطة شاشة لحوار تحرير التنبيه المبسط</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="editwindow-simple.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>حوار تحرير تنبيه مبسط لتنبيه عرض</phrase>
+</textobject>
+<caption
+><para
+>حوار تحرير تنبيه مبسط لتنبيه عرض</para
+></caption>
+</mediaobject>
+</screenshot>
+
+<screenshot>
+<screeninfo
+>لقطة شاشة لحوار تحرير التنبيه تعرض جميع الخيارات</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="editwindow.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>حوار تحرير تنبيه لتنبيه عرض، يعرض جميع الخيارات</phrase>
+</textobject>
+<caption
+><para
+>حوار تحرير تنبيه لتنبيه عرض، يعرض جميع الخيارات</para
+></caption>
+</mediaobject>
+</screenshot>
+
+<sect2>
+<title
+>اسم المنبه</title>
+
+<para
+>يمكنك إعطاء اسم للتنبيه في حقل <guilabel
+>اسم التنبيه</guilabel
+>. هذا لتسهيل التعرف على التنبيه بسهولة أكبر. ليس عليك إدخال اسم، ولا يلزم أن يكون فريدًا.</para>
+
+<para
+>لاحظ أن هذا الحقل يُعرض فقط إذا كان استخدام أسماء التنبيهات مفعلًا في لسان <link linkend="preferences-general"
+>عام</link
+> من حوار الضبط.</para>
+
+</sect2>
+
+<sect2>
+<title
+>إجراء المنبه</title>
+
+<para
+>تختلف عناصر التحكم في مربع المجموعة <guilabel
+>إجراء</guilabel
+> حسب نوع التنبيه الجاري تحريره.</para>
+
+<sect3>
+<title
+>عرض المنبهات</title>
+
+<para
+>تعرض تنبيهات العرض نافذة عند تشغيل التنبيه. اختر الطريقة المستخدمة لتوليد محتويات نافذة التنبيه، باستخدام مربع التحرير والسرد في الأعلى:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>رسالة نصية</guilabel
+> لإدخال نص رسالة التنبيه (قد يتضمن أسطرًا جديدة) في مربع التحرير.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>محتويات الملف</guilabel
+> لإدخال المسار أو &URL; لملف نصي أو صوري ستُعرض محتوياته في رسالة التنبيه. استخدم الزر بجانب مربع التحرير لعرض حوار اختيار ملف. خيار <guilabel
+>نطق</guilabel
+> غير متاح لهذا النوع من التنبيهات.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>مخرجات الأمر</guilabel
+> لتحديد أن نص رسالة التنبيه سيُولَّد بواسطة أمر يُنفَّذ عند تفعيل التنبيه. انظر <link linkend="command-alarm"
+>تنبيهات الأوامر</link
+> أدناه لتفاصيل كيفية إدخال الأمر أو سكريبت الأمر المراد تنفيذه.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>عناصر التحكم المتاحة لتنبيهات العرض هي:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>خيار <guilabel
+>الصوت</guilabel
+> يتيح لك اختيار ما إذا كان سيصدر صوت تنبيه مسموع عند عرض رسالة التنبيه. اختر:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>بلا</guilabel
+> لعرض التنبيه بصمت.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>صافرة</guilabel
+> لإصدار صافرة.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>نطق</guilabel
+> لنطق رسالة التنبيه بالإضافة إلى عرضها. هذا الخيار متاح فقط إذا بُني منبهك مع تمكين النطق وكان لديك وحدة &Qt; للنطق مثبتة وتعمل.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>ملف صوتي</guilabel
+> لتشغيل ملف صوتي. استخدم الزر على اليمين لعرض حوار الملف الصوتي الذي يتيح لك اختيار ملف للتشغيل وضبط خيارات الصوت والتكرار. إذا مررت الماوس فوق المحدد، فستظهر تلميحة تعرض الملف الصوتي المحدد حاليًا.</para>
+
+<para
+>في حوار الملف الصوتي:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>أدخل مسار الملف الصوتي، أو استخدم الزر بجانب مربع التحرير لعرض حوار اختيار ملف. يمكنك الاستماع إلى الملف المحدد بالنقر على زر التشغيل إلى يسار حقل التحرير. ثم يغير ذلك الزر وظيفته ليسمح لك بإيقاف التشغيل عندما تسمع ما يكفي.</para>
+</listitem>
+
+<listitem>
+<para
+>حدد <guilabel
+>تكرار</guilabel
+> لتكرار الملف الصوتي باستمرار طالما يُعرض التنبيه. (تحتوي نافذة رسالة التنبيه على زر لإيقاف تشغيل الصوت إذا احتجت إلى الصمت ولكنك لا تزال تريد عرض التنبيه.)</para>
+</listitem>
+
+<listitem>
+<para
+>حدد <guilabel
+>الصوت</guilabel
+> واضبط عنصر التحكم المنزلق إذا أردت ضبط مستوى الصوت الذي يُشغَّل به الملف الصوتي.</para>
+</listitem>
+
+<listitem>
+<para
+>إذا كان الخلفية الصوتية المستخدمة حاليًا تدعم ذلك، يمكنك تخفيف الصوت تدريجيًا. التخفيف يعني بدء تشغيل الملف الصوتي بمستوى صوت واحد وتغييره تدريجيًا إلى المستوى النهائي، خلال فترة زمنية محددة. المستوى النهائي هو المُدخل في <guilabel
+>الصوت</guilabel
+> أعلاه. لتمكين التخفيف، حدد <guilabel
+>تخفيف</guilabel
+>، ثم أدخل فترة التخفيف بالثواني في حقل <guilabel
+>زمن التخفيف</guilabel
+>، واضبط منزلق <guilabel
+>المستوى الابتدائي</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+
+<tip
+><para
+>يمكنك استخدام زر <guibutton
+>تجربة</guibutton
+> لاختبار مستويات الصوت المحددة.</para
+></tip>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>استخدم زر <guibutton
+>الخط واللون...</guibutton
+> لاختيار خط، ولونين للمقدمة والخلفية، لرسالة التنبيه. في حوار <guilabel
+>اختيار خط ولون التنبيه</guilabel
+>، حدد <guilabel
+>استخدام الخط المبدئي</guilabel
+> لعرض الرسالة بأي خط مُهيأ كمبدئي وقت عرض الرسالة. لاختيار خط محدد للرسالة، ألغِ تحديد <guilabel
+>استخدام الخط المبدئي</guilabel
+>. (يمكن ضبط الخط والألوان المبدئية في <link linkend="preferences-edit"
+>حوار الإعدادات</link
+>.)</para>
+
+<para
+>تُظهر الألوان المحددة في حقل إدخال نص رسالة التنبيه.</para>
+</listitem>
+
+<listitem>
+<para
+>خيار <guilabel
+>طريقة العرض</guilabel
+> يتيح لك اختيار كيفية عرض التنبيه. اختر:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>نافذة</guilabel
+> لعرض التنبيه في نافذة. هذا الخيار يسمح باستخدام النطاق الكامل من الخيارات عند ضبط التنبيه.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>إشعار</guilabel
+> لاستخدام نظام الإشعارات القياسي لعرض رسالة التنبيه. نظرًا لقيود نظام الإشعارات، لا يمكن استخدام خيارات ضبط التنبيه التالية مع الإشعارات: ضبط الخط واللون؛ ضبط ملف صوتي للتشغيل عند عرض التنبيه؛ تأكيد إقرار التنبيه؛ الإغلاق التلقائي للعرض عند انتهاء وقت الإلغاء المتأخر.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>انظر قسم <link linkend="message-display"
+>عرض رسالة التنبيه</link
+> لمزيد من التفاصيل حول كيفية عرض رسائل التنبيه.</para>
+</listitem>
+
+<listitem>
+<para
+>استخدم زر <guibutton
+>إجراءات خاصة...</guibutton
+> لتحديد أوامر صدفة لتنفيذها قبل عرض المنبه أو بعده. في حوار <guilabel
+>إجراءات المنبه الخاصة</guilabel
+>:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>في حقل <guilabel
+>إجراء ما قبل المنبه</guilabel
+>، أدخل أمر صدفة لتنفيذه قبل عرض المنبه. لاحظ أن منبهك سينتظر اكتمال الأمر قبل عرض المنبه.</para>
+
+<para
+>يُنفّذ إجراء ما قبل المنبه مرة واحدة فقط عند عرض رسالة المنبه ابتداءً، بما في ذلك عندما تُستبدل رسالة تذكير برسالة المنبه الفعلية. <emphasis
+>لا</emphasis
+> يُنفّذ في أي من الظروف التالية:</para>
+
+<itemizedlist>
+<listitem
+><para
+>عند عرض رسالة تذكير.</para
+></listitem>
+<listitem
+><para
+>عند إعادة عرض الرسالة بعد تأجيل المنبه، ما لم يُحدد <guilabel
+>نفّذ للمنبهات المؤجلة</guilabel
+>.</para
+></listitem>
+<listitem
+><para
+>عندما كانت الرسالة تُعرض وقت تسجيل الخروج ثم استُعيدت عند تسجيل الدخول مجددًا.</para
+></listitem>
+<listitem
+><para
+>عند تفعيل منبه متكرر ولكن رسالة المنبه (أو رسالة منبه مؤجل) من حدوث سابق للمنبه لا تزال مرئية؛ بعبارة أخرى، عندما لم يُقرّ بالحدوث السابق للمنبه بعد.</para
+></listitem>
+</itemizedlist>
+
+<para
+>يمكن استخدام إجراء ما قبل المنبه للتحكم في عرض رسالة المنبه:</para>
+
+<itemizedlist>
+<listitem
+><para
+>حدد <guilabel
+>ألغ المنبه عند الخطأ</guilabel
+> لإلغاء المنبه إذا أعاد أمر ما قبل المنبه حالة خطأ. سيمنع هذا عرض رسالة المنبه، وتنفيذ أي إجراء بعد المنبه.</para
+></listitem>
+
+<listitem
+><para
+>عادةً، إذا أعاد أمر ما قبل المنبه خطأ، تُعرض رسالة خطأ ويُظهر مؤشر خطأ في قائمة المنبهات. يمكن منع هذه الإشعارات الخطأ بتحديد <guilabel
+>لا تُبلغ عن الأخطاء</guilabel
+>.</para
+></listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>في حقل <guilabel
+>إجراء بعد المنبه</guilabel
+>، أدخل أمر صدفة لتنفيذه عند الإقرار بالمنبه (سواء بالنقر على <guibutton
+>إغلاق</guibutton
+> أو باستخدام زر الإغلاق في شريط عنوان النافذة). <emphasis
+>لا</emphasis
+> يُنفّذ في أي من الظروف التالية:</para>
+
+<itemizedlist>
+<listitem
+><para
+>عند إغلاق رسالة تذكير.</para
+></listitem>
+<listitem
+><para
+>عند تأجيل المنبه، باستثناء عندما يُقرّ بالمنبه المؤجل نهائيًا.</para
+></listitem>
+<listitem
+><para
+>عند إغلاق رسالة المنبه بسبب تسجيل الخروج.</para
+></listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
+<para
+>انظر <link linkend="command-alarm"
+>منبهات الأوامر</link
+> أدناه لتفاصيل كيفية تنفيذ أوامر الصدفة.</para>
+
+</listitem>
+</itemizedlist>
+</sect3>
+
+<sect3 id="command-alarm">
+<title
+>منبّهات الأوامر</title>
+
+<para
+>تنفّذ منبهات الأوامر أمرًا دون عرض أي رسالة منبه.</para>
+
+<note
+><para
+>نوع المنبه هذا غير متاح إذا كان كيدي يعمل في وضع الكشك.</para
+></note>
+
+<para
+>عند تنفيذ الأمر، يحتوي متغير البيئة <envar
+>KALARM_UID</envar
+> على UID الحدث للمنبه. لاحظ أنه عند تنفيذ الأمر من زر <guibutton
+>جرب</guibutton
+> في حوار تحرير المنبه، سيكون <envar
+>KALARM_UID</envar
+> فارغًا إذا كان منبهًا جديدًا، أو إذا عُدّل المنبه في الحوار، لأن المنبه يكتسب UID فقط عند حفظه في تقويم المنبهات.</para>
+
+<para
+>عناصر التحكم المتاحة لمنبهات الأوامر هي:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>يتيح لك مربع الاختيار <guilabel
+>أدخل نصًا برمجيًا</guilabel
+> اختيار إدخال سطر أمر صدفة أو نصًا برمجيًا.</para>
+
+<para
+>إذا لم يُحدد هذا الخيار، يمكنك إدخال سطر أوامر صدفة لتنفيذه. يُمرر الأمر مباشرةً إلى الصدفة المبدئية (المعرفة بمتغير البيئة <envar
+>SHELL</envar
+>)، ويمكن أن يتضمن أي خيارات، وسائط، أوامر أنبوبية، إلخ… مما تسمح به الصدفة في أمر سطر واحد.</para>
+
+<para
+>إذا حُدد هذا الخيار، يمكنك إدخال نص سكريبت لتنفيذه. تذكر تضمين سطر أول مثل <literal
+>#!/bin/bash</literal
+> لضمان استدعاء المفسر الصحيح للأوامر.</para>
+</listitem>
+
+<listitem
+><para
+>إذا أعاد الأمر خطأً، تُعرض رسالة خطأ عادةً، ويُظهر مؤشر خطأ في قائمة المنبهات. يمكن منع رسالة إشعار الخطأ بتحديد <guilabel
+>لا تُبلغ عن الأخطاء</guilabel
+>.</para
+></listitem>
+
+<listitem>
+<para
+>استخدم مربع المجموعة <guilabel
+>مخرجات الأمر</guilabel
+> لتحديد ما تريد فعله بأي مخرجات طرفية ينتجها الأمر عند تنفيذه.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>حدد <guilabel
+>نفذ في نافذة طرفية</guilabel
+> لجعل الأمر يُنفذ في نافذة طرفية. يمكنك اختيار نوع النافذة الطرفية المستخدمة في <link linkend="preferences-general"
+>حوار الضبط</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>حدد <guilabel
+>سجل في ملف</guilabel
+> لحفظ مخرجات الأمر في ملف. ستُضاف المخرجات، مسبوقة بعنوان يظهر الوقت الذي جُدول فيه الأمر للتشغيل، إلى أي محتويات موجودة في الملف. أدخل اسم الملف في مربع التحرير، أو استخدم الزر بجانب مربع التحرير لعرض حوار اختيار ملف.</para>
+</listitem>
+
+<listitem>
+<para
+>حدد <guilabel
+>تجاهل</guilabel
+> لتجاهل مخرجات الأمر.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</sect3>
+
+<sect3>
+<title
+>منبهات البريد الإلكتروني</title>
+
+<para
+>ترسل منبهات البريد الإلكتروني بريدًا إلكترونيًا دون عرض أي رسالة منبه.</para>
+
+<para
+>املأ عناوين المستلمين، سطر موضوع البريد الإلكتروني، ونص الرسالة في حقول التحرير الثلاثة. استخدم الزر بجانب مربع تحرير المرسل إليه لعرض دفتر عناوين كيدي الذي يمكنك من خلاله اختيار مستلمي البريد الإلكتروني. (لاحظ أن الزر يُعرض فقط إذا كان ملحق منبهك <link linkend="akonadi-plugin"
+>أكونادي</link
+> مثبتًا ومفعلًا.) يمكن إضافة المرفقات باستخدام الزر <guibutton
+>أضف...</guibutton
+>. لاحظ أن الملفات المرفقة يجب أن تظل موجودة عند تشغيل المنبه؛ لا تُخزن نسخة في وقت ضبط المنبه. لإزالة مرفق، أبرزه في القائمة المنسدلة وانقر الزر <guibutton
+>أزل</guibutton
+>.</para>
+
+<para
+>اضبط الخيارات التالية:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>يسمح لك مربع التحرير والسرد <guilabel
+>من</guilabel
+> باختيار هوية بريدك التي ستستخدمها كعنوان بريدك الإلكتروني لإرسال البريد. يظهر هذا الخيار فقط إذا كان عنوان بريدك الإلكتروني <guilabel
+>من</guilabel
+> في <link linkend="preferences-email"
+>حوار الضبط</link
+> مضبوطًا على <guilabel
+>استخدم هويات بريدك</guilabel
+>. وإلا، فسيُضبط عنوان بريدك الإلكتروني مسبقًا في <link linkend="preferences-email"
+>حوار الضبط</link
+>، مما يجعل هذا الخيار غير قابل للتطبيق.</para>
+</listitem>
+
+<listitem>
+<para
+>حدد <guilabel
+>انسخ البريد الإلكتروني إلى نفسي</guilabel
+> لإرسال نسخة مخفية من البريد الإلكتروني إلى نفسك عند تشغيل المنبه. يمكن ضبط عنوان البريد الإلكتروني الذي ستُرسل إليه النسخة في <link linkend="preferences-email"
+>حوار الضبط</link
+>، والمبدئي هو عنوان بريدك الإلكتروني المضبوط في بريدك.</para>
+</listitem>
+</itemizedlist>
+
+</sect3>
+
+<sect3>
+<title
+>منبهات صوتية</title>
+
+<para
+>تشغل المنبهات الصوتية ملفًا صوتيًا دون عرض أي رسالة منبه.</para>
+
+<para
+>اضبط الخيارات التالية:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>أدخل مسار ملف الصوت، أو استخدم الزر بجانب مربع التحرير لعرض حوار اختيار ملف.</para>
+</listitem>
+
+<listitem>
+<para
+>حدد <guilabel
+>كرر</guilabel
+> لتكرار الملف الصوتي باستمرار حتى يُحدد خيار <guilabel
+>أوقف التشغيل</guilabel
+>. لإيقاف تشغيل الملف، اختر خيار القائمة <menuchoice
+><guimenu
+>إجراءات</guimenu
+> <guimenuitem
+>أوقف التشغيل</guimenuitem
+></menuchoice
+>، أو انقر <mousebutton
+>يمين</mousebutton
+> على أيقونة علبة النظام واختر <menuchoice
+><guimenuitem
+>أوقف التشغيل</guimenuitem
+></menuchoice
+> من قائمة السياق. إذا أردت، يمكنك ضبط مفتاح اختصار عام لهذا الإجراء.</para>
+</listitem>
+
+<listitem>
+<para
+>حدد <guilabel
+>الصوت</guilabel
+> واضبط عنصر التحكم المنزلق إذا أردت ضبط مستوى الصوت الذي يُشغَّل به الملف الصوتي.</para>
+</listitem>
+
+<listitem>
+<para
+>إذا كان الخلفية الصوتية المستخدمة حاليًا تدعم ذلك، يمكنك تخفيف الصوت تدريجيًا. التخفيف يعني بدء تشغيل الملف الصوتي بمستوى صوت واحد وتغييره تدريجيًا إلى المستوى النهائي، خلال فترة زمنية محددة. المستوى النهائي هو المُدخل في <guilabel
+>الصوت</guilabel
+> أعلاه. لتمكين التخفيف، حدد <guilabel
+>تخفيف</guilabel
+>، ثم أدخل فترة التخفيف بالثواني في حقل <guilabel
+>زمن التخفيف</guilabel
+>، واضبط منزلق <guilabel
+>المستوى الابتدائي</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</sect3>
+</sect2>
+
+<sect2>
+<title
+>التأجيل والتخطي</title>
+
+<para
+>إذا كان المنبه منبهًا متكررًا وقد أُجل بعد آخر عرض له، يُظهر مربع المجموعة <guilabel
+>منبه مؤجل/مُتخطى</guilabel
+> الوقت الذي أُجل إليه المنبه. يعرض <guibutton
+>غير...</guibutton
+> حوارًا يسمح لك بتغيير الوقت المؤجل أو إلغاء التأجيل.</para>
+
+<para
+>إذا كان المنبه منبهًا متكررًا ويُتخطى حاليًا (انظر <link linkend="skipping"
+>تخطي المنبهات الفردية</link
+>)، يُظهر مربع المجموعة <guilabel
+>منبه مؤجل/مُتخطى</guilabel
+> الوقت التالي الذي سيشغل فيه المنبه بعد تخطيه، أي الوقت الذي سيستأنف فيه التشغيل العادي. سيلغي <guibutton
+>ألغ التخطي</guibutton
+> تخطي المنبه.</para>
+
+<note
+><para
+>إذا أجريت أي تغييرات على وقت بدء المنبه أو تفاصيل التكرار، يُلغى التخطي آليًا ولم يعد وقت التخطي معروضًا.</para
+></note>
+
+<para
+>لاحظ أن التغييرات في التأجيل والتخطي تسري عند النقر على <guibutton
+>موافق</guibutton
+>.</para>
+
+</sect2>
+
+<sect2 id="alarm-edit-dlg-time">
+<title
+>الوقت</title>
+
+<para
+>في مربع المجموعة <guilabel
+>الوقت</guilabel
+>، اختر إما</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>في تاريخ/وقت</guilabel
+> لإدخال التاريخ والوقت الذي سيُطلق فيه المنبه. حدد <guilabel
+>أي وقت</guilabel
+> إذا أردت تحديد تاريخ فقط للمنبه: في هذه الحالة سيُعرض المنبه في أول فرصة في أو بعد وقت بدء اليوم المضبوط، في التاريخ المحدد. (<link linkend="preferences-time"
+>ضبط منبهك</link
+> يصف كيفية ضبط وقت بدء اليوم.)</para>
+
+<para
+>بالنسبة لمنبه غير متكرر، يجب أن يكون التاريخ/الوقت الذي تدخله في المستقبل، أو إذا أدخلت تاريخًا فقط فيجب أن يكون اليوم أو لاحقًا. بالنسبة لمنبه متكرر، لا توجد مثل هذه القيود لأن تاريخ/وقت البداية سيُضبط آليًا على أول تكرار مستحق بعد الوقت الحالي.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>وقت من الآن</guilabel
+> لإدخال المدة بعد الآن (بالساعات والدقائق) التي يجب أن يُطلق فيها المنبه.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>إذا رغبت، اختر منطقة زمنية لتطبيقها على المنبه. تُستخدم هذه المنطقة الزمنية لجميع التواريخ والأوقات المتعلقة بهذا المنبه، بما في ذلك تواريخ وأوقات التكرار والاستثناءات. عادةً، يجب أن تترك عناصر التحكم في المنطقة الزمنية دون تغيير إلا إذا كان لديك سبب وجيه لتغييرها.</para>
+
+<para
+>تُعرض عناصر التحكم في المنطقة الزمنية فقط عندما تكون المنطقة الزمنية المحددة مختلفة عن المنطقة الزمنية المبدئية المضبوطة في <link linkend="preferences-time"
+>حوار الضبط</link
+>، أو إذا نقرت على الزر <guibutton
+>المنطقة الزمنية...</guibutton
+>.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>في المربع المنسدل، اختر المنطقة الزمنية التي سيستخدمها هذا المنبه. عند إنشاء منبه جديد، يُضبط هذا مبدئيًا على المنطقة الزمنية المحددة في <link linkend="preferences-time"
+>حوار الضبط</link
+>، والتي ستكون المنطقة الزمنية لحاسوبك ما لم تغيرها.</para>
+</listitem>
+
+<listitem>
+<para
+>حدد <guilabel
+>المنطقة الزمنية للنظام</guilabel
+> إذا أردت استخدام المنطقة الزمنية المحلية للحاسوب (على أي حاسوب يعمل عليه منبهك في ذلك الوقت).</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>التّذكير</title>
+
+<para
+>بالنسبة لمنبه عرض، حدد <guilabel
+>تذكير</guilabel
+> إذا أردت عرض تذكير إما قبل أو بعد المنبه الرئيس وكل تكراراته (إن وجدت). أدخل المدة مقدمًا أو لاحقًا، باستخدام عناصر التحكم في التحرير بجانب خانة الاختيار. لاحظ أنه إذا تكرر المنبه، فعادةً ما تُحدد فترة التذكير بأن تكون أقل من فترة التكرار أو التكرار الفرعي.</para>
+
+<note
+><para
+>لا تُعرض التذكيرات للتكرارات الفرعية ضمن تكرار. تُعرض التذكيرات فقط لكل تكرار رئيس للمنبه.</para
+></note>
+
+<para
+>إذا تكرر المنبه، حدد <guilabel
+>تذكير للتكرار الأول فقط</guilabel
+> إذا أردت تذكيرًا للتكرار الأول للمنبه فقط. إذا كان هذا محددًا، وكان تذكيرًا مقدمًا، فلا تخضع فترة التذكير للحد الطبيعي بأن تكون أقل من فترة التكرار أو التكرار الفرعي.</para>
+
+
+</sect2>
+
+<sect2 id="alarm-edit-dlg-cancel">
+<title
+>الإلغاء</title>
+
+<para
+>تحدد خيارات الإلغاء المتأخر كيفية معالجة المنبه بعد وقته المقرر:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>تحدد خانة الاختيار <guilabel
+>ألغِ إذا تأخر</guilabel
+> ما يحدث إذا تعذر إطلاق المنبه في وقته المقرر.</para>
+
+<para
+>حدد هذه الخانة لإلغاء المنبه إذا تعذر إطلاقه ضمن فترة زمنية محددة بعد الوقت الصحيح. تُحدد الفترة الزمنية باستخدام عناصر تحكم تظهر عند تحديد الخانة. على سبيل المثال، إذا أدخلت فترة زمنية مدتها ساعة واحدة، سيُطلق المنبه في أول فرصة خلال ساعة بعد موعده، ولكن إذا تعذر إطلاقه خلال ساعة، سيُلغى تفعيله.</para>
+
+<note
+><para
+>يُحسب تأخر المنبهات ذات التاريخ فقط، أي تلك التي يُحدد لها خيار <guilabel
+>أي وقت</guilabel
+>، من وقت بدء اليوم في التاريخ المقرر للمنبه.</para
+></note>
+
+<para
+>اترك الخانة غير محددة لإطلاق المنبه في أول فرصة تبدأ من الوقت المقرر، بغض النظر عن مدى تأخره.</para>
+
+<note
+><para
+>لا يمكن إطلاق المنبه إلا أثناء تسجيل دخولك، وأثناء تشغيل كل من X ومنبهك.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+>حدد <guilabel
+>أغلق النافذة آليًا بعد هذا الوقت</guilabel
+> إذا أردت إغلاق نافذة المنبه آليًا إذا كانت لا تزال معروضة عند انتهاء وقت الإلغاء المتأخر.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="alarm-edit-dlg-recur">
+<title
+>التّكرار</title>
+
+<para
+>حدد ما إذا كان يجب تكرار المنبه أم لا وكيفية ذلك باستخدام لسان <guilabel
+>التكرار</guilabel
+>.</para>
+
+<note
+><para
+>تُعرض خصائص التكرار الأساسية للمنبه للراحة في عنوان لسان <guilabel
+>التكرار</guilabel
+>. يُعرض فاصل التكرار أولًا، يليه أي فاصل تكرار فرعي يُضبط باستخدام الزر <guibutton
+>التكرار الفرعي</guibutton
+>.</para
+></note>
+
+<para
+>في مربع المجموعة <guilabel
+>قاعدة التكرار</guilabel
+>، اضبط نوع التكرار أو الفترة الزمنية كما يلي:</para>
+
+<itemizedlist>
+<listitem
+><para
+>لتشغيل المنبه مرة واحدة فقط، اختر <guilabel
+>لا تكرار</guilabel
+>.</para
+></listitem>
+
+<listitem
+><para
+>اختر <guilabel
+>عند تسجيل الدخول</guilabel
+> لتشغيل المنبه كلما سجلت الدخول، حتى وقت انتهائه المجدول. ثم، في وقت انتهائه المجدول، سيُشغل أخيرًا مرة أخيرة. (لاحظ أن المنبه المتكرر عند تسجيل الدخول سيُشغل أيضًا في أي وقت تعيد فيه تشغيل منبهك.)</para
+></listitem>
+
+<listitem>
+<para
+>لجعل المنبه يتكرر على فترات منتظمة، اختر أحد أنواع الفترات الزمنية ثم أدخل في مربع <guilabel
+>التكرار كل</guilabel
+> عدد الفترات الزمنية التي يجب أن تنقضي بين التكرارات. على سبيل المثال، للتكرار كل أسبوعين، يمكنك اختيار <guilabel
+>يوميًا</guilabel
+> وإدخال قيمة 14، أو اختيار <guilabel
+>أسبوعيًا</guilabel
+> وإدخال قيمة 2. اعتمادًا على نوع الفترة الزمنية المختارة، قد تتوفر لديك خيارات إضافية:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>للتكرار اليومي، حدد كل يوم في الأسبوع الذي سيُسمح فيه بتشغيل المنبه. سيتكرر المنبه بالتردد المحدد، ولكن كلما شُغل في يوم غير محدد من الأسبوع، سيُكبت.</para>
+</listitem>
+
+<listitem>
+<para
+>للتكرار الأسبوعي، حدد كل يوم في الأسبوع الذي ترغب في تشغيل المنبه فيه.</para>
+</listitem>
+
+<listitem>
+<para
+>للتكرار الشهري، يمكنك اختيار إما:</para>
+<itemizedlist>
+<listitem
+><para
+>يوم ثابت في الشهر أو آخر يوم في الشهر. لاحظ أنه إذا اخترت مثلًا اليوم الحادي والثلاثين من الشهر، فلن يُشغل المنبه في أي شهر يقل عدد أيامه عن 31 يومًا.</para>
+</listitem>
+
+<listitem
+><para
+>موضع في الشهر، مثل الثلاثاء الثاني أو الجمعة الأخيرة من الشهر.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>للتكرار السنوي، يمكنك اختيار إما يوم ثابت في الشهر أو موضع في الشهر، كما هو موصوف للتكرارات الشهرية. حدد كل شهر من السنة ترغب في تشغيل المنبه فيه.</para>
+
+<para
+>إذا أعددت تكرارًا سنويًا في 29 فبراير، يمكنك تحديد كيفية معالجته في السنوات غير الكبيسة باختيار الخيار المناسب <guilabel
+>منبه 29 فبراير في السنوات غير الكبيسة</guilabel
+>:</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>لا شيء</guilabel
+>: سيحدث المنبه في 29 فبراير في السنوات الكبيسة، ولكن سيُكبت في السنوات غير الكبيسة.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>28 فبراير</guilabel
+>: سيحدث المنبه في 29 فبراير في السنوات الكبيسة، وفي 28 فبراير في السنوات غير الكبيسة.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>1 مارس</guilabel
+>: سيحدث المنبه في 29 فبراير في السنوات الكبيسة، وفي 1 مارس في السنوات غير الكبيسة.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
+<tip
+><para
+>لضبط منبه يومي ليحدث فقط في أيام الأسبوع، استخدم تكرارًا أسبوعيًا وحدد كل يوم من أيام الأسبوع.</para
+></tip>
+
+</listitem>
+</itemizedlist>
+
+<para
+>في مربع المجموعة <guilabel
+>نهاية التكرار</guilabel
+>، اضبط النطاق الزمني الإجمالي للتكرار كما يلي:</para>
+
+<itemizedlist>
+<listitem
+><para
+>اختر <guilabel
+>لا نهاية</guilabel
+> لمواصلة التكرارات إلى أجل غير مسمى.</para
+></listitem>
+
+<listitem
+><para
+>اختر <guilabel
+>انته بعد</guilabel
+> لتحديد العدد الإجمالي لمرات حدوث المنبه.</para
+></listitem>
+
+<listitem
+><para
+>اختر <guilabel
+>الانتهاء بحلول</guilabel
+> لتحديد التاريخ/الوقت الذي سيتكرر فيه المنبه حتى. لاحظ أن هذا يستخدم نفس المنطقة الزمنية كوقت بدء المنبه.</para>
+
+<note
+><para
+>يحدد تاريخ/وقت الانتهاء متى سيكون آخر تكرار رئيس، لكنه لا يحد من التكرارات الفرعية. إذا ضُبطت التكرارات الفرعية، فستُفعّل كالمعتاد بعد آخر تكرار رئيس، بغض النظر عن تاريخ/وقت الانتهاء.</para
+></note>
+</listitem>
+</itemizedlist>
+
+<para
+>يتيح لك مربع المجموعة <guilabel
+>الاستثناءات</guilabel
+> استبعاد تواريخ/أوقات معينة من التكرار الذي أعددته. لاحظ أن عناصر التحكم هذه لا تظهر في النموذج المبسط لحوار تحرير المنبه: لرؤيتها، انقر <guibutton
+>خيارات إضافية</guibutton
+>.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>تظهر قائمة الاستثناءات (أي التواريخ/الأوقات المستبعدة) على اليسار. لإضافة استثناء جديد، أدخل تاريخًا على اليمين واضغط <guibutton
+>إضافة</guibutton
+>. لتغيير استثناء، أبرزه في القائمة، وأدخل التاريخ الجديد على اليمين واضغط <guibutton
+>تغيير</guibutton
+>. لحذف استثناء، أبرزه في القائمة واضغط <guibutton
+>حذف</guibutton
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>يمكنك تقييد منبه بعدم الحدوث في العطلات بتأشير <guilabel
+>استبعاد العطلات</guilabel
+>. هذا لا يغير طريقة جدولة المنبه؛ إنه ببساطة يكتم المنبه كلما صادف تفعيله في عطلة. يمكنك اختيار بلد أو منطقة العطلات في <link linkend="preferences-time"
+>حوار الضبط</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>يمكنك تقييد منبه بالحدوث فقط خلال وقت العمل بتأشير <guilabel
+>فقط خلال ساعات العمل</guilabel
+>. هذا لا يغير طريقة جدولة المنبه؛ إنه ببساطة يكتم المنبه كلما صادف تفعيله خارج ساعات العمل. تُضبط أيام العمل وساعات العمل في <link linkend="preferences-time"
+>حوار الضبط</link
+>.</para>
+</listitem>
+</itemizedlist>
+
+<sect3>
+<title
+>التكرار الفرعي</title>
+
+<para
+>يمكنك استخدام زر <guibutton
+>التكرار الفرعي</guibutton
+> لإعداد تكرار ضمن تكرار. في هذه الحالة، كل مرة يحين فيها المنبه كما هو محدد في التكرار الرئيس، بدلًا من تفعيله مرة واحدة فقط يُفعّل بشكل متكرر وفقًا لمواصفات التكرار الفرعي. مثلًا، لإعداد منبه يتكرر كل ساعة من الظهر حتى السادسة مساءً كل خميس، ستُعد تكرارًا أسبوعيًا يوم الخميس عند الساعة 12:00، وتستخدم حوار التكرار الفرعي لتحديد فاصل زمني قدره ساعة واحدة وإما عدد 6 أو مدة 6 ساعات.</para>
+
+<note
+><para
+>تُفعّل التكرارات الفرعية فقط بعد تكرار رئيس يُفعّل فعليًا. إذا كُبت تكرار رئيس بواسطة تاريخ/وقت استثناء أو بتقييدات العطلات أو وقت العمل، فلن تُفعّل التكرارات الفرعية لذلك المثال من التكرار.</para>
+
+<para
+>ستُكبت التكرارات الفرعية الفردية أيضًا إذا حدثت في تاريخ/وقت استثناء، أو خلال تقييدات العطلات أو وقت العمل.</para
+></note>
+
+<para
+>في حوار التكرار الفرعي الذي يظهر عند النقر على زر <guibutton
+>التكرار الفرعي</guibutton
+>، أشِر <guilabel
+>كرر كل</guilabel
+> لإعداد تكرار، أو ألغ تأشيرها لإزالة التكرار. إذا أُشيرت <guilabel
+>كرر كل</guilabel
+>، فاضبط التكرار كما يلي:</para>
+
+<itemizedlist>
+<listitem
+><para
+>أدخل الفاصل الزمني بين التكرارات في عناصر التحكم بجانب <guilabel
+>كرر كل</guilabel
+>. اختر وحدات الوقت المطلوبة (مثل <guilabel
+>أيام</guilabel
+>) ثم أدخل عدد الوحدات.</para>
+</listitem>
+
+<listitem
+><para
+>حدد إما عدد التكرارات أو مدتها:</para>
+
+<itemizedlist>
+<listitem
+><para
+>اختر <guilabel
+>عدد المرات</guilabel
+> لإدخال كم مرة يجب تفعيل المنبه بعد التكرار الرئيس. لذا، مثلًا، لجعل المنبه يحدث 4 مرات في كل تكرار رئيس، أي 3 مرات إضافية، يجب إدخال 3 هنا.</para>
+</listitem>
+
+<listitem
+><para
+>اختر <guilabel
+>المدة</guilabel
+> لإدخال الفترة الزمنية الإجمالية التي يجب خلالها تكرار المنبه. لا يلزم أن تكون هذه مضاعفًا دقيقًا لفاصل التكرار؛ ستُقرّب تلقائيًا للأسفل عند النقر على <guibutton
+>موافق</guibutton
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
+<note
+><para
+>لمنع تداخل التكرارات الفرعية لنفس المنبه، تُقيّد مدة التكرار الفرعي لتكون أقل من أطول فاصل بين التكرارات الرئيسة. كل مرة يتكرر فيها المنبه كما هو محدد في التكرار الرئيس، يُلغى آليًا أي تكرار فرعي لا يزال نشطًا بدأ عند التكرار السابق.</para
+></note>
+
+</sect3>
+</sect2>
+
+<sect2 id="alarm-edit-dlg-other">
+<title
+>عناصر تحكم أخرى</title>
+
+<para
+>إذا سمح ضبط النظام لمنبهات متعددة بإيقاظ النظام من التعليق، يمكنك اختيار <guilabel
+>إيقاظ من التعليق</guilabel
+> لإيقاظ النظام إذا كان معلقًا حاليًا عندما يحين المنبه. هذه الوظيفة غير متاحة للمنبهات ذات التاريخ فقط لأن وقتها غير محدد. انظر <link linkend="wake-suspend"
+>إيقاظ من التعليق</link
+> لمزيد من المعلومات.</para>
+
+<para
+>بالنسبة لمنبهات العرض، يتيح لك مربع التأشير <guilabel
+>تأكيد الإقرار</guilabel
+> تحديد ما إذا ستُطلب منك تأكيدًا عند إغلاق نافذة رسالة المنبه. قد يُستخدم هذا كإجراء وقائي ضد الإقرار العرضي للمنبهات.</para>
+
+<para
+>تُعلّق منبهات العرض عادةً بينما تُكبت الإشعارات لسطح المكتب، ولا تظهر فوق تطبيقات ملء الشاشة. لتجاوز هذه التقييدات وعرض المنبه دائمًا إذا أمكن، اختر مربع التأشير <guilabel
+>لا تمنع المنبه أبدًا</guilabel
+>. لاحظ أن القدرة على عرض الرسائل فوق تطبيقات ملء الشاشة قد تعتمد على مدير النوافذ لديك، وحاليًا يسمح نظام النوافذ X11 فقط بهذا.</para>
+
+<para
+>اختر <guilabel
+>أظهر في &korganizer;</guilabel
+> لإضافة المنبه إلى التقويم النشط لـ &korganizer;، حيث سيظهر كحدث بدون منبه. يتيح لك هذا الخيار تتبع المنبهات في &korganizer; مع الاستمرار في استخدام وظائف منبهك.</para>
+
+<note
+><para
+>إذا عدّلت أو حذفت المنبّه لاحقًا في منبهك، فسيُعدّل أو يُحذف حدث &korganizer; بالمقابل. لكن إذا غيّرت الحدث في &korganizer;، فلن يتأثر المنبّه في منبهك.</para
+></note>
+
+<para
+>اضغط زر <guibutton
+>تحميل قالب</guibutton
+> لاختيار قالب تضبط به الحوار مسبقًا، كما هو موصوف في <link linkend="create-edit"
+>إنشاء المنبّهات ومعالجتها</link
+>. </para>
+
+<para
+>اضغط زر <guibutton
+>جرّب</guibutton
+> لاختبار المنبّه والتحقق من عمله بشكل صحيح. يُنفّذ المنبّه تمامًا كما لو كان قد جُدول بالطريقة العادية. في حالة المنبّه الصوتي، اضغط زر <guibutton
+>جرّب</guibutton
+> مرة ثانية لإيقاف تشغيل ملف الصوت.</para>
+
+<para
+>اضغط زر <guibutton
+>موافق</guibutton
+> عندما تكون كل التفاصيل صحيحة، لإضافة المنبّه إلى القائمة المجدولة. لاحظ أنه عند تحرير منبّه موجود، يُعطّل زر <guibutton
+>موافق</guibutton
+> ما لم تُجرَ أي تغييرات.</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="message-display">
+<title
+>عرض رسالة المنبّه</title>
+
+<para
+>قد تُعرض رسائل المنبّه في نوافذ أو كإشعارات، اعتمادًا على الخيار المختار في <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبّه</link
+>. يُوصف خيارا العرض هذان أدناه.</para>
+
+<para
+>إذا كبحت الإشعارات لسطح المكتب، فسيُعلّق تنفيذ منبّهات العرض حتى إعادة تمكين الإشعارات، باستثناء المنبّهات التي حددتها في <link linkend="alarm-edit-dlg-other"
+>حوار تحرير المنبّه</link
+> بأنها لا تُكبح أبدًا. لاحظ أن هذا ينطبق على كل منبّهات العرض، بغض النظر عن عرضها في نوافذ أو كإشعارات.</para>
+
+<para
+>لاحظ أنه على نظام ذي شاشة واحدة، قد يكبح مدير النوافذ الإشعارات أثناء تشغيل أي تطبيق بملء الشاشة، مما سيعلّق تلقائيًا تنفيذ منبّهات العرض.</para>
+
+<sect2 id="message-window">
+<title
+>نافذة رسالة المنبّه</title>
+
+<para
+>رسائل المنبّه التي تُعرض في نوافذ توفر أكمل وظائف.</para>
+
+<para
+>عندما يحين موعد رسالة منبّه، تُعرض إن أمكن على كل سطح مكتب ولا يمكن تغطيتها بنوافذ عادية، لضمان رؤيتك لها. (لاحظ أن نظام النوافذ X11 فقط يوفر حاليًا هذه الإمكانية.) تظهر نافذة الرسالة الوقت الذي جُدول له المنبّه، لتتمكن من رؤية متى ظهر إذا كنت بعيدًا عن الحاسوب في ذلك الوقت. إذا كان وقت المنبّه المجدول في منطقة زمنية مختلفة عن إعداد حاسوبك المحلي، فستُعرض منطقته الزمنية أيضًا. (بالنسبة لرسائل التذكير، التاريخ/الوقت المعروض هو للمنبّه الرئيس أو تكراره، وليس وقت رسالة التذكير، وعنوان النافذة هو <quote
+>تذكير</quote
+>.)</para>
+
+<para
+>تظل نوافذ رسائل المنبّه مرئية حتى تقرّ بها، ما لم يُحدد <guilabel
+>إغلاق النافذة تلقائيًا بعد وقت الإلغاء المتأخر</guilabel
+> في <link linkend="alarm-edit-dlg-cancel"
+>حوار تحرير المنبّه</link
+>. في حالة منبّه متكرر، إذا بقيت نافذة رسالة غير مقرّ بها من حدوث سابق للمنبّه، فتُظهر النافذة الموجودة ببساطة عندما يتكرر المنبّه. يتجنب هذا الاضطرار إلى الإقرار بنسخ متعددة من نفس الرسالة إذا لم ترغب، أو لم تكن قادرًا، على الإقرار برسالة في وقت ظهورها.</para>
+
+<para
+>توفر نافذة رسالة المنبّه أيًا من الخيارات التالية المنطبقة على المنبّه المعروض:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>أقرّ بالمنبّه بالنقر على زر <guibutton
+>إغلاق</guibutton
+>. يغلق هذا النافذة (بعد مطالبة بالتأكيد، إذا اخترت <guilabel
+>تأكيد الإقرار</guilabel
+>).</para>
+</listitem>
+
+<listitem>
+<para
+>حرّر المنبّه بالنقر على زر <guibutton
+>تحرير...</guibutton
+>. يعرض هذا <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبّه</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>اعرض خيارات تأجيل المنبّه إلى وقت لاحق بالنقر على زر <guibutton
+>تأجيل...</guibutton
+>. ثم اختر <guilabel
+>أجّل لمدة</guilabel
+> لإدخال المدة بعد الآن التي يجب إعادة عرض الرسالة فيها (زر <guilabel
+>مضبوط مسبقًا</guilabel
+> يتيح لك الاختيار من قائمة فترات زمنية شائعة)، أو اختر <guilabel
+>أجّل حتى</guilabel
+> لإدخال التاريخ والوقت اللذين ستُعاد فيهما عرض الرسالة. ثم انقر <guibutton
+>موافق</guibutton
+> لتأجيل رسالة المنبّه وإغلاق نافذتها.</para>
+
+<note
+><para
+>يجب أن يكون الوقت الذي يُؤجّل إليه المنبّه أبكر من حدوثه المجدول التالي أو تذكيره المتقدم التالي. لهذا السبب، يُعطّل زر <guibutton
+>تأجيل...</guibutton
+> في نافذة رسالة المنبّه وزر <guibutton
+>موافق</guibutton
+> في حوار التأجيل قبل دقيقة واحدة من الحدوث التالي أو التذكير المتقدم.</para>
+<para
+>لاحظ أنه إذا ضُبط تذكير <emphasis
+>بعد</emphasis
+> المنبّه، فيمكنك <emphasis
+>تأجيل</emphasis
+> المنبّه بعد وقت تذكيره. في هذه الحالة، سيُكبح التذكير.</para
+></note>
+
+<note
+><para
+>زر <guibutton
+>تأجيل...</guibutton
+> غير متاح للمنبّهات التي تُعرض عند تسجيل الدخول بسبب اختيار خيار <guilabel
+>تكرار عند تسجيل الدخول</guilabel
+>.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+>أوقف تشغيل ملف صوت المنبّه بالنقر على الزر الذي يظهر رمز <quote
+>إيقاف التشغيل</quote
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>إذا أُنشئت رسالة التنبيه بسحب بريد إلكتروني من بريدك، يمكنك الوصول مباشرةً إلى البريد الإلكتروني في بريدك بالنقر على الزر الذي يظهر أيقونة بريدك. سيعرض هذا البريد الإلكتروني ويحدد المجلد الذي يحتوي البريد الإلكتروني في قائمة مجلدات بريدك.</para>
+
+<warning
+><para
+>إذا أُعيد توليد فهارس بريدك، فسيفقد الرابط إلى البريد الإلكتروني في بريدك.</para
+></warning>
+</listitem>
+
+<listitem>
+<para
+>يوفر الزر الذي يظهر أيقونة <guiicon
+>منبهك</guiicon
+> طريقة مريحة لتفعيل النافذة الرئيسة لـ منبهك مع إبراز ذلك التنبيه.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>تعتمد طريقة عرض نوافذ رسائل التنبيه على نظام النوافذ المستخدم.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><application
+>نظام النوافذ اكس11</application
+></para>
+
+<para
+>يمكنك الاختيار في <link linkend="preferences-view"
+>حوار الضبط</link
+> أي من وضعين مختلفين ينبغي استخدامه لعرض نوافذ رسائل التنبيه:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>كنافذة عادية. في هذا الوضع، تأخذ نافذة رسالة التنبيه التركيز اللوحي عند ظهورها، لذا إذا كنت تكتب في ذلك الوقت، فستُحوّل ضغطاتك اللوحية إليها بدلًا من تطبيقك الأصلي.</para>
+</listitem>
+
+<listitem>
+<para
+>كنافذة غير مشروطة. في هذا الوضع، لا يتأثر التركيز اللوحي عند ظهور نافذة رسالة التنبيه، لذا لن تتداخل مع كتابتك. ولكن في هذا الوضع، لا تحتوي النافذة على شريط عنوان أو إطار، لذا لا يمكنك تحريكها أو تغيير حجمها.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>يمكنك الاختيار في <link linkend="preferences-view"
+>حوار الضبط</link
+> أي من مخططين ينبغي استخدامه لتحديد موضع نوافذ رسائل التنبيه:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>تُعرض النوافذ بعيدًا قدر الإمكان عن مؤشر الفأرة الحالي. يقلل هذا من تعطيل سير عملك ويقلل من احتمالية تأكيد التنبيه عن طريق الخطأ.</para>
+</listitem>
+
+<listitem>
+<para
+>تُعرض النوافذ في وسط الشاشة. لتقليل فرصة تأكيد التنبيه عن طريق الخطأ، تُعطل الأزرار على النافذة مبدئيًا، وتصبح نشطة فقط بعد تأخير قابل للضبط.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>إذا كان لديك عدة نوافذ رسائل تنبيه، أو رسائل خطأ، معروضة، يمكنك نشر النوافذ عبر الشاشة لجعلها جميعًا مرئية، أو تجميعها جميعًا مرة أخرى في الزاوية العلوية اليسرى من الشاشة، عبر خيار القائمة <menuchoice
+> <guimenu
+>عرض</guimenu
+><guimenuitem
+>انشر النوافذ</guimenuitem
+> </menuchoice
+>. إذا أردت، يمكنك إعداد مفتاح اختصار عام لهذا الإجراء.</para>
+
+</listitem>
+
+<listitem>
+<para
+><application
+>نظام نوافذ ويلاند</application
+></para>
+
+<para
+>لا يسمح نظام النوافذ Wayland للتطبيقات بالتحكم في موضع نوافذها أو زخرفتها، لذا تكون خيارات العرض محدودة أكثر بكثير.</para>
+
+<para
+>لتقليل فرصة تأكيد التنبيه عن طريق الخطأ، تُعطل الأزرار على النافذة مبدئيًا، وتصبح نشطة فقط بعد تأخير قابل للضبط.</para>
+
+</listitem>
+
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>إشعارات رسائل التنبيه</title>
+
+<para
+>توفر رسائل التنبيه التي تُعرض كإشعارات وظائف أقل من تلك المعروضة في النوافذ.</para>
+
+<para
+>عندما يحين موعد رسالة تنبيه، تُعرض كإشعار. يظهر الإشعار الوقت الذي جُدول له التنبيه. إذا كان الوقت المجدول للتنبيه في منطقة زمنية مختلفة عن إعداد حاسوبك المحلي، فستُعرض منطقته الزمنية أيضًا. (بالنسبة لرسائل التذكير، التاريخ/الوقت المعروض هو للتنبيه الرئيس أو تكراره، وليس وقت رسالة التذكير، ويُعرض عنوان “تذكير”.)</para>
+
+<para
+>يُغلق الإشعار آليًا بعد مهلة قصيرة. (لاحظ أن المهلة مشتركة بين جميع التطبيقات؛ يمكن تغييرها في &systemsettings;.) بعد انتهاء مهلة الإشعار، لا يزال يمكن رؤيته في سجل الإشعارات حتى تزيله أو حتى تسجل الخروج. نظرًا لعدم وجود طريقة للتطبيقات للوصول إلى سجل الإشعارات، لا يمكن لـ منبهك إزالة أو استبدال الإشعارات في السجل كما يفعل مع نوافذ التنبيه. لذا قد يحتوي السجل على إشعارات متعددة لنفس التنبيه، بما في ذلك التذكيرات والتكرارات.</para>
+
+<para
+>يوفر إشعار رسالة التنبيه الخيارات التالية. لاحظ أن اختيار أي خيار سيغلق الإشعار فورًا، ويمنع عرضه في سجل الإشعارات. لاحظ أيضًا أن هذه الخيارات متاحة فقط أثناء نشاط الإشعار، قبل انتهاء مهلة. إذا وصلت لاحقًا إلى الإشعار في سجل الإشعارات، فبسبب قيود نظام الإشعارات، فإن التفاعل الوحيد المتاح هو إزالته من السجل.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>أكد التنبيه بالنقر على الزر <guibutton
+>أغلق</guibutton
+>. يغلق هذا الإشعار.</para>
+</listitem>
+
+<listitem>
+<para
+>حرر التنبيه بالنقر على الزر <guibutton
+>حرر</guibutton
+>. يعرض هذا <link linkend="alarm-edit-dlg"
+>حوار تحرير التنبيه</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>خيارات العرض لتأجيل المنبه لوقت لاحق بالنقر على الزر <guibutton
+>تأجيل</guibutton
+>. يُظهر هذا الزر فقط إذا أمكن تأجيل المنبه. راجع وصف خيار التأجيل في قسم <link linkend="message-window"
+>نافذة رسالة المنبه</link
+> للتفاصيل.</para>
+</listitem>
+
+<listitem>
+<para
+>النقر على الإشعار في أي مكان غير الزر سينشّط النافذة الرئيسة لـمنبهك، مع إبراز ذلك المنبه.</para>
+</listitem>
+
+</itemizedlist>
+
+</sect2>
+</sect1>
+
+<sect1 id="system-tray">
+<title
+>عملية صينية النظام</title>
+
+<para
+>يعرض منبهك مبدئيًا أيقونة في علبة النظام. توفر الأيقونة التحكم وإشارة حالة مراقبة المنبهات. تشير أيقونة منبهك عادية إلى أن جميع المنبهات تُراقب، بينما تشير أيقونتان مختلفتان معدلتان إما إلى أن بعض المنبهات، أو أن جميع المنبهات، لا تُراقب. تعتمد تعديلات الأيقونة على سمة الأيقونة المستخدمة.</para>
+
+<para
+>تُخفى أيقونة علبة النظام لـمنبهك مبدئيًا آليًا كلما لم تكن هناك منبهات مستحقة في الـ24 ساعة التالية. يمكنك تغيير حد وقت الإخفاء الآلي، أو إظهار أيقونة علبة النظام دائمًا، باستخدام <link linkend="preferences-view"
+>حوار الضبط</link
+>. لإظهار الأيقونة عندما خُفيت آليًا، انقر على السهم في علبة النظام لكشف الأيقونات المخفية.</para>
+
+<para
+>إذا مررت مؤشر الفأرة فوق أيقونة علبة النظام، يُعرض ملخص لأول منبهات الرسائل القليلة المستحقة في الـ24 ساعة التالية كتلميح أدوات. يمكنك إيقاف تشغيل هذه الميزة، أو ضبط عدد المنبهات لعرضها وتنسيقها، في <link linkend="preferences-view"
+>حوار الضبط</link
+>.</para>
+
+<para
+>انقر <mousebutton
+>يسار</mousebutton
+> على أيقونة علبة النظام للتبديل بين عرض وإخفاء النافذة الرئيسة لـمنبهك.</para>
+
+<para
+>انقر <mousebutton
+>يمين</mousebutton
+> على أيقونة علبة النظام لعرض قائمتها السياقية:</para>
+
+<variablelist>
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>مكّن المنبّهات</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>يمكّن أو يعطّل مراقبة المنبهات.</action
+></para>
+<para
+>راجع <link linkend="enable-disable"
+>تمكين وتعطيل المنبهات</link
+> للتفاصيل.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>منبّه جديد</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>بعد اختيار نوع المنبه من القائمة التي تظهر، يفتح حوار تحرير المنبه لإنشاء منبه جديد.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>أوقف التشغيل</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>يوقف تشغيل الملف الصوتي المشغّل حاليًا.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>انشر النوافذ</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>ينشر نوافذ رسائل المنبه والخطأ عبر الشاشة، أو يجمعها معًا مرة أخرى.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>اضبط منبهك...</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>يعرض حوار ضبط منبهك.</action
+></para>
+<para
+>يُوصف حوار الضبط في <link linkend="preferences"
+>ضبط منبهك</link
+>. يتضمن خيارات متعلقة بأيقونة علبة النظام لـمنبهك.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>استعادة / تصغير</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>يستعيد أو يصغّر النافذة الرئيسة لـمنبهك.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>أنهِ</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>يغلق أيقونة علبة النظام والنوافذ الرئيسة لـمنبهك.</action
+></para>
+<para
+>يخرج من منبهك إذا لم تُعرض أي نوافذ رسائل منبه.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<sect2>
+<title
+>عرض منبهك في علبة النظام</title>
+
+<para
+>يجب أن تكون مشغّلًا سطح مكتب بلازما أو أي مدير نوافذ مناسب آخر لعرض كالارم في علبة النظام.</para>
+
+<para
+>اختر <menuchoice
+><guimenu
+>عرض</guimenu
+> <guimenuitem
+>أظهر في علبة النظام</guimenuitem
+></menuchoice
+> لعرض كالارم في علبة النظام وفقًا للتفضيلات المضبوطة في لسان <link linkend="preferences-view"
+>العرض</link
+> من حوار الضبط.</para>
+
+<para
+>لإزالة كالارم من علبة النظام، ألغِ اختيار <menuchoice
+><guimenu
+>عرض</guimenu
+> <guimenuitem
+>أظهر في علبة النظام</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>لاختيار ما إذا كان كالارم سيُظهر عند بدء التشغيل في علبة النظام أم لا، استخدم لسان <link linkend="preferences-view"
+>العرض</link
+> من حوار الضبط.</para>
+</sect2>
+</sect1>
+
+<sect1 id="refreshing">
+<title
+>تحديث المنبهات</title>
+
+<para
+>إذا حدث، في حالة غير محتملة، أن أي منبه لم يُشغّل عندما كان ينبغي، يمكنك تحديث قائمة المنبهات وتشغيل أي منبهات فائتة باختيار <menuchoice
+> <guimenu
+>إجراءات</guimenu
+><guimenuitem
+>حدّث المنبهات</guimenuitem
+> </menuchoice
+>. يؤدي هذا إلى إعادة تحميل كالارم لجميع تقاويم المنبهات.</para>
+
+<para
+>يمكنك إعادة تحميل تقويم فردي وتحديث منبهاته في قائمة المنبهات بالنقر <mousebutton
+>الأيمن</mousebutton
+> على التقويم في قائمة التقاويم واختيار خيار القائمة <menuchoice
+><guimenuitem
+>أعد التحميل</guimenuitem
+></menuchoice
+>. انظر <link linkend="calendars"
+>تقاويم المنبهات</link
+> للتفاصيل.</para>
+
+</sect1>
+
+<sect1 id="enable-disable">
+<title
+>تمكين المنبهات وتعطيلها</title>
+
+<para
+>يمكن تمكين المنبهات وتعطيلها إما ككل أو بشكل فردي:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>ينطبق <quote
+>مراقبة المنبهات</quote
+> على المنبهات ككل. بينما مراقبة المنبهات معطّلة، لا تُشغّل أي منبهات على الإطلاق. بينما مراقبة المنبهات مفعّلة (الوضع الطبيعي)، ستُشغّل جميع المنبهات غير المعطّلة فرديًا في الأوقات المناسبة.</para>
+
+<para
+>عند إعادة تمكين مراقبة المنبهات، تُشغّل الآن المنبهات التي كانت ستُشغّل بينما كانت معطّلة (ما لم يمنع أي خيار إلغاء متأخر ذلك). بعبارة أخرى، تعطيل مراقبة المنبهات له نفس تأثير إيقاف كالارم &ndash; تُؤجّل المنبهات حتى إعادة تمكينها.</para>
+</listitem>
+
+<listitem>
+<para
+>يمكن تمكين المنبهات وتعطيلها بشكل فردي، بغض النظر عن حالة مراقبة المنبهات. لذا ستبقى حالة التمكين/التعطيل للمنبهات الفردية دون تغيير عند تعطيل مراقبة المنبهات ثم إعادة تمكينها. على عكس مراقبة المنبهات التي قد تُعطّل بسبب عدم تشغيل كالارم، لا يمكن تعطيل المنبهات الفردية إلا إذا استخدمت أوامر القائمة للقيام بذلك.</para>
+
+<para
+>عند إعادة تمكين منبه فردي، لا يُشغّل الآن إذا أصبح مستحقًا بينما كان معطّلًا. بعبارة أخرى، تعطيل منبه فردي يلغي جميع مرات حدوثه حتى إعادة تمكينه.</para>
+
+<para
+>يُشار إلى حالة التمكين/التعطيل الفردية لمنبه بلونه في قائمة المنبهات (اللون قابل للضبط في لسان <link linkend="preferences-view"
+>العرض</link
+> من حوار الضبط).</para>
+</listitem>
+</itemizedlist>
+
+<para
+>لتشغيل منبه، يجب أن يكون مفعّلًا فرديًا بالإضافة إلى كون مراقبة المنبهات مفعّلة.</para>
+
+<sect2>
+<title
+>تمكين مراقبة المنبهات</title>
+
+<para
+>لحدوث مراقبة المنبهات، يجب أن يكون كالارم مشغّلًا. بمجرد تشغيل كالارم، سيبدأ آليًا من ذلك الحين كلما سجّلت الدخول ما لم تعطّله لاحقًا في لسان <link linkend="preferences-general"
+>عام</link
+> من حوار الضبط.</para>
+
+<para
+>إذا كانت مراقبة المنبهات معطّلة حاليًا، افعل أحد التالي لتمكين المنبهات:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>اختر <menuchoice
+><guimenu
+>إجراءات</guimenu
+> <guimenuitem
+>فعّل المنبهات</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>انقر <mousebutton
+>الأيمن</mousebutton
+> على أيقونة علبة النظام واختر <menuchoice
+><guimenuitem
+>فعّل المنبهات</guimenuitem
+></menuchoice
+> من قائمة السياق.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>تعطيل مراقبة المنبهات</title>
+
+<para
+>يمكنك تعطيل مراقبة المنبهات مؤقتًا، مما يمنع منبهك من فحص أي منبهات إما حتى تعيد تمكين المنبهات، أو &ndash; بافتراض أن منبهك مضبوط على البدء عند تسجيل الدخول &ndash; حتى المرة التالية التي تسجل فيها الدخول.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>ألغِ اختيار <menuchoice
+><guimenu
+>إجراءات</guimenu
+> <guimenuitem
+>تمكين المنبهات</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>انقر <mousebutton
+>يمين</mousebutton
+> على أيقونة علبة النظام وألغِ تحديد <menuchoice
+><guimenuitem
+>تمكين المنبهات</guimenuitem
+></menuchoice
+> من قائمة السياق.</para>
+</listitem>
+
+<listitem>
+<para
+>شغّل منبهك مع خيار سطر الأوامر <option
+>--disable-all</option
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>أوقف منبهك كما هو موصوف في <link linkend="quitting"
+>إنهاء منبهك</link
+>.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>يمكن تعطيل المنبهات بشكل دائم بمنع منبهك من البدء عند تسجيل الدخول باستخدام لسان <link linkend="preferences-general"
+>عام</link
+> من حوار الضبط.</para>
+
+</sect2>
+
+<sect2>
+<title
+>تمكين وتعطيل المنبهات الفردية</title>
+
+<para
+>لتمكين منبهات فردية معطلة حاليًا، افعل أحد التالي:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>اختر منبهًا واحدًا أو أكثر بالنقر على مدخلاتها في قائمة المنبهات. ثم اختر <menuchoice
+> <guimenu
+>إجراءات</guimenu
+><guimenuitem
+>تمكين</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>انقر <mousebutton
+>يمين</mousebutton
+> على المدخلات المطلوبة في قائمة المنبهات واختر <menuchoice
+><guimenuitem
+>تمكين</guimenuitem
+></menuchoice
+> من قائمة السياق.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>لتعطيل منبهات فردية مفعلة حاليًا، افعل أحد التالي:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>اختر منبهًا واحدًا أو أكثر بالنقر على مدخلاتها في قائمة المنبهات. ثم اختر <menuchoice
+> <guimenu
+>إجراءات</guimenu
+><guimenuitem
+>تعطيل</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>انقر <mousebutton
+>يمين</mousebutton
+> على المدخلات المطلوبة في قائمة المنبهات واختر <menuchoice
+><guimenuitem
+>تعطيل</guimenuitem
+></menuchoice
+> من قائمة السياق.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="skipping">
+<title
+>تخطي المنبهات الفردية</title>
+
+<para
+>يمكنك اختيار تخطي التنشيطات القليلة التالية (1 - 10) لمنبه. هذا يعطل المنبه مؤقتًا حتى يمر ذلك العدد من التكرارات أو التكرارات الفرعية دون تنشيط. سيعاود المنبه الإطلاق كالمعتاد بعد ذلك.</para>
+
+<note
+><para
+>لن تُعرض أي تذكيرات للتنشيطات المتخطاة.</para>
+<para
+>التخطي لا يؤثر على أي تأجيل معلق للمنبه.</para
+></note>
+
+<para
+>لتخطي التنشيط(ات) التالي(ة) لمنبهات فردية، افعل أحد التالي، ثم أدخل عدد التنشيطات المراد تخطيها:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>اختر منبهًا واحدًا أو أكثر بالنقر على مدخلاتها في قائمة المنبهات. ثم اختر <menuchoice
+> <guimenu
+>إجراءات</guimenu
+><guimenuitem
+>تخطي</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>انقر <mousebutton
+>يمين</mousebutton
+> على المدخلات المرغوبة في قائمة المنبهات واختر <menuchoice
+><guimenuitem
+>تجاوز</guimenuitem
+></menuchoice
+> من القائمة السياقية.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>لإلغاء تجاوز منبهات فردية، افعل أحد التالي:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>اختر منبهًا أو أكثر بالنقر على مدخلاتهم في قائمة المنبهات. ثم اختر <menuchoice
+> <guimenu
+>إجراءات</guimenu
+><guimenuitem
+>إلغاء التجاوز</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>انقر <mousebutton
+>يمين</mousebutton
+> على المدخلات المرغوبة في قائمة المنبهات واختر <menuchoice
+><guimenuitem
+>إلغاء التجاوز</guimenuitem
+></menuchoice
+> من القائمة السياقية.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+</sect1>
+
+<sect1 id="wake-suspend">
+<title
+>أفِق من التعليق</title>
+
+<para
+>يمكن ضبط المنبهات لإيقاظ حاسوبك من الإسبات أو التعليق عند تفعيل المنبه، بحيث يمكن أن يحدث إجراء المنبه حتى عندما يكون النظام مطفأً. الآلية التي يستخدمها منبهك لإيقاظ النظام، وواجهة المستخدم للتحكم بها، تعتمدان على نوع النظام وصلاحيات المستخدم. هناك احتمالان:</para>
+
+<sect2>
+<title
+>إيقاظ نواة لينكس من التعليق بواسطة الموقت</title>
+
+<para
+>على أنظمة لينكس، إذا كان المستخدم يملك صلاحية موقت منبه النواة (<literal
+>cap_wake_alarm</literal
+>)، يمكن ضبط أي عدد من المنبهات للإيقاظ من التعليق. في هذه الحالة، يُضبط الإيقاظ من التعليق لكل منبه فردي في <link linkend="alarm-edit-dlg-other"
+>حوار تحرير المنبه</link
+> باستخدام خياره <guilabel
+>إيقاظ من التعليق</guilabel
+>.</para>
+
+<para
+>يمكنك ضبط المدة قبل المنبه للإيقاظ من التعليق، لضمان أن النظام لديه وقت لاستعادة نفسه بالكامل قبل تفعيل المنبه، في <link linkend="preferences-time"
+>حوار الضبط</link
+>.</para>
+
+</sect2>
+
+<sect2>
+<title
+>إيقاظ من التعليق بواسطة ساعة الوقت الحقيقي</title>
+
+<para
+>على الأنظمة غير اللينكسية، أو على أنظمة لينكس حيث لا يملك المستخدم صلاحية <literal
+>cap_wake_alarm</literal
+>، يُستخدم منبه ساعة الوقت الحقيقي (<acronym
+>RTC</acronym
+>). يمكن ضبط هذا لمنبه واحد فقط في كل مرة. في هذه الحالة، يُستخدم حوار خاص للإيقاظ من التعليق لضبطه. يسمح الحوار بضبط منبه الإيقاظ من التعليق أو إلغائه أو عرضه. للوصول إلى الحوار، اختر <menuchoice
+><guimenu
+>إجراءات</guimenu
+> <guimenuitem
+>إيقاظ من التعليق</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>استخدام وظيفة الإيقاظ من التعليق يتطلب صلاحيات إدارية. سيُطلب منك كلمة مرور الجذر عند ضبط أو إلغاء منبه الإيقاظ من التعليق.</para>
+
+<note
+><para
+>الإيقاظ من التعليق غير مدعوم على بعض الحواسيب، خاصة القديمة منها، وبعض الحواسيب تدعم فقط ضبط وقت إيقاظ يصل إلى 24 ساعة مقدمًا. قد تكون هناك أيضًا قيود على وضع التعليق الذي ستوقظ منه الوظيفة. يجب أن تفكر في إعداد منبهات اختبارية للتحقق من قدرة نظامك قبل الاعتماد على هذه الميزة.</para
+></note>
+
+<warning
+><para
+>يمكن لحاسوبك جدولة إيقاظ واحد فقط من التعليق في كل مرة. إذا استخدمت هذه الوظيفة مع منبهك، يجب أن تضمن أن هذا لا يتعارض مع أي تطبيق آخر يستخدم أيضًا الإيقاظ من التعليق. كلما جدول تطبيق أو ألغى الإيقاظ من التعليق، فإن هذا يلغي أي إيقاظ من التعليق مضبوط سابقًا، بغض النظر عما إذا كان مضبوطًا بواسطة منبهك أو أي تطبيق آخر.</para
+></warning>
+
+<para
+>يُستخدم حوار الإيقاظ من التعليق بالتزامن مع قائمة المنبهات في النافذة الرئيسة لـ منبهك.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guibutton
+>استخدم المنبه المظلل</guibutton
+>: هذا يضبط المنبه المظلل حاليًا في قائمة المنبهات كمنبه الإيقاظ من التعليق. يُلغى أي إيقاظ من التعليق مجدول موجود، كما شُرح أعلاه. يُفعّل الزر فقط إذا كان منبه واحد بالضبط مظللًا.</para>
+</listitem>
+
+<listitem>
+<para
+><guibutton
+>إلغاء الإيقاظ من التعليق</guibutton
+>: هذا يلغي أي إيقاظ من التعليق موجود (سواء مضبوط بواسطة منبهك أو أي تطبيق آخر - انظر أعلاه). لاحظ أن هذا يلغي فقط وظيفة الإيقاظ المرتبطة بالمنبه؛ المنبه نفسه لا يُحذف وسيستمر في العمل كالمعتاد.</para>
+</listitem>
+
+<listitem>
+<para
+><guibutton
+>أظهر المنبه الحالي</guibutton
+>: هذا يظلل منبه الإيقاظ من التعليق الحالي في قائمة المنبهات، بحيث يمكن التعرف عليه. يُعطّل الزر إذا لم يُضبط أي إيقاظ من التعليق حاليًا.</para>
+</listitem>
+
+<listitem>
+<para
+>يتيح لك عنصر التحكم <guilabel
+>عدد الدقائق قبل المنبه للإيقاظ من التعليق</guilabel
+>، إذا رغبت، ضمان أن النظام لديه وقت لاستعادة نفسه بالكامل قبل تفعيل المنبه، بحيث يمكن للمنبه أن يُفعّل في الوقت الصحيح.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+</sect1>
+
+<sect1 id="quitting">
+<title
+>إنهاء منبهك</title>
+
+<para
+>أنهِ منبهك باختيار <menuchoice
+> <guimenu
+>ملف</guimenu
+><guimenuitem
+>إنهاء</guimenuitem
+></menuchoice
+>، أو <menuchoice
+><guimenuitem
+>إنهاء</guimenuitem
+></menuchoice
+> في القائمة السياقية لأيقونة علبة النظام. بدلًا من ذلك، إذا لم تكن أيقونة علبة النظام مرئية، أغلق جميع نوافذ منبهك.</para>
+
+</sect1>
+</chapter>
+
+<chapter id="preferences">
+<title
+>ضبط منبهك</title>
+
+<para
+>لضبط تشغيل منبهك ليتوافق مع نظامك وتفضيلاتك الشخصية، اختر <menuchoice
+><guimenu
+>إعدادات</guimenu
+> <guimenuitem
+>ضبط منبهك...</guimenuitem
+></menuchoice
+>. يعرض هذا حوار الضبط.</para>
+
+<sect1 id="preferences-general">
+<title
+>عامّ</title>
+
+<para
+>يتيح لك قسم <guilabel
+>عام</guilabel
+> التحكم في السلوك العام لـ منبهك:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>وضع التشغيل</guilabel
+>: يتيح لك هذا اختيار ما إذا كان منبهك سيعمل آليًا أو يدويًا أو لا يعمل مطلقًا.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>تشغيل آلي</guilabel
+>: اختر هذا لتشغيل منبهك آليًا عند تسجيل الدخول لضمان تشغيله دائمًا. يجب اختيار هذا الخيار لكي يعمل منبهك بشكل طبيعي ويطلق الإنذارات دائمًا.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>تشغيل يدوي فقط</guilabel
+>: اختر هذا إذا كنت تريد استخدام منبهك أحيانًا فقط. لن يعمل آليًا، وستحتاج إلى تشغيله يدويًا عند الحاجة. بمجرد خروجه (أو بعد تسجيل الخروج)، لن يعمل أو يطلق إنذارات حتى تشغيله يدويًا مرة أخرى.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>لا تشغيل</guilabel
+>: اختر هذا إذا كنت تريد التوقف عن استخدام منبهك. لن يُبدأ بعد الآن عند تسجيل الدخول، وبعد خروجه أو تسجيل خروجك، لن يطلق إنذارات بعد الآن.</para>
+
+<para
+>لاحظ أنه إذا شغّلت منبهك لاحقًا بعد اختيار هذا الخيار، فسيستأنف منبهك العمل الطبيعي وسيُشغّل آليًا عند تسجيل الدخول. إذا كنت لا تزال لا تريد استخدام منبهك بعد ذلك، فستحتاج إلى اختيار خيار <guilabel
+>لا تشغيل</guilabel
+> هذا مرة أخرى.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>حذّر قبل الخروج</guilabel
+>: يجب أن يكون منبهك قيد التشغيل لإطلاق الإنذارات. اختر هذا الخيار بحيث إذا حاولت إنهاء منبهك باستخدام خيار <menuchoice
+><guimenu
+>خروج</guimenu
+></menuchoice
+>، فسيُحذّر من أن الإنذارات ستُعطّل ويُطلب منك التأكيد. يمنع هذا تعطيل الإنذارات عرضيًا. للسلامة، يُعاد تمكين هذا الخيار آليًا مبدئيًا كلما غيّرت وضع التشغيل.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>تمكين أسماء الإنذارات</guilabel
+>: حدد ما إذا كان يمكن إعطاء كل إنذار اسمًا لمساعدتك في التعرف عليه. يحدد هذا ما إذا كان عمود <guilabel
+>الاسم</guilabel
+> سيُعرض في <link linkend="alarm-list"
+>قائمة الإنذارات</link
+>، وما إذا كان حقل <guilabel
+>اسم الإنذار</guilabel
+> سيظهر في <link linkend="alarm-edit-dlg"
+>حوار تحرير الإنذار</link
+>.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>تأكيد حذف الإنذارات</guilabel
+>: حدد ما إذا كان يجب أن يُطلب منك التأكيد في كل مرة تحذف فيها إنذارًا.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>الفاصل الزمني المبدئي للتأجيل</guilabel
+>: أدخل الفاصل الزمني المبدئي، بالساعات والدقائق، ليُعرض مبدئيًا عند عرض حوار تأجيل الإنذار. لاحظ أنه إذا أُجّل إنذار سابقًا، فسيكون الفاصل الزمني المعروض مبدئيًا في حوار تأجيل الإنذار مساويًا لفاصل التأجيل المستخدم آخر مرة أُجّل فيها ذلك الإنذار.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>طرفية لإنذارات الأوامر</guilabel
+>: هنا، يمكنك اختيار نوع نافذة الطرفية التي ستُستخدم لإنذارات الأوامر التي تُنفذ في نافذة طرفية. بعض تطبيقات نافذة الطرفية الأكثر شيوعًا مضبوطة مسبقًا، مثل <application
+>xterm</application
+> و &konsole;، على الرغم من أن فقط تلك المثبتة على نظامك ستُعرض هنا. يمكنك عرض خيارات الأوامر الفعلية المستخدمة لكل تطبيق بعرض المساعدة السياقية لزر الاختيار الخاص به.</para>
+
+<para
+>إذا كنت تريد استخدام تطبيق آخر، أو تريد استخدام أحد تلك المدرجة ولكن بخيارات أوامر مختلفة، فاختر <guilabel
+>آخر</guilabel
+> وأدخل الأمر لاستدعاء نافذة الطرفية. مبدئيًا، ستُلحق سلسلة أمر الإنذار بما تحدده. بدلًا من ذلك، يمكنك تحديد أين يجب إدراج سلسلة أمر الإنذار، باستخدام الرموز التالية:</para>
+
+<variablelist>
+<varlistentry>
+<term
+>%c</term>
+<listitem>
+<para
+>ستُستبدل سلسلة أمر الإنذار.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+>%w</term>
+<listitem>
+<para
+>ستُستبدل سلسلة أمر الإنذار، مع إلحاق <literal
+>sleep</literal
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+>%C</term>
+<listitem>
+<para
+>سيُنشأ ملف أمر مؤقت يحتوي على سلسلة أمر الإنذار، وسيُستبدل الأمر لتنفيذ الملف.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+>%W</term>
+<listitem>
+<para
+>سيُنشأ ملف أمر مؤقت يحتوي على سلسلة أمر الإنذار مع إلحاق <literal
+>sleep</literal
+>، وسيُستبدل الأمر لتنفيذ الملف.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+>%t</term>
+<listitem>
+<para
+>سيُستبدل اسم منبهك باللغة الحالية.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+>عند إطلاق إنذار الأمر، ستُقتبس سلسلة أمره قبل إدراجها في أمر نافذة الطرفية.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>ملحقات</guilabel
+>: يتيح لك هذا القسم اختيار أي من ملحقات منبهك المثبتة تريد استخدامها.</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>الخلفية الصوتية</guilabel
+>: اختر النظام الصوتي الذي تريد استخدامه لتشغيل ملفات الصوت. تُدرَج ملحقات الصوت المثبتة فقط؛ إذا لم يُثبَّت أي منها، لا يُعرض هذا الخيار.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>تمكين أكونادي</guilabel
+>: اختر ما إذا كنت تريد استخدام أكونادي لتوفير الميزات التي تعتمد عليه. انظر <link linkend="akonadi-plugin"
+>ملحق أكونادي</link
+> للتفاصيل. لاحظ أن هذا الخيار يُعرض فقط إذا كان ملحق أكونادي مثبتًا.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-time">
+<title
+>الوقت والتاريخ</title>
+
+<para
+>يتيح لك قسم <guilabel
+>الوقت والتاريخ</guilabel
+> ضبط الخيارات المتعلقة بالوقت والتاريخ:</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>المنطقة الزمنية</guilabel
+>: اختر منطقتك الزمنية. يستخدم منبهك هذه المنطقة الزمنية في كل مكان، إلا عندما تتجاوزها لإنذارات فردية.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>منطقة العطلات</guilabel
+>: اختر عطلات أي بلد أو منطقة تريد استخدامها. يؤثر هذا على الإنذارات المتكررة التي اختير لها خيار استثناء العطلات.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>إيقاظ من السبات قبل الإنذار</guilabel
+>: أدخل عدد الدقائق قبل وقت تشغيل الإنذار لإيقاظ النظام، للإنذارات المضبوطة للإيقاظ من السبات. يتيح لك هذا ضمان أن النظام لديه وقت كافٍ لاستعادة نفسه بالكامل قبل تشغيل الإنذار، بحيث يمكن للإنذار أن يُشغَّل في الوقت الصحيح. يُعرض هذا الخيار فقط إذا كان تكوين النظام يسمح لإنذارات متعددة بإيقاظ النظام من السبات. انظر <link linkend="wake-suspend"
+>إيقاظ من السبات</link
+> لمزيد من المعلومات.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>بداية اليوم للإنذارات المحددة بالتاريخ فقط</guilabel
+>: اضبط وقت بداية اليوم لأغراض تشغيل الإنذارات المحددة بالتاريخ فقط، أي تلك التي اختير لها خيار <guilabel
+>أي وقت</guilabel
+>. في التاريخ المستحق، ستُخرج هذه الإنذارات في أقرب فرصة خلال 24 ساعة ابتداءً من وقت بداية اليوم.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>ساعات العمل</guilabel
+>: تتيح لك هذه الخيارات تحديد ساعات عملك، اللازمة عندما يُختار خيار <guilabel
+>فقط خلال ساعات العمل</guilabel
+> لتكرار في <link linkend="alarm-edit-dlg-recur"
+>حوار تحرير الإنذار</link
+>.</para>
+
+<itemizedlist>
+<listitem
+><para
+>حدد كل يوم هو يوم عمل.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>وقت البدء اليومي</guilabel
+>: أدخل الوقت الذي تبدأ فيه العمل كل يوم.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>وقت الانتهاء اليومي</guilabel
+>: أدخل الوقت الذي تنهي فيه العمل كل يوم.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>مدة حدث كي أورغنايزر</guilabel
+>: أدخل مدة الحدث لتعيينها في &korganizer; للإنذارات المنسوخة إلى &korganizer;. المدة المبدئية هي صفر.</para>
+</listitem>
+
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-storage">
+<title
+>التخزين</title>
+
+<para
+>يتيح لك قسم <guilabel
+>التخزين</guilabel
+> اختيار خيارات حفظ وأرشفة الإنذارات:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>إنذارات وقوالب جديدة</guilabel
+>: حدد أي تقويم تخزَّن فيه الإنذارات الجديدة وقوالب الإنذار عند استخدام تقاويم إنذار متعددة:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>خزِّن في التقويم المبدئي</guilabel
+>: تضاف الإنذارات الجديدة وقوالب الإنذار آليًا إلى تقويم الإنذار المبدئي دون طلب تأكيد.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>اسأل عن أي تقويم تخزَّن فيه</guilabel
+>: عندما تنشئ إنذارًا جديدًا أو قالب إنذار جديدًا ويوجد أكثر من تقويم إنذار قابل للكتابة، ستُطلب منك اختيار التقويم الذي تحفظه فيه. لاحظ أنه عند حفظ الإنذارات عند انتهاء صلاحيتها، تُخزَّن دائمًا في تقويم الإنذار المؤرشف المبدئي دون طلب.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>الإنذارات المؤرشفة</guilabel
+>: تتحكم هذه الخيارات في تخزين الإنذارات المؤرشفة في تقويم الإنذار المؤرشف المبدئي.</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>احتفظ بالإنذارات بعد انتهاء الصلاحية</guilabel
+>: اختر هذا الخيار لأرشفة الإنذارات المنتهية صلاحيتها والمحذوفة. ألغِ اختياره لعدم الاحتفاظ بأي سجل للإنذارات بمجرد توقفها عن النشاط. لاحظ أن الإنذارات المحذوفة تُؤرشف فقط إذا شُغِّلت سابقًا. إذا حذفت إنذارًا قبل أن يُشغَّل أبدًا، يُتخلص منه.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>تجاهل المنبهات المؤرشفة بعد</guilabel
+>: اضبط عدد الأيام لتخزين المنبهات المنتهية والمحذوفة في الأرشيف، وبعدها تُحذف نهائيًا.</para>
+</listitem>
+
+<listitem
+><para
+><guibutton
+>امسح المنبهات المؤرشفة</guibutton
+>: يهمل هذا الزر جميع المنبهات المؤرشفة حاليًا من تقويم المنبهات المؤرشفة المبدئي. (تُترك تقاويم المنبهات المؤرشفة الأخرى دون تغيير في حال مشاركتها مع أشخاص آخرين.) لا يؤثر هذا على المنبهات التي تنتهي أو تُحذف لاحقًا؛ ستستمر في الأرشفة وفق الخيارات المحددة.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-email">
+<title
+>البريد الإلكترونيّ</title>
+
+<para
+>يتيح لك قسم <guilabel
+>البريد الإلكتروني</guilabel
+> اختيار خيارات إرسال وعنونة منبهات البريد الإلكتروني:</para>
+
+<note
+><para
+>الخيارات المعتمدة على بريدك متاحة فقط إذا كان <link linkend="akonadi-plugin"
+>ملحق أكونادي</link
+> لـمنبهك مُثبتًا ومُفعّلًا.</para>
+</note>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>عميل البريد الإلكتروني</guilabel
+>: حدد عميل البريد الإلكتروني الذي سيُستخدم لإرسال منبهات البريد الإلكتروني:</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>KMail</guilabel
+>: عندما يُفعّل منبه بريد إلكتروني، يُرسل البريد الإلكتروني آليًا باستخدام بريدك.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Sendmail</guilabel
+>: عندما يُفعّل منبه بريد إلكتروني، يُرسل البريد الإلكتروني آليًا باستخدام &Sendmail;. سيعمل هذا الخيار فقط إذا كان نظامك مضبوطًا لاستخدام &Sendmail;، أو وكيل نقل بريد متوافق مع &Sendmail; مثل <application
+>postfix</application
+> أو <application
+>qmail</application
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>انسخ رسائل البريد الإلكتروني المرسلة إلى مجلد "البريد المرسل" في بريدك</guilabel
+>: اختر هذا الخيار إذا كنت تريد، في كل مرة يُفعّل فيها منبه بريد إلكتروني، تخزين نسخة من البريد الإلكتروني المرسل في مجلد <filename
+>sent-mail</filename
+> لـبريدك.</para>
+
+<note
+><para
+>هذا الخيار غير متاح عند اختيار بريدك كعميل بريد إلكتروني، لأن بريدك يفعل ذلك آليًا.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>أشعر عند اصطفاف رسائل البريد الإلكتروني البعيدة</guilabel
+>: اختر هذا الخيار لعرض إشعار كلما صفّف منبه بريد إلكتروني بريدًا إلكترونيًا للإرسال إلى نظام بعيد. قد يكون هذا مفيدًا إذا، على سبيل المثال، كان لديك اتصال هاتفي، أو اصطفّ البريد الإلكتروني في مجلد <filename
+>outbox</filename
+> لـبريدك، لضمان قيامك بكل ما يلزم لإرسال البريد الإلكتروني فعليًا.</para>
+</listitem>
+
+<listitem>
+<para
+>اختر عنوان بريدك الإلكتروني ليُستخدم كعنوان المرسل في منبهات البريد الإلكتروني:</para>
+
+<itemizedlist>
+<listitem
+><para
+>اختر <guilabel
+>من</guilabel
+> لإدخال عنوان بريد إلكتروني.</para>
+</listitem>
+
+<listitem
+><para
+>اختر <guilabel
+>استخدم هوية KMail المبدئية</guilabel
+> لاستخدام عنوان بريدك الإلكتروني المبدئي المضبوط في بريدك.</para>
+</listitem>
+
+<listitem
+><para
+>اختر <guilabel
+>استخدم هويات بريدك</guilabel
+> لتتمكن من اختيار هوية البريد الإلكتروني لـبريدك التي ستُستخدم عند ضبط منبه بريد إلكتروني. ستُستخدم هوية بريدك المبدئية للمنبهات التي ضُبطت بالفعل قبل اختيارك هذا الخيار.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>اختر عنوان بريدك الإلكتروني ليُستخدم لإرسال نسخ مخفية من منبهات البريد الإلكتروني إلى نفسك عند اختيار خيار <guilabel
+>انسخ البريد الإلكتروني إلى النفس</guilabel
+>:</para>
+
+<itemizedlist>
+<listitem
+><para
+>اختر <guilabel
+>نسخة مخفية</guilabel
+> لإدخال عنوان بريد إلكتروني. إذا كانت النسخ المخفية ستُرسل إلى حسابك على الحاسوب الذي يعمل عليه منبهك، يمكنك ببساطة إدخال اسم دخول المستخدم الخاص بك هنا.</para>
+</listitem>
+
+<listitem
+><para
+>اختر <guilabel
+>استخدم هوية KMail المبدئية</guilabel
+> لاستخدام عنوان بريدك الإلكتروني المبدئي المضبوط في بريدك.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-view">
+<title
+>عرض</title>
+
+<para
+>يتيح لك قسم <guilabel
+>العرض</guilabel
+> التحكم في بعض جوانب مظهر منبهك. في اللسان <guilabel
+>عام</guilabel
+>:</para>
+<itemizedlist>
+
+<listitem>
+<para
+>مربع مجموعة <guilabel
+>أظهر في علبة النظام</guilabel
+>: عند اختياره، يُعرض أيقونة علبة النظام أثناء تشغيل منبهك، وفقًا للخيار المحدد:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>أظهر دائمًا</guilabel
+>: تُعرض أيقونة علبة النظام دائمًا.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>أخفِ آليًا إذا لم تكن هناك منبهات نشطة</guilabel
+>: تُخفى أيقونة علبة النظام إذا لم تكن هناك منبهات نشطة.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>إخفاء آلي إذا لم ينضج إنذار خلال الفترة الزمنية</guilabel
+>: يُخفى أيقونة علبة النظام إذا لم ينضج أي إنذار خلال الفترة الزمنية المدخلة، بدءًا من الآن.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>عندما تُخفى أيقونة علبة النظام آليًا، يمكنك جعلها مرئية عبر خيار علبة النظام لإظهار الأيقونات المخفية.</para>
+
+<para
+>عند اختيار <guilabel
+>أظهر في علبة النظام</guilabel
+>، يؤدي إغلاق أيقونة علبة النظام إلى إغلاق جميع النوافذ الرئيسة لـمنبهك، وإذا لم تكن أي نوافذ رسائل مرئية، يُنهي التطبيق.</para>
+</listitem>
+
+<listitem>
+<para
+>مربع مجموعة <guilabel
+>تلميح علبة النظام</guilabel
+>: تتحكم هذه الخيارات في المعلومات المعروضة في التلميح الذي يظهر عند تحويم مؤشر الفأرة فوق أيقونة علبة النظام لـمنبهك.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>أظهر إنذارات الـ24 ساعة القادمة</guilabel
+>: عند اختياره، يُعرض ملخص لأول عدد من الإنذارات الناضجة في الـ24 ساعة القادمة.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>العدد الأقصى للإنذارات المعروضة</guilabel
+>: ألغِ اختيار هذا الخيار لعرض جميع إنذارات الـ24 ساعة القادمة. اختره لتعيين العدد الأقصى للإنذارات التي ستُعرض.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>أظهر وقت الإنذار</guilabel
+>: اختر هذا الخيار لإظهار الوقت المقرر لكل إنذار.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>أظهر الوقت المتبقي للإنذار</guilabel
+>: اختر هذا الخيار لإظهار طول الوقت المتبقي قبل حدوث كل إنذار مقرر تالٍ. يُعرض طول الوقت بالساعات والدقائق.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>بادئة</guilabel
+>: حدد رمزًا أو نصًا ليُعرض أمام طول الوقت المتبقي للإنذار، لتمييزه عن الوقت المقرر للإنذار.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>يسمح مربع مجموعة <guilabel
+>قائمة الإنذارات</guilabel
+> باختيار الألوان المستخدمة في قائمة الإنذارات في النافذة الرئيسة لـمنبهك، لإظهار الإنذارات المعطلة والمؤرشفة.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>تحتوي لسان <guilabel
+>نوافذ الإنذارات</guilabel
+> على خيارات للتحكم في مظهر نوافذ رسائل الإنذار. تعتمد الخيارات المتاحة على نظام النوافذ المستخدم.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><application
+>نظام النوافذ اكس11</application
+></para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>ضع النوافذ بعيدًا عن مؤشر الفأرة</guilabel
+>: اختر هذا الخيار لعرض نوافذ رسائل الإنذار بعيدًا قدر الإمكان عن موضع مؤشر الفأرة الحالي. يقلل هذا من فرصة تأكيد إنذار عرضيًا بالنقر غير المقصود على زر لحظة ظهور نافذة الرسالة.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>وسّط النوافذ، أخرّ تفعيل أزرار النافذة</guilabel
+>: اختر هذا الخيار لعرض نوافذ رسائل الإنذار في وسط الشاشة. لتقليل فرصة تأكيد الإنذار عرضيًا، تُعطل أزرار النافذة مبدئيًا. يُضبط التأخير بالثواني قبل أن تصبح نشطة في <guilabel
+>تأخير تفعيل الزر (ثوانٍ)</guilabel
+>.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>نوافذ الرسائل لها شريط عنوان وتأخذ بؤرة لوحة المفاتيح</guilabel
+>: يتحكم هذا الخيار في ما إذا كانت نوافذ رسائل الإنذار مشروطة أم لا، أي ما إذا كانت تستحوذ على بؤرة لوحة المفاتيح عند ظهورها. راجع قسم <link linkend="message-display"
+>عرض رسالة الإنذار</link
+> للتفاصيل.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+><application
+>نظام نوافذ ويلاند</application
+></para>
+
+<itemizedlist>
+<listitem>
+<para
+>لتقليل فرصة تأكيد الإنذار عرضيًا، تُعطل أزرار النافذة مبدئيًا. يُضبط التأخير بالثواني قبل أن تصبح نشطة في <guilabel
+>تأخير تفعيل الزر (ثوانٍ)</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="preferences-edit">
+<title
+>حرّر</title>
+
+<para
+>يتيح لك قسم <guilabel
+>تحرير</guilabel
+> اختيار قيم مبدئية للخيارات في <link linkend="alarm-edit-dlg"
+>حوار تحرير الإنذار</link
+>:</para>
+
+<itemizedlist>
+<listitem
+><para
+>تحتوي لسان <guilabel
+>عام</guilabel
+> على خيارات تنطبق على جميع أنواع الإنذارات.</para>
+
+<itemizedlist>
+<listitem
+><para
+>اضبط الطريقة المبدئية لعرض رسائل الإنذار.</para>
+</listitem>
+
+<listitem
+><para
+>اضبط الحالات المبدئية لخانتي الاختيار <guilabel
+>أظهر في KOrganizer</guilabel
+> و<guilabel
+>ألغِ إذا تأخر</guilabel
+>.</para>
+</listitem>
+
+<listitem
+><para
+>اضبط نوع التكرار المبدئي.</para>
+</listitem>
+
+<listitem
+><para
+>اختر المعالجة المبدئية في السنوات غير الكبيسة للتكرارات السنوية المجدولة ليوم 29 فبراير.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+>تحتوي لسان <guilabel
+>أنواع المنبهات</guilabel
+> على خيارات تنطبق على أنواع محددة من المنبهات.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>للمنبهات العرضية:</para>
+
+<itemizedlist>
+<listitem
+><para
+>اضبط الحالات المبدئية لخانتي الاختيار <guilabel
+>إغلاق النافذة آليًا بعد هذه المدة</guilabel
+> و<guilabel
+>تأكيد الإقرار</guilabel
+>.</para>
+</listitem>
+
+<listitem
+><para
+>اضبط وحدات فترة التذكير المبدئية.</para>
+</listitem>
+
+<listitem
+><para
+>اضبط إجراءات المنبه العرضي الخاصة المبدئية.</para>
+</listitem>
+
+<listitem
+><para
+>اضبط خيارات الصوت المبدئية. لاحظ أنه يمكن تحديد ملف صوت مبدئي حتى لو لم يُضبط نوع الصوت على <guilabel
+>ملف صوت</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>لمنبهات الأوامر:</para>
+
+<itemizedlist>
+<listitem
+><para
+>اضبط الحالات المبدئية لخانتي الاختيار <guilabel
+>أدخل سكريبت</guilabel
+> و<guilabel
+>نفذ في نافذة طرفية</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>لمنبهات البريد الإلكتروني:</para>
+
+<itemizedlist>
+<listitem
+><para
+>اضبط الحالة المبدئية لخانة الاختيار <guilabel
+>انسخ البريد إلى النفس</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+>تتيح لك لسان <guilabel
+>الخط واللون</guilabel
+> ضبط المظهر المبدئي لرسائل المنبهات. اختر خطها المبدئي، وألوان المقدمة والخلفية.</para>
+</listitem>
+</itemizedlist>
+</sect1>
+
+</chapter>
+
+<chapter id="cmdline-operation">
+<title
+>تشغيل سطر الأوامر</title>
+
+<para
+>عند توفير وسائط سطر الأوامر، لا يعرض منبهك قائمة المنبهات المجدولة كما هو موصوف في <link linkend="using-kalarm"
+>استخدام منبهك</link
+> أعلاه. يمكن استخدام خيارات سطر الأوامر الخاصة بـ منبهك لأداء العمليات التالية:</para>
+
+<itemizedlist>
+<listitem
+><para
+>جدولة منبه جديد</para>
+</listitem>
+<listitem
+><para
+>التحكم في وضع عرض منبهك</para>
+</listitem>
+<listitem
+><para
+>الحصول على مساعدة</para>
+</listitem>
+</itemizedlist>
+
+<para
+>تُوفَّر خيارات إضافية لسطر الأوامر بشكل أساسي لتمكين البرامج الأخرى من التفاعل مع منبهك. وهي موصوفة في الفصل <link linkend="cmdline-interface"
+>دليل المطور لـ منبهك</link
+>.</para>
+
+<para
+>يجب أن يحتوي سطر الأوامر فقط على خيارات تنطبق على عملية واحدة لـ منبهك. إذا أردت أداء عمليات متعددة، فعليك استدعاء منبهك مرات متعددة بمجموعة واحدة من الخيارات في كل مرة.</para>
+
+<sect1 id="cmdline-schedule">
+<title
+>جدولة منبه جديد</title>
+
+<para
+>تُستخدم الخيارات التالية لجدولة إنذار جديد:</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry
+>الخيار</entry>
+  <entry
+>الوصف</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry
+><option
+>-a</option
+>، <option
+>--ack-confirm</option
+></entry>
+  <entry
+>اطلب تأكيدًا عند الإقرار برسالة الإنذار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-A</option
+>، <option
+>--attach <replaceable
+>URL</replaceable
+></option
+></entry>
+  <entry
+>حدد المسار أو &URL; لملف يُرفق بالبريد الإلكتروني. يمكن تكرار هذا الخيار حسب الحاجة. يجب تحديد <option
+>--mail</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>--auto-close</option
+></entry>
+  <entry
+>أغلق نافذة الإنذار آليًا بعد انتهاء فترة <option
+>--late-cancel</option
+>. يجب تحديد <option
+>--late-cancel</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-b</option
+>، <option
+>--beep</option
+></entry>
+  <entry
+>أصدر صوت تنبيه مسموع عند عرض الرسالة. لا يمكن تحديد <option
+>--speak</option
+> و<option
+>--play</option
+> و<option
+>--play-repeat</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>--bcc</option
+></entry>
+  <entry
+>انسخ البريد الإلكتروني لنفسك كنسخة مخفية. يجب تحديد <option
+>--mail</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-c</option
+>، <option
+>--color</option
+>، <option
+>--colour <replaceable
+>color</replaceable
+></option
+></entry>
+  <entry
+>اضبط لون خلفية الرسالة على اسم اللون &Qt; المحدد أو الرمز السداسي العشري 0xRRGGBB.</entry>
+</row>
+<row>
+  <entry
+><option
+>-C</option
+>، <option
+>--colorfg</option
+>، <option
+>--colourfg <replaceable
+>color</replaceable
+></option
+></entry>
+  <entry
+>اضبط لون مقدمة الرسالة على اسم اللون &Qt; المحدد أو الرمز السداسي العشري 0xRRGGBB.</entry>
+</row>
+<row>
+  <entry
+><option
+>-d</option
+>, <option
+>--disable</option
+></entry>
+  <entry
+>عطّل الإنذار. لن يُفعّل حتى يُمكن يدويًا.</entry>
+</row>
+<row>
+  <entry
+><option
+>--disable-all</option
+></entry>
+  <entry
+>عطّل مراقبة الإنذار. يمنع ذلك تفعيل أي إنذارات حتى تعيد تمكين الإنذارات أو تعيد تشغيل منبهك، مثلًا عند تسجيل الدخول التالي. لا يمكن تحديد <option
+>--triggerEvent</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-e</option
+>، <option
+>--exec <replaceable
+>commandline</replaceable
+></option
+></entry>
+  <entry
+>حدد أمر صدفة لتنفيذه. إذا حُدد، يجب أن يكون هذا الخيار آخر خيار منبهك في سطر أوامر منبهك. تُفسر جميع معاملات وخيارات الأوامر اللاحقة على أنها تشكل سطر الأوامر المراد تنفيذه. لا يمكن تحديد <option
+>--file</option
+> و<option
+>--exec-display</option
+> و<option
+>--mail</option
+> مع هذا الخيار. يُتجاهل <option
+>--ack-confirm</option
+> و<option
+>--beep</option
+> و<option
+>--color</option
+> و<option
+>--colorfg</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-E</option
+>، <option
+>--exec-display <replaceable
+>commandline</replaceable
+></option
+></entry>
+  <entry
+>حدد أمر صدفة لتنفيذه لتوليد نص رسالة الإنذار. إذا حُدد، يجب أن يكون هذا الخيار آخر خيار منبهك في سطر أوامر منبهك. تُفسر جميع معاملات وخيارات الأوامر اللاحقة على أنها تشكل سطر الأوامر المراد تنفيذه. لا يمكن تحديد <option
+>--exec</option
+> و<option
+>--file</option
+> و<option
+>--mail</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-f</option
+>، <option
+>--file <replaceable
+>URL</replaceable
+></option
+></entry>
+  <entry
+>حدد المسار أو &URL; لملف نصي أو صوري ستشكل محتوياته رسالة التنبيه. لا يمكن تحديد <option
+>--exec</option
+> أو <option
+>--exec-display</option
+> أو <option
+>--mail</option
+>، ويجب ألا يكون <replaceable
+>message</replaceable
+> موجودًا مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-F</option
+>، <option
+>--from-id <replaceable
+>ID</replaceable
+></option
+></entry>
+  <entry
+>استخدم هوية بريدك المحددة كمرسل للبريد الإلكتروني. يجب تحديد <option
+>--mail</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-i</option
+>، <option
+>--interval <replaceable
+>period</replaceable
+></option
+></entry>
+  <entry
+>اضبط الفاصل الزمني بين تكرارات التنبيه. تُحدد الساعات/الدقائق بالتنسيق <replaceable
+>nHnM</replaceable
+>، حيث <replaceable
+>n</replaceable
+> رقم، مثلًا 3H30M. تُحدد الفترات الزمنية الأخرى بالتنسيق <replaceable
+>nX</replaceable
+>، حيث <replaceable
+>n</replaceable
+> رقم و<replaceable
+>X</replaceable
+> أحد الأحرف التالية: Y (سنوات)، M (أشهر)، W (أسابيع)، D (أيام). إذا حُدد <option
+>--recurrence</option
+> أيضًا، فلا يُسمح بـ Y (سنوات) وM (أشهر). إجباري إذا حُدد <option
+>--repeat</option
+> أو <option
+>--until</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-k</option
+>، <option
+>--korganizer</option
+></entry>
+  <entry
+>اعرض التنبيه كحدث في التقويم النشط لـ &korganizer;.</entry>
+</row>
+<row>
+  <entry
+><option
+>-l</option
+>، <option
+>--late-cancel <replaceable
+>period</replaceable
+></option
+></entry>
+  <entry
+>ألغِ التنبيه إذا تعذر تشغيله ضمن <replaceable
+>period</replaceable
+> المحدد بعد الوقت الصحيح. تُحدد الساعات/الدقائق بالتنسيق <replaceable
+>nHnM</replaceable
+>، حيث <replaceable
+>n</replaceable
+> رقم، مثلًا 3H30M. تُحدد الفترات الزمنية الأخرى بالتنسيق <replaceable
+>nX</replaceable
+>، حيث <replaceable
+>n</replaceable
+> رقم و<replaceable
+>X</replaceable
+> أحد الأحرف التالية: W (أسابيع)، D (أيام). القيمة المبدئية لـ <replaceable
+>period</replaceable
+> هي دقيقة واحدة.</entry>
+</row>
+<row>
+  <entry
+><option
+>-L</option
+>, <option
+>--login</option
+></entry>
+  <entry
+>شغّل التنبيه في كل مرة تسجل فيها الدخول. لا يمكن تحديد <option
+>--interval</option
+> أو <option
+>--repeat</option
+> أو <option
+>--until</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-m</option
+>، <option
+>--mail <replaceable
+>address</replaceable
+></option
+></entry>
+  <entry
+>أرسل بريدًا إلكترونيًا إلى العنوان المحدد. يمكن تكرار هذا الخيار حسب الحاجة. لا يمكن تحديد <option
+>--exec</option
+> أو <option
+>--exec-display</option
+> أو <option
+>--file</option
+> مع هذا الخيار. يُتجاهل <option
+>--ack-confirm</option
+> و<option
+>--beep</option
+> و<option
+>--color</option
+> و<option
+>--colorfg</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-n</option
+>، <option
+>--name <replaceable
+>name</replaceable
+></option
+></entry>
+  <entry
+>حدد اسمًا لمساعدتك في التعرف على التنبيه.</entry>
+</row>
+<row>
+  <entry
+><option
+>-N</option
+>، <option
+>--notify</option
+></entry>
+  <entry
+>اعرض التنبيه كإشعار، وليس في نافذة. لا يمكن تحديد <option
+>--color</option
+> أو <option
+>--colorfg</option
+> أو <option
+>--play</option
+> أو <option
+>--ack-confirm</option
+> أو <option
+>--auto-close</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-p</option
+>، <option
+>--play <replaceable
+>URL</replaceable
+></option
+></entry>
+  <entry
+>حدد المسار أو &URL; لملف صوتي يُشغل مرة واحدة، إما كتنبيه صوتي أو عند عرض رسالة التنبيه. لا يمكن تحديد <option
+>--play-repeat</option
+> أو <option
+>--beep</option
+> أو <option
+>--speak</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-P</option
+>، <option
+>--play-repeat <replaceable
+>URL</replaceable
+></option
+></entry>
+  <entry
+>حدد المسار أو &URL; لملف صوتي يُشغل بشكل متكرر، إما حتى يُستخدم <guilabel
+>Stop Play</guilabel
+>، أو طالما تُعرض رسالة التنبيه. لا يمكن تحديد <option
+>--play</option
+> أو <option
+>--beep</option
+> أو <option
+>--speak</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>--recurrence <replaceable
+>مواصفات</replaceable
+></option
+></entry>
+  <entry
+>اضبط المنبه ليتكرر. حدد التكرار باستخدام صيغة iCalendar (المُعرَّفة في <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>)، مثل <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+>. لا يمكن تحديد <option
+>--until</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-r</option
+>, <option
+>--repeat <replaceable
+>عدد</replaceable
+></option
+></entry>
+  <entry
+>اضبط عدد مرات تشغيل المنبه، أو إذا حُدد تكرار مع <option
+>--recurrence</option
+>، فعدد مرات تشغيل المنبه كل مرة يُفعِّله فيها <option
+>--recurrence</option
+> (أي تكرار ضمن تكرار). إذا لم يكن <option
+>--recurrence</option
+> موجودًا، فحدد -1 لتكرار المنبه بلا حدود. يجب تحديد <option
+>--interval</option
+>، ولا يمكن تحديد <option
+>--until</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-R</option
+>, <option
+>--reminder <replaceable
+>فترة</replaceable
+></option
+></entry>
+  <entry
+>أخرج منبه تذكير بالمدة الزمنية المحددة قبل أو بعد المنبه الرئيس وكل تكراراته (إن وُجدت). تُحدد <replaceable
+>الفترة</replaceable
+> بنفس الصيغة الموصوفة لـ <option
+>--late-cancel</option
+>. مبدئيًا، سيحدث التذكير قبل المنبه. لتحديد تذكير بعد المنبه، اسبق <replaceable
+>الفترة</replaceable
+> بـ <replaceable
+>+</replaceable
+>، مثل +3D. لا يمكن تحديد هذا الخيار مع <option
+>--exec</option
+> أو <option
+>--mail</option
+> أو <option
+>--reminder-once</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>--reminder-once <replaceable
+>فترة</replaceable
+></option
+></entry>
+  <entry
+>أخرج منبه تذكير مرة واحدة، بالمدة الزمنية المحددة قبل أو بعد التكرار الأول للمنبه. لن يُعرض أي تذكير قبل أو بعد التكرارات اللاحقة (إن وُجدت). تُحدد <replaceable
+>الفترة</replaceable
+> بنفس الصيغة الموصوفة لـ <option
+>--reminder</option
+>. لا يمكن تحديد هذا الخيار مع <option
+>--exec</option
+> أو <option
+>--mail</option
+> أو <option
+>--reminder</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-s</option
+>, <option
+>--speak</option
+></entry>
+  <entry
+>انطق الرسالة عند عرضها. يتطلب هذا الخيار أن يكون منبهك قد بُني مع تمكين النطق وأن تكون وحدة &Qt; Speech مثبتة وتعمل. لا يمكن تحديد <option
+>--beep</option
+> أو <option
+>--play</option
+> أو <option
+>--play-repeat</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>-S</option
+>, <option
+>--subject <replaceable
+>موضوع</replaceable
+></option
+></entry>
+  <entry
+>سطر موضوع البريد الإلكتروني. يجب تحديد <option
+>--mail</option
+> مع هذا الخيار.</entry>
+</row>
+<!-- test-set-time time (debug mode)-->
+<row>
+  <entry
+><option
+>-t</option
+>, <option
+>--time <replaceable
+>تاريخ/وقت</replaceable
+></option
+></entry>
+  <entry
+>شغّل المنبه في التاريخ أو في التاريخ/الوقت المحددين. حدد تاريخًا بدون وقت بالصيغة <replaceable
+>yyyy-mm-dd[ TZ]</replaceable
+>؛ حدد تاريخًا ووقتًا بـ <replaceable
+>[[[yyyy-]mm-]dd-]hh:mm[ TZ]</replaceable
+> (حيث تُحذف، فترجع حقول التاريخ مبدئيًا لقيم اليوم). إذا لم يُحدد نطاق زمني، فسيُفترض نطاق النظام المحلي. إذا وُجد محدد نطاق زمني <replaceable
+>TZ</replaceable
+>، فقد يكون اسم نطاق زمني للنظام (مثل <userinput
+>Europe/London</userinput
+>)، أو <userinput
+>UTC</userinput
+> لتمثيل نطاق UTC الزمني.</entry>
+</row>
+<row>
+  <entry
+><option
+>-v</option
+>, <option
+>--volume <replaceable
+>نسبة مئوية</replaceable
+></option
+></entry>
+  <entry
+>اضبط مستوى الصوت لتشغيل الملف الصوتي. يمكن استخدام هذا الخيار فقط عند تحديد <option
+>--play</option
+> أو <option
+>--play-repeat</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-u</option
+>, <option
+>--until <replaceable
+>تاريخ/وقت</replaceable
+></option
+></entry>
+  <entry
+>كرر المنبه حتى التاريخ أو التاريخ/الوقت المحددين. حدد التاريخ أو التاريخ/الوقت باستخدام نفس الصيغة لـ <option
+>--time</option
+>. لاحظ أنه إذا حُدد <option
+>--time</option
+>، فسيُؤخذ النطاق الزمني من قيمته ولا يجوز تضمين أي نطاق زمني في قيمة <option
+>--until</option
+>. يجب تحديد <option
+>--interval</option
+>، ولا يمكن تحديد <option
+>--repeat</option
+> و <option
+>--recurrence</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><replaceable
+>الرسالة</replaceable
+></entry>
+  <entry
+>نص الرسالة لعرضه، أو إذا حُدد <option
+>--mail</option
+>، فمتن رسالة البريد الإلكتروني.</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para
+>يجب تحديد إما نص رسالة، أو <option
+>--file</option
+>، أو <option
+>--exec</option
+>، أو <option
+>--exec-display</option
+>، أو <option
+>--play</option
+>، أو <option
+>--play-repeat</option
+>؛ باستثناء ما ذُكر أعلاه، فجميع الخيارات اختيارية.</para>
+
+<para
+>مثالان بديلان يعرضان رسالة متعددة الأسطر بخلفية حمراء في الساعة 10 مساءً من اليوم 27 من هذا الشهر هما:</para>
+
+<informalexample
+><screen
+><prompt
+>%</prompt
+> <userinput
+><command
+>kalarm</command
+> <option
+>-c <replaceable
+>red</replaceable
+></option
+> <option
+>-t <replaceable
+>27-22:00</replaceable
+></option
+> <option
+><replaceable
+>"Remember to\nSTOP"</replaceable
+></option
+></userinput>
+<prompt
+>%</prompt
+> <userinput
+><command
+>kalarm</command
+> <option
+>-c <replaceable
+>0xFF0000</replaceable
+></option
+> <option
+>-t <replaceable
+>27-22:00</replaceable
+></option
+> <option
+><replaceable
+>"Remember to\nSTOP"</replaceable
+></option
+></userinput
+>
+</screen>
+</informalexample>
+
+</sect1>
+
+<sect1 id="cmdline-other">
+<title
+>خيارات أخرى</title>
+
+<para
+>تُستخدم الخيارات التالية لأداء وظائف متنوعة، بما في ذلك عرض <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+>.</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry
+>الخيار</entry>
+  <entry
+>الوصف</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry
+><option
+>--edit <replaceable
+>معرف_الحدث</replaceable
+></option
+></entry>
+  <entry
+>اعرض حوار تحرير المنبه لتحرير المنبه بمعرف الحدث المحدد. معرف الحدث هو المعرف الفريد للحدث، ويُسبق اختياريًا باسم الضبط أو المعرف الرقمي للمورد المحتوي على الحدث، بالتنسيق <replaceable
+>[معرف_المورد:]معرف_الحدث_الفريد</replaceable
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-audio</option
+></entry>
+  <entry
+>اعرض حوار تحرير المنبه، لتحرير منبه صوتي جديد.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-command</option
+></entry>
+  <entry
+>اعرض حوار تحرير المنبه، لتحرير منبه أمر جديد.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-display</option
+></entry>
+  <entry
+>اعرض حوار تحرير المنبه، لتحرير منبه عرض جديد.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-email</option
+></entry>
+  <entry
+>اعرض حوار تحرير المنبه، لتحرير منبه بريد إلكتروني جديد.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-preset <replaceable
+>اسم_القالب</replaceable
+></option
+></entry>
+  <entry
+>اعرض حوار تحرير المنبه، مضبوطًا مسبقًا بقالب المنبه بالاسم المحدد، لتحرير منبه جديد.</entry>
+</row>
+<row>
+  <entry
+><option
+>--list</option
+></entry>
+  <entry
+>أخرج قائمة بالمنبهات المجدولة إلى <filename
+>stdout</filename
+>. تعرض القائمة تفاصيل موجزة لكل منبه معلق: معرف المورد الخاص به، المعرف الفريد، الوقت المجدول التالي، ونص الرسالة أو الملف.</entry>
+</row>
+<row>
+  <entry
+><option
+>--tray</option
+></entry>
+  <entry
+>اعرض منبهك كأيقونة في علبة النظام.</entry>
+</row>
+<row>
+  <entry
+><option
+>--disable-all</option
+></entry>
+  <entry
+>عطّل مراقبة كل المنبّهات.</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para
+>طالع أيضًا:</para>
+<simplelist>
+<member
+>kf6options(7)</member>
+<member
+>qt6options(7)</member>
+</simplelist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="developers">
+<title
+>دليل المطور لـ منبهك</title>
+
+<para
+>يوفر منبهك واجهة للسماح للتطبيقات الأخرى بطلب الوظائف التالية:</para>
+
+<itemizedlist>
+<listitem
+><para
+>جدولة منبه جديد</para
+></listitem>
+<listitem
+><para
+>ألغِ منبهًا مجدولًا بالفعل</para
+></listitem>
+<listitem
+><para
+>أطلق إنذارًا مجدولًا مسبقًا</para
+></listitem>
+<listitem
+><para
+>اعرض حوار تحرير الإنذار</para
+></listitem>
+<listitem
+><para
+>اسرد الإنذارات المجدولة</para
+></listitem>
+</itemizedlist>
+
+<para
+>كل وظيفة من الوظائف أعلاه مُنفَّذة باستدعاء &DBus; وبسطر الأوامر. يُفضَّل استخدام استدعاءات &DBus; إذا كان منبهك قيد التشغيل فعلًا.</para>
+
+<sect1 id="dbus-interface">
+<title
+>واجهة &DBus;</title>
+
+<para
+>استدعاءات &DBus; الموصوفة في هذا المستند كلها مُنفَّذة في مسار كائن &DBus; <constant
+>/kalarm</constant
+> الخاص بـ منبهك. الواجهة مُعرَّفة في الملفين <filename
+>org.kde.kalarm.kalarm.xml</filename
+> و <filename
+>kalarmiface.h</filename
+>.</para>
+
+<refentry id="cancelEvent">
+<refmeta>
+<refentrytitle
+>cancelEvent</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>cancelEvent</refname>
+<refpurpose
+>ألغِ إنذارًا مجدولًا مسبقًا.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>void cancelEvent(const QString&amp; <replaceable
+>eventID</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>المعاملات</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>معرِّف‌مناسبة</parameter
+></term>
+<listitem>
+<para
+>يُحدِّد المُعرّف الفريد للحدث المطلوب إلغاؤه، مع إمكانية إضافة اسم الضبط أو المُعرّف الرقمي للمورد المحتوي على الحدث كبادئة، بالتنسيق <replaceable
+>[resourceID:]eventUID</replaceable
+>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>الوصف</title>
+
+<para
+><function
+>cancelEvent()</function
+> هو استدعاء &DBus; لإلغاء الإنذار المُحدَّد. يحذف منبهك الإنذار من التقويم دون عرضه أو تنفيذه.</para>
+
+</refsect1>
+</refentry>
+
+<refentry id="triggerEvent">
+<refmeta>
+<refentrytitle
+>triggerEvent</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>triggerEvent</refname>
+<refpurpose
+>أطلق إنذارًا مجدولًا مسبقًا.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>void triggerEvent(const QString&amp; <replaceable
+>eventID</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>المعاملات</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>معرِّف‌مناسبة</parameter
+></term>
+<listitem>
+<para
+>يُحدِّد المُعرّف الفريد للحدث المطلوب إطلاقه، مع إمكانية إضافة اسم الضبط أو المُعرّف الرقمي للمورد المحتوي على الحدث كبادئة، بالتنسيق <replaceable
+>[resourceID:]eventUID</replaceable
+>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>الوصف</title>
+
+<para
+><function
+>triggerEvent()</function
+> هو استدعاء &DBus; لإطلاق العرض أو التنفيذ الفوري للإنذار المُحدَّد (بغض النظر عن الوقت المُجدول له). يسترجع منبهك الإنذار من التقويم ثم يعرضه أو ينفذه.</para>
+
+<para
+>إذا كان الإنذار قد حان وقته، يحذف منبهك كل مرات حدوث الإنذار المجدولة حتى الوقت الحالي، وإذا لم تبقَ أي تكرارات للإنذار، يُحذف الإنذار من التقويم. إذا لم يحن وقت الإنذار بعد، تُترك مرات حدوثه المجدولة دون تغيير.</para>
+
+</refsect1>
+</refentry>
+
+<refentry id="scheduleMessage">
+<refmeta>
+<refentrytitle
+>scheduleMessage</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>جدولةرسالة</refname>
+<refpurpose
+>جدولة رسالة منبه جديدة.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleMessage(const QString&amp; <replaceable
+>name</replaceable
+>,
+                     const QString&amp; <replaceable
+>message</replaceable
+>,
+                     const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                     int <replaceable
+>lateCancel</replaceable
+>,
+                     unsigned <replaceable
+>flags</replaceable
+>, 
+                     const QString&amp; <replaceable
+>bgColor</replaceable
+>, 
+                     const QString&amp; <replaceable
+>fgColor</replaceable
+>, 
+                     const QString&amp; <replaceable
+>font</replaceable
+>, 
+                     const QString&amp; <replaceable
+>audioURL</replaceable
+>, 
+                     int <replaceable
+>reminderMins</replaceable
+>, 
+                     const QString&amp; <replaceable
+>recurrence</replaceable
+>,
+                     int <replaceable
+>subRepeatInterval</replaceable
+>, 
+                     int <replaceable
+>subRepeatCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleMessage(const QString&amp; <replaceable
+>name</replaceable
+>,
+                     const QString&amp; <replaceable
+>message</replaceable
+>,
+                     const QString&amp; <replaceable
+>startDateTime</replaceable
+>, 
+                     int <replaceable
+>lateCancel</replaceable
+>,
+                     unsigned <replaceable
+>flags</replaceable
+>, 
+                     const QString&amp; <replaceable
+>bgColor</replaceable
+>, 
+                     const QString&amp; <replaceable
+>fgColor</replaceable
+>, 
+                     const QString&amp; <replaceable
+>font</replaceable
+>, 
+                     const QString&amp; <replaceable
+>audioURL</replaceable
+>, 
+                     int <replaceable
+>reminderMins</replaceable
+>, 
+                     int <replaceable
+>recurType</replaceable
+>, 
+                     int <replaceable
+>recurInterval</replaceable
+>, 
+                     int <replaceable
+>recurCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleMessage(const QString&amp; <replaceable
+>name</replaceable
+>,
+                     const QString&amp; <replaceable
+>message</replaceable
+>,
+                     const QString&amp; <replaceable
+>startDateTime</replaceable
+>, 
+                     int <replaceable
+>lateCancel</replaceable
+>, 
+                     unsigned <replaceable
+>flags</replaceable
+>, 
+                     const QString&amp; <replaceable
+>bgColor</replaceable
+>, 
+                     const QString&amp; <replaceable
+>fgColor</replaceable
+>, 
+                     const QString&amp; <replaceable
+>font</replaceable
+>, 
+                     const QString&amp; <replaceable
+>audioURL</replaceable
+>, 
+                     int <replaceable
+>reminderMins</replaceable
+>, 
+                     int <replaceable
+>recurType</replaceable
+>, 
+                     int <replaceable
+>recurInterval</replaceable
+>, 
+                     const QString&amp; <replaceable
+>endDateTime</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>المعاملات</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>الاسم</parameter
+></term>
+<listitem>
+<para
+>يحدد اسمًا اختياريًا للمنبه.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>الرسالة</parameter
+></term>
+<listitem>
+<para
+>يحدد نص الرسالة المقرر جدولتها، أو إذا كانت <parameter
+>الأعلام</parameter
+> تحتوي على البت <userinput
+>DISPLAY_COMMAND</userinput
+>، يحدد سطر الأوامر المراد تنفيذه لتوليد نص الرسالة.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>تاريخالبدء</parameter
+></term>
+<listitem>
+<para
+>يحدد التاريخ المقرر، أو التاريخ والوقت، الذي يجب عرض الرسالة فيه. لمنبه تاريخ فقط، يجب أن تكون السلسلة بالتنسيق <replaceable
+>YYYY-MM-DD[ TZ]</replaceable
+> (كما تُرجعها <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). لمنبه بتاريخ ووقت، يجب أن تكون السلسلة بالتنسيق <replaceable
+>YYYY-MM-DDTHH:MM[:SS][ TZ]</replaceable
+> (كما تُرجعها <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) أو <replaceable
+>HH:MM[:SS]</replaceable
+> (كما تُرجعها <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). إذا لم يُحدد تاريخ، يُستخدم تاريخ اليوم. لاحظ أن أي قيمة للثواني تُتجاهل.</para>
+
+<para
+>إذا لم تُحدد منطقة زمنية، يُفترض منطقة النظام الزمنية المحلية. إذا وُجد محدد منطقة زمنية <replaceable
+>TZ</replaceable
+>، فقد يكون اسم منطقة زمنية للنظام (&eg; <userinput
+>Europe/London</userinput
+>)، أو <userinput
+>UTC</userinput
+> لتمثيل منطقة UTC الزمنية.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>إلغاءمتأخر</parameter
+></term>
+<listitem>
+<para
+>يُسبب إلغاء المنبه إذا تعذر تشغيله خلال العدد المحدد من الدقائق بعد وقت المنبه المقرر. إذا كانت القيمة 0، لن يُلغى المنبه مهما تأخر تشغيله.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>أعلام</parameter
+></term>
+<listitem>
+<para
+>يحدد OR المنطقي لأعلام المنبه المطلوبة. بتات الأعلام هي تلك المعرفة في الصنف <classname
+>منبهكIface</classname
+> في <filename
+>kalarmiface.h</filename
+>. لاحظ أن ليست كل بتات الأعلام قابلة للتطبيق على منبهات الرسائل.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>لونالخلفية</parameter
+></term>
+<listitem>
+<para
+>يحدد لون الخلفية لعرض الرسالة. قد تكون السلسلة بالتنسيق <quote
+>#RRGGBB</quote
+> (كما تُرجعها <methodname
+>QColor::name()</methodname
+>) حيث RR وGG وBB هي قيم سداسية عشرية مكونة من رقمين للأحمر والأخضر والأزرق. بدلًا من ذلك، قد تكون السلسلة بأي من التنسيقات الأخرى المقبولة بواسطة <methodname
+>QColor::setNamedColor()</methodname
+>، مثل اسم من قاعدة ألوان X (&eg; <quote
+>red</quote
+> أو <quote
+>steelblue</quote
+>). عيّن السلسلة إلى null لتحديد لون الخلفية المبدئي الحالي.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>لونالمقدمة</parameter
+></term>
+<listitem>
+<para
+>يحدد لون المقدمة لعرض الرسالة. تنسيق السلسلة هو نفسه لـ <parameter
+>لونالخلفية</parameter
+>، أو بدلًا من ذلك عيّن السلسلة إلى null لتحديد لون المقدمة المبدئي الحالي.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>الخط</parameter
+></term>
+<listitem>
+<para
+>يحدد الخط لعرض الرسالة. تنسيق السلسلة هو ما تُخرجه <methodname
+>QFont::toString()</methodname
+>. عيّن السلسلة إلى null لاستخدام خط الرسالة المبدئي الحالي وقت عرض الرسالة.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>رابطالصوت</parameter
+></term>
+<listitem>
+<para
+>يحدد الملف الصوتي المراد تشغيله عند عرض الرسالة. عيّن القيمة إلى null إذا لم يُراد تشغيل أي ملف صوتي.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>reminderMins</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد الدقائق التي تسبق المنبه الرئيس وكل تكرار له (إن وُجد) والتي يجب عرض منبه تذكيري عندها. حدد قيمة سالبة لعرض التذكير بعد المنبه الرئيس. حدد 0 إذا لم يكن التذكير مطلوبًا.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>التّكرار</parameter
+></term>
+<listitem>
+<para
+>يحدد تكرارًا منتظمًا للمنبه باستخدام صيغة iCalendar المعرفة في <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. على سبيل المثال، <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> يحدد 4 تكرارات بفاصل 3 أشهر في آخر إثنين من الشهر. لمنبه غير متكرر، حدد سلسلة فارغة.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurType</parameter
+></term>
+<listitem>
+<para
+>يحدد نوع التكرار للمنبه. القيم المسموح بها هي MINUTELY وDAILY وWEEKLY وMONTHLY وYEARLY. هذه القيم معرفة في الصنف <classname
+>منبهكIface</classname
+> في <filename
+>kalarmiface.h</filename
+>. التكرارات الشهرية هي من نوع يوم الشهر، والتكرارات السنوية هي من نوع التاريخ في السنة، مع أخذ التاريخ في كلتا الحالتين من الوسيط <parameter
+>startDateTime</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurInterval</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد الفترات (دقائق/أيام/أسابيع/شهور/سنوات كما يحددها <parameter
+>recurType</parameter
+>) بين تكرارات المنبه.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurCount</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد المرات التي يجب تكرار المنبه فيها. حدد -1 لتكرار المنبه إلى أجل غير مسمى.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>endDateTime</parameter
+></term>
+<listitem>
+<para
+>يحدد تاريخ الانتهاء، أو التاريخ والوقت، لتكرارات المنبه. إذا كان <parameter
+>startDateTime</parameter
+> يتضمن وقتًا، فيجب أن يتضمن هذا الوسيط وقتًا أيضًا؛ إذا كان <parameter
+>startDateTime</parameter
+> يحتوي على تاريخ فقط، فيجب أن يحتوي هذا الوسيط على تاريخ فقط أيضًا. يجب ألا يحتوي على محدد منطقة زمنية؛ تُستخدم نفس المنطقة الزمنية لـ <parameter
+>startDateTime</parameter
+> لتفسير قيمة هذا الوسيط.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatInterval</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد الدقائق بين التكرارات الفرعية للمنبه. حدد 0 لعدم وجود تكرار فرعي. يُتجاهل إذا لم يُحدد أي تكرار.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatCount</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد التكرارات الفرعية للمنبه، بما في ذلك الحدوث الأولي.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1 id="scheduleMessage-descrip">
+<title
+>الوصف</title>
+<para
+><function
+>scheduleMessage()</function
+> هو استدعاء &DBus; لجدولة رسالة المنبه المحددة لعرضها في التاريخ والوقت المحددين. له ثلاثة أشكال. الشكل الأكثر عمومية يسمح بتحديد تكرار عشوائي &ndash; استخدم هذا أيضًا للمنبهات غير المتكررة. الأشكال الأخرى توفر وصولًا مريحًا لمجموعة محدودة من أنواع تكرار المنبه، أحدها يحدد عدد التكرارات والآخر يحدد وقت الانتهاء.</para>
+
+<para
+>إذا كان الوقت المجدول (بما في ذلك أي تكرارات) قد مضى بالفعل، يعرض منبهك الرسالة فورًا (ما لم تشير قيمة <parameter
+>lateCancel</parameter
+> إلى أنه قد فات الأوان الآن لعرض المنبه، وفي هذه الحالة يتجاهل منبهك الطلب). إذا كان الوقت المجدول (أو تكرار) في المستقبل، يضيف منبهك رسالة المنبه إلى تقويم المنبهات النشطة المبدئي لعرضها لاحقًا.</para>
+</refsect1>
+</refentry>
+
+<refentry id="scheduleFile">
+<refmeta>
+<refentrytitle
+>scheduleFile</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleFile</refname>
+<refpurpose
+>جدولة منبه جديد يعرض محتويات ملف نصي أو صوري.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleFile(const QString&amp; <replaceable
+>name</replaceable
+>,
+                  const QString&amp; <replaceable
+>URL</replaceable
+>,
+                  const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                  int <replaceable
+>lateCancel</replaceable
+>,
+                  unsigned <replaceable
+>flags</replaceable
+>,
+                  const QString&amp; <replaceable
+>bgColor</replaceable
+>,
+                  const QString&amp; <replaceable
+>audioURL</replaceable
+>,
+                  int <replaceable
+>reminderMins</replaceable
+>,
+                  const QString&amp; <replaceable
+>recurrence</replaceable
+>,
+                  int <replaceable
+>subRepeatInterval</replaceable
+>, 
+                  int <replaceable
+>subRepeatCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleFile(const QString&amp; <replaceable
+>name</replaceable
+>,
+                  const QString&amp; <replaceable
+>URL</replaceable
+>,
+                  const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                  int <replaceable
+>lateCancel</replaceable
+>,
+                  unsigned <replaceable
+>flags</replaceable
+>,
+                  const QString&amp; <replaceable
+>bgColor</replaceable
+>,
+                  const QString&amp; <replaceable
+>audioURL</replaceable
+>,
+                  int <replaceable
+>reminderMins</replaceable
+>,
+                  int <replaceable
+>recurType</replaceable
+>,
+                  int <replaceable
+>recurInterval</replaceable
+>,
+                  int <replaceable
+>recurCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleFile(const QString&amp; <replaceable
+>name</replaceable
+>,
+                  const QString&amp; <replaceable
+>URL</replaceable
+>,
+                  const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                  int <replaceable
+>lateCancel</replaceable
+>,
+                  unsigned <replaceable
+>flags</replaceable
+>,
+                  const QString&amp; <replaceable
+>bgColor</replaceable
+>,
+                  const QString&amp; <replaceable
+>audioURL</replaceable
+>,
+                  int <replaceable
+>reminderMins</replaceable
+>,
+                  int <replaceable
+>recurType</replaceable
+>,
+                  int <replaceable
+>recurInterval</replaceable
+>,
+                  const QString&amp; <replaceable
+>endDateTime</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>المعاملات</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>الاسم</parameter
+></term>
+<listitem>
+<para
+>يحدد اسمًا اختياريًا للمنبه.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>رابط</parameter
+></term>
+<listitem>
+<para
+>يحدد ملف النص أو الصورة الذي ستُعرض محتوياته في الرسالة المقرر جدولتها.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>تاريخالبدء</parameter
+></term>
+<listitem>
+<para
+>يحدد التاريخ المقرر، أو التاريخ والوقت، الذي يجب عرض الرسالة فيه. لمنبه تاريخ فقط، يجب أن تكون السلسلة بالتنسيق <replaceable
+>YYYY-MM-DD[ TZ]</replaceable
+> (كما تُرجعها <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). لمنبه بتاريخ ووقت، يجب أن تكون السلسلة بالتنسيق <replaceable
+>YYYY-MM-DDTHH:MM[:SS][ TZ]</replaceable
+> (كما تُرجعها <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) أو <replaceable
+>HH:MM[:SS]</replaceable
+> (كما تُرجعها <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). إذا لم يُحدد تاريخ، يُستخدم تاريخ اليوم. لاحظ أن أي قيمة للثواني تُتجاهل.</para>
+
+<para
+>إذا لم تُحدد منطقة زمنية، يُفترض منطقة النظام الزمنية المحلية. إذا وُجد محدد منطقة زمنية <replaceable
+>TZ</replaceable
+>، فقد يكون اسم منطقة زمنية للنظام (&eg; <userinput
+>Europe/London</userinput
+>)، أو <userinput
+>UTC</userinput
+> لتمثيل منطقة UTC الزمنية.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>إلغاءمتأخر</parameter
+></term>
+<listitem>
+<para
+>يُسبب إلغاء المنبه إذا تعذر تشغيله خلال العدد المحدد من الدقائق بعد وقت المنبه المقرر. إذا كانت القيمة 0، لن يُلغى المنبه مهما تأخر تشغيله.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>أعلام</parameter
+></term>
+<listitem>
+<para
+>يحدد الجمع المنطقي (OR) لأعلام الإنذار المطلوبة. بتات الأعلام هي تلك المعرفة في الصنف <classname
+>منبهكIface</classname
+> في <filename
+>kalarmiface.h</filename
+>. لاحظ أن ليس كل بتات الأعلام قابلة للتطبيق على إنذارات الملفات.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>لونالخلفية</parameter
+></term>
+<listitem>
+<para
+>يحدد لون الخلفية لعرض الملف. قد تكون السلسلة بالتنسيق <quote
+>#RRGGBB</quote
+> (كما تُرجعها <methodname
+>QColor::name()</methodname
+>) حيث RR وGG وBB هي قيم سداسية عشرية مكونة من رقمين للأحمر والأخضر والأزرق. بدلًا من ذلك، قد تكون السلسلة بأي من التنسيقات الأخرى المقبولة بواسطة <methodname
+>QColor::setNamedColor()</methodname
+>، مثل اسم من قاعدة بيانات ألوان X (&eg; <quote
+>red</quote
+> أو <quote
+>steelblue</quote
+>). اضبط السلسلة على قيمة خالية لتحديد لون الخلفية المبدئي الحالي.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>رابطالصوت</parameter
+></term>
+<listitem>
+<para
+>يحدد الملف الصوتي المراد تشغيله عند عرض الرسالة. عيّن القيمة إلى null إذا لم يُراد تشغيل أي ملف صوتي.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>reminderMins</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد الدقائق التي تسبق المنبه الرئيس وكل تكرار له (إن وُجد) والتي يجب عرض منبه تذكيري عندها. حدد قيمة سالبة لعرض التذكير بعد المنبه الرئيس. حدد 0 إذا لم يكن التذكير مطلوبًا.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>التّكرار</parameter
+></term>
+<listitem>
+<para
+>يحدد تكرارًا منتظمًا للمنبه باستخدام صيغة iCalendar المعرفة في <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. على سبيل المثال، <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> يحدد 4 تكرارات بفاصل 3 أشهر في آخر إثنين من الشهر. لمنبه غير متكرر، حدد سلسلة فارغة.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurType</parameter
+></term>
+<listitem>
+<para
+>يحدد نوع التكرار للمنبه. القيم المسموح بها هي MINUTELY وDAILY وWEEKLY وMONTHLY وYEARLY. هذه القيم معرفة في الصنف <classname
+>منبهكIface</classname
+> في <filename
+>kalarmiface.h</filename
+>. التكرارات الشهرية هي من نوع يوم الشهر، والتكرارات السنوية هي من نوع التاريخ في السنة، مع أخذ التاريخ في كلتا الحالتين من الوسيط <parameter
+>startDateTime</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurInterval</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد الفترات (دقائق/أيام/أسابيع/شهور/سنوات كما يحددها <parameter
+>recurType</parameter
+>) بين تكرارات المنبه.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurCount</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد المرات التي يجب تكرار المنبه فيها. حدد -1 لتكرار المنبه إلى أجل غير مسمى.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>endDateTime</parameter
+></term>
+<listitem>
+<para
+>يحدد تاريخ الانتهاء، أو التاريخ والوقت، لتكرارات المنبه. إذا كان <parameter
+>startDateTime</parameter
+> يتضمن وقتًا، فيجب أن يتضمن هذا الوسيط وقتًا أيضًا؛ إذا كان <parameter
+>startDateTime</parameter
+> يحتوي على تاريخ فقط، فيجب أن يحتوي هذا الوسيط على تاريخ فقط أيضًا. يجب ألا يحتوي على محدد منطقة زمنية؛ تُستخدم نفس المنطقة الزمنية لـ <parameter
+>startDateTime</parameter
+> لتفسير قيمة هذا الوسيط.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatInterval</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد الدقائق بين التكرارات الفرعية للمنبه. حدد 0 لعدم وجود تكرار فرعي. يُتجاهل إذا لم يُحدد أي تكرار.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatCount</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد التكرارات الفرعية للمنبه، بما في ذلك الحدوث الأولي.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>الوصف</title>
+<para
+><function
+>scheduleFile()</function
+> هي استدعاء &DBus; لجدولة ملف النص أو الصورة المحدد لعرضه في التاريخ والوقت المحددين. بصرف النظر عن تحديد مسار ملف أو &URL; وحذف لون المقدمة والخط، فإن استخدامه مطابق لـ <link linkend="scheduleMessage-descrip"
+><function
+>scheduleMessage</function
+></link
+> - انظر وصف تلك الدالة لمزيد من التفاصيل.</para>
+</refsect1>
+</refentry>
+
+
+<refentry id="scheduleCommand">
+<refmeta>
+<refentrytitle
+>scheduleCommand</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleCommand</refname>
+<refpurpose
+>جدولة إنذار جديد ينفذ أمر صدفة.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleCommand(const QString&amp; <replaceable
+>name</replaceable
+>,
+                     const QString&amp; <replaceable
+>commandLine</replaceable
+>,
+                     const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                     int <replaceable
+>lateCancel</replaceable
+>,
+                     unsigned <replaceable
+>flags</replaceable
+>,
+                     const QString&amp; <replaceable
+>recurrence</replaceable
+>,
+                     int <replaceable
+>subRepeatInterval</replaceable
+>, 
+                     int <replaceable
+>subRepeatCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleCommand(const QString&amp; <replaceable
+>name</replaceable
+>,
+                     const QString&amp; <replaceable
+>commandLine</replaceable
+>,
+                     const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                     int <replaceable
+>lateCancel</replaceable
+>,
+                     unsigned <replaceable
+>flags</replaceable
+>,
+                     int <replaceable
+>recurType</replaceable
+>,
+                     int <replaceable
+>recurInterval</replaceable
+>,
+                     int <replaceable
+>recurCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleCommand(const QString&amp; <replaceable
+>name</replaceable
+>,
+                     const QString&amp; <replaceable
+>commandLine</replaceable
+>,
+                     const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                     int <replaceable
+>lateCancel</replaceable
+>,
+                     unsigned <replaceable
+>flags</replaceable
+>,
+                     int <replaceable
+>recurType</replaceable
+>,
+                     int <replaceable
+>recurInterval</replaceable
+>,
+                     const QString&amp; <replaceable
+>endDateTime</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>المعاملات</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>الاسم</parameter
+></term>
+<listitem>
+<para
+>يحدد اسمًا اختياريًا للمنبه.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>سطر_الأمر</parameter
+></term>
+<listitem>
+<para
+>يحدد الأمر المقرر جدولة تنفيذه. تشير وسيطة <parameter
+>الأعلام</parameter
+> إلى ما إذا كانت هذه الوسيطة تحتوي على سطر أوامر صدفة أم نص أمر.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>تاريخالبدء</parameter
+></term>
+<listitem>
+<para
+>يحدد التاريخ المقرر، أو التاريخ والوقت، الذي يجب عرض الرسالة فيه. لمنبه تاريخ فقط، يجب أن تكون السلسلة بالتنسيق <replaceable
+>YYYY-MM-DD[ TZ]</replaceable
+> (كما تُرجعها <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). لمنبه بتاريخ ووقت، يجب أن تكون السلسلة بالتنسيق <replaceable
+>YYYY-MM-DDTHH:MM[:SS][ TZ]</replaceable
+> (كما تُرجعها <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) أو <replaceable
+>HH:MM[:SS]</replaceable
+> (كما تُرجعها <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). إذا لم يُحدد تاريخ، يُستخدم تاريخ اليوم. لاحظ أن أي قيمة للثواني تُتجاهل.</para>
+
+<para
+>إذا لم تُحدد منطقة زمنية، يُفترض منطقة النظام الزمنية المحلية. إذا وُجد محدد منطقة زمنية <replaceable
+>TZ</replaceable
+>، فقد يكون اسم منطقة زمنية للنظام (&eg; <userinput
+>Europe/London</userinput
+>)، أو <userinput
+>UTC</userinput
+> لتمثيل منطقة UTC الزمنية.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>إلغاءمتأخر</parameter
+></term>
+<listitem>
+<para
+>يُسبب إلغاء المنبه إذا تعذر تشغيله خلال العدد المحدد من الدقائق بعد وقت المنبه المقرر. إذا كانت القيمة 0، لن يُلغى المنبه مهما تأخر تشغيله.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>أعلام</parameter
+></term>
+<listitem>
+<para
+>يحدد الجمع المنطقي (OR) لأعلام الإنذار المطلوبة. بتات الأعلام هي تلك المعرفة في الصنف <classname
+>منبهكIface</classname
+> في <filename
+>kalarmiface.h</filename
+>. لاحظ أن ليس كل بتات الأعلام قابلة للتطبيق على إنذارات الأوامر.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>التّكرار</parameter
+></term>
+<listitem>
+<para
+>يحدد تكرارًا منتظمًا للمنبه باستخدام صيغة iCalendar المعرفة في <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. على سبيل المثال، <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> يحدد 4 تكرارات بفاصل 3 أشهر في آخر إثنين من الشهر. لمنبه غير متكرر، حدد سلسلة فارغة.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurType</parameter
+></term>
+<listitem>
+<para
+>يحدد نوع التكرار للمنبه. القيم المسموح بها هي MINUTELY وDAILY وWEEKLY وMONTHLY وYEARLY. هذه القيم معرفة في الصنف <classname
+>منبهكIface</classname
+> في <filename
+>kalarmiface.h</filename
+>. التكرارات الشهرية هي من نوع يوم الشهر، والتكرارات السنوية هي من نوع التاريخ في السنة، مع أخذ التاريخ في كلتا الحالتين من الوسيط <parameter
+>startDateTime</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurInterval</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد الفترات (دقائق/أيام/أسابيع/شهور/سنوات كما يحددها <parameter
+>recurType</parameter
+>) بين تكرارات المنبه.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurCount</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد المرات التي يجب تكرار المنبه فيها. حدد -1 لتكرار المنبه إلى أجل غير مسمى.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>endDateTime</parameter
+></term>
+<listitem>
+<para
+>يحدد تاريخ الانتهاء، أو التاريخ والوقت، لتكرارات المنبه. إذا كان <parameter
+>startDateTime</parameter
+> يتضمن وقتًا، فيجب أن يتضمن هذا الوسيط وقتًا أيضًا؛ إذا كان <parameter
+>startDateTime</parameter
+> يحتوي على تاريخ فقط، فيجب أن يحتوي هذا الوسيط على تاريخ فقط أيضًا. يجب ألا يحتوي على محدد منطقة زمنية؛ تُستخدم نفس المنطقة الزمنية لـ <parameter
+>startDateTime</parameter
+> لتفسير قيمة هذا الوسيط.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatInterval</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد الدقائق بين التكرارات الفرعية للمنبه. حدد 0 لعدم وجود تكرار فرعي. يُتجاهل إذا لم يُحدد أي تكرار.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatCount</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد التكرارات الفرعية للمنبه، بما في ذلك الحدوث الأولي.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>الوصف</title>
+<para
+><function
+>scheduleCommand()</function
+> هي استدعاء &DBus; لجدولة سطر أوامر الصدفة المحدد، أو نص الأمر، للتنفيذ في التاريخ والوقت المحددين. بصرف النظر عن تحديد أمر وحذف وسائط لون الرسالة وخطها وملف الصوت، فإن استخدامه مطابق لـ <link linkend="scheduleMessage-descrip"
+><function
+>scheduleMessage</function
+></link
+> - انظر وصف تلك الدالة لمزيد من التفاصيل.</para>
+</refsect1>
+</refentry>
+
+
+<refentry id="scheduleEmail">
+<refmeta>
+<refentrytitle
+>scheduleEmail</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleEmail</refname>
+<refpurpose
+>جدولة إنذار جديد يرسل بريدًا إلكترونيًا.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleEmail(const QString&amp; <replaceable
+>name</replaceable
+>,
+                   const QString&amp; <replaceable
+>fromID</replaceable
+>,
+                   const QString&amp; <replaceable
+>addresses</replaceable
+>,
+                   const QString&amp; <replaceable
+>subject</replaceable
+>,
+                   const QString&amp; <replaceable
+>message</replaceable
+>,
+                   const QString&amp; <replaceable
+>attachments</replaceable
+>,
+                   const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                   int <replaceable
+>lateCancel</replaceable
+>,
+                   unsigned <replaceable
+>flags</replaceable
+>,
+                   const QString&amp; <replaceable
+>recurrence</replaceable
+>,
+                   int <replaceable
+>subRepeatInterval</replaceable
+>, 
+                   int <replaceable
+>subRepeatCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleEmail(const QString&amp; <replaceable
+>name</replaceable
+>,
+                   const QString&amp; <replaceable
+>fromID</replaceable
+>,
+                   const QString&amp; <replaceable
+>addresses</replaceable
+>,
+                   const QString&amp; <replaceable
+>subject</replaceable
+>,
+                   const QString&amp; <replaceable
+>message</replaceable
+>,
+                   const QString&amp; <replaceable
+>attachments</replaceable
+>,
+                   const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                   int <replaceable
+>lateCancel</replaceable
+>,
+                   unsigned <replaceable
+>flags</replaceable
+>,
+                   int <replaceable
+>recurType</replaceable
+>,
+                   int <replaceable
+>recurInterval</replaceable
+>,
+                   int <replaceable
+>recurCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleEmail(const QString&amp; <replaceable
+>name</replaceable
+>,
+                   const QString&amp; <replaceable
+>fromID</replaceable
+>,
+                   const QString&amp; <replaceable
+>addresses</replaceable
+>,
+                   const QString&amp; <replaceable
+>subject</replaceable
+>,
+                   const QString&amp; <replaceable
+>message</replaceable
+>,
+                   const QString&amp; <replaceable
+>attachments</replaceable
+>,
+                   const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                   int <replaceable
+>lateCancel</replaceable
+>, 
+                   unsigned <replaceable
+>flags</replaceable
+>,
+                   int <replaceable
+>recurType</replaceable
+>,
+                   int <replaceable
+>recurInterval</replaceable
+>,
+                   const QString&amp; <replaceable
+>endTime</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>المعاملات</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>الاسم</parameter
+></term>
+<listitem>
+<para
+>يحدد اسمًا اختياريًا للمنبه.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>fromID</parameter
+></term>
+<listitem>
+<para
+>هوية بريدك التي ستُستخدم كمرسل للبريد الإلكتروني. إذا كانت فارغة، سيكون عنوان البريد الإلكتروني للمرسل هو ذلك المضبوط في <link linkend="preferences-email"
+>تفضيلات البريد الإلكتروني</link
+> لـ منبهك.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>العناوين</parameter
+></term>
+<listitem>
+<para
+>قائمة مفصولة بفواصل لعناوين البريد الإلكتروني للمستلمين.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>الموضوع</parameter
+></term>
+<listitem>
+<para
+>يحدد سطر موضوع البريد الإلكتروني.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>الرسالة</parameter
+></term>
+<listitem>
+<para
+>يحدد نص رسالة البريد الإلكتروني.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>المرفقات</parameter
+></term>
+<listitem>
+<para
+>قائمة مفصولة بفواصل لمسارات أو &URL;ات ملفات تُرسل كمرفقات بريد إلكتروني.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>تاريخالبدء</parameter
+></term>
+<listitem>
+<para
+>يحدد التاريخ المقرر، أو التاريخ والوقت، الذي يجب عرض الرسالة فيه. لمنبه تاريخ فقط، يجب أن تكون السلسلة بالتنسيق <replaceable
+>YYYY-MM-DD[ TZ]</replaceable
+> (كما تُرجعها <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). لمنبه بتاريخ ووقت، يجب أن تكون السلسلة بالتنسيق <replaceable
+>YYYY-MM-DDTHH:MM[:SS][ TZ]</replaceable
+> (كما تُرجعها <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) أو <replaceable
+>HH:MM[:SS]</replaceable
+> (كما تُرجعها <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). إذا لم يُحدد تاريخ، يُستخدم تاريخ اليوم. لاحظ أن أي قيمة للثواني تُتجاهل.</para>
+
+<para
+>إذا لم تُحدد منطقة زمنية، يُفترض منطقة النظام الزمنية المحلية. إذا وُجد محدد منطقة زمنية <replaceable
+>TZ</replaceable
+>، فقد يكون اسم منطقة زمنية للنظام (&eg; <userinput
+>Europe/London</userinput
+>)، أو <userinput
+>UTC</userinput
+> لتمثيل منطقة UTC الزمنية.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>إلغاءمتأخر</parameter
+></term>
+<listitem>
+<para
+>يُسبب إلغاء المنبه إذا تعذر تشغيله خلال العدد المحدد من الدقائق بعد وقت المنبه المقرر. إذا كانت القيمة 0، لن يُلغى المنبه مهما تأخر تشغيله.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>أعلام</parameter
+></term>
+<listitem>
+<para
+>يحدد OR المنطقي لأعلام التنبيه المطلوبة. بتات الأعلام هي تلك المعرفة في الصنف <classname
+>منبهكIface</classname
+> في <filename
+>kalarmiface.h</filename
+>. لاحظ أن ليست كل بتات الأعلام قابلة للتطبيق على تنبيهات البريد الإلكتروني.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>التّكرار</parameter
+></term>
+<listitem>
+<para
+>يحدد تكرارًا منتظمًا للمنبه باستخدام صيغة iCalendar المعرفة في <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. على سبيل المثال، <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> يحدد 4 تكرارات بفاصل 3 أشهر في آخر إثنين من الشهر. لمنبه غير متكرر، حدد سلسلة فارغة.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurType</parameter
+></term>
+<listitem>
+<para
+>يحدد نوع التكرار للمنبه. القيم المسموح بها هي MINUTELY وDAILY وWEEKLY وMONTHLY وYEARLY. هذه القيم معرفة في الصنف <classname
+>منبهكIface</classname
+> في <filename
+>kalarmiface.h</filename
+>. التكرارات الشهرية هي من نوع يوم الشهر، والتكرارات السنوية هي من نوع التاريخ في السنة، مع أخذ التاريخ في كلتا الحالتين من الوسيط <parameter
+>startDateTime</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurInterval</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد الفترات (دقائق/أيام/أسابيع/شهور/سنوات كما يحددها <parameter
+>recurType</parameter
+>) بين تكرارات المنبه.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurCount</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد المرات التي يجب تكرار المنبه فيها. حدد -1 لتكرار المنبه إلى أجل غير مسمى.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>endDateTime</parameter
+></term>
+<listitem>
+<para
+>يحدد تاريخ الانتهاء، أو التاريخ والوقت، لتكرارات المنبه. إذا كان <parameter
+>startDateTime</parameter
+> يتضمن وقتًا، فيجب أن يتضمن هذا الوسيط وقتًا أيضًا؛ إذا كان <parameter
+>startDateTime</parameter
+> يحتوي على تاريخ فقط، فيجب أن يحتوي هذا الوسيط على تاريخ فقط أيضًا. يجب ألا يحتوي على محدد منطقة زمنية؛ تُستخدم نفس المنطقة الزمنية لـ <parameter
+>startDateTime</parameter
+> لتفسير قيمة هذا الوسيط.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatInterval</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد الدقائق بين التكرارات الفرعية للمنبه. حدد 0 لعدم وجود تكرار فرعي. يُتجاهل إذا لم يُحدد أي تكرار.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatCount</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد التكرارات الفرعية للمنبه، بما في ذلك الحدوث الأولي.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>الوصف</title>
+<para
+><function
+>scheduleEmail()</function
+> هي استدعاء &DBus; لجدولة البريد الإلكتروني المحدد للإرسال في التاريخ والوقت المحددين. بصرف النظر عن تحديد رأس البريد الإلكتروني ومحتوياته وحذف وسائط لون الرسالة وخطها وملف الصوت، فإن استخدامه مطابق لـ <link linkend="scheduleMessage-descrip"
+><function
+>scheduleMessage</function
+></link
+> - انظر وصف تلك الدالة لمزيد من التفاصيل.</para>
+</refsect1>
+</refentry>
+
+
+<refentry id="scheduleAudio">
+<refmeta>
+<refentrytitle
+>scheduleAudio</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleAudio</refname>
+<refpurpose
+>جدولة إنذار جديد ينفذ أمر صدفة.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleAudio(const QString&amp; <replaceable
+>name</replaceable
+>,
+                   const QString&amp; <replaceable
+>audioURL</replaceable
+>,
+                   int <replaceable
+>volumePercent</replaceable
+>,
+                   const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                   int <replaceable
+>lateCancel</replaceable
+>,
+                   unsigned <replaceable
+>flags</replaceable
+>,
+                   const QString&amp; <replaceable
+>recurrence</replaceable
+>,
+                   int <replaceable
+>subRepeatInterval</replaceable
+>, 
+                   int <replaceable
+>subRepeatCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleAudio(const QString&amp; <replaceable
+>name</replaceable
+>,
+                   const QString&amp; <replaceable
+>audioURL</replaceable
+>,
+                   int <replaceable
+>volumePercent</replaceable
+>,
+                   const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                   int <replaceable
+>lateCancel</replaceable
+>,
+                   unsigned <replaceable
+>flags</replaceable
+>,
+                   int <replaceable
+>recurType</replaceable
+>,
+                   int <replaceable
+>recurInterval</replaceable
+>,
+                   int <replaceable
+>recurCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleAudio(const QString&amp; <replaceable
+>name</replaceable
+>,
+                   const QString&amp; <replaceable
+>audioURL</replaceable
+>,
+                   int <replaceable
+>volumePercent</replaceable
+>,
+                   const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                   int <replaceable
+>lateCancel</replaceable
+>,
+                   unsigned <replaceable
+>flags</replaceable
+>,
+                   int <replaceable
+>recurType</replaceable
+>,
+                   int <replaceable
+>recurInterval</replaceable
+>,
+                   const QString&amp; <replaceable
+>endDateTime</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>المعاملات</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>الاسم</parameter
+></term>
+<listitem>
+<para
+>يحدد اسمًا اختياريًا للمنبه.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>رابطالصوت</parameter
+></term>
+<listitem>
+<para
+>يحدد ملف الصوت الذي سيُشغل.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>volumePercent</parameter
+></term>
+<listitem>
+<para
+>يحدد مستوى الصوت المستخدم، كنسبة مئوية من الصوت الكامل. حدد -1 لاستخدام الصوت المبدئي.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>تاريخالبدء</parameter
+></term>
+<listitem>
+<para
+>يحدد التاريخ المقرر، أو التاريخ والوقت، الذي يجب عرض الرسالة فيه. لمنبه تاريخ فقط، يجب أن تكون السلسلة بالتنسيق <replaceable
+>YYYY-MM-DD[ TZ]</replaceable
+> (كما تُرجعها <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). لمنبه بتاريخ ووقت، يجب أن تكون السلسلة بالتنسيق <replaceable
+>YYYY-MM-DDTHH:MM[:SS][ TZ]</replaceable
+> (كما تُرجعها <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) أو <replaceable
+>HH:MM[:SS]</replaceable
+> (كما تُرجعها <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). إذا لم يُحدد تاريخ، يُستخدم تاريخ اليوم. لاحظ أن أي قيمة للثواني تُتجاهل.</para>
+
+<para
+>إذا لم تُحدد منطقة زمنية، يُفترض منطقة النظام الزمنية المحلية. إذا وُجد محدد منطقة زمنية <replaceable
+>TZ</replaceable
+>، فقد يكون اسم منطقة زمنية للنظام (&eg; <userinput
+>Europe/London</userinput
+>)، أو <userinput
+>UTC</userinput
+> لتمثيل منطقة UTC الزمنية.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>إلغاءمتأخر</parameter
+></term>
+<listitem>
+<para
+>يُسبب إلغاء المنبه إذا تعذر تشغيله خلال العدد المحدد من الدقائق بعد وقت المنبه المقرر. إذا كانت القيمة 0، لن يُلغى المنبه مهما تأخر تشغيله.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>أعلام</parameter
+></term>
+<listitem>
+<para
+>يحدد الجمع المنطقي (OR) لأعلام الإنذار المطلوبة. بتات الأعلام هي تلك المعرفة في الصنف <classname
+>منبهكIface</classname
+> في <filename
+>kalarmiface.h</filename
+>. لاحظ أن ليس كل بتات الأعلام قابلة للتطبيق على إنذارات الأوامر.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>التّكرار</parameter
+></term>
+<listitem>
+<para
+>يحدد تكرارًا منتظمًا للمنبه باستخدام صيغة iCalendar المعرفة في <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. على سبيل المثال، <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> يحدد 4 تكرارات بفاصل 3 أشهر في آخر إثنين من الشهر. لمنبه غير متكرر، حدد سلسلة فارغة.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurType</parameter
+></term>
+<listitem>
+<para
+>يحدد نوع التكرار للمنبه. القيم المسموح بها هي MINUTELY وDAILY وWEEKLY وMONTHLY وYEARLY. هذه القيم معرفة في الصنف <classname
+>منبهكIface</classname
+> في <filename
+>kalarmiface.h</filename
+>. التكرارات الشهرية هي من نوع يوم الشهر، والتكرارات السنوية هي من نوع التاريخ في السنة، مع أخذ التاريخ في كلتا الحالتين من الوسيط <parameter
+>startDateTime</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurInterval</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد الفترات (دقائق/أيام/أسابيع/شهور/سنوات كما يحددها <parameter
+>recurType</parameter
+>) بين تكرارات المنبه.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurCount</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد المرات التي يجب تكرار المنبه فيها. حدد -1 لتكرار المنبه إلى أجل غير مسمى.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>endDateTime</parameter
+></term>
+<listitem>
+<para
+>يحدد تاريخ الانتهاء، أو التاريخ والوقت، لتكرارات المنبه. إذا كان <parameter
+>startDateTime</parameter
+> يتضمن وقتًا، فيجب أن يتضمن هذا الوسيط وقتًا أيضًا؛ إذا كان <parameter
+>startDateTime</parameter
+> يحتوي على تاريخ فقط، فيجب أن يحتوي هذا الوسيط على تاريخ فقط أيضًا. يجب ألا يحتوي على محدد منطقة زمنية؛ تُستخدم نفس المنطقة الزمنية لـ <parameter
+>startDateTime</parameter
+> لتفسير قيمة هذا الوسيط.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatInterval</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد الدقائق بين التكرارات الفرعية للمنبه. حدد 0 لعدم وجود تكرار فرعي. يُتجاهل إذا لم يُحدد أي تكرار.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatCount</parameter
+></term>
+<listitem>
+<para
+>يحدد عدد التكرارات الفرعية للمنبه، بما في ذلك الحدوث الأولي.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>الوصف</title>
+<para
+><function
+>scheduleAudio()</function
+> هي استدعاء &DBus; لجدولة ملف الصوت المحدد ليُشغل في التاريخ والوقت المحددين. بصرف النظر عن تحديد مستوى الصوت وحذف وسائط لون الرسالة وخطها، فإن استخدامه مطابق لـ <link linkend="scheduleMessage-descrip"
+><function
+>scheduleMessage</function
+></link
+> - انظر وصف تلك الدالة لمزيد من التفاصيل.</para>
+</refsect1>
+</refentry>
+
+<refentry id="dbus_edit">
+<refmeta>
+<refentrytitle
+>حرّر</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>حرّر</refname>
+<refpurpose
+>اعرض <link linkend="alarm-edit-dlg"
+>حوار تحرير التنبيه</link
+> لتحرير تنبيه.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool edit(const QString&amp; <replaceable
+>معرف_الحدث</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>المعاملات</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>معرِّف‌مناسبة</parameter
+></term>
+<listitem>
+<para
+>يحدد المعرف الفريد للحدث المراد تحريره، ويمكن أن يسبقه اختياريًا اسم الضبط أو المعرف الرقمي للمورد المحتوي على الحدث، بالتنسيق <replaceable
+>[معرف_المورد:]معرف_الحدث_الفريد</replaceable
+>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+
+<refsect2>
+<title
+>قيمة الإرجاع</title>
+<para
+><returnvalue
+>false</returnvalue
+> إذا تعذر العثور على المنبه المحدد أو كان للقراءة فقط، <returnvalue
+>true</returnvalue
+> خلاف ذلك.</para>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>الوصف</title>
+
+<para
+><function
+>edit()</function
+> هي استدعاء &DBus; لعرض <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> لتحرير المنبه المحدد.</para>
+
+</refsect1>
+</refentry>
+
+<refentry id="dbus_editnew">
+<refmeta>
+<refentrytitle
+>editNew</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>editNew</refname>
+<refpurpose
+>اعرض <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> لتحرير منبه جديد.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool editNew(int <replaceable
+>النوع</replaceable
+>)
+</synopsis>
+<synopsis
+>bool editNew(const QString&amp; <replaceable
+>اسم_القالب</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>المعاملات</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>النوع</parameter
+></term>
+<listitem>
+<para
+>يحدد نوع المنبه. القيم المسموح بها هي DISPLAY و COMMAND و EMAIL و AUDIO. هذه معرفة في الصنف <classname
+>منبهكIface</classname
+> في <filename
+>kalarmiface.h</filename
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>اسم_القالب</parameter
+></term>
+<listitem>
+<para
+>يحدد اسم قالب منبه لبناء المنبه الجديد عليه.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+
+<refsect2>
+<title
+>قيمة الإرجاع</title>
+<para
+><returnvalue
+>false</returnvalue
+> إذا كان <parameter
+>النوع</parameter
+> ذا قيمة غير صالحة، أو إذا تعذر العثور على قالب بالاسم <parameter
+>اسم_القالب</parameter
+>؛ <returnvalue
+>true</returnvalue
+> خلاف ذلك.</para>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>الوصف</title>
+
+<para
+><function
+>editNew()</function
+> هي استدعاء &DBus; لعرض <link linkend="alarm-edit-dlg"
+>حوار تحرير المنبه</link
+> لتحرير منبه جديد. إذا حُدد نوع منبه كوسيط، يُعرض حوار فارغ. بدلًا من ذلك، إذا حُدد اسم قالب منبه كوسيط، يُضبط الحوار مسبقًا بتفاصيل من القالب.</para>
+
+</refsect1>
+</refentry>
+
+<refentry id="dbus_list">
+<refmeta>
+<refentrytitle
+>قائمة</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>قائمة</refname>
+<refpurpose
+>أرجع قائمة بالمنبهات المجدولة.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>QString list()
+</synopsis>
+
+<refsect2>
+<title
+>قيمة الإرجاع</title>
+<para
+>قائمة المنبهات، مفصولة بأسطر جديدة، كل منها بالتنسيق <returnvalue
+><replaceable
+>معرف_المورد</replaceable
+>:<replaceable
+>المعرف_الفريد</replaceable
+> <replaceable
+>الوقت</replaceable
+> <replaceable
+>النص</replaceable
+></returnvalue
+></para>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>الوصف</title>
+
+<para
+><function
+>list()</function
+> هي استدعاء &DBus; لإرجاع سلسلة تحتوي على ملخص للمنبهات المجدولة. تُظهر القائمة تفاصيل موجزة لكل منبه معلق: معرف المورد، المعرف الفريد، الوقت المجدول التالي، ونص الرسالة أو الملف.</para>
+
+</refsect1>
+</refentry>
+
+</sect1>
+
+<sect1 id="cmdline-interface">
+<title
+>واجهة سطر الأوامر</title>
+
+<para
+>خيارات سطر الأوامر متوفرة لتمكين البرامج الأخرى من تشغيل منبهك إذا لم يكن قيد التشغيل بالفعل، وذلك لتفعيل أو إلغاء المنبهات المجدولة، أو جدولة منبهات جديدة. سبب استخدام خيارات سطر الأوامر لهذا الغرض هو أنه إذا شُغل منبهك دون أي وسائط سطر أوامر ثم أُرسلت إليه طلبات &DBus;، فسيبدأ في وضعه الرسومي المبدئي، وهو أمر غير مرغوب فيه بوضوح لطلب بين البرامج.</para>
+
+<note
+><para
+>يجب على البرامج أن تتحقق أولًا مما إذا كان منبهك قيد التشغيل بالفعل؛ إذا كان كذلك، فعليها بدلًا من ذلك استخدام استدعاءات &DBus; لطلب هذه العمليات.</para
+></note>
+
+<para
+>خيارات سطر الأوامر لجدولة منبه جديد موصوفة في الفصل <link linkend="cmdline-operation"
+>تشغيل سطر الأوامر</link
+>. خيارات تشغيل وإلغاء المنبهات المجدولة هي كالتالي:</para>
+
+<note
+><para
+>يمكن للمستخدمين العاديين أيضًا استخدام خيارات سطر الأوامر هذه إذا أرادوا (بافتراض أنهم يستطيعون توفير معلومات الوسائط اللازمة).</para
+></note>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry
+>الخيار</entry>
+  <entry
+>الوصف</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry
+><option
+>--cancelEvent <replaceable
+>معرف_الحدث</replaceable
+></option
+></entry>
+  <entry
+>ألغِ المنبه بمعرف الحدث المحدد. معرف الحدث هو المعرف الفريد للحدث، ويمكن أن يسبقه اختياريًا معرف المورد المحتوي على الحدث، بالتنسيق <replaceable
+>[معرف_المورد:]معرف_الحدث_الفريد</replaceable
+>. الإجراء المتخذ هو نفسه استدعاء &DBus; <link linkend="cancelEvent"
+>cancelEvent()</link
+>. لا يمكن تحديد <option
+>--triggerEvent</option
+> مع هذا الخيار.</entry>
+</row>
+<row>
+  <entry
+><option
+>--triggerEvent <replaceable
+>معرف_الحدث</replaceable
+></option
+></entry>
+  <entry
+>شغّل المنبه بمعرف الحدث المحدد. معرف الحدث هو المعرف الفريد للحدث، ويمكن أن يسبقه اختياريًا معرف المورد المحتوي على الحدث، بالتنسيق <replaceable
+>[معرف_المورد:]معرف_الحدث_الفريد</replaceable
+>. الإجراء المتخذ هو نفسه استدعاء &DBus; <link linkend="triggerEvent"
+>triggerEvent()</link
+>. لا يمكن تحديد <option
+>--cancelEvent</option
+> مع هذا الخيار.</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para
+>الأمثلة هي:</para>
+
+<informalexample
+><screen
+><prompt
+>%</prompt
+> <userinput
+><command
+>kalarm</command
+> <option
+>--triggerEvent <replaceable
+>منبهك-387486299.702</replaceable
+></option
+></userinput>
+<prompt
+>%</prompt
+> <userinput
+><command
+>kalarm</command
+> <option
+>--cancelEvent <replaceable
+>منبهك-388886299.793</replaceable
+></option
+></userinput
+>
+</screen>
+</informalexample>
+
+</sect1>
+</chapter>
+
+
+<chapter id="faq">
+<title
+>أسئلة وأجوبة</title>
+
+<qandaset id="faqlist">
+<qandaentry>
+<question>
+<para
+>ما ملفات الضبط التي يستخدمها منبهك؟</para>
+</question>
+<answer>
+<para
+>ضبط منبهك محفوظ في الملفات التالية في المجلد <command
+>qtpaths --paths GenericConfigLocation</command
+> :</para>
+
+<itemizedlist>
+<listitem>
+<simpara
+><filename
+>kalarmrc</filename
+> يحمل تفضيلات منبهك الخاصة بك.</simpara>
+</listitem>
+
+<listitem>
+<simpara
+><filename
+>kalarmresources</filename
+> يحمل قائمة تقاويم المنبهات المستخدمة حاليًا بواسطة منبهك.</simpara>
+</listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para
+>أين يخزن منبهك منبهاته؟</para>
+</question>
+<answer>
+
+<para
+>عند تشغيل منبهك لأول مرة، يُنشئ تقاويم المنبهات التالية في المجلد <command
+>qtpaths --paths GenericDataLocation</command
+> :</para>
+
+<itemizedlist>
+<listitem>
+<simpara
+><filename
+>kalarm/calendar.ics</filename
+>، الذي يحمل المنبهات النشطة.</simpara>
+</listitem>
+
+<listitem>
+<simpara
+><filename
+>kalarm/expired.ics</filename
+>، الذي يحمل المنبهات المؤرشفة.</simpara>
+</listitem>
+
+<listitem>
+<simpara
+><filename
+>kalarm/template.ics</filename
+>، الذي يحمل قوالب المنبهات.</simpara>
+</listitem>
+
+<listitem>
+<simpara
+><filename
+>kalarm/displaying.ics</filename
+>، وهو ملف تقويم خاص لحمل تفاصيل المنبهات المعروضة حاليًا، مما يسمح لـ منبهك، عند إعادة تشغيله، بإعادة عرض المنبهات التي كانت معروضة عند توقفه آخر مرة.</simpara>
+</listitem>
+</itemizedlist>
+
+<para
+>يمكنك لاحقًا استبدال هذه التقاويم، باستثناء <filename
+>displaying.ics</filename
+>، أو إنشاء تقاويم منبهات إضافية في أي موقع تختاره. يمكنك معرفة ملفات التقويم المستخدمة حاليًا بعرض تفاصيل كل تقويم في قائمة تقاويم المنبهات.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para
+>بأي تنسيق تُخزن المنبهات؟</para>
+</question>
+<answer>
+<para
+>ملفات التقويم التي يخزن فيها منبهك تنبيهاته هي ملفات نصية يُحدد تنسيقها بواسطة المستند <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445 - مواصفات الكائن الأساسي للتقويم والجدولة عبر الإنترنت (iCalendar)</ulink
+>. هذا هو التنسيق القياسي المستخدم بواسطة جميع تطبيقات kdepim. يستخدم منبهك خصائص غير قياسية معينة، وفقًا لـ RFC2445. هذه موثقة في ملف <filename
+>DESIGN-kalarmcalendar.html</filename
+> الموزع مع منبهك.</para>
+</answer>
+</qandaentry>
+
+<qandaentry id="akonadi-plugin">
+<question>
+<para
+>ما وظيفة ملحق منبهك الخاص بـ أكونادي؟</para>
+</question>
+<answer>
+<para
+>يستخدم منبهك ملحقه الخاص بـ أكونادي لتوفير جميع الميزات التي تعتمد على أكونادي (خدمة التخزين عبر أسطح المكتب في كيدي &PIM;). إذا لم يُثبَّت هذا الملحق ويُفعَّل، فسيفتقد منبهك الميزات التالية: <itemizedlist>
+<listitem>
+<simpara
+>إرسال رسائل البريد الإلكتروني عبر بريدك، مما يترك &Sendmail; الخيار الوحيد لإرسال البريد الإلكتروني (انظر <link linkend="preferences-email"
+>تفضيلات البريد الإلكتروني</link
+>).</simpara>
+</listitem>
+<listitem>
+<simpara
+>سحب وإفلات رسائل البريد الإلكتروني.</simpara>
+</listitem>
+<listitem>
+<simpara
+>اختيار عناوين البريد الإلكتروني من دفتر عناوينك.</simpara>
+</listitem>
+<listitem>
+<simpara
+>استيراد أعياد الميلاد من دفتر عناوينك.</simpara>
+</listitem>
+<listitem>
+<simpara
+>ترحيل موارد تقويم التنبيهات الخاصة بـ أكونادي عند التشغيل الأول لإصدار جديد من منبهك.</simpara>
+</listitem>
+</itemizedlist>
+</para>
+<para
+>إذا ثُبِّت الملحق، فيمكن تفعيله أو تعطيله في لسان <link linkend="preferences-general"
+>عام</link
+> من حوار الضبط.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para
+>ما هو البرنامج <application
+>kalarmautostart</application
+>؟</para>
+</question>
+<answer>
+<para
+><application
+>kalarmautostart</application
+> هو برنامج مساعد صغير وظيفته تشغيل منبهك آليًا عند تسجيل الدخول.</para>
+
+<para
+>عادةً ما يستعيد مدير الجلسة منبهك عند تسجيل الدخول (لإعادة عرض نوافذه بنفس الحالة التي كانت عليها عند تسجيل الخروج). ولكن إذا لم يكن قيد التشغيل عند تسجيل الخروج، فلن يبدأه مدير الجلسة، وبالتالي يحتاج إلى التشغيل الآلي. المشكلة هي أنه عندما يكون تطبيق ما مُدارًا بالجلسة ومُشغَّلًا آليًا، فلا يوجد ضمان لأيهما سيحدث أولًا. إذا حدث التشغيل الآلي أولًا، فسيمنع مدير الجلسة من استعادة حالة التطبيق.</para>
+
+<para
+>لتجنب هذه المشكلة، يُشغَّل <application
+>kalarmautostart</application
+> آليًا عند تسجيل الدخول بدلًا من منبهك. كل ما يفعله هو الانتظار لفترة قصيرة (لضمان أن مدير الجلسة لديه الوقت لأداء مهمته) قبل بدء منبهك، وعندها ينتهي.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para
+>كيف يمكنني استخدام منبهك على سطح مكتب غير &plasma;؟</para>
+</question>
+<answer>
+<para
+>لتشغيل منبهك على سطح مكتب غير &plasma;، المتطلب الرئيس هو ضمان تشغيل منبهك آليًا كلما سجلت الدخول. توجد تعليمات أكثر تفصيلًا في ملف <filename
+>INSTALL</filename
+> الموزَّع مع منبهك.</para>
+</answer>
+</qandaentry>
+
+</qandaset>
+</chapter>
+
+
+<chapter id="credits">
+
+<title
+>الحقوق والترخيص</title>
+
+<para
+>منبهك </para>
+<para
+>حقوق نشر البرنامج 2001، 2002، 2003، 2004، 2005، 2006، 2007، 2008، 2009، 2010، 2011، 2012، 2013، 2014، 2015، 2016، 2017، 2018، 2019، 2020، 2021، 2022، 2023، 2024، 2025، 2026 &David.Jarvie; &David.Jarvie.mail; </para>
+
+<para
+>Documentation copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 &David.Jarvie; &David.Jarvie.mail; </para>
+
+<para
+>الترجمة: زايد السعيدي <email
+>zayed.alsaidi@gmail.com</email
+></para
+> &underFDL; &underGPL; <para
+>الشكر موصول لمؤلف تطبيق منبهك الخاص بـ كيدي 1، Stefan Nikolaus <email
+>stefan.nikolaus@stuco.uni-oldenburg.de</email
+>، الذي وافق بلطف على السماح باستخدام الاسم منبهك لهذا التطبيق، المتاح منذ كيدي 2 فصاعدًا. </para>
+
+</chapter>
+
+&documentation.index;
+</book>
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->
+
