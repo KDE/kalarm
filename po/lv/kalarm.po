@@ -5,20 +5,20 @@
 # Einars Sprugis <einars8@gmail.com>, 2009, 2010, 2012.
 # Maris Nartiss <maris.kde@gmail.com>, 2009, 2010, 2012.
 # Viesturs Zariņš <viesturs.zarins@mii.lu.lv>, 2009.
-# SPDX-FileCopyrightText: 2025 Toms Trasuns <toms.trasuns@posteo.net>
+# SPDX-FileCopyrightText: 2025-2026 Toms Trasuns <toms.trasuns@posteo.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:58+0000\n"
-"PO-Revision-Date: 2025-02-13 15:56+0200\n"
-"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"PO-Revision-Date: 2026-11-12 14:56+0200\n"
+"Last-Translator: Toms Trasūns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.12.2\n"
+"X-Generator: Lokalize 26.08.2\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
@@ -1537,22 +1537,19 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:309
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@label"
 msgid "Never inhibit alarm"
-msgstr "Lietot izcelto signālu"
+msgstr "Nekad nenomākt signālu"
 
 #. i18n: ectx: whatsthis, entry (DefaultNoInhibit), group (Defaults)
 #: data/kalarmconfig.kcfg:310
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
 msgstr ""
-"Noklusējuma iestatījums signālu rediģēšanas lodziņā iestatījumam "
-"„Automātiski aizvērt, ja nokavēts“."
+"Noklusējuma vērtība signāla rediģēšanas lodziņā iestatījumam „Nekad nenomākt "
+"signālu“."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -2165,11 +2162,10 @@ msgid "Recurrence - [%1]"
 msgstr "Atkārtošanās — [%1]"
 
 #: editdlg.cpp:87
-#, fuzzy, kde-format
-#| msgid "Use highlighted alarm"
+#, kde-format
 msgctxt "@option:check"
 msgid "Never inhibit alarm"
-msgstr "Lietot izcelto signālu"
+msgstr "Nekad nenomākt signālu"
 
 #: editdlg.cpp:88
 #, kde-format
@@ -2244,12 +2240,10 @@ msgid "Action"
 msgstr "Darbība"
 
 #: editdlg.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Deferred Alarm"
+#, kde-format
 msgctxt "@title:group"
 msgid "Deferred / Skipped Alarm"
-msgstr "Atlikts signāls"
+msgstr "Atlikts / izlaists signāls"
 
 #: editdlg.cpp:271
 #, kde-format
@@ -2273,28 +2267,26 @@ msgstr "Mainīt signāla atlikšanas laiku vai atcelt atlikšanu"
 #, kde-format
 msgctxt "@label When the alarm will next trigger after being skipped"
 msgid "Skipping until:"
-msgstr ""
+msgstr "Izlaiž līdz:"
 
 #: editdlg.cpp:285
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The next time the alarm will trigger, when it will resume normal activation."
-msgstr ""
+msgstr "Nākamā reize, kad atskanēs signāls, kad atsāksies normāla aktivācija."
 
 #: editdlg.cpp:288
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel skip"
-msgstr "Atcelt, ja ir nokavēts"
+msgstr "Atcelt izlaišanu"
 
 #: editdlg.cpp:290
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel skipping of the alarm"
-msgstr ""
+msgstr "Atcelt signāla izlaišanu"
 
 #: editdlg.cpp:301 editdlg.cpp:362
 #, kde-format
@@ -2510,6 +2502,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications"
 msgstr ""
+"Atzīmēt, lai vienmēr izpildītu signālu, kad ir tā laiks, neskatoties uz "
+"paziņojumu nomākšanu vai aktīvām pilnekrāna programmām"
 
 #: editdlg.cpp:1621
 #, kde-format
@@ -2518,6 +2512,8 @@ msgid ""
 "Check to always execute the alarm when it is due, regardless of notification "
 "inhibition or active full screen applications."
 msgstr ""
+"Atzīmēt, lai vienmēr izpildītu signālu, kad ir tā laiks, neskatoties uz "
+"paziņojumu nomākšanu vai aktīvām pilnekrāna programmām."
 
 #: editdlgtypes.cpp:75
 #, kde-format
@@ -4217,20 +4213,16 @@ msgid "Delete"
 msgstr "Dzēst"
 
 #: mainwindow.cpp:910
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Display Alarm"
+#, kde-format
 msgctxt "@title:window"
 msgid "Skip Alarm"
-msgstr "Ekrāna signāls"
+msgstr "Izlaist signālu"
 
 #: mainwindow.cpp:911
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Number of repetitions:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Number of activations to skip:"
-msgstr "Atkārtošanās reižu skaits:"
+msgstr "Izlaižamu aktivizāciju skaits:"
 
 #: mainwindow.cpp:942
 #, kde-format
@@ -4322,15 +4314,13 @@ msgstr "Izslēgt"
 #, kde-format
 msgctxt "@action"
 msgid "Skip..."
-msgstr ""
+msgstr "Izlaist..."
 
 #: mainwindow.cpp:1779
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action"
 msgid "Cancel skip"
-msgstr "Atcelt, ja ir nokavēts"
+msgstr "Atcelt izlaišanu"
 
 #: messagedisplay.cpp:278
 #, kde-kuit-format
@@ -6661,39 +6651,34 @@ msgstr "Kļūda! Datni „<filename>%1</filename>“ jau izmanto ārējs kalend�
 #: resources/fileresourcedatamodel.cpp:407
 #, kde-format
 msgid "Checking for existing KAlarm calendars to migrate."
-msgstr ""
+msgstr "Pārbauda esošus „KAlarm“ kalendārus migrēšanai."
 
 #: resources/fileresourcedatamodel.cpp:412
 #, kde-format
 msgid " – Waiting for Akonadi to start."
-msgstr ""
+msgstr " — gaida „Akonadi“ palaišanu"
 
 #: resources/fileresourcedatamodel.cpp:415
 #, kde-format
 msgid " – Finding KAlarm Akonadi resources."
-msgstr ""
+msgstr " — meklē „KAlarm“ „Akonadi“ resursus."
 
 #: resources/fileresourcedatamodel.cpp:418
-#, fuzzy, kde-format
-#| msgid "Path to KAlarm calendar file."
+#, kde-format
 msgid "Migrating existing KAlarm calendars."
-msgstr "Ceļš uz KAlarm kalendāra failu."
+msgstr "Migrēšana uz esošiem „KAlarma“ kalendāriem."
 
 #: resources/fileresourcedatamodel.cpp:433
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Calendar Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar migration"
-msgstr "Kalendāra konfigurācija"
+msgstr "Kalendāra migrēšana"
 
 #: resources/fileresourcedatamodel.cpp:450
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Cancel if late"
+#, kde-format
 msgctxt "@action:button"
 msgid "Cancel migration"
-msgstr "Atcelt, ja ir nokavēts"
+msgstr "Atcelt migrēšanu"
 
 #: resources/fileresourcedatamodel.cpp:451
 #, kde-format
@@ -6702,6 +6687,8 @@ msgid ""
 "Stop attempting to migrate calendars.\n"
 "New calendars will be created if necessary."
 msgstr ""
+"Apturēt mēģinājumu migrēt kalendārus.\n"
+"Jaunie kalendāri tiks izveidoti pēc vajadzības."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
@@ -6985,13 +6972,13 @@ msgstr "Signālu sagataves"
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: resources/resourcedatamodelbase.cpp:75
 #, kde-format
 msgctxt "@info List of alarm types"
 msgid "%1, %2, %3"
-msgstr ""
+msgstr "%1, %2, %3"
 
 #: resources/resourcedatamodelbase.cpp:90
 #, kde-format
@@ -7000,20 +6987,16 @@ msgid "Read-only"
 msgstr "Tikai lasāms"
 
 #: resources/resourcedatamodelbase.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (old format)"
+#, kde-format
 msgctxt "@item:intext Calendar status, parameter is KAlarm version"
 msgid "Read-only (KAlarm pre-%1 format)"
-msgstr "Tikai lasāms (vecais formāts)"
+msgstr "Tikai lasāms („KAlarm“ pirms %1 versijas formāts)"
 
 #: resources/resourcedatamodelbase.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only (other format)"
+#, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (not a KAlarm calendar)"
-msgstr "Tikai lasāms (cits formāts)"
+msgstr "Tikai lasāms (nav „KAlarm“ kalendārs)"
 
 #: resources/resourcedatamodelbase.cpp:119
 #, kde-format
@@ -7217,12 +7200,7 @@ msgid "Choose Calendar"
 msgstr "Izvēlieties kalendāru"
 
 #: resources/resources.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>The calendar <resource>%1</resource> has been made read-only. This "
-#| "was the default calendar for:%2</para><para>Please select new default "
-#| "calendars.</para>"
+#, kde-kuit-format
 msgid ""
 "<para>The calendar <resource>%2</resource> has been made read-only.</"
 "para><para>This was the default calendar for %3.</para><para>Please select a "
@@ -7232,17 +7210,17 @@ msgid_plural ""
 "para><para>This was the default calendar for %3.</para><para>Please select "
 "new default calendars.</para>"
 msgstr[0] ""
-"<para>Kalendārs „<resource>%1</resource>“ ir iestatīts kā tikai lasāms. Šis "
-"bija noklusējuma kalendārs kalendārs priekš: %2</para><para>Izvēlieties "
-"jaunu noklusējuma kalendāru.</para>"
+"<para>Kalendārs „<resource>%2</resource>“ ir iestatīts kā tikai lasāms. Šis "
+"bija noklusējuma kalendārs priekš „%3“.</para><para>Izvēlieties jaunu "
+"noklusējuma kalendāru.</para>"
 msgstr[1] ""
-"<para>Kalendārs „<resource>%1</resource>“ ir iestatīts kā tikai lasāms. Šis "
-"bija noklusējuma kalendārs kalendārs priekš: %2</para><para>Izvēlieties "
-"jaunu noklusējuma kalendāru.</para>"
+"<para>Kalendārs „<resource>%2</resource>“ ir iestatīts kā tikai lasāms. Šis "
+"bija noklusējuma kalendārs priekš „%3“.</para><para>Izvēlieties jaunus "
+"noklusējuma kalendārus.</para>"
 msgstr[2] ""
-"<para>Kalendārs „<resource>%1</resource>“ ir iestatīts kā tikai lasāms. Šis "
-"bija noklusējuma kalendārs kalendārs priekš: %2</para><para>Izvēlieties "
-"jaunu noklusējuma kalendāru.</para>"
+"<para>Kalendārs „<resource>%2</resource>“ ir iestatīts kā tikai lasāms. Šis "
+"bija noklusējuma kalendārs priekš „%3“.</para><para>Izvēlieties jaunus "
+"noklusējuma kalendārus.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7569,25 +7547,19 @@ msgstr ""
 "ir norādīts paturēt izbeigušos signālus."
 
 #: resourceselector.cpp:254
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "<para>It also contains:%1</para>"
+#, kde-format
 msgctxt "@info"
 msgid "It also contains %1"
-msgstr "<para>Tas satur arī: %1</para>"
+msgstr "Tas satur arī %1"
 
 #: resourceselector.cpp:255
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> is the default calendar for:%2</para>"
-#| "%3<para>Do you really want to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> ir noklusējuma kalendārs priekš: %2</para>"
+"<para>„<resource>%1</resource>“ ir noklusējuma kalendārs priekš „%2“</para>"
 "%3<para>Vai tiešām vēlaties noņemt to no visiem kalendāru sarakstiem?</para>"
 
 #: resourceselector.cpp:259
@@ -7601,17 +7573,13 @@ msgstr ""
 "(„<resource>%1</resource>“)?"
 
 #: resourceselector.cpp:262
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para><resource>%1</resource> contains:%2</para><para>Do you really want "
-#| "to remove it from all calendar lists?</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para><resource>%1</resource> contains %2</para><para>Do you really want to "
 "remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> satur: %2</para><para>Vai tiešām vēlaties "
+"<para>„<resource>%1</resource>“ satur „%2“</para><para>Vai tiešām vēlaties "
 "noņemt to no visiem kalendāru sarakstiem?</para>"
 
 #: resourceselector.cpp:265
