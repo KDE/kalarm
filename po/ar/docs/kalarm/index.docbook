@@ -4929,7 +4929,7 @@
 </refmeta>
 <refnamediv>
 <refname
->جدولةرسالة</refname>
+>scheduleMessage</refname>
 <refpurpose
 >جدولة رسالة منبه جديدة.</refpurpose>
 </refnamediv>
@@ -6660,7 +6660,7 @@
 </refmeta>
 <refnamediv>
 <refname
->حرّر</refname>
+>edit</refname>
 <refpurpose
 >اعرض <link linkend="alarm-edit-dlg"
 >حوار تحرير التنبيه</link
@@ -6812,7 +6812,7 @@
 </refmeta>
 <refnamediv>
 <refname
->قائمة</refname>
+>list</refname>
 <refpurpose
 >أرجع قائمة بالمنبهات المجدولة.</refpurpose>
 </refnamediv>
