@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:58+0000\n"
-"PO-Revision-Date: 2026-11-12 19:08+0300\n"
+"PO-Revision-Date: 2026-11-15 20:12+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -973,14 +973,14 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Message font"
-msgstr "İleti yazıtipi"
+msgstr "İleti yazı tipi"
 
 #. i18n: ectx: whatsthis, entry (MessageFont), group (General)
 #: data/kalarmconfig.kcfg:119
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default font for displaying alarm messages."
-msgstr "Alarm iletileri için öntanımlı yazıtipi."
+msgstr "Alarm iletileri için öntanımlı yazı tipi."
 
 #. i18n: ectx: label, entry (ShowInSystemTray), group (General)
 #: data/kalarmconfig.kcfg:124
@@ -3287,7 +3287,7 @@ msgstr "Alarm iletisi arka alan rengini seç"
 #, kde-format
 msgctxt "@option:check"
 msgid "Use default font"
-msgstr "Öntanımlı yazıtipini kullan"
+msgstr "Öntanımlı yazı tipini kullan"
 
 #: fontcolour.cpp:86
 #, kde-format
@@ -3295,38 +3295,38 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to use the default font current at the time the alarm is displayed."
 msgstr ""
-"Alarm gösterildiği zamanda öntanımlı mevcut yazıtipinin kullanımını "
+"Alarm gösterildiği zamanda öntanımlı mevcut yazı tipinin kullanımını "
 "denetleyin."
 
 #: fontcolour.h:26
 #, kde-format
 msgid "Requested font"
-msgstr "İstenen yazıtipi"
+msgstr "İstenen yazı tipi"
 
 #: fontcolourbutton.cpp:27
 #, kde-format
 msgctxt "@action:button"
 msgid "Font && Color..."
-msgstr "Yazıtipi ve Renk…"
+msgstr "Yazı Tipi ve Renk…"
 
 #: fontcolourbutton.cpp:30
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set alarm message font and color"
-msgstr "Alarm iletisi yazıtipi ve rengini ayarla"
+msgstr "Alarm iletisi yazı tipi ve rengini ayarla"
 
 #: fontcolourbutton.cpp:31
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Choose the font, and foreground and background color, for the alarm message."
-msgstr "Uyarı iletisinin yazıtipini, ön plan ve arka plan rengini seçin."
+msgstr "Uyarı iletisinin yazı tipini, ön plan ve arka plan rengini seçin."
 
 #: fontcolourbutton.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
-msgstr "Alarm Yazıtipi ve Rengi"
+msgstr "Alarm Yazı Tipi ve Rengi"
 
 #: functions.cpp:147
 #, kde-format
@@ -5495,7 +5495,7 @@ msgstr "Türe Özel"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Font && Color"
-msgstr "Yazıtipi ve Renk"
+msgstr "Yazı Tipi ve Renk"
 
 #: prefdlg.cpp:1470
 #, kde-format
@@ -5651,7 +5651,7 @@ msgstr "E-posta Alarmları"
 #, kde-format
 msgctxt "@title:group"
 msgid "Message Font && Color"
-msgstr "İleti Yazıtipi ve Rengi"
+msgstr "İleti Yazı Tipi ve Rengi"
 
 #: prefdlg.cpp:1886
 #, kde-kuit-format
