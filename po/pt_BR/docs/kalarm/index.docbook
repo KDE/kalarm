@@ -112,7 +112,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->09/01/2026</date>
+>22/01/2026</date>
 <releaseinfo
 >3.13.0 (KDE Gear 26.04)</releaseinfo>
 
@@ -1944,14 +1944,33 @@
 
 <sect2>
 <title
->Adiamento</title>
+>Adiar e ignorar</title>
 
 <para
 >Se o alarme for recorrente e se foi adiado depois de ter sido mostrado pela última vez, o grupo <guilabel
->Alarme Adiado</guilabel
+>Alarme adiado / ignorado</guilabel
 > mostra a hora para a qual o alarme foi adiado. O <guibutton
 >Modificar...</guibutton
 > mostra um diálogo que lhe permite alterar a hora do adiamento ou cancelá-lo.</para>
+
+<para
+>Se o alarme for recorrente e estiver sendo ignorado (consulte <link linkend="skipping"
+>Ignorando alarmes individuais</link
+>), a caixa de grupo <guilabel
+>Alarme adiado / ignorado</guilabel
+> mostra a próxima vez que o alarme será acionado após ser ignorado, ou seja, o horário em que ele retomará a operação normal. <guibutton
+>Cancelar ignorar</guibutton
+> cancelará a opção de ignorar o alarme.</para>
+
+<note
+><para
+>Se você fizer qualquer alteração no horário de início ou nos detalhes de recorrência do alarme, o recurso de pular alarmes será cancelado automaticamente e o horário de pulo não será mais exibido.</para
+></note>
+
+<para
+>Observe que as alterações de adiamento e ignorar entram em vigor quando <guibutton
+>OK</guibutton
+> é clicado.</para>
 
 </sect2>
 
@@ -3019,7 +3038,7 @@
 
 </sect2>
 
-<sect2>
+<sect2 id="skipping">
 <title
 >Ignorando alarmes individuais</title>
 
