@@ -59,11 +59,7 @@ endif()
 
 
 set(KDEPIM_VERSION "${PIM_VERSION}${KDEPIM_DEV_VERSION} (${RELEASE_SERVICE_VERSION})")
-set(AKONADI_VERSION "6.8.90")
-set(AKONADI_MIMELIB_VERSION "6.8.90")
-set(AKONADI_CONTACT_VERSION "6.8.90")
-set(KMAILTRANSPORT_LIB_VERSION "6.8.90")
-set(IDENTITYMANAGEMENT_LIB_VERSION "6.8.90")
+set(PIM_MIN_VERSION "6.7.0")
 
 set(KDEPIM_LIB_VERSION "${PIM_VERSION}")
 set(KDEPIM_LIB_SOVERSION "6")
@@ -121,7 +117,7 @@ if(TARGET KF6::GlobalAccel)
 endif()
 
 # Find KDE PIM packages
-find_package(KPim6IdentityManagementWidgets ${IDENTITYMANAGEMENT_LIB_VERSION} CONFIG REQUIRED)
+find_package(KPim6IdentityManagementWidgets ${PIM_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6Mime ${KF_MIN_VERSION} CONFIG REQUIRED)
 
 # Build support for audio backend plugins
@@ -158,10 +154,10 @@ if(TARGET KF6::TextEditTextToSpeech)
 endif()
 
 if(ENABLE_AKONADI_PLUGIN)
-    find_package(KPim6Akonadi ${AKONADI_VERSION} CONFIG REQUIRED)
-    find_package(KPim6AkonadiContactWidgets ${AKONADI_CONTACT_VERSION} CONFIG REQUIRED)
-    find_package(KPim6AkonadiMime ${AKONADI_MIMELIB_VERSION} CONFIG REQUIRED)
-    find_package(KPim6MailTransport ${KMAILTRANSPORT_LIB_VERSION} CONFIG REQUIRED)
+    find_package(KPim6Akonadi ${PIM_MIN_VERSION} CONFIG REQUIRED)
+    find_package(KPim6AkonadiContactWidgets ${PIM_MIN_VERSION} CONFIG REQUIRED)
+    find_package(KPim6AkonadiMime ${PIM_MIN_VERSION} CONFIG REQUIRED)
+    find_package(KPim6MailTransport ${PIM_MIN_VERSION} CONFIG REQUIRED)
 endif()
 
 configure_file(kalarm-version-string.h.in ${CMAKE_CURRENT_BINARY_DIR}/kalarm-version-string.h @ONLY)
