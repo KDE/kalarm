@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.29)
 set(PIM_VERSION "6.9.40")
-set(PIM_VERSION ${PIM_VERSION})
 set(RELEASE_SERVICE_VERSION_MAJOR "27")
 set(RELEASE_SERVICE_VERSION_MINOR "03")
 set(RELEASE_SERVICE_VERSION_MICRO "70")
@@ -26,20 +25,30 @@ endif()
 
 project(kalarm VERSION ${KALARM_VERSION})
 
+# Do NOT add quote
+set(KDEPIM_DEV_VERSION alpha)
+# add an extra space
+if(DEFINED KDEPIM_DEV_VERSION)
+    set(KDEPIM_DEV_VERSION " ${KDEPIM_DEV_VERSION}")
+endif()
+
+set(KDEPIM_LIB_VERSION "${PIM_VERSION}")
+set(KDEPIM_LIB_SOVERSION "6")
+
 set(KF_MIN_VERSION "6.30.0")
+set(KTEXTADDONS_MIN_VERSION "2.0.0")
+set(PIM_MIN_VERSION "6.7.0")
+set(QT_REQUIRED_VERSION "6.9.0")
 
 find_package(ECM ${KF_MIN_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
-include(ECMInstallIcons)
 
+include(ECMInstallIcons)
 include(ECMSetupVersion)
 include(ECMAddTests)
-
 include(GenerateExportHeader)
 include(ECMGenerateHeaders)
-
 include(CheckFunctionExists)
-
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
@@ -47,25 +56,8 @@ include(ECMAddAppIcon)
 include(ECMQtDeclareLoggingCategory)
 include(ECMDeprecationSettings)
 include(ECMFeatureSummary)
-set(QT_REQUIRED_VERSION "6.9.0")
-set(KTEXTADDONS_MIN_VERSION "2.0.0")
-# Do NOT add quote
-set(KDEPIM_DEV_VERSION alpha)
-
-# add an extra space
-if(DEFINED KDEPIM_DEV_VERSION)
-    set(KDEPIM_DEV_VERSION " ${KDEPIM_DEV_VERSION}")
-endif()
-
-
-set(KDEPIM_VERSION "${PIM_VERSION}${KDEPIM_DEV_VERSION} (${RELEASE_SERVICE_VERSION})")
-set(PIM_MIN_VERSION "6.7.0")
-
-set(KDEPIM_LIB_VERSION "${PIM_VERSION}")
-set(KDEPIM_LIB_SOVERSION "6")
 
 find_package(Qt6 ${QT_REQUIRED_VERSION} CONFIG REQUIRED DBus Gui Network Widgets)
-
 
 option(ENABLE_AKONADI_PLUGIN "Build the Akonadi plugin" ON)
 add_feature_info(AKONADI_PLUGIN ${ENABLE_AKONADI_PLUGIN} "Provides features dependent on Akonadi (including birthday import,
@@ -93,18 +85,19 @@ find_package(KF6GlobalAccel ${KF_MIN_VERSION})
 find_package(KF6GuiAddons ${KF_MIN_VERSION} REQUIRED)
 find_package(KF6Holidays ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6I18n ${KF_MIN_VERSION} CONFIG REQUIRED)
+find_package(KF6IconThemes ${KF_MIN_VERSION})
 find_package(KF6ItemModels ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6JobWidgets ${KF_MIN_VERSION} REQUIRED)
 find_package(KF6KIO ${KF_MIN_VERSION} CONFIG REQUIRED)
+find_package(KF6Mime ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6Notifications ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6NotifyConfig ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6Service ${KF_MIN_VERSION} CONFIG REQUIRED)
+find_package(KF6StatusNotifierItem ${KF_MIN_VERSION} CONFIG REQUIRED)
+find_package(KF6TextWidgets ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6WidgetsAddons ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6WindowSystem ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6XmlGui ${KF_MIN_VERSION} CONFIG REQUIRED)
-find_package(KF6TextWidgets ${KF_MIN_VERSION} CONFIG REQUIRED)
-find_package(KF6StatusNotifierItem ${KF_MIN_VERSION} CONFIG REQUIRED)
-find_package(KF6IconThemes ${KF_MIN_VERSION})
 
 find_package(KF6DocTools ${KF_MIN_VERSION})
 set_package_properties(KF6DocTools PROPERTIES DESCRIPTION
@@ -116,17 +109,13 @@ if(TARGET KF6::GlobalAccel)
     add_definitions(-DHAVE_GLOBAL_ACCEL_SUPPORT)
 endif()
 
-# Find KDE PIM packages
-find_package(KPim6IdentityManagementWidgets ${PIM_MIN_VERSION} CONFIG REQUIRED)
-find_package(KF6Mime ${KF_MIN_VERSION} CONFIG REQUIRED)
-
 # Build support for audio backend plugins
 option(ENABLE_LIBVLC "Build support for LibVLC" ON)
 add_feature_info(ENABLE_LIBVLC ${ENABLE_LIBVLC} "Provides support for playing sound files using LibVLC")
 if(WIN32)
-option(ENABLE_LIBMPV "Build support for Libmpv" OFF)
+    option(ENABLE_LIBMPV "Build support for Libmpv" OFF)
 else()
-option(ENABLE_LIBMPV "Build support for Libmpv" ON)
+    option(ENABLE_LIBMPV "Build support for Libmpv" ON)
 endif()
 add_feature_info(ENABLE_LIBMPV ${ENABLE_LIBMPV} "Provides support for playing sound files using Libmpv")
 
@@ -153,6 +142,9 @@ if(TARGET KF6::TextEditTextToSpeech)
     set(HAVE_TEXT_TO_SPEECH_SUPPORT TRUE)
 endif()
 
+# Find KDE PIM packages
+find_package(KPim6IdentityManagementWidgets ${PIM_MIN_VERSION} CONFIG REQUIRED)
+
 if(ENABLE_AKONADI_PLUGIN)
     find_package(KPim6Akonadi ${PIM_MIN_VERSION} CONFIG REQUIRED)
     find_package(KPim6AkonadiContactWidgets ${PIM_MIN_VERSION} CONFIG REQUIRED)
@@ -173,8 +165,6 @@ if(NOT APPLE)
         endif()
     endif()
 endif()
-
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 configure_file(src/config-kalarm.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-kalarm.h)
 
