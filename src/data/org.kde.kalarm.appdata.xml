@@ -428,6 +428,10 @@
     <value key="KDE::mailinglist-devel">kde-pim@kde.org</value>
   </custom>
   <content_rating type="oars-1.1"/>
+  <branding>
+    <color type="primary" scheme_preference="light">#f3d6d6</color>
+    <color type="primary" scheme_preference="dark">#5c1f1f</color>
+  </branding>
   <screenshots>
     <screenshot type="default">
       <caption>KAlarm configuration window with a testing message alarm</caption>
