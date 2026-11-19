@@ -844,9 +844,8 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     }
 
     mHolidays->addItem(i18nc("No holiday region", "None"), QString());
-    for (QMapIterator<QString, QString> it(regionsMap);  it.hasNext();  )
+    for (auto it = regionsMap.cbegin(), end = regionsMap.cend();  it != end;  ++it)
     {
-        it.next();
         mHolidays->addItem(it.key(), it.value());
     }
 
