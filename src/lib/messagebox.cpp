@@ -10,6 +10,7 @@
 
 #include <KConfigGroup>
 #include <KSharedConfig>
+#include <QMap>
 
 using namespace Qt::Literals::StringLiterals;
 

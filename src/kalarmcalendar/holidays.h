@@ -12,6 +12,7 @@
 
 #include "kalarmcal_export.h"
 
+#include <QList>
 #include <QSharedPointer>
 #include <QDate>
 #include <QBitArray>

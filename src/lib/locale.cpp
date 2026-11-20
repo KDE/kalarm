@@ -8,6 +8,7 @@
 
 #include "locale.h"
 
+#include <QList>
 #include <QLocale>
 
 namespace

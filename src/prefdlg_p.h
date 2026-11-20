@@ -11,6 +11,7 @@
 #include "preferences.h"
 #include "prefdlg.h"
 #include "lib/stackedwidgets.h"
+#include <QMap>
 
 class QCheckBox;
 class QGroupBox;
