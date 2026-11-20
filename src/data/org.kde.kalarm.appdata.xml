@@ -512,6 +512,7 @@
           <li xml:lang="nl">Toon de knop Uitstellen in het alarmmeldingenvensters bij weergeven over toepassingen met volledig scherm in X11.</li>
           <li xml:lang="pt-BR">Exibir o botão "Adiar" na janela de mensagem de alarme quando esta for exibida sobre aplicativos em tela cheia no X11.</li>
           <li xml:lang="ru">Кнопка «Отложить» в окне сигнала, показанном поверх полноэкранных приложений X11;</li>
+          <li xml:lang="sk">Zobrazenie tlačidla Odložiť v okne správy budíka, keď sa zobrazuje nad celoobrazovkovými aplikáciami na X11.</li>
           <li xml:lang="sl">Prikaži gumb Odloži v oknu z alarmnimi sporočili, ko je prikazan čez celozaslonske aplikacije X11.</li>
           <li xml:lang="tr">X11 tam ekran uygulamaları üzerinde görüntülendiğinde, Ertele düğmesini alarm iletisi penceresinde göster</li>
           <li xml:lang="uk">Реалізовано показ кнопки «Відкласти» у вікні повідомлення будильника при показі у повноекранних програмах у X11.</li>
