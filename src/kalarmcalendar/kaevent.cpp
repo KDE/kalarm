@@ -308,7 +308,7 @@ public:
     QString            mPostAction;        // command to execute after alarm window is closed
     DateTime           mStartDateTime;     // DTSTART and DTEND: start and end time for event
     KADateTime         mCreatedDateTime;   // CREATED: date event was created, or saved in archive calendar
-    DateTime           mNextMainDateTime;  // next time to display the alarm, excluding repetitions
+    mutable DateTime   mNextMainDateTime;  // next time to display the alarm, excluding repetitions
     KADateTime         mAtLoginDateTime;   // repeat-at-login end time
     DateTime           mDeferralTime;      // extra time to trigger alarm (if alarm or reminder deferred)
     mutable DateTime   mSkipTime;          // next time to trigger alarm if it's currently being skipped
@@ -2533,7 +2533,6 @@ bool KAEventPrivate::skip(int count)
         count = MAX_SKIP_COUNT;
     KADateTime pre = KADateTime::currentDateTime(mStartDateTime.timeSpec()).clearSecs();
     // Find the next occurrence after the skip.
-    DateTime last;
     DateTime next;
     for (int i = 0;  i <= count;  ++i)
     {
@@ -2555,7 +2554,6 @@ bool KAEventPrivate::skip(int count)
                 next = next.addSecs(60);
             break;
         }
-        last = next;
         pre = next.effectiveKDateTime();
     }
 
@@ -2565,6 +2563,7 @@ bool KAEventPrivate::skip(int count)
 
 /******************************************************************************
 * Set a time for the event to be skipped until.
+* The time will be adjusted to the first occurrence which will not be skipped.
 */
 bool KAEvent::skip(const KADateTime& dt)
 {
@@ -2580,7 +2579,7 @@ bool KAEventPrivate::skip(const KADateTime& dt)
         return false;
     }
 
-    // Find the next occurrence after the skip.
+    // Find the next occurrence on or after the skip.
     DateTime next;
     const KADateTime pre = dt.isDateOnly() ? dt.addDays(-1)
                                            : dt.time().second() ? dt.clearSecs() : dt.addSecs(-60);
@@ -2663,12 +2662,30 @@ DateTime KAEventPrivate::skipDateTime() const
             KADateTime now = KADateTime::currentDateTime(mStartDateTime.timeSpec());
             now.setDateOnly(true);
             if (mSkipTime <= now)
-                setSkipTime();   // skip date has passed, so cancel it
+            {
+                // Skip date has passed, so cancel it.
+                // Adjust the existing next alarm time to the skip time so that
+                // alarm windows show the skipped alarm time.
+                DateTime last;
+                if (previousOccurrence(mSkipTime.kDateTime().addDays(1), last, KAEvent::Repeats::Ignore) != KAEvent::OccurType::None)
+                    mNextMainDateTime = last;
+                setSkipTime();
+            }
         }
         else
         {
             if (mSkipTime <= KADateTime::currentUtcDateTime())
-                setSkipTime();   // skip date has passed, so cancel it
+            {
+                // Skip time has passed, so cancel it.
+                // Adjust the existing next alarm time to the skip time so that
+                // alarm windows show the skipped alarm time.
+                DateTime last;
+                const KADateTime skiptime = mSkipTime.kDateTime();
+                const KADateTime after = skiptime.time().second() ? skiptime : skiptime.addSecs(60);
+                if (previousOccurrence(after, last, KAEvent::Repeats::Ignore) != KAEvent::OccurType::None)
+                    mNextMainDateTime = last;
+                setSkipTime();
+            }
         }
     }
     return mSkipTime;

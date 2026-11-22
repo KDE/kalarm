@@ -3,6 +3,7 @@ KAlarm Change Log
 === Version 3.14.0 (KDE Gear 26.12) --- 22 November 2026 ===
 * Show message during first run calendar migration and let user cancel if it hangs [KDE Bug 524187]
 * Fix hang: handle alarm times correctly during summer/winter time change when local time is used [KDE Bug 528953]
+* In first alarm message window after skipping, show the after-skip time in the heading.
 
 === Version 3.13.2 (KDE Gear 26.08.3) --- 25 October 2026 ===
 * Show Defer button in alarm message window when displayed over X11 full screen applications.
