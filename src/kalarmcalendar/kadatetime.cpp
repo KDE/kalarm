@@ -497,9 +497,10 @@ public:
         if (mDt.time() != t)
         {
             mDt.setTime(t);
-            utcCached = convertedCached = mDateOnly = false;
+            utcCached = convertedCached = false;
             setTzTransitionOccurrence(false);
         }
+        mDateOnly = false;
     }
     void setSpec(const KADateTime::Spec&);
     void setDateOnly(bool d);
