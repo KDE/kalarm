@@ -1060,7 +1060,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
         dt.setDateOnly(mStartDateTime.isDateOnly());
         if (mDeferralTime.isDateOnly())
         {
-            mDeferralTime = DateTime(deferralOffset.end(dt.qDateTime()));
+            mDeferralTime = DateTime(deferralOffset.end(dt.qDateTime(true)));
             mDeferralTime.setDateOnly(true);
         }
         else
