@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 02:58+0000\n"
+"POT-Creation-Date: 2026-11-22 01:05+0000\n"
 "PO-Revision-Date: 2007-04-24 00:52+0200\n"
 "Last-Translator: Rinse de Vries <rinsedevries@kde.nl>\n"
 "Language-Team: Frysk <kde-i18n-fry@kde.org>\n"
@@ -464,7 +464,7 @@ msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Alaarm tekst"
 
-#: birthdaydlg.cpp:83 prefdlg.cpp:2025
+#: birthdaydlg.cpp:83 prefdlg.cpp:2024
 #, fuzzy, kde-format
 #| msgid "Pre&fix:"
 msgctxt "@label:textbox"
@@ -1296,7 +1296,7 @@ msgid "Show alarm times in system tray tooltip"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:189 prefdlg.cpp:2013
+#: data/kalarmconfig.kcfg:189 prefdlg.cpp:2012
 #, fuzzy, kde-format
 #| msgid ""
 #| "Specify whether to show in the system tray tooltip, the time at which "
@@ -1316,7 +1316,7 @@ msgid "Show time to alarms in system tray tooltip"
 msgstr "P&iktogram yn systeemfak sette by oanmelden"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:195 prefdlg.cpp:2019
+#: data/kalarmconfig.kcfg:195 prefdlg.cpp:2018
 #, fuzzy, kde-format
 #| msgid ""
 #| "Specify whether to show in the system tray tooltip, how long until each "
@@ -1336,7 +1336,7 @@ msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:201 prefdlg.cpp:2030
+#: data/kalarmconfig.kcfg:201 prefdlg.cpp:2029
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter the text to be displayed in front of the time until the alarm, in "
@@ -1566,7 +1566,7 @@ msgid "Disabled alarm color"
 msgstr "Kleur fan it útsk&eakele alaarm:"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:259 prefdlg.cpp:2052
+#: data/kalarmconfig.kcfg:259 prefdlg.cpp:2051
 #, fuzzy, kde-format
 #| msgid "Choose the text color in the alarm list for disabled alarms."
 msgctxt "@info:whatsthis"
@@ -1582,7 +1582,7 @@ msgid "Archived alarm color"
 msgstr "Kleur fan ferrûn &alaarm:"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:265 prefdlg.cpp:2065
+#: data/kalarmconfig.kcfg:265 prefdlg.cpp:2064
 #, fuzzy, kde-format
 #| msgid "Choose the text color in the alarm list for expired alarms."
 msgctxt "@info:whatsthis"
@@ -1929,7 +1929,7 @@ msgid "Recurrence period"
 msgstr "Ein werhelling"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:387 prefdlg.cpp:1513
+#: data/kalarmconfig.kcfg:387 prefdlg.cpp:1512
 #, fuzzy, kde-format
 #| msgid ""
 #| "The default setting for the recurrence rule in the alarm edit dialog."
@@ -1963,7 +1963,7 @@ msgid "Hourly/minutely"
 msgstr "Elk oere/elke minút"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:400 prefdlg.cpp:1520
+#: data/kalarmconfig.kcfg:400 prefdlg.cpp:1519
 #, fuzzy, kde-format
 #| msgid "In non-leap years, repeat yearly February 29th alarms on:"
 msgctxt "@label"
@@ -2184,7 +2184,7 @@ msgid "Notify when remote emails are queued"
 msgstr "Melde as eksterne e-mailberjochten y&n de wachtrige setten wurde"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailQueuedNotify), group (Notification Messages)
-#: data/kalarmconfig.kcfg:457 prefdlg.cpp:1225
+#: data/kalarmconfig.kcfg:457 prefdlg.cpp:1224
 #, fuzzy, kde-format
 #| msgid ""
 #| "Display a notification message whenever an email alarm has queued an "
@@ -5758,13 +5758,13 @@ msgctxt "No holiday region"
 msgid "None"
 msgstr "Gjin"
 
-#: prefdlg.cpp:864
+#: prefdlg.cpp:863
 #, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
 msgstr ""
 
-#: prefdlg.cpp:872
+#: prefdlg.cpp:871
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5773,21 +5773,21 @@ msgid ""
 "is fully restored by the time the alarm triggers."
 msgstr ""
 
-#: prefdlg.cpp:873
+#: prefdlg.cpp:872
 #, fuzzy, kde-format
 #| msgid "hours/minutes"
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
 msgstr "oeren/minuten"
 
-#: prefdlg.cpp:887
+#: prefdlg.cpp:886
 #, fuzzy, kde-format
 #| msgid "&Start of day for date-only alarms:"
 msgctxt "@label:spinbox"
 msgid "Start of day for date-only alarms:"
 msgstr "Begjin fan de dei foar al&aarms mei allinnich in datum:"
 
-#: prefdlg.cpp:894
+#: prefdlg.cpp:893
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "The earliest time of day at which a date-only alarm (i.e. an alarm with "
@@ -5801,34 +5801,34 @@ msgstr ""
 "wurde sil (yn gefal dat it alaarm foarsjoen is fan de opsje \"Gjin tiid "
 "opjaan\")."
 
-#: prefdlg.cpp:899
+#: prefdlg.cpp:898
 #, kde-format
 msgctxt "@title:group"
 msgid "Working Hours"
 msgstr ""
 
-#: prefdlg.cpp:914
+#: prefdlg.cpp:913
 #, fuzzy, kde-format
 #| msgid "Select the days of the week on which to repeat the alarm"
 msgctxt "@info:whatsthis"
 msgid "Check the days in the week which are work days"
 msgstr "Selektearje de dag(en) fan de wike wêrop dit alaarm werhelle wurde sil"
 
-#: prefdlg.cpp:924
+#: prefdlg.cpp:923
 #, fuzzy, kde-format
 #| msgid "&Default time"
 msgctxt "@label:spinbox"
 msgid "Daily start time:"
 msgstr "&Standert tiid"
 
-#: prefdlg.cpp:931
+#: prefdlg.cpp:930
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the name or path of the log file."
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the start time of the working day.</para><para>%1</para>"
 msgstr "Fier de namme of it paad yn fan de logtriem yn."
 
-#: prefdlg.cpp:943
+#: prefdlg.cpp:942
 #, fuzzy, kde-format
 #| msgctxt "Time period over which to fade the sound"
 #| msgid "Fade time:"
@@ -5836,27 +5836,27 @@ msgctxt "@label:spinbox"
 msgid "Daily end time:"
 msgstr "Tiid oant fol folume:"
 
-#: prefdlg.cpp:950
+#: prefdlg.cpp:949
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the end time of the working day.</para><para>%1</para>"
 msgstr "Fier de namme fan it alaarmsjabloan yn"
 
-#: prefdlg.cpp:955
+#: prefdlg.cpp:954
 #, fuzzy, kde-format
 #| msgid "Show in KOrganizer"
 msgctxt "@title:group"
 msgid "KOrganizer"
 msgstr "Yn KOrganizer toane"
 
-#: prefdlg.cpp:963
+#: prefdlg.cpp:962
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "KOrganizer event duration:"
 msgstr ""
 
-#: prefdlg.cpp:970
+#: prefdlg.cpp:969
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the start time for alarms based on this template."
 msgctxt "@info:whatsthis"
@@ -5865,20 +5865,20 @@ msgid ""
 "copied to KOrganizer.</para><para>%1</para>"
 msgstr "Fier in begjintiid yn foar alaarms, basearre op dit sjabloan."
 
-#: prefdlg.cpp:1039
+#: prefdlg.cpp:1038
 #, fuzzy, kde-format
 #| msgid "New Alarm Template"
 msgctxt "@title:group"
 msgid "New Alarms && Templates"
 msgstr "Nij alaarmsjabloan"
 
-#: prefdlg.cpp:1044
+#: prefdlg.cpp:1043
 #, kde-format
 msgctxt "@option:radio"
 msgid "Store in default calendar"
 msgstr ""
 
-#: prefdlg.cpp:1046
+#: prefdlg.cpp:1045
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5886,13 +5886,13 @@ msgid ""
 "prompting."
 msgstr ""
 
-#: prefdlg.cpp:1048
+#: prefdlg.cpp:1047
 #, kde-format
 msgctxt "@option:radio"
 msgid "Prompt for which calendar to store in"
 msgstr ""
 
-#: prefdlg.cpp:1051
+#: prefdlg.cpp:1050
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5902,21 +5902,21 @@ msgid ""
 "calendar.</para>"
 msgstr ""
 
-#: prefdlg.cpp:1056
+#: prefdlg.cpp:1055
 #, fuzzy, kde-format
 #| msgid "Activate KAlarm"
 msgctxt "@title:group"
 msgid "Archived Alarms"
 msgstr "KAlarm aktivearje"
 
-#: prefdlg.cpp:1061
+#: prefdlg.cpp:1060
 #, fuzzy, kde-format
 #| msgid "Keep alarms after e&xpiry"
 msgctxt "@option:check"
 msgid "Keep alarms after expiry"
 msgstr "Alaarms bewarje neidat se &ferrûn binne"
 
-#: prefdlg.cpp:1064
+#: prefdlg.cpp:1063
 #, fuzzy, kde-format
 #| msgid ""
 #| "Check to store alarms after expiry or deletion (except deleted alarms "
@@ -5929,21 +5929,21 @@ msgstr ""
 "Selektearje dizze opsje om alaarms te bewarjen neidat se ferrûn binne of "
 "wiske (útsein wiske alaarms dy't noait aktivearre binne)."
 
-#: prefdlg.cpp:1070
+#: prefdlg.cpp:1069
 #, fuzzy, kde-format
 #| msgid "Discard ex&pired alarms after:"
 msgctxt "@option:check"
 msgid "Discard archived alarms after:"
 msgstr "Ferrû&ne alaarms wiskje nei:"
 
-#: prefdlg.cpp:1079
+#: prefdlg.cpp:1078
 #, fuzzy, kde-format
 #| msgid "days"
 msgctxt "@label Time unit for user-entered number"
 msgid "days"
 msgstr "dagen"
 
-#: prefdlg.cpp:1083
+#: prefdlg.cpp:1082
 #, fuzzy, kde-format
 #| msgid ""
 #| "Uncheck to store expired alarms indefinitely. Check to enter how long "
@@ -5956,21 +5956,21 @@ msgstr ""
 "De-selektearje dizze opsje as jo ferrûne alaarms foar altyd bewarje wolle. "
 "Selektearje dit om te bepalen hoe lang ferrûne alaarms bewarre wurde moatte."
 
-#: prefdlg.cpp:1086
+#: prefdlg.cpp:1085
 #, fuzzy, kde-format
 #| msgid "Clear Expired Alar&ms"
 msgctxt "@action:button"
 msgid "Clear Archived Alarms"
 msgstr "Ferrûne al&aarms wiskje"
 
-#: prefdlg.cpp:1089
+#: prefdlg.cpp:1088
 #, fuzzy, kde-format
 #| msgid "Delete all existing expired alarms."
 msgctxt "@info:whatsthis"
 msgid "Delete all existing archived alarms."
 msgstr "Alle besteande ferrûne alaarms wiskje."
 
-#: prefdlg.cpp:1090
+#: prefdlg.cpp:1089
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the selected alarm?"
 #| msgid_plural "Do you really want to delete the %1 selected alarms?"
@@ -5980,7 +5980,7 @@ msgid ""
 "calendar only)."
 msgstr "Wolle jo it selektearre alaarm wiskje?"
 
-#: prefdlg.cpp:1136
+#: prefdlg.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5990,7 +5990,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: prefdlg.cpp:1153
+#: prefdlg.cpp:1152
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the selected alarm?"
 #| msgid_plural "Do you really want to delete the %1 selected alarms?"
@@ -5998,7 +5998,7 @@ msgctxt "@info"
 msgid "Do you really want to delete all archived alarms?"
 msgstr "Wolle jo it selektearre alaarm wiskje?"
 
-#: prefdlg.cpp:1154
+#: prefdlg.cpp:1153
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the selected alarm?"
 #| msgid_plural "Do you really want to delete the %1 selected alarms?"
@@ -6008,34 +6008,34 @@ msgid ""
 "calendar?"
 msgstr "Wolle jo it selektearre alaarm wiskje?"
 
-#: prefdlg.cpp:1174
+#: prefdlg.cpp:1173
 #, fuzzy, kde-format
 #| msgid "Email client:"
 msgctxt "@label"
 msgid "Email client:"
 msgstr "E-mailprogramma:"
 
-#: prefdlg.cpp:1177
+#: prefdlg.cpp:1176
 #, fuzzy, kde-format
 #| msgid "&KMail"
 msgctxt "@option:radio"
 msgid "KMail"
 msgstr "&KMail"
 
-#: prefdlg.cpp:1178
+#: prefdlg.cpp:1177
 #, fuzzy, kde-format
 #| msgid "&Sendmail"
 msgctxt "@option:radio"
 msgid "Sendmail"
 msgstr "&Sendmail"
 
-#: prefdlg.cpp:1191
+#: prefdlg.cpp:1190
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
 msgstr ""
 
-#: prefdlg.cpp:1194
+#: prefdlg.cpp:1193
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Choose how to send email when an email alarm is triggered.\n"
@@ -6060,7 +6060,7 @@ msgstr ""
 "wurket allinnich as jo systeem sendmail of in fergelykber transportmeganisme "
 "brûkt."
 
-#: prefdlg.cpp:1202
+#: prefdlg.cpp:1201
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Choose how to send email when an email alarm is triggered.\n"
@@ -6084,7 +6084,7 @@ msgstr ""
 "wurket allinnich as jo systeem sendmail of in fergelykber transportmeganisme "
 "brûkt."
 
-#: prefdlg.cpp:1213
+#: prefdlg.cpp:1212
 #, fuzzy, kde-kuit-format
 #| msgid "Co&py sent emails into KMail's %1 folder"
 msgctxt "@option:check"
@@ -6093,7 +6093,7 @@ msgid ""
 "resource> folder"
 msgstr "Ferstjoerde e-mails ko&piearje nei de map %1 yn KMail"
 
-#: prefdlg.cpp:1214
+#: prefdlg.cpp:1213
 #, fuzzy, kde-kuit-format
 #| msgid "After sending an email, store a copy in KMail's %1 folder"
 msgctxt "@info:whatsthis"
@@ -6104,21 +6104,21 @@ msgstr ""
 "Nei it ferstjoeren fan in e-mail wurdt der in kopy bewarre yn de map %1 fan "
 "KMail"
 
-#: prefdlg.cpp:1223
+#: prefdlg.cpp:1222
 #, fuzzy, kde-format
 #| msgid "&Notify when remote emails are queued"
 msgctxt "@option:check"
 msgid "Notify when remote emails are queued"
 msgstr "Melde as eksterne e-mailberjochten y&n de wachtrige setten wurde"
 
-#: prefdlg.cpp:1231
+#: prefdlg.cpp:1230
 #, fuzzy, kde-format
 #| msgid "Your Email Address"
 msgctxt "@title:group"
 msgid "Your Email Address"
 msgstr "Jo e-mailadres"
 
-#: prefdlg.cpp:1237
+#: prefdlg.cpp:1236
 #, fuzzy, kde-format
 #| msgctxt "'From' email address"
 #| msgid "From:"
@@ -6126,7 +6126,7 @@ msgctxt "@label 'From' email address"
 msgid "From:"
 msgstr "Fan:"
 
-#: prefdlg.cpp:1249
+#: prefdlg.cpp:1248
 #, fuzzy, kde-format
 #| msgid ""
 #| "Your email address, used to identify you as the sender when sending email "
@@ -6139,14 +6139,14 @@ msgstr ""
 "Jo e-mailadres, dit wurdt brûkt om jo as e-mail ferstjoerder bekend te "
 "meitsjen"
 
-#: prefdlg.cpp:1256 prefdlg.cpp:1292
+#: prefdlg.cpp:1255 prefdlg.cpp:1291
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
 msgstr "KMail-&identiteiten brûke"
 
-#: prefdlg.cpp:1259
+#: prefdlg.cpp:1258
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Check to use the email address set in the KDE Control Center, to identify "
@@ -6159,14 +6159,14 @@ msgstr ""
 "Selektearje dizze opsje om it e-mailadres dat ynsteld is yn KDE's "
 "Konfiguraasjesintrum te brûken as ferstjoerder fan alaarms middels e-mail."
 
-#: prefdlg.cpp:1263
+#: prefdlg.cpp:1262
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@option:radio"
 msgid "Use <application>KMail</application> identities"
 msgstr "KMail-&identiteiten brûke"
 
-#: prefdlg.cpp:1266
+#: prefdlg.cpp:1265
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Check to use KMail's email identities to identify you as the sender when "
@@ -6185,7 +6185,7 @@ msgstr ""
 "fan e-mailalaarms. Foar besteande e-mailalaarms sil de standertidentiteit "
 "brûkt wurde. Foar nije alaarms is it mooglik om sels in identiteit te kiezen."
 
-#: prefdlg.cpp:1273
+#: prefdlg.cpp:1272
 #, fuzzy, kde-format
 #| msgctxt "'Bcc' email address"
 #| msgid "&Bcc:"
@@ -6193,7 +6193,7 @@ msgctxt "@label 'Bcc' email address"
 msgid "Bcc:"
 msgstr "&Bcc:"
 
-#: prefdlg.cpp:1284
+#: prefdlg.cpp:1283
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Your email address, used for blind copying email alarms to yourself. If "
@@ -6211,7 +6211,7 @@ msgstr ""
 "nei jo akkount op de kompjûter dêr't KAlarm op draait, dan kinne jo folstean "
 "mei it ynfieren fan jo brûkersnamme op dizze kompjûter."
 
-#: prefdlg.cpp:1295
+#: prefdlg.cpp:1294
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Check to use the email address set in the KDE Control Center, for blind "
@@ -6225,14 +6225,14 @@ msgstr ""
 "Konfiguratiecentrum brûke wolle foar it ferstjoeren fan bline kopyën nei "
 "josels."
 
-#: prefdlg.cpp:1397
+#: prefdlg.cpp:1396
 #, fuzzy, kde-format
 #| msgid "No valid 'Bcc' email address is specified."
 msgctxt "@info"
 msgid "No valid 'Bcc' email address is specified."
 msgstr "Der is gjin jildich 'Bcc-adres opjûn."
 
-#: prefdlg.cpp:1404
+#: prefdlg.cpp:1403
 #, fuzzy, kde-format
 #| msgid ""
 #| "%1\n"
@@ -6243,7 +6243,7 @@ msgstr ""
 "%1\n"
 "Wolle jo de feroarings opslaan?"
 
-#: prefdlg.cpp:1410
+#: prefdlg.cpp:1409
 #, fuzzy, kde-kuit-format
 #| msgid "No email address is currently set in the KDE Control Center. %1"
 msgctxt "@info"
@@ -6254,7 +6254,7 @@ msgstr ""
 "Der is op dit stuit gjin e-mailadres opjûn yn it Konfiguraasjesintrum van "
 "KDE. %1"
 
-#: prefdlg.cpp:1415
+#: prefdlg.cpp:1414
 #, fuzzy, kde-kuit-format
 #| msgid "No KMail identities currently exist. %1"
 msgctxt "@info"
@@ -6263,7 +6263,7 @@ msgid ""
 "para><para>%1</para><para>%2</para>"
 msgstr "Der binne op dit stuit gjin KMail-identiteiten. %1"
 
-#: prefdlg.cpp:1433
+#: prefdlg.cpp:1432
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "The default setting for the recurrence rule in the alarm edit dialog."
@@ -6273,27 +6273,27 @@ msgid ""
 msgstr ""
 "De standertynstellingen foar werhelling fan alaarms yn it bewurkfinster."
 
-#: prefdlg.cpp:1442 prefdlg.cpp:1907
+#: prefdlg.cpp:1441 prefdlg.cpp:1906
 #, fuzzy, kde-format
 #| msgid "General"
 msgctxt "@title:tab"
 msgid "General"
 msgstr "Algemien"
 
-#: prefdlg.cpp:1448
+#: prefdlg.cpp:1447
 #, kde-format
 msgctxt "@title:tab Settings specific to alarm type"
 msgid "Type Specific"
 msgstr ""
 
-#: prefdlg.cpp:1454
+#: prefdlg.cpp:1453
 #, fuzzy, kde-format
 #| msgid "Font & Color"
 msgctxt "@title:tab"
 msgid "Font && Color"
 msgstr "Lettertype en kleur"
 
-#: prefdlg.cpp:1470
+#: prefdlg.cpp:1469
 #, fuzzy, kde-format
 #| msgid ""
 #| "The default setting for the recurrence rule in the alarm edit dialog."
@@ -6304,35 +6304,35 @@ msgid ""
 msgstr ""
 "De standertynstellingen foar werhelling fan alaarms yn it bewurkfinster."
 
-#: prefdlg.cpp:1500
+#: prefdlg.cpp:1499
 #, fuzzy, kde-format
 #| msgid "Recurrence:"
 msgctxt "@label:listbox"
 msgid "Recurrence:"
 msgstr "Werhelling:"
 
-#: prefdlg.cpp:1533
+#: prefdlg.cpp:1532
 #, fuzzy, kde-format
 #| msgid "February 2&8th"
 msgctxt "@option:radio"
 msgid "February 28th"
 msgstr "2&8 febrewaris"
 
-#: prefdlg.cpp:1537
+#: prefdlg.cpp:1536
 #, fuzzy, kde-format
 #| msgid "March &1st"
 msgctxt "@option:radio"
 msgid "March 1st"
 msgstr "&1 maart"
 
-#: prefdlg.cpp:1541
+#: prefdlg.cpp:1540
 #, fuzzy, kde-format
 #| msgid "Do &not repeat"
 msgctxt "@option:radio"
 msgid "Do not repeat"
 msgstr "&Net werhelje"
 
-#: prefdlg.cpp:1546
+#: prefdlg.cpp:1545
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "For yearly recurrences, choose what date, if any, alarms due on February "
@@ -6350,21 +6350,21 @@ msgstr ""
 "Opmerking: de folgjende plande werhelling fan besteande alaarms wurde net "
 "opnij evaluearre neidat jo dizze ynstelling feroare hawwe."
 
-#: prefdlg.cpp:1552
+#: prefdlg.cpp:1551
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@title:group"
 msgid "Display Alarms"
 msgstr "Alaarms toane"
 
-#: prefdlg.cpp:1570
+#: prefdlg.cpp:1569
 #, fuzzy, kde-format
 #| msgid "Reminder &units:"
 msgctxt "@label:listbox"
 msgid "Reminder units:"
 msgstr "Tiidsien&heid foar alaarms:"
 
-#: prefdlg.cpp:1573
+#: prefdlg.cpp:1572
 #, fuzzy, kde-format
 #| msgid "1 Minute"
 #| msgid_plural "%1 Minutes"
@@ -6372,14 +6372,14 @@ msgctxt "@item:inlistbox"
 msgid "Minutes"
 msgstr "1 minút"
 
-#: prefdlg.cpp:1574
+#: prefdlg.cpp:1573
 #, fuzzy, kde-format
 #| msgid "Hours/Minutes"
 msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
 msgstr "Oeren/minuten"
 
-#: prefdlg.cpp:1577
+#: prefdlg.cpp:1576
 #, fuzzy, kde-format
 #| msgid "The default units for the reminder in the alarm edit dialog."
 msgctxt "@info:whatsthis"
@@ -6390,7 +6390,7 @@ msgstr ""
 "De standert tiidsienheid foar it alaarm foarôf yn it finster "
 "\"Alaarmgegevens bewurkje\"."
 
-#: prefdlg.cpp:1583
+#: prefdlg.cpp:1582
 #, fuzzy, kde-format
 #| msgctxt "An audio sound"
 #| msgid "Sound"
@@ -6398,14 +6398,14 @@ msgctxt "@title:group Audio options group"
 msgid "Sound"
 msgstr "Lûd"
 
-#: prefdlg.cpp:1602
+#: prefdlg.cpp:1601
 #, fuzzy, kde-format
 #| msgid "Repea&t sound file"
 msgctxt "@option:check"
 msgid "Repeat sound file"
 msgstr "Lûdstriem &werhelje"
 
-#: prefdlg.cpp:1605
+#: prefdlg.cpp:1604
 #, fuzzy, kde-kuit-format
 #| msgctxt "sound file \"Repeat\" checkbox"
 #| msgid "The default setting for sound file \"%1\" in the alarm edit dialog."
@@ -6415,21 +6415,21 @@ msgid ""
 "edit dialog."
 msgstr "De standert ynstelling foar lûdstriem \"%1\" yn it bewurkfinster."
 
-#: prefdlg.cpp:1611
+#: prefdlg.cpp:1610
 #, fuzzy, kde-format
 #| msgid "Sound &file:"
 msgctxt "@label:textbox"
 msgid "Sound file:"
 msgstr "Lûds&triem:"
 
-#: prefdlg.cpp:1619
+#: prefdlg.cpp:1618
 #, fuzzy, kde-format
 #| msgid "Choose a sound file"
 msgctxt "@info:tooltip"
 msgid "Choose a sound file"
 msgstr "Kies een lûdstriem"
 
-#: prefdlg.cpp:1621
+#: prefdlg.cpp:1620
 #, fuzzy, kde-format
 #| msgid "Enter the default sound file to use in the alarm edit dialog."
 msgctxt "@info:whatsthis"
@@ -6437,7 +6437,7 @@ msgid "Enter the default sound file to use in the alarm edit dialog."
 msgstr ""
 "Jou in standert lûdstriem op om yn it bewurkfinster foar alaarms te brûken."
 
-#: prefdlg.cpp:1630
+#: prefdlg.cpp:1629
 #, fuzzy, kde-format
 #| msgid "Enter the default sound file to use in the alarm edit dialog."
 msgctxt "@info:whatsthis"
@@ -6446,7 +6446,7 @@ msgid ""
 msgstr ""
 "Jou in standert lûdstriem op om yn it bewurkfinster foar alaarms te brûken."
 
-#: prefdlg.cpp:1634
+#: prefdlg.cpp:1633
 #, fuzzy, kde-format
 #| msgid "Enter the default sound file to use in the alarm edit dialog."
 msgctxt "@info:whatsthis"
@@ -6454,28 +6454,28 @@ msgid "The default volume for sound files in the alarm edit dialog."
 msgstr ""
 "Jou in standert lûdstriem op om yn it bewurkfinster foar alaarms te brûken."
 
-#: prefdlg.cpp:1644
+#: prefdlg.cpp:1643
 #, fuzzy, kde-format
 #| msgid "Command Alarms"
 msgctxt "@title:group"
 msgid "Command Alarms"
 msgstr "Alaarms mei shell-kommando"
 
-#: prefdlg.cpp:1663
+#: prefdlg.cpp:1662
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@title:group"
 msgid "Email Alarms"
 msgstr "Alaarms middels e-mail"
 
-#: prefdlg.cpp:1676
+#: prefdlg.cpp:1675
 #, fuzzy, kde-format
 #| msgid "Message Font && Color"
 msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "Lettertype en -kleur berjocht"
 
-#: prefdlg.cpp:1886
+#: prefdlg.cpp:1885
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "You must enter a sound file when %1 is selected as the default sound type"
@@ -6486,21 +6486,21 @@ msgid ""
 msgstr ""
 "Jo moatte in lûdstriem opjaan as %1 selektearre is as standert lûdstype"
 
-#: prefdlg.cpp:1913
+#: prefdlg.cpp:1912
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "Alaarmlist"
 
-#: prefdlg.cpp:1916
+#: prefdlg.cpp:1915
 #, fuzzy, kde-format
 #| msgid "Show in System &Tray"
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "In sys&teemfak toane"
 
-#: prefdlg.cpp:1918
+#: prefdlg.cpp:1917
 #, fuzzy, kde-kuit-format
 #| msgid "Check to run KAlarm whenever you start KDE."
 msgctxt "@info:whatsthis"
@@ -6511,13 +6511,13 @@ msgid ""
 msgstr ""
 "Selektearje dizze opsje om KAlarm te starten, hieltyd as jo KDE opstarte."
 
-#: prefdlg.cpp:1947
+#: prefdlg.cpp:1946
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr ""
 
-#: prefdlg.cpp:1951
+#: prefdlg.cpp:1950
 #, fuzzy, kde-kuit-format
 #| msgid "Check to run KAlarm whenever you start KDE."
 msgctxt "@info:whatsthis"
@@ -6527,13 +6527,13 @@ msgid ""
 msgstr ""
 "Selektearje dizze opsje om KAlarm te starten, hieltyd as jo KDE opstarte."
 
-#: prefdlg.cpp:1955
+#: prefdlg.cpp:1954
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr ""
 
-#: prefdlg.cpp:1959
+#: prefdlg.cpp:1958
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6542,7 +6542,7 @@ msgid ""
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
 
-#: prefdlg.cpp:1965
+#: prefdlg.cpp:1964
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6552,27 +6552,27 @@ msgid ""
 "to show hidden icons."
 msgstr ""
 
-#: prefdlg.cpp:1968
+#: prefdlg.cpp:1967
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr ""
 
-#: prefdlg.cpp:1980
+#: prefdlg.cpp:1979
 #, fuzzy, kde-format
 #| msgid "System Tray Tooltip"
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "Tekstballon yn systeemfak toane"
 
-#: prefdlg.cpp:1987
+#: prefdlg.cpp:1986
 #, fuzzy, kde-format
 #| msgid "Show next &24 hours' alarms"
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
 msgstr "Alaarms foar de kommende &24 oere toane"
 
-#: prefdlg.cpp:1991
+#: prefdlg.cpp:1990
 #, fuzzy, kde-format
 #| msgid ""
 #| "Specify whether to include in the system tray tooltip, a summary of "
@@ -6585,14 +6585,14 @@ msgstr ""
 "Jou oan oft de tekstballon yn it systeemfak in gearfetting toant fan de "
 "alaarms dy't de kommende 24 oere barre sille"
 
-#: prefdlg.cpp:1997
+#: prefdlg.cpp:1996
 #, fuzzy, kde-format
 #| msgid "Ma&ximum number of alarms to show:"
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "Ma&ksimum oantal te toanen alaarms:"
 
-#: prefdlg.cpp:2006
+#: prefdlg.cpp:2005
 #, fuzzy, kde-format
 #| msgid ""
 #| "Uncheck to display all of the next 24 hours' alarms in the system tray "
@@ -6606,48 +6606,48 @@ msgstr ""
 "tekstballon werjaan litte wolle. Selektearje dizze opsje as jo in limyt "
 "ynstelle wolle."
 
-#: prefdlg.cpp:2010
+#: prefdlg.cpp:2009
 #, fuzzy, kde-format
 #| msgid "Show alarm &time"
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "Toan tiids&tip alaarms"
 
-#: prefdlg.cpp:2016
+#: prefdlg.cpp:2015
 #, fuzzy, kde-format
 #| msgid "Show time u&ntil alarm"
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "De tiid oant alaarm to&ane"
 
-#: prefdlg.cpp:2034
+#: prefdlg.cpp:2033
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "Alaarmlist"
 
-#: prefdlg.cpp:2046
+#: prefdlg.cpp:2045
 #, fuzzy, kde-format
 #| msgid "Di&sabled alarm color:"
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "Kleur fan it útsk&eakele alaarm:"
 
-#: prefdlg.cpp:2059
+#: prefdlg.cpp:2058
 #, fuzzy, kde-format
 #| msgid "Di&sabled alarm color:"
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "Kleur fan it útsk&eakele alaarm:"
 
-#: prefdlg.cpp:2072
+#: prefdlg.cpp:2071
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr ""
 
-#: prefdlg.cpp:2084
+#: prefdlg.cpp:2083
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6658,25 +6658,25 @@ msgid ""
 "time after the window is displayed.</item></list></para>"
 msgstr ""
 
-#: prefdlg.cpp:2087
+#: prefdlg.cpp:2086
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr ""
 
-#: prefdlg.cpp:2091
+#: prefdlg.cpp:2090
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr ""
 
-#: prefdlg.cpp:2100
+#: prefdlg.cpp:2099
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr ""
 
-#: prefdlg.cpp:2108
+#: prefdlg.cpp:2107
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6685,7 +6685,7 @@ msgid ""
 "acknowledged."
 msgstr ""
 
-#: prefdlg.cpp:2112
+#: prefdlg.cpp:2111
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
