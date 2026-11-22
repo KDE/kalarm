@@ -615,10 +615,18 @@ public:
      *
      * If the instance is date-only, the time value is set to 00:00:00.
      *
+     * If the time specification is LocalZone, by default the value is
+     * returned with a QTimeZone::LocalTime type. Note that this loses any
+     * second occurrence indication during a change from daylight savings to
+     * standard time.
+     *
+     * @param useTzIfLocal  If it's a LocalZone time specification, return a
+     *                      value using the system time zone instead of the
+     *                      default QTimeZone::LocalTime type.
      * @return date/time
      * @see date(), time()
      */
-    QDateTime qDateTime() const;
+    QDateTime qDateTime(bool useTzIfLocal = false) const;
 
     /**
      * Returns the new (Qt >= 6.5) QTimeZone for the date/time,
@@ -1522,6 +1530,8 @@ public:
 private:
     QSharedDataPointer<KADateTimePrivate> d;
 };
+
+KALARMCAL_EXPORT QDebug operator<<(QDebug dbg, const KADateTime::Spec& spec);
 
 KALARMCAL_EXPORT QDebug operator<<(QDebug dbg, const KADateTime& dt);
 

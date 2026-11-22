@@ -5,7 +5,7 @@
  *  calendar data.
  *  It is the Qt5/Qt6 version of KDE 4 kdelibs/kdecore/date/kdatetime.cpp.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -423,9 +423,9 @@ public:
     {
         return mDt;
     }
-    QDateTime dt() const
+    QDateTime dt(bool useTzIfLocal = false) const
     {
-        if (specType == KADateTime::LocalZone)
+        if (specType == KADateTime::LocalZone  &&  !useTzIfLocal)
         {
             QDateTime dtl(mDt);
             dtl.setTimeZone(QTimeZone(QTimeZone::LocalTime));
@@ -485,15 +485,21 @@ public:
     void setDateTime(const QDateTime& d);
     void setDate(const QDate& d)
     {
-        mDt.setDate(d);
-        utcCached = convertedCached = false;
-        setTzTransitionOccurrence(false);
+        if (mDt.date() != d)
+        {
+            mDt.setDate(d);
+            utcCached = convertedCached = false;
+            setTzTransitionOccurrence(false);
+        }
     }
     void setTime(const QTime& t)
     {
-        mDt.setTime(t);
-        utcCached = convertedCached = mDateOnly = false;
-        setTzTransitionOccurrence(false);
+        if (mDt.time() != t)
+        {
+            mDt.setTime(t);
+            utcCached = convertedCached = mDateOnly = false;
+            setTzTransitionOccurrence(false);
+        }
     }
     void setSpec(const KADateTime::Spec&);
     void setDateOnly(bool d);
@@ -593,20 +599,35 @@ KADateTime::Spec KADateTimePrivate::spec() const
 */
 void KADateTimePrivate::setDtSpec(const KADateTime::Spec& s)
 {
+    const QTimeZone tz = mDt.timeRepresentation();
     switch (s.type())
     {
         case KADateTime::UTC:
+            if (tz.timeSpec() == Qt::UTC)
+                return;
             mDt.setTimeZone(QTimeZone::utc());
             break;
         case KADateTime::OffsetFromUTC:
+            if (tz.timeSpec() == Qt::OffsetFromUTC  &&  tz.fixedSecondsAheadOfUtc() == s.utcOffset())
+                return;
             mDt.setTimeZone(QTimeZone::fromSecondsAheadOfUtc(s.utcOffset()));
             break;
         case KADateTime::TimeZone:
-            mDt.setTimeZone(s.namedTimeZone());
+        {
+            const QTimeZone newTz = s.namedTimeZone();
+            if (newTz == tz)
+                return;    // retain daylight savings status etc. if unchanged
+            mDt.setTimeZone(newTz);
             break;
+        }
         case KADateTime::LocalZone:
-            mDt.setTimeZone(QTimeZone::systemTimeZone());
+        {
+            const QTimeZone newTz = QTimeZone::systemTimeZone();
+            if (newTz == tz)
+                return;    // retain daylight savings status etc. if unchanged
+            mDt.setTimeZone(newTz);
             break;
+        }
         case KADateTime::Invalid:
         default:
             return;
@@ -715,11 +736,13 @@ QDateTime KADateTimePrivate::updatedDt(QTimeZone& local) const
 {
     if (specType == KADateTime::LocalZone)
     {
-        local = QTimeZone::systemTimeZone();
+        if (!local.isValid())
+            local = QTimeZone::systemTimeZone();
         if (mDt.timeZone() != local)
         {
             const_cast<QDateTime*>(&mDt)->setTimeZone(local);
             utcCached = convertedCached = false;
+            m2ndOccurrence = false;   // it's a different time zone, so clear this
         }
     }
     return mDt;
@@ -1133,9 +1156,9 @@ QTime KADateTime::time() const
 {
     return d->time();
 }
-QDateTime KADateTime::qDateTime() const
+QDateTime KADateTime::qDateTime(bool useTzIfLocal) const
 {
-    return d->dt();
+    return d->dt(useTzIfLocal);
 }
 
 KADateTime::Spec KADateTime::timeSpec() const
@@ -1326,6 +1349,17 @@ KADateTime KADateTime::toTimeSpec(const Spec& spec) const
         return result;
     }
     QTimeZone local;
+    if (spec.type() == LocalZone)
+    {
+        local = QTimeZone::systemTimeZone();
+        if (d->rawDt().timeZone() == local)
+        {
+            // It already uses the system time zone, so keep m2ndOccurrence etc.
+            KADateTime result = *this;
+            result.d->setSpec(LocalZone);
+            return result;
+        }
+    }
     return KADateTime(d->toUtc(local), spec);
 }
 
@@ -2865,6 +2899,29 @@ KADateTime KADateTime::realCurrentLocalDateTime()
     return KADateTime(QDateTime::currentDateTime(), Spec(QTimeZone::systemTimeZone()));
 }
 
+QDebug operator<<(QDebug dbg, const KADateTime::Spec& spec)
+{
+    QDebugStateSaver saver(dbg);
+    switch (spec.type())
+    {
+        case KADateTime::TimeZone:
+            dbg.noquote() << spec.qTimeZone().id();
+            break;
+        case KADateTime::UTC:
+            dbg.noquote() << "UTC";
+            break;
+        case KADateTime::OffsetFromUTC:
+            dbg.noquote() << spec.qTimeZone().id();
+            break;
+        case KADateTime::LocalZone:
+            dbg.noquote() << "Local";
+            break;
+        default:
+            break;
+    }
+    return dbg;
+}
+
 QDebug operator<<(QDebug dbg, const KADateTime& dt)
 {
     QDebugStateSaver saver(dbg);
@@ -2877,6 +2934,7 @@ QDebug operator<<(QDebug dbg, const KADateTime& dt)
         const int n = t.msec() ? 12 : t.second() ? 8 : 5;
         dbg.noquote() << dt.time().toString(QStringView(format.constData(), n));
     }
+    dbg << dt.timeSpec();
     const KADateTime::Spec spec = dt.timeSpec();
     switch (spec.type())
     {
