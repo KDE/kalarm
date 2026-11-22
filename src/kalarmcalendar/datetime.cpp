@@ -117,9 +117,9 @@ void DateTime::setDate(const QDate& date)
     d->mDateTime.setDate(date);
 }
 
-QDateTime DateTime::qDateTime() const
+QDateTime DateTime::qDateTime(bool useTzIfLocal) const
 {
-    return d->mDateTime.qDateTime();
+    return d->mDateTime.qDateTime(useTzIfLocal);
 }
 
 KADateTime DateTime::kDateTime() const
@@ -142,7 +142,8 @@ QDateTime DateTime::effectiveDateTime() const
     if (d->mDateTime.isDateOnly())
     {
         QDateTime dt = d->mDateTime.qDateTime();    // preserve Qt::UTC or Qt::LocalTime
-        dt.setTime(d->mStartOfDay);
+        if (dt.time() != d->mStartOfDay)            // preserve second occurrence status
+            dt.setTime(d->mStartOfDay);
         return dt;
     }
     return d->mDateTime.qDateTime();

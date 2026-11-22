@@ -35,8 +35,8 @@
 #include "kalarm_debug.h"
 
 #include <KCalendarCore/MemoryCalendar>
-using namespace KCalendarCore;
 #include <KCalendarCore/MimeData>
+using namespace KCalendarCore;
 
 #include <KAboutData>
 #include <KToolBar>

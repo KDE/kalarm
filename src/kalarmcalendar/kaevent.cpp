@@ -5436,7 +5436,7 @@ void KAEventPrivate::nextWorkingTime(const Triggers& startTrigger, bool skipRepe
     const QTimeZone tz = kdt.namedTimeZone();
     // Get time zone transitions for the next 10 years.
     const QDateTime endTransitionsTime = QDateTime::currentDateTimeUtc().addYears(10);
-    const QTimeZone::OffsetDataList tzTransitions = tz.transitions(mStartDateTime.qDateTime(), endTransitionsTime);
+    const QTimeZone::OffsetDataList tzTransitions = tz.transitions(mStartDateTime.qDateTime(true), endTransitionsTime);
 
     if (recurTimeVaries)
     {

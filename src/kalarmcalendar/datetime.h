@@ -82,8 +82,12 @@ public:
     void setDate(const QDate& d);
 
     /** Returns the date and time of the value.
-     *  If the value is date-only, the time part returned is 00:00:00. */
-    QDateTime qDateTime() const;
+     *  If the value is date-only, the time part returned is 00:00:00.
+     * @param useTzIfLocal  If it's a LocalZone time specification, return a
+     *                      value using the system time zone instead of the
+     *                      default QTimeZone::LocalTime type.
+     */
+    QDateTime qDateTime(bool useTzIfLocal = false) const;
 
     /** Returns the date and time of the value as a KADateTime. */
     KADateTime kDateTime() const;

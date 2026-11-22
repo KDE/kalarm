@@ -20,7 +20,7 @@ using namespace KCalendarCore;
 
 namespace
 {
-QDateTime msecs0(const KAlarmCal::KADateTime&);
+QDateTime msecs0(const KAlarmCal::KADateTime&, bool useTzIfLocal = false);
 }
 
 namespace KAlarmCal
@@ -835,10 +835,10 @@ KADateTime KARecurrence::getNextDateTime(const KADateTime& preDateTime) const
         {
             Recurrence recur;
             writeRecurrence(recur);
-            return KADateTime(recur.getNextDateTime(msecs0(preDateTime)));
+            return KADateTime(recur.getNextDateTime(msecs0(preDateTime, true)));
         }
         default:
-            return KADateTime(d->mRecurrence.getNextDateTime(msecs0(preDateTime)));
+            return KADateTime(d->mRecurrence.getNextDateTime(msecs0(preDateTime, true)));
     }
 }
 
@@ -854,10 +854,10 @@ KADateTime KARecurrence::getPreviousDateTime(const KADateTime& afterDateTime) co
         {
             Recurrence recur;
             writeRecurrence(recur);
-            return KADateTime(recur.getPreviousDateTime(msecs0(afterDateTime)));
+            return KADateTime(recur.getPreviousDateTime(msecs0(afterDateTime, true)));
         }
         default:
-            return KADateTime(d->mRecurrence.getPreviousDateTime(msecs0(afterDateTime)));
+            return KADateTime(d->mRecurrence.getPreviousDateTime(msecs0(afterDateTime, true)));
     }
 }
 
@@ -892,7 +892,7 @@ bool KARecurrence::recursOn(const QDate& dt, const KADateTime::Spec& timeSpec) c
 
 bool KARecurrence::recursAt(const KADateTime& dt) const
 {
-    return d->mRecurrence.recursAt(msecs0(dt));
+    return d->mRecurrence.recursAt(msecs0(dt, true));
 }
 
 TimeList KARecurrence::recurTimesOn(const QDate& date, const KADateTime::Spec& timeSpec) const
@@ -902,7 +902,7 @@ TimeList KARecurrence::recurTimesOn(const QDate& date, const KADateTime::Spec& t
 
 DateTimeList KARecurrence::timesInInterval(const KADateTime& start, const KADateTime& end) const
 {
-    const auto l = d->mRecurrence.timesInInterval(msecs0(start), msecs0(end));
+    const auto l = d->mRecurrence.timesInInterval(msecs0(start, true), msecs0(end, true));
     DateTimeList rv;
     rv.reserve(l.size());
     for (const auto& qdt : l)
@@ -932,7 +932,7 @@ void KARecurrence::setDuration(int duration)
 
 int KARecurrence::durationTo(const KADateTime& dt) const
 {
-    return d->mRecurrence.durationTo(msecs0(dt));
+    return d->mRecurrence.durationTo(msecs0(dt, true));
 }
 
 int KARecurrence::durationTo(const QDate& date) const
@@ -993,7 +993,7 @@ int KARecurrence::Private::combineDurations(const RecurrenceRule* rrule1, const 
     // Get the date of the next occurrence after the end of the earlier ending rule
     RecurrenceRule rr(*rr1);
     rr.setDuration(-1);
-    KADateTime next1(rr.getNextDate(end1.qDateTime()));
+    KADateTime next1(rr.getNextDate(end1.qDateTime(true)));
     next1.setDateOnly(true);
     if (!next1.isValid())
         end = end1.date();
@@ -1007,7 +1007,7 @@ int KARecurrence::Private::combineDurations(const RecurrenceRule* rrule1, const 
             end = end2.date();
             return count1 + count2;
         }
-        const QDate prev2 = rr2->getPreviousDate(next1.qDateTime()).date();
+        const QDate prev2 = rr2->getPreviousDate(next1.qDateTime(true)).date();
         end = (prev2 > end1.date()) ? prev2 : end1.date();
     }
     if (count2)
@@ -1253,7 +1253,7 @@ void KARecurrence::setExDates(const DateList& exdates)
 
 void KARecurrence::addExDateTime(const KADateTime& exdate)
 {
-    d->mRecurrence.addExDateTime(msecs0(exdate));
+    d->mRecurrence.addExDateTime(msecs0(exdate, true));
 }
 
 void KARecurrence::addExDate(const QDate& exdate)
@@ -1343,9 +1343,9 @@ namespace
 * also to get round a minor bug in KRecurrence which doesn't return correct
 * milliseconds values for sub-daily recurrences.
 */
-QDateTime msecs0(const KAlarmCal::KADateTime& kdt)
+QDateTime msecs0(const KAlarmCal::KADateTime& kdt, bool useTzIfLocal)
 {
-    return kdt.clearMSecs().qDateTime();
+    return kdt.clearMSecs().qDateTime(useTzIfLocal);
 }
 
 }
