@@ -38,7 +38,7 @@
 #include <KLocalizedString>
 #include <KConfig>
 #include <KSharedConfig>
-#if ENABLE_X11
+#if WITH_X11
 #include <KX11Extras>
 #include <KWindowSystem>
 #endif
@@ -454,7 +454,7 @@ void EditAlarmDlg::init(const KAEvent& event)
     // If a main window is visible, the dialog will by KDE default always appear on its
     // desktop. If the user invokes the dialog via the system tray on a different desktop,
     // that can cause confusion.
-#if ENABLE_X11
+#if WITH_X11
     if (KWindowSystem::isPlatformX11())
         mDesktop = KX11Extras::currentDesktop();
 #endif
@@ -972,7 +972,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
         }
     }
     slotResize();
-#if ENABLE_X11
+#if WITH_X11
     if (KWindowSystem::isPlatformX11())
         KX11Extras::setOnDesktop(winId(), mDesktop);    // ensure it displays on the virtual desktop expected by the user
 #endif
