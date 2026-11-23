@@ -112,7 +112,8 @@ bool AudioPlayerMpv::play()
 
     qCDebug(AUDIOPLUGIN_LOG) << "AudioPlayerMpv::play";
 
-    const char* cmd[] = {"loadfile", mFile.toUtf8().constData(), nullptr};
+    const QByteArray file = mFile.toUtf8();
+    const char* cmd[] = {"loadfile", file.constData(), nullptr};
     int retval = 0;
     if ((retval = mpv_command_async(mAudioInstance, 0, cmd)) < 0)
     {
@@ -140,8 +141,8 @@ void AudioPlayerMpv::setVolume()
 {
     qCDebug(AUDIOPLUGIN_LOG) << "AudioPlayerMpv::setVolume" << mCurrentVolume;
     int retval = 0;
-    const char* volumeLevel = QString::number(static_cast<int>(mCurrentVolume * 100)).toUtf8().constData();
-    if ((retval = mpv_set_option_string(mAudioInstance, "volume", volumeLevel))  < 0)
+    const QByteArray volumeLevel = QString::number(static_cast<int>(mCurrentVolume * 100)).toUtf8();
+    if ((retval = mpv_set_option_string(mAudioInstance, "volume", volumeLevel.constData()))  < 0)
     {
         setErrorStatus(i18nc("@info", "Cannot set the audio volume: %1", QString::fromUtf8(mpv_error_string(retval))));
         qCWarning(AUDIOPLUGIN_LOG) << "AudioPlayerMpv: Error setting MPV audio volume:" << mpv_error_string(retval);
@@ -153,7 +154,7 @@ void AudioPlayerMpv::setVolume()
 */
 void AudioPlayerMpv::wakeup_callback(void* ctx)
 {
-    QMetaObject::invokeMethod(static_cast<AudioPlayerMpv*>(ctx), "onMpvEvents"); // , Qt::QueuedConnection
+    QMetaObject::invokeMethod(static_cast<AudioPlayerMpv*>(ctx), "onMpvEvents", Qt::QueuedConnection);
 }
 
 /******************************************************************************
@@ -208,7 +209,7 @@ void AudioPlayerMpv::stop()
     qCDebug(AUDIOPLUGIN_LOG) << "AudioPlayerMpv::stop";
     if (mAudioInstance  &&  status() == Playing)
     {
-        const char* cmd[] = {"stop"};
+        const char* cmd[] = {"stop", nullptr};
         mpv_command_async(mAudioInstance, 0, cmd);
     }
 }
