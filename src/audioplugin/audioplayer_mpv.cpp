@@ -1,7 +1,7 @@
 /*
  *  audioplayer_mpv.cpp  -  play an audio file using the MPV backend
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2024 Fabio Bas <ctrlaltca@gmail.com>
+ *  SPDX-FileCopyrightText: 2024-2026 Fabio Bas <ctrlaltca@gmail.com>
  *  SPDX-FileCopyrightText: 2024-2025 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
