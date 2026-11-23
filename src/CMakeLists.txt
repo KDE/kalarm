@@ -355,10 +355,6 @@ if(ENABLE_RTC_WAKE_FROM_SUSPEND)
     target_link_libraries(kalarm_bin KF6::AuthCore)
 endif()
 
-if(ENABLE_X11)
-    target_link_libraries(kalarm_bin ${X11_X11_LIB})
-endif()
-
 install(TARGETS kalarm_bin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 #endif(UNIX)
 

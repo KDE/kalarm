@@ -20,7 +20,7 @@
 #include <KFind>
 #include <KSeparator>
 #include <KLocalizedString>
-#if ENABLE_X11
+#if WITH_X11
 #include <KX11Extras>
 #endif
 
@@ -85,7 +85,7 @@ void Find::display()
 
     if (mDialog)
     {
-#if ENABLE_X11
+#if WITH_X11
         KX11Extras::activateWindow(mDialog->winId());
 #endif
     }

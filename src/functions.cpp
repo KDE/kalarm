@@ -53,7 +53,7 @@ using namespace KCalendarCore;
 #include <KIO/StoredTransferJob>
 #include <KFileCustomDialog>
 #include <KWindowSystem>
-#if ENABLE_X11
+#if WITH_X11
 #include <KWindowInfo>
 #include <KX11Extras>
 #endif
@@ -165,7 +165,7 @@ MainWindow* displayMainWindowSelected(const QString& eventId)
     else
     {
         // There is already a main window, so make it the active window
-#if ENABLE_X11
+#if WITH_X11
         if (KWindowSystem::isPlatformX11())
         {
             KWindowInfo wi(win->winId(), NET::WMDesktop);

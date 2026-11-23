@@ -32,7 +32,7 @@
 #include <KTextEdit>
 #include <KSqueezedTextLabel>
 #include <KWindowSystem>
-#if ENABLE_X11
+#if WITH_X11
 #include <KX11Extras>
 #include <KWindowInfo>
 #include <netwm.h>
@@ -528,7 +528,7 @@ void MessageWindow::setUpDisplay()
     topLayout->activate();
     setMinimumSize(QSize(grid->sizeHint().width() + dcmLeft + dcmRight,
                          sizeHint().height()));
-#if ENABLE_X11
+#if WITH_X11
     if (KWindowSystem::isPlatformX11())
     {
         const bool modal = !(windowFlags() & Qt::BypassWindowManagerHint);
@@ -1167,12 +1167,12 @@ void MessageWindow::slotEdit()
     if (!dlg)
         return;
     KWindowSystem::setMainWindow(dlg->windowHandle(), winId());
-#if ENABLE_X11
+#if WITH_X11
     if (KWindowSystem::isPlatformX11())
         KX11Extras::setOnAllDesktops(dlg->winId(), false);   // don't show on all virtual desktops
 #endif
     setButtonsReadOnly(true);
-#if ENABLE_X11
+#if WITH_X11
     if (KWindowSystem::isPlatformX11())
         connect(KX11Extras::self(), &KX11Extras::activeWindowChanged, this, &MessageWindow::activeWindowChanged);
 #endif
@@ -1195,7 +1195,7 @@ void MessageWindow::editDlgCancelled()
 */
 void MessageWindow::activeWindowChanged(WId win)
 {
-#if ENABLE_X11
+#if WITH_X11
     // Note that the alarm edit dialog is not a QWindow, so we can't call
     // QWindow::requestActivate().
     if (mEditDlg()  &&  win == winId())
@@ -1342,7 +1342,7 @@ bool MessageWindow::getWorkAreaAndModal()
         return false;  // can't logically get here, since there can only be one active window...
     }
 
-#if ENABLE_X11
+#if WITH_X11
     if (KWindowSystem::isPlatformX11())
     {
         const WId activeId = KX11Extras::activeWindow();
@@ -1369,7 +1369,7 @@ FullScreenType haveFullScreenWindow(int screen)
 {
     FullScreenType type = NoFullScreen;
 //TODO: implement on Wayland
-#if ENABLE_X11
+#if WITH_X11
     if (KWindowSystem::isPlatformX11())
     {
         using namespace QNativeInterface;
@@ -1394,7 +1394,7 @@ FullScreenType haveFullScreenWindow(int screen)
             }
         }
     }
-#endif // ENABLE_X11
+#endif // WITH_X11
     return type;
 }
 
@@ -1407,7 +1407,7 @@ FullScreenType findFullScreenWindows(const QList<QRect>& screenRects, QList<Full
     FullScreenType result = NoFullScreen;
     screenTypes.fill(NoFullScreen);
 //TODO: implement on Wayland
-#if ENABLE_X11
+#if WITH_X11
     if (KWindowSystem::isPlatformX11())
     {
         using namespace QNativeInterface;
@@ -1453,7 +1453,7 @@ FullScreenType findFullScreenWindows(const QList<QRect>& screenRects, QList<Full
             }
         }
     }
-#endif // ENABLE_X11
+#endif // WITH_X11
     return result;
 }
 

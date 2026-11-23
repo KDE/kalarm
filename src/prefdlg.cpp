@@ -58,7 +58,7 @@ using namespace KHolidays;
 #include <KAboutData>
 #include <KStandardGuiItem>
 #include <QIcon>
-#if ENABLE_X11
+#if WITH_X11
 #include <KX11Extras>
 #include <KWindowInfo>
 #endif
@@ -113,7 +113,7 @@ void KAlarmPrefDlg::display()
     {
         mInstance->restoreTab();
         // Switch to the virtual desktop which the dialog is in
-#if ENABLE_X11
+#if WITH_X11
         KWindowInfo info = KWindowInfo(mInstance->winId(), NET::WMGeometry | NET::WMDesktop);
         KX11Extras::setCurrentDesktop(info.desktop());
 #endif
