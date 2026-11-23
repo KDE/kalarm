@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 00:14+0000\n"
+"POT-Creation-Date: 2026-11-23 03:49+0000\n"
 "PO-Revision-Date: 2026-09-03 13:00+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
@@ -3873,19 +3873,19 @@ msgstr "A échéance le :"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3525
+#: kalarmcalendar/kaevent.cpp:3542
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Connexion"
 
-#: kalarmcalendar/kaevent.cpp:3525
+#: kalarmcalendar/kaevent.cpp:3542
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "A la connexion"
 
-#: kalarmcalendar/kaevent.cpp:3534 kalarmcalendar/kaevent.cpp:3627
+#: kalarmcalendar/kaevent.cpp:3551 kalarmcalendar/kaevent.cpp:3644
 #, kde-format
 msgctxt "@info"
 msgid "1 Minute"
@@ -3893,7 +3893,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "Une minute"
 msgstr[1] "%1 minutes"
 
-#: kalarmcalendar/kaevent.cpp:3536 kalarmcalendar/kaevent.cpp:3629
+#: kalarmcalendar/kaevent.cpp:3553 kalarmcalendar/kaevent.cpp:3646
 #, kde-format
 msgctxt "@info"
 msgid "1 Hour"
@@ -3901,13 +3901,13 @@ msgid_plural "%1 Hours"
 msgstr[0] "une heure"
 msgstr[1] "%1 heures"
 
-#: kalarmcalendar/kaevent.cpp:3538 kalarmcalendar/kaevent.cpp:3630
+#: kalarmcalendar/kaevent.cpp:3555 kalarmcalendar/kaevent.cpp:3647
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1 h %2 m"
 
-#: kalarmcalendar/kaevent.cpp:3541 kalarmcalendar/kaevent.cpp:3620
+#: kalarmcalendar/kaevent.cpp:3558 kalarmcalendar/kaevent.cpp:3637
 #, kde-format
 msgctxt "@info"
 msgid "1 Day"
@@ -3915,7 +3915,7 @@ msgid_plural "%1 Days"
 msgstr[0] "un jour"
 msgstr[1] "%1 jours"
 
-#: kalarmcalendar/kaevent.cpp:3543 kalarmcalendar/kaevent.cpp:3621
+#: kalarmcalendar/kaevent.cpp:3560 kalarmcalendar/kaevent.cpp:3638
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3923,7 +3923,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "Une semaine"
 msgstr[1] "%1 semaines"
 
-#: kalarmcalendar/kaevent.cpp:3545
+#: kalarmcalendar/kaevent.cpp:3562
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3931,7 +3931,7 @@ msgid_plural "%1 Months"
 msgstr[0] "Un mois"
 msgstr[1] "%1 mois"
 
-#: kalarmcalendar/kaevent.cpp:3547
+#: kalarmcalendar/kaevent.cpp:3564
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3940,14 +3940,14 @@ msgstr[0] "Une année"
 msgstr[1] "%1 années"
 
 # unreviewed-context
-#: kalarmcalendar/kaevent.cpp:3553
+#: kalarmcalendar/kaevent.cpp:3570
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Aucun"
 
 # unreviewed-context
-#: kalarmcalendar/kaevent.cpp:3633
+#: kalarmcalendar/kaevent.cpp:3650
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"

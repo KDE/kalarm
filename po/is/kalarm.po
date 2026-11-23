@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 00:14+0000\n"
+"POT-Creation-Date: 2026-11-23 03:49+0000\n"
 "PO-Revision-Date: 2005-12-29 22:18+0100\n"
 "Last-Translator: Arnar Leosson <leosson@frisurf.no>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -3850,7 +3850,7 @@ msgstr "Dags:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3525
+#: kalarmcalendar/kaevent.cpp:3542
 #, fuzzy, kde-format
 #| msgctxt "Brief form of 'At Login'"
 #| msgid "Login"
@@ -3858,14 +3858,14 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Innskr."
 
-#: kalarmcalendar/kaevent.cpp:3525
+#: kalarmcalendar/kaevent.cpp:3542
 #, fuzzy, kde-format
 #| msgid "At login"
 msgctxt "@info"
 msgid "At login"
 msgstr "Við innskráningu"
 
-#: kalarmcalendar/kaevent.cpp:3534 kalarmcalendar/kaevent.cpp:3627
+#: kalarmcalendar/kaevent.cpp:3551 kalarmcalendar/kaevent.cpp:3644
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Minute"
@@ -3873,7 +3873,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "ein mínúta"
 msgstr[1] "%1 mínútur"
 
-#: kalarmcalendar/kaevent.cpp:3536 kalarmcalendar/kaevent.cpp:3629
+#: kalarmcalendar/kaevent.cpp:3553 kalarmcalendar/kaevent.cpp:3646
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Hour"
@@ -3881,7 +3881,7 @@ msgid_plural "%1 Hours"
 msgstr[0] "ein klukkustund"
 msgstr[1] "%1 klukkustundir"
 
-#: kalarmcalendar/kaevent.cpp:3538 kalarmcalendar/kaevent.cpp:3630
+#: kalarmcalendar/kaevent.cpp:3555 kalarmcalendar/kaevent.cpp:3647
 #, fuzzy, kde-format
 #| msgctxt "Hours and Minutes"
 #| msgid "%1H %2M"
@@ -3889,7 +3889,7 @@ msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1klst %2mín"
 
-#: kalarmcalendar/kaevent.cpp:3541 kalarmcalendar/kaevent.cpp:3620
+#: kalarmcalendar/kaevent.cpp:3558 kalarmcalendar/kaevent.cpp:3637
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Day"
@@ -3897,7 +3897,7 @@ msgid_plural "%1 Days"
 msgstr[0] "einn dagur"
 msgstr[1] "%1 dagar"
 
-#: kalarmcalendar/kaevent.cpp:3543 kalarmcalendar/kaevent.cpp:3621
+#: kalarmcalendar/kaevent.cpp:3560 kalarmcalendar/kaevent.cpp:3638
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3905,7 +3905,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "ein vika"
 msgstr[1] "%1 vikur"
 
-#: kalarmcalendar/kaevent.cpp:3545
+#: kalarmcalendar/kaevent.cpp:3562
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3913,7 +3913,7 @@ msgid_plural "%1 Months"
 msgstr[0] "einn mánuður"
 msgstr[1] "%1 mánuðir"
 
-#: kalarmcalendar/kaevent.cpp:3547
+#: kalarmcalendar/kaevent.cpp:3564
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3921,14 +3921,14 @@ msgid_plural "%1 Years"
 msgstr[0] "eitt ár"
 msgstr[1] "%1 ár"
 
-#: kalarmcalendar/kaevent.cpp:3553
+#: kalarmcalendar/kaevent.cpp:3570
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Ekkert"
 
-#: kalarmcalendar/kaevent.cpp:3633
+#: kalarmcalendar/kaevent.cpp:3650
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@info No repetition"

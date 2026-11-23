@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 00:14+0000\n"
+"POT-Creation-Date: 2026-11-23 03:49+0000\n"
 "PO-Revision-Date: 2026-09-14 20:10+0200\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -3664,19 +3664,19 @@ msgstr "Termín:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:3525
+#: kalarmcalendar/kaevent.cpp:3542
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Prihlásenie"
 
-#: kalarmcalendar/kaevent.cpp:3525
+#: kalarmcalendar/kaevent.cpp:3542
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "Pri prihlásení"
 
-#: kalarmcalendar/kaevent.cpp:3534 kalarmcalendar/kaevent.cpp:3627
+#: kalarmcalendar/kaevent.cpp:3551 kalarmcalendar/kaevent.cpp:3644
 #, kde-format
 msgctxt "@info"
 msgid "1 Minute"
@@ -3685,7 +3685,7 @@ msgstr[0] "1 minúta"
 msgstr[1] "%1 minúty"
 msgstr[2] "%1 minút"
 
-#: kalarmcalendar/kaevent.cpp:3536 kalarmcalendar/kaevent.cpp:3629
+#: kalarmcalendar/kaevent.cpp:3553 kalarmcalendar/kaevent.cpp:3646
 #, kde-format
 msgctxt "@info"
 msgid "1 Hour"
@@ -3694,13 +3694,13 @@ msgstr[0] "1 hodina"
 msgstr[1] "%1 hodiny"
 msgstr[2] "%1 hodín"
 
-#: kalarmcalendar/kaevent.cpp:3538 kalarmcalendar/kaevent.cpp:3630
+#: kalarmcalendar/kaevent.cpp:3555 kalarmcalendar/kaevent.cpp:3647
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1h %2m"
 
-#: kalarmcalendar/kaevent.cpp:3541 kalarmcalendar/kaevent.cpp:3620
+#: kalarmcalendar/kaevent.cpp:3558 kalarmcalendar/kaevent.cpp:3637
 #, kde-format
 msgctxt "@info"
 msgid "1 Day"
@@ -3709,7 +3709,7 @@ msgstr[0] "1 deň"
 msgstr[1] "%1 dni"
 msgstr[2] "%1 dní"
 
-#: kalarmcalendar/kaevent.cpp:3543 kalarmcalendar/kaevent.cpp:3621
+#: kalarmcalendar/kaevent.cpp:3560 kalarmcalendar/kaevent.cpp:3638
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3718,7 +3718,7 @@ msgstr[0] "1 týždeň"
 msgstr[1] "%1 týždne"
 msgstr[2] "%1 týždňov"
 
-#: kalarmcalendar/kaevent.cpp:3545
+#: kalarmcalendar/kaevent.cpp:3562
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3727,7 +3727,7 @@ msgstr[0] "1 mesiac"
 msgstr[1] "%1 mesiace"
 msgstr[2] "%1 mesiacov"
 
-#: kalarmcalendar/kaevent.cpp:3547
+#: kalarmcalendar/kaevent.cpp:3564
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3736,13 +3736,13 @@ msgstr[0] "1 rok"
 msgstr[1] "%1 roky"
 msgstr[2] "%1 rokov"
 
-#: kalarmcalendar/kaevent.cpp:3553
+#: kalarmcalendar/kaevent.cpp:3570
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Žiadne"
 
-#: kalarmcalendar/kaevent.cpp:3633
+#: kalarmcalendar/kaevent.cpp:3650
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"
