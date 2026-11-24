@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-23 01:04+0000\n"
+"POT-Creation-Date: 2026-11-24 01:06+0000\n"
 "PO-Revision-Date: 2026-08-01 13:52+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -291,7 +291,7 @@ msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
 msgstr "לא ניתן לאתחל את מערכת השמע: %1"
 
-#: audioplugin/audioplayer_mpv.cpp:119 audioplugin/audioplayer_mpv.cpp:184
+#: audioplugin/audioplayer_mpv.cpp:120 audioplugin/audioplayer_mpv.cpp:185
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -299,7 +299,7 @@ msgid ""
 msgstr ""
 "<para>שגיאה בניגון קובץ השמע <filename>%1</filename></para><para>%2</para>"
 
-#: audioplugin/audioplayer_mpv.cpp:146
+#: audioplugin/audioplayer_mpv.cpp:147
 #, kde-format
 msgctxt "@info"
 msgid "Cannot set the audio volume: %1"

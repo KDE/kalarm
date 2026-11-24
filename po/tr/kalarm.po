@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-23 01:04+0000\n"
-"PO-Revision-Date: 2026-11-15 20:12+0300\n"
+"POT-Creation-Date: 2026-11-24 01:06+0000\n"
+"PO-Revision-Date: 2026-11-23 18:13+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -85,7 +85,7 @@ msgstr ""
 msgctxt "@info"
 msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
 msgstr ""
-"Bu KAlarm’ın öntanımlı zaman bölgesini kullanır, Yapılandırma iletişim "
+"Bu KAlarm’ın varsayılan zaman bölgesini kullanır, Yapılandırma iletişim "
 "pencerisinden ayarlayın."
 
 #: alarmtimewidget.cpp:93
@@ -246,7 +246,7 @@ msgid ""
 "Choose a time zone for this alarm which is different from the default time "
 "zone set in KAlarm's configuration dialog."
 msgstr ""
-"Bu alarm için KAlarm’ın yapılandırma penceresindeki öntanımlı zaman "
+"Bu alarm için KAlarm’ın yapılandırma penceresindeki varsayılan zaman "
 "bölgesinden farklı bir zaman bölgesi seçin."
 
 #: alarmtimewidget.cpp:228 prefdlg.cpp:804
@@ -297,7 +297,7 @@ msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
 msgstr "Ses sistemi ilklendirilemiyor: %1"
 
-#: audioplugin/audioplayer_mpv.cpp:119 audioplugin/audioplayer_mpv.cpp:184
+#: audioplugin/audioplayer_mpv.cpp:120 audioplugin/audioplayer_mpv.cpp:185
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -306,7 +306,7 @@ msgstr ""
 "<para>Ses dosyası çalınırken hata: <filename>%1</filename></para><para>%2</"
 "para>"
 
-#: audioplugin/audioplayer_mpv.cpp:146
+#: audioplugin/audioplayer_mpv.cpp:147
 #, kde-format
 msgctxt "@info"
 msgid "Cannot set the audio volume: %1"
@@ -905,7 +905,7 @@ msgid ""
 "Select the time zone which KAlarm should use as its default for displaying "
 "and entering dates and times."
 msgstr ""
-"Tarihleri ve zamanları girmesi ve göstermesi için KAlarmın öntanımlı olarak "
+"Tarihleri ve zamanları girmesi ve göstermesi için KAlarmın varsayılan olarak "
 "kullabileceği zaman bölgesini seçin."
 
 #. i18n: ectx: label, entry (Base_HolidayRegion), group (General)
@@ -934,7 +934,7 @@ msgstr "Ön plan rengi"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default foreground color for alarm message windows."
-msgstr "Alarm ileti pencereleri için öntanımlı ön plan renkleri."
+msgstr "Alarm ileti pencereleri için varsayılan ön plan renkleri."
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
 #: data/kalarmconfig.kcfg:107
@@ -948,7 +948,7 @@ msgstr "Arka plan rengi"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default background color for alarm message windows."
-msgstr "Alarm ileti pencereleri için öntanımlı arka plan rengi."
+msgstr "Alarm ileti pencereleri için varsayılan arka plan rengi."
 
 #. i18n: ectx: label, entry (UseAlarmName), group (General)
 #: data/kalarmconfig.kcfg:112
@@ -980,7 +980,7 @@ msgstr "İleti yazı tipi"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default font for displaying alarm messages."
-msgstr "Alarm iletileri için öntanımlı yazı tipi."
+msgstr "Alarm iletileri için varsayılan yazı tipi."
 
 #. i18n: ectx: label, entry (ShowInSystemTray), group (General)
 #: data/kalarmconfig.kcfg:124
@@ -1105,7 +1105,7 @@ msgstr "Çalıştırma"
 #, kde-format
 msgctxt "@label"
 msgid "Default defer time interval"
-msgstr "Öntanımlı erteleme aralığı"
+msgstr "Varsayılan erteleme aralığı"
 
 #. i18n: ectx: whatsthis, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:157
@@ -1115,7 +1115,7 @@ msgid ""
 "Enter the default time interval (in minutes) to defer alarms, used by the "
 "Defer Alarm dialog."
 msgstr ""
-"Alarmları ertelemek için öntanımlı zaman aralığını (dakika olarak) girin, "
+"Alarmları ertelemek için varsayılan zaman aralığını (dakika olarak) girin, "
 "girilen değer Alarm Erteleme iletişim penceresi tarafından kullanılır."
 
 #. i18n: ectx: label, entry (AskResource), group (General)
@@ -1136,7 +1136,7 @@ msgid ""
 msgstr ""
 "<p>Yeni bir alarmı ya da şablonu kaydederken, birden fazla etkin takvim "
 "varsa hangi takvimin onu depolaması gerekiyorsa ona yönlendir.</p><p>Dikkat "
-"et, arşivlenmiş alarmlar her zaman öntanımlı arşivlenmiş alarm takviminde "
+"et, arşivlenmiş alarmlar her zaman varsayılan arşivlenmiş alarm takviminde "
 "depoludur.</p>"
 
 #. i18n: ectx: label, entry (Base_MessageButtonDelay), group (General)
@@ -1326,7 +1326,7 @@ msgid ""
 "email address otherwise."
 msgstr ""
 "E-posta alarmlarını gönderirken kimliğinizi tanımlayacak e-posta adresiniz. "
-"KMail’de kullanılan öntanımlı posta adresini kullanmak için "
+"KMail’de kullanılan varsayılan posta adresini kullanmak için "
 "“@SystemSettings” girin, KMail kimliklerinden birinin seçilmesine izin "
 "vermek için “@KMail” girebilir veya gerçek e-posta adresinizi yazabilirsiniz."
 
@@ -1542,7 +1542,7 @@ msgid ""
 "notifications."
 msgstr ""
 "Alarm iletilerini pencerelerde veya sistem bildirimlerinde görüntülenmesini "
-"seçmek için alarm düzenleme penceresindeki “görüntüleme yöntemi” öntanımlı "
+"seçmek için alarm düzenleme penceresindeki “görüntüleme yöntemi” varsayılan "
 "ayarı."
 
 #. i18n: ectx: label, entry (DefaultNoInhibit), group (Defaults)
@@ -1558,7 +1558,7 @@ msgstr "Alarmı asla engelleme"
 msgctxt "@info:whatsthis"
 msgid "Default value in the alarm edit dialog for \"never inhibit alarm\"."
 msgstr ""
-"“Alarmı asla engelleme” için alarm düzenleme penceresinde öntanımlı değer."
+"“Alarmı asla engelleme” için alarm düzenleme penceresinde varsayılan değer."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:314
@@ -1576,7 +1576,7 @@ msgid ""
 "minutes). 0 for no late cancellation, >0 how many minutes before cancelling."
 msgstr ""
 "Alarm düzenleme penceresinde geç iptal zamanı (dakika cinsinden) için "
-"öntanımlı değer. Geç iptal olmaması için 0, iptalden önce zaman "
+"varsayılan değer. Geç iptal olmaması için 0, iptalden önce zaman "
 "belirtilecekse >0 bir değer girilmelidir."
 
 #. i18n: ectx: label, entry (DefaultAutoClose), group (Defaults)
@@ -1592,7 +1592,8 @@ msgstr "Gecikmiş iptal zamanı durumunda pencereyi otomatik kapat"
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
 msgstr ""
-"“Gecikmişse otomatik kapat” için alarm düzenleme penceresinde öntanımlı ayar."
+"“Gecikmişse otomatik kapat” için alarm düzenleme penceresinde varsayılan "
+"ayar."
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
 #: data/kalarmconfig.kcfg:325
@@ -1610,7 +1611,7 @@ msgid ""
 "\"."
 msgstr ""
 "Alarm düzenleme penceresindeki “alarm bildirimini doğrula” ayarı için "
-"öntanımlı değer."
+"varsayılan değer."
 
 #. i18n: ectx: label, entry (DefaultCopyToKOrganizer), group (Defaults)
 #: data/kalarmconfig.kcfg:330
@@ -1625,7 +1626,7 @@ msgstr "K Organizatör içinde Göster"
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"show in KOrganizer\"."
 msgstr ""
-"“KOrganizer’da göster” için alarm düzenleme penceresindeki öntanımlı ayar."
+"“KOrganizer’da göster” için alarm düzenleme penceresindeki varsayılan ayar."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
 #: data/kalarmconfig.kcfg:335
@@ -1639,7 +1640,7 @@ msgstr "Ses"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default sound type in the alarm edit dialog."
-msgstr "Alarm düzenleme penceresinde öntanımlı ses türü."
+msgstr "Alarm düzenleme penceresinde varsayılan ses türü."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
 #: data/kalarmconfig.kcfg:340
@@ -1660,7 +1661,7 @@ msgstr "Ses dosyası"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default sound file path in the alarm edit dialog."
-msgstr "Alarm düzenleme penceresinde öntanımlı ses dosyası yolu."
+msgstr "Alarm düzenleme penceresinde varsayılan ses dosyası yolu."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
 #: data/kalarmconfig.kcfg:350
@@ -1677,7 +1678,7 @@ msgid ""
 "Default sound volume in the alarm edit dialog. -1 to deselect volume, or 0 - "
 "100 %"
 msgstr ""
-"Alarm düzenleme penceresinde öntanımlı ses yüksekliği. Yükseklik seçmemek "
+"Alarm düzenleme penceresinde varsayılan ses yüksekliği. Yükseklik seçmemek "
 "için -1 bir değer belirlemek için % 0 - 100 arasında bir değer girin."
 
 #. i18n: ectx: label, entry (DefaultSoundRepeat), group (Defaults)
@@ -1692,7 +1693,7 @@ msgstr "Ses dosyasını yinele"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for sound repetition."
-msgstr "Alarm düzenleme penceresinde ses yinelemesi için öntanımlı ayar."
+msgstr "Alarm düzenleme penceresinde ses yinelemesi için varsayılan ayar."
 
 #. i18n: ectx: label, entry (DefaultCmdScript), group (Defaults)
 #: data/kalarmconfig.kcfg:362
@@ -1706,7 +1707,7 @@ msgstr "Betik gir"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for command script entry."
-msgstr "Alarm düzenleme penceresinde komut betiği girişi için öntanımlı ayar."
+msgstr "Alarm düzenleme penceresinde komut betiği girişi için varsayılan ayar."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:367
@@ -1724,7 +1725,7 @@ msgid ""
 "output."
 msgstr ""
 "Alarm komutunun çıktısının nereye gönderileceğinin alarm düzenle "
-"penceresindeki öntanımlı değeri."
+"penceresindeki varsayılan değeri."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:370
@@ -1760,7 +1761,7 @@ msgstr "Günlük dosyası"
 msgctxt "@info:whatsthis"
 msgid "Default log file path for command alarms in the alarm edit dialog."
 msgstr ""
-"Alarm düzenleme penceresinde komut alarmları için öntanımlı sistem günlüğü "
+"Alarm düzenleme penceresinde komut alarmları için varsayılan sistem günlüğü "
 "dosya yolu."
 
 #. i18n: ectx: label, entry (DefaultEmailBcc), group (Defaults)
@@ -1778,7 +1779,7 @@ msgid ""
 "Default setting in the alarm edit dialog for blind copying emails to self."
 msgstr ""
 "Kör kopya e-postalarının gönderimi için alarm düzenle penceresindeki "
-"öntanımlı değer."
+"varsayılan değer."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:386
@@ -1792,7 +1793,7 @@ msgstr "Yineleme dönemi"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default setting for the recurrence rule in the alarm edit dialog."
-msgstr "Alarm düzenleme penceresinde yineleme kuralı için öntanımlı ayar."
+msgstr "Alarm düzenleme penceresinde yineleme kuralı için varsayılan ayar."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:389
@@ -1869,7 +1870,7 @@ msgstr "Anımsatma birimleri"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default reminder time units in the alarm edit dialog."
-msgstr "Alarm düzenleme penceresidne öntanımlı anımsatıcı zaman birimleri."
+msgstr "Alarm düzenleme penceresidne varsayılan anımsatıcı zaman birimleri."
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:415
@@ -1890,7 +1891,7 @@ msgstr "Alarm öncesi eylemi"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute before displaying alarms."
-msgstr "Gösterilen alarmlardan önce yürütmek için öntanımlı komut."
+msgstr "Gösterilen alarmlardan önce yürütmek için varsayılan komut."
 
 #. i18n: ectx: label, entry (DefaultExecPreActionOnDeferral), group (Defaults)
 #: data/kalarmconfig.kcfg:424
@@ -1908,7 +1909,7 @@ msgid ""
 "alarms trigger."
 msgstr ""
 "Ertelenen alarmlardan önce alarm öncesi eyleminin yürütülüp "
-"yürütülmeyeceğini belirleyen öntanımlı ayar."
+"yürütülmeyeceğini belirleyen varsayılan ayar."
 
 #. i18n: ectx: label, entry (DefaultCancelOnPreActionError), group (Defaults)
 #: data/kalarmconfig.kcfg:429
@@ -1926,7 +1927,7 @@ msgid ""
 "command fails."
 msgstr ""
 "Alarm öncesi eylem komutu başarısız olduğunda alarmın iptal edilip "
-"edilmeyeceğinin öntanımlı ayarı."
+"edilmeyeceğinin varsayılan ayarı."
 
 #. i18n: ectx: label, entry (DefaultDontShowPreActionError), group (Defaults)
 #: data/kalarmconfig.kcfg:434
@@ -1944,7 +1945,7 @@ msgid ""
 "pre-alarm action command fails."
 msgstr ""
 "Alarm öncesi eylem komutu başarısız olduğunda hata yok bildirimini veya hata "
-"iletisini gösterip göstermemek için öntanımlı ayar."
+"iletisini gösterip göstermemek için varsayılan ayar."
 
 #. i18n: ectx: label, entry (DefaultPostAction), group (Defaults)
 #: data/kalarmconfig.kcfg:439
@@ -1959,7 +1960,7 @@ msgstr "Alarm sonrası eylemi"
 msgctxt "@info:whatsthis"
 msgid "Default command to execute after alarm message windows are closed."
 msgstr ""
-"Alarm ileti pencereleri kapatıldıktan sonra yürütmek için öntanımlı komut."
+"Alarm ileti pencereleri kapatıldıktan sonra yürütmek için varsayılan komut."
 
 #. i18n: ectx: label, entry (Base_QuitWarn), group (Notification Messages)
 #: data/kalarmconfig.kcfg:446
@@ -2303,7 +2304,7 @@ msgstr "Saat"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
-msgstr "Öntanımlı saat:"
+msgstr "Varsayılan saat:"
 
 #: editdlg.cpp:310
 #, kde-format
@@ -2313,7 +2314,7 @@ msgid ""
 "default start time will be used."
 msgstr ""
 "Bu şablon tabanlı alarmlar için bir başlangıç zamanı belirtmeyin. Normal "
-"öntanımlı başlangıç zamanı kullanılacak."
+"varsayılan başlangıç zamanı kullanılacak."
 
 #: editdlg.cpp:318
 #, kde-format
@@ -3287,7 +3288,7 @@ msgstr "Alarm iletisi arka alan rengini seç"
 #, kde-format
 msgctxt "@option:check"
 msgid "Use default font"
-msgstr "Öntanımlı yazı tipini kullan"
+msgstr "Varsayılan yazı tipini kullan"
 
 #: fontcolour.cpp:86
 #, kde-format
@@ -3295,7 +3296,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to use the default font current at the time the alarm is displayed."
 msgstr ""
-"Alarm gösterildiği zamanda öntanımlı mevcut yazı tipinin kullanımını "
+"Alarm gösterildiği zamanda varsayılan mevcut yazı tipinin kullanımını "
 "denetleyin."
 
 #: fontcolour.h:26
@@ -3545,7 +3546,7 @@ msgstr "Çıkmak, zamanlanmış askıdan uyandır işlemini iptal eder."
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
-msgstr "Alarm oluşturulamıyor: Bir öntanımlı takvim tanımlanmamış"
+msgstr "Alarm oluşturulamıyor: Bir varsayılan takvim tanımlanmamış"
 
 #: kalarmapp.cpp:1072
 #, kde-kuit-format
@@ -3601,10 +3602,10 @@ msgid ""
 "interface>."
 msgstr ""
 "Alarmlar arşivlenmek için yapılandırılmıştır; ancak bu olanaklı değil; çünkü "
-"hiçbir arşivlenmiş alarm öntanımlı olarak ayarlanmamış.<nl/><nl/>Bunu "
+"hiçbir arşivlenmiş alarm varsayılan olarak ayarlanmamış.<nl/><nl/>Bunu "
 "düzeltmek için <interface>Görünüm | Takvimleri Göster</interface> kullanın, "
 "bir arşivlenmiş alarm takvimi seçin ve <interface>Arşivlenmiş Alarmlar için "
-"Öntanımlı Olarak Kullan</interface>’ı imleyin."
+"Varsayılan Olarak Kullan</interface>’ı imleyin."
 
 #: kalarmapp.cpp:2473
 #, kde-format
@@ -3809,7 +3810,7 @@ msgid ""
 "found)</para><para>Please set it in <application>KMail</application> or in "
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
-"<para>Yapılandırılmış 'Kimden' e-posta adresi mevcut değil (öntanımlı e-"
+"<para>Yapılandırılmış 'Kimden' e-posta adresi mevcut değil (varsayılan e-"
 "posta tanımlaması bulunamadı)</para><para>Lütfen <application>KMail</"
 "application> uygulamasında ya da <application>KAlarm</application> "
 "uygulaması Yapılandırma penceresinde ayarlayın.</para>"
@@ -4711,13 +4712,13 @@ msgstr "E-posta Alarmı Ayarları"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Defaults"
-msgstr "Alarm Öntanımlıları"
+msgstr "Alarm Varsayılanları"
 
 #: prefdlg.cpp:166
 #, kde-format
 msgctxt "@title"
 msgid "Default Alarm Edit Settings"
-msgstr "Öntanımlı Uyarı Düzenleme Seçenekleri"
+msgstr "Varsayılan Uyarı Düzenleme Seçenekleri"
 
 #: prefdlg.cpp:171
 #, kde-format
@@ -4736,7 +4737,7 @@ msgstr "Görünüm Ayarları"
 msgctxt "@info"
 msgid "Reset all tabs to their default values, or only reset the current tab?"
 msgstr ""
-"Bütün sekmeleri öntanımlı değerlerine sıfırla, ya da yalnızca şu anki "
+"Bütün sekmeleri varsayılan değerlerine sıfırla, ya da yalnızca şu anki "
 "sekmeyi sıfırla?"
 
 #: prefdlg.cpp:265
@@ -4854,7 +4855,7 @@ msgstr "Alarm silme işlemlerini doğrula"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Default defer time interval:"
-msgstr "Öntanımlı erteleme aralığı:"
+msgstr "Varsayılan erteleme aralığı:"
 
 #: prefdlg.cpp:524
 #, kde-format
@@ -4863,7 +4864,7 @@ msgid ""
 "Enter the default time interval (hours & minutes) to defer alarms, used by "
 "the Defer Alarm dialog."
 msgstr ""
-"Alarmları ertelemek için öntanımlı zaman aralığını (dakika ve saat olarak) "
+"Alarmları ertelemek için varsayılan zaman aralığını (dakika ve saat olarak) "
 "girin, bu değerler Alarm Erteleme Penceresi tarafından kullanılır."
 
 #: prefdlg.cpp:529
@@ -4907,7 +4908,7 @@ msgid ""
 "details of special codes to tailor the command line."
 msgstr ""
 "Seçtiğiniz uçbirim penceresinde bir komutu yürütmek için gereken tam komut "
-"satırını girin. Öntanımlı olarak, alarmın komut dizisi buraya girdiğiniz "
+"satırını girin. Varsayılan olarak, alarmın komut dizisi buraya girdiğiniz "
 "şeyin sonuna eklenir. Komut satırını özelleştirmek üzere özel kodların "
 "ayrıntıları için <application>KAlarm</application> El Kitabı’na bakın."
 
@@ -4963,7 +4964,7 @@ msgid ""
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
 "<para>Bir uçbirim penceresi çağırmak için bir komut belirtilmemiş.</"
-"para><para>Öntanımlı komut (<command>%1</command>) kullanılacak.</para>"
+"para><para>Varsayılan komut (<command>%1</command>) kullanılacak.</para>"
 
 #: prefdlg.cpp:684
 #, kde-kuit-format
@@ -5006,7 +5007,7 @@ msgid ""
 "its default for displaying and entering dates and times."
 msgstr ""
 "Tarih ve saat girmek ve görüntülemek için <application>KAlarm</application> "
-"uygulamasının öntanımlı olarak kullanacağı zaman dilimini seçin."
+"uygulamasının varsayılan olarak kullanacağı zaman dilimini seçin."
 
 #: prefdlg.cpp:825
 #, kde-format
@@ -5140,7 +5141,7 @@ msgstr "Yeni Alarmlar ve Şablonlar"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Store in default calendar"
-msgstr "Öntanımlı takvime kaydet"
+msgstr "Varsayılan takvime kaydet"
 
 #: prefdlg.cpp:1045
 #, kde-format
@@ -5149,7 +5150,7 @@ msgid ""
 "Add all new alarms and alarm templates to the default calendars, without "
 "prompting."
 msgstr ""
-"Bütün yeni alarmları ve alarm şablonlarını öntanımlı takvime sormadan ekle."
+"Bütün yeni alarmları ve alarm şablonlarını varsayılan takvime sormadan ekle."
 
 #: prefdlg.cpp:1047
 #, kde-format
@@ -5168,7 +5169,7 @@ msgid ""
 msgstr ""
 "<para>Yeni bir alarm ya da alarm şablonu kaydederken, birden fazla etkin "
 "takvim varsa hangisinde saklanacağı sorulur.</para><para>Unutmayın, "
-"arşivlenmiş alarmlar her zaman öntanımlı arşivlenmiş alarm takviminde "
+"arşivlenmiş alarmlar her zaman varsayılan arşivlenmiş alarm takviminde "
 "saklanır.</para>"
 
 #: prefdlg.cpp:1055
@@ -5234,7 +5235,7 @@ msgid ""
 "Delete all existing archived alarms (from the default archived alarm "
 "calendar only)."
 msgstr ""
-"Tüm arşivlenmiş alarmları sil (yalnızca öntanımlı arşivlenmiş alarm "
+"Tüm arşivlenmiş alarmları sil (yalnızca varsayılan arşivlenmiş alarm "
 "takvimindekileri siler)."
 
 #: prefdlg.cpp:1135
@@ -5246,9 +5247,9 @@ msgid ""
 "first use the calendars view to select a default archived alarms calendar.</"
 "para>"
 msgstr ""
-"<para>Alarmları arşivlemek için öntanımlı bir takvim gerekli, fakat şu anda "
+"<para>Alarmları arşivlemek için varsayılan bir takvim gerekli, fakat şu anda "
 "etkin değil.</para><para>Eğer sonlanan alarmları saklamak istiyorsanız "
-"lütfen öntanımlı arşivlenmiş alarm takvimi seçmek için ilk olarak takvim "
+"lütfen varsayılan arşivlenmiş alarm takvimi seçmek için ilk olarak takvim "
 "görünümünü kullanın.</para>"
 
 #: prefdlg.cpp:1152
@@ -5264,7 +5265,7 @@ msgid ""
 "Do you really want to delete all alarms in the default archived alarm "
 "calendar?"
 msgstr ""
-"Öntanımlı arşivlenmiş alarmlar klasöründeki tüm alarmları silmeyi gerçekten "
+"Varsayılan arşivlenmiş alarmlar klasöründeki tüm alarmları silmeyi gerçekten "
 "istiyor musunuz?"
 
 #: prefdlg.cpp:1173
@@ -5373,7 +5374,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
-msgstr "Öntanımlı <application>KMail</application> kimliğini kullan"
+msgstr "Varsayılan <application>KMail</application> kimliğini kullan"
 
 #: prefdlg.cpp:1258
 #, kde-kuit-format
@@ -5405,7 +5406,7 @@ msgstr ""
 "E-posta alarmı gönderildiğinde sizi gönderici olarak tanımlayarak "
 "<application>KMail</application> uygulamasının e-posta kimliklerini "
 "kullanması için işaretleyin. Var olan e-posta alarmları için <application>K "
-"Posta</application> uygulamasının öntanımlı kimliği kullanılacaktır. Yeni "
+"Posta</application> uygulamasının varsayılan kimliği kullanılacaktır. Yeni "
 "alarmlar için <application>KMail</application> uygulamasının kimliklerinden "
 "birini seçebilirsiniz."
 
@@ -5459,7 +5460,7 @@ msgid ""
 "application>.</para><para>%1</para><para>%2</para>"
 msgstr ""
 "<para>Şu anda <application>KMail</application>uygulamasında ayarlı bir "
-"öntanımlı e-posta adresi yok.</para><para>%1</para><para>%2</para>"
+"varsayılan e-posta adresi yok.</para><para>%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1414
 #, kde-kuit-format
@@ -5477,7 +5478,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "The default setting for <interface>%1</interface> in the alarm edit dialog."
 msgstr ""
-"Alarm düzenleme penceresinde <interface>%1</interface> için öntanımlı ayar."
+"Alarm düzenleme penceresinde <interface>%1</interface> için varsayılan ayar."
 
 #: prefdlg.cpp:1441 prefdlg.cpp:1906
 #, kde-format
@@ -5505,7 +5506,7 @@ msgid ""
 "dialog."
 msgstr ""
 "Alarm düzenleme penceresinde alarm iletisi görüntüleme yöntemi için "
-"öntanımlı ayar."
+"varsayılan ayar."
 
 #: prefdlg.cpp:1499
 #, kde-format
@@ -5575,7 +5576,7 @@ msgid ""
 "soon."
 msgstr ""
 "Yaklaşan alarmlar için alarm düzenleme penceresinde anımsatıcı için "
-"öntanımlı birimler."
+"varsayılan birimler."
 
 #: prefdlg.cpp:1582
 #, kde-format
@@ -5597,7 +5598,7 @@ msgid ""
 "edit dialog."
 msgstr ""
 "Alarm düzenleme penceresinde <interface>%1</interface> ses dosyası için "
-"öntanımlı ayar."
+"varsayılan ayar."
 
 #: prefdlg.cpp:1610
 #, kde-format
@@ -5616,7 +5617,7 @@ msgstr "Bir ses dosyası seçin"
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
 msgstr ""
-"Alarm ayarlama penceresinde kullanılacak öntanımlı ses dosyasını girin."
+"Alarm ayarlama penceresinde kullanılacak varsayılan ses dosyasını girin."
 
 #: prefdlg.cpp:1629
 #, kde-format
@@ -5624,7 +5625,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Select to set the default volume for sound files in the alarm edit dialog."
 msgstr ""
-"Alarm ayarlama penceresinde ses dosyaları için öntanımlı ses düzeyini "
+"Alarm ayarlama penceresinde ses dosyaları için varsayılan ses düzeyini "
 "ayarlamak için seçin."
 
 #: prefdlg.cpp:1633
@@ -5632,8 +5633,8 @@ msgstr ""
 msgctxt "@info:whatsthis"
 msgid "The default volume for sound files in the alarm edit dialog."
 msgstr ""
-"Alarm düzenleme penceresindeki ses dosyaları için kullanılacak öntanımlı ses "
-"düzeyi."
+"Alarm düzenleme penceresindeki ses dosyaları için kullanılacak varsayılan "
+"ses düzeyi."
 
 #: prefdlg.cpp:1643
 #, kde-format
@@ -5660,7 +5661,7 @@ msgid ""
 "You must enter a sound file when <interface>%1</interface> is selected as "
 "the default sound type"
 msgstr ""
-"Öntanımlı ses türü olarak <interface>%1</interface> seçildiğinden, bir ses "
+"Varsayılan ses türü olarak <interface>%1</interface> seçildiğinden, bir ses "
 "dosyası girmelisiniz"
 
 #: prefdlg.cpp:1912
@@ -6946,7 +6947,7 @@ msgid ""
 "<para>Failed to create default calendar <resource>%1</resource></"
 "para><para>Location: <filename>%2</filename></para>"
 msgstr ""
-"<para><resource>%1</resource> öntanımlı takvimi oluşturulamadı</"
+"<para><resource>%1</resource> varsayılan takvimi oluşturulamadı</"
 "para><para>Konum: <filename>%2</filename></para>"
 
 #: resources/resourcedatamodelbase.cpp:66
@@ -7174,7 +7175,7 @@ msgstr "%1d %2:%3"
 #, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
-msgstr "Öntanımlı etkin alarm takvimini kapatamazsın."
+msgstr "Varsayılan etkin alarm takvimini kapatamazsın."
 
 #: resources/resourcemodel.cpp:363
 #, kde-format
@@ -7183,14 +7184,14 @@ msgid ""
 "You cannot disable your default archived alarm calendar while expired alarms "
 "are configured to be kept."
 msgstr ""
-"Zamanı geçmiş alarmlar korunmak için yapılandırılırken öntanımlı arşivlenmiş "
-"alarm takvimini kapatamazsın."
+"Zamanı geçmiş alarmlar korunmak için yapılandırılırken varsayılan "
+"arşivlenmiş alarm takvimini kapatamazsın."
 
 #: resources/resourcemodel.cpp:367
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"
-msgstr "Öntanımlı takviminizi devre dışı bırakmayı gerçekten istiyor musunuz?"
+msgstr "Varsayılan takviminizi devre dışı bırakmayı gerçekten istiyor musunuz?"
 
 #: resources/resources.cpp:289
 #, kde-format
@@ -7210,11 +7211,11 @@ msgid_plural ""
 "new default calendars.</para>"
 msgstr[0] ""
 "<para><resource>%2</resource> takvimi saltokunur yapıldı.</para><para>Bu, %3 "
-"için olan öntanımlı takvimdi.</para><para>Lütfen yeni bir öntanımlı takvim "
+"için olan varsayılan takvimdi.</para><para>Lütfen yeni bir varsayılan takvim "
 "seçin.</para>"
 msgstr[1] ""
 "<para><resource>%2</resource> takvimi saltokunur yapıldı.</para><para>Bu, %3 "
-"için olan öntanımlı takvimdi.</para><para>Lütfen yeni bir öntanımlı "
+"için olan varsayılan takvimdi.</para><para>Lütfen yeni bir varsayılan "
 "takvimler seçin.</para>"
 
 #: resources/resourceselectdialog.cpp:36
@@ -7474,7 +7475,7 @@ msgid ""
 msgstr ""
 "Seçili türdeki kullanılabilir takvimlerin listesi. İşaretli durum, bir "
 "takvimin etkin mi (işaretli) yoksa devre dışı mı (işaretsiz) olduğunu "
-"gösterir. Öntanımlı takvim kalın harflerle gösterilmiştir."
+"gösterir. Varsayılan takvim kalın harflerle gösterilmiştir."
 
 #: resourceselector.cpp:83
 #, kde-format
@@ -7527,7 +7528,7 @@ msgstr "Yeni bir alarm şablonu takvimi ekle"
 #, kde-format
 msgctxt "@info"
 msgid "You cannot remove your default active alarm calendar."
-msgstr "Öntanımlı etkin alarm takvimini kaldıramazsın."
+msgstr "Varsayılan etkin alarm takvimini kaldıramazsın."
 
 #: resourceselector.cpp:239
 #, kde-format
@@ -7536,7 +7537,7 @@ msgid ""
 "You cannot remove your default archived alarm calendar while expired alarms "
 "are configured to be kept."
 msgstr ""
-"Zamanı geçmiş alarmlar korunmak için yapılandırılmışken öntanımlı "
+"Zamanı geçmiş alarmlar korunmak için yapılandırılmışken varsayılan "
 "arşivlenmiş alarm takvimini kaldıramazsın."
 
 #: resourceselector.cpp:254
@@ -7552,9 +7553,9 @@ msgid ""
 "<para><resource>%1</resource> is the default calendar for %2</para><para>%3</"
 "para><para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource>, %2 için olan öntanımlı takvimdir.</para><para>"
-"%3</para><para>Onu tüm takvim listelerinden kaldırmayı gerçekten istiyor "
-"musunuz?</para>"
+"<para><resource>%1</resource>, %2 için olan varsayılan takvimdir.</"
+"para><para>%3</para><para>Onu tüm takvim listelerinden kaldırmayı gerçekten "
+"istiyor musunuz?</para>"
 
 #: resourceselector.cpp:259
 #, kde-kuit-format
@@ -7563,7 +7564,7 @@ msgid ""
 "Do you really want to remove your default calendar (<resource>%1</resource>) "
 "from the list?"
 msgstr ""
-"Listeden öntanımlı takviminizi (<resource>%1</resource>) kaldırmayı "
+"Listeden varsayılan takviminizi (<resource>%1</resource>) kaldırmayı "
 "gerçekten istiyor musunuz?"
 
 #: resourceselector.cpp:262
@@ -7638,19 +7639,19 @@ msgstr "İçe Aktar…"
 #, kde-format
 msgctxt "@action"
 msgid "Use as Default for Active Alarms"
-msgstr "Etkin Alarmlar için Öntanımlı Olarak Kullan"
+msgstr "Etkin Alarmlar için Varsayılan Olarak Kullan"
 
 #: resourceselector.cpp:374
 #, kde-format
 msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
-msgstr "Arşivlenen Alarmlar için Öntanımlı Olarak Kullan"
+msgstr "Arşivlenen Alarmlar için Varsayılan Olarak Kullan"
 
 #: resourceselector.cpp:375
 #, kde-format
 msgctxt "@action"
 msgid "Use as Default for Alarm Templates"
-msgstr "Alarm Şablonları için Öntanımlı Olarak Kullan"
+msgstr "Alarm Şablonları için Varsayılan Olarak Kullan"
 
 #: resourceselector.cpp:504
 #, kde-format
@@ -7715,7 +7716,7 @@ msgid ""
 "calendar: %9</para>"
 msgstr ""
 "<title>%1</title><para>ID: %2<nl/>Takvim türü: %3<nl/>İçindekiler: %4<nl/>"
-"%5: <filename>%6</filename><nl/>İzinler: %7<nl/>Durum: %8<nl/>Öntanımlı "
+"%5: <filename>%6</filename><nl/>İzinler: %7<nl/>Durum: %8<nl/>Varsayılan "
 "takvim: %9</para>"
 
 #: rtcwakeaction.cpp:90

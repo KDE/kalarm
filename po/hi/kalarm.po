@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-23 01:04+0000\n"
+"POT-Creation-Date: 2026-11-24 01:06+0000\n"
 "PO-Revision-Date: 2021-08-21 16:25+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -299,7 +299,7 @@ msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
 msgstr ""
 
-#: audioplugin/audioplayer_mpv.cpp:119 audioplugin/audioplayer_mpv.cpp:184
+#: audioplugin/audioplayer_mpv.cpp:120 audioplugin/audioplayer_mpv.cpp:185
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error attaching file: <filename>%1</filename>"
@@ -308,7 +308,7 @@ msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
 msgstr "फ़ााइल: <filename>%1</filename> को संलग्न करने में त्रुटि"
 
-#: audioplugin/audioplayer_mpv.cpp:146
+#: audioplugin/audioplayer_mpv.cpp:147
 #, kde-format
 msgctxt "@info"
 msgid "Cannot set the audio volume: %1"

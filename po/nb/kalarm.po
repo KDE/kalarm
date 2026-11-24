@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-23 01:04+0000\n"
+"POT-Creation-Date: 2026-11-24 01:06+0000\n"
 "PO-Revision-Date: 2026-07-12 21:57+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@nuug.no>\n"
@@ -294,7 +294,7 @@ msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
 msgstr ""
 
-#: audioplugin/audioplayer_mpv.cpp:119 audioplugin/audioplayer_mpv.cpp:184
+#: audioplugin/audioplayer_mpv.cpp:120 audioplugin/audioplayer_mpv.cpp:185
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -303,7 +303,7 @@ msgstr ""
 "<para>Feil ved spilling av lydfil:<filename>%1</filename></para><para> %2</"
 "para>"
 
-#: audioplugin/audioplayer_mpv.cpp:146
+#: audioplugin/audioplayer_mpv.cpp:147
 #, kde-format
 msgctxt "@info"
 msgid "Cannot set the audio volume: %1"
