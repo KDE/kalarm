@@ -126,7 +126,7 @@ public:
         KAAlarm::Type     alarmType;
         KAEvent::CmdErr   commandError;
 
-        DeferDlgData(MessageDisplay* m, DeferAlarmDlg* d, EventId e, KAAlarm::Type a, KAEvent::CmdErr c)
+        DeferDlgData(MessageDisplay* m, DeferAlarmDlg* d, const EventId& e, KAAlarm::Type a, KAEvent::CmdErr c)
           : dlg(d), display(m), eventId(e), alarmType(a), commandError(c) {}
         ~DeferDlgData();
     };

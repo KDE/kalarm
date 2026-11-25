@@ -639,7 +639,7 @@ void MiscPrefTab::restore(bool defaults, bool)
         const AudioPlugin* audioPlugin = Preferences::audioPlugin();
         const QList<AudioPlugin*> audioPlugins = PluginManager::instance()->audioPlugins();
         int i = 0;
-        for (const auto plugin : audioPlugins)
+        for (const auto* plugin : audioPlugins)
         {
             if (plugin == audioPlugin)
             {

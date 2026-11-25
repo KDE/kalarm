@@ -5793,8 +5793,8 @@ int KAEventPrivate::nextWorkRepetition(const KADateTime& pre) const
         }
     }
     const int interval = mRepetition.intervalSeconds();
-    if (interval < 0)
-        return -1;    // error - calling for a daily repetition
+    if (interval <= 0)
+        return -1;    // error - there's no repetition or it's a daily repetition
     return (pre.secsTo(nextWork) - 1) / interval + 1;
 }
 

@@ -48,7 +48,7 @@ private:
     QTimer*                mCheckPlayTimer {nullptr};
     QTimer*                mStartVolumeTimer {nullptr};
     int                    mStartVolumeCount {0};
-    bool                   mStartVolumeWrong;   // a wrong volume has been found after play start
+    bool                   mStartVolumeWrong {false};   // a wrong volume has been found after play start
 };
 
 // vim: et sw=4:

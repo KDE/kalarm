@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2025 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2026 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -59,10 +59,10 @@ public:
         ExecAlarmResult()
           : status(ExecAlarmStatus::Error)
           , ptr(nullptr) {}
-        ExecAlarmResult(ExecAlarmStatus s, void* p = nullptr)
+        ExecAlarmResult(ExecAlarmStatus s, void* p = nullptr)    //cppcheck-suppress[noExplicitConstructor]
           : status(s)
           , ptr(p) {}
-        ExecAlarmResult(void* p)
+        ExecAlarmResult(void* p)                                 //cppcheck-suppress[noExplicitConstructor]
           : status(p ? ExecAlarmStatus::Success : ExecAlarmStatus::Error)
           , ptr(p) {}
         ExecAlarmResult operator=(ExecAlarmStatus s)
