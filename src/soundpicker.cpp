@@ -15,7 +15,7 @@
 #include "lib/file.h"
 #include "lib/pushbutton.h"
 
-#if HAVE_TEXT_TO_SPEECH_SUPPORT
+#if ENABLE_TEXT_TO_SPEECH_SUPPORT
 #include <TextEditTextToSpeech/TextToSpeech>
 #endif
 #include <KLocalizedString>
@@ -130,7 +130,7 @@ void SoundPicker::showFile(bool show)
 */
 void SoundPicker::showSpeak(bool show)
 {
-#if HAVE_TEXT_TO_SPEECH_SUPPORT
+#if ENABLE_TEXT_TO_SPEECH_SUPPORT
     if (!TextEditTextToSpeech::TextToSpeech::self()->isReady())
 #endif
         show = false;    // speech capability is not installed or configured
@@ -156,7 +156,7 @@ Preferences::SoundType SoundPicker::sound() const
 {
     if (mTypeCombo->currentIndex() < 0)
         return Preferences::Sound_None;
-#ifndef HAVE_TEXT_TO_SPEECH_SUPPORT
+#if !ENABLE_TEXT_TO_SPEECH_SUPPORT
     if (mTypeCombo->currentData().toInt() == Preferences::Sound_Speak)
         return Preferences::Sound_None;
 #endif

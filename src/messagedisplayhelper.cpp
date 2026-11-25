@@ -26,7 +26,7 @@
 #include "screensaver.h" // DBUS-generated
 #include "kalarm_debug.h"
 
-#if HAVE_TEXT_TO_SPEECH_SUPPORT
+#if ENABLE_TEXT_TO_SPEECH_SUPPORT
 #include <TextEditTextToSpeech/TextToSpeech>
 #endif
 
@@ -843,7 +843,7 @@ void MessageDisplayHelper::playAudio()
 */
 void MessageDisplayHelper::slotSpeak()
 {
-#if HAVE_TEXT_TO_SPEECH_SUPPORT
+#if ENABLE_TEXT_TO_SPEECH_SUPPORT
     TextEditTextToSpeech::TextToSpeech* tts = TextEditTextToSpeech::TextToSpeech::self();
     if (!tts->isReady())
     {

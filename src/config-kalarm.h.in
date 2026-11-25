@@ -7,4 +7,4 @@
 #cmakedefine01 ENABLE_RTC_WAKE_FROM_SUSPEND
 
 /* Define to 1 if text to speech is enabled */
-#cmakedefine01 HAVE_TEXT_TO_SPEECH_SUPPORT
+#cmakedefine01 ENABLE_TEXT_TO_SPEECH_SUPPORT

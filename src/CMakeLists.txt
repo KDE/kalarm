@@ -344,7 +344,7 @@ if(ENABLE_LIBMPV)
     target_compile_definitions(kalarm_bin PUBLIC -DHAVE_LIBMPV)
 endif()
 
-if(TARGET KF6::TextEditTextToSpeech)
+if(ENABLE_TEXT_TO_SPEECH_SUPPORT)
     target_link_libraries(kalarm_bin KF6::TextEditTextToSpeech)
 endif()
 if(TARGET KF6::IconThemes)

@@ -652,7 +652,7 @@ void splitXTermCommands()
 
 Preferences::SoundType Preferences::defaultSoundType()
 {
-#if HAVE_TEXT_TO_SPEECH_SUPPORT
+#if ENABLE_TEXT_TO_SPEECH_SUPPORT
     return self()->base_DefaultSoundType();
 #else
     SoundType type = self()->base_DefaultSoundType();
@@ -662,7 +662,7 @@ Preferences::SoundType Preferences::defaultSoundType()
 
 void Preferences::setDefaultSoundType(SoundType type)
 {
-#ifndef HAVE_TEXT_TO_SPEECH_SUPPORT
+#if !ENABLE_TEXT_TO_SPEECH_SUPPORT
     if (type == Sound_Speak)
         return;
 #endif

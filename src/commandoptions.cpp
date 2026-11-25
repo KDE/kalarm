@@ -61,7 +61,7 @@ enum Option
     REMINDER,
     REMINDER_ONCE,
     REPEAT,
-#if HAVE_TEXT_TO_SPEECH_SUPPORT
+#if ENABLE_TEXT_TO_SPEECH_SUPPORT
     SPEAK,
 #endif
     SUBJECT,
@@ -247,7 +247,7 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
               = new QCommandLineOption(QStringList{QStringLiteral("r"), QStringLiteral("repeat")},
                                        i18n("Number of times to repeat alarm (including initial occasion)"),
                                        QStringLiteral("count"));
-#if HAVE_TEXT_TO_SPEECH_SUPPORT
+#if ENABLE_TEXT_TO_SPEECH_SUPPORT
     mOptions[SPEAK]
               = new QCommandLineOption(QStringList{QStringLiteral("s"), QStringLiteral("speak")},
                                        i18n("Speak the message when it is displayed"));
@@ -479,7 +479,7 @@ void CommandOptions::process()
     d->checkEditType(EditAlarmDlg::DISPLAY, EditAlarmDlg::AUDIO, PLAY);
     d->checkEditType(EditAlarmDlg::DISPLAY, EditAlarmDlg::AUDIO, PLAY_REPEAT);
     d->checkEditType(EditAlarmDlg::DISPLAY, EditAlarmDlg::AUDIO, VOLUME);
-#if HAVE_TEXT_TO_SPEECH_SUPPORT
+#if ENABLE_TEXT_TO_SPEECH_SUPPORT
     d->checkEditType(EditAlarmDlg::DISPLAY, SPEAK);
 #endif
     d->checkEditType(EditAlarmDlg::DISPLAY, BEEP);
@@ -633,7 +633,7 @@ void CommandOptions::process()
                     d->setErrorIncompatible(PLAY, PLAY_REPEAT);
                 if (mParser->isSet(*mOptions.at(BEEP)))
                     d->setErrorIncompatible(BEEP, opt);
-#if HAVE_TEXT_TO_SPEECH_SUPPORT
+#if ENABLE_TEXT_TO_SPEECH_SUPPORT
                 else if (mParser->isSet(*mOptions.at(SPEAK)))
                     d->setErrorIncompatible(SPEAK, opt);
 #endif
@@ -649,7 +649,7 @@ void CommandOptions::process()
             }
             else if (mParser->isSet(*mOptions.at(VOLUME)))
                 d->setErrorRequires(VOLUME, PLAY, PLAY_REPEAT);
-#if HAVE_TEXT_TO_SPEECH_SUPPORT
+#if ENABLE_TEXT_TO_SPEECH_SUPPORT
             if (mParser->isSet(*mOptions.at(SPEAK)))
             {
                 if (mParser->isSet(*mOptions.at(BEEP)))
@@ -708,7 +708,7 @@ void CommandOptions::process()
                 mFlags |= KAEvent::AutoClose;
             if (mParser->isSet(*mOptions.at(BEEP)))
                 mFlags |= KAEvent::Beep;
-#if HAVE_TEXT_TO_SPEECH_SUPPORT
+#if ENABLE_TEXT_TO_SPEECH_SUPPORT
             if (mParser->isSet(*mOptions.at(SPEAK)))
                 mFlags |= KAEvent::Speak;
 #endif
@@ -771,7 +771,7 @@ void CommandOptions::process()
                 errors << d->optionName(REMINDER);
             if (mParser->isSet(*mOptions.at(REMINDER_ONCE)))
                 errors << d->optionName(REMINDER_ONCE);
-#if HAVE_TEXT_TO_SPEECH_SUPPORT
+#if ENABLE_TEXT_TO_SPEECH_SUPPORT
             if (mParser->isSet(*mOptions.at(SPEAK)))
                 errors << d->optionName(SPEAK);
 #endif

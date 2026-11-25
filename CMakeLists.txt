@@ -132,14 +132,13 @@ if(NOT ENABLE_LIBVLC AND NOT ENABLE_LIBMPV)
     message(FATAL_ERROR "One or more of ENABLE_LIBVLC or ENABLE_LIBMPV must be enabled for support for playing sound files")
 endif()
 
-find_package(KF6TextEditTextToSpeech ${KTEXTADDONS_MIN_VERSION} CONFIG)
-set_package_properties(KF6TextEditTextToSpeech PROPERTIES DESCRIPTION
-    "Add support for text to speech"
-    TYPE OPTIONAL
-)
-
-if(TARGET KF6::TextEditTextToSpeech)
-    set(HAVE_TEXT_TO_SPEECH_SUPPORT TRUE)
+option(ENABLE_TEXT_TO_SPEECH_SUPPORT "Build support for text to speech" ON)
+if(ENABLE_TEXT_TO_SPEECH_SUPPORT)
+    find_package(KF6TextEditTextToSpeech ${KTEXTADDONS_MIN_VERSION} CONFIG)
+    set_package_properties(KF6TextEditTextToSpeech PROPERTIES DESCRIPTION
+        "Add support for text to speech"
+        TYPE REQUIRED
+    )
 endif()
 
 # Find KDE PIM packages
