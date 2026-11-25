@@ -3713,7 +3713,7 @@ void initDayMonthNames()
 // Short day name, in English
 const QString& shortDay(int day)   // Mon = 1, ...
 {
-    static QString error;
+    static QString error;             //cppcheck-suppress[unassignedVariable]  value set to empty
     initDayMonthNames();
     return (day >= 1 && day <= 7) ? shortDayNames.at(day - 1) : error;
 }
@@ -3721,7 +3721,7 @@ const QString& shortDay(int day)   // Mon = 1, ...
 // Long day name, in English
 const QString& longDay(int day)   // Mon = 1, ...
 {
-    static QString error;
+    static QString error;             //cppcheck-suppress[unassignedVariable]  value set to empty
     initDayMonthNames();
     return (day >= 1 && day <= 7) ? longDayNames.at(day - 1) : error;
 }
@@ -3729,7 +3729,7 @@ const QString& longDay(int day)   // Mon = 1, ...
 // Short month name, in English
 const QString& shortMonth(int month)   // Jan = 1, ...
 {
-    static QString error;
+    static QString error;             //cppcheck-suppress[unassignedVariable]  value set to empty
     initDayMonthNames();
     return (month >= 1 && month <= 12) ? shortMonthNames.at(month - 1) : error;
 }
@@ -3737,7 +3737,7 @@ const QString& shortMonth(int month)   // Jan = 1, ...
 // Long month name, in English
 const QString& longMonth(int month)   // Jan = 1, ...
 {
-    static QString error;
+    static QString error;             //cppcheck-suppress[unassignedVariable]  value set to empty
     initDayMonthNames();
     return (month >= 1 && month <= 12) ? longMonthNames.at(month - 1) : error;
 }
