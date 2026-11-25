@@ -292,7 +292,6 @@ qt_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.ScreenSaver.xml scree
 
 kconfig_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC data/kalarmconfig.kcfgc)
 
-#if(UNIX)
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/icons/hicolor/*-apps-kalarm.png")
 ecm_add_app_icon(kalarm_bin ICONS ${ICONS_SRCS})
 add_executable(kalarm_bin ${kalarm_bin_SRCS})
@@ -356,7 +355,6 @@ if(ENABLE_RTC_WAKE_FROM_SUSPEND)
 endif()
 
 install(TARGETS kalarm_bin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-#endif(UNIX)
 
 ########### install files ###############
 
