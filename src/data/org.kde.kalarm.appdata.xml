@@ -516,6 +516,7 @@
           <li xml:lang="sl">Prikaži gumb Odloži v oknu z alarmnimi sporočili, ko je prikazan čez celozaslonske aplikacije X11.</li>
           <li xml:lang="tr">X11 tam ekran uygulamaları üzerinde görüntülendiğinde, Ertele düğmesini alarm iletisi penceresinde göster</li>
           <li xml:lang="uk">Реалізовано показ кнопки «Відкласти» у вікні повідомлення будильника при показі у повноекранних програмах у X11.</li>
+          <li xml:lang="zh-CN">在 X11 全屏应用上方时在闹钟消息窗口中显示延迟提醒按钮。</li>
         </ul>
       </description>
     </release>
