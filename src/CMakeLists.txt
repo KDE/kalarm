@@ -360,7 +360,7 @@ install(TARGETS kalarm_bin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES data/org.kde.kalarm.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES data/kalarm.autostart.desktop DESTINATION ${KDE_INSTALL_AUTOSTARTDIR})
-install(FILES data/org.kde.kalarm.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install(FILES data/org.kde.kalarm.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 install(FILES data/kalarmconfig.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
 install(FILES data/org.kde.kalarm.kalarm.xml DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})

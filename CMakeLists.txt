@@ -15,7 +15,7 @@ set(KALARM_VERSION_RELEASE_SERVICE_MICRO "0")
 
 # If KAlarm's version has not changed since the last KDE Release Service version,
 # this code sets a sub-version x.x.x.N to avoid duplicate version numbers in
-# org.kde.kalarm.appdata.xml, which cause appstream to choke.
+# org.kde.kalarm.metainfo.xml, which cause appstream to choke.
 math(EXPR LAST_RELEASE_MONTH "${KALARM_VERSION_RELEASE_SERVICE_MAJOR} * 12 + ${KALARM_VERSION_RELEASE_SERVICE_MINOR} + ${KALARM_VERSION_RELEASE_SERVICE_MICRO}")
 math(EXPR THIS_RELEASE_MONTH "${RELEASE_SERVICE_VERSION_MAJOR} * 12 + ${RELEASE_SERVICE_VERSION_MINOR} + ${RELEASE_SERVICE_VERSION_MICRO}")
 math(EXPR KALARM_RELEASE_SUB_VERSION "${THIS_RELEASE_MONTH} - ${LAST_RELEASE_MONTH}")

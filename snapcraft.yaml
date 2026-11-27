@@ -105,7 +105,7 @@ parts:
         after:
             - kde-neon
         parse-info:
-            - usr/share/metainfo/org.kde.kalarm.appdata.xml
+            - usr/share/metainfo/org.kde.kalarm.metainfo.xml
         plugin: cmake
         build-packages:
             - kross-dev
